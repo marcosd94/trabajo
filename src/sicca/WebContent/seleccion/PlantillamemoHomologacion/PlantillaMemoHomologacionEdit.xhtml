@@ -1,0 +1,244 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU415_titulo_lis}</h1>
+		<!--******************** MODAL ******************-->
+		<!-- ****Modal tab02**** -->
+		<a:region>
+
+			<rich:modalPanel id="modalContacto" autosized="true" 
+				styleClass="centerbox">
+				<f:facet name="header">#{messages.CU415_tags}</f:facet>
+				<f:facet name="controls">
+					<h:graphicImage value="/img/dialog-close.png" width="18"
+						height="18" style="cursor:pointer"
+						onclick="#{rich:component('modalContacto')}.hide()" />
+				</f:facet>
+				<h:form>
+					<rich:panel>
+
+						<rich:dataTable id="tablaContactos"
+							value="#{plantillaMemoHomologacionHome.tagList}" var="tag"
+							rows="5" reRender="panelContacto">
+
+							<rich:column>
+								<f:facet name="header">#{messages.CU415_tags}</f:facet>
+								<h:outputText id="tag1" value="#{tag.tag}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU415_desc}</f:facet>
+								<h:outputText id="outputText1" value="#{tag.descripcion}" />
+							</rich:column>
+
+						</rich:dataTable>
+						<rich:datascroller for="tablaContactos" renderIfSinglePage="false"
+							id="scrc" reRender="tdPr">
+						</rich:datascroller>
+						<div style="clear: both"><h:outputText
+							value="#{messages.GENERICO_NOTA_ETIQUETAS}"							 
+							styleClass="labelClass" /></div>
+
+					</rich:panel>
+				</h:form>
+
+
+
+				<h:panelGrid>
+					<h:form>
+
+					</h:form>
+				</h:panelGrid>
+			</rich:modalPanel>
+
+
+			<!-- ****Fin Modal**** -->
+		</a:region>
+		<h:form id="plantillaNotaHomologacion" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{plantillaMemoHomologacionHome.managed ? 'Editar' : 'Cargar'} #{messages.CU415_titulo_lis}</f:facet>
+				<rich:tabPanel switchType="server" id="tabGeneral">
+					<rich:tab label="#{messages.CU415_tab1}" id="tabCargaDatos">
+						<h:panelGrid columns="2">
+							<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_desc}</ui:define>
+								<h:inputText id="descripcion" required="true" size="100"
+									maxlength="150"
+									value="#{plantillaMemoHomologacionHome.instance.descripcion}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate id="activoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+								<h:selectBooleanCheckbox id="activo" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.activo}" />
+							</s:decorate>
+						</h:panelGrid>
+						<fieldset><legend>#{messages.GENERICO_PLANTILLA}</legend>
+						<h:panelGrid columns="1">
+							<a:region>
+								<a:commandButton id="showValoracionModalButton"
+									value="#{messages.GENERICO_VER_TAGS}"
+									onclick="Richfaces.showModalPanel('modalContacto');" />
+							</a:region>
+							<s:decorate id="titulo1Field" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_titulo}</ui:define>
+								<h:inputTextarea id="titulo1" cols="80" rows="6" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.titulo}" />
+							</s:decorate>
+							<s:decorate id="titulo2Field" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_a}</ui:define>
+								<h:inputTextarea id="titulo2" cols="80" rows="6" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.a}" />
+							</s:decorate>
+							<s:decorate id="cuerpoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_de}</ui:define>
+								<h:inputTextarea id="cuerpo" cols="80" rows="10" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.de}" />
+							</s:decorate>
+							<s:decorate id="firmaField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_ref}</ui:define>
+								<h:inputTextarea id="firma" cols="80" rows="3" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.ref}" />
+							</s:decorate>
+							<s:decorate id="cargoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU415_texto}</ui:define>
+								<h:inputTextarea id="cargo" cols="80" rows="3" required="true"
+									value="#{plantillaMemoHomologacionHome.instance.texto}" />
+							</s:decorate>
+						</h:panelGrid></fieldset>
+					</rich:tab>
+					<rich:tab label="#{messages.CU248_vista_preliminar}"
+						id="tabVistaPreliminar">
+						<table>
+							<tr>
+								<td colspan="2" style="text-align: center;"><h:graphicImage
+									value="/img/cabecera.jpg" alt="Cabecera" /></td>
+							</tr>
+							<tr>
+								<td
+									style="text-align: justify; font-size: medium; font-weight: bold;">
+								<h:outputText size="100" maxlength="150"
+									value="#{plantillaMemoHomologacionHome.instance.titulo}"
+									style="font-style:oblique;">
+								</h:outputText></td>
+
+							</tr>
+							<tr>
+								<td>
+								<table>
+									<tr>
+										<td><rich:spacer height="6px" /></td>
+									</tr>
+									<tr>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText value="#{messages.CU415_a}"
+											style="font-style:oblique;">
+										</h:outputText></td>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText size="100" maxlength="150"
+											value="#{plantillaMemoHomologacionHome.instance.a}"
+											style="font-style:oblique;">
+										</h:outputText></td>
+									</tr>
+									<tr>
+										<td><rich:spacer height="6px" /></td>
+									</tr>
+									<tr>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText value="#{messages.CU415_de}"
+											style="font-style:oblique;">
+										</h:outputText></td>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText size="100" maxlength="150"
+											value="#{plantillaMemoHomologacionHome.instance.de}"
+											style="font-style:oblique;">
+										</h:outputText></td>
+										<td style="text-align: justify; font-size: medium;"></td>
+									</tr>
+									<tr>
+										<td><rich:spacer height="6px" /></td>
+									</tr>
+									<tr>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText size="100" maxlength="150"
+											value="#{messages.CU415_ref}" style="font-style:oblique;">
+										</h:outputText></td>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;"><h:outputText
+											size="100" maxlength="150"
+											value="#{plantillaMemoHomologacionHome.instance.ref}"
+											style="text-align:justify;font-style:oblique;" /></td>
+									</tr>
+									<tr>
+										<td><rich:spacer height="6px" /></td>
+									</tr>
+									<tr>
+										<td
+											style="text-align: justify; font-size: medium; font-weight: bold;">
+										<h:outputText size="100" maxlength="150"
+											value="#{messages.CU415_fecha}" style="font-style:oblique;">
+										</h:outputText></td>
+										<td colspan="2"
+											style="text-align: justify; font-size: medium;"></td>
+									</tr>
+								</table>
+								</td>
+							</tr>
+							<tr>
+								<td><rich:spacer height="6px" /></td>
+							</tr>
+							<tr>
+								<td
+									style="text-align: justify; font-size: medium; font-weight: bold;">#{plantillaMemoHomologacionHome.instance.texto}</td>
+							</tr>
+						</table>
+					</rich:tab>
+				</rich:tabPanel>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!plantillaMemoHomologacionHome.managed}"
+					styleClass="labelClass" /> <h:outputText
+					value="#{messages.msg_obs_update}"
+					rendered="#{plantillaMemoHomologacionHome.managed}"
+					styleClass="labelClass" /></div>
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{plantillaMemoHomologacionHome.persist()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!plantillaMemoHomologacionHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{plantillaMemoHomologacionHome.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{plantillaMemoHomologacionHome.managed}" /> <s:button
+				id="cancelEdit" value="#{messages.GENERICO_VOLVER}"
+				propagation="end"
+				view="/seleccion/PlantillamemoHomologacion/PlantillaMemoHomologacionList.xhtml"
+				rendered="#{plantillaMemoHomologacionHome.managed}" /> <s:button
+				id="cancelAdd" value="#{messages.GENERICO_VOLVER}" propagation="end"
+				view="/#{empty plantillaNotaHomologacionFrom ? 'seleccion/PlantillamemoHomologacion/PlantillaMemoHomologacionList' : plantillaNotaHomologacionFrom}.xhtml"
+				rendered="#{!plantillaMemoHomologacionHome.managed}" /></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

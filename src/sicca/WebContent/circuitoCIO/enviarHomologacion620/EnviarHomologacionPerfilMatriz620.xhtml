@@ -1,0 +1,141 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="concursoPuestoAgrSearch" styleClass="edit">
+			 
+ <rich:panel>
+        <h1>#{messages.CU620_titulo}</h1>
+       <h:panelGrid columns="1" style=" width : 1110px;">
+			<rich:panel id="panelParametro" >	<f:facet name="header">#{messages.CU243_grupo_puesto}</f:facet>
+			
+			<h:panelGrid columns="3" style=" width : 1000px;">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{enviarHomologacionPerfilMatriz620FC.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{enviarHomologacionPerfilMatriz620FC.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadbField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{enviarHomologacionPerfilMatriz620FC.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{enviarHomologacionPerfilMatriz620FC.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{enviarHomologacionPerfilMatriz620FC.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{enviarHomologacionPerfilMatriz620FC.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" style=" width : 1095px;">
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{enviarHomologacionPerfilMatriz620FC.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+       
+   		 	<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU36_grupo_puesto}</ui:define>
+                <h:inputText disabled="true" value="#{enviarHomologacionPerfilMatriz620FC.concursoPuestoAgr.descripcionGrupo}" style=" width : 514px;"/>
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU36_estado}</ui:define>
+                <h:inputText disabled="true" value="#{enviarHomologacionPerfilMatriz620FC.estado}" style=" width : 514px;"/>
+            </s:decorate>
+            </h:panelGrid>
+   		
+   	</rich:panel>
+     
+    
+   		<rich:tabPanel switchType="client" id="tagGeneral" selectedTab="#{enviarHomologacionPerfilMatriz620FC.selectedTab}" style=" width : 1100px;">
+						
+						<rich:tab label="Perfil de Selección" id="tabObsRpta">
+							<a:include id="includeTab1"
+								viewId="/circuitoCIO/perfilMatrizhomolog619/tabs/ObservacionesRespuestasOee.xhtml" >
+								<f:param name="codActividad" value="#{enviarHomologacionPerfilMatriz620FC.codActividad}"/>
+								</a:include>
+						</rich:tab>
+				
+		</rich:tabPanel>
+    </h:panelGrid>
+</rich:panel>
+
+<s:decorate id="buttonsField" template="/layout/display.xhtml">
+	<s:button view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+    <h:commandButton id="print"
+					value="#{messages['CU53_imprimir']}"
+					action="#{enviarHomologacionPerfilMatriz620FC.imprimirPerfilMatriz()}"/>   
+			<s:button propagation="join" disabled="#{!enviarHomologacionPerfilMatriz620FC.enviadoHomologacion() and !enviarHomologacionPerfilMatriz620FC.esPendienteRevision()}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml" 
+				id="anexos" value="#{messages.gral_anexos}"
+				>
+				<f:param name="direccionFisica" value="#{enviarHomologacionPerfilMatriz620FC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{enviarHomologacionPerfilMatriz620FC.nombrePantalla}" />
+				<f:param name="idCU" value="#{enviarHomologacionPerfilMatriz620FC.homologacionPerfilMatriz.idHomologacion}" />
+				<f:param name="nombreTabla" value="#{enviarHomologacionPerfilMatriz620FC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="seleccion/homologacionPerfilMatriz/EnviarHomologacionPerfil" />
+			</s:button>
+			
+				<s:button view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+                  id="basesycondiciones"  disabled="#{ver=='true'}"
+           propagation="join"  
+                 value="#{messages.CU53_editar_condiciones}">
+                 <f:param name="idConcursoPuestoAgr"
+					value="#{enviarHomologacionPerfilMatriz620FC.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="/seleccion/homologacionPerfilMatriz/EnviarHomologacionPerfil" />
+			<f:param name="nomPantalla"
+					value="enviarHomologacionPerfil" />
+					<f:param name="CU"
+					value="52" />
+        </s:button>
+        
+			<h:commandButton id="tarea" disabled="#{!enviarHomologacionPerfilMatriz620FC.enviadoHomologacion() }"
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{enviarHomologacionPerfilMatriz620FC.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+		
+		    
+		    </s:decorate>
+	
+	
+	
+
+        
+</h:form>
+
+</ui:define>
+
+</ui:composition>

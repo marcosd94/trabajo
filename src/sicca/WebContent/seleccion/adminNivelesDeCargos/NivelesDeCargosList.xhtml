@@ -1,0 +1,118 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+     xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.niveles_cargos}</h1>
+    <h:form id="datosEspecificosSearch" styleClass="edit" >
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{nivelesDeCargosFormController.descripcion}" size="60"/>
+            </s:decorate>
+            
+           <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.gral_tipo}</ui:define>
+                <h:inputText id="tipo" value="#{nivelesDeCargosFormController.tipo}" size="20"/>
+            </s:decorate> 
+				
+				
+            <h:selectOneRadio id="buttons"
+                      value="#{nivelesDeCargosFormController.radioButton}">
+        <f:selectItem id="item1" itemLabel="ACTIVO" itemValue="1" />
+        #{'  '}
+        <f:selectItem id="item2" itemLabel="INACTIVO" itemValue="2" />
+        #{'  '}
+        <f:selectItem id="item3" itemLabel="TODOS" itemValue="3" />
+     
+    </h:selectOneRadio>
+			
+
+        </rich:simpleTogglePanel>
+
+		<a:outputPanel id="botons">
+        <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links,botons"
+				action="#{nivelesDeCargosFormController.search()}">
+			</a:commandButton>
+			
+			 <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{nivelesDeCargosFormController.searchAll()}" 
+				 reRender="panelParametro,panelResultado,links,botons" >
+				 </a:commandButton>
+				
+        </div>
+        </a:outputPanel>
+
+    </h:form>
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty nivelesDeCargosFormController.nivelesDeCargosList ? 0 :  nivelesDeCargosFormController.nivelesDeCargosList.size()})</f:facet>
+    <div class="results" id="datosEspecificosList">
+
+    <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty nivelesDeCargosFormController.nivelesDeCargosList}"/>
+
+    <rich:dataTable id="nivelesCargosList"
+                var="_nivelesDeCargos"
+              value="#{nivelesDeCargosFormController.nivelesDeCargosList}"
+           rendered="#{not empty nivelesDeCargosFormController.nivelesDeCargosList}">
+      
+        <h:column>
+            <f:facet name="header">TIPO</f:facet>
+            <h:outputText value="#{_nivelesDeCargos.tipo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">DESCRIPCION</f:facet>
+            <h:outputText value="#{_nivelesDeCargos.descripcion}"/>
+        </h:column>
+       <h:column>
+					<f:facet name="header">Activo</f:facet>
+					<h:selectBooleanCheckbox value="#{_nivelesDeCargos.activo}" disabled="true"/>
+				</h:column>
+				
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/seleccion/adminNivelesDeCargos/NivelesDeCargosEdit.xhtml"
+                   value="Ver"
+                   action="#{nivelesDeCargosFormController.cambiarView()}">
+                <f:param name="idNivelesDeCargos"
+                         value="#{_nivelesDeCargos.idNivelesDeCargo}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/adminNivelesDeCargos/NivelesDeCargosEdit.xhtml"
+                   value="#{messages.msg_edit}"
+                   action="#{nivelesDeCargosFormController.cambiarEdit()}">
+                <f:param name="idNivelesDeCargos"
+                        value="#{_nivelesDeCargos.idNivelesDeCargo}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+		<a:outputPanel id="links" ajaxRendered="true">
+    
+    </a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seleccion/adminNivelesDeCargos/NivelesDeCargosEdit.xhtml"
+                       value="#{messages.msg_create_male}"
+                       action="#{nivelesDeCargosFormController.cambiarNew()}">
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

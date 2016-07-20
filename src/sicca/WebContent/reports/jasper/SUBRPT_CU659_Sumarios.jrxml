@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBRPT_CU659_Sumarios" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+	OEE.DENOMINACION_UNIDAD OEE,
+	DATE(SC.FECHA_ALTA) FECHA,
+	SC.NRO_EXP || '/' ||SC.ANIO_EXP || ' ESTADO: ' ||
+	CASE WHEN SC.ESTADO = 'EC' THEN 'EN CURSO'
+		WHEN SC.ESTADO = 'RJ' THEN 'CON RESOLUCION DEL JUEZ'
+		WHEN SC.ESTADO = 'SO' THEN 'SOBRESEIMIENTO'
+		WHEN SC.ESTADO = 'SA' THEN 'SANCION'
+	WHEN SC.ESTADO = 'AR' THEN 'ARCHIVO' END AS NRO_ESTADO_SUMARIO,
+	JURIDICOS.FNC_GET_SUMARIOS(SC.ID_SUMARIO_CAB ) FALTAS,
+		CASE WHEN SC.ESTADO_JUEZ = 'SO' THEN 'SOBRESEIMIENTO'
+WHEN SC.ESTADO_JUEZ = 'SA' THEN 'SANCION' ||' - '|| S.DESCRIPCION ||' - '|| SC.TIEMPO_J ||' '|| CASE WHEN SC.EXPRESADO_J = 'D' THEN 'DÍA/S' WHEN SC.EXPRESADO_J = 'M' THEN 'MES/ES' WHEN SC.EXPRESADO_J = 'A' THEN 'AÑO/S' END
+WHEN SC.ESTADO_JUEZ = 'AR' THEN 'ARCHIVO' END ||' - OBS.: '|| SC.OBS_J AS OBS_JUEZ,
+	CASE WHEN SC.ESTADO = 'SO' THEN 'SOBRESEIMIENTO - MAI'
+WHEN SC.ESTADO = 'SA' THEN 'SANCION MAI - ' || SD.DESCRIPCION ||' '|| CASE WHEN SD.INHABILITA = TRUE THEN SC.TIEMPO_M ||' '|| CASE WHEN SC.EXPRESADO_M = 'D' THEN 'DÍA/S' WHEN SC.EXPRESADO_M = 'M' THEN 'MES/ES' WHEN SC.EXPRESADO_M = 'A' THEN 'AÑO/S' END ELSE  SD.DESCRIPCION END
+	WHEN SC.ESTADO = 'AR' THEN 'ARCHIVO - MAI' END AS DECISION_MAI, SC.OBS_M AS OBS_MAI
+
+FROM
+	JURIDICOS.SUMARIO_CAB SC
+LEFT JOIN
+	JURIDICOS.SANCION S
+ON
+	S.ID_SANCION = SC.ID_SANCION_J
+LEFT JOIN
+	JURIDICOS.SANCION SD
+ON
+	SD.ID_SANCION = SC.ID_SANCION_M
+JOIN
+PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+OEE.ID_CONFIGURACION_UO = SC.ID_CONFIGURACION_UO
+WHERE
+SC.ID_PERSONA = $P{id}
+ORDER BY SC.FECHA_ALTA]]>
+	</queryString>
+	<field name="oee" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="nro_estado_sumario" class="java.lang.String"/>
+	<field name="faltas" class="java.lang.String"/>
+	<field name="obs_juez" class="java.lang.String"/>
+	<field name="decision_mai" class="java.lang.String"/>
+	<field name="obs_mai" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Sumarios]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="0" y="18" width="66" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["OEE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="66" y="18" width="51" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="117" y="18" width="53" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Nro. Expediente"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="170" y="18" width="93" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Faltas Cometidas"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="263" y="18" width="106" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Recomendación Juez"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="369" y="18" width="92" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Decisión MAI"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="461" y="18" width="94" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Observación MAI"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="66" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{oee}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="66" y="0" width="51" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="117" y="0" width="53" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_estado_sumario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="170" y="0" width="93" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{faltas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="263" y="0" width="106" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{obs_juez}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="369" y="0" width="92" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{decision_mai}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="461" y="0" width="94" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{obs_mai}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

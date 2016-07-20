@@ -1,0 +1,172 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.Ciudad_}</h1>
+
+		<h:form id="ciudadSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+				<a:region> 
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Departamento_idPais}</ui:define>
+						<h:selectOneMenu id="pais" value="#{ciudadListFormController.codPais}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+							<a:support event="onchange" action="#{ciudadListFormController.updateDepartamento()}" reRender="departamentoField"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="departamentoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Departamento_}</ui:define>
+					<h:selectOneMenu id="departamento" value="#{ciudadListFormController.codDepartamento}" style="width:250px">
+						<f:selectItems value="#{ciudadListFormController.departamentosSelecItem}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+					<h:inputText id="descripcion"
+						value="#{ciudadListFormController.ciudad.descripcion}" size="60"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_estado}</ui:define>
+					<h:selectOneRadio id="estado" value="#{ciudadListFormController.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages.msg_list_search_button}"
+					action="#{ciudadListFormController.search()}"
+					reRender="panelResultados">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{ciudadListFormController.searchAll()}"
+					reRender="panelResultados,panelBusqueda">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<h:commandButton id="print"
+					value="#{messages['msg_list_search_print_button']}"
+					action="#{ciudadListFormController.print()}"/> 
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty ciudadList.resultList ? 0 : (ciudadList.paginated ? ciudadList.resultCount : ciudadList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty ciudadList.resultList}" /> <rich:dataTable
+				id="ciudadList" var="_ciudad"
+				value="#{ciudadList.resultList}"
+				rendered="#{not empty ciudadList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{ciudadList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Ciudad_descripcion}" />
+							<ui:param name="propertyPath" value="ciudad.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_ciudad.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{ciudadList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Ciudad_idDepartamento}" />
+							<ui:param name="propertyPath" value="ciudad.departamento.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_ciudad.departamento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{ciudadList}" />
+							<ui:param name="propertyLabel" value="#{messages.Pais_}" />
+							<ui:param name="propertyPath" value="ciudad.departamento.pais.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_ciudad.departamento.pais.descripcion}" />
+				</h:column>
+				<rich:column style="text-align:center" width="10%">
+					<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+					<h:selectBooleanCheckbox value="#{_ciudad.activo}" disabled="true"/>
+				</rich:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/ciudad/Ciudad' : from}.xhtml"
+						value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="ciudadViewId"
+						rendered="#{not empty from}">
+						<f:param name="ciudadIdCiudad"
+							value="#{_ciudad.idCiudad}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/ciudad/CiudadEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="ciudadEdit" rendered="#{empty from}">
+						<f:param name="ciudadIdCiudad"
+							value="#{_ciudad.idCiudad}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<a:outputPanel ajaxRendered="true">
+			<div class="tableControl"><s:link view="/planificacion/ciudad/CiudadList.xhtml"
+				rendered="#{ciudadList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/ciudad/CiudadList.xhtml"
+				rendered="#{ciudadList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{ciudadList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/ciudad/CiudadList.xhtml"
+				rendered="#{ciudadList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{ciudadList.nextFirstResult}" />
+			</s:link> <s:link view="/planificacion/ciudad/CiudadList.xhtml"
+				rendered="#{ciudadList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{ciudadList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/ciudad/CiudadEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="ciudadIdCiudad" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,264 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU590_title}</h1>
+
+
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+			<rich:panel id="panelCabecera">
+				<f:facet name="header">Persona</f:facet>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Nro. Doc.</ui:define>
+						<h:inputText
+							value="#{consultaIngCon590FC.persona.documentoIdentidad}"
+							disabled="true" style=" width :250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Nombres</ui:define>
+						<h:inputText value="#{consultaIngCon590FC.persona.nombres}"
+							disabled="true" style=" width :250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU590_pais}</ui:define>
+						<h:inputText
+							value="#{consultaIngCon590FC.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							disabled="true" style=" width :250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Apellidos</ui:define>
+						<h:inputText value="#{consultaIngCon590FC.persona.apellidos}"
+							disabled="true" style=" width :250px;" />
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">Datos de Acto Administrativo (#{empty consultaIngCon590FC.lActoAdmin ? 0 : consultaIngCon590FC.lActoAdmin.size()})</f:facet>
+				<rich:extendedDataTable rowKeyVar="indexVar"
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" border="0" var="_record2"
+					height="100px" value="#{consultaIngCon590FC.lActoAdmin}">
+					<rich:column width="8%">
+						<f:facet name="header">
+						Nº
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{indexVar+1}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						Nro. Doc.
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.nroDocumento}" />
+					</rich:column>
+
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_anho}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.anhoDocumento}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_nombreDoc}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.nombreFisicoDoc}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_fechaDoc}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.fechaDoc}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_firmaContrato}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.fechaFirmaContrato}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_finContrato}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.fechaFinContrato}" />
+					</rich:column>
+					<rich:column width="12%">
+						<f:facet name="header">
+						#{messages.CU590_tipoDoc}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.documentos.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column width="8%">
+						<f:facet name="header">
+							Descargar
+						</f:facet>
+						<h:commandLink value="Descargar" target="_blank"
+							rendered="#{_record2.documentos.idDocumento!=null}"
+							action="#{consultaIngCon590FC.descargarArchivo(indexVar)}" />
+					</rich:column>
+
+
+				</rich:extendedDataTable>
+			</rich:panel>
+			<rich:simpleTogglePanel
+				label="#{messages.CU590_puestoCategoriaRemuneracion}"
+				switchType="client" id="panelBusqueda">
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1">
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}"
+								style=" width : 100px;"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="idPanelCampos" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}"
+								disabled="true" style=" width : 400px;" />
+								 	#{' '}
+	               
+					  				
+							</s:decorate>
+
+
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}"
+								style=" width : 100px;"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="idPanelCampos" focus="unidadOrgCodigo" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" disabled="true"
+								style=" width : 400px;" />
+									#{' '}
+	                				
+							</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric"
+								style=" width : 100px;"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion"
+								style=" width : 400px;" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				
+							</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">UO
+								</ui:define>
+							<h:inputText styleClass="numeric" style=" width : 100px;"
+								value="#{consultaIngCon590FC.codUoDet}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+
+							</h:inputText>
+										#{' '}
+										<h:inputText style=" width : 400px;" disabled="true"
+								value="#{consultaIngCon590FC.descUoDet}" />
+									#{' '}
+	                				
+							</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Puesto
+								</ui:define>
+							<h:inputText styleClass="numeric" style=" width : 100px;"
+								value="#{consultaIngCon590FC.codPuesto}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+
+							</h:inputText>
+										#{' '}
+										<h:inputText style=" width : 400px;" disabled="true"
+								value="#{consultaIngCon590FC.descpuesto}" />
+									#{' '}
+	                				
+							</s:decorate>
+					</h:panelGrid>
+
+				</h:panelGrid>
+				<rich:panel>
+					<f:facet name="header">Obj. Gasto (#{empty consultaIngCon590FC.lEmpleadoConceptoPago ? 0 : consultaIngCon590FC.lEmpleadoConceptoPago.size()})</f:facet>
+					<rich:extendedDataTable
+						noDataLabel="#{messages.msg_list_search_no_results}"
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						cellpadding="0" cellspacing="0" border="0" var="_record3"
+						height="100px"
+						value="#{consultaIngCon590FC.lEmpleadoConceptoPago}">
+						<rich:column width="8%">
+							<f:facet name="header">
+						Obj. de Gasto
+						</f:facet>
+							<h:outputText style="white-space:normal;word-wrap: break-word"
+								value="#{_record3.objCodigo}" />
+						</rich:column>
+						<rich:column width="80%">
+							<f:facet name="header">
+						#{messages.CU590_categoria}
+						</f:facet>
+							<h:outputText style="white-space:normal"
+								value="#{_record3.categoria}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">
+									Monto
+								</f:facet>
+							<h:outputText style="white-space:normal"
+								value="#{consultaIngCon590FC.formatearNumero(_record3.monto)}" />
+						</rich:column>
+
+					</rich:extendedDataTable>
+				</rich:panel>
+			</rich:simpleTogglePanel>
+			<div class="actionButtons"><s:button id="reset"
+				view="/seleccion/consultaIngCon/consultaIngCon590.xhtml"
+				propagation="none" value="Volver" /></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

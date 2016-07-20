@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBRPT_CU659_Jubilados" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+	OEE.DENOMINACION_UNIDAD OEE,
+	DE.DESCRIPCION TIPO,
+	case when JU.INHABILITADO is true then 'SI' else 'NO' END  inhabilitado,
+	JU.FECHA_ALTA fecha
+FROM
+	DESVINCULACION.JUBILADOS JU
+JOIN
+	PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+	OEE.ID_CONFIGURACION_UO = JU.ID_CONFIGURACION_UO
+JOIN
+	GENERAL.PERSONA
+ON
+	JU.ID_PERSONA = PERSONA.ID_PERSONA
+JOIN
+	SELECCION.DATOS_ESPECIFICOS DE
+ON
+	DE.ID_DATOS_ESPECIFICOS = JU.ID_DATOS_ESPECIF_TIPO
+JOIN
+	GENERAL.PAIS
+ON
+	PAIS.ID_PAIS = PERSONA.ID_PAIS_EXPEDICION_DOC
+WHERE JU.ID_PERSONA = $P{id}
+ORDER BY JU.FECHA_ALTA
+]]>
+	</queryString>
+	<field name="oee" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="inhabilitado" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Jubilación]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="0" y="18" width="145" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["OEE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="145" y="18" width="96" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha Jubilación"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="241" y="18" width="181" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Tipo Jubilación"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="422" y="18" width="134" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Inhabilitación"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="145" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{oee}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="145" y="0" width="96" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="241" y="0" width="181" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="422" y="0" width="133" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{inhabilitado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

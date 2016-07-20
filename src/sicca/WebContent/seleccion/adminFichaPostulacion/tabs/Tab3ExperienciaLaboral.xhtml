@@ -1,0 +1,325 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h:form id="experienciaLaboral" prependId="false"
+		enctype="multipart/form-data" styleClass="edit">
+
+		<rich:panel id="panelSuperior" style=" width : 872px;">
+			<f:facet name="header">#{messages.ExperienciaLaboralPortal_}</f:facet>
+
+			<h:panelGrid columns="3">
+				<s:decorate id="empresaField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_empresa}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="empresa" size="60" maxlength="150"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.empresa}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_desde}<span
+							class="required">*</span>
+					</ui:define>
+					<rich:calendar id="fechaDesde"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.fechaDesde}"
+						enableManualInput="true" inputSize="10"
+						oninputkeypress="ponerBarra(event);" datePattern="dd/MM/yyyy" />
+				</s:decorate>
+				<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_hasta}</ui:define>
+					<rich:calendar id="fechaHasta"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.fechaHasta}"
+						enableManualInput="true" inputSize="10"
+						oninputkeypress="ponerBarra(event);" datePattern="dd/MM/yyyy"
+						locale="#{siccaAppHelper.localeCode}" />
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<a:region>
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{tab3ExperienciaLaboralFormController.idPais}"
+							style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								reRender="paisField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU23_puesto_cargo}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText size="60" maxlength="100"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.puestoCargo}">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+
+
+				<a:region>
+					<s:decorate id="tituloField" template="/layout/display.xhtml">
+						<ui:define name="label">Tipo de Vinculación<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="titulo"
+							value="#{tab3ExperienciaLaboralFormController.idTipoVinculacion}"
+							style="width:250px">
+							<f:selectItems value="#{datosEspecificossBytTipoVincSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{tab3ExperienciaLaboralFormController.otipoVinculo()}"
+								reRender="panelOIns" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</a:region>
+
+				<a:outputPanel ajaxRendered="true" id="panelOIns">
+					<s:decorate id="otraInstField" template="/layout/edit.xhtml"
+						rendered="#{tab3ExperienciaLaboralFormController.esOtrovincilo}">
+						<ui:define name="label">#{messages.CU23_otro}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="otraInst" maxlength="100"
+							value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.otroVincu}">
+						</h:inputText>
+					</s:decorate>
+				</a:outputPanel>
+				<a:region>
+					<s:decorate id="sectorField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU23_sector}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="sector"
+							value="#{tab3ExperienciaLaboralFormController.idSector}"
+							style="width:250px">
+							<f:selectItems value="#{datosEspecificossBySectorSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{tab3ExperienciaLaboralFormController.oSector()}"
+								reRender="panelOtroSector" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:outputPanel ajaxRendered="true" id="panelOtroSector">
+					<s:decorate id="otroSectorField" template="/layout/edit.xhtml"
+						rendered="#{tab3ExperienciaLaboralFormController.esOtroSector}">
+						<ui:define name="label">#{messages.CU23_otro}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="otroSector" maxlength="100"
+							value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.otroSector}">
+						</h:inputText>
+					</s:decorate>
+				</a:outputPanel>
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<s:decorate id="funcionesRealizadasField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_descFunciones}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputTextarea id="funcionesRealizadas" cols="80" rows="3"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.funcionesRealizadas}">
+						<f:validateLength maximum="250" />
+					</h:inputTextarea>
+				</s:decorate>
+				<s:decorate id="referenciasLaboralesField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_referenciasLaborales}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputTextarea id="referenciasLaborales" cols="80" rows="3"
+						value="#{tab3ExperienciaLaboralFormController.experienciaLaboral.referenciasLaborales}">
+						<f:validateLength maximum="250" />
+					</h:inputTextarea>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="">
+				<s:decorate id="tipoDocumentoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_tipoDocumento}</ui:define>
+					<h:selectOneMenu id="tipoDocumento"
+						value="#{tab3ExperienciaLaboralFormController.idTipoDocumento}"
+						style="width:250px">
+						<f:selectItems
+							value="#{datosEspecificossByTipoDocumentoFPEXPSelectItems}" />
+					</h:selectOneMenu>
+
+				</s:decorate>
+
+				<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="30"
+						contentType="#{tab3ExperienciaLaboralFormController.contentType}"
+						data="#{tab3ExperienciaLaboralFormController.uploadedFile}"
+						fileName="#{tab3ExperienciaLaboralFormController.fileName}"
+						style=" width : 382px;">
+						<a:support event="onchange" eventsQueue="default"
+							action="#{tab3ExperienciaLaboralFormController.changeNameDoc()}"
+							reRender="panelDocNomex" />
+					</s:fileUpload>
+					<a:outputPanel ajaxRendered="true" id="panelDocNomex"
+						eventsQueue="default">
+						<h:inputText id="nomFin"
+							value="#{tab3ExperienciaLaboralFormController.nombreDoc}"
+							disabled="true" />
+					</a:outputPanel>
+				</s:decorate>
+				<!--<s:decorate id="experiencia" template="/layout/edit.xhtml">
+					<ui:define name="label">Experiencia</ui:define>
+					<h:selectOneRadio id="subscriptions"
+						value="#{tab3ExperienciaLaboralFormController.experiencia}">
+						<f:selectItem id="item1" itemLabel="General" itemValue="G" />
+						<f:selectItem id="item2" itemLabel="Específica" itemValue="E" />
+						
+					</h:selectOneRadio>
+				</s:decorate>-->
+
+
+			</h:panelGrid>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<br />
+			<div style="clear: both"><h:outputText
+				value="#{messages.ExperienciaLaboral_lbl_datos_requeridos}"
+				rendered="#{!experienciaLaboralHome.managed}"
+				styleClass="labelClass" /></div>
+			<br />
+
+			<div class="actionButtons"><h:commandButton id="addToList"
+				action="#{tab3ExperienciaLaboralFormController.addRow()}"
+				value="#{messages.msg_list_add}"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{tab3ExperienciaLaboralFormController.experienciaLaboral.idExperienciaLab == null}" />
+
+			<h:commandButton id="updateOnList"
+				action="#{tab3ExperienciaLaboralFormController.updateOnList()}"
+				value="#{messages.msg_update}"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{tab3ExperienciaLaboralFormController.experienciaLaboral.idExperienciaLab != null}" />
+
+			<a:commandButton id="cancelEditOnList"
+				action="#{tab3ExperienciaLaboralFormController.clearDataDetail()}"
+				value="#{messages.msg_cancel}"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{tab3ExperienciaLaboralFormController.experienciaLaboral.idExperienciaLab != null}" />
+			<a:commandButton id="ClearOnList"
+				action="#{tab3ExperienciaLaboralFormController.clearDataDetail()}"
+				value="Limpiar" reRender="panelDetalles,panelSuperior"
+				rendered="#{tab3ExperienciaLaboralFormController.experienciaLaboral.idExperienciaLab == null}" />
+
+			</div>
+
+		</rich:panel>
+
+		<br />
+
+		<rich:panel id="panelDetalles" style=" width : 872px;">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{tab3ExperienciaLaboralFormController.listDetails.size})</f:facet>
+			<div class="results" id="details" style="overflow: scroll;"
+				width="310"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty tab3ExperienciaLaboralFormController.listDetails}" />
+			<rich:dataTable id="detailsExperiences" var="_detail" rows="5"
+				value="#{tab3ExperienciaLaboralFormController.listDetails}"
+				rendered="#{not empty tab3ExperienciaLaboralFormController.listDetails}"
+				rowKeyVar="_index">
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.ExperienciaLaboral_desde}</f:facet>
+					<h:outputText value="#{_detail.fechaDesde}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.ExperienciaLaboral_hasta}</f:facet>
+					<h:outputText value="#{_detail.fechaHasta}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<h:column>
+					<f:facet name="header">#{messages.ExperienciaLaboral_empresa}</f:facet>
+					<h:outputText value="#{_detail.empresa}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{messages.CU23_puesto_cargo}</f:facet>
+					<h:outputText value="#{_detail.puestoCargo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{messages.CU23_tipo_vinculacion}</f:facet>
+					<h:outputText
+						value="#{_detail.datosEspecificosTipoVinculo.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{messages.CU23_sector}</f:facet>
+					<h:outputText value="#{_detail.datosEspecificosSector.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages.ExperienciaLaboral_funcionesRealizadas}</f:facet>
+					<h:outputText value="#{_detail.funcionesRealizadas}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{messages.ExperienciaLaboral_referenciaLaboral}</f:facet>
+					<h:outputText value="#{_detail.referenciasLaborales}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages.ExperienciaLaboral_tipoDocumento}</f:facet>
+					<h:outputText
+						value="#{_detail.documentos.datosEspecificos.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Documento</f:facet>
+					<h:outputText value="#{_detail.documentos.nombreFisicoDoc}" />
+				</h:column>
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<a:commandLink id="removeRow"
+						action="#{tab3ExperienciaLaboralFormController.removeRow(_index)}"
+						value="#{messages.msg_list_remove}"
+						onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+						reRender="panelDetalles" />
+						
+	            		#{' '}
+	            		<a:commandLink id="editRow"
+						action="#{tab3ExperienciaLaboralFormController.selectToEdit(_index)}"
+						value="#{messages.msg_edit}"
+						rendered="#{_detail.idExperienciaLab != null}"
+						reRender="panelSuperior,panelDetalles" />
+						
+	            		#{' '}
+	            		<h:commandLink value="Descargar" target="_blank"
+								rendered="#{_detail.documentos.idDocumento!=null}"
+								action="#{tab3ExperienciaLaboralFormController.abrirDoc(_index)}" />
+
+				
+				</rich:column>
+			</rich:dataTable><rich:datascroller for="detailsExperiences" id="scrollexperiencia"
+				renderIfSinglePage="false" /></div>
+		</rich:panel>
+
+		<br />
+		<div style="clear: both"><h:outputText
+			value="#{messages.ExperienciaLaboral_lbl_obs_add}"
+			rendered="#{!experienciaLaboralHome.managed}" styleClass="labelClass" />
+		</div>
+
+		<div class="actionButtons"><h:commandButton id="next"
+			rendered="false" value="#{messages.msg_to_next}" action="#" /> <s:button
+			id="cancelEdit" value="#{messages.msg_done}" propagation="none"
+			view="/cuentaUsuarioPortal.xhtml" /></div>
+	</h:form>
+
+</ui:composition>

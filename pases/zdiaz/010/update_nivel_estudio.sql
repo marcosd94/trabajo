@@ -1,0 +1,1 @@
+﻿update seleccion.nivel_estudio set activo = false where id_nivel_estudio = 1700;

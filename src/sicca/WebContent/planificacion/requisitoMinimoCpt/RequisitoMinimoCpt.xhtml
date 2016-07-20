@@ -1,0 +1,70 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.RequisitoMinimoCpt_}</h1>
+    <rich:panel>
+        <f:facet name="header">#{messages.msg_list_view} #{messages.RequisitoMinimoCpt_single}</f:facet>
+
+        <s:decorate id="descripcion" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.RequisitoMinimoCpt_descripcion}</ui:define>
+            <h:outputText value="#{requisitoMinimoCptHome.instance.descripcion}"/>
+        </s:decorate>
+        <s:decorate id="orden" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.RequisitoMinimoCpt_orden}</ui:define>
+            <h:outputText value="#{requisitoMinimoCptHome.instance.orden}"/>
+        </s:decorate>
+        <s:decorate id="activo" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.RequisitoMinimoCpt_activo}</ui:define>
+            <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{requisitoMinimoCptHome.instance.activo}" />
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/#{empty requisitoMinimoCptFrom ? 'planificacion/requisitoMinimoCpt/RequisitoMinimoCptList' : requisitoMinimoCptFrom}.xhtml"
+                    id="done"
+                 value="Volver"/>
+
+    </div>
+    
+   	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{requisitoMinimoCptHome.managed}">
+             <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+             <h:outputText id="usuAlta" value="#{requisitoMinimoCptHome.instance.usuAlta}"/>
+         </s:decorate>
+         <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{requisitoMinimoCptHome.managed}">
+             <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+             <h:outputText id="fechaAlta" value="#{requisitoMinimoCptHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+         </s:decorate>
+         <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{requisitoMinimoCptHome.managed}">
+             <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+             <h:outputText id="usuMod" value="#{requisitoMinimoCptHome.instance.usuMod}"/>
+         </s:decorate>
+         <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{requisitoMinimoCptHome.managed}">
+             <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+             <h:outputText id="fechaMod" value="#{requisitoMinimoCptHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+         </s:decorate> 
+     </h:panelGrid>   
+
+    
+</ui:define>
+
+</ui:composition>

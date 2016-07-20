@@ -1,0 +1,121 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.EstadoDet_}</h1>
+    <h:form id="estadoDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{estadoDetHome.managed ? messages.msg_edit : messages.msg_save}  #{messages.EstadoDet_}</f:facet>
+			
+			<s:decorate id="tipoCceField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.EstadoCab_}</ui:define>
+					<h:selectOneMenu id="tipoCce" 
+								  value="#{estadoDetHome.idEstadoCab}"
+							   required="true">
+						<f:selectItems value="#{estadosCabsSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+
+            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{estadoDetHome.instance.descripcion}">
+                </h:inputText>
+            </s:decorate>
+			  <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ValorNivelOrg_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{estadoDetHome.instance.activo}" />
+	            </s:decorate>
+
+           
+
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!estadoDetHome.managed}" styleClass="labelClass"/>
+	            <h:outputText value="#{messages.msg_obs_update}" rendered="#{estadoDetHome.managed}" styleClass="labelClass"/>
+	        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+  <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{estadoDetHome.persist}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       disabled="#{!estadoDetHome.wired}"                      
+                       rendered="#{!estadoDetHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{estadoDetHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{estadoDetHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{estadoDetHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="false"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/estados/EstadoDetList.xhtml"
+                rendered="#{estadoDetHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty estadoDetFrom ? 'planificacion/estados/EstadoDetList' : estadoDetFrom}.xhtml"
+                rendered="#{!estadoDetHome.managed}"/>
+
+        </div>
+         
+    </h:form>
+    
+    	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{estadoDetHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{estadoDetHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{estadoDetHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{estadoDetHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{estadoDetHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{estadoDetHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{estadoDetHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{estadoDetHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,90 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+    <rich:panel id="datosHomolog" style=" width : 1095px;">
+        <f:facet name="header">#{messages.CU52_obs_resp} (#{ ( perfilMatrizHomologacionFormController.homologacionSFPconFirmaList.size() == 0)? 0 : perfilMatrizHomologacionFormController.homologacionSFPconFirmaList.size()})</f:facet>
+		<div class="results" id="homologacionPerfilMatrizDetList">
+
+			<h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty perfilMatrizHomologacionFormController.homologacionSFPconFirmaList}" />
+
+			<rich:dataTable id="homologacionPerfilMatrizDetList" var="_ObsRptas"
+				rowKeyVar="index" rows="5"
+				value="#{perfilMatrizHomologacionFormController.homologacionSFPconFirmaList}"
+				rendered="#{not empty perfilMatrizHomologacionFormController.homologacionSFPconFirmaList}">
+
+				<h:column>
+					<f:facet name="heade">Descripción</f:facet>
+					<h:outputText value="#{_ObsRptas.observacion}" />
+				</h:column>
+				<!-- FECHA DE OBSERVACION -->
+				<h:column>
+					<f:facet name="header">#{messages.CU52_fecha}</f:facet>
+					<h:outputText value="#{_ObsRptas.fechaObs}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages.CU52_repuesta}</f:facet>
+					<h:outputText value="#{_ObsRptas.respuesta}" />
+				</h:column>
+
+
+				<h:column>
+					<f:facet name="header">#{messages.CU52_fecha}</f:facet>
+					<h:outputText value="#{_ObsRptas.fechaRpta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+				
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+  	        #{' '}
+            <s:link
+						view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucionEdit.xhtml"
+						value="#{messages.CU53_resp}" propagation="none"
+						disabled="#{!perfilMatrizHomologacionFormController.habRpta(_ObsRptas.idHomologacionDet) and !perfilMatrizHomologacionFormController.canEdit}">
+						<f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+							value="#{_ObsRptas.idHomologacionDet}" />
+						<f:param name="fromRpta" value="true" />
+						<f:param name="idGrupo"
+							value="#{perfilMatrizHomologacionFormController.idConcursoPuestoAgr}" />
+							<f:param name="codActividad"
+							value="#{perfilMatrizHomologacionFormController.codActividad}" />
+					</s:link>
+					#{' '}
+<!-- AdmPerfilMatHomologInsEditFormController.java; codActividad está en null cuando se entra en editar, deshabilitado temporalmente; Werner. -->
+<!-- deshabilitado temporalmente, ya que codActividad envía null cuando se entra en el link "editar" en este formulario no hay problemas, se deshabilita solo por estética; Werner. -->
+<!-- 					<s:link -->
+<!-- 						view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucionEdit.xhtml" -->
+<!-- 						value="Editar" propagation="none" -->
+<!-- 						rendered="#{perfilMatrizHomologacionFormController.canEdit(_ObsRptas.idHomologacionDet)}"> -->
+<!-- 						<f:param name="homologacionPerfilMatrizDetIdHomologacionDet" -->
+<!-- 							value="#{_ObsRptas.idHomologacionDet}" /> -->
+<!-- 						<f:param name="fromRpta" value="true" /> -->
+<!-- 						<f:param name="idGrupo" -->
+<!-- 							value="#{perfilMatrizHomologacionFormController.idConcursoPuestoAgr}" /> -->
+<!-- 							<f:param name="codActividad" -->
+<!-- 							value="#{perfilMatrizHomologacionFormController.codActividad}" /> -->
+<!-- 					</s:link> -->
+				</rich:column>
+					
+			</rich:dataTable>
+			<rich:datascroller for="homologacionPerfilMatrizDetList"
+				id="scrollObsRptasOee" renderIfSinglePage="false" />
+
+		</div>
+	</rich:panel>
+
+   
+</ui:composition>
+ 

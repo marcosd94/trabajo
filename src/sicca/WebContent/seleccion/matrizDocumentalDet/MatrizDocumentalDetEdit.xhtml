@@ -1,0 +1,90 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU382_title}</h1>
+		<h:form id="matrizDocumentalDet" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{matrizDocumentalDetHome.managed ? messages.msg_edit : messages.msg_add_new} #{messages.CU382_title_panel}</f:facet>
+
+				<s:decorate id="cabeceraField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+					<h:inputText id="descripcion" disabled="true"
+						value="#{admDetMatrizDocumentalFormController.cabecera.descripcion}"
+						size="80">
+					</h:inputText>
+				</s:decorate>
+				<br />
+				<br />
+				<s:decorate id="msgField" template="/layout/edit.xhtml">
+					<h:outputText id="msg"
+						value="#{admDetMatrizDocumentalFormController.mensaje}"
+						style="color:red;" />
+				</s:decorate>
+				<div style="clear: both; overflow: auto; HEIGHT: 250px"><rich:dataTable
+					id="tablaDet" cellpadding="0" cellspacing="0" width="400"
+					border="0" var="var" rowKeyVar="row"
+					value="#{admDetMatrizDocumentalFormController.listaDTO}">
+
+					<f:facet name="header">
+
+						<f:facet name="header">#{messages.CU382_title_detalle}</f:facet>
+					</f:facet>
+					<rich:column width="150px" style="text-align: center;">
+						<f:facet name="header">#{messages.CU382_title_orden}</f:facet>
+						<h:inputText value="#{var.orden}" disabled="true">
+							
+						</h:inputText>
+					</rich:column>
+					<rich:column width="250px" style="text-align: center;">
+						<f:facet name="header">#{messages.CU382_title_tipo_doc}</f:facet>
+						<h:selectOneMenu id="tipoDocumento"
+							value="#{var.idDatosEspecificos}" style="width:500px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocumentoSelectItems}" />
+							<a:support event="onchange" reRender="tablaDet,msg"
+								action="#{admDetMatrizDocumentalFormController.modificarFilaDet(row)}">
+							</a:support>
+						</h:selectOneMenu>
+					</rich:column>
+					<rich:column width="100px" style="text-align: center;">
+						<f:facet name="header">#{messages.CU382_title_activo}</f:facet>
+						<h:selectBooleanCheckbox value="#{var.activo}" />
+					</rich:column>
+
+					<rich:column width="100px" style="text-align: center;">
+						<f:facet name="header">#{messages.CU382_title_acciones}</f:facet>
+						<a:commandButton value="+"
+							action="#{admDetMatrizDocumentalFormController.agregarListaDto(row)}"
+							reRender="tablaDet,msg" disabled="#{var.bloquear}" />
+						<a:commandButton value="-"
+							disabled="#{var.orden == null and var.idDatosEspecificos == null}"
+							action="#{admDetMatrizDocumentalFormController.eliminarListaDto(row)}"
+							reRender="tablaDet" />
+					</rich:column>
+				</rich:dataTable></div>
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{admDetMatrizDocumentalFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml" /></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

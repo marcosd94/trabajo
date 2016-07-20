@@ -1,0 +1,463 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		
+		<h1>#{messages.CU41_title}</h1>
+		<h:form id="evalDocumentalCabSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel id="panelBusqueda">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{evaluarDocPostulantesFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{evaluarDocPostulantesFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{evaluarDocPostulantesFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{evaluarDocPostulantesFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{evaluarDocPostulantesFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{evaluarDocPostulantesFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{evaluarDocPostulantesFormController.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+						<h:inputText id="grupoCodigo" size="5" disabled="true"
+							value="#{evaluarDocPostulantesFormController.concursoPuestoAgr.codGrupo}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{evaluarDocPostulantesFormController.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<fieldset style="width: 500px;"><legend>#{messages.CU41_fecha_eval}</legend>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">Desde</ui:define>
+						<rich:calendar id="fechaDesde"
+							disabled="#{evaluarDocPostulantesFormController.bloquearTodo}"
+							value="#{evaluarDocPostulantesFormController.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">Hasta</ui:define>
+						<rich:calendar id="fechaHasta"
+							disabled="#{evaluarDocPostulantesFormController.bloquearTodo}"
+							value="#{evaluarDocPostulantesFormController.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+						
+				<s:decorate id="usuPostulanteFiltro"  template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU41_cod_postulante}</ui:define>
+					<h:inputText id="usuPostulacion" size="9"
+						value="#{evaluarDocPostulantesFormController.usuPostulacionFiltro}">
+					</h:inputText>
+				</s:decorate>
+				
+				<s:decorate id="evaluadoFiltro"  template="/layout/display.xhtml">
+					<ui:define name="label" >#{messages.CU41_evaluadoFiltro}</ui:define>	
+					<h:selectOneRadio value="#{evaluarDocPostulantesFormController.evaluadoFiltro}">
+					<f:selectItems
+						value="#{evaluarDocPostulantesFormController.estaEvaluado()}" />
+					
+				    </h:selectOneRadio>
+				    
+				    <!--		<h:selectBooleanCheckbox id="evaluadoFiltroCheck" disabled="false"
+						 value="#{evaluarDocPostulantesFormController.evaluadoFiltro}" /> 
+					-->
+			
+				 </s:decorate>
+							
+				
+			 <s:decorate id="aprobadoFiltro" template="/layout/display.xhtml">
+				 
+					  <ui:define name="label" >#{messages.CU41_aprobadoFiltro}</ui:define>   
+				    <h:selectOneRadio value="#{evaluarDocPostulantesFormController.aprobadoFiltro}"  >
+					<f:selectItems
+						value="#{evaluarDocPostulantesFormController.estaAprobado()}" />
+				    </h:selectOneRadio>
+			</s:decorate>
+				
+				
+				
+				<s:decorate id="obsField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.gral_observacion}</ui:define>
+					<h:inputTextarea
+						disabled="#{evaluarDocPostulantesFormController.bloquearTodo}"
+						value="#{evaluarDocPostulantesFormController.observacion}"
+						cols="50">
+						<f:validateLength maximum="250" />
+					</h:inputTextarea>
+				</s:decorate>
+				
+				<div style="clear: both"><h:outputText
+					value="* Se han verificado los documentos de los postulantes"
+					styleClass="labelClass" style="color:Red;" /></div>
+			</rich:simpleTogglePanel>
+			<a:outputPanel id="idPanelBotones" ajaxRendered="true">
+				<div class="actionButtons"><a:commandButton id="search"
+					rendered="#{!evaluarDocPostulantesFormController.bloquearTodo}"
+					value="#{messages.msg_list_search_button}"
+					action="#{evaluarDocPostulantesFormController.search()}"
+					reRender="panelResultados">
+					<f:param name="firstResult" value="0" />
+					
+				</a:commandButton> <a:commandButton id="reset"
+					rendered="#{!evaluarDocPostulantesFormController.bloquearTodo}"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{evaluarDocPostulantesFormController.searchAll()}"
+					reRender="panelResultados,panelBusqueda">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				
+				<s:button
+					rendered="#{evaluarDocPostulantesFormController.todosEvaluados and !evaluarDocPostulantesFormController.bloquearTodo}"
+					id="anexo" value="Anexo"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{evaluarDocPostulantesFormController.direccionFisica}" />
+					<f:param name="nombrePantalla" value="evaluar_doc_postulante_list" />
+					<f:param name="idCU"
+						value="#{evaluarDocPostulantesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="#{evaluarDocPostulantesFormController.from}" />
+				</s:button> 
+				
+				
+				
+				<s:button
+					rendered="#{evaluarDocPostulantesFormController.mostrarModal}"
+					id="idBtnDisminuirPuestos" value="Disminuir Puestos"
+					propagation="default"
+					view="#{evaluarDocPostulantesFormController.view451}">
+				</s:button></div>
+
+			</a:outputPanel>
+
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty evalDocumentalCabList.resultList ? 0 : (evalDocumentalCabList.paginated ? evalDocumentalCabList.resultCount : evalDocumentalCabList.resultList.size)})</f:facet>
+				<div class="results" id="evalDocumentalCabList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty evalDocumentalCabList.resultList}" /> <rich:dataTable
+					id="evalDocumentalCabList" var="_evalDocumentalCab"
+					rowKeyVar="row"
+					value="#{evalDocumentalCabList.resultList}"
+					rendered="#{not empty evalDocumentalCabList.resultList}">
+					
+					<h:column>
+						<f:facet name="header">#{messages.CU41_nro}</f:facet>
+						<h:outputText
+							value="#{evalDocumentalCabList.firstResult + row+1}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU41_cod_postulante}" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.usuAlta" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_evalDocumentalCab.postulacion.personaPostulante.usuAlta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel" value="Evaluado" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.evaluado" />
+							</ui:include>
+						</f:facet>
+						<h:selectBooleanCheckbox id="evaluado" disabled="true"
+							value="#{_evalDocumentalCab.evaluado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU41_fecha_eval}" />
+								<ui:param name="propertyPath"
+									value="evalDocumentalCab.fechaEvaluacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel" value="Aprobado" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.aprobado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="APROBADO"
+							rendered="#{_evalDocumentalCab.aprobado and _evalDocumentalCab.aprobado != null}" />
+						<h:outputText value="NO APROBADO"
+							rendered="#{!_evalDocumentalCab.aprobado and _evalDocumentalCab.aprobado != null}" />
+					</h:column>
+
+
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<a:commandLink id="showParentescoList" value="Parentescos"
+								reRender="verParentesco"
+								action="#{evaluarDocPostulantesFormController.listarParentesco(_evalDocumentalCab.postulacion.personaPostulante.idPersonaPostulante)}"
+								 oncomplete= "#{rich:component('verParentesco')}.show()"/>
+								 
+								<!-- oncomplete= rich:component('verParentesco').show() 
+								="Richfaces.showModalPanel('VerParentesco', {top:'50px', left:'200px', height:'400px'});" -->
+								#{' '}
+						<h:commandLink action="#{evaluarDocPostulantesFormController.imprimir(_evalDocumentalCab)}" value="Ver Datos del Postulantes"/>
+						
+							#{' '}
+
+						<s:link
+							
+							view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabEdit.xhtml"
+							value="#{evaluarDocPostulantesFormController.evaluar()}" propagation="none"
+							id="evalDocumentalCabEdit"
+							>
+							<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+								value="#{_evalDocumentalCab.idEvalDocumentalCab}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{evaluarDocPostulantesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="codActividad"
+								value="#{evaluarDocPostulantesFormController.codActividad}" />
+							<f:param name="isEdit"
+								value="#{isEdit}" />
+						</s:link>
+						<!-- rendered="#{!_evalDocumentalCab.evaluado}" -->
+						
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<div class="tableControl"><s:link
+				view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.lastFirstResult}" />
+			</s:link></div>
+
+
+			<s:decorate id="cantField" template="/layout/edit.xhtml">
+				<ui:define name="label">Cant. Evaluados</ui:define>
+				<h:inputText
+					value="#{evaluarDocPostulantesFormController.cantEvaluados}"
+					size="10" disabled="true" />
+			</s:decorate>
+
+			<br />
+			<br />
+			<a:outputPanel id="idPanelBotonesGral" ajaxRendered="true">
+			<div class="actionButtons"><a:commandButton id="tarea"
+			rendered="#{!evaluarDocPostulantesFormController.bloquearTodo}" 
+				value="#{messages.proceso_sgte_tarea}"
+				reRender="modalPanel,idPanelBotones"
+				action="#{evaluarDocPostulantesFormController.nextTask()}" />
+				 <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"
+				rendered = "#{isEdit}" />
+				<s:button
+				id="alHistorial" value="Volver" propagation="none"
+				view="#{evaluarDocPostulantesFormController.volverHistorial()}"
+				rendered = "#{not isEdit}" /></div>
+				</a:outputPanel>
+		</h:form>
+		
+		<!-- VER PARENTESCO -->
+		<rich:modalPanel id="verParentesco" width="550" height="450"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">Parentesco</f:facet>
+		
+			<!-- LISTAR POR CONSANGUINIDAD -->
+		<h:form>
+		
+		<rich:panel rendered="#{evaluarDocPostulantesFormController.listDetails.size == 0}">
+		<f:facet name="header">Por Consanguinidad</f:facet>
+		<div class="results" id="details" style="overflow: scroll;"
+				width="310"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluarDocPostulantesFormController.listDetails}" />
+		</div>
+		</rich:panel>		
+		
+		<rich:panel rendered="#{evaluarDocPostulantesFormController.listDetails.size >0}">
+		<f:facet name="header">Por Consanguinidad</f:facet>
+		<div class="results" id="details" style="overflow: scroll;"
+				width="310"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluarDocPostulantesFormController.listDetails}" />
+				
+		
+		<rich:dataTable id="detailsParentesco" var="_list" rows="3"
+				value="#{evaluarDocPostulantesFormController.listDetails}">
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_parentesco}</f:facet>
+					<h:outputText value="#{evaluarDocPostulantesFormController.descripParent(_list.idParentesco)}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_Nombres}</f:facet>
+					<h:outputText value="#{_list.nombres}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_apellidos}</f:facet>
+					<h:outputText value="#{_list.apellidos}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_ci}</f:facet>
+					<h:outputText value="#{_list.documentoIdentidad}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_institucion}</f:facet>
+					<h:outputText value="#{_list.institucion}" />
+				</rich:column>
+				
+		</rich:dataTable>
+		<rich:datascroller for="detailsParentesco" maxPages="3" 
+				renderIfSinglePage="false" /></div>
+		</rich:panel>
+		</h:form>
+		<br/>
+				<!-- LISTAR POR AFINIDAD -->
+		<h:form>
+		
+		<rich:panel rendered="#{evaluarDocPostulantesFormController.listDetails2.size == 0}">
+		<f:facet name="header">Por Afinidad</f:facet>
+		<div class="results" id="details2" style="overflow: scroll;"
+				width="310"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluarDocPostulantesFormController.listDetails2}" />
+		</div>		
+		</rich:panel>		
+		<rich:panel rendered="#{evaluarDocPostulantesFormController.listDetails2.size >0}">
+		<f:facet name="header">Por Afinidad</f:facet>
+		<div class="results" id="details2" style="overflow: scroll;"
+				width="310"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluarDocPostulantesFormController.listDetails2}" />
+				
+		<rich:dataTable id="detailsParentescoAfin" var="_list2" rows="3"
+				value="#{evaluarDocPostulantesFormController.listDetails2}">
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_parentesco}</f:facet>
+					<h:outputText value="#{evaluarDocPostulantesFormController.descripParent(_list2.idParentesco)}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_Nombres}</f:facet>
+					<h:outputText value="#{_list2.nombres}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_apellidos}</f:facet>
+					<h:outputText value="#{_list2.apellidos}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_ci}</f:facet>
+					<h:outputText value="#{_list2.documentoIdentidad}" />
+				</rich:column>
+				<rich:column style="width:90px;">
+					<f:facet name="header">#{messages.CU212_tab7_institucion}</f:facet>
+					<h:outputText value="#{_list2.institucion}" />
+				</rich:column>
+				
+		</rich:dataTable>
+		<rich:datascroller for="detailsParentescoAfin" maxPages="3" data="#{evaluarDocPostulantesFormController.listDetails2}"
+				renderIfSinglePage="false" /></div>
+		</rich:panel>
+		</h:form>
+			<br/>
+				<div class="actionButtons" align="center"><a:commandButton
+					id="cancel_tap03" value="Volver" ajaxSingle="true"
+					onclick="Richfaces.hideModalPanel('verParentesco')" /></div>
+			
+		</rich:modalPanel>
+	
+		
+	
+
+	</ui:define>
+
+</ui:composition>

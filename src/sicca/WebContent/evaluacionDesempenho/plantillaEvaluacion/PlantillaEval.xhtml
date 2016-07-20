@@ -1,0 +1,135 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Ver #{messages.CU555_plantilla}</h1>
+		<h:form id="plantillaEval" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU555_panel_datos}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU555_nombre}<span
+								class="required">*</span></ui:define>
+						<h:inputText id="nombre" size="100" disabled="true"
+							maxlength="150"
+							value="#{plantillaEvalDesempFC.plantillaEval.nombre}">
+
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU555_metodologia}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="idMetodologia" disabled="true"
+							value="#{plantillaEvalDesempFC.idMetodologia}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoPlantillaEvalSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			
+			<rich:panel id="panelResultadoDetalle">
+				<f:facet name="header">#{messages.CU555_panel_item} (#{plantillaEvalDesempFC.listaPlantillaEvalDets.size()})</f:facet>
+				<div class="results" id="tbldetList"
+					style="FONT-SIZE: medium; overflow: scroll; width: 1000px; HEIGHT: 230px">
+					<h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty plantillaEvalDesempFC.listaPlantillaEvalDets}" />
+					<rich:dataTable 
+					id="itemsList" var="_items" first="0"
+					value="#{plantillaEvalDesempFC.listaPlantillaEvalDets}"
+					rowKeyVar="rowNr" rendered="#{plantillaEvalDesempFC.listaPlantillaEvalDets.size() > 0}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU555_nro}
+						</f:facet>
+						<h:outputText value="#{_items.orden}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU555_resultado}
+						</f:facet>
+						<h:outputText value="#{_items.resultadoEsperado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU555_actividades}
+						</f:facet>
+						<h:outputText value="#{_items.actividades}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU555_indicadores}
+						</f:facet>
+
+
+						<h:outputText value="#{_items.indicadoresCump}" />
+					</h:column>
+
+					
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<h:panelGrid columns="1">
+			<s:decorate id="activoField" template="/layout/edit.xhtml">
+				<ui:define name="label">Activo</ui:define>
+				<h:selectBooleanCheckbox value="#{plantillaEvalDesempFC.plantillaEval.activo}" disabled="true"/>
+			</s:decorate>
+			</h:panelGrid>
+
+			<div class="actionButtons"> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/evaluacionDesempenho/plantillaEvaluacion/PlantillaEvalList.xhtml" />
+
+			</div>
+			
+			<h:panelGrid columns="2">
+				<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+					rendered="#{plantillaEvalDesempFC.idPlantillaEval != null}">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText id="usuAlta"
+						value="#{plantillaEvalDesempFC.plantillaEval.usuAlta}" />
+				</s:decorate>
+				<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+					rendered="#{plantillaEvalDesempFC.idPlantillaEval != null}">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText id="fechaAlta"
+						value="#{plantillaEvalDesempFC.plantillaEval.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+				<s:decorate id="usuModField" template="/layout/edit.xhtml"
+					rendered="#{plantillaEvalDesempFC.idPlantillaEval != null}">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText id="usuMod"
+						value="#{plantillaEvalDesempFC.plantillaEval.usuMod}" />
+				</s:decorate>
+				<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+					rendered="#{plantillaEvalDesempFC.idPlantillaEval != null}">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+					<h:outputText id="fechaMod"
+						value="#{plantillaEvalDesempFC.plantillaEval.fechaMod}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

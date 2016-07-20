@@ -1,0 +1,239 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU234_list_title}</h1>
+		 
+		<h:form id="solicitudProrrogaSearch" styleClass="edit">
+		
+				<rich:panel id="panelEncabezado">
+					<h:panelGrid columns="3">
+
+						<s:decorate id="nivelField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_nivel}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+						</s:decorate>
+						<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+						</s:decorate>
+						<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+			                #{' '}
+			                <h:inputText id="configUoCab" size="40"
+									disabled="true"
+									value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+				<br></br>
+				<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+					switchType="client" id="panelParamentro">
+	
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_concurso}</ui:define>
+							<h:inputText id="concurso" size="40" value="#{solicitudProrrogaFormController.concurso}">
+							</h:inputText>
+						</s:decorate>
+	
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_grupo_puestos}</ui:define>
+							<h:inputText id="concurso" size="40" value="#{solicitudProrrogaFormController.grupoPuesto}">
+							</h:inputText>
+						</s:decorate>
+						
+						<s:decorate id="fechaDesdeField" template="/layout/display.xhtml">
+			                <ui:define name="label">#{messages.CU234_fecha_solicitud_desde}</ui:define>
+			                <rich:calendar id="fechaDesde"
+			                		 value="#{solicitudProrrogaFormController.fechaDesde}"
+			                         inputSize="10"
+			                    	 enableManualInput="true"
+			                         oninputkeyup="ponerBarra(event)" 
+			                         datePattern="dd/MM/yyyy" />
+			            </s:decorate>
+			            
+			            <s:decorate id="fechaHastaField" template="/layout/display.xhtml">
+			                <ui:define name="label">#{messages.CU234_fecha_solicitud_hasta}</ui:define>
+			                <rich:calendar id="fechaHasta"
+			                		value="#{solicitudProrrogaFormController.fechaHasta}"
+			                        inputSize="10"
+			                    	enableManualInput="true"
+			                        oninputkeyup="ponerBarra(event)" 
+			                        datePattern="dd/MM/yyyy" />
+			            </s:decorate>
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+
+				<div class="actionButtons">
+					<a:commandButton id="search"
+						eventsQueue="default" value="#{messages.msg_list_search_button}"
+						reRender="panelParamentro,panelResultado"
+						action="#{solicitudProrrogaFormController.search()}">
+						<f:param name="firstResult" value="0" />
+					</a:commandButton> 
+					<a:commandButton id="reset" eventsQueue="default"
+						value="#{messages['msg_list_search_reset_button']}"
+						action="#{solicitudProrrogaFormController.searchAll()}"
+						reRender="panelParamentro,panelResultado" />
+				</div>
+
+
+				
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty solicProrrogaCabList.resultList ? 0 : (solicProrrogaCabList.paginated ? solicProrrogaCabList.resultCount : solicProrrogaCabList.resultList.size)})</f:facet>
+					<div class="results" id="solicProrrogaCabList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty solicProrrogaCabList.resultList}" /> <rich:dataTable
+						id="solicProrrogaCabList" var="_solicProrrogaCab"
+						value="#{solicitudProrrogaFormController.listaSolicProrrogaCab}"
+						rendered="#{not empty solicProrrogaCabList.resultList}">
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{solicProrrogaCabList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU234_tipo}" />
+									<ui:param name="propertyPath" value="solicProrrogaCab.tipo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_solicProrrogaCab.fechasGrupoPuesto.concurso == null ? 'CONCURSO' : 'GRUPO DE PUESTOS'}" />
+						</h:column>
+						
+						<h:column> 
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{solicProrrogaCabList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU234_fecha_solicitud}" />
+									<ui:param name="propertyPath" value="solicProrrogaCab.fechaSol" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_solicProrrogaCab.fechaSol}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{solicProrrogaCabList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_concurso}" />
+									<ui:param name="propertyPath" value="solicProrrogaCab.fechasGrupoPuesto.concursoPuestoAgr.concurso.nombre" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_solicProrrogaCab.fechasGrupoPuesto.concurso == null ? _solicProrrogaCab.fechasGrupoPuesto.concursoPuestoAgr.concurso.nombre : _solicProrrogaCab.fechasGrupoPuesto.concurso.nombre}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{solicProrrogaCabList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_grupo_puestos}" />
+									<ui:param name="propertyPath" value="solicProrrogaCab.fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_solicProrrogaCab.fechasGrupoPuesto.concurso == null ? _solicProrrogaCab.fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo : ''}" />
+						</h:column>
+						
+						<h:column> 
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{solicProrrogaCabList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_estado}" />
+									<ui:param name="propertyPath" value="solicProrrogaCab.estado" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_solicProrrogaCab.estado}" />
+						</h:column>
+						
+	
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							
+				            <s:link view="/seleccion/admSolicitudProrroga/SolicitudProrroga.xhtml"
+									value="Ver" propagation="none" id="concurso"
+									rendered="#{empty from}">
+									<f:param name="idSolicCab" value="#{_solicProrrogaCab.idSolicCab}" />
+									<f:param name="modoVista" value="true" />
+							</s:link>
+				            #{' '}
+				            <s:link view="/seleccion/admSolicitudProrroga/SolicitudProrroga.xhtml"
+									value="#{messages.msg_edit}" propagation="none" id="concursoEdit"
+									rendered="#{empty from}">
+									<f:param name="idSolicCab" value="#{_solicProrrogaCab.idSolicCab}" />
+									<f:param name="modoVista" value="false" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+		</h:form>
+	
+		<div class="tableControl">
+			<s:link
+				view="/seleccion/admSolicitudProrroga/SolicitudProrrogaList.xhtml"
+				rendered="#{solicProrrogaCabList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> 
+			<s:link view="/seleccion/admSolicitudProrroga/SolicitudProrrogaList.xhtml"
+				rendered="#{solicProrrogaCabList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{solicProrrogaCabList.previousFirstResult}" />
+			</s:link> 
+			<s:link view="/seleccion/admSolicitudProrroga/SolicitudProrrogaList.xhtml"
+				rendered="#{solicProrrogaCabList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{solicProrrogaCabList.nextFirstResult}" />
+			</s:link> 
+			<s:link view="/seleccion/admSolicitudProrroga/SolicitudProrrogaList.xhtml"
+				rendered="#{solicProrrogaCabList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{solicProrrogaCabList.lastFirstResult}" />
+			</s:link>
+		</div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/seleccion/admSolicitudProrroga/SolicitudProrrogaEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="idSolicCab"/>
+			</s:button>
+		</s:div>
+	
+	
+</ui:define>
+
+</ui:composition>

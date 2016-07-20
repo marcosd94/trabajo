@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+		 <begin-conversation flush-mode="MANUAL" join="true"/>
+		<action execute="#{adjuntarResolucionFC.initVer()}"
+		on-postback="false" />
+		  <param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{adjuntarResolucionFC.idEvaluacionDesempeno}"/>
+
+	 
+  <param name="ver"/>
+   <param name="from" value="#{adjuntarResolucionFC.from}"/>
+
+   <param name="evaluacion" value="#{seguridadUtilFormController.evaluacionNombre}"/>  
+    <param name="sinNivelEntidadIdSinNivelEntidad" value="#{seguridadUtilFormController.nivelEntidadOeeUtil.idSinNivelEntidad}"/>
+ 	<param name="sinEntidadIdSinEntidad" value="#{seguridadUtilFormController.nivelEntidadOeeUtil.idSinEntidad}"/>
+ 	<param name="configuracionUoCabIdConfiguracionUo" value="#{seguridadUtilFormController.nivelEntidadOeeUtil.idConfigCab}"/>
+   <param name="configuracionUoDetIdConfiguracionUoDet" value="#{seguridadUtilFormController.nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+  	
+  	<navigation from-action="#{adjuntarResolucionFC.nextTask()}">
+		<rule if-outcome="next">
+			   <end-conversation before-redirect="true"/>
+			<redirect
+				view-id="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml">
+				 <param name="mensaje" value="ok"/>
+			</redirect>
+		</rule>
+	</navigation>
+  
+  <restrict>#{identity.hasRole('ver_adjuntoResolucion')}</restrict>
+</page>
+

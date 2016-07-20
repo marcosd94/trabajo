@@ -1,0 +1,339 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="matrizDocConfigEnc" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{matrizDocConfigEncHome.managed ? 'Edit' : 'Add'} Matriz doc config enc</f:facet>
+
+
+            <s:decorate id="idMatrizDocConfigEncField" template="layout/edit.xhtml">
+                <ui:define name="label">Id matriz doc config enc</ui:define>
+                <h:inputText id="idMatrizDocConfigEnc"
+                       required="true"
+                       disabled="#{matrizDocConfigEncHome.managed}"
+                          value="#{matrizDocConfigEncHome.instance.idMatrizDocConfigEnc}">
+                    <a:support event="onblur" reRender="idMatrizDocConfigEncField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{matrizDocConfigEncHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{matrizDocConfigEncHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{matrizDocConfigEncHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{matrizDocConfigEncHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{matrizDocConfigEncHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{matrizDocConfigEncHome.persist}"
+                       disabled="#{!matrizDocConfigEncHome.wired}"
+                       rendered="#{!matrizDocConfigEncHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{matrizDocConfigEncHome.update}"
+                       rendered="#{matrizDocConfigEncHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{matrizDocConfigEncHome.remove}"
+                      immediate="true"
+                       rendered="#{matrizDocConfigEncHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/MatrizDocConfigEnc.xhtml"
+                rendered="#{matrizDocConfigEncHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty matrizDocConfigEncFrom ? 'MatrizDocConfigEncList' : matrizDocConfigEncFrom}.xhtml"
+                rendered="#{!matrizDocConfigEncHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Datos especificos *" labelClass="required">
+    <div class="association" id="datosEspecificosParent">
+
+        <h:outputText value="There is no datosEspecificos associated with this matrizDocConfigEnc."
+                   rendered="#{matrizDocConfigEncHome.instance.datosEspecificos == null}"/>
+
+        <rich:dataTable var="_datosEspecificos"
+                   value="#{matrizDocConfigEncHome.instance.datosEspecificos}"
+                rendered="#{matrizDocConfigEncHome.instance.datosEspecificos != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="datosEspecificosTable">
+            <h:column>
+                <f:facet name="header">Id datos especificos</f:facet>
+                <h:outputText value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos generales id datos generales</f:facet>
+                <h:outputText value="#{_datosEspecificos.datosGenerales.idDatosGenerales}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_datosEspecificos.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor alf</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor num</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorNum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_datosEspecificos.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{matrizDocConfigEncHome.instance.datosEspecificos != null ? 'changeParent' : 'selectParent'}" value="#{matrizDocConfigEncHome.instance.datosEspecificos != null ? 'Change' : 'Select'} datosEspecificos"
+                       view="/DatosEspecificosList.xhtml">
+                <f:param name="from" value="MatrizDocConfigEncEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Concurso puesto agr *" labelClass="required">
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this matrizDocConfigEnc."
+                   rendered="#{matrizDocConfigEncHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{matrizDocConfigEncHome.instance.concursoPuestoAgr}"
+                rendered="#{matrizDocConfigEncHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{matrizDocConfigEncHome.instance.concursoPuestoAgr != null ? 'changeParent' : 'selectParent'}" value="#{matrizDocConfigEncHome.instance.concursoPuestoAgr != null ? 'Change' : 'Select'} concursoPuestoAgr"
+                       view="/ConcursoPuestoAgrList.xhtml">
+                <f:param name="from" value="MatrizDocConfigEncEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Matriz doc config dets">
+        <h:form styleClass="association" id="matrizDocConfigDetsChildren">
+
+            <h:outputText value="There are no matrizDocConfigDets associated with this matrizDocConfigEnc."
+                       rendered="#{empty matrizDocConfigEncHome.matrizDocConfigDets}"/>
+
+            <rich:dataTable value="#{matrizDocConfigEncHome.matrizDocConfigDets}"
+                           var="_matrizDocConfigDet"
+                      rendered="#{not empty matrizDocConfigEncHome.matrizDocConfigDets}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="matrizDocConfigDetsTable">
+                <rich:column sortBy="#{_matrizDocConfigDet.idMatrizDocConfigDet}">
+                    <f:facet name="header">Id matriz doc config det</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.idMatrizDocConfigDet}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.nroOrden}">
+                    <f:facet name="header">Nro orden</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.nroOrden}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.obligatorio}">
+                    <f:facet name="header">Obligatorio</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.obligatorio}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.evaluacionDoc}">
+                    <f:facet name="header">Evaluacion doc</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.evaluacionDoc}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.adjudicacion}">
+                    <f:facet name="header">Adjudicacion</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.adjudicacion}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.activo}">
+                    <f:facet name="header">Activo</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.activo}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.usuAlta}">
+                    <f:facet name="header">Usu alta</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.usuAlta}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.fechaAlta}">
+                    <f:facet name="header">Fecha alta</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.fechaAlta}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.usuMod}">
+                    <f:facet name="header">Usu mod</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.usuMod}"/>
+                </rich:column>
+                <rich:column sortBy="#{_matrizDocConfigDet.fechaMod}">
+                    <f:facet name="header">Fecha mod</f:facet>
+                    <h:outputText value="#{_matrizDocConfigDet.fechaMod}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{matrizDocConfigEncHome.managed}" id="matrizDocConfigDets">
+        <div class="actionButtons">
+            <s:button id="addmatrizDocConfigDet"
+                   value="Add matrizDocConfigDet"
+                    view="/MatrizDocConfigDetEdit.xhtml"
+             propagation="none">
+                 <f:param name="matrizDocConfigEncIdMatrizDocConfigEnc"
+                         value="#{matrizDocConfigEncHome.instance.idMatrizDocConfigEnc}"/>
+                 <f:param name="matrizDocConfigDetFrom" value="MatrizDocConfigEnc"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

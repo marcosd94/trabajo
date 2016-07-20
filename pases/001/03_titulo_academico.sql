@@ -1,0 +1,50 @@
+--Titulo Academico de Estudiante Universitario
+
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('TECNICO INDUSTRIAL', 21, true, 'ADMIN', '2011-10-03 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('OTROS', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('INGENIERO EN INFORMATICA', 21, true, 'ADMIN', '2011-10-21 10:23:13.188');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('NINGUNO', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('INGENIERÍA COMERCIAL', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. CIVIL', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. ELÉCTRICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. ELECTROMECÁNICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. TELECOMUNICACIONES', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. INFORMÁTICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('DERECHO', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('DISEÑO GRÁFICO', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ADMINISTRACIÓN DE EMPRESAS', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BIOQUÍMICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ESCRIBANÍA PÚBLICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('EDUCACIÓN FÍSICA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ENFERMERÍA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('FISIOTERAPIA Y KINESIOLOGÍA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('MERCADOTÉCNIA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('MEDICINA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('OBSTETRICIA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ODONTOLOGÍA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('CIENCIAS DE LA EDUCACIÓN', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('CIENCIAS POLÍTICAS', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('COMERCIO EXTERIOR', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('CIENCIAS CONTABLES', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('PERIODISMO', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('PUBLICIDAD', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('QUÍMICA Y FARMACIA', 21, true, 'ADMIN', '2011-12-19 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ANÁLISIS DE SISTEMAS', 21, true, 'ADMIN', '2011-10-03 00:00:00');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ECONOMIA AGROPECUARIA', 21, true, 'TALLER13', '2012-03-14 13:44:35.111');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('TITULO DE PRUEBA', 21, true, 'ADMIN', '2012-03-14 13:44:39.605');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('PSICOLOGIA CLINICA', 21, true, 'TALLER7', '2012-03-14 13:45:46.599');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('LIC. EN MARKETING', 21, true, 'TALLER12', '2012-03-14 13:46:04.265');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ARQUITECTO/A', 21, true, 'TALLER12', '2012-03-14 13:44:41.51', 'TALLER4', '2012-03-14 13:46:42.824');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ING. ELECTRÒNICO', 21, true, 'TALLER12', '2012-03-14 13:48:10.454');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ECOLOGÍA HUMANA', 21, true, 'TALLER7', '2012-03-14 13:58:31.84');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('LIC. EN ADMINISTRACION DE EMPRESAS', 21, true, 'TALLER6', '2012-03-14 14:02:05.155');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ABOGADA UJIER', 21, true, 'TALLER13', '2012-03-14 13:45:29.482', 'TALLER13', '2012-03-14 14:04:34.454');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ANÁLISIS QUÍMICO', 21, false, 'ADMIN', '2011-12-19 00:00:00', 'TALLER15', '2012-04-25 09:41:46.563');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('ADMINISTRACIÓN RURAL', 21, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+
+--Titulo Academico de Estudiante Bachiller
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BACHILLER TECNICO', 20, true, 'ADMIN', '2012-03-14 13:45:29.482', 'ADMIN', '2012-03-14 14:04:34.454');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BACHILLER HUMANISTICO', 20, false, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-04-25 09:41:46.563');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BACHILLER TÉCNICO EN ADMINISTRACIÓN', 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BACHILLER TÉCNICO EN INFORMÁTICA', 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+INSERT INTO seleccion.titulo_academico (descripcion, id_nivel_estudio, activo, usu_alta, fecha_alta) VALUES ('BACHILLER TECNICO EN CONTABILIDAD', 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');

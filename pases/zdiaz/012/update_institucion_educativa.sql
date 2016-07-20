@@ -1,0 +1,3 @@
+﻿INSERT INTO seleccion.institucion_educativa(id_inst_educativa, descripcion, id_pais, activo, usu_alta, fecha_alta, usu_mod, fecha_mod, convenio_sfp, id_documento)
+    VALUES (nextVal('seleccion.institucion_educativa_id_inst_educativa_seq'), 'CENTRO LATINOAMERICANO DE ADMINISTRACION PARA EL DESARROLLO (CLAD)', 5, TRUE, 'ADMIN', (SELECT TIMESTAMP WITHOUT TIME ZONE 'now'), NULL, NULL, TRUE, NULL);
+update seleccion.institucion_educativa set descripcion = 'SECRETARIA DE LA FUNCIÓN PÚBLICA-INAPP' where descripcion = 'INAPP';

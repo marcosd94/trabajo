@@ -1,0 +1,260 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU314_tittle}</h1>
+		
+		<h3>#{messages.CU314_cargar } #{bloqueoConcursoGrupoPuestoFC.esBloqueoPorConcurso() ? messages.CU314_bloqueo_concurso : 
+			 (bloqueoConcursoGrupoPuestoFC.esBloqueoPorGrupo() ? messages.CU314_bloqueo_grupo : messages.CU314_bloqueo_puesto)}</h3>
+		 
+		<h:form id="envioHomologacionSearch" styleClass="edit">
+		
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+									value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+						</s:decorate>
+						<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+						</s:decorate>
+							
+						<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+						</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+				
+
+			<br></br>
+			<rich:panel rendered="#{bloqueoConcursoGrupoPuestoFC.esBloqueoPorConcurso()}">
+			    <f:facet name="header">#{messages.CU314_bloqueo_concurso}</f:facet> 
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="concurso"
+							value="#{grupoPuestosController.idConcurso}">
+							<f:selectItems value="#{grupoPuestosController.concursosNoFinalizadosSelectItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+		
+		
+			<rich:panel rendered="#{bloqueoConcursoGrupoPuestoFC.esBloqueoPorGrupo()}">
+			    <f:facet name="header">#{messages.CU314_bloqueo_grupo}</f:facet> 
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="concurso2"
+							value="#{grupoPuestosController.idConcurso}">
+							<f:selectItems value="#{grupoPuestosController.concursosNoFinalizadosSelectItem}" />
+							<a:support event="onchange" action="#{grupoPuestosController.cargarListaFiltradaConcursoPuestoAgr()}" reRender="panelListaGrupos"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				
+				<rich:panel id="panelListaGrupos">
+					<f:facet name="header">#{messages['CU314_grupo']}(#{empty grupoPuestosController.listaFiltradaConcursoPuestoAgr ? 0 : (grupoPuestosController.listaFiltradaConcursoPuestoAgr.size)})</f:facet>
+					<div class="results" id="ListaGrupos">
+						<h:outputText value="#{messages.msg_list_search_no_results}" rendered="#{empty grupoPuestosController.listaFiltradaConcursoPuestoAgr}" /> 
+						<rich:dataTable id="ListaGruposList" var="_concursoPuestoAgr" 
+							value="#{grupoPuestosController.listaFiltradaConcursoPuestoAgr}"
+							rendered="#{not empty grupoPuestosController.listaFiltradaConcursoPuestoAgr}">
+						
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{messages.gral_codigo}"/>
+								</f:facet>
+								<h:outputText value="#{_concursoPuestoAgr.codGrupo}" />
+							</h:column>
+							
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{messages.CU314_grupo}"/>
+								</f:facet>
+								<h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}" />
+							</h:column>
+							
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:selectBooleanCheckbox value="#{grupoPuestosController.seleccionarTodosConcursoPuestoAgr}">
+										<a:support event="onchange" action="#{grupoPuestosController.cargarSeleccionarTodosConcursoPuestoAgr()}" reRender="panelListaGrupos"/>
+									</h:selectBooleanCheckbox>
+								</f:facet>
+								
+								<h:selectBooleanCheckbox value="#{_concursoPuestoAgr.seleccionado}"/>
+							</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+			</rich:panel>
+			
+			
+			
+			<rich:panel rendered="#{bloqueoConcursoGrupoPuestoFC.esBloqueoPorPuesto()}">
+			    <f:facet name="header">#{messages.CU314_bloqueo_puesto}</f:facet> 
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="concurso3" style="width : 400px;"
+							value="#{grupoPuestosController.idConcurso}">
+							<f:selectItems value="#{grupoPuestosController.concursosNoFinalizadosSelectItem}" />
+							<a:support event="onchange" action="#{grupoPuestosController.cargarListaFiltradaConcursoPuestoAgr()}" reRender="grupoSel,panelListaPuestos"/>
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU314_grupo}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="grupoSel" style="width : 400px;"
+							value="#{grupoPuestosController.idConcursoPuestoAgr}">
+							<f:selectItems value="#{grupoPuestosController.concursoPuestoAgrFiltradoSelectItem}" />
+							<a:support event="onchange" action="#{grupoPuestosController.cargarListaFiltradaConcursoPuestoDet()}" reRender="panelListaPuestos"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				
+				<rich:panel id="panelListaPuestos">
+					<f:facet name="header">#{messages['CU314_puesto']}(#{empty grupoPuestosController.listaFiltradaConcursoPuestoDet ? 0 : (grupoPuestosController.listaFiltradaConcursoPuestoDet.size)})</f:facet>
+					<div class="results" id="ListaPuestos">
+						<h:outputText value="#{messages.msg_list_search_no_results}" rendered="#{empty grupoPuestosController.listaFiltradaConcursoPuestoDet}" /> 
+						<rich:dataTable id="ListaPuestosList" var="_concursoPuestoDet" 
+							value="#{grupoPuestosController.listaFiltradaConcursoPuestoDet}"
+							rendered="#{not empty grupoPuestosController.listaFiltradaConcursoPuestoDet}">
+
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{messages.CU314_puesto}"/>
+								</f:facet>
+								<h:outputText value="#{_concursoPuestoDet.plantaCargoDet.descripcion}" />
+							</h:column>
+							
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:selectBooleanCheckbox value="#{grupoPuestosController.seleccionarTodosConcursoPuestoDet}">
+										<a:support event="onchange" action="#{grupoPuestosController.cargarSeleccionarTodosConcursoPuestoDet()}" reRender="panelListaPuestos"/>
+									</h:selectBooleanCheckbox>
+								</f:facet>
+								
+								<h:selectBooleanCheckbox value="#{_concursoPuestoDet.seleccionado}"/>
+							</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+			</rich:panel>
+				
+
+			<br></br>
+			<rich:panel>
+			    <f:facet name="header">#{messages.CU314_datos_bloqueo}</f:facet> 
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_motivo}
+							<span class="required">*</span>
+						</ui:define>
+						<h:inputTextarea value="#{bloqueoConcursoGrupoPuestoFC.motivo}" rows="4" cols="60"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}</ui:define>
+						<h:inputText value="#{bloqueoConcursoGrupoPuestoFC.fecha}" disabled="true"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU314_tipo_bloqueo}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="tipobloqueo"
+							value="#{bloqueoConcursoGrupoPuestoFC.tBloqueo}">
+							<f:selectItems value="#{bloqueoConcursoGrupoPuestoFC.tipoBloqueoSelectItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			
+		<s:div styleClass="actionButtons">
+			 <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{bloqueoConcursoGrupoPuestoFC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                        rendered="#{bloqueoConcursoGrupoPuestoFC.idExcepcion == null}"/>
+                          
+			<s:button
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="#{messages.gral_anexos}"
+				rendered="#{bloqueoConcursoGrupoPuestoFC.idExcepcion != null}">
+				<f:param name="direccionFisica" value="#{bloqueoConcursoGrupoPuestoFC.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="#{bloqueoConcursoGrupoPuestoFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{bloqueoConcursoGrupoPuestoFC.idExcepcion}" />
+				<f:param name="nombreTabla" value="#{bloqueoConcursoGrupoPuestoFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="#{bloqueoConcursoGrupoPuestoFC.from}" />
+			</s:button>
+			
+			<h:commandButton id="publicar"
+                          value="#{messages.CU314_publicar}"
+                         action="#{bloqueoConcursoGrupoPuestoFC.publicar()}"
+                        rendered="#{bloqueoConcursoGrupoPuestoFC.idExcepcion != null}"/>
+                          
+			<s:button view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+				id="volver" propagation="none" value="#{messages.msg_done}">
+			</s:button>
+		</s:div>
+		
+		<br />
+		<div style="clear:both">
+			 <span class="required">*</span>
+			 #{messages.msg_required_fields}
+		</div>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>

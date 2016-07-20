@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/AntecedenteGrupoList.xhtml" login-required="true">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+
+	<param name="from"/>
+	 <param name="fromPantalla" value="#{cptEspecificoFormController.fromCU}"/>
+	  <param name="nomPantalla"/>
+
+	<action execute="#{antecedenteGrupoHome.wire}" />
+	<action execute="#{cptEspecificoFormController.init()}"
+		on-postback="false" />
+		
+	<param name="idConcursoPuestoAgr"
+		value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+		 <param name="CU" value="#{cptEspecificoFormController.cu}"/>
+ 	<param name="cptIdCpt" value="#{cptEspecificoFormController.idCptFromList}"/>
+ 	
+
+	<navigation from-action="#{cptEspecificoFormController.guardar()}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{antecedenteGrupoHome.remove}">
+		<rule if-outcome="removed">
+			<end-conversation />
+			<redirect view-id="/AntecedenteGrupoList.xhtml" />
+		</rule>
+	</navigation>
+
+<restrict>#{identity.hasRole('bases_y_condiciones_funciones')}</restrict>
+</page>

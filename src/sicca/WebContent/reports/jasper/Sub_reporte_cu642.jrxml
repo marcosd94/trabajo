@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sub_reporte_cu642" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+OEE.DENOMINACION_UNIDAD AS OEE,
+SNE.NEN_CODIGO AS NEN_COD, SNE.NEN_NOMBRE AS NEN_NOM, SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO AS ENT_COD,
+SIN_ENTIDAD.ENT_NOMBRE AS ENT_NOMBRE,SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN AS ORDEN,
+UO.DENOMINACION_UNIDAD, SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN  || DESVINCULACION.GETDEPENDIENTES(UO.ID_CONFIGURACION_UO_DET) AS NRO_UO,
+E.TITULO, E.FECHA_EVAL_DESDE, E.FECHA_EVAL_HASTA, GE.GRUPO, DE.DESCRIPCION AS PLANTILLA,
+P.ORDEN AS NRO, P.RESULTADO_ESPERADO AS CRITERIO, P.DESCRIPCION, DES.DESCRIPCION AS TIPO,
+CASE WHEN ES.DESDE = ES.HASTA THEN ES.DESDE ::TEXT ELSE ES.DESDE::TEXT||' - '||ES.HASTA::TEXT END AS ESCALA,
+EVAL.DESCRIPCION as eval
+FROM EVAL_DESEMPENO.PLANTILLA_EVAL_CONF_DET P
+JOIN EVAL_DESEMPENO.GRUPO_METODOLOGIA GM
+ON GM.ID_GRUPO_METODOLOGIA = P.ID_GRUPO_METODOLOGIA
+JOIN EVAL_DESEMPENO.GRUPOS_EVALUACION GE
+ON GE.ID_GRUPOS_EVALUACION = GM.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.GRUPOS_SUJETOS GS
+ON GS.ID_GRUPOS_EVALUACION = GE.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.SUJETOS S
+ON S.ID_SUJETOS = GS.ID_SUJETOS
+JOIN GENERAL.EMPLEADO_PUESTO EMP
+ON EMP.ID_EMPLEADO_PUESTO = S.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PER
+ON PER.ID_PERSONA = EMP.ID_PERSONA
+JOIN EVAL_DESEMPENO.EVALUACION_DESEMPENO E
+ON E.ID_EVALUACION_DESEMPENO = GE.ID_EVALUACION_DESEMPENO
+JOIN SELECCION.DATOS_ESPECIFICOS DE
+ON DE.ID_DATOS_ESPECIFICOS = GM.ID_DATOS_ESPECIF_METOD
+JOIN SELECCION.DATOS_ESPECIFICOS DES
+ON DES.ID_DATOS_ESPECIFICOS = P.ID_DATOS_ESPECIF_TIPO_VAR
+JOIN EVAL_DESEMPENO.PLANTILLA_EVAL_ESCALA EVAL
+ON EVAL.ID_PLANTILLA_EVAL_CONF_DET = P.ID_PLANTILLA_EVAL_CONF_DET
+JOIN EVAL_DESEMPENO.ESCALA_EVAL ES
+ON ES.ID_ESCALA_EVAL = EVAL.ID_ESCALA_EVAL
+JOIN PLANIFICACION.CONFIGURACION_UO_DET UO
+ON UO.ID_CONFIGURACION_UO_DET = E.ID_CONFIGURACION_UO_DET
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+  JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD ON SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+  JOIN SINARH.SIN_NIVEL_ENTIDAD SNE ON (SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO)
+WHERE GM.ID_GRUPO_METODOLOGIA = $P{id}
+and eval.activo = true
+ORDER BY criterio,P.ORDEN, ESCALA]]>
+	</queryString>
+	<field name="oee" class="java.lang.String"/>
+	<field name="nen_cod" class="java.math.BigDecimal"/>
+	<field name="nen_nom" class="java.lang.String"/>
+	<field name="ent_cod" class="java.lang.String"/>
+	<field name="ent_nombre" class="java.lang.String"/>
+	<field name="orden" class="java.lang.String"/>
+	<field name="denominacion_unidad" class="java.lang.String"/>
+	<field name="nro_uo" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="fecha_eval_desde" class="java.sql.Timestamp"/>
+	<field name="fecha_eval_hasta" class="java.sql.Timestamp"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="plantilla" class="java.lang.String"/>
+	<field name="nro" class="java.lang.Long"/>
+	<field name="criterio" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="escala" class="java.lang.String"/>
+	<field name="eval" class="java.lang.String"/>
+	<group name="criterioGroup" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{criterio}]]></groupExpression>
+		<groupHeader>
+			<band height="101">
+				<staticText>
+					<reportElement mode="Opaque" x="158" y="81" width="387" height="20" backcolor="#99CCFF"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Descripcion]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="35" y="81" width="123" height="20" backcolor="#99CCFF"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Escala]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="35" y="-1" width="533" height="24"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{criterio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="35" y="42" width="71" height="38"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Descripcion]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="35" y="22" width="71" height="21"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Tipo]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="106" y="22" width="475" height="21"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="106" y="42" width="475" height="38"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="43">
+			<staticText>
+				<reportElement positionType="Float" x="12" y="6" width="552" height="23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[CRITERIOS DE LA EVALUACIÓN]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="158" y="0" width="387" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{eval}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="35" y="0" width="123" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{escala}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

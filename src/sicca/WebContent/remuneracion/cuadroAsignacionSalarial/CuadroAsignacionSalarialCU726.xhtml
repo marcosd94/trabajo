@@ -1,0 +1,159 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU726_menu}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('remuneracion/cuadroAsignacionSalarial/CuadroAsignacionSalarialCU726')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('remuneracion/cuadroAsignacionSalarial/CuadroAsignacionSalarialCU726')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('remuneracion/cuadroAsignacionSalarial/CuadroAsignacionSalarialCU726')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cuadroAsignacionSalarialCU726FC.cambiarUO()}"
+									reRender="idPanelCampos,panelCombos" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('remuneracion/cuadroAsignacionSalarial/CuadroAsignacionSalarialCU726')}" />
+						</s:decorate>
+					</a:outputPanel>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU726_ci}
+								</ui:define>
+						<h:inputText id="ci" value="#{cuadroAsignacionSalarialCU726FC.ci}"
+							size="15">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Puesto
+								</ui:define>
+						<h:inputText id="puesto"
+							value="#{cuadroAsignacionSalarialCU726FC.puesto}" size="30">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Objeto de Gasto
+								</ui:define>
+						<h:inputText id="obj"
+							value="#{cuadroAsignacionSalarialCU726FC.objCodigos}" size="30">
+						</h:inputText>
+					</s:decorate>
+
+					<div style="clear: both"><span class="required">En caso de especificar varios objetos de gastos separados entre ";" (punto y coma)</span>
+					</div>
+				</h:panelGrid>
+
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton
+				value="#{messages.CU726_btn_informe}"
+				action="#{cuadroAsignacionSalarialCU726FC.imprimir()}" /> <a:commandButton
+				id="reset" value="Limpiar"
+				action="#{cuadroAsignacionSalarialCU726FC.limpiar()}"
+				reRender="panelBusqueda">
+			</a:commandButton></div>
+
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

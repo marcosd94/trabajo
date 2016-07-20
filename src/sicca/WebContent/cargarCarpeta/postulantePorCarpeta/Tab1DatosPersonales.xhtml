@@ -1,0 +1,342 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<a:outputPanel id="idModalPanel" ajaxRendered="true">
+		<rich:modalPanel id="modalGuardar" autosized="true" width="500"
+			rendered="#{!empty tab1DatosPersonalesPorCarpetaFC.msjCopiaRealizada}"
+			resizeable="false" moveable="true">
+			<h:form>
+				<rich:panel id="idPanel">
+					<f:facet name="header">#{messages.CU508_atencion} </f:facet>
+					<h:inputTextarea
+						style=" width : 660px; height : 69px;font-size:15px;"
+						value="#{tab1DatosPersonalesPorCarpetaFC.msjCopiaRealizada}" />
+				</rich:panel>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><s:button
+					propagation="join"
+					action="#{tab1DatosPersonalesPorCarpetaFC.guardar()}"
+					value="Aceptar" /><s:button value="Cancelar" propagation="join"
+					action="#{tab1DatosPersonalesPorCarpetaFC.limpiar()}" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<script type="text/javascript">		
+		if(document.getElementById('includeTab01:modalGuardar')!=null){
+			Richfaces.showModalPanel('includeTab01:modalGuardar');
+		}
+		</script>
+	</a:outputPanel>
+	<h:form>
+		<h:outputText
+			rendered="#{tab1DatosPersonalesPorCarpetaFC.boolCopiaRealizada!=null and tab1DatosPersonalesPorCarpetaFC.boolCopiaRealizada}"
+			value="#{messages.CU515_copiaRealizada}"
+			style="color:red;font-size:15px;" />
+		<rich:panel style=" width : 872px;">
+			<f:facet name="header">#{messages.CU212_title_tab1}</f:facet>
+			<h:panelGrid columns="2">
+				<s:decorate id="nombresField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+					<h:inputText id="nombre" required="true" disabled="true" size="60"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.nombres}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="docIdentField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU12_doc_identidad}</ui:define>
+					<h:inputText id="docIdent" disabled="true" size="30"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.documentoIdentidad}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="apellidoCompletoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_apellido_completo}</ui:define>
+					<h:inputText id="apellidoCompleto" required="true" disabled="true"
+						size="60"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.apellidos}">
+					</h:inputText>
+				</s:decorate>
+
+				<s:decorate id="paisDocIdentField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_pais_exp_doc}</ui:define>
+					<h:inputText id="paisDocIdent" disabled="true" size="30"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.paisByIdPaisExpedicionDoc.descripcion}">
+					</h:inputText>
+				</s:decorate>
+
+
+				<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_idNacionalidad}</ui:define>
+					<h:inputText id="nacionalidad" disabled="true" size="30"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.datosEspecificos.descripcion}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_sexo}</ui:define>
+					<h:selectOneMenu id="sexo" style="width : 250px;" required="true"
+						value="#{tab1DatosPersonalesPorCarpetaFC.idSexo}">
+						<f:selectItems value="#{referenciasBySexoSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="correoElectField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_eMail}</ui:define>
+					<h:inputText id="correoElectronico" size="30" disabled="true"
+						required="true"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.EMail}">
+					</h:inputText>
+				</s:decorate>
+				<a:region>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_estadoCivil}</ui:define>
+						<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idEstadoCivil}">
+							<f:selectItems value="#{referenciasByEstadoCivilSelectItems}" />
+							<a:support event="onchange" eventsQueue="default" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_nac}</ui:define>
+						<h:selectOneMenu id="paisNac" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idPaisNac}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac"
+								eventsQueue="default"
+								action="#{tab1DatosPersonalesPorCarpetaFC.updateDepartamento()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+
+				<s:decorate id="fechaNacField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_fecha_nac}<span
+							class="required">*</span>
+					</ui:define>
+					<rich:calendar id="fechaNac"
+						value="#{tab1DatosPersonalesPorCarpetaFC.fechaNac}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event);"
+						inputSize="10" datePattern="dd/MM/yyyy" />
+				</s:decorate>
+
+				<a:region>
+					<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_nac}</ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idDptoNac}">
+							<f:selectItems
+								value="#{tab1DatosPersonalesPorCarpetaFC.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{tab1DatosPersonalesPorCarpetaFC.updateCiudad()}"
+								reRender="ciudadNac" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</a:region>
+
+				<a:region>
+					<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_ciudad_nac}</ui:define>
+						<h:selectOneMenu id="ciudadNac" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idCiudadNac}">
+							<f:selectItems
+								value="#{tab1DatosPersonalesPorCarpetaFC.ciudadSelecItem}" />
+							<a:support event="onchange" eventsQueue="default" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<h:outputLabel value="#{messages.CU212_tab1_msg1}"
+					style="font-weight:bold" />
+			</h:panelGrid>
+
+		</rich:panel>
+		<rich:panel style=" width : 872px;">
+			<f:facet name="header">#{messages.CU212_tab1_title2}</f:facet>
+			<a:region>
+				<h:panelGrid columns="1">
+					<s:decorate id="callePrincipalField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_callePrincipal}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="callePrincipal" size="100" maxlength="100"
+							value="#{tab1DatosPersonalesPorCarpetaFC.callePrincipal}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</a:region>
+			<a:region>
+				<h:panelGrid columns="2">
+					<s:decorate id="primeraLateralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_primeraLateral}</ui:define>
+						<h:inputText id="primeraLateral" size="60" maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.callePrimeraLateral}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="segundaLateralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_segundaLateral}</ui:define>
+						<h:inputText id="segundaLateral" size="60" maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.calleSegundaLateral}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="dptoNroField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_departamentoNro}.</ui:define>
+						<h:inputText id="dptoNro" size="60" maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.dptoNro}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="pisoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_piso}</ui:define>
+						<h:inputText id="piso" size="60" maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.piso}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+
+			</a:region>
+			<h:panelGrid columns="1">
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_dir}</ui:define>
+						<h:selectOneMenu id="paisDir" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idPaisDir}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoDir,ciudadDir"
+								eventsQueue="default"
+								action="#{tab1DatosPersonalesPorCarpetaFC.updateDepartamentoDir()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="dptoDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_dir}</ui:define>
+						<h:selectOneMenu id="dptoDir" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idDptoDir}">
+							<f:selectItems
+								value="#{tab1DatosPersonalesPorCarpetaFC.departamentosDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{tab1DatosPersonalesPorCarpetaFC.updateCiudadDir()}"
+								reRender="ciudadDir" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="ciudadDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_ciudad_dir}</ui:define>
+						<h:selectOneMenu id="ciudadDir" style="width : 250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idCiudadDir}">
+							<f:selectItems
+								value="#{tab1DatosPersonalesPorCarpetaFC.ciudadDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{tab1DatosPersonalesPorCarpetaFC.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="barrioField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+						<h:selectOneMenu id="barrio" style="width :250px;"
+							value="#{tab1DatosPersonalesPorCarpetaFC.idLocalidadDir}">
+							<f:selectItems
+								value="#{tab1DatosPersonalesPorCarpetaFC.localidadDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="direccionLabField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_direccion_laboral}</ui:define>
+						<h:inputText id="direccionLab" size="100" maxlength="100"
+							value="#{tab1DatosPersonalesPorCarpetaFC.direccionLaboral}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="otrasDirField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_otra_direccion}</ui:define>
+						<h:inputText id="otrasDir" size="100" maxlength="100"
+							value="#{tab1DatosPersonalesPorCarpetaFC.otrasDirecciones}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="telefonosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_telefono}</ui:define>
+						<h:inputText id="telefonos" size="50" required="true"
+							maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.telefonos}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="telefonoPartField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU643_telefono_part}</ui:define>
+						<h:inputText id="telefonoPart" size="50" required="true"
+							maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.telefonoPart}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="telefonoLabField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU643_telefono_lab}</ui:define>
+						<h:inputText id="telefonoLab" size="50" required="true"
+							maxlength="50"
+							value="#{tab1DatosPersonalesPorCarpetaFC.telefonoLab}">
+							<a:support event="onblur" eventsQueue="default" />
+						</h:inputText>
+					</s:decorate>
+				</a:region>
+			</h:panelGrid>
+		</rich:panel>
+		<rich:panel id="panelDatos" style=" width : 872px;">
+			<f:facet name="header">#{messages.CU212_tab1_otros_datos}</f:facet>
+			<h:panelGrid columns="2">
+				<s:decorate id="esFuncionarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_FuncionarioOee_}</ui:define>
+					<h:selectOneRadio id="esFuncionarioOee" required="true"
+						value="#{tab1DatosPersonalesPorCarpetaFC.persona.esFuncionario}">
+						<f:selectItems
+							value="#{enumAppHelper.enumsValueItems('EsFuncionario', 'getValor', false)}" />
+						<a:support event="onchange" reRender="panelDatos" />
+					</h:selectOneRadio>
+				</s:decorate>
+				<s:link propagation="join" value="#{messages.CU212_tab1_link}"
+					action="#{tab1DatosPersonalesPorCarpetaFC.genLinkFuncionario()}"
+					id="link"
+					disabled="#{!tab1DatosPersonalesPorCarpetaFC.persona.esFuncionario}">
+				</s:link>
+			</h:panelGrid>
+		</rich:panel>
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+		<div style="clear: both"><h:outputText
+			value="#{messages.msg_obs_save}" styleClass="labelClass" /><br />
+		<h:outputText value="#{messages.CU515_obsPie}" style="color:red;" /></div>
+		<div class="actionButtons"><a:region>
+			<a:commandButton id="save" value="Guardar"
+				reRender="includeTab01:idModalPanel"
+				action="#{tab1DatosPersonalesPorCarpetaFC.verficarCopiaRealizada2()}" />
+		</a:region> <s:button id="cancelEdit" value="#{messages.msg_done}"
+			propagation="none"
+			view="/#{empty tab1DatosPersonalesPorCarpetaFC.from? 'home':tab1DatosPersonalesPorCarpetaFC.from}.xhtml">
+			<f:param name="idGrupo"
+				value="#{tab1DatosPersonalesPorCarpetaFC.idGrupo}" />
+			<f:param name="codActividad"
+				value="#{tab1DatosPersonalesPorCarpetaFC.codActividad}" />
+		</s:button></div>
+	</h:form>
+</ui:composition>

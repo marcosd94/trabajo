@@ -1,0 +1,95 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.PuestoConceptoPago_}</h1>
+
+    <h:form id="puestoConceptoPago" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{puestoConceptoPagoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.PuestoConceptoPago_}</f:facet>
+
+	            <s:decorate id="plantaCargoDetField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.PuestoConceptoPago_idPlantaCargoDet}</ui:define>
+	                <h:selectOneMenu id="plantaCargoDet"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{puestoConceptoPagoHome.idPlantaCargoDet}">
+	                    <f:selectItems value="#{plantaCargoDetsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="conceptoPagoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.PuestoConceptoPago_idConceptoPago}</ui:define>
+	                <h:selectOneMenu id="conceptoPago"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{puestoConceptoPagoHome.idConceptoPago}">
+	                    <f:selectItems value="#{conceptoPagosSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="montoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.PuestoConceptoPago_monto}</ui:define>
+	                <h:inputText id="monto"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{puestoConceptoPagoHome.instance.monto}">
+	                    <a:support event="onblur" reRender="montoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{puestoConceptoPagoHome.persist}"
+                       disabled="#{!puestoConceptoPagoHome.wired}"                      
+                       rendered="#{!puestoConceptoPagoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{puestoConceptoPagoHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{puestoConceptoPagoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{puestoConceptoPagoHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{puestoConceptoPagoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml"
+                rendered="#{puestoConceptoPagoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty puestoConceptoPagoFrom ? 'planificacion/puestoConceptoPago/PuestoConceptoPagoList' : puestoConceptoPagoFrom}.xhtml"
+                rendered="#{!puestoConceptoPagoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,194 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<ui:remove><h1>#{messages.CU605_titulo_ver}</h1></ui:remove>
+		<h1>Ver Reglamento de Evaluación de Desempeño</h1>
+		<h:form>
+			<rich:simpleTogglePanel label="#{messages['CU471_organizado_por']}"
+				switchType="ajax" id="panelParametro">
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+						<h:inputText size="100" id="evaluacion" disabled="true"
+							value="#{seguridadUtilFormController.evaluacionNombre}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" id="idPanelCampos">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codNivelEntidad}"
+								size="5" disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreNivelEntidad}"
+								size="50" disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codSinEntidad}"
+								size="10" disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreSinEntidad}"
+								size="60" disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{seguridadUtilFormController.nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+					<ui:remove>
+						<a:region>
+												<s:decorate template="/layout/display.xhtml">
+													<ui:define name="label">#{messages.CU398_unidadOrganiza}
+															</ui:define>
+													<h:inputText id="orgCodigo2" size="10" disabled="true"
+														value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codigoUnidOrgDep}">
+													</h:inputText>
+															#{' '}
+															<h:inputText id="orgDenominacion2" size="60" disabled="true"
+														value="#{seguridadUtilFormController.nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						
+												</s:decorate>
+											</a:region>
+					</ui:remove>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<table align="center">
+				<tr>
+					<td><rich:panel style=" width : 500px;">
+						<f:facet name="header">#{messages.CU605_grupos} (#{gestionarResolucionEvalFC.grupoMetodologiaLista.size()})</f:facet>
+						<div class="results" id="tblsinAgruparList"
+							style="overflow: scroll; width: 450; HEIGHT: 230px"><rich:dataTable
+							id="sinAgrupar" var="_record"
+							value="#{gestionarResolucionEvalFC.grupoMetodologiaLista}"
+							rowKeyVar="_row" style=" width : 450px;">
+							<h:column>
+								<f:facet name="header">
+							#{messages.CU557_grupo}
+						</f:facet>
+								<h:outputText
+									value="#{gestionarResolucionEvalFC.obtenerGrupo(_row)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+							#{messages.CU557_plantilla}
+						</f:facet>
+								<h:outputText
+									value="#{gestionarResolucionEvalFC.obtenerPlantilla(_row)}" />
+							</h:column>
+						</rich:dataTable></div>
+					</rich:panel></td>
+
+					<ui:remove>
+						<td><rich:panel style=" width : 500px;">
+												<f:facet name="header">#{messages.CU605_resoluciones} (#{gestionarResolucionEvalFC.resolucionEvalLista.size()})<span
+														class="required">*</span>
+												</f:facet>
+												<div class="results" id="tblResoluciones"
+													style="overflow: scroll; width: 450; HEIGHT: 230px"><rich:dataTable
+													id="resolucion" var="_resol"
+													value="#{gestionarResolucionEvalFC.resolucionEvalLista}"
+													style=" width : 450px;">
+													<h:column>
+														<f:facet name="header">
+													#{messages.CU605_resol_nro}
+												</f:facet>
+														<h:outputText value="#{_resol.nro}" />
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+													#{messages.CU605_fecha}
+												</f:facet>
+														<h:outputText value="#{_resol.fecha}" />
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+													#{messages.gral_accion}
+												</f:facet>
+														<s:link id="editar" value="#{messages.CU605_link_edit}"
+															propagation="join"
+															view="/evaluacionDesempenho/resolucion/ResolucionEvaluacionView.xhtml">
+															<f:param name="from"
+																value="evaluacionDesempenho/gestionarResolucion/GestionarResolucionEvalView" />
+															<f:param name="resolucionEvaluacionIdResolucionEvaluacion"
+																value="#{_resol.idResolucionEval}" />
+														</s:link>
+													</h:column>
+												</rich:dataTable></div>
+											</rich:panel></td>
+					</ui:remove>
+				</tr>
+
+			</table>
+			<div class="actionButtons">
+				
+			<s:button propagation="join" 
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="Ver #{messages.CU605_eval_adj_regl}"
+				>
+				<f:param name="nombrePantalla" value="adjuntarReglamento" />
+				<f:param name="idCU" value="#{gestionarResolucionEvalFC.idEvaluacionDesempeno}" />
+				<f:param name="nombreTabla" value="EvaluacionDesempeno" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="evaluacionDesempenho/gestionarResolucion/GestionarResolucionEvalView" />
+			</s:button>
+			</div>
+			<div align="center"><rich:panel
+				style="border:none; width : 500px;">
+				<fieldset><legend><span class="required">#{messages.CU605_obs}</span></legend>
+				<h:inputTextarea cols="100" disabled="true"
+					value="#{gestionarResolucionEvalFC.observacion}">
+					<f:validateLength maximum="1000" />
+				</h:inputTextarea></fieldset>
+			</rich:panel></div>
+			<div class="actionButtons"> 
+				<ui:remove>
+					<s:button
+									id="cancelAdd" value="Volver" propagation="join"
+									view="/#{from}.xhtml" />
+				</ui:remove>
+				<s:button
+					id="cancelAdd" value="Volver" propagation="join"
+					view="/#{gestionarResolucionEvalFC.from}.xhtml" />
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

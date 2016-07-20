@@ -1,0 +1,468 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+    <style type="text/css">
+        .style1
+        {
+        }
+        .style2
+        {
+        }
+        .style4
+        {
+        }
+        .style5
+        {
+            width: 248px;
+        }
+        .style6
+        {
+            width: 178px;
+        }
+        .style8
+        {
+            width: 266px;
+        }
+    </style>
+<!--******************** MODAL ******************-->
+		<!-- ****Modal tab02**** -->
+	<a:region >
+	
+	<rich:modalPanel id="modalContacto" width="400" height="150" styleClass="centerbox">
+			<f:facet name="header">Plantillas de Notas</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalContacto')}.hide()" />
+			</f:facet>
+			 <h:form>
+                 <rich:panel>
+               
+            		<rich:dataTable id="tablaContactos"
+						value="#{generarNotaHomologacion.notaHomologacionList}" var="tag" rows="5"
+						reRender="panelContacto">
+						
+						<rich:column >
+							<f:facet name="header"> Descripción</f:facet>
+							<h:outputText id="outputText1" value="#{tag.descripcion}" />
+						</rich:column>
+						<rich:column >
+							<f:facet name="header">Acción</f:facet>
+							<a:commandLink id="linkSelecEst" reRender="panelPlanilla" eventsQueue="default"
+								action="#{generarNotaHomologacion.findPlantilla(tag.idPlantillaNotaHomologacion)}"
+								onclick="#{rich:component('modalContacto')}.hide()"
+								value="Seleccionar" >
+								</a:commandLink>
+
+						</rich:column>
+						
+					</rich:dataTable>
+					<rich:datascroller for="tablaContactos" renderIfSinglePage="false"
+						id="scrc" reRender="tdPr">
+					</rich:datascroller>
+               
+               
+                </rich:panel>
+                </h:form>
+			
+			
+
+			<h:panelGrid>
+				<h:form>
+				
+				</h:form>
+			</h:panelGrid>
+		</rich:modalPanel>
+	</a:region>
+		
+		<!-- ****Fin Modal**** -->
+		
+			<h1>#{messages.CU56_bo}</h1>
+    <h:form id="notaHomologacion"  enctype="multipart/form-data"  styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{notaHomologacionHome.managed ? messages.msg_edit : 'Nueva'} #{messages.CU56_titulo}</f:facet>
+
+			<rich:tabPanel switchType="server" id="tabGeneral">
+					<rich:tab label="#{messages.CU249_tab1}" id="tabCargaDatos">
+					<f:facet name="header">#{messages.CU56_titulo}</f:facet>
+					<a:region >
+							<a:commandButton id="showValoracionModalButton"
+										value="Cargar Formato de Nota"
+										onclick="Richfaces.showModalPanel('modalContacto');" />
+					</a:region>
+					<a:outputPanel id="panelPlanilla">
+					<rich:panel >
+					<h:panelGrid columns="3">
+						<s:decorate id="lugarField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU56_lugar}</ui:define>
+								<h:inputText id="lugar" required="true" size="20" maxlength="150"
+									value="#{generarNotaHomologacion.notaHomologacion.lugar}">
+								</h:inputText>
+							</s:decorate>	
+						
+						<s:decorate  template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU56_fecha_nota}</ui:define>
+								 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" required="true"
+                            inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{generarNotaHomologacion.notaHomologacion.fecha}" />
+							</s:decorate>
+						
+							
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU56_nro_nota}</ui:define>
+								<h:inputText id="descripcion" required="true" size="20"
+									
+									value="#{generarNotaHomologacion.notaHomologacion.nroNota}">
+								</h:inputText>
+							</s:decorate>
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+						
+            <s:decorate id="referenciaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_refe}</ui:define>
+                <h:inputTextarea id="referencia"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.referencia}">
+                               <f:validateLength maximum="500" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="titulo1Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU56_titulo1}</ui:define>
+                <h:inputTextarea id="titulo1"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.titulo1}">
+                               <f:validateLength maximum="500" />
+                            </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="titulo2Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU56_titulo2}</ui:define>
+                <h:inputTextarea id="titulo2"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.titulo2}">
+                              <f:validateLength maximum="500" />
+                            </h:inputTextarea>
+            </s:decorate>
+             <s:decorate id="cuerpoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_cuerpo}</ui:define>
+                <h:inputTextarea id="cuerpo"
+                               cols="80"
+                               rows="10"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.cuerpo}">
+                              <f:validateLength maximum="2000" />
+                             </h:inputTextarea>
+                             
+            </s:decorate>
+             <s:decorate id="firmaField" template="/layout/edit.xhtml">
+                <ui:define name="label">Firma</ui:define>
+                <h:inputTextarea id="firma"
+                               cols="80"
+                               rows="3"
+                           required="true" 
+                              value="#{generarNotaHomologacion.notaHomologacion.firma}">
+                               <f:validateLength maximum="250" />
+                             </h:inputTextarea>
+            </s:decorate>
+             <s:decorate id="cargoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_cargo_firma}</ui:define>
+                <h:inputTextarea id="cargo"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.cargo}">
+                                <f:validateLength maximum="250" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="institucionFirmaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_institucion}</ui:define>
+                <h:inputTextarea id="institucionFirma"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.institucionFirma}">
+                                 <f:validateLength maximum="250" />
+                            </h:inputTextarea>
+            </s:decorate>
+            
+            
+            <s:decorate id="aField" template="/layout/edit.xhtml">
+                <ui:define name="label">A</ui:define>
+                <h:inputTextarea id="a"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.a}">
+                                <f:validateLength maximum="250" />
+                            </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="donField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_dona}</ui:define>
+                <h:inputTextarea id="don"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.don}">
+                                 <f:validateLength maximum="250" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="institucionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_institucion}</ui:define>
+                <h:inputTextarea id="institucion"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{generarNotaHomologacion.notaHomologacion.institucion}">
+                                 <f:validateLength maximum="250" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="itemFinalField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_item_fin}</ui:define>
+                <h:inputTextarea id="itemFinal"
+                               cols="80"
+                               rows="3"
+                              value="#{generarNotaHomologacion.notaHomologacion.itemFinal}">
+                                 <f:validateLength maximum="250" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+            
+						</h:panelGrid>
+					<h:panelGrid columns="2">
+           				<s:decorate id="documentoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU57_adjuntar}</ui:define>
+				<h:inputText disabled="true" id="nomFinal" size="50" value="#{generarNotaHomologacion.nombreDoc}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<s:fileUpload size="30"  id="archivo"
+						contentType="#{generarNotaHomologacion.contentType}"
+						data="#{generarNotaHomologacion.uploadedFile}"
+						fileName="#{generarNotaHomologacion.fileName}"
+						style=" width : 382px;" >
+					</s:fileUpload>
+											
+										</s:decorate>
+										
+					<h:commandLink value="Descargar Documento"   target="_blank"     rendered="#{notaHomologacionHome.managed and generarNotaHomologacion.notaHomologacion.documentos.idDocumento!=null}"
+				action="#{generarNotaHomologacion.abrirDoc()}" />
+           				</h:panelGrid>
+		
+            </rich:panel>
+			</a:outputPanel>
+
+
+          </rich:tab>
+          
+          <rich:tab label="#{messages.CU248_vista_preliminar}" id="tabVistaPreliminar"  action="#{generarNotaHomologacion.findFecha()}" >
+					    		  <table style="width:700px;">
+        <tr>
+            <td class="style1" align="center" colspan="4">
+                <h:graphicImage value="/img/cabecera.jpg" alt="Cabecera" /></td>
+        </tr>
+        <tr>
+            <td class="style6">
+                &nbsp;</td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td align="right">
+                <h:outputText id="fec" required="true" size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.fechaNota}" style="text-align:right;">
+                                </h:outputText></td>
+        </tr>
+        <tr>
+            <td class="style6">
+                &nbsp;</td>
+            <td class="style5" align="right" style="font-style: normal; font-weight: bold"
+                valign="top" colspan="2">
+                <h:outputText size="10"
+                                    maxlength="150"
+                                    value="Referencia:">
+                                </h:outputText></td>
+            <td align="justify" style="font-style: normal; font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.referencia}" >
+                                    </h:outputText></td>
+        </tr>
+        <tr>
+            <td class="style6" align="left" style="font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.titulo1}" style="font-style:oblique;">
+                                </h:outputText></td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style6" align="left" style="font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.titulo2}" style="font-style:oblique;">
+                                </h:outputText></td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style4" align="justify" colspan="4">
+               <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.cuerpo}" style="text-align:justify;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.firma}" style="text-align:right;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.cargo}" style="text-align:right;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.institucionFirma}" style="font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.a}" style="text-align:right;font-style:oblique;font-weight:bolder;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{generarNotaHomologacion.notaHomologacion.don}"  style="text-align:right;font-style:oblique;font-weight:bolder;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"  style="text-align:right;font-style:oblique;font-weight:bolder;"
+                                    value="#{generarNotaHomologacion.notaHomologacion.institucion}" /></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"  style="text-align:right;font-style:oblique;font-weight:bolder;"
+                                    value="#{generarNotaHomologacion.notaHomologacion.itemFinal}" /></td>
+        </tr>
+        
+        <tr>
+        <td>
+        <h:commandButton id="print"  value="#{messages.msg_list_search_print_button}"
+									action="#{generarNotaHomologacion.print()}" />
+        </td>
+        </tr>
+    </table>
+					    	
+							
+							
+							
+					</rich:tab>
+          </rich:tabPanel>
+    
+
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+		<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!notaHomologacionHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{notaHomologacionHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+             <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{generarNotaHomologacion.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!notaHomologacionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{generarNotaHomologacion.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{notaHomologacionHome.managed}"/>
+            
+
+            <s:button id="cancelEdit"
+                   value="#{messages.CU412_volver}"
+             propagation="end"
+                    view="/#{notaHomologacionFrom}.xhtml"
+                rendered="#{notaHomologacionHome.managed}">
+                   <f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{generarNotaHomologacion.idConcurso411}"/>
+                </s:button>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.CU412_volver}"
+             propagation="end"
+                    view="/#{notaHomologacionFrom}.xhtml"
+                rendered="#{!notaHomologacionHome.managed}">
+                   <f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{generarNotaHomologacion.idConcurso411}"/>
+                </s:button>
+
+        </div>
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>

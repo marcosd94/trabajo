@@ -1,0 +1,163 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+<h1>#{messages.Rol_}</h1>
+    <h:form id="rolSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.Rol}</ui:define>
+                <h:inputText id="descripcion" value="#{rolList.rol.descripcion}" size="100"/>
+            </s:decorate>
+
+           <s:decorate template="/layout/display.xhtml">
+			<h:selectOneRadio id="estado" value="#{rolList.estado}">
+				<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+				<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+       <div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{rolList.listaResultados()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{rolList.limpiar()}"
+				reRender="panelResultados, panelBusqueda">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				</div>
+
+    </h:form>
+
+    <rich:panel id="panelResultados">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty rolList.resultList ? 0 : (rolList.paginated ? rolList.resultCount : rolList.resultList.size)})</f:facet>
+    
+   <div class="results" id="rolList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty rolList.obtenerListaRoles()}" />
+
+    <rich:dataTable id="rolList"
+                var="_rol"
+              value="#{rolList.resultList}"
+           rendered="#{not empty rolList.resultList}">
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{rolList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Rol}"/>
+                    <ui:param name="propertyPath" value="rol.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_rol.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{rolList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="rol.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:selectBooleanCheckbox id="activo" disabled="true"
+						value="#{_rol.activo}" /> 
+        </h:column>
+      
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seguridad/rol/Rol' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="rolViewId" rendered="false">
+                <f:param name="rolIdRol"
+                        value="#{_rol.idRol}"/>
+            </s:link>
+              #{' '}
+            <s:link view="/seguridad/rol/Rol.xhtml"
+                   value="Ver"
+             propagation="none"
+                      id="rol"
+                rendered="#{empty from}">
+                <f:param name="rolIdRol"
+                        value="#{_rol.idRol}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seguridad/rol/RolEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="rolEdit"
+                rendered="#{empty from}">
+                <f:param name="rolIdRol"
+                        value="#{_rol.idRol}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/seguridad/rol/RolList.xhtml"
+            rendered="#{rolList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seguridad/rol/RolList.xhtml"
+            rendered="#{rolList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{rolList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seguridad/rol/RolList.xhtml"
+            rendered="#{rolList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{rolList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seguridad/rol/RolList.xhtml"
+            rendered="#{rolList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{rolList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seguridad/rol/RolEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="rolIdRol"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

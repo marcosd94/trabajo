@@ -1,0 +1,1 @@
+ update seleccion.referencias set valor_num = 2014 where dominio like 'ANHO_MAXIMO';

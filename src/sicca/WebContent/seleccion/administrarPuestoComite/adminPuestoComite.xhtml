@@ -1,0 +1,266 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<!-- MODAL PANEL PARA ALERTAR QUE NO HA REALIZADO TODAS LAS OPERACIONES -->
+		<rich:modalPanel id="modalSelect" autosized="true" width="300">
+			<f:facet name="header">#{messages.GENERALES_CONFIRMACION}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form id="formConfirmacion">
+				<table>
+					<tr>
+						<td><a:outputPanel id="divConfirm" ajaxRendered="true">
+
+							<h:outputText value="#{messages.CU409_confirm_falta_oper}"
+								rendered="#{!empty admPuestoComiFormController.volver()}" />
+							<rich:dataList var="varFalta"
+								value="#{admPuestoComiFormController.lFalta}"
+								rendered="#{!empty admPuestoComiFormController.lFalta}">
+								<h:outputText value="#{varFalta}" />
+							</rich:dataList>
+							<h:outputText value="#{messages.CU409_confirm_volver}" />
+						</a:outputPanel></td>
+					</tr>
+					<tr>
+						<td>
+						<div class="actionButtons"><s:button id="confirm"
+							value="#{messages.msg_acept}" propagation="join"
+							view="/#{admPuestoComiFormController.from}.xhtml"
+							onclick="#{rich:component('modalSelect')}.hide()">
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+
+						</s:button> <a:commandButton id="clear" value="#{messages.msg_cancel}"
+							onclick="#{rich:component('modalSelect')}.hide()" /></div>
+						</td>
+					</tr>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:simpleTogglePanel label="#{messages.CU409_titulo}"
+			switchType="client"  >
+			<h:panelGrid columns="3">
+
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Concurso</ui:define>
+						<h:inputText id="tipoConcurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 514px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tipo</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion}"
+							style=" width : 514px;" />
+					</s:decorate>
+				</h:panelGrid>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Puesto</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.puesto.descripcion}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+		<rich:simpleTogglePanel label="#{messages.CU409_operaciones}"
+			switchType="client"  >
+
+			<a:form id="form">
+				<table>
+					<tr>
+						<td><a:outputPanel ajaxRendered="true">
+							<h:commandButton id="agregarTodo"
+								value="#{messages.CU409_usarTodosDatosPuesto}"
+								style="width:200px " reRender="divPaneles"
+								onclick="return confirm('#{messages.GENERICO_ESTA_SEGURO}');"
+								action="#{admPuestoComiFormController.saveTodo()}">
+
+							</h:commandButton>
+						</a:outputPanel></td>
+						<td><a:outputPanel ajaxRendered="true">
+							<a:commandButton id="volver" value="#{messages.GENERICO_VOLVER}"
+								style="width:80px"
+								reRender="divPaneles,formConfirmacion:divConfirm"
+								onclick="#{rich:component('modalSelect')}.show();return false;">
+							</a:commandButton>
+						</a:outputPanel></td>
+					</tr>
+				</table>
+				<table>
+					<tr valign="top">
+						<td><rich:panelMenu style=" width : 239px;" mode="ajax"
+							iconExpandedGroup="disc" iconCollapsedGroup="disc"
+							iconExpandedTopGroup="chevronUp" iconGroupTopPosition="right"
+							iconCollapsedTopGroup="chevronDown">
+							<rich:panelMenuGroup label="" expanded="true" style="wid:300px">
+								<rich:panelMenuItem label="#{messages.CU404_link_funciones}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_225" />
+								</rich:panelMenuItem>
+								<rich:panelMenuItem label="#{messages.CU404_link_226}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_226" />
+								</rich:panelMenuItem>
+								<rich:panelMenuItem label="#{messages.CU404_link_229}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_229" />
+								</rich:panelMenuItem>
+								<rich:panelMenuItem label="#{messages.CU404_link_230}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_230" />
+								</rich:panelMenuItem>
+								<rich:panelMenuItem label="#{messages.CU404_link_231}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_231" />
+								</rich:panelMenuItem>
+								<rich:panelMenuItem label="#{messages.CU404_link_232}"
+									reRender="divPaneles,divBotonesFormulario"
+									action="#{admPuestoComiFormController.updateCurrent()}">
+									<f:param name="current" value="LINK_232" />
+								</rich:panelMenuItem>
+							</rich:panelMenuGroup>
+						</rich:panelMenu></td>
+						<td>
+						<div id="divPaneles"><a:outputPanel layout="block"
+							style="width:290%" ajaxRendered="true">
+							<a:include id="includeLink01"
+								rendered="#{admPuestoComiFormController.showPanelLinkFunciones}"
+								viewId="/seleccion/administrarPuestoComite/funciones/funciones.xhtml">
+							</a:include>
+						</a:outputPanel> <a:outputPanel layout="block" style="width:290%"
+							ajaxRendered="true">
+							<a:include id="includeLink04"
+								rendered="#{admPuestoComiFormController.showPanelLink230}"
+								viewId="/seleccion/administrarPuestoComite/230/CondTrabajoGen.xhtml">
+							</a:include>
+						</a:outputPanel> <a:outputPanel layout="block" style="width:290%"
+							ajaxRendered="true">
+							<a:include id="includeLink05"
+								rendered="#{admPuestoComiFormController.showPanelLink231}"
+								viewId="/seleccion/administrarPuestoComite/231/CondTrabajoEspe.xhtml">
+							</a:include>
+						</a:outputPanel> <a:outputPanel layout="block" style="width:290%"
+							ajaxRendered="true">
+							<a:include id="includeLink06"
+								rendered="#{admPuestoComiFormController.showPanelLink232}"
+								viewId="/seleccion/administrarPuestoComite/232/CondSeguridad.xhtml">
+							</a:include>
+						</a:outputPanel> <a:outputPanel layout="block" style="width:290%"
+							ajaxRendered="true">
+							<a:include id="includeLink07"
+								rendered="#{admPuestoComiFormController.showPanelLink229}"
+								viewId="/seleccion/administrarPuestoComite/229/Remuneracion.xhtml">
+							</a:include>
+						</a:outputPanel> <a:outputPanel layout="block" style="width:290%"
+							ajaxRendered="true">
+							<a:include id="includeLink08"
+								rendered="#{admPuestoComiFormController.showPanelLink226}"
+								viewId="/seleccion/administrarPuestoComite/226/Requisitos.xhtml">
+							</a:include>
+						</a:outputPanel></div>
+						</td>
+
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+						<div id="divBotonVolver"></div>
+						</td>
+					</tr>
+					<tr valign="top">
+						<td></td>
+						<td style=" width : 517px;">
+						<div id="divBotonesFormulario"><a:outputPanel
+							ajaxRendered="true">
+							<a:commandButton id="agregarDet" value="#{messages.msg_save}"
+								rendered="#{admPuestoComiFormController.current!=null and !admPuestoComiFormController.modoLectura}"
+								reRender="divPaneles"
+								action="#{admPuestoComiFormController.save()}">
+							</a:commandButton>
+							<a:commandButton id="selTodo" value="#{messages.CU409_selTodo}"
+								action="#{admPuestoComiFormController.seleccionarTodos()}"
+								rendered="#{admPuestoComiFormController.current!=null and !admPuestoComiFormController.modoLectura}"
+								reRender="divPaneles">
+							</a:commandButton>
+							<a:commandButton id="modifDet33"
+								value="#{messages.GENERICO_VOLVER}"
+								action="#{admPuestoComiFormController.cancelar()}"
+								rendered="#{admPuestoComiFormController.current!=null}"
+								reRender="divPaneles">
+							</a:commandButton>
+						</a:outputPanel></div>
+						</td>
+					</tr>
+				</table>
+			</a:form>
+
+
+		</rich:simpleTogglePanel>
+
+
+	</ui:define>
+
+</ui:composition>

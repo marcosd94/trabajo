@@ -1,0 +1,181 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.SinEntidad_tituloLi}</h1>
+		
+
+		<h:form id="sinEntidadSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" id="panelParamentro" switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.SinEntidad_aniAniopre}</ui:define>
+					<h:inputText id="entAnio"
+						value="#{buscarEntidadesFormController.sinEntidad.aniAniopre}"
+						disabled="true"
+						size="5"
+						styleClass="numeric"/>
+				</s:decorate>
+				<a:region>
+					<s:decorate id="nivelEntidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.SinEntidad_nivelDeEntidad}</ui:define>
+						<h:inputText id="sinNivelEntidadCodigo" disabled="#{not empty  from}"
+							value="#{buscarEntidadesFormController.sinNivelEntidad.nenCodigo}"
+							onkeypress="return soloNumeros(event);"
+							styleClass="numeric"
+							size="5">
+							<a:support event="onchange"  
+									  action="#{buscarEntidadesFormController.findNivelEntidad()}" 
+									reRender="nivelEntidadField"/>
+						</h:inputText>
+						#{' '}
+						<h:inputText id="sinNivelEntidadNombre"
+							value="#{buscarEntidadesFormController.sinNivelEntidad.nenNombre}"
+							size="60"
+							disabled="true"/>
+						#{' '}
+		                <s:button id="searchNivel" disabled="#{not empty  from}"
+							image="#{request.contextPath}/img/Buscar.png"
+							view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml">
+							<f:param name="aniAniopre"
+								value="#{buscarEntidadesFormController.sinEntidad.aniAniopre}" />
+							<f:param name="from"
+								value="planificacion/searchForms/FindNivelEntidad" />
+						</s:button>
+					</s:decorate>
+				</a:region>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.SinEntidad_entNombre}</ui:define>
+					<h:inputText id="nombreEntidad" size="70"
+						value="#{buscarEntidadesFormController.sinEntidad.entNombre}" />
+				</s:decorate>
+				
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages.msg_list_search_button}" reRender="panelResultados,links"
+					action="#{buscarEntidadesFormController.search()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{buscarEntidadesFormController.searchAll()}" 
+					reRender="panelParamentro,panelResultados,links" >
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<s:button id="back"
+					   value="#{messages.msg_done}"
+						view="/#{from}.xhtml" 
+					rendered="#{not empty from}">
+					<f:param name="fromToPage" value="#{fromToPage}"/>
+					</s:button>
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty sinEntidadList.resultList ? 0 : (sinEntidadList.paginated ? sinEntidadList.resultCount : sinEntidadList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty sinEntidadList.resultList}" /> <rich:dataTable
+				id="sinEntidadList" var="_sinEntidad"
+				value="#{sinEntidadList.resultList}"
+				rendered="#{not empty sinEntidadList.resultList}">
+				
+				<rich:column styleClass="numeric" width="5%">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinEntidadList}" />
+							<ui:param name="propertyLabel" value="#{messages.GradoSalarial_anio}" />
+							<ui:param name="propertyPath" value="sinEntidad.aniAniopre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinEntidad.aniAniopre}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">#{messages.SinEntidad_nivelDeEntidad}</f:facet>
+					<h:outputText value="#{buscarEntidadesFormController.buscarNombreNivelEntidad(_sinEntidad.nenCodigo)}" />
+				</rich:column>
+				<rich:column styleClass="numeric" width="10%">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinEntidadList}" />
+							<ui:param name="propertyLabel" value="#{messages.SinEntidad_entCodigo}" />
+							<ui:param name="propertyPath" value="sinEntidad.entCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinEntidad.entCodigo}" />
+				</rich:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinEntidadList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Dependencia_nombre}" />
+							<ui:param name="propertyPath" value="sinEntidad.entNombre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinEntidad.entNombre}" />
+				</h:column>
+				<rich:column width="10%" style="text-align:center;">
+					<f:facet name="header">#{messages.CondicionSegur_activo}</f:facet>
+					<h:selectBooleanCheckbox value="#{_sinEntidad.activo}" disabled="true"/>
+				</rich:column>
+				
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/sinEntidad/SinEntidad' : from}.xhtml" rendered="#{not empty from}"
+						value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="sinEntidadViewId"> 
+						<f:param name="#{empty varDestino ? 'sinEntidadIdSinEntidad':varDestino}"
+							value="#{_sinEntidad.idSinEntidad}" />
+						<f:param name="from" />
+						<f:param name="fromToPage" value="#{fromToPage}"/>
+					</s:link>
+					
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link view="/planificacion/searchForms/FindNivelEntidad.xhtml"
+				rendered="#{sinEntidadList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/searchForms/FindNivelEntidad.xhtml"
+				rendered="#{sinEntidadList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{sinEntidadList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/FindNivelEntidad.xhtml"
+				rendered="#{sinEntidadList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{sinEntidadList.nextFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/FindNivelEntidad.xhtml"
+				rendered="#{sinEntidadList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{sinEntidadList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

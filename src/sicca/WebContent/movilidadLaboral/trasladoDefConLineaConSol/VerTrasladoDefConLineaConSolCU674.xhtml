@@ -1,0 +1,403 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>MOVILIDAD: Ver</h1>
+			<rich:panel>
+				<f:facet name="header">Datos de Acto Administrativo</f:facet>
+				<div class="results" id="tblList"
+					style="overflow: scroll; width: 400; HEIGHT: 200px"><h:panelGrid>
+					<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{trasladoDefConLineaConSolCU674FC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+
+
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText
+								value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{trasladoDefConLineaConSolCU674FC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+
+				</h:panelGrid></div>
+
+				<rich:panel style="border:none;" id="panelCheck">
+					<h:panelGrid columns="3">
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.notaSol}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Nota de Solicitud" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.resMai}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Resolución MAI de aceptación" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.copiaLegajo}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Copia Autenticada de Legajo" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.constanciaUaf}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Constacia UAF" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.presupuesto}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Cuadros de presupuesto" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.informeSfp}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Informe de SFP" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.informeMH}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Informe de M.Hacienda" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.resMH_SEAF}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Informe de MH/SEAF" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<h:selectBooleanCheckbox disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.decreto}">
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Decreto" />
+						</s:decorate>
+					</h:panelGrid>
+
+					<rich:panel>
+						<f:facet name="header">Estados de Solicitud</f:facet>
+						<div class="results" id="tblEstadoList"
+							style="overflow: scroll; width: 400; HEIGHT: 200px"><h:panelGrid>
+							<rich:dataTable id="estadoSol" var="_est"
+								value="#{trasladoDefConLineaConSolCU674FC.detalleSolicitud}"
+								rowKeyVar="rowNrEst">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_fecha}
+													</f:facet>
+									<h:outputText value="#{_est.fechaAlta}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_estado}
+													</f:facet>
+									<h:outputText
+										value="#{_est.datosEspEstadoSolicitud.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.gral_observacion}
+													</f:facet>
+									<h:outputText value="#{_est.observacion}" />
+								</rich:column>
+							</rich:dataTable>
+						</h:panelGrid></div>
+					</rich:panel>
+
+				</rich:panel>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">Datos del Puesto Anterior</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.codNivelEntidad}"
+								size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{trasladoDefConLineaConSolCU674FC.nivelEntidadOeeUtilPersona.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+						<h:inputText id="nroCedula" disabled="true"
+							value="#{trasladoDefConLineaConSolCU674FC.persona.documentoIdentidad}"
+							size="20" maxlength="30">
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+						<h:inputText id="nombres" disabled="true"
+							value="#{trasladoDefConLineaConSolCU674FC.persona.nombres}"
+							size="60" maxlength="100">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+						<h:inputText id="paisExpDoc" disabled="true"
+							value="#{trasladoDefConLineaConSolCU674FC.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+						<h:inputText id="apellidos" disabled="true"
+							value="#{trasladoDefConLineaConSolCU674FC.persona.apellidos}"
+							size="60" maxlength="80">
+						</h:inputText>
+						#{' '}
+									
+									<a:commandButton id="searchper" eventsQueue="default"
+							value="#{messages.CU541_ver_datos_persona}"
+							action="#{trasladoDefConLineaConSolCU674FC.toFindPersonaView()}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				<rich:panel style="width: 330; HEIGHT: 250px" rendered="#{trasladoDefConLineaConSolCU674FC.listaConceptoPagoAnterior.size() > 0}">
+							<f:facet name="header">Categoria/Remuneracion en puesto anterior</f:facet>
+							<div class="results" id="tbldetList"
+								style="overflow: scroll; width: 310; HEIGHT: 230px"><rich:dataTable
+								id="itemsListAnterior" var="_pagosAnterior" first="0"
+								value="#{trasladoDefConLineaConSolCU674FC.listaConceptoPagoAnterior}"
+								rowKeyVar="rowNr3">
+								
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+									<h:outputText value="#{_pagosAnterior.objCodigo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+									<h:outputText value="#{_pagosAnterior.categoria}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+									<h:outputText value="#{_pagosAnterior.monto}" />
+								</rich:column>
+							</rich:dataTable></div>
+						</rich:panel>
+
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">Datos de Nuevo Puesto</f:facet>
+				<table>
+					<tr>
+						<td><h:panelGrid columns="1">
+							<a:region>
+								<s:decorate template="/layout/display.xhtml"
+									id="nivelCodigoField2">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+									<h:inputText id="nivelCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);" disabled="true"
+										value="#{trasladoDefConLineaConSolCU674FC.codNivelEntidad}"
+										size="5">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+										value="#{trasladoDefConLineaConSolCU674FC.nombreNivelEntidad}"
+										size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+							</a:region>
+
+							<a:region>
+								<s:decorate template="/layout/display.xhtml"
+									id="entidadCodigoField2">
+									<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+									<h:inputText id="entidadCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);" disabled="true"
+										value="#{trasladoDefConLineaConSolCU674FC.codSinEntidad}"
+										size="5">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+										value="#{trasladoDefConLineaConSolCU674FC.nombreSinEntidad}"
+										size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+							</a:region>
+
+							<a:region>
+								<s:decorate template="/layout/display.xhtml"
+									id="unidadOrgCodigoField2">
+									<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo2" styleClass="numeric"
+										size="5"
+										value="#{trasladoDefConLineaConSolCU674FC.ordenUnidOrg}"
+										disabled="true" onkeypress="return soloNumeros(event);">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+										disabled="true"
+										value="#{trasladoDefConLineaConSolCU674FC.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+							</a:region>
+							
+
+						</h:panelGrid></td>
+					</tr>
+					<tr>
+						<td><rich:panel rendered="#{trasladoDefConLineaConSolCU674FC.listaConceptoPagoNuevo.size() > 0}">
+							<f:facet name="header">Categoria/Remuneracion en nuevo puesto </f:facet>
+							<div class="results" id="tbldetcopiaList"
+								style="overflow: scroll; width: 310; HEIGHT: 230px"><rich:dataTable
+								id="itemsListNuevo" var="_pagosNuevo" first="0"
+								value="#{trasladoDefConLineaConSolCU674FC.listaConceptoPagoNuevo}"
+								rowKeyVar="rowNr2">
+								
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+									<h:outputText value="#{_pagosNuevo.objCodigo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+									<h:outputText value="#{_pagosNuevo.categoria}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+									<h:outputText value="#{_pagosNuevo.monto}" />
+								</rich:column>
+							</rich:dataTable></div>
+						</rich:panel></td>
+						
+					</tr>
+				</table>
+			</rich:panel>
+			
+
+			<div class="actionButtons"><s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/movilidadLaboral/historialSolicitud/HistorialSolicitud746.xhtml" /></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

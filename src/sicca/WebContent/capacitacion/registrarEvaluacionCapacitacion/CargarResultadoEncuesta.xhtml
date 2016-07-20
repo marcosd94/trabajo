@@ -1,0 +1,120 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU493_titulo}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit"
+			enctype="multipart/form-data">
+			<rich:panel>
+				<h2>#{messages.CU493_cargar_encuenta}</h2>
+				<h:panelGrid columns="2">
+
+					<s:decorate id="cntParField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU493_cnt_part_eval}</ui:define>
+						<h:inputText id="cntParticipane" required="true"
+							styleClass="numeric" onkeypress="return soloNumeros(event);"
+							size="20" disabled="#{!cargarResultadoEncuestaFC.habEncuesta}"
+							value="#{cargarResultadoEncuestaFC.cntEvalTotal}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel id="pantenCapa">
+					<f:facet name="header">#{messages.CU474_capacitacion}</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate id="idDatosEspecificosTipoCapField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU471_titulo}</ui:define>
+							<h:inputText id="idDatosEspecificosTipoCap" size="100"
+								maxlength="300" disabled="true"
+								value="#{cargarResultadoEncuestaFC.capacitaciones.nombre}">
+							</h:inputText>
+						</s:decorate>
+
+
+
+						<s:decorate id="tipoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+							<h:inputText id="idDatosEspecificosTipoCap" size="100"
+								maxlength="300" disabled="true"
+								value="#{cargarResultadoEncuestaFC.tipoCapac}">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+				<rich:panel switchType="ajax" id="panelNiveles">
+					<f:facet name="header">#{messages.CU493_encuesta}</f:facet>
+					<h:panelGrid columns="2" id="idPanelCampos">
+						<s:decorate id="nombrePla" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU493_nom_plantilla}
+									</ui:define>
+							<h:inputText id="nomp"
+								value="#{cargarResultadoEncuestaFC.nombreEncuesta}" size="100"
+								disabled="true">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+				<rich:panel>
+					<rich:column style="border:0;">
+						<a:outputPanel layout="block" ajaxRendered="true"
+							rendered="#{cargarResultadoEncuestaFC.habEncuesta}"
+							style="border-style: none;">
+							<a:include id="concProcPost"
+								viewId="/capacitacion/registrarEvaluacionCapacitacion/Encuesta.xhtml">
+							</a:include>
+						</a:outputPanel>
+					</rich:column>
+					<rich:column style="border:0;">
+						<a:outputPanel layout="block" ajaxRendered="true"
+							rendered="#{!cargarResultadoEncuestaFC.habEncuesta}"
+							style="border-style: none;">
+							<a:include id="restulPost"
+								viewId="/capacitacion/registrarEvaluacionCapacitacion/Resultados.xhtml">
+							</a:include>
+						</a:outputPanel>
+					</rich:column>
+				</rich:panel>
+
+
+
+
+				<div class="actionButtons"><h:commandButton id="save"
+					value="#{messages.CU493_guardar}"
+					action="#{cargarResultadoEncuestaFC.guardar()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					rendered="#{cargarResultadoEncuestaFC.habEncuesta}" /> <h:commandButton
+					id="print" rendered="#{!cargarResultadoEncuestaFC.habEncuesta}"
+					action="#{cargarResultadoEncuestaFC.imprimir('TEXTO')}"
+					value="#{messages.msg_list_search_print_button}" /> <h:commandButton
+					id="grafico" rendered="#{!cargarResultadoEncuestaFC.habEncuesta}"
+					action="#{cargarResultadoEncuestaFC.imprimir('GRAFICO')}"
+					value="#{messages.CU493_grafico}" /> <s:button id="cancelAdd"
+					value="Volver" propagation="join"
+					view="/#{from}.xhtml" />
+
+				</div>
+
+				<a:outputPanel ajaxRendered="true"
+					rendered="#{cargarResultadoEncuestaFC.habEncuesta}">
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<div style="clear: both"><h:outputText
+						value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+				</a:outputPanel>
+			</rich:panel>
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

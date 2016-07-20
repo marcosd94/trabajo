@@ -1,0 +1,142 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j">
+
+	<h1>#{messages.CU656_titulo}</h1>
+
+	<rich:simpleTogglePanel label="#{messages.CU606_panel1_title}"
+		id="idPanel1">
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU656_fechaPresentacion}<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar value="#{admDeclaraJuradas656FC.fechaPrese}"
+					enableManualInput="true" oninputkeyup="ponerBarra(event);"
+					inputSize="10" datePattern="dd/MM/yyyy"
+					locale="#{siccaAppHelper.localeCode}">
+				</rich:calendar>
+			</s:decorate>
+
+
+
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="3">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU656_comentario}</ui:define>
+				<h:inputTextarea value="#{admDeclaraJuradas656FC.observacion}"
+					style=" width : 350px; height : 100px;" />
+			</s:decorate>
+		</h:panelGrid>
+
+		<h:panelGrid columns="1">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Tipo Documento<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="idTipoDocumento"
+					value="#{admDeclaraJuradas656FC.idTipoDoc}" style="width:200px">
+					<f:selectItems
+						value="#{admDeclaraJuradas656FC.traerTipoDocumentoSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Documento<span class="required">*</span>
+				</ui:define>
+				<s:fileUpload size="30"
+					contentType="#{admDeclaraJuradas656FC.cType1}"
+					data="#{admDeclaraJuradas656FC.uFile1}"
+					fileName="#{admDeclaraJuradas656FC.fName1}">
+					<s:conversationPropagation type="join" />
+				</s:fileUpload>
+			</s:decorate>
+			<s:decorate id="documentoField" template="/layout/edit.xhtml">
+						<h:inputText disabled="true" id="nomFinal" style="width:200px"
+							value="#{admDeclaraJuradas656FC.nombreDoc}" />
+			</s:decorate>
+		</h:panelGrid>
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+
+		<s:div styleClass="actionButtons">
+			<h:commandButton value="Agregar"
+				rendered="#{admDeclaraJuradas656FC.idElemUpdate == null}"
+				action="#{admDeclaraJuradas656FC.agregar()}" />
+			<h:commandButton value="Actualizar"
+				rendered="#{admDeclaraJuradas656FC.idElemUpdate!=null}"
+				action="#{admDeclaraJuradas656FC.actualizar()}" />
+			<a:commandButton value="Cancelar" reRender="idPanel1,idPanel2"
+				action="#{admDeclaraJuradas656FC.limpiar()}" />
+		</s:div>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel
+		label="#{messages.CU656_panel2_title} (#{empty admDeclaraJuradas656FC.lGrilla1?0:admDeclaraJuradas656FC.lGrilla1.size()})"
+		id="idPanel2">
+		<div class="results" id="tbldetList" style="overflow: scroll;"
+			width="310">
+		<rich:dataTable id="itemsList"
+			noDataLabel="#{messages.msg_list_search_no_results}"
+			width="500" rows="5"
+			rowKeyVar="rowIndexGrilla1" var="_record" 
+			value="#{admDeclaraJuradas656FC.lGrilla1}">
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU656_fechaPresentacion}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{_record.fechaPresentacion}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU656_comentario}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.comentario}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU656_tipoDocumento}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDeclaraJuradas656FC.updateDoc(_record).documento.datosEspecificos.descripcion}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU654_documento}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.documento.nombreFisicoDoc}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+
+				<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+					action="#{admDeclaraJuradas656FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+					onclick="return confirm('#{messages.msg_confirm_delete}');"
+					action="#{admDeclaraJuradas656FC.eliminar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Descargar"
+					action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record.documento.idDocumento)}"
+					rendered="#{_record.documento!=null}" />
+			</rich:column>
+		</rich:dataTable><rich:datascroller for="itemsList" id="scrollDec"
+			renderIfSinglePage="false" /></div>
+	</rich:simpleTogglePanel>
+</ui:composition>

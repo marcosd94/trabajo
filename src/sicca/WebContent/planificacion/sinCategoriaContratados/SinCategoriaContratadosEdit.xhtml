@@ -1,0 +1,113 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.SinCategoriaContratados_}</h1>
+
+    <h:form id="sinCategoriaContratados" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{sinCategoriaContratadosHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.SinCategoriaContratados_}</f:facet>
+
+	            <s:decorate id="aniAniopreField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinCategoriaContratados_aniAniopre}</ui:define>
+	                <h:inputText id="aniAniopre"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinCategoriaContratadosHome.instance.aniAniopre}">
+	                    <a:support event="onblur" reRender="aniAniopreField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="objCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinCategoriaContratados_objCodigo}</ui:define>
+	                <h:inputText id="objCodigo"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinCategoriaContratadosHome.instance.objCodigo}">
+	                    <a:support event="onblur" reRender="objCodigoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="conCtgField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinCategoriaContratados_conCtg}</ui:define>
+	                <h:inputText id="conCtg"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinCategoriaContratadosHome.instance.conCtg}">
+	                    <a:support event="onblur" reRender="conCtgField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="ctgDescripField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinCategoriaContratados_ctgDescrip}</ui:define>
+	                <h:inputText id="ctgDescrip"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinCategoriaContratadosHome.instance.ctgDescrip}">
+	                    <a:support event="onblur" reRender="ctgDescripField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="ctgLineaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinCategoriaContratados_ctgLinea}</ui:define>
+	                <h:inputText id="ctgLinea"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinCategoriaContratadosHome.instance.ctgLinea}">
+	                    <a:support event="onblur" reRender="ctgLineaField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{sinCategoriaContratadosHome.persist}"
+                       disabled="#{!sinCategoriaContratadosHome.wired}"                      
+                       rendered="#{!sinCategoriaContratadosHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{sinCategoriaContratadosHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{sinCategoriaContratadosHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{sinCategoriaContratadosHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{sinCategoriaContratadosHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/sinCategoriaContratados/SinCategoriaContratadosList.xhtml"
+                rendered="#{sinCategoriaContratadosHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty sinCategoriaContratadosFrom ? 'planificacion/sinCategoriaContratados/SinCategoriaContratadosList' : sinCategoriaContratadosFrom}.xhtml"
+                rendered="#{!sinCategoriaContratadosHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

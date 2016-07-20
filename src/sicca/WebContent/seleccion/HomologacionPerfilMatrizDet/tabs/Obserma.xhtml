@@ -1,0 +1,102 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+ 
+ <rich:panel>
+        <f:facet name="header">#{messages.CU52_obs_resp} (#{ ( perfilMatrizHomologacionFormController.homologacionSFPconFirmaList.size() == 0)? 0 : perfilMatrizHomologacionFormController.homologacionSFPconFirmaList.size()})</f:facet>
+    <div class="results" id="homologacionPerfilMatrizDetList">
+
+    <h:outputText  value="#{messages.msg_list_search_no_results}"
+               rendered="#{perfilMatrizHomologacionFormController.homologacionSFPconFirmaList.size() > 0}"/>
+
+    <rich:dataTable id="homologacionPerfilMatrizDetList"
+                var="_homologacionPerfilMatrizDet"
+                rows="5"
+              value="#{perfilMatrizHomologacionFormController.homologacionSFPconFirmaList}"
+           rendered="#{not empty perfilMatrizHomologacionFormController.homologacionSFPconFirmaList}">
+           
+        
+       
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_obs}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.observacion}"/>
+        </h:column>
+        <!-- FECHA DE OBSERVACION -->
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_fecha}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.fechaObs"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.fechaObs}">
+              	<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+            </h:outputText>
+        </h:column>
+      
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_repuesta}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.respuesta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.respuesta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_fecha}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.fechaRpta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.fechaRpta}">
+              	<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+            </h:outputText>
+        </h:column>
+	
+    </rich:dataTable>
+     <rich:datascroller for="homologacionPerfilMatrizDetList" id="scrollObsRptasOee"
+				renderIfSinglePage="false" /></div>
+    
+    <h:outputText value="#{messages.CU52_obs_list}" style="color:Red;"/>
+   
+    <h:panelGrid columns="4" >
+	<s:button view="/seleccion/HomologacionPerfilMatrizDet/HomologacionPerfilMatrizDetEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.CU52_nueva_obs}">
+             
+            <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"/>
+            <f:param name="idGrupo" value="#{perfilMatrizHomologacionFormController.idConcursoPuestoAgr}"/>
+            <f:param name="from" value="/seleccion/perfilMatrizHomologacion/PerfilMatrizHomologacion.xhtml"/>
+        </s:button>
+        
+       
+                          
+         <h:commandButton id="print"
+					value="#{messages['CU53_imprimir']}"
+					action="#{perfilMatrizHomologacionFormController.imprimirPerfilMatriz()}"/> 
+					                 
+        
+	</h:panelGrid>
+    </rich:panel>
+    
+</ui:composition>

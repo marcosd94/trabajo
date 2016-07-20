@@ -1,0 +1,302 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="fechasGrupoPuesto" styleClass="edit">
+			<rich:simpleTogglePanel
+				label="#{fechasGrupoPuestoHome.managed ? messages.msg_edit  : messages.msg_add_new} #{messages.CU269_titulo}#{' '}#{fechaGrupoPuestoFormController.titulo}"
+				switchType="client"  >
+				<rich:panel id="panelParametro">
+					<f:facet name="header">#{fechaGrupoPuestoFormController.titulo}</f:facet>
+					<h:panelGrid columns="3">
+						<s:decorate id="nivelField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_nivel}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+						</s:decorate>
+						<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+						</s:decorate>
+						<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU269_concurso}</ui:define>
+							<h:inputText id="concurso" disabled="true"
+								value="#{fechaGrupoPuestoFormController.concurso}"
+								style=" width : 514px;" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{fechaGrupoPuestoFormController.grupoPuesto}">
+							<ui:define name="label">#{messages.CU269_grupoPuestos}</ui:define>
+							<h:inputText id="usuMod" disabled="true"
+								rendered="#{fechaGrupoPuestoFormController.grupoPuesto}"
+								value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+								style=" width : 514px;" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+			</rich:simpleTogglePanel>
+			<a:outputPanel id="_prinfaces_messages_panel" ajaxRendered="true">
+				<fieldset><legend align="left">#{messages.CU_269_publicacion}</legend>
+				<h:panelGrid id="elPanelGrid" columns="2" border="0">
+					<s:decorate id="fechaPublicacionDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fecPubDesde} <span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaPublicacionDesde" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaPublicacionDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+							<a:support event="oninputblur"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_PUBLICACION)}"
+								reRender="_prinfaces_messages_panel" />
+							<a:support event="onchanged"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_PUBLICACION)}"
+								reRender="_prinfaces_messages_panel" />
+						</rich:calendar>
+					</s:decorate>
+
+
+					<s:decorate id="fechaPublicacionHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fecPubHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaPublicacionHasta" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaPublicacionHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="horaPublicacionDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaPubDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<p:inputMask disabled="true"
+							value="#{fechaGrupoPuestoFormController.horaPublicacionDesde}"
+							mask="99:99">
+						</p:inputMask>
+
+					</s:decorate>
+
+					<s:decorate id="horaPublicacionHastaField" 
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaPubHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<p:inputMask disabled="true"
+							value="#{fechaGrupoPuestoFormController.horaPublicacionHasta}"
+							mask="99:99">
+						</p:inputMask>
+
+					</s:decorate>
+				</h:panelGrid></fieldset>
+				<fieldset><legend align="left">#{messages.CU_269_recpPostulantes}</legend>
+				<h:panelGrid columns="2" border="0">
+					<s:decorate id="fechaRecepcionDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fechaRepDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaRecepcionDesde" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaRecepcionDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+							<a:support event="onchanged"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_RECEPCION)}"
+								reRender="_prinfaces_messages_panel" />
+
+							<a:support event="oninputblur"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_RECEPCION)}"
+								reRender="_prinfaces_messages_panel" />
+
+						</rich:calendar>
+					</s:decorate>
+
+
+					<s:decorate id="fechaRecepcionHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fechaRepHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaRecepcionHasta" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaRecepcionHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+							<a:support event="onchanged"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_VIGENCIA)}"
+								reRender="_prinfaces_messages_panel" />
+
+							<a:support event="oninputblur"
+								action="#{fechaGrupoPuestoFormController.sugerenciaDate(fechaGrupoPuestoFormController.TIPO_VIGENCIA)}"
+								reRender="_prinfaces_messages_panel" />
+
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="horaRecepcionDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaRepDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<p:inputMask disabled="true"
+							value="#{fechaGrupoPuestoFormController.horaRecepcionDesde}"
+							mask="99:99">
+						</p:inputMask>
+					</s:decorate>
+					<s:decorate id="horaRecepcionHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaRepHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<p:inputMask disabled="true"
+							value="#{fechaGrupoPuestoFormController.horaRecepcionHasta}"
+							mask="99:99">
+						</p:inputMask>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+				<fieldset><legend align="left">#{messages.CU_269_vigenciaProceso}</legend>
+				<h:panelGrid columns="2" border="0">
+					<s:decorate id="fechaVigProcDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fecVigDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaVigProcDesde" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaVigProcDesde}"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaVigProcHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_fecVigHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaVigProcHasta" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.fechaVigProcHasta}"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="horaVigProcDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaVigDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="horaVigProcDesde" size="10" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.horaVigProcDesde}">
+							<s:convertDateTime type="time" pattern="hh:mm" />
+							<a:support event="onblur" reRender="horaVigProcDesdeField"
+								bypassUpdates="true" ajaxSingle="true" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="horaVigProcHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU269_horaVigHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="horaVigProcHasta" size="10" disabled="true"
+							value="#{fechasGrupoPuestoHome.instance.horaVigProcHasta}">
+							<s:convertDateTime type="time" pattern="hh:mm" />
+							<a:support event="onblur" reRender="horaVigProcHastaField"
+								bypassUpdates="true" ajaxSingle="true" />
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+			</a:outputPanel>
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<br />
+			
+			<br />
+
+			<div class="actionButtons">  <s:button
+				id="volverAdd" value="Volver" propagation="join"
+				view="/#{from}.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{empty concursoPuestoAgrIdConcursoPuestoAgr ? grupoPuestosController.idConcursoPuestoAgr : concursoPuestoAgrIdConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{fechasGrupoPuestoHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{fechasGrupoPuestoHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{fechasGrupoPuestoHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{fechasGrupoPuestoHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{fechasGrupoPuestoHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{fechasGrupoPuestoHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{fechasGrupoPuestoHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{fechasGrupoPuestoHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

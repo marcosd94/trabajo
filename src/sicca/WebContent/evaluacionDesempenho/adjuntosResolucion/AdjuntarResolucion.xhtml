@@ -1,0 +1,168 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU565_titulo}</h1>
+    <h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel  label="#{messages['CU471_organizado_por']}" switchType="ajax" id="panelParametro">
+
+			<h:panelGrid columns="">
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{seguridadUtilFormController.evaluacionNombre}"/>
+            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2" id="idPanelCampos">
+			
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+			
+						<ui:remove>
+							<a:outputPanel >
+										<s:decorate template="/layout/display.xhtml">
+																<ui:define name="label">#{messages.CU398_unidadOrganiza}
+																</ui:define>
+																<h:inputText id="orgCodigo2" size="10" disabled="true"
+																	value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codigoUnidOrgDep}">
+																</h:inputText>
+																#{' '}
+																<h:inputText id="orgDenominacion2" size="70" disabled="true"
+																	value="#{seguridadUtilFormController.nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+																
+														</s:decorate>
+											</a:outputPanel>
+						</ui:remove>
+			 
+           
+
+          
+			</h:panelGrid>
+			
+            
+
+          
+
+        </rich:simpleTogglePanel>
+   
+        <rich:panel id="panelGrillagruposAsig">
+				<f:facet name="header">#{messages.CU557_grupos_asignados} (#{adjuntarResolucionFC.grupoMetodologiaLista.size()})<span class="required">*</span></f:facet>
+ 			<div class="results" id="tblsinAgruparList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+				<rich:dataTable id="sinAgrupar" var="_record" 
+					value="#{adjuntarResolucionFC.grupoMetodologiaLista}" style=" width : 600px;">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU557_grupo}
+						</f:facet>
+						<h:outputText value="#{_record.gruposEvaluacion.grupo}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU607_metodologia}
+						</f:facet>
+						<h:outputText value="#{_record.datosEspecifMetod.descripcion}" />
+					</h:column>
+					
+					
+				
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+       
+        <s:div styleClass="actionButtons" >
+        <s:button propagation="join" 
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="#{messages.CU565_anexar_reso}"
+				>
+				<f:param name="direccionFisica" value="#{adjuntarResolucionFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{adjuntarResolucionFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{adjuntarResolucionFC.idEvaluacionDesempeno}" />
+				<f:param name="nombreTabla" value="#{adjuntarResolucionFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="evaluacionDesempenho/adjuntosResolucion/AdjuntarResolucion" />
+			</s:button>
+                  <h:commandButton id="tarea" 
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{adjuntarResolucionFC.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+                          <s:button id="volver"
+                   value="Volver"
+             propagation="none"
+              view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"  >
+                  </s:button>
+                  <s:decorate template="/layout/display.xhtml" style="COLOR: #ff0000;" rendered="#{!adjuntarResolucionFC.tieneAdjuntos()}">
+				<ui:define name="label" >× Sin Resolución</ui:define>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml" style="COLOR: #008000;" rendered="#{adjuntarResolucionFC.tieneAdjuntos()}">
+				<ui:define name="label" >√ Resolución Adjunta</ui:define>
+			</s:decorate>
+    </s:div>
+        
+    </h:form>
+
+	
+
+    
+</ui:define>
+
+</ui:composition>

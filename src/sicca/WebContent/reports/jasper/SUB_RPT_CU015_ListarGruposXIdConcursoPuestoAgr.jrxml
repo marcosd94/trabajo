@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUB_RPT_CU015_ListarGruposXIdConcursoPuestoAgr" pageWidth="555" pageHeight="800" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idConcursoPuestoAgrSub" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select g.nro_orden as nro_orden_grupo,
+       g.descripcion as documento_grupo,
+       case when g.evaluacion_doc is true then 'Postulacion'
+	else 'Adjudicacion' end as cuando_grupo,
+       case
+	when g.obligatorio is true then 'SI'
+       else 'NO' end as es_obligatorio_grupo
+from
+seleccion.matriz_doc_config_grupos g where g.id_matriz_doc_config_enc in
+(select id_matriz_doc_config_enc from seleccion.matriz_doc_config_enc where
+id_concurso_puesto_agr = $P{idConcursoPuestoAgrSub} AND activo IS TRUE)]]>
+	</queryString>
+	<field name="nro_orden_grupo" class="java.lang.Integer"/>
+	<field name="documento_grupo" class="java.lang.String"/>
+	<field name="cuando_grupo" class="java.lang.String"/>
+	<field name="es_obligatorio_grupo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="228" y="0" width="55" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Obligatorio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="151" y="0" width="75" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Presentar para]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="0" y="0" width="150" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grupo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23">
+			<textField>
+				<reportElement x="228" y="0" width="55" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{es_obligatorio_grupo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cuando_grupo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="150" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_orden_grupo}+". "+$F{documento_grupo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

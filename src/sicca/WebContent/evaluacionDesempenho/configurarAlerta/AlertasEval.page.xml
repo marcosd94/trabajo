@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/AlertasEvalList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('alertasEval_edit')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{alertasEvalEditFC.init()}" on-postback="false"/>
+ <action execute="#{alertasEvalHome.wire}"/>
+
+ <param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}"/>
+ <param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}"/>
+ <param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}"/>
+ <param name="personaIdPersona" value="#{alertasEvalEditFC.idPersona}"/>
+ <param name="alertasEvalFrom"/>
+ <param name="alertasEvalIdAlertasEval" value="#{alertasEvalEditFC.idAlertasEval}"/>
+ <navigation from-action="#{alertasEvalEditFC.save()}">
+  <rule if-outcome="persisted">
+   <end-conversation/>
+   <redirect view-id="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"/>
+  </rule>
+ </navigation>
+ <navigation from-action="#{alertasEvalEditFC.update()}">
+  <rule if-outcome="updated">
+   <end-conversation/>
+   <redirect view-id="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"/>
+  </rule>
+ </navigation>
+ 	<restrict>#{identity.hasRole('alertasEval_view')}</restrict>
+</page>

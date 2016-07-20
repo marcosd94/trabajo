@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('ELABORAR_RESOL_NOMB_EXC')}</restrict>
+ 
+ 
+ <param name="resolucionHomologacionIdResolucionHomologacion" />
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ 
+ <param name="idGrupo" value="#{resolucionNombramientoExcFC.idConcursoPuestoAgr}"/>
+ <param name="idExcepcion" value="#{resolucionNombramientoExcFC.idExcepcion}"/>
+ 
+ <action execute="#{resolucionNombramientoExcFC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{resolucionNombramientoExcFC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{resolucionNombramientoExcFC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionNombramientoExcFC.idSave}"/>
+    <param name="idGrupo" value="#{resolucionNombramientoExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionNombramientoExcFC.paramIdConcurso}"/>
+    <param name="idExcepcion" value="#{resolucionNombramientoExcFC.idExcepcion}"/>
+     <param name="fromCU" value="599"/>
+     
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/resolucionNombramientoExc/ResolucionNombramientoExc"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{resolucionNombramientoExcFC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionNombramientoExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{resolucionNombramientoExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionNombramientoExcFC.idResoConsurso}"/>
+    <param name="idExcepcion" value="#{resolucionNombramientoExcFC.idExcepcion}"/>
+    <param name="texto" value="NOMBRAMIENTO"/>
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/resolucionNombramientoExc/ResolucionNombramientoExc"/>
+     <param name="fromCU" value="599"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{resolucionNombramientoExcFC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/VerResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionNombramientoExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{resolucionNombramientoExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionNombramientoExcFC.idResoConsurso}" />
+     <param name="idExcepcion" value="#{resolucionNombramientoExcFC.idExcepcion}"/>
+    <param name="texto" value="NOMBRAMIENTO"/>
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/resolucionNombramientoExc/ResolucionNombramientoExc"/>
+     <param name="fromCU" value="599"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{resolucionNombramientoExcFC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

@@ -1,0 +1,196 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+     xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.DatosEspecificos_list}</h1>
+    <h:form id="datosEspecificosSearch" styleClass="edit" >
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{datosEspecificosFCList.datosEspecificos.descripcion}" size="60"/>
+            </s:decorate>
+				<s:decorate id="datosGralField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.DatosGenerales_list}</ui:define>
+					<h:selectOneMenu id="idDatosGenerales" value="#{datosEspecificosFCList.idDatosGenerales}" style="width:250px">
+						<f:selectItems value="#{datosGeneralesSelectItems}"/>
+						<a:support event="onchange" eventsQueue="default"
+							 action="#{datosEspecificosFCList.upTipo()}"  reRender="charArea"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				<a:outputPanel id="charArea" ajaxRendered="true">
+					<s:decorate id="tipoField" template="/layout/edit.xhtml" rendered="#{datosEspecificosFCList.habTipo()}">
+					<ui:define name="label">#{messages.DatosEspecificos_tipo}</ui:define>
+					<h:selectOneMenu id="idReferencias" value="#{datosEspecificosFCList.idReferencias}" 
+					 style="width:250px">
+						<f:selectItems value="#{datosEspecificosFCList.tipoSelecItem}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				</a:outputPanel>
+            <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{datosEspecificosFCList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+		<a:outputPanel id="botons">
+        <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links,botons"
+				action="#{datosEspecificosFCList.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			
+			 <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{datosEspecificosFCList.searchAll()}" 
+				 reRender="panelParametro,panelResultado,links,botons" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+				 <h:commandButton id="print"   
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{datosEspecificosFCList.pdf()}" />
+        </div>
+        </a:outputPanel>
+
+    </h:form>
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty datosEspecificosList.resultList ? 0 : (datosEspecificosList.paginated ? datosEspecificosList.resultCount : datosEspecificosList.resultList.size)})</f:facet>
+    <div class="results" id="datosEspecificosList">
+
+    <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty datosEspecificosList.resultList}"/>
+
+    <rich:dataTable id="datosEspecificosList"
+                var="_datosEspecificos"
+              value="#{datosEspecificosList.resultList}"
+           rendered="#{not empty datosEspecificosList.resultList}">
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{datosEspecificosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.DatosEspecificos_dato_gral}"/>
+                    <ui:param name="propertyPath" value="datosEspecificos.datosGenerales.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_datosEspecificos.datosGenerales.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{datosEspecificosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.msg_descripcion}"/>
+                    <ui:param name="propertyPath" value="datosEspecificos.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_datosEspecificos.descripcion}"/>
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{datosEspecificosList}"/>
+                    <ui:param name="propertyLabel" value="Tipo"/>
+                    <ui:param name="propertyPath" value="datosEspecificos.valorAlf"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+        </h:column>
+       <h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{datosEspecificosList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.DatosEspecificos_activo}" />
+							<ui:param name="propertyPath" value="datosEspecificos.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_datosEspecificos.activo}" disabled="true"/>
+				</h:column>
+				
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seleccion/administrarDatosEspecificos/DatosEspecificos' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : 'Select'}" 
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="datosEspecificosViewId">
+                <f:param name="datosEspecificosIdDatosEspecificos"
+                        value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/administrarDatosEspecificos/DatosEspecificosEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="datosEspecificosEdit"
+                rendered="#{empty from}">
+                <f:param name="datosEspecificosIdDatosEspecificos"
+                        value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+		<a:outputPanel id="links" ajaxRendered="true">
+    <div class="tableControl">
+
+        <s:link view="/seleccion/administrarDatosEspecificos/DatosEspecificosList.xhtml"
+            rendered="#{datosEspecificosList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarDatosEspecificos/DatosEspecificosList.xhtml"
+            rendered="#{datosEspecificosList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{datosEspecificosList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarDatosEspecificos/DatosEspecificosList.xhtml"
+            rendered="#{datosEspecificosList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{datosEspecificosList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarDatosEspecificos/DatosEspecificosList.xhtml"
+            rendered="#{datosEspecificosList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{datosEspecificosList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+    </a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seleccion/administrarDatosEspecificos/DatosEspecificosEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="datosEspecificosIdDatosEspecificos"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

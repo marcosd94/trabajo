@@ -1,0 +1,297 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionarioOee" styleClass="edit">
+			<h1>#{messages.CU255_title}</h1>
+
+			<rich:panel id="panelBusqueda">
+				<f:facet name="header">#{messages['msg_list_search_filter']}</f:facet>
+
+				<h:panelGrid>
+
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}
+							</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							onkeypress="return soloNumeros(event);"
+							value="#{funcionarioUtilFormController.sinNivelEntidad.nenCodigo}">
+							<a:support event="onchange"
+								action="#{funcionarioUtilFormController.obtenerDescNivelEntidad()}"
+								reRender="nivelField" focus="entidadCodigo" />
+						</h:inputText>
+			                #{' '}
+			                <h:inputText id="nivelDesc" size="60" disabled="true"
+							value="#{funcionarioUtilFormController.sinNivelEntidad.nenNombre}" />
+			                #{' '}
+			                <s:button id="searchNivel"
+							image="#{request.contextPath}/img/Buscar.png"
+							view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml">
+							<f:param name="from"
+								value="seleccion/homologacion/ElegirPerfilHomologado" />
+						</s:button>
+					</s:decorate>
+
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}
+							</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							onkeypress="return soloNumeros(event);"
+							value="#{funcionarioUtilFormController.sinEntidad.entCodigo}">
+							<a:support event="onchange"
+								action="#{funcionarioUtilFormController.obtenerDescEntidad()}"
+								reRender="entidadField" focus="anxDescrip" />
+						</h:inputText>
+			                #{' '}
+			                <h:inputText id="entidadDesc" size="60"
+							disabled="true"
+							value="#{funcionarioUtilFormController.sinEntidad.entNombre}" />
+			                #{' '}
+			                <a:commandButton id="searchEntidad"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{funcionarioUtilFormController.getUrlToPageEntidad()}">
+
+							<f:param name="from"
+								value="seleccion/homologacion/ElegirPerfilHomologado" />
+						</a:commandButton>
+					</s:decorate>
+
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}
+							</ui:define>
+			                #{' '}
+			                <h:inputText id="oeeDesc" size="73" disabled="true"
+							value="#{funcionarioUtilFormController.configuracionUoCab.denominacionUnidad}" />
+			                #{' '}
+			                <a:commandButton id="searchEntidad"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{funcionarioUtilFormController.toFindOee()}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU159_generalEspecifico}<span
+								class="required">* </span>
+						</ui:define>
+						<h:selectOneMenu id="modalidad" style="width :250px;"
+							value="#{funcionarioUtilFormController.tipoEspGeneral}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.tipoGeneralEspecifico}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_tipo_cpt}</ui:define>
+						<h:selectOneMenu id="cpt" style="width : 330px;"
+							value="#{funcionarioUtilFormController.idTipoCpt}">
+							<f:selectItems value="#{tipoCptsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_cpt}</ui:define>
+						<h:inputText id="cpt"
+							value="#{funcionarioUtilFormController.codigoCpt}" size="20">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="denominacionCPT"
+								action="#{funcionarioUtilFormController.findCpt()}" />
+						</h:inputText>	
+			                #{' '}
+			                <h:inputText id="denominacionCPT"
+							value="#{funcionarioUtilFormController.cpt.denominacion}"
+							size="50" disabled="true" />
+							
+							#{' '}
+			                <a:commandButton id="searchCPT" eventsQueue="default"
+							image="/img/Buscar.png"
+							action="#{elegirPerfilHomologadoFormController.getUrlToPageTipoCpt()}">
+							<f:param name="from"
+								value="seleccion/homologacion/ElegirPerfilHomologado" />
+						</a:commandButton>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU255_denominacion}</ui:define>
+						<h:inputText id="denominacion"
+							value="#{funcionarioUtilFormController.denominacion}" size="50" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado" rendered="false"
+							value="#{funcionarioUtilFormController.activo}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				propagation="join" value="#{messages.msg_list_search_button}"
+				action="#{elegirPerfilHomologadoFormController.search()}"
+				rendered="#{elegirPerfilHomologadoFormController.habilitar}"
+				reRender="panelBusqueda,panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				rendered="#{elegirPerfilHomologadoFormController.habilitar}"
+				action="#{elegirPerfilHomologadoFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+			<br />
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty homologacionPerfilMatrizList.resultList ? 0 : (homologacionPerfilMatrizList.paginated ? homologacionPerfilMatrizList.resultCount : homologacionPerfilMatrizList.resultList.size)})</f:facet>
+				<div class="results" id="homologacionPerfilMatrizList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty homologacionPerfilMatrizList.resultList}" /> <rich:dataTable
+					id="homologacionPerfilMatrizList" var="_homologacionPerfilMatriz"
+					value="#{homologacionPerfilMatrizList.resultList}"
+					rendered="#{not empty homologacionPerfilMatrizList.resultList}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="oeeList" value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.configuracionUoCab.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_homologacionPerfilMatriz.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU255_denominacion}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.denominacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_homologacionPerfilMatriz.denominacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_tipo_cpt}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.cpt.tipoCpt.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_homologacionPerfilMatriz.cpt.tipoCpt.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_cpt}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.cpt.denominacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_homologacionPerfilMatriz.cpt.denominacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU253_activo}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.activo" />
+							</ui:include>
+						</f:facet>
+						<h:selectBooleanCheckbox
+							value="#{_homologacionPerfilMatriz.activo}" disabled="true" />
+					</h:column>
+
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<s:link rendered="#{elegirPerfilHomologadoFormController.habilitar}"
+							view="/seleccion/homologacion/ElegirPerfilHomologadoView.xhtml"
+							value="Ver" id="homologacionViewId">
+							<f:param name="idHomologacion"
+								value="#{_homologacionPerfilMatriz.idHomologacion}" />
+							<f:param name="from" value="#{fromx}" />
+						</s:link>
+						
+						#{' '}
+						
+						<s:link value="#{messages.msg_list_select}" rendered="#{elegirPerfilHomologadoFormController.habilitar}"
+							onclick="return confirm('#{messages.CU255_seleccionar}');"
+							id="homologacionSelId"
+							action="#{elegirPerfilHomologadoFormController.seleccionar()}">
+							<f:param name="idHomologacion"
+								value="#{_homologacionPerfilMatriz.idHomologacion}" />
+						</s:link>
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<div class="tableControl"><s:link propagation="join"
+				view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml"
+				rendered="#{homologacionPerfilMatrizList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml"
+				rendered="#{homologacionPerfilMatrizList.previousExists}"
+				propagation="join"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{homologacionPerfilMatrizList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml"
+				rendered="#{homologacionPerfilMatrizList.nextExists}"
+				propagation="join"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{homologacionPerfilMatrizList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml"
+				rendered="#{homologacionPerfilMatrizList.nextExists}"
+				propagation="join"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{homologacionPerfilMatrizList.lastFirstResult}" />
+			</s:link></div>
+
+
+			<div class="actionButtons"><s:button view="/#{fromx}.xhtml"
+				id="volver" value="#{messages.msg_done}">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{elegirPerfilHomologadoFormController.idConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

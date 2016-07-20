@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU495_titulo_list}</h1>
+    <h:form id="planCapacitacionSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"  switchType="ajax" id="panelParametro">
+
+          <h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" onkeypress="return soloNumeros(event);" styleClass="numeric"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"  
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/admPlanCapacitacion/PlanCapacitacionList')}" />
+							</s:decorate>
+				</a:outputPanel>
+			
+          
+</h:panelGrid>
+	<h:panelGrid  columns="2">
+  <s:decorate template="/layout/display.xhtml" id="anioField">
+                <ui:define name="label">#{messages.CU495_anio}</ui:define>
+                <h:inputText size="10" id="anio" onkeypress="return soloNumeros(event);"
+                 value="#{planCapacitacionListFC.anio}"/>
+            </s:decorate>
+     <s:decorate template="/layout/display.xhtml" id="nroField">
+                <ui:define name="label">#{messages.CU495_nro_entrada}</ui:define>
+                <h:inputText size="10" id="nro" onkeypress="return soloNumeros(event);"
+                 value="#{planCapacitacionListFC.nro}"/>
+            </s:decorate>
+	</h:panelGrid>
+
+        </rich:simpleTogglePanel>
+
+     
+        <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="links,panelResultado"
+				action="#{planCapacitacionListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{planCapacitacionListFC.searchAll()}" 
+				 reRender="panelParametro,links,panelResultado" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+    </h:form>
+<h:form >
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty planCapacitacionList.resultList ? 0 : (planCapacitacionList.paginated ? planCapacitacionList.resultCount : planCapacitacionList.resultList.size)})</f:facet>
+    <div class="results" id="planCapacitacionList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty planCapacitacionList.resultList}"/>
+
+    <rich:dataTable id="planCapacitacionList"
+                var="_planCapacitacion"
+              value="#{planCapacitacionList.resultList}"
+           rendered="#{not empty planCapacitacionList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planCapacitacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.gral_oee}"/>
+                    <ui:param name="propertyPath" value="planCapacitacion.configuracionUoCab.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planCapacitacion.configuracionUoCab.denominacionUnidad}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planCapacitacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU495_unid}"/>
+                    <ui:param name="propertyPath" value="planCapacitacion.configuracionUoDet.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planCapacitacion.configuracionUoDet.denominacionUnidad}"/>
+      </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planCapacitacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU495_nro_mesa}"/>
+                    <ui:param name="propertyPath" value="planCapacitacion.nro"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planCapacitacion.nro} /#{_planCapacitacion.anio}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planCapacitacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU495_anio}"/>
+                    <ui:param name="propertyPath" value="planCapacitacion.anio"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planCapacitacion.anio}"/>
+        </h:column>
+        
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planCapacitacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU495_estado}"/>
+                    <ui:param name="propertyPath" value="planCapacitacion.estado"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="CARGA" rendered="#{_planCapacitacion.estado=='C'}"/>
+             <h:outputText value="EJECUTADO" rendered="#{_planCapacitacion.estado=='E'}"/>
+        </h:column>
+         <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'capacitacion/admPlanCapacitacion/PlanCapacitacion' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : ''}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="planCapacitacionViewId">
+                <f:param name="planCapacitacionIdPlan"
+                        value="#{_planCapacitacion.idPlan}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/capacitacion/admPlanCapacitacion/PlanCapacitacionEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none" 
+                      id="planCapacitacionEdit"
+                rendered="#{_planCapacitacion.estado=='C'}">
+                <f:param name="planCapacitacionIdPlan"
+                        value="#{_planCapacitacion.idPlan}"/>
+            </s:link>
+              #{' '}
+            <s:link 
+                   value="#{messages.CU495_ejecucion_plan}"
+             propagation="none"
+             view="/capacitacion/admPlanCapacitacion/CargarPlanCapacitacionDet.xhtml"
+                      id="planCapacitacionEjecucion" >
+                <f:param name="planCapacitacionIdPlan"
+                        value="#{_planCapacitacion.idPlan}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+</h:form>
+
+<a:outputPanel id="links" >
+    <div class="tableControl">
+
+        <s:link view="/capacitacion/admPlanCapacitacion/PlanCapacitacionList.xhtml"
+            rendered="#{planCapacitacionList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admPlanCapacitacion/PlanCapacitacionList.xhtml"
+            rendered="#{planCapacitacionList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{planCapacitacionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admPlanCapacitacion/PlanCapacitacionList.xhtml"
+            rendered="#{planCapacitacionList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{planCapacitacionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admPlanCapacitacion/PlanCapacitacionList.xhtml"
+            rendered="#{planCapacitacionList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{planCapacitacionList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+</a:outputPanel>
+
+	<h:form >
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/capacitacion/admPlanCapacitacion/PlanCapacitacionEdit.xhtml"
+                    id="create"
+           propagation="none"
+                value="#{messages.msg_create_male}">
+            <f:param name="planCapacitacionIdPlan"/>
+        </s:button>
+        <h:commandButton value="#{messages.CU495_plantilla_plan}" 
+							action="#{planCapacitacionListFC.plantillaPlanAnual()}" />
+	
+	 <h:commandButton value="#{messages.CU495_plantilla_ejecucion}" 
+							action="#{planCapacitacionListFC.plantillaEjcucion()}" />
+	<h:commandButton value="#{messages.CU495_modelo}" 
+							action="#{planCapacitacionListFC.plantillaContrato()}" />
+    </s:div>
+	</h:form>
+</ui:define>
+
+</ui:composition>

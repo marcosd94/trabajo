@@ -1,0 +1,175 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU86_title2}</h1>
+		<h:form id="listaLarga" styleClass="edit">
+
+			<rich:panel>
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{listaLargaFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{listaLargaFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{listaLargaFormController.sinEntidad.entCodigo}" size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{listaLargaFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{listaLargaFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{listaLargaFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="codConcurso" size="20" disabled="true"
+							value="#{listaLargaFormController.codConcurso}" />
+							#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{listaLargaFormController.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU86_agr}</ui:define>
+						<h:inputText id="grupo" size="80" disabled="true"
+							value="#{listaLargaFormController.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel>
+					<f:facet name="header">#{messages.CU86_panel}</f:facet>
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_fecha}
+							</ui:define>
+							<rich:calendar id="fecha"
+								value="#{listaLargaFormController.fecha}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<rich:panel style="border:none;">
+							<fieldset><legend>#{messages.CU86_hora}</legend> <h:panelGrid
+								columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_desde}
+									</ui:define>
+									<h:inputText id="horaDesde" size="5" maxlength="5"
+										onkeyup="ponerDosPuntos(event);"
+										value="#{listaLargaFormController.horaDesde}" />
+								</s:decorate>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_hasta}
+									</ui:define>
+									<h:inputText id="horaHasta" size="5" maxlength="5"
+										onkeyup="ponerDosPuntos(event);"
+										value="#{listaLargaFormController.horaHasta}" />
+								</s:decorate>
+							</h:panelGrid></fieldset>
+						</rich:panel>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_lugar}
+							</ui:define>
+							<h:inputText id="lugar" size="100" maxlength="150"
+								value="#{listaLargaFormController.lugar}">
+								<s:validate />
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="departamentoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Departamento_}
+							</ui:define>
+							<h:selectOneMenu id="departamento"
+								value="#{listaLargaFormController.idDpto}" style="width:250px">
+								<f:selectItems
+									value="#{listaLargaFormController.departamentosSelecItem}" />
+								<a:support event="onchange"
+									action="#{listaLargaFormController.updateCiudad()}"
+									reRender="ciudadField" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate id="ciudadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU86_ciudad}
+							</ui:define>
+							<h:selectOneMenu id="ciudad"
+								value="#{listaLargaFormController.idCiudad}" style="width:250px">
+								<f:selectItems
+									value="#{listaLargaFormController.ciudadSelecItem}" />
+
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_direccion}
+							</ui:define>
+							<h:inputText id="direccion" size="100" maxlength="150"
+								value="#{listaLargaFormController.direccion}">
+								<s:validate />
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_obs}
+							</ui:define>
+
+							<h:inputTextarea cols="80"
+								value="#{listaLargaFormController.obs}">
+								<s:validate />
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{listaLargaFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <a:commandButton
+				id="Cancelar" eventsQueue="default" value="Volver"
+				action="#{listaLargaFormController.getUrlToPageListaLargaList()}" /></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

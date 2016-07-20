@@ -1,0 +1,649 @@
+<rich:dropDownMenu 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich" showDelay="250" hideDelay="0"
+	submitMode="none" rendered="#{identity.loggedIn}">
+	<f:facet name="label">#{messages.Menu_seleccion}</f:facet>
+
+	<!--  PROYECTO DE CONCURSO	-->
+	<rich:menuGroup rendered="#{identity.hasRole('groupProyConcSel')}" value="#{messages.CU40_title_menu}">
+		<rich:menuItem rendered="#{identity.hasRole('concurso_list')}" onclick="clickMenu('adminConcursosId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/concurso/ConcursoList.xhtml"
+				value="#{messages.submenu_concurso}" id="adminConcursosId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		
+		<rich:menuItem rendered="#{identity.hasRole('concursoCIO_list')}" onclick="clickMenu('adminConcursosCIOId')">
+			<s:link onclick="clickMenu('')"
+				view="/circuitoCIO/concurso/ConcursoList.xhtml"
+				value="#{messages.menu_concurso_oposicion}" id="adminConcursosCIOId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('concurso_list_SI')}" onclick="clickMenu('adminConcursosSIId')">
+			<s:link onclick="clickMenu('')"
+				view="/circuitoCSI/concurso/ConcursoList.xhtml"
+				value="Concurso Simplificado" id="adminConcursosSIId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('ConcursoList')}" onclick="clickMenu('adminConcursosPublicacionId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/concursoPublicacion/ConcursoList.xhtml"
+				value="#{messages.submenu_concurso_publicacion}" id="adminConcursosPublicacionId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		
+	</rich:menuGroup>
+	<!--  GESTIONAR BANDEJA DE TAREA	-->
+	<rich:menuItem rendered="#{identity.hasRole('bandejaEntrada_list')}" onclick="clickMenu('bandejaEntradaId')">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"
+			value="#{messages.CU395_title_menu}" id="bandejaEntradaId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	<rich:menuItem rendered="#{identity.hasRole('bandejaEntrada_CIO_list')}" onclick="clickMenu('bandejaEntradaCIOId')">
+		<s:link onclick="clickMenu('')"
+			view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+			value="Gestionar Bandeja de Tareas Concurso Interno" id="bandejaEntradaCIOId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	<rich:menuItem rendered="#{identity.hasRole('bandejaEntrada_CSI_list')}" onclick="clickMenu('bandejaEntradaSIId')">
+		<s:link onclick="clickMenu('')"
+			view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"
+			value="Gestionar Bandeja de Tareas Concurso Simplificado" id="bandejaEntradaSIId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	<rich:menuItem rendered="#{identity.hasRole('historialConcursoGrupo')}" onclick="clickMenu('historialConcursoGrupoId')">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+			value="#{messages.CU463_menu}" id="historialConcursoGrupoId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+
+	<!-- LISTADO DE CONCURSO/GRUPO/PUESTOS-->
+	<rich:menuItem rendered="#{identity.hasRole('VisualizarDatosConcurso')}" onclick="clickMenu('CU366')">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+			value="#{messages.CU366_menu}" includePageParams="false" id="CU366"
+			propagation="none">
+		</s:link>
+	</rich:menuItem>
+	
+	<!-- LISTADO DE CONCURSO/GRUPO - PUBLICADOS-->
+	<rich:menuItem rendered="#{identity.hasRole('gruposPublicados')}" onclick="clickMenu('GPUBLICADOS')">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/visualizarDatosConcurso/GruposPublicados.xhtml"
+			value="#{messages.LCP_titulo}" includePageParams="false" id="GPUBLICADOS"
+			propagation="none">
+		</s:link>
+	</rich:menuItem>
+
+	<!-- LISTADO DE ELEJIBLES-->
+	<rich:menuItem rendered="#{identity.hasRole('listaElejibles_list')}" onclick="clickMenu('CU324')">
+		<s:link onclick="clickMenu('')" id="CU324"
+			view="/seleccion/listaElejibles/ListaElejibles.xhtml"
+			value="#{messages.CU324_lista}" includePageParams="false"
+			propagation="none">
+		</s:link>
+	</rich:menuItem>
+
+	<!-- Reclamo o Sugerencia del Concurso -->
+
+	<rich:menuItem rendered="#{identity.hasRole('reclamo_sugerencia_concurso_list')}" onclick="clickMenu('CU107')">
+		<s:link onclick="clickMenu('')" id="CU107"
+			view="/seleccion/administrarReclamosConcurso/ReclamoSugerenciaList.xhtml"
+			value="Reclamo o Sugerencia Concurso" includePageParams="false"
+			propagation="none">
+		</s:link>
+	</rich:menuItem>
+	<!--Reclamo o Sugerencia del Concurso para Administrador  -->
+	<rich:menuItem rendered="#{identity.hasRole('admReclamoSugerenciaConcurso_list')}" onclick="clickMenu('CU200')">
+		<s:link onclick="clickMenu('')" id="CU200"
+			view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml"
+			value="#{messages.CU200_menu} " includePageParams="false"
+			propagation="none">
+		</s:link>
+	</rich:menuItem>
+	<rich:menuItem rendered="#{identity.hasRole('cancelar_depo_postula_536')}" onclick="clickMenu('cancelarPoslaDocId')">
+		<s:link onclick="clickMenu('')"
+			view="/depostulacion/depoPostula539.xhtml"
+			value="#{messages.CU539_menu}" id="cancelarPoslaDocId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	<!--  MANTENIMIENTO	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupMantenimientoSel')}" value="#{messages.Menu_mantenimiento}">
+
+		<rich:menuItem rendered="#{identity.hasRole('empresasTercerizadas_list')}" onclick="clickMenu('EmpresaTercerizadaID')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/empresasTercerizadas/EmprTercerizadaList.xhtml"
+				value="#{messages.EmprTercerizada_title}" id="EmpresaTercerizadaID"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('OrganizacionDiscapacitadosList')}" onclick="clickMenu('orgDiscId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/admOrgDis270/OrganizacionDiscapacitadosList.xhtml"
+				value="#{messages.CU270_menu}" id="orgDiscId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('nivelEstudio_list')}" onclick="clickMenu('NivelEstudioId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/administrarNivelEstudio/NivelEstudioList.xhtml"
+				value="#{messages.NivelEstudio_}" id="NivelEstudioId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('TituloAcademicoList')}" onclick="clickMenu('TituloAcademicoID')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/administrarTituloAcademicos/TituloAcademicoList.xhtml"
+				value="#{messages.Menu_mantenimiento_CU259}" id="TituloAcademicoID"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('institucionEducativa_list')}" onclick="clickMenu('InstitucionEducativaId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/institucionEducativa/InstitucionEducativaList.xhtml"
+				value="#{messages.InstitucionEducativa_}"
+				id="InstitucionEducativaId" includePageParams="false"
+				propagation="none" />
+		</rich:menuItem>
+
+
+		<rich:menuItem rendered="#{identity.hasRole('adm_banco_perfiles_list')}" onclick="clickMenu('CU357')">
+			<s:link onclick="clickMenu('')" id="CU357"
+				view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+				value="#{messages.CU357_menu} " includePageParams="false"
+				propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('reglas_cab_list')}" onclick="clickMenu('CU510')">
+			<s:link onclick="clickMenu('')" id="CU510"
+				view="/seleccion/regla/ReglaCabList.xhtml"
+				value="#{messages.CU510_menu} " includePageParams="false"
+				propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+	</rich:menuGroup>
+	<!--  EXCEPCIONES	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupExcepcionesSel')}" value="Excepciones">
+		<rich:menuItem rendered="#{identity.hasRole('LisSolTipExc')}" onclick="clickMenu('excepcionesPorTipoId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+				value="#{messages.CU427_menu}" id="excepcionesPorTipoId"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('bandejaExcepcion_list')}" onclick="clickMenu('bandejaExcepcionId')">
+			<s:link onclick="clickMenu('')"
+				view="/proceso/BandejaExcepcionList.xhtml"
+				value="#{messages.CU426_menu}" id="bandejaExcepcionId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('gestExcIngreso591')}" onclick="clickMenu('gestionExcepcionIngrespoId')">
+			<s:link onclick="clickMenu('')"
+				view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				value="#{messages.CU591_menu}" id="gestionExcepcionIngrespoId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+
+
+	<!--  CARGA INICIAL	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupCargaInicialSel')}" value="Carga Inicial">
+
+		<rich:menuItem rendered="#{identity.hasRole('calendario_sfp_list')}" onclick="clickMenu('admCalendarioSfpId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/calendarioSfp/CalendarioSfpList.xhtml"
+				value="Calendario Base SFP" id="admCalendarioSfpId"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('calendario_oee_list')}" onclick="clickMenu('calendarioOeeId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/calendarioOeeCab/CalendarioOeeCabList.xhtml"
+				value="Calendario Base OEE" id="calendarioOeeId"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('feriado_list')}" onclick="clickMenu('feriadosId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/feriados/FeriadosList.xhtml"
+				value="#{messages.CU299_title}" id="feriadosId"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('tipoArchivo_LIST')}" onclick="clickMenu('TipoArchivoID')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/administrarTipoArchivo/TipoArchivoList.xhtml"
+				value="#{messages.Menu_mantenimiento_CU262}" id="TipoArchivoID"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+
+	<!--  PLANTILLAS	-->
+	<rich:menuGroup rendered="#{identity.hasRole('groupPlantillaSel')}" value="Plantillas">
+
+		<rich:menuItem rendered="#{identity.hasRole('matrizDocumentalEnc_list')}" onclick="clickMenu('PlantillaMatrizEncId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"
+				value="#{messages.MatrizDocumentalEnc_}" id="PlantillaMatrizEncId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('matrizReferencial_list')}" onclick="clickMenu('MatrizReferencialId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/matrizReferencial/MatrizReferencialList.xhtml"
+				value="#{messages.MatrizReferencial_}" id="MatrizReferencialId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('PlantillaResolucionHomologacionList')}" onclick="clickMenu('admplanHomo')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/plantillaResolucionHomologacion/PlantillaResolucionHomologacionList.xhtml"
+				value="#{messages.CU248_plantillas_resolucio}" id="admplanHomo"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('PlantillaNotaHomologacionList')}" onclick="clickMenu('admNotaPlantillaH')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+				value="#{messages.CU249_menu}" id="admNotaPlantillaH"
+				includePageParams="false" propagation="none">
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('PlantillaMemoHomologacionList')}" onclick="clickMenu('PlantillasMemoId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/PlantillamemoHomologacion/PlantillaMemoHomologacionList.xhtml"
+				value="Plantillas de Memo" id="PlantillasMemoId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+
+
+
+	<!--  Items para el portal	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupItemPortalSel')}" value="#{messages.menu_items_portal}">
+
+		<rich:menuItem rendered="#{identity.hasRole('listar_preguntas_frecuentes_list')}" onclick="clickMenu('PreguntasFrecuentesID')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/preguntasFrecuentes/PreguntasFrecuentesList.xhtml"
+				value="Preguntas Frecuentes Portal" id="PreguntasFrecuentesID"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('reclamo_sug_portal_list')}" onclick="clickMenu('reclamoSugPortal')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+				value="Reclamos o Sugerencias" id="reclamoSugPortal"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('AdjuntoDocPortalList')}" onclick="clickMenu('admDocPort')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/admPublicacionDocPortal/AdjuntoDocPortalList.xhtml"
+				value="#{messages.CU328_titulo}" id="admDocPort"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+
+
+	</rich:menuGroup>
+
+	<!--Actividades   -->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupActividadeSel')}" value="Actividades">
+		<rich:menuItem rendered="#{identity.hasRole('actividad_list')}" onclick="clickMenu('actividadId')">
+			<s:link onclick="clickMenu('')"
+				view="/proceso/admActividad/ActividadList.xhtml"
+				value="#{messages.CU390_title_menu}" id="actividadId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('actividadProceso_list')}" onclick="clickMenu('actividadProcesoId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/actividadProceso/ActividadProcesoList.xhtml"
+				value="#{messages.CU391_title_menu}" id="actividadProcesoId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+
+	<!--  Estan ocultos	-->
+	<rich:menuItem onclick="clickMenu('CronogramaConcursoId')"
+		rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/selGrupoPuestos/seleGrupoPuesto.xhtml"
+			value="CU_321" id="CronogramaConcursoId" includePageParams="false"
+			propagation="none" />
+	</rich:menuItem>
+
+
+	<rich:menuItem onclick="clickMenu('reclamoSugerenciaId')"
+		rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+			value="#{messages.CU367_title}" id="reclamoSugerenciaId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+
+
+
+
+
+	<rich:menuItem onclick="clickMenu('admcomisionCab')" rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/comisionSeleccionCab/ComisionSeleccionCabList.xhtml"
+			value="CU165" id="admcomisionCab" includePageParams="false"
+			propagation="none">
+			<f:param name="idConcursoPuestoAgr" value="5" />
+		</s:link>
+	</rich:menuItem>
+
+
+
+	<rich:menuItem onclick="clickMenu('idConcursoPuestoAgr')"
+		rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/notaHomologacion/NotaHomologacionEdit.xhtml"
+			value="CU56" includePageParams="false" propagation="none">
+			<f:param name="idConcursoPuestoAgr" value="5" />
+		</s:link>
+	</rich:menuItem>
+	<rich:menuItem onclick="clickMenu('idConcursoPuestoAgr')"
+		rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/memoHomologacion/MemoHomologacionEdit.xhtml"
+			value="CU250" includePageParams="false" propagation="none">
+			<f:param name="idConcursoPuestoAgr" value="5" />
+		</s:link>
+	</rich:menuItem>
+
+	<rich:menuItem onclick="clickMenu('EnvioHomologacionId')"
+		rendered="false">
+		<s:link onclick="clickMenu('')"
+			view="/seleccion/homologacion/EnvioHomologacion.xhtml"
+			id="EnvioHomologacionId" value="CU410" includePageParams="false"
+			propagation="none">
+			<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="17" />
+		</s:link>
+	</rich:menuItem>
+
+
+
+
+	<!--  Circuito	Oculto  -->
+	<rich:menuGroup value="Circuito" rendered="false">
+		<rich:menuItem onclick="clickMenu('CU36')">
+			<s:link onclick="clickMenu('')" id="CU36"
+				view="/seleccion/perfilMatrizHomologacion/PerfilMatrizHomologacion.xhtml"
+				value="Enviar a Homologacion OEE" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('CU37')">
+			<s:link onclick="clickMenu('')" id="CU37"
+				view="/seleccion/homologacionPerfilMatriz/EnviarHomologacionPerfil.xhtml"
+				value="Aprobar Homologacion SFP" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('CU411')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/admDocHomologacion/AdmDocHomologacion.xhtml"
+				id="CU411" value="Elaborar Doc. Homolog. SFP"
+				includePageParams="false" propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU74')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/publicacionConcursoCab/PublicacionConcursoCabList.xhtml"
+				value="Solicitar Publicacion" id="CU74" includePageParams="false"
+				propagation="none">
+				<f:param name="idConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU254')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/publicacionConcursoSFP/PublicacionConcursoCabList.xhtml"
+				value="Aprobar Publicacion SFP" id="CU254" includePageParams="false"
+				propagation="none">
+				<f:param name="idConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU41')">
+			<s:link onclick="clickMenu('')" id="CU41"
+				view="/seleccion/evalDocumentosPostulantes/EvalDocumentalCabList.xhtml"
+				value="Evaluar Doc. Postulante" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('CU86')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/listaLarga/ListaLargaList.xhtml"
+				value="Lista Larga" id="CU86" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU417')">
+			<s:link onclick="clickMenu('')" id="CU417"
+				view="/seleccion/resolucionAdjudicacion/ElaborarResolucionAdjudicacion.xhtml"
+				value="Gestionar Elaboracion Resolucion de Adjudicacion"
+				includePageParams="false" propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('CU333')">
+			<s:link onclick="clickMenu('')" id="CU333"
+				view="/seleccion/administrarDecreto/AdministrarDecreto.xhtml"
+				value="Administrar Decretos" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU87')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/evalReferencialPostulante/ElaboracionListaCorta.xhtml"
+				value="Lista Corta" id="CU87" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU161')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/elaborarPublicacionSeleccionados/ListaSeleccionadosList.xhtml"
+				value="Lista Seleccionados" id="CU161" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('CU419')">
+			<s:link onclick="clickMenu('')" id="CU419"
+				view="/seleccion/resolucionNombramiento/ResolucionNombramiento.xhtml"
+				value="Gestionar Elab. Resolcion Nombramiento"
+				includePageParams="false" propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="15" />
+			</s:link>
+		</rich:menuItem>
+
+
+		<rich:menuItem onclick="clickMenu('CU350')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/evaluacionDocumentalAdjudicados/EvaluarDocAdjudicado.xhtml"
+				value="Lista Adjudicados" id="CU350" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU414')">
+			<s:link onclick="clickMenu('')" id="CU414"
+				view="/seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList.xhtml"
+				value="#{messages.CU414_title} " includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('CU201')">
+			<s:link onclick="clickMenu('')" id="CU201"
+				view="/seleccion/reclamoSugerenciaPorComite/ReclamoSugerenciaList.xhtml"
+				value="CU201 - Reclamos y Sugerencias Comite "
+				includePageParams="false" propagation="none">
+
+			</s:link>
+		</rich:menuItem>
+
+		<rich:menuItem onclick="clickMenu('FirmarResolucionHomologacionID')">
+			<s:link onclick="clickMenu('')" id="FirmarResolucionHomologacionID"
+				view="/seleccion/firmarResolucionHomologacion/FirmarResolucionHomologacion.xhtml"
+				value="Firmar Res. Homolog. OEE-7" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+				<f:param name="fromAct" value="7" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('FirmarResolucionHomologacionID2')">
+			<s:link onclick="clickMenu('')" id="FirmarResolucionHomologacionID2"
+				view="/seleccion/firmarResolucionHomologacion/FirmarResolucionHomologacion.xhtml"
+				value="Firmar Res. Homolog. OEE-21" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+				<f:param name="fromAct" value="21" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('FirmarResolucionHomologacionID3')">
+			<s:link onclick="clickMenu('')" id="FirmarResolucionHomologacionID3"
+				view="/seleccion/firmarResolucionHomologacion/FirmarResolucionHomologacion.xhtml"
+				value="Firmar Res. Homolog. OEE-26" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+				<f:param name="fromAct" value="26" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('evalPuntajePostulanteID')">
+			<s:link onclick="clickMenu('')" id="evalPuntajePostulanteID"
+				view="/seleccion/realizarEval/evalPuntajePostulante.xhtml"
+				value="Firmar Res. Homolog. OEE-26" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+				<f:param name="fromAct" value="26" />
+			</s:link>
+		</rich:menuItem>
+		<rich:menuItem onclick="clickMenu('admCargaGrupoId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/admCargaGrupo/ConcursoPuestoDetList.xhtml"
+				value="Cu404" id="admCargaGrupoId" includePageParams="false"
+				propagation="none">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="5" />
+			</s:link>
+		</rich:menuItem>
+	</rich:menuGroup>
+
+
+
+	<!--  INFORMES SELECCION	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupInformeSel')}" value="#{messages.Menu_informes}">
+		<rich:menuItem rendered="#{identity.hasRole('informePersonasRegistradasPortal')}" onclick="clickMenu('personasRegistradasPortalId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/reportes/PersonasRegistradasPortal.xhtml"
+				value="#{messages.CU468_menu}" 
+				id="personasRegistradasPortalId" includePageParams="false" 
+				propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+	<!-- INGRESO -->
+
+	<rich:menuGroup rendered="#{identity.hasRole('groupIngresoSel')}" value="#{messages.Menu_Ingreso}">
+		<rich:menuItem rendered="#{identity.hasRole('consultaIngCon590')}" onclick="clickMenu('consultaIngresoxConcursoId')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/consultaIngCon/consultaIngCon590.xhtml"
+				value="#{messages.CU541_menu_consulta}"
+				id="consultaIngresoxConcursoId" includePageParams="false"
+				propagation="none" />
+		</rich:menuItem>
+		<rich:menuGroup rendered="#{identity.hasRole('groupIngresoElegConcSel')}" value="Ingreso de Elegible de Concurso">
+			<rich:menuItem rendered="#{identity.hasRole('ajustarPuestoPostuConcu')}" onclick="clickMenu('elegibleConcursoId')">
+				<s:link onclick="clickMenu('elegibleConcursoId')"
+					view="/seleccion/ElegibleIngreso/ElegibleIngreso610.seam"
+					value="#{messages.CU610_menu}" id="elegibleConcursoId"
+					includePageParams="false" propagation="none" />
+			</rich:menuItem>
+			<rich:menuItem rendered="#{identity.hasRole('otrasCarreras_list')}" onclick="clickMenu('cu609Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/concursoElegible/PersonalElegibleList.xhtml"
+				value="Ingreso de Elegible" id="cu609Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		</rich:menuGroup>
+
+
+
+		<rich:menuItem rendered="#{identity.hasRole('permanenteConfElec_list')}" onclick="clickMenu('cu541Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/ingresoPermConfElec/PermanenteConfElecList.xhtml"
+				value="#{messages.CU541_menu}" id="cu541Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('personalContratadoConfianza_list')}" onclick="clickMenu('cu582Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/contratadoConfiaza/PersonalContratadoConfianzaList.xhtml"
+				value="Ingreso de Contratado Puesto de Confianza" id="cu582Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		
+		<rich:menuItem rendered="#{identity.hasRole('ingresoPorLeyEmergencia_list')}" onclick="clickMenu('cu583Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/porLeyDeEmergencia/IngresoDirectoPorLeyEmergenciaList.xhtml"
+				value="#{messages.CU583_menu}" id="cu583Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		<rich:menuItem rendered="#{identity.hasRole('personalReposicionJudicial_list')}" onclick="clickMenu('cu586Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/porReposicionJudicial/PersonalReposicionJudicialList.xhtml"
+				value="#{messages.CU586_menu}" id="cu586Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('ingresoRenovacionContrato_list')}" onclick="clickMenu('cu587Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/porRenovacionContrato/RenovacionContratoList.xhtml"
+				value="#{messages.CU587_menu}" id="cu587Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('otrasCarreras_list')}" onclick="clickMenu('cu584Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/porOtrasCarreras/OtrasCarrerasList.xhtml"
+				value="#{messages.CU584_menu}" id="cu584Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('ingresoEspecial_list')}" onclick="clickMenu('cu588Id')">
+			<s:link onclick="clickMenu('')"
+				view="/seleccion/ingresoDirecto/ingresoEspecial/IngresoEspecialList.xhtml"
+				value="#{messages.CU588_menu}" id="cu588Id"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		
+
+		
+
+		
+
+	</rich:menuGroup>
+
+
+
+</rich:dropDownMenu>

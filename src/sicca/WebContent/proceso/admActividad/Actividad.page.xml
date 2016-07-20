@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/NivelEstudioList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{actividadHome.wire}"/>
+
+   <param name="actividadFrom"/>
+   <param name="actividadIdActividad" value="#{actividadHome.actividadIdActividad}"/>
+
+
+   <navigation from-action="#{actividadHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/proceso/admActividad/ActividadList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{actividadHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/proceso/admActividad/ActividadList.xhtml"/>
+      </rule>
+   </navigation>
+
+
+	<restrict>#{identity.hasRole('actividad_view')}</restrict>
+</page>

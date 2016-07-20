@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="evaluacionDesempeno" styleClass="edit">
+			<h1>#{messages.CU550_titulo_rapido}</h1>
+			<rich:panel>
+				<f:facet name="header">#{admEvalDesempFC.idEvalDesempeno != null ? 'Editar' : 'Cargar'} #{messages.CU550_titulo_rapido}</f:facet>
+				<rich:panel>
+					<f:facet name="header">Organizado por</f:facet>
+					<h:panelGrid columns="3">
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+								disabled="true" />
+						</s:decorate>
+
+
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+								size="5">
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+								disabled="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU40_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+
+					</h:panelGrid>
+					<a:region>
+						<h:panelGrid columns="1">
+							<ui:remove>
+								<s:decorate template="/layout/display.xhtml">
+																<ui:define name="label">#{messages.CU398_unidadOrganiza}
+																</ui:define>
+																<h:inputText id="orgCodigo2" size="10"
+																	disabled="#{!admEvalDesempFC.esAdministradorSFP}"
+																	value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+																	<a:support event="onchange" eventsQueue="default"
+																		action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+																		reRender="orgCodigo2,orgDenominacion2,orden2" />
+																</h:inputText>
+																#{' '}
+																<h:inputText id="orgDenominacion2" size="50" disabled="true"
+																	value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+																#{' '}
+																<a:commandButton id="searchUnidadOrgDep2"
+																	rendered="#{admEvalDesempFC.esAdministradorSFP}"
+																	eventsQueue="default" image="/img/Buscar.png"
+																	action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoEdit')}" />
+															</s:decorate>
+							</ui:remove>
+						</h:panelGrid>
+					</a:region>
+				</rich:panel>
+				<br />
+				<rich:panel>
+					<h:panelGrid columns="1">
+						<s:decorate id="nombreField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU235_funcionario_titulo}</ui:define>
+							<h:inputText id="titulo" 
+								value="#{admEvalDesempFC.nombreFuncionarioEvaluacionDesempenoRapida}" size="100"
+								maxlength="250" disabled="true" />
+
+						</s:decorate>
+
+
+						<s:decorate id="puntajeField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU11_puntaje}</ui:define>
+							<h:inputText id="puntaje" 
+								value="#{admEvalDesempFC.puntajeFuncionarioEvaluacionDesempenoRapida}" size="7"
+								maxlength="7" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{admEvalDesempFC.idEvalDesempeno == null}"
+					styleClass="labelClass" /> <h:outputText
+					value="#{messages.msg_obs_update}"
+					rendered="#{admEvalDesempFC.idEvalDesempeno != null}"
+					styleClass="labelClass" /></div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{admEvalDesempFC.savePuntajeEvaluacionRapida()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="true" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{admEvalDesempFC.updatedEvaluacionRapida()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="false}" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/evaluacionDesempenho/evaluacionDesempenho/CargaEvaluacionRapidaEdit.xhtml" >
+				<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								value="#{admEvalDesempFC.idEvalDesempeno}" />
+				<f:param name="gruposEvaluacionFrom"
+								value="/evaluacionDesempenho/evaluacionDesempenho/PuntajeSujetoEvaluacionDesempenoRapida.xhtml" />
+				</s:button>
+				</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

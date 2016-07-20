@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU258_matriz_seleccion" pageWidth="555" pageHeight="800" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="91"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="idConcursoPuestoAgr" class="java.lang.Long" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Long(5)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 	MR_ENC.DESCRIPCION AS FactoresEvaluacion,
+MR_DET.DESCRIPCION AS Items,
+MR_ENC.PUNTAJE_MAXIMO AS PuntajeMaximo,
+MR_DET.PUNTAJE_MAXIMO AS GraduacionPuntajes ,
+MR.PUNTAJE_MAXIMO  AS TotalPuntos,
+MR_ENC.nro_orden as nro_orden,
+MR_DET.criterios_evaluacion as criterios_evaluacion,
+MR.otros_datos as otros_datos
+
+FROM SELECCION.MATRIZ_REF_CONF_DET MR_DET
+
+JOIN SELECCION.MATRIZ_REF_CONF_ENC MR_ENC
+ON MR_DET.ID_MATRIZ_REF_CONF_ENC = MR_ENC.ID_MATRIZ_REF_CONF_ENC
+
+JOIN SELECCION.MATRIZ_REF_CONF MR
+ON MR.ID_MATRIZ_REF_CONF = MR_ENC.ID_MATRIZ_REF_CONF
+
+WHERE  MR.ID_CONCURSO_PUESTO_AGR = $P{idConcursoPuestoAgr} AND MR.TIPO='GRUPO'
+and MR_DET.activo is true
+and MR_ENC.activo is true
+and MR.activo is true
+ORDER BY MR_ENC.nro_orden ,Items]]>
+	</queryString>
+	<field name="factoresevaluacion" class="java.lang.String"/>
+	<field name="items" class="java.lang.String"/>
+	<field name="puntajemaximo" class="java.lang.Float"/>
+	<field name="graduacionpuntajes" class="java.lang.Float"/>
+	<field name="totalpuntos" class="java.lang.Float"/>
+	<field name="nro_orden" class="java.lang.Integer"/>
+	<field name="otros_datos" class="java.lang.String"/>
+	<field name="criterios_evaluacion" class="java.lang.String"/>
+	<variable name="totalPuntos" class="java.lang.Float">
+		<variableExpression><![CDATA[$F{totalpuntos}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Float("0")]]></initialValueExpression>
+	</variable>
+	<variable name="nroFactor" class="java.lang.Integer" incrementType="Group" incrementGroup="factoresEvaluacion" calculation="Count">
+		<variableExpression><![CDATA[$F{factoresevaluacion}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<group name="factoresEvaluacion">
+		<groupExpression><![CDATA[$F{factoresevaluacion}]]></groupExpression>
+		<groupHeader>
+			<band height="22">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="497" y="0" width="50" height="20" backcolor="#CCCCCC"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntajemaximo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement mode="Opaque" x="0" y="0" width="497" height="20" backcolor="#CCCCCC"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["" + $F{nro_orden} + ". " + $F{factoresevaluacion}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="497" y="0" width="50" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Puntaje Máximo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="5" y="0" width="130" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Factores de Evaluación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="135" y="0" width="287" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Criterios de Evaluación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="433" y="0" width="64" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Criterios de Gradación]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="31" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="5" y="2" width="130" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{items}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="433" y="2" width="64" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{graduacionpuntajes}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="135" y="2" width="287" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{criterios_evaluacion} == null ? "-" : $F{criterios_evaluacion}+"\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="14" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band height="84" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="497" y="10" width="58" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$V{totalPuntos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="0" y="10" width="497" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total de Puntos]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="5" y="38" width="542" height="21"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{otros_datos}+"\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

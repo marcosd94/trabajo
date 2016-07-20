@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBRPT_CU659_Estudios" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT CASE WHEN E.ID_TITULO_ACADEMICO = 117 THEN E.OTRO_TITULO_OBT ELSE T.DESCRIPCION END TITULO,
+	ES.DESCRIPCION ESPECIALIDAD,
+	CASE WHEN E.ID_INST_EDUCATIVA IS NULL THEN E.OTRA_INSTIT ELSE I.DESCRIPCION END INSTITUCION,
+	PAIS.DESCRIPCION,
+	CASE WHEN Extract(year from E.FECHA_FIN) IS NULL THEN 'PENDIENTE' WHEN Extract(year from E.FECHA_FIN)
+	IS NOT NULL THEN Extract(year from E.FECHA_FIN)||' '  END  AS anio_egreso,
+	E.DURACION_HORAS || ' '|| CASE  E.TIPO_DURACION
+	WHEN 'A' THEN 'AÑO(S)'
+	WHEN 'M' THEN 'MES(MESES)'
+	WHEN 'S' THEN 'SEMESTRE(S)'
+	WHEN 'D' THEN 'DIA(S)'
+	ELSE 'HORA(S)' END DURACION
+  FROM LEGAJO.ESTUDIOS_REALIZADOS E
+  JOIN SELECCION.TITULO_ACADEMICO T
+  ON T.ID_TITULO_ACADEMICO = E.ID_TITULO_ACADEMICO
+  LEFT JOIN PLANIFICACION.ESPECIALIDADES ES
+  ON ES.ID_ESPECIALIDADES = E.ID_ESPECIALIDAD
+  LEFT JOIN SELECCION.INSTITUCION_EDUCATIVA I
+  ON I.ID_INST_EDUCATIVA = E.ID_INST_EDUCATIVA
+  JOIN GENERAL.PAIS PAIS
+  ON PAIS.ID_PAIS = E.ID_PAIS
+  WHERE E.ID_PERSONA = $P{id}
+  AND E.ACTIVO = TRUE;]]>
+	</queryString>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="especialidad" class="java.lang.String"/>
+	<field name="institucion" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="anio_egreso" class="java.lang.String"/>
+	<field name="duracion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estudios Realizados]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="0" y="18" width="145" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Título Obtenido"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="145" y="18" width="114" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Especialidad"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="259" y="18" width="117" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Institución"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="376" y="18" width="86" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Año de Egreso"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="462" y="18" width="93" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Duración"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="145" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="145" y="0" width="114" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{especialidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="259" y="0" width="117" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{institucion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="376" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{anio_egreso}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="462" y="0" width="93" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{duracion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

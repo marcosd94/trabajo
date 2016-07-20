@@ -1,0 +1,198 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Antecedentes</h1>
+
+
+		<rich:modalPanel id="verEditarModal" width="450" height="260"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">Ver/Editar Antecedentes</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tabEdit">
+					<h:panelGrid columns="1">
+						<a:region>
+							<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+								<h:inputTextarea required="true" onkeypress="return imposeMaxLength(event, this, 200);"
+									value="#{antecedentesComiteeFormController.antecedenteGrupo.descripcion}"
+									cols="50">
+									<a:support event="onblur" eventsQueue="default" />
+								</h:inputTextarea>
+							</s:decorate>
+						</a:region>
+					</h:panelGrid>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+
+					<div style="clear: both"><h:outputText
+						value="#{messages.msg_obs_save}"
+						rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo == null}"
+						styleClass="labelClass" /> <h:outputText
+						value="#{messages.msg_obs_update}"
+						rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}"
+						styleClass="labelClass" /></div>
+
+					<div class="actionButtons" align="center"><a:commandButton
+						id="guardar" value="Guardar"
+						rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo == null}"
+						action="#{antecedentesComiteeFormController.guardar()}"
+						ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('verEditarModal')"
+						reRender="panelAntecedentes" /> <a:commandButton id="update"
+						value="Actualizar"
+						rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}"
+						action="#{antecedentesComiteeFormController.actualizar()}"
+						ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('verEditarModal')"
+						reRender="panelAntecedentes" /> <a:commandButton
+						id="cancel_tap03" value="Cancelar" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('verEditarModal')" /></div>
+
+					<h:panelGrid columns="2">
+						<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+							rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}">
+							<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+							<h:outputText id="usuAlta"
+								value="#{antecedentesComiteeFormController.antecedenteGrupo.usuAlta}" />
+						</s:decorate>
+						<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+							rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}">
+							<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+							<h:outputText id="fechaAlta"
+								value="#{antecedentesComiteeFormController.antecedenteGrupo.fechaAlta}">
+								<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+							</h:outputText>
+						</s:decorate>
+						<s:decorate id="usuModField" template="/layout/edit.xhtml"
+							rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}">
+							<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+							<h:outputText id="usuMod"
+								value="#{antecedentesComiteeFormController.antecedenteGrupo.usuMod}" />
+						</s:decorate>
+						<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+							rendered="#{antecedentesComiteeFormController.antecedenteGrupo.idAntecedenteGrupo != null}">
+							<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+							<h:outputText id="fechaMod"
+								value="#{antecedentesComiteeFormController.antecedenteGrupo.fechaMod}">
+								<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+							</h:outputText>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="antecedentes" styleClass="edit">
+			<h:panelGrid columns="1">
+				<rich:panel style="border:none;">
+					<table align="right">
+						<tr>
+							<td><s:decorate id="nivelField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_nivel}</ui:define>
+								<h:inputText
+									value="#{antecedentesComiteeFormController.nivelEntidad.nenNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="entidadField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_entidad}</ui:define>
+								<h:inputText
+									value="#{antecedentesComiteeFormController.sinEntidad.entNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="concursoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_concurso}</ui:define>
+								<h:inputText
+									value="#{antecedentesComiteeFormController.concurso.nombre}"
+									disabled="true" size="60" />
+							</s:decorate></td>
+							<td><s:decorate id="tipoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_tipo}</ui:define>
+								<h:inputText
+									value="#{antecedentesComiteeFormController.concurso.datosEspecificosTipoConc.descripcion}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="puestoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_puesto}</ui:define>
+								<h:inputText
+									value="#{antecedentesComiteeFormController.concursoPuestoAgr.descripcionGrupo}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+					</table>
+				</rich:panel>
+
+				<rich:panel style="border:none;">
+
+
+					<rich:panel style="width : 800px;" id="panelAntecedentes">
+						<f:facet name="header"> Cargar Antecedentes</f:facet>
+
+						<h:outputText value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty antecedentesComiteeFormController.listaAntecedentes}" />
+						<div style="clear: both; overflow: auto; HEIGHT: 200px"><rich:dataTable
+							id="antecedenteGrupoList" var="_ant"
+							value="#{antecedentesComiteeFormController.listaAntecedentes}"
+							rendered="#{not empty antecedentesComiteeFormController.listaAntecedentes}">
+							<rich:column>
+								<f:facet name="header">#{messages.Ciudad_descripcion}</f:facet>
+								<h:outputText value="#{_ant.descripcion}" />
+							</rich:column>
+							<rich:column styleClass="action" rendered="#{antecedentesComiteeFormController.habilitar}">
+								<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+									 #{' '}
+			         <a:commandLink id="ver" value="Ver/Editar"
+									action="#{antecedentesComiteeFormController.editar(_ant.idAntecedenteGrupo)}"
+									reRender="verEditarModal"
+									oncomplete="#{rich:component('verEditarModal')}.show()" />
+						 #{' '}
+			         <h:commandLink id="eliminar" value="Eliminar"
+									action="#{antecedentesComiteeFormController.eliminar(_ant.idAntecedenteGrupo)}"
+									onclick="return confirm('#{messages.msg_confirm_delete}');" />
+
+							</rich:column>
+						</rich:dataTable></div>
+						<s:div styleClass="actionButtons">
+
+							<a:commandButton id="verEditarModalButton" rendered="#{antecedentesComiteeFormController.habilitar}"
+								value="#{messages.msg_create_male}"
+								action="#{antecedentesComiteeFormController.nuevo()}"
+								reRender="verEditarModal"
+								oncomplete="#{rich:component('verEditarModal')}.show()" />
+							<s:button id="cancelEdit" value="Volver" propagation="nest"
+								view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+						</s:div>
+					</rich:panel>
+
+
+				</rich:panel>
+			</h:panelGrid>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

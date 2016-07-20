@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subRPT_CU239_Discapacidad" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.3636363636363635"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="idPersona" class="java.lang.Long"/>
+	<parameter name="path_logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="whereDiscapacidad" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	DISCAPACIDAD.DESCRIPCION AS discapacidad
+,	PERSONA_DISCAPACIDAD.CAUSA AS causa
+,	PERSONA_DISCAPACIDAD.GRADO AS  grado
+,	GRADO_AUTONOMIA.DESCRIPCION AS gradoAutonomia
+, 	PERSONA_DISCAPACIDAD.DIFICULTAD_ACTIVIDAD AS  tieneDificultad ,PERSONA_DISCAPACIDAD.nro_certificado AS nroCeti, PERSONA_DISCAPACIDAD.fecha_emision as fecEmi,
+PERSONA_DISCAPACIDAD.actividad_realizar as ar
+FROM seleccion.persona_discapacidad PERSONA_DISCAPACIDAD
+LEFT OUTER JOIN   seleccion.datos_especificos DISCAPACIDAD
+ON DISCAPACIDAD.ID_DATOS_ESPECIFICOS = PERSONA_DISCAPACIDAD.ID_DATOS_ESPECIFICOS_DISCAPAC
+LEFT OUTER JOIN   seleccion.datos_especificos GRADO_AUTONOMIA
+ON GRADO_AUTONOMIA.ID_DATOS_ESPECIFICOS = PERSONA_DISCAPACIDAD.ID_DATOS_ESPECIFICOS_GRADO_AUTONOM
+$P!{whereDiscapacidad}]]>
+	</queryString>
+	<field name="discapacidad" class="java.lang.String"/>
+	<field name="causa" class="java.lang.String"/>
+	<field name="grado" class="java.lang.Integer"/>
+	<field name="gradoautonomia" class="java.lang.String"/>
+	<field name="tienedificultad" class="java.lang.String"/>
+	<field name="nroceti" class="java.lang.Integer"/>
+	<field name="fecemi" class="java.sql.Timestamp"/>
+	<field name="ar" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="1" y="2" width="231" height="23" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[D. DISCAPACIDAD]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="104" splitType="Stretch">
+			<textField>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="2" y="36" width="62" height="35" backcolor="#CCCCCC"/>
+				<box>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Causa:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="156" y="36" width="55" height="35" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grado:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="64" y="36" width="93" height="35"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{causa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="211" y="36" width="107" height="35"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{grado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="383" y="36" width="170" height="35"/>
+				<box>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{gradoautonomia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="156" y="4" width="397" height="32" backcolor="#F29900"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{discapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="2" y="4" width="154" height="32" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+"Discapacidad"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="318" y="36" width="65" height="35" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grado de Autonomía]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="2" y="71" width="118" height="32" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Nro Certificado:"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="119" y="71" width="113" height="32"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{nroceti}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="232" y="71" width="151" height="32" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha de Emisión]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="383" y="71" width="170" height="32"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecemi}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

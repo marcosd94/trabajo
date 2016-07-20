@@ -1,0 +1,459 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+		<h1>#{messages.CU646_titulo}</h1>
+		
+		<rich:panel style="border:none;">
+			<h:panelGrid>
+			<rich:panel style=" width : 872px;">
+			<f:facet name="header">#{messages.CU646_apoyos}</f:facet>
+			<h:panelGrid columns="3">
+			 <s:decorate id="item1Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item1}</ui:define>
+                <h:selectBooleanCheckbox id="item1"
+                                     value="#{discapacidadLegajoFC.discapacidadApoyos.instRehab}"/>
+            </s:decorate>
+             <s:decorate id="item6Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item6}</ui:define>
+                <h:selectBooleanCheckbox id="item6"
+                                    value="#{discapacidadLegajoFC.discapacidadApoyos.otroApoyo}"/>
+            </s:decorate>
+          
+			<s:decorate  template="/layout/edit.xhtml">
+								<h:inputTextarea 
+									value="#{discapacidadLegajoFC.discapacidadApoyos.comentario}"
+									style=" width : 360px;">
+									   <f:validateLength maximum="250" />
+								</h:inputTextarea>
+							</s:decorate>
+			
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			 <s:decorate id="item2Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item2}</ui:define>
+                <h:selectBooleanCheckbox id="item2"
+                                   value="#{discapacidadLegajoFC.discapacidadApoyos.centroSal}"/>
+            </s:decorate>
+            <s:decorate id="item3Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item3}</ui:define>
+                <h:selectBooleanCheckbox id="item3"
+                                   value="#{discapacidadLegajoFC.discapacidadApoyos.particular}"/>
+            </s:decorate>
+             <s:decorate id="item4Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item4}</ui:define>
+                <h:selectBooleanCheckbox id="item4"
+                                   value="#{discapacidadLegajoFC.discapacidadApoyos.entrenamiento}"/>
+            </s:decorate>
+              <s:decorate id="item5Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU646_item5}</ui:define>
+                <h:selectBooleanCheckbox id="item5"
+                                  value="#{discapacidadLegajoFC.discapacidadApoyos.ninguno}"/>
+            </s:decorate>
+            
+			
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+			<a:commandButton id="savePanel1" 
+							action="#{discapacidadLegajoFC.savePanel1()}"
+							value="#{messages.msg_save}"
+							onclick="if(!confirm('#{messages.msg_confirm_save}')){return false;}"
+							reRender="panelRepresentante"/>
+			#{''}<h:outputText value="#{messages.CU646_msg_apoyo}" styleClass="labelClass" style="color:Red;"/>
+			</h:panelGrid>
+			</rich:panel>
+			
+			
+			
+				<a:outputPanel  id="panelParanDiscapacidad" ajaxRendered="false"
+					eventsQueue="default">
+					<rich:panel id="discap" style=" width : 872px;">
+						<f:facet name="header">#{messages.CU646_datos_tipos}</f:facet>
+						<h:panelGrid columns="1">
+							<h:outputLabel value="#{messages.CU646_certificado_entidad}"
+								style="font-weight:bold" />
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<s:decorate id="gradoAuField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_funcionalidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoAu"
+									value="#{discapacidadLegajoFC.idFuncionalidad}"
+									style="width:250px">
+									<f:selectItems
+										value="#{discapacidadLegajoFC.gradoAutonomiaSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="causaField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_causa}</ui:define>
+								
+								<h:selectOneMenu id="causa" 
+									value="#{discapacidadLegajoFC.idCausa}"
+									style="width:250px">
+									<f:selectItems
+										value="#{discapacidadLegajoFC.causaDiscSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="discapacidadField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_discapacidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="discapacidad"
+									value="#{discapacidadLegajoFC.idDiscapacidad}"
+									style="width:250px">
+									<f:selectItems
+										value="#{discapacidadLegajoFC.discapacidadSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="grield" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_porcentaje_discap}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="gr"  onkeypress="return soloNumeros(event);"
+									value="#{discapacidadLegajoFC.personaDiscapacidad.grado}">
+								</h:inputText>
+								<h:outputText value="#{messages.CU646_porcentaje}"/>
+							</s:decorate>
+							<s:decorate id="gradoAutField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_nro_certificado}</ui:define>
+								<h:inputText id="gradoAut"  onkeypress="return soloNumeros(event);"
+									value="#{discapacidadLegajoFC.personaDiscapacidad.nroCertificado}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_fecha_emision}</ui:define>
+								<rich:calendar id="fechaEmision" datePattern="dd/MM/yyyy"
+									inputSize="10" enableManualInput="true"
+									oninputkeyup="ponerBarra(event)"
+									value="#{discapacidadLegajoFC.personaDiscapacidad.fechaEmision}" />
+							</s:decorate>
+
+
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<s:decorate id="tipoDocField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU1556_tipo_doc}<span
+										class="required">*</span></ui:define>
+								<h:selectOneMenu id="tipoDo"
+									value="#{discapacidadLegajoFC.idTipoDoc}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByTipoConcursoFPDISCSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							</h:panelGrid>
+							
+							<h:panelGrid columns="2">
+							
+							
+							<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Adjunto<span
+										class="required">*</span></ui:define>
+								<s:fileUpload size="30"  id="archivo" 
+						contentType="#{discapacidadLegajoFC.contentType}"
+						data="#{discapacidadLegajoFC.uploadedFile}"
+						fileName="#{discapacidadLegajoFC.fileName}"
+						style=" width : 382px;" >
+					
+					</s:fileUpload>
+							</s:decorate>
+						
+							<a:region><a:outputPanel ajaxRendered="true" id="panelNombreDoc">
+							<s:decorate id="documentoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_doc}</ui:define>
+								<h:inputText id="documento" disabled="true" size="30"
+									value="#{discapacidadLegajoFC.nombreDoc}">
+								</h:inputText>
+							</s:decorate>
+							</a:outputPanel></a:region>
+						</h:panelGrid>
+						<h:panelGrid>
+
+							<s:decorate id="tienedifField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_potencial}</ui:define>
+								<h:inputTextarea id="tienedif"
+									value="#{discapacidadLegajoFC.personaDiscapacidad.actividadRealizar}"
+									style=" width : 446px;">
+									   <f:validateLength maximum="250" />
+								</h:inputTextarea>
+							</s:decorate>
+							<s:decorate id="actividadRealizaField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU646_obs}</ui:define>
+								<h:inputTextarea id="actividadRealiza"
+									value="#{discapacidadLegajoFC.personaDiscapacidad.dificultadActividad}"
+									style=" width : 446px;">
+									   <f:validateLength maximum="250" />
+								</h:inputTextarea>
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+						<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+						<div style="clear: both"><h:outputText
+							value="#{messages.CU646_mbs_add}"
+							styleClass="labelClass" /></div>
+
+					</rich:panel>
+				</a:outputPanel>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+
+				<a:outputPanel id="panelBotones" ajaxRendered="true">
+
+					<h:commandButton id="add" eventsQueue="default"
+					onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+						rendered="#{!discapacidadLegajoFC.esEdit}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+						action="#{discapacidadLegajoFC.addDiscapacidad()}" />
+
+					<h:commandButton id="limpiar" eventsQueue="default"
+						rendered="#{!discapacidadLegajoFC.esEdit}"
+						value="Limpiar"
+						action="#{discapacidadLegajoFC.limpiar()}" />
+					<h:commandButton id="update"
+						rendered="#{discapacidadLegajoFC.esEdit}"
+						onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+						value="#{messages.msg_update}"
+						action="#{discapacidadLegajoFC.update()}" />
+						
+						
+					<h:commandButton id="cancelEdit"
+						rendered="#{discapacidadLegajoFC.esEdit}"
+						value="#{messages.msg_cancel}" 
+						action="#{discapacidadLegajoFC.cancelar()}" />
+
+				</a:outputPanel>
+			</h:panelGrid>
+			<h:panelGrid>
+				<a:outputPanel ajaxRendered="true" id="resulDiscapacidad"
+					eventsQueue="default">
+					<rich:panel id="discapacidadPanel" style=" width : 872px;">
+						<f:facet name="header">#{messages.CU646_datos_tipos}</f:facet>
+						
+							<div class="results" id="tbldetList" style=" overflow: scroll;"  width="310">
+							<rich:dataTable id="itemsList" var="_items"
+								value="#{discapacidadLegajoFC.discapacidadsList}"
+								rowKeyVar="rowNr">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_discapacidad}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosDiscapac.descripcion}" />
+								</rich:column>
+								<rich:column>
+
+									<f:facet name="header">
+													#{messages.CU156_causa}
+													</f:facet>
+									<h:outputText value="#{_items.datosEspecificoByIdDatosEspecificosCausa.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_grado}
+													</f:facet>
+									<h:outputText value="#{_items.grado}" />
+
+								</rich:column>
+								
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_funcionalidad}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosGradoAutonom.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_nro_cer}
+													</f:facet>
+									<h:outputText value="#{_items.nroCertificado}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_fecha_emi}
+													</f:facet>
+									<h:outputText value="#{_items.fechaEmision}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_tipo_doc}
+													</f:facet>
+									<h:outputText
+										value="#{_items.documentos.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_docum}
+													</f:facet>
+									<h:outputText value="#{_items.documentos.nombreFisicoDoc}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_potencial_laboral}
+													</f:facet>
+									<h:outputText value="#{_items.actividadRealizar}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU646_obs}
+													</f:facet>
+									<h:outputText value="#{_items.dificultadActividad}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+										  <a:commandLink 
+										action="#{discapacidadLegajoFC.editar(rowNr)}"
+										value="#{messages.msg_edit}"
+										onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+										reRender="itemsList,discapacidadPanel,discap,tbldetList" />
+									
+										
+										#{'  '}
+											   
+											   <a:commandLink id="removeRow"
+										action="#{discapacidadLegajoFC.delItems(rowNr)}"
+										value="#{messages.msg_list_remove}"
+										onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+										reRender="itemsList,discapacidadPanel,discap,tbldetList" />
+									  #{' '}
+				     <h:commandLink value="Descargar"   target="_blank" rendered="#{_items.documentos.idDocumento!=null}"
+					action="#{discapacidadLegajoFC.abrirDoc(rowNr)}" />
+									   
+											 
+								</rich:column>
+							</rich:dataTable></div>
+
+						
+					</rich:panel>
+				</a:outputPanel>
+				<rich:panel id="panelRepresentante" style=" width : 872px;">
+					<f:facet name="header">#{messages.CU646_datos_representarse}</f:facet>
+					<h:panelGrid columns="1">
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU646_pais_exp}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="pais" disabled="#{!discapacidadLegajoFC.habPaisExp}"
+								value="#{discapacidadLegajoFC.idPais}"
+								style="width:250px">
+								<f:selectItems value="#{paissSelectItems}" />
+								<a:support event="onchange" reRender="panelRepresentante" action="#{discapacidadLegajoFC.cambioPais()}" 
+							 eventsQueue="default" focus="docIdensField" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="docIdensField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_doc_iden}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="docIdens"
+								value="#{discapacidadLegajoFC.docRep}">
+								 <a:support event="onblur" reRender="panelRepresentante" eventsQueue="default"
+	                          action="#{discapacidadLegajoFC.seleccionoExDoc()}"/>
+							</h:inputText>
+						</s:decorate>
+						
+						<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU13_nacionalidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="nacionalidad"
+								value="#{discapacidadLegajoFC.idNacionalidad}"
+								style="width:250px">
+								<f:selectItems
+									value="#{discapacidadLegajoFC.getNacionalidadSelectItems()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="nombreField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_nom}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nombre" size="50"  disabled="#{discapacidadLegajoFC.personaRepre.idPersona!=null}"
+								value="#{discapacidadLegajoFC.nomRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_apellido}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="apellido" size="50"
+								value="#{discapacidadLegajoFC.apeRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="direccionField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_direccion}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="direccion" size="80"
+								value="#{discapacidadLegajoFC.dirRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="telefonoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_telefono}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="telefono" size="20"
+								value="#{discapacidadLegajoFC.telRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="correoElectField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_mail}<span
+									class="required">*</span></ui:define>
+							<h:inputText id="correoElectronico"  size="30"
+								value="#{discapacidadLegajoFC.mail}">
+							</h:inputText>
+						</s:decorate>
+						
+						<s:decorate id="obsField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_obs}</ui:define>
+							<h:inputTextarea id="obs" cols="40"
+								value="#{discapacidadLegajoFC.reprPersonaDiscapacidad.observacion}">
+							</h:inputTextarea>
+						</s:decorate>
+						
+					</h:panelGrid>
+					<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+					<div style="clear: both"><h:outputText
+						value="Obs.: #{messages.CU156_msg_save}"
+						styleClass="labelClass" style="color:Red;"/></div>
+					
+					<a:commandButton id="sav" 
+							action="#{discapacidadLegajoFC.save()}"
+							value="#{messages.msg_save}"
+							onclick="if(!confirm('#{messages.msg_confirm_save}')){return false;}"
+							reRender="panelRepresentante"/>
+											
+					<a:commandButton id="delete"  rendered="#{discapacidadLegajoFC.reprPersonaDiscapacidad.idReprPersonaDiscapacidad!=null}"
+							action="#{discapacidadLegajoFC.eliminar()}"
+							value="Eliminar Representante"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="panelRepresentante"/>
+					
+								                    	
+					
+				</rich:panel>
+			</h:panelGrid>
+
+
+		</rich:panel>
+
+
+		<div class="actionButtons"><s:button id="cancelar" rendered="false"
+			value="#{messages.msg_done}" propagation="none"
+			view="/#{from}.xhtml" /></div>
+
+</ui:composition>

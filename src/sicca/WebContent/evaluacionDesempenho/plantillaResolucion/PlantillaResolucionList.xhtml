@@ -1,0 +1,154 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+         xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU248_plantillas_resolucio}</h1>
+    <h:form id="plantillaResolucionHomologacionSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"  switchType="ajax" id="panelParametro">
+
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{plantillaResolucionEvalList.plantillaResolucionEval.descripcion}" size="80"/>
+            </s:decorate>
+
+           <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{plantillaResolucionEvalList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{plantillaResolucionEvalList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{plantillaResolucionEvalList.limpiar()}" 
+				 reRender="panelParametro,panelResultado,links" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+    </h:form>
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty plantillaResolucionEvalList.resultList ? 0 : (plantillaResolucionEvalList.paginated ? plantillaResolucionEvalList.resultCount : plantillaResolucionEvalList.resultList.size)})</f:facet>
+    <div class="results" id="plantillaResolucionEvalList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty plantillaResolucionEvalList.resultList}"/>
+
+    <rich:dataTable id="plantillaResolucionEvalList"
+                var="_plantillaResolucionEval"
+              value="#{plantillaResolucionEvalList.resultList}"
+           rendered="#{not empty plantillaResolucionEvalList.resultList}">
+        
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{plantillaResolucionEvalList}"/>
+                    <ui:param name="propertyLabel" value="Descripción"/>
+                    <ui:param name="propertyPath" value="plantillaResolucionEval.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_plantillaResolucionEval.descripcion}"/>
+        </h:column>
+      
+        
+         <h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{resolucionHomologacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.DatosEspecificos_activo}" />
+							<ui:param name="propertyPath" value="plantillaResolucionEval.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_plantillaResolucionEval.activo}" disabled="true"/>
+				</h:column>
+        <rich:column styleClass="action">
+             <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+             <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucion.xhtml"
+                  value="Ver"
+             propagation="none"
+                 rendered="#{empty from}">
+               <f:param name="plantillaResolucionEvalIdPlantillaResolucionEval"
+                        value="#{_plantillaResolucionEval.idPlantillaResolucionEval}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionEdit.xhtml"
+                  value="#{messages.msg_edit}"
+             propagation="none"
+                      id="plantillaResolucionHomologacionEdit"
+                rendered="#{empty from}">
+                <f:param name="plantillaResolucionEvalIdPlantillaResolucionEval"
+                        value="#{_plantillaResolucionEval.idPlantillaResolucionEval}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+	<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionList.xhtml"
+            rendered="#{plantillaResolucionEvalList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionList.xhtml"
+            rendered="#{plantillaResolucionEvalList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{plantillaResolucionEvalList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionList.xhtml"
+            rendered="#{plantillaResolucionEvalList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{plantillaResolucionEvalList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionList.xhtml"
+            rendered="#{plantillaResolucionEvalList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{plantillaResolucionEvalList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="plantillaResolucionEvalIdPlantillaResolucionEval"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

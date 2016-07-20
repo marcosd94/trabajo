@@ -1,0 +1,197 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.Barrio_}</h1>
+
+		<h:form id="barrioSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelBusqueda">
+
+				<a:region>
+					<s:decorate id="paisField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{barrioListFormController.codPais}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{barrioListFormController.updateDepartamentoChange()}"
+								reRender="departamentoField,ciudadField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate id="departamentoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Barrio_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dpto"
+							value="#{barrioListFormController.codDepartamento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{barrioListFormController.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{barrioListFormController.updateCiudad()}"
+								reRender="ciudadField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Barrio_ciudad}</ui:define>
+					<h:selectOneMenu id="ciudad"
+						value="#{barrioListFormController.idCiudad}" style="width:250px">
+						<f:selectItems value="#{barrioListFormController.ciudadSelecItem}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Barrio_descripcion}</ui:define>
+					<h:inputText id="descripcion" size="100"
+						value="#{barrioListFormController.barrio.descripcion}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado"
+						value="#{barrioListFormController.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{barrioListFormController.search()}"
+				reRender="panelResultados,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{barrioListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty barrioList.resultList ? 0 : (barrioList.paginated ? barrioList.resultCount : barrioList.resultList.size)})</f:facet>
+			<div class="results" id="barrioList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty barrioList.resultList}" /> <rich:dataTable
+				id="barrioList" var="_barrio" value="#{barrioList.resultList}"
+				rendered="#{not empty barrioList.resultList}">
+
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{barrioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Barrio_descripcion}" />
+							<ui:param name="propertyPath" value="barrio.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_barrio.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{barrioList}" />
+							<ui:param name="propertyLabel" value="#{messages.Barrio_ciudad}" />
+							<ui:param name="propertyPath" value="barrio.ciudad.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_barrio.ciudad.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{barrioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Barrio_idDepartamento}" />
+							<ui:param name="propertyPath"
+								value="barrio.ciudad.departamento.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_barrio.ciudad.departamento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{barrioList}" />
+							<ui:param name="propertyLabel" value="#{messages.Barrio_pais}" />
+							<ui:param name="propertyPath"
+								value="barrio.ciudad.departamento.pais.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_barrio.ciudad.departamento.pais.descripcion}" />
+				</h:column>
+
+				<rich:column style="text-align:center">
+					<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+					<h:selectBooleanCheckbox value="#{_barrio.activo}" disabled="true" />
+				</rich:column>
+
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link view="/planificacion/barrio/Barrio.xhtml" value="Ver"
+						propagation="none" id="verEdit" rendered="#{empty from}">
+						<f:param name="barrioIdBarrio" value="#{_barrio.idBarrio}" />
+					</s:link>
+            #{' '}
+            <s:link view="/planificacion/barrio/BarrioEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none" id="barrioEdit"
+						rendered="#{empty from}">
+						<f:param name="barrioIdBarrio" value="#{_barrio.idBarrio}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/planificacion/barrio/BarrioList.xhtml"
+				rendered="#{barrioList.previousExists}"
+				value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+				<f:param name="fromLink" value="link" />
+			</s:link> <s:link view="/planificacion/barrio/BarrioList.xhtml"
+				rendered="#{barrioList.previousExists}"
+				value="#{messages.left}  #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{barrioList.previousFirstResult}" />
+				<f:param name="fromLink" value="link" />
+			</s:link> <s:link view="/planificacion/barrio/BarrioList.xhtml"
+				rendered="#{barrioList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{barrioList.nextFirstResult}" />
+				<f:param name="fromLink" value="link" />
+			</s:link> <s:link view="/planificacion/barrio/BarrioList.xhtml"
+				rendered="#{barrioList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{barrioList.lastFirstResult}" />
+				<f:param name="fromLink" value="link" />
+			</s:link></div>
+		</a:outputPanel>
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/barrio/BarrioEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="barrioIdBarrio" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

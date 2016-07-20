@@ -1,0 +1,233 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU456_excepcionados}</h1>
+    <h:form id="excepcionados" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.CU456_excepcionados}</f:facet>
+					<rich:panel ><f:facet name="header">#{messages['CU456_datos_persona']}</f:facet>
+					<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelPrincipal" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="panelPrincipal" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                										</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				
+				
+				<h:panelGrid columns="2">
+            <a:region>
+						<s:decorate id="ciField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU456_ci_n}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="ci" size="50" maxlength="50"
+								disabled="true" value="#{excepcionadosEditFC.persona.documentoIdentidad}">
+								<a:support event="onblur"
+									action="#{excepcionadosEditFC.findPersona()}"
+									reRender="nomField,apeField" focus="anxDescrip" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+           <s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_nombres}</ui:define>
+						<h:inputText id="nombre" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{excepcionadosEditFC.persona.nombres}" />
+					</s:decorate>
+
+
+          <s:decorate id="apeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_apellido}</ui:define>
+						<h:inputText id="apellido" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{excepcionadosEditFC.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+				</rich:panel>
+				
+				<rich:panel ><f:facet name="header">#{messages['CU456_datos_excepcion']}</f:facet>
+				<h:panelGrid >
+				 <s:decorate id="anioField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_anio}</ui:define>
+                <h:inputText id="anio"
+                       required="true" disabled="true"
+                          value="#{excepcionadosEditFC.excepcionados.anio}">
+                 </h:inputText>
+            </s:decorate>
+            
+            <s:decorate id="fechaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fecha}</ui:define>
+                <rich:calendar id="fecha"
+					 oninputkeyup="ponerBarra(event);" disabled="true"
+			         locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadosEditFC.excepcionados.fecha}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+             <s:decorate id="nroDictamenField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_nro_dictamen}</ui:define>
+                <h:inputText id="nroDictamen"
+                            required="true" disabled="true"
+                              value="#{excepcionadosEditFC.excepcionados.nroDictamen}"/>
+            </s:decorate>
+             <s:decorate id="motivoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_motivo}</ui:define>
+                <h:inputTextarea id="motivo"
+                               cols="80" disabled="true"
+                               rows="6"
+                           required="true"
+                              value="#{excepcionadosEditFC.excepcionados.motivo}"/>
+            </s:decorate>
+
+            <s:decorate id="activoField" template="/layout/edit.xhtml"   rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"  disabled="true"
+                                      value="#{excepcionadosEditFC.excepcionados.activo}"/>
+            </s:decorate>
+            
+				</h:panelGrid>
+				</rich:panel>
+				
+           
+
+
+
+           
+
+
+      
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           
+				
+				
+            
+
+
+        <s:button propagation="join" rendered="#{!excepcionadosEditFC.habSave}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anesxos" value="#{messages.CU200_ver_anexos}"
+				>
+				<f:param name="direccionFisica" value="#{excepcionadosEditFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{excepcionadosEditFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{excepcionadosEditFC.excepcionados.idExcepcionado}" />
+				<f:param name="nombreTabla" value="#{excepcionadosEditFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="juridicos/excepcionados/Excepcionados" />
+			</s:button>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+                rendered="#{excepcionadosHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty excepcionadosFrom ? 'juridicos/excepcionados/ExcepcionadosList' : excepcionadosFrom}.xhtml"
+                rendered="#{!excepcionadosHome.managed}"/>
+
+        </div>
+    </h:form>
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{excepcionadosEditFC.excepcionados.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{excepcionadosEditFC.excepcionados.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{excepcionadosEditFC.excepcionados.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{excepcionadosEditFC.excepcionados.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,185 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU165_titulo}</h1>
+    <h:form id="comisionSeleccionCabSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{comisionSeleccionCabListFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{comisionSeleccionCabListFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{comisionSeleccionCabListFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{comisionSeleccionCabListFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{comisionSeleccionCabListFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{comisionSeleccionCabListFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{comisionSeleccionCabListFormController.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU165_titulo}</ui:define>
+                <h:inputText style=" width : 514px;" id="descripcion" value="#{comisionSeleccionCabListFormController.descripcion}"/>
+            </s:decorate>
+
+          </h:panelGrid>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,outPrint"
+				action="#{comisionSeleccionCabListFormController.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{comisionSeleccionCabListFormController.searchAll()}" 
+				 reRender="descripcion,panelResultado,outPrint" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+				 <a:outputPanel ajaxRendered="true" id="outPrint">
+				 <h:commandButton id="print"   rendered="#{not empty comisionSeleccionCabListFormController.comisionSeleccionCabDTOList}"
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{comisionSeleccionCabListFormController.print()}" />
+						</a:outputPanel>
+        </div>
+
+    </h:form>
+
+
+   <rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{comisionSeleccionCabListFormController.tam})</f:facet>
+			<div class="results" id="cronogramaConcCabList"  style="height: 330px; overflow-x: auto; overflow-y: scroll"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty comisionSeleccionCabListFormController.comisionSeleccionCabDTOList}" />
+			<rich:dataTable id="concursoList" var="_dto" rowKeyVar="row"
+				value="#{comisionSeleccionCabListFormController.comisionSeleccionCabDTOList}"
+				rendered="#{not empty comisionSeleccionCabListFormController.comisionSeleccionCabDTOList}">
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU165_titulo}
+						</f:facet>
+					<h:outputText value="#{_dto.comisionSeleccionCab.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU165_ci}
+						</f:facet>
+					<h:outputText value="#{_dto.comisionSeleccionDet.persona.documentoIdentidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU165_nom_ape}
+						</f:facet>
+					<h:outputText value="#{_dto.comisionSeleccionDet.persona.nombreCompleto}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU456_pais_expe}
+						</f:facet>
+					<h:outputText value="#{_dto.comisionSeleccionDet.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU165_rol}
+						</f:facet>
+					<h:outputText value="#{_dto.comisionSeleccionDet.rol.descripcion}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+					#{' '}
+            		<s:link
+						view="/seleccion/comisionSeleccionCab/ComisionSeleccionCab.xhtml"
+						value="Ver" propagation="none" id="cronogramaConcCab"
+						rendered="#{_dto.mostrarAcciones}">
+							<f:param name="comisionSeleccionCabIdComisionSel"
+							value="#{_dto.comisionSeleccionCab.idComisionSel}" />
+							  <f:param name="idConcursoPuestoAgr" value="#{comisionSeleccionCabListFormController.idConcursoPuestoAgr}"/>
+							    <f:param name="from" value="#{comisionSeleccionCabListFormController.from}"/>
+							    <f:param name="personaIdPersona" />
+					</s:link>
+					#{' '}
+					<s:link 
+						view="/seleccion/comisionSeleccionCab/ComisionSeleccionCabEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none" disabled="#{comisionSeleccionCabListFormController.cerradoGrupo}"
+						id="cronogramaConcCabEdit" rendered="#{_dto.mostrarAcciones}">
+						<f:param name="comisionSeleccionCabIdComisionSel"
+							value="#{_dto.comisionSeleccionCab.idComisionSel}" />
+							  <f:param name="idConcursoPuestoAgr" value="#{comisionSeleccionCabListFormController.idConcursoPuestoAgr}"/>
+							    <f:param name="personaIdPersona" />
+							      <f:param name="from" value="#{comisionSeleccionCabListFormController.from}"/>
+					</s:link>
+					<h:form>
+					<h:commandLink id="verAdjunto" value="Descargar" target="_blank"
+						rendered="#{!comisionSeleccionCabListFormController.tieneDocAdjunto(_dto.comisionSeleccionCab.concurso.idConcurso)}"
+						action="#{comisionSeleccionCabListFormController.imprimirDocumentoComision(_dto.comisionSeleccionCab.concurso.idConcurso)}" />
+					</h:form>
+					
+				</h:column>
+
+			</rich:dataTable></div>
+		</rich:panel>
+
+
+
+    <s:div styleClass="actionButtons" >
+        <s:button view="/seleccion/comisionSeleccionCab/ComisionSeleccionCabEdit.xhtml"
+                    id="create" rendered="#{!comisionSeleccionCabListFormController.cerradoGrupo}"
+           propagation="none" 
+                 value="#{messages.msg_create_male}">
+            <f:param name="comisionSeleccionCabIdComisionSel"/>
+            <f:param name="idConcursoPuestoAgr" value="#{comisionSeleccionCabListFormController.idConcursoPuestoAgr}"/>
+             <f:param name="from" value="#{comisionSeleccionCabListFormController.from}"/>
+        </s:button>
+        <s:button includePageParams="false"
+					view="/#{comisionSeleccionCabListFormController.from}.xhtml"
+					id="volver" propagation="none" value="#{messages.CU412_volver}">
+					
+				</s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

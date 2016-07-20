@@ -1,0 +1,354 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="historicosEstado" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{historicosEstadoHome.managed ? 'Edit' : 'Add'} Historicos estado</f:facet>
+
+
+            <s:decorate id="idHistoricoEstadoField" template="layout/edit.xhtml">
+                <ui:define name="label">Id historico estado</ui:define>
+                <h:inputText id="idHistoricoEstado"
+                       required="true"
+                       disabled="#{historicosEstadoHome.managed}"
+                          value="#{historicosEstadoHome.instance.idHistoricoEstado}">
+                    <a:support event="onblur" reRender="idHistoricoEstadoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+            <s:decorate id="observacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputTextarea id="observacion"
+                               cols="80"
+                               rows="3"
+                              value="#{historicosEstadoHome.instance.observacion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{historicosEstadoHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{historicosEstadoHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{historicosEstadoHome.persist}"
+                       disabled="#{!historicosEstadoHome.wired}"
+                       rendered="#{!historicosEstadoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{historicosEstadoHome.update}"
+                       rendered="#{historicosEstadoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{historicosEstadoHome.remove}"
+                      immediate="true"
+                       rendered="#{historicosEstadoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/HistoricosEstado.xhtml"
+                rendered="#{historicosEstadoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty historicosEstadoFrom ? 'HistoricosEstadoList' : historicosEstadoFrom}.xhtml"
+                rendered="#{!historicosEstadoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Planta cargo det *" labelClass="required">
+    <div class="association" id="plantaCargoDetParent">
+
+        <h:outputText value="There is no plantaCargoDet associated with this historicosEstado."
+                   rendered="#{historicosEstadoHome.instance.plantaCargoDet == null}"/>
+
+        <rich:dataTable var="_plantaCargoDet"
+                   value="#{historicosEstadoHome.instance.plantaCargoDet}"
+                rendered="#{historicosEstadoHome.instance.plantaCargoDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="plantaCargoDetTable">
+            <h:column>
+                <f:facet name="header">Id planta cargo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_plantaCargoDet.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Oficina id oficina</f:facet>
+                <h:outputText value="#{_plantaCargoDet.oficina.idOficina}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado cab id estado cab</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Configuracion uo det id configuracion uo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.configuracionUoDet.idConfiguracionUoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Codigo puesto</f:facet>
+                <h:outputText value="#{_plantaCargoDet.codigoPuesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fundamentacion tecnica</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fundamentacionTecnica}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_plantaCargoDet.mision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.objetivo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Categoria</f:facet>
+                <h:outputText value="#{_plantaCargoDet.categoria}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contratado</f:facet>
+                <h:outputText value="#{_plantaCargoDet.contratado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Jornalero</f:facet>
+                <h:outputText value="#{_plantaCargoDet.jornalero}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Permanente</f:facet>
+                <h:outputText value="#{_plantaCargoDet.permanente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Justificacion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.justificacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id entidad</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idEntidad}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{historicosEstadoHome.instance.plantaCargoDet != null ? 'changeParent' : 'selectParent'}" value="#{historicosEstadoHome.instance.plantaCargoDet != null ? 'Change' : 'Select'} plantaCargoDet"
+                       view="/PlantaCargoDetList.xhtml">
+                <f:param name="from" value="HistoricosEstadoEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Estado cab *" labelClass="required">
+    <div class="association" id="estadoCabParent">
+
+        <h:outputText value="There is no estadoCab associated with this historicosEstado."
+                   rendered="#{historicosEstadoHome.instance.estadoCab == null}"/>
+
+        <rich:dataTable var="_estadoCab"
+                   value="#{historicosEstadoHome.instance.estadoCab}"
+                rendered="#{historicosEstadoHome.instance.estadoCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="estadoCabTable">
+            <h:column>
+                <f:facet name="header">Id estado cab</f:facet>
+                <h:outputText value="#{_estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_estadoCab.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_estadoCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_estadoCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_estadoCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_estadoCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_estadoCab.activo}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{historicosEstadoHome.instance.estadoCab != null ? 'changeParent' : 'selectParent'}" value="#{historicosEstadoHome.instance.estadoCab != null ? 'Change' : 'Select'} estadoCab"
+                       view="/EstadoCabList.xhtml">
+                <f:param name="from" value="HistoricosEstadoEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

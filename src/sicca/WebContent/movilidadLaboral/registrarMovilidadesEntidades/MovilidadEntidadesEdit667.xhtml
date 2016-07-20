@@ -1,0 +1,366 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="otrasCarreras" styleClass="edit" enctype="multipart/form-data">
+<h1>#{messages.CU667_titulo_edit}</h1>
+
+		<rich:panel id="panelAdjuntar">
+		 <f:facet name="header">#{messages.CU541_acto_administrativo}</f:facet>
+		  <h:panelGrid columns="2">
+		 <h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_nr_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText value="#{buscadorDocsFC.nroDoc}" id="idNroDoc" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"/>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDoc" enableManualInput="true"
+								value="#{buscadorDocsFC.fechaDoc}" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<h:panelGrid columns="2">
+
+
+
+							<s:decorate id="tipoField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU289_tipo_doc}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipo"
+									value="#{buscadorDocsFC.idTipoDoc}" style=" width : 275px;">
+									<f:selectItems
+										value="#{movilidadEntidadesEdit667FC.updateTipoDocSelectItems()}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<h:panelGrid columns="3">
+								<a:commandButton value="#{messages.CU541_busca_acto}" reRender="panelAdjuntar,idPanelAdjuntar" 
+									action="#{buscadorDocsFC.buscarDoc()}" />
+								<s:button value="Descargar" disabled="#{buscadorDocsFC.fNameMostrar==null}"
+									action="#{buscadorDocsFC.descargarDoc()}" />
+								<s:button value="#{messages.CU541_cambiar_acto}"
+									action="#{buscadorDocsFC.cambiarActo()}" />
+							</h:panelGrid>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre del Archivo</ui:define>
+								<h:inputText value="#{buscadorDocsFC.fNameMostrar}"
+									disabled="true" style=" width : 250px;" />
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+						<a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						<h:panelGrid columns="2" rendered="#{buscadorDocsFC.mostrarPanelAdjunto}" 
+						
+								style="border-style: dotted;border-color: gray;">
+								<s:fileUpload size="30" contentType="#{buscadorDocsFC.cType}"
+						data="#{buscadorDocsFC.uFile}"
+						fileName="#{buscadorDocsFC.fName}" style=" width : 299px;">
+									<s:conversationPropagation type="join" />
+
+								</s:fileUpload>
+
+								<h:commandButton value="Adjuntar Documento"
+									action="#{buscadorDocsFC.adjuntarDoc()}" />
+							</h:panelGrid>
+						</a:outputPanel>
+					</h:panelGrid>
+					
+					</h:panelGrid>
+		 <!--  -->
+		 
+		<h:panelGrid columns="1">
+		
+		</h:panelGrid>
+		</rich:panel>
+
+        <rich:panel id="panelMovilidad">
+            <f:facet name="header">#{messages.CU667_tipificacion}<span
+											class="required">*</span></f:facet>
+			<h:panelGrid columns="2">
+				<s:decorate id="tipoMovilidadField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU667_tipo_movilidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipoMovilidad"
+									value="#{movilidadEntidadesEdit667FC.idTipoMovilidad}" style=" width : 275px;">
+									<f:selectItems
+										value="#{movilidadEntidadesEdit667FC.updateTipoMovSelectItems()}" />
+								 <a:support event="onchange" eventsQueue="default" action="#{movilidadEntidadesEdit667FC.changeCb()}"  reRender="panelMovilidad"/>
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="fechaIngresoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU706_fec_ini}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIngreso"  
+							value="#{movilidadEntidadesEdit667FC.fechaInicio}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+							<a:support event="onchanged" reRender="fechaIngreso"/>
+						</rich:calendar>
+					</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			<a:outputPanel ajaxRendered="true">
+			<s:decorate id="condicionesField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU667_condiciones}</ui:define>
+                
+               <rich:panel style="width : 500px; height : 145px;">
+                <div class="results" id="tbldetList" style="overflow: scroll; width : 473px; height : 130px;"   >
+               <h:panelGrid >
+                
+                   <h:outputText escape="false" value="#{movilidadEntidadesEdit667FC.condiciones}" />
+                   
+                  </h:panelGrid> 
+                    </div> 
+               </rich:panel>
+             
+              
+           
+        
+            </s:decorate></a:outputPanel>
+          <s:decorate id="obsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU706_obs}</ui:define>
+                <h:inputTextarea id="obs"
+                               cols="80"
+                               rows="6"
+                         value="#{movilidadEntidadesEdit667FC.observacion}">
+                         <a:support event="onchanged" reRender="obsField"/>
+              <f:validateLength maximum="500" />
+        </h:inputTextarea>
+            </s:decorate>
+			</h:panelGrid>
+			
+	
+	
+	
+            </rich:panel>
+           <rich:panel >  <f:facet name="header">#{messages.CU667_entidades}</f:facet>
+           		<h:panelGrid columns="2">
+					<h:panelGrid>
+						<a:region>
+							<fieldset><legend>#{messages.CU398_origen}</legend> <a:outputPanel
+								id="idPanelCampos" ajaxRendered="true">
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.codNivelEntidad}"
+										size="10">
+										<a:support event="onblur" reRender="idPanelCampos"
+											ajaxSingle="true"
+											action="#{movilidadEntidadesEdit667FC.findNivelEntidadOrigen()}">
+											<f:param value="sinNivelEntidadIdSinNivelEntidad"
+												name="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.idSinNivelEntidad}" />
+										</a:support>
+									</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.nombreNivelEntidad}"
+										size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.getUrlToPageNivel('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.codSinEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{movilidadEntidadesEdit667FC.findEntidadOrigen()}"
+											reRender="idPanelCampos">
+											<f:param value="sinNivelEntidadIdSinNivelEntidad"
+												name="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.idSinNivelEntidad}" />
+										</a:support>
+									</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.nombreSinEntidad}"
+										size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.getUrlToPageEntidad('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric"
+										size="10"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{movilidadEntidadesEdit667FC.findUnidadOrganizativaOrigen()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilOrigen.getUrlToPageOee('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+
+
+						
+							</a:outputPanel></fieldset>
+						</a:region>
+					</h:panelGrid>
+					<h:panelGrid>
+
+						<a:outputPanel id="idPanelCampos2" ajaxRendered="true">
+							<fieldset><legend>#{messages.CU398_destino}</legend> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.codNivelEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											reRender="idPanelCampos2"
+											action="#{movilidadEntidadesEdit667FC.findNivelEntidadDestino()}" />
+									</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion2"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.nombreNivelEntidad}"
+										size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi2" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.getUrlToPageNivel('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.codSinEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{movilidadEntidadesEdit667FC.findEntidadDestino()}"
+											reRender="idPanelCampos" />
+									</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion2"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.nombreSinEntidad}"
+										size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.getUrlToPageEntidad('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo2" styleClass="numeric"
+										size="10"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{movilidadEntidadesEdit667FC.findUnidadOrganizativaDestino()}"
+											reRender="unidadOrgCodigo2,unidadOrgDenominacion2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion2" size="50"
+										disabled="true"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.getUrlToPageOee('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10"
+										disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.codigoUnidOrgDep}">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{movilidadEntidadesEdit667FC.obtenerUnidadOrganizativaDepDestino()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{movilidadEntidadesEdit667FC.nivelEntidadOeeUtilDestino.getUrlToPageUnidadOrgDep('/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesEdit667')}" />
+								</s:decorate>
+							</a:region></fieldset>
+						</a:outputPanel>
+
+					</h:panelGrid>
+				</h:panelGrid>
+           </rich:panel>
+            
+                      <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" styleClass="labelClass"/>
+        </div>
+
+        <div class="actionButtons">
+
+             <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{movilidadEntidadesEdit667FC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"/>
+
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/movilidadLaboral/registrarMovilidadesEntidades/MovilidadEntidadesList667.xhtml"
+                />
+
+          
+                
+
+        </div>
+    </h:form>
+    
+
+</ui:define>
+
+</ui:composition>

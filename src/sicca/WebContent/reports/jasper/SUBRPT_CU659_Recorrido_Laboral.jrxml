@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBRPT_CU659_Recorrido_Laboral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+  planificacion.configuracion_uo_cab.denominacion_unidad AS oee,
+  planificacion.configuracion_uo_det.denominacion_unidad AS uo,
+  planificacion.planta_cargo_det.descripcion AS puesto,
+  general.empleado_puesto.fecha_inicio,
+  general.empleado_puesto.fecha_fin,
+  seleccion.datos_especificos.descripcion as estado,
+  general.empleado_puesto.id_persona
+FROM
+  general.empleado_puesto
+  INNER JOIN planificacion.planta_cargo_det ON (general.empleado_puesto.id_planta_cargo_det = planificacion.planta_cargo_det.id_planta_cargo_det)
+  INNER JOIN planificacion.configuracion_uo_det ON (planificacion.planta_cargo_det.id_configuracion_uo_det = planificacion.configuracion_uo_det.id_configuracion_uo_det)
+  INNER JOIN planificacion.configuracion_uo_cab ON (planificacion.configuracion_uo_det.id_configuracion_uo = planificacion.configuracion_uo_cab.id_configuracion_uo)
+  INNER JOIN seleccion.datos_especificos ON (general.empleado_puesto.id_datos_esp_estado = seleccion.datos_especificos.id_datos_especificos)
+WHERE
+  general.empleado_puesto.id_persona = $P{id}
+UNION
+SELECT
+  general.empleado_puesto.desc_oee_historico AS oee,
+  null as uo,
+  general.empleado_puesto.desc_puesto_historico AS PUESTO,
+  general.empleado_puesto.fecha_inicio,
+  general.empleado_puesto.fecha_fin,
+  null as estado,
+  general.empleado_puesto.id_persona
+FROM
+  general.empleado_puesto
+WHERE
+  general.empleado_puesto.id_persona = $P{id} AND
+  general.empleado_puesto.id_planta_cargo_det IS NULL
+ORDER BY 4]]>
+	</queryString>
+	<field name="oee" class="java.lang.String"/>
+	<field name="uo" class="java.lang.String"/>
+	<field name="puesto" class="java.lang.String"/>
+	<field name="fecha_inicio" class="java.sql.Date"/>
+	<field name="fecha_fin" class="java.sql.Date"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="id_persona" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="274" y="1" width="149" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Puesto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="1" y="1" width="107" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["OEE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="108" y="1" width="88" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Unidad Organizativa"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="196" y="1" width="78" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Estado"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="423" y="1" width="67" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha Inicio"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="490" y="1" width="65" height="32" backcolor="#009999"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha Fin"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="107" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{oee}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="108" y="0" width="88" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{uo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="196" y="0" width="78" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="274" y="0" width="149" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="423" y="0" width="67" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha_inicio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="490" y="0" width="65" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha_fin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

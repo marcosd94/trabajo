@@ -1,0 +1,318 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+
+		<a:outputPanel id="idModalPanel" ajaxRendered="true">
+			<rich:modalPanel id="modalPersonMatch" autosized="true" width="500"
+				rendered="#{!empty cargarCarpeta508FC.msjModalPersonMatch}"
+				resizeable="false" moveable="true">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU508_atencion} </f:facet>
+						<h:inputTextarea style=" width : 660px; height : 69px;"
+							value="#{cargarCarpeta508FC.msjModalPersonMatch}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button
+						propagation="join"
+						action="#{cargarCarpeta508FC.siAddPersonMatch()}"
+						value="#{messages.CU508_si}" /><s:button value="No"
+						propagation="join"
+						action="#{cargarCarpeta508FC.noAddPersonMatch()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<rich:modalPanel id="modalCargarObs" autosized="true" width="500"
+				rendered="#{cargarCarpeta508FC.idPersonaModalObs!=null}"
+				resizeable="false" moveable="true">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU508_cargarObs} </f:facet>
+						<h:inputTextarea style=" width : 660px; height : 69px;"
+							value="#{cargarCarpeta508FC.obsModal}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><h:commandButton
+						action="#{cargarCarpeta508FC.guardarObsModal()}" value="Guardar" /><s:button
+						value="Cancelar" action="#{cargarCarpeta508FC.limpiarObsModal()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<rich:modalPanel id="modalConfirmPostula" autosized="true"
+				width="500" resizeable="false" moveable="true"
+				rendered="#{!empty cargarCarpeta508FC.mensajeConfirmPostula}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU508_modal_confirm_postula_title} </f:facet>
+						<h:outputText style="text-align: justify"
+							value="#{cargarCarpeta508FC.mensajeConfirmPostula}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><h:commandButton
+						onclick="Richfaces.showModalPanel('modalConfirmPostula');return true"
+						action="#{cargarCarpeta508FC.postular()}" value="Aceptar" /><s:button
+						value="Cancelar"
+						action="#{cargarCarpeta508FC.limpiarPostulante()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<rich:modalPanel id="modalDismiPue" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{!empty cargarCarpeta508FC.mensajeModalDismiPue}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU508_modal_dimi_oue_title} </f:facet>
+						<h:outputText style="text-align: justify"
+							value="#{cargarCarpeta508FC.mensajeModalDismiPue}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button
+						action="#{cargarCarpeta508FC.generarLinkDisminuir()}"
+						value="Aceptar">
+					</s:button> <s:button value="Cancelar"
+						action="#{cargarCarpeta508FC.limpiarDismiPue()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			
+			if(document.getElementById('modalPersonMatch')!=null){
+				Richfaces.showModalPanel('modalPersonMatch');
+			}
+			if(document.getElementById('modalConfirmPostula')!=null){
+				Richfaces.showModalPanel('modalConfirmPostula');
+			}
+			if(document.getElementById('modalDismiPue')!=null){
+				Richfaces.showModalPanel('modalDismiPue');
+			}
+			if(document.getElementById('modalCargarObs')!=null){
+				Richfaces.showModalPanel('modalCargarObs');
+			}
+			 		
+			</script>
+		</a:outputPanel>
+		<h1>#{cargarCarpeta508FC.nombrePantalla}</h1>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codNivelEntidad}">
+						</h:inputText>						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}">
+						</h:inputText>						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+							disabled="true" value="#{nivelEntidadOeeUtil.nombreSinEntidad}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							styleClass="numeric" value="#{nivelEntidadOeeUtil.ordenUnidOrg}" />								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU508_concurso} 
+					</ui:define>
+						<h:inputText style="width:250px" disabled="true"
+							value="#{cargarCarpeta508FC.grupo.concurso.nombre}">
+						</h:inputText>
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU508_grupo} 
+					</ui:define>
+						<h:inputText style="width:250px" disabled="true"
+							value="#{cargarCarpeta508FC.grupo.descripcionGrupo}">
+						</h:inputText>
+
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU539_docIdentidad}<a:outputPanel
+								rendered="#{!cargarCarpeta508FC.codActividad.equalsIgnoreCase('COMPLETAR_CARPETAS')}">
+								<span class="required">*</span>
+							</a:outputPanel>
+						</ui:define>
+						<h:inputText style=" width : 250px;"
+							value="#{cargarCarpeta508FC.ci}" />
+					</s:decorate>
+
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU479_pais_exp}<a:outputPanel
+								rendered="#{!cargarCarpeta508FC.codActividad.equalsIgnoreCase('COMPLETAR_CARPETAS')}">
+								<span class="required">*</span>
+							</a:outputPanel>
+						</ui:define>
+						<h:selectOneMenu id="idPaisExp"
+							value="#{cargarCarpeta508FC.idPaisEpeDoc}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml"
+						rendered="#{cargarCarpeta508FC.isActividad13}">
+						<ui:define name="label">#{messages.CU539_nombres}</ui:define>
+						<h:inputText style=" width : 250px;"
+							rendered="#{cargarCarpeta508FC.isActividad13}"
+							value="#{cargarCarpeta508FC.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml"
+						rendered="#{cargarCarpeta508FC.isActividad13}">
+						<ui:define name="label">#{messages.CU539_apellidos}</ui:define>
+						<h:inputText style=" width : 250px;"
+							value="#{cargarCarpeta508FC.apellido}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{cargarCarpeta508FC.search('BUSCAR')}"
+				reRender="idPanelResultados,idPanelFooter">
+			</a:commandButton><a:commandButton value="Todos"
+				action="#{cargarCarpeta508FC.search('TODOS')}"
+				reRender="panelBusqueda,idPanelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{cargarCarpeta508FC.limpiar()}" id="reset"
+				propagation="end" value="Limpiar" includePageParams="false">
+			</s:button> <s:button action="#{cargarCarpeta508FC.nextTask('CSI')}"
+				rendered="#{cargarCarpeta508FC.isActividad13}"
+				value="Siguiente Tarea">
+			</s:button> <s:button propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml" id="anesxos"
+				value="Anexos">
+				<f:param name="direccionFisica"
+					value="#{cargarCarpeta508FC.direccionFisica}" />
+				<f:param name="nombrePantalla"
+					value="#{cargarCarpeta508FC.nombrePantalla}" />
+				<f:param name="idCU" value="#{cargarCarpeta508FC.idGrupo}" />
+				<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="/cargarCarpeta/cargarCarpeta.xhtml" />
+			</s:button> <a:commandButton action="#{cargarCarpeta508FC.disminuirPuesto()}"
+				reRender="idModalPanel"
+				rendered="#{cargarCarpeta508FC.isActividad13}"
+				disabled="#{!cargarCarpeta508FC.habBtnDisminuirP}"
+				value="Disminuir Puestos">
+			</a:commandButton> <s:button view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"
+				propagation="end" value="Volver" includePageParams="false">
+			</s:button></div>
+		</a:form>
+		<a:form>
+			<rich:panel id="idPanelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty cargarCarpeta508FC.lista? 0 : (cargarCarpeta508FC.lista.size)})</f:facet>
+				<rich:extendedDataTable id="idGrillaPrincipal"
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="100%" border="0"
+					var="_record" height="250px" value="#{cargarCarpeta508FC.lista}">
+					<rich:column width="20%">
+						<f:facet name="header">
+						#{messages.CU539_docIdentidad}
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{cargarCarpeta508FC.updatePersona(_record.persona).documentoIdentidad}" />
+					</rich:column>
+					<rich:column width="20%">
+						<f:facet name="header">
+						#{messages.CU539_paisDoc}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{cargarCarpeta508FC.updatePersona(_record.persona).paisByIdPaisExpedicionDoc.descripcion}" />
+					</rich:column>
+					<rich:column width="20%">
+						<f:facet name="header">
+						#{messages.CU539_nombreApellido}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{cargarCarpeta508FC.updatePersona(_record.persona).nombres} #{' '} #{cargarCarpeta508FC.updatePersona(_record.persona).apellidos}" />
+					</rich:column>
+					<rich:column width="20%">
+						<f:facet name="header">
+						#{messages.CU508_estado}
+						</f:facet>
+						<h:outputText style="white-space:normal" value="#{_record.estado}" />
+					</rich:column>
+					<rich:column width="20%">
+						<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+						<s:link value="#{messages.CU508_ver}"
+							view="/cargarCarpeta/admPersona/VerPersonaCarpeta.xhtml"
+							rendered="#{_record.habLinkVer}" propagation="join">
+							<f:param name="personaIdPersona"
+								value="#{_record.persona.idPersona}" />
+						</s:link>									
+						#{' '}
+						<a:commandLink value="#{messages.CU508_Postular}"
+							reRender="modalConfirmPostula"
+							action="#{cargarCarpeta508FC.confirmPostulacion(_record.persona.idPersona)}"
+							rendered="#{_record.habLinkPostular}" propagation="join">
+						</a:commandLink>
+						#{' '}
+						<a:commandLink value="#{messages.CU508_ingresarObs}"
+							action="#{cargarCarpeta508FC.seleccionarIngresarObs(_record.persona.idPersona)}"
+							rendered="#{_record.habLinkIngresarObs}" propagation="join">
+						</a:commandLink>
+						#{' '}
+						<s:link value="Datos Detallados"
+							view="/cargarCarpeta/postulantePorCarpeta/FichaPostulacionPorCarpeta.xhtml"
+							rendered="#{_record.habLinkDatosDetallados}" propagation="join">
+							<f:param name="personaIdPersona"
+								value="#{_record.persona.idPersona}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{cargarCarpeta508FC.idGrupo}" />
+							<f:param name="from" value="cargarCarpeta/cargarCarpeta" />
+							<f:param name="msjOk" value="#{true}" />
+							<f:param name="codActividad"
+								value="#{cargarCarpeta508FC.codActividad}" />
+						</s:link>
+					</rich:column>
+				</rich:extendedDataTable>
+				<a:outputPanel id="idPanelFooter">
+					<h:panelGrid columns="1">
+
+						<a:commandButton id="addPerson"
+							disabled="#{!cargarCarpeta508FC.habilitarBtnNewPerson}"
+							eventsQueue="default" value="#{messages.CU508_nuevaPersona}"
+							action="#{cargarCarpeta508FC.getUrlCU513()}" />
+						<s:div>
+							<h:outputLabel value="#{messages.CU508_obsActividad}" />
+						#{' '}
+						<h:commandButton
+								action="#{cargarCarpeta508FC.guardarObsActividad()}"
+								value="#{messages.CU508_guardarObs}" />
+						</s:div>
+						<h:inputTextarea value="#{cargarCarpeta508FC.obsActividad}"
+							style=" width : 660px; height : 69px;" />
+					</h:panelGrid>
+				</a:outputPanel>
+			</rich:panel>
+		</a:form>
+	</ui:define>
+</ui:composition>

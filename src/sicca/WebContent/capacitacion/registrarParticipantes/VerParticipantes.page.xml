@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/home.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+<action execute="#{registrarParticipantesFC.init()}" on-postback="false" />
+
+ <param name="personaIdPersona" value="#{registrarParticipantesFC.idPersona}"/>
+    <param name="capacitacionesIdCapacitacion" value="#{registrarParticipantesFC.idCapacitacion}"/>
+ <param name="configuracionUoDetIdConfiguracionUoDet" value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+  <param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{nivelEntidadOeeUtil.idConfigCab}" />
+ 
+
+
+
+   <navigation from-action="#{registrarParticipantesFC.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/capacitacion/registrarParticipantes/RegistrarParticipantes.xhtml"/>
+      </rule>
+   </navigation>
+
+<navigation from-action="#{registrarParticipantesFC.update()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/capacitacion/registrarParticipantes/RegistrarParticipantes.xhtml"/>
+      </rule>
+   </navigation>
+
+
+ 
+  <restrict>#{identity.hasRole('verParticipantes')}</restrict>
+</page>

@@ -1,0 +1,171 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.Usuario_plural}</h1>
+		<rich:panel>
+			<f:facet name="header">#{usuarioHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.Usuario_}</f:facet>
+
+			<s:decorate id="codigoUsuarioField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Usuario_}</ui:define>
+				<h:inputText id="codigoUsuario" required="true" size="69"
+					disabled="true"
+					value="#{usuarioFormController.usuario.codigoUsuario}">
+				</h:inputText>
+			</s:decorate>
+			<a:region>
+				<a:status onstart="Richfaces.showModalPanel('espera')"
+					onstop="#{rich:component('espera')}.hide()" />
+				<s:decorate id="cedulaUsuarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Usuario_cedula}</ui:define>
+					<h:inputText id="cedulaUsuario" size="10" maxlength="10"
+						required="true" disabled="#{usuarioHome.managed}"
+						value="#{usuarioFormController.persona.documentoIdentidad}">
+						<a:support event="onchange"
+							action="#{usuarioFormController.findPersona()}"
+							reRender="cedulaUsuario,nombreUsuario,apellidoUsuario"
+							focus="nivelCodigo" />
+					</h:inputText>
+				</s:decorate>
+			</a:region>
+			<s:decorate id="nombreUsuarioField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Usuario_nombre}</ui:define>
+				<h:inputText id="nombreUsuario" disabled="true" size="69"
+					value="#{usuarioFormController.persona.nombres}">
+				</h:inputText>
+			</s:decorate>
+			<s:decorate id="apellidoUsuarioField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Usuario_apellido}</ui:define>
+				<h:inputText id="apellidoUsuario" disabled="true" size="69"
+					value="#{usuarioFormController.persona.apellidos}">
+				</h:inputText>
+			</s:decorate>
+
+			<h:panelGrid
+				rendered="#{usuarioFormController.usuario.usuAlta != 'PORTAL'}">
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										 
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);" disabled="true"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							<a:support event="onchange" eventsQueue="default"
+								reRender="nivelDescripcion" focus="entidadCodigo"
+								action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+								 	#{' '}
+	               
+					  				
+					</s:decorate>
+				</a:region>
+
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+										 
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);" disabled="true"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.findEntidad()}"
+								reRender="entidadDescripcion" focus="unidadOrgCodigo" />
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+									
+					</s:decorate>
+				</a:region>
+
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+						</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+							onkeypress="return soloNumeros(event);">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+								reRender="unidadOrgCodigo,unidadOrgDenominacion"
+								focus="orgCodigo2" />
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					
+					</s:decorate>
+				</a:region>
+			</h:panelGrid>
+
+			<s:decorate id="activoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Usuario_activo}</ui:define>
+				<h:selectBooleanCheckbox id="activo" required="true" disabled="true"
+					value="#{usuarioFormController.usuario.activo}" />
+			</s:decorate>
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+		</rich:panel>
+		<br />
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages.Usuario_roles_asignados} (#{empty usuarioFormController.rolesAsignados ? 0 : usuarioFormController.rolesAsignados.size})</f:facet>
+			<div class="results" id="usuarioList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty usuarioFormController.rolesAsignados}" /> <rich:dataTable
+				id="usuarioList" var="_roles"
+				value="#{usuarioFormController.rolesAsignados}"
+				rendered="#{not empty usuarioFormController.rolesAsignados}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="propertyLabel" value="Roles" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_roles.descripcion}" />
+				</h:column>
+
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="actionButtons"><s:button includePageParams="false" propagation="none"
+			view="/#{empty usuarioFrom ? 'seguridad/usuario/UsuarioList' : usuarioFrom}.xhtml"
+			id="done" value="#{messages.msg_done}" /></div>
+
+	</ui:define>
+
+</ui:composition>

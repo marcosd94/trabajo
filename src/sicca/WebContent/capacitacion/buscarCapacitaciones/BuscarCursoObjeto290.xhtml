@@ -1,0 +1,281 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/templateCapacitacion.xhtml">
+
+	<ui:define name="body">
+
+
+
+
+		<h1>#{messages.CU498_titulo}</h1>
+		<h:form id="postulacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelParametro">
+
+					
+					<a:region>
+					<h:panelGrid columns="2" style="width : 508px;">
+						<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU498_entidad}</ui:define>
+						</s:decorate>
+						
+							<p:autoComplete id="acSimpleEntidad"
+							value="#{buscarCursoObjeto290FC.sugestionEntidad}"
+							completeMethod="#{buscarCursoObjeto290FC.autocompletarEntidades}" />
+				
+				<rich:spacer />#{messages.CU498_entidad_msg}	
+					</h:panelGrid>
+				</a:region>
+					<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU481_capa_becas}</ui:define>
+				</s:decorate>
+					<a:region>
+				<p:autoComplete id="acSimple"
+					value="#{buscarCursoObjeto290FC.sugestion}"
+					completeMethod="#{buscarCursoObjeto290FC.autocompletar}" />
+						</a:region>
+				<rich:spacer /> #{messages.CU481_msg_capa}	
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<a:region >
+				 <s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="codPais" style="width : 250px;"
+							value="#{buscarCursoObjeto290FC.codPais}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac" eventsQueue="default" limitToList="true" 
+								action="#{buscarCursoObjeto290FC.updateDepartamentoChange()}"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+					<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU481_tipo_capac_beca}
+						</ui:define>
+						  <h:selectOneMenu id="idTipoCapacitacion" value="#{buscarCursoObjeto290FC.idTipoCapacitacion}" 
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoCapaTodosSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				<a:region >
+					<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;"
+							value="#{buscarCursoObjeto290FC.codDepartamento}">
+							<f:selectItems
+								value="#{buscarCursoObjeto290FC.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{buscarCursoObjeto290FC.updateCiudad()}"
+								reRender="ciudadNac" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+					<s:decorate id="modalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU481_modalidad}</ui:define>
+						<h:selectOneMenu id="modalidadCapaSeleccione" immediate="true" style="width : 250px;"
+							value="#{buscarCursoObjeto290FC.modalidadCapaSeleccione}">
+							<s:selectItems var="tipo" label="#{tipo.descripcion}"
+								value="#{enumAppHelper.modalidadCapaSelecciones}" />
+							<s:convertEnum />
+								</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+							<h:selectOneMenu id="ciudadNac" style="width : 250px;"
+								value="#{buscarCursoObjeto290FC.idCiudad}">
+								<f:selectItems
+									value="#{buscarCursoObjeto290FC.ciudadSelecItem}" />
+									
+							</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelResultado,idPanelPaginador"
+				action="#{buscarCursoObjeto290FC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{buscarCursoObjeto290FC.searchAll()}"
+				reRender="panelParametro,panelResultado,idPanelPaginador">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty buscarCursoObjeto290FC.capacitacionOg290Lista ? 0 : (capacitacionOg290List.paginated ? capacitacionOg290List.resultCount : buscarCursoObjeto290FC.capacitacionOg290Lista.size())})</f:facet>
+				<div class="results" id="postulacionList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty buscarCursoObjeto290FC.capacitacionOg290Lista}" />
+				<rich:dataTable id="postulacionList" var="_capacitacionOg290List"
+					value="#{buscarCursoObjeto290FC.capacitacionOg290Lista}"
+					rendered="#{not empty buscarCursoObjeto290FC.capacitacionOg290Lista}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="#{messages.CU498_entidad}" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_capa_becas}" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.nombre" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="#{messages.CU498_tipo_capac}" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.datosEspecificos.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.datosEspecificos.descripcion}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_modalidad}" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.modalidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.modalidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="Fecha Inicio" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.fechaInicio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionOg290List}" />
+								<ui:param name="propertyLabel" value="Fecha Fin" />
+								<ui:param name="propertyPath"
+									value="capacitacionOg290.fechaFin" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionOg290List.fechaFin}" />
+					</h:column>
+					
+					
+					<h:column>
+						<f:facet name="header">#{messages.CU481_prospecto}</f:facet>
+ 							<div align="center">
+						<h:commandLink  target="_blank"
+							id="verHistorialId"
+							action="#{buscarCursoObjeto290FC.abrirDocumento(_capacitacionOg290List.idCapacitacion)}"
+							reRender="panelModalSelect">
+							<h:graphicImage value="/img/application_form_magnify.png"
+								title="#{messages.gral_descargar}"
+								alt="#{messages.gral_descargar}" />
+						</h:commandLink> 
+							</div>
+					</h:column>
+
+				
+
+					<rich:column styleClass="action">
+					
+						<s:link  value="#{messages.CU481_ver_info}" id="verInformacionCU527"
+						view="/capacitacion/publicarCapacitacion/datosPublicacion/PublicarCapacitacion.xhtml"
+					propagation="join">
+					<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capacitacionOg290List.idCapacitacion}" />
+								<f:param name="from"
+								value="capacitacion/buscarCapacitaciones/BuscarCursoObjeto290" />
+					</s:link>
+           					 #{' '}
+          
+			         
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<a:outputPanel id="idPanelPaginador" ajaxRendered="true">
+				<div class="tableControl"><s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCursoObjeto290.xhtml"
+					rendered="#{capacitacionOg290List.previousExists}"
+					value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCursoObjeto290.xhtml"
+					rendered="#{capacitacionOg290List.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{capacitacionOg290List.previousFirstResult}" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCursoObjeto290.xhtml"
+					rendered="#{capacitacionOg290List.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{capacitacionOg290List.nextFirstResult}" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCursoObjeto290.xhtml"
+					rendered="#{capacitacionOg290List.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{capacitacionOg290List.lastFirstResult}" />
+				</s:link></div>
+			</a:outputPanel>
+
+
+
+
+			<s:button id="cancelEdit" value="#{messages.msg_done}"
+				propagation="none" view="/capacitacion/portal/portalCapacitacion.xhtml" />
+
+		</h:form>
+	</ui:define>
+
+
+
+</ui:composition>

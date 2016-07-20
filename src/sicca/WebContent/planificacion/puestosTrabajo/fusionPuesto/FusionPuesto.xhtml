@@ -1,0 +1,105 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<h3>#{messages.CU120_titulo_fusion}</h3>
+	<rich:panel id="panel" style="border:none;">
+		<h:panelGrid columns="1">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.ClasificadorUo_nivel}
+			</ui:define>
+				<h:inputText id="nivelCodigo" styleClass="numeric" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.nivelEntidad.nenCodigo}"
+					size="10">
+				</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+					value="#{administrarPuestosTrabajoFormController.nivelEntidad.nenNombre}"
+					size="80" disabled="true" />
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.Usuario_entidad}
+			</ui:define>
+				<h:inputText id="entidadCodigo" styleClass="numeric" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.sinEntidad.entCodigo}"
+					size="10">
+				</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+					value="#{administrarPuestosTrabajoFormController.sinEntidad.entNombre}"
+					size="80" disabled="true" />
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">OEE
+			</ui:define>
+				<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10"
+					disabled="#{administrarPuestosTrabajoFormController.tieneUsuario}"
+					value="#{administrarPuestosTrabajoFormController.ordenUnidOrg}">
+					<a:support event="onblur" eventsQueue="default"
+						action="#{administrarPuestosTrabajoFormController.findUnidadOrganizativa()}"
+						reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+				</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="80"
+					disabled="true"
+					value="#{administrarPuestosTrabajoFormController.configuracionUoCab.denominacionUnidad}" />
+			</s:decorate>
+			<s:decorate
+				template="/layout/display.xhtml">
+				<ui:define name="label">Unidad Organizativa
+				</ui:define>
+				<h:inputText id="oeeDepCodigo" size="8" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.ordenOEEDep}">
+
+				</h:inputText>
+				#{' '}
+				<h:inputText id="orgCodigo" size="12"
+					disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+					value="#{administrarPuestosTrabajoFormController.codigoUnidOrgDep}">
+					<a:support event="onblur" eventsQueue="default"
+						action="#{administrarPuestosTrabajoFormController.obtenerUnidadOrganizativaDep()}"
+						reRender="orgCodigo,orgDenominacion,orden" />
+				</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="70" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.configuracionUoDet.denominacionUnidad}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep"
+					eventsQueue="default"
+					disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+					image="/img/Buscar.png"
+					action="#{administrarPuestosTrabajoFormController.getUrlToPageUnidadOrgDep()}" />
+			</s:decorate>
+			
+			<a:commandButton id="search" value="Filtrar"
+				action="#{administrarPuestosTrabajoFormController.traerDatos()}"
+				reRender="panel">
+			</a:commandButton>
+
+			<rich:listShuttle
+				sourceValue="#{administrarPuestosTrabajoFormController.puestosSinFusionar}"
+				id="filtro"
+				targetValue="#{administrarPuestosTrabajoFormController.puestosFusionados}"
+				var="puesto" listsHeight="150" sourceListWidth="300"
+				targetListWidth="300" sourceCaptionLabel="Puestos sin Fusionar"
+				targetCaptionLabel="Puestos Fusionados"
+				converter="org.jboss.seam.ui.EntityConverter">
+				<rich:column width="18">
+					<h:outputText value="#{puesto.descripcion}" />
+				</rich:column>
+
+				<a:support event="onlistchanged"
+					action="#{administrarPuestosTrabajoFormController.storeItemInList(puesto)}" />
+
+			</rich:listShuttle>
+			
+			
+		</h:panelGrid>
+	</rich:panel>
+</ui:composition>

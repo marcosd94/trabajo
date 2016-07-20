@@ -1,0 +1,520 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU304_exepcion_titulo}</h1>
+    <h:form id="comisionSeleccionCab" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">#{messages.CU304_verificar_inclusion}</f:facet>
+
+			<fieldset>
+          <h:panelGrid columns="3">
+			
+			<s:decorate  template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText styleClass="numeric" size="10" 
+						disabled="true"	value="#{verificarInclusionMiembroFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText  size="40" disabled="true"
+							value="#{verificarInclusionMiembroFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadFiesd" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText styleClass="numeric" size="10"
+							disabled="true"
+							value="#{verificarInclusionMiembroFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText size="40"
+							disabled="true"
+							value="#{verificarInclusionMiembroFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate  template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText size="10" disabled="true"
+							value="#{verificarInclusionMiembroFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText  size="40" disabled="true"
+							value="#{verificarInclusionMiembroFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2" >
+			
+           <a:region>
+		<s:decorate id="concursosField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU304_concuro}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="concursos" value="#{verificarInclusionMiembroFormController.idConcurso}" style="width:250px" 
+					disabled="true">
+							<f:selectItems value="#{verificarInclusionMiembroFormController.concursoSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{verificarInclusionMiembroFormController.getComisionSelecciones}" reRender="comisionSeleFiels"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+
+            <s:decorate id="comisionSeleFiels" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU304_comision_seleccion}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="comisionSele" value="#{verificarInclusionMiembroFormController.idComisionSelCab}" style="width:250px" disabled="true">
+							<f:selectItems value="#{verificarInclusionMiembroFormController.comisionSelecCabSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default" reRender="concursosField,comisionSeleFiels"/>
+						</h:selectOneMenu>
+					</s:decorate>
+
+          </h:panelGrid>
+
+			</fieldset>
+			<fieldset>
+			<legend>#{messages.CU304_add_integrantes}</legend>
+			
+			<h:panelGrid columns="4">
+			<a:region>
+							<h:panelGrid columns="2">
+								<s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU40_paises_expedicion}</ui:define>
+									<h:selectOneMenu id="idPaisExped" 
+										value="#{verificarInclusionMiembroFormController.idPaisExp}"
+										style="width:150px">
+										<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+										<a:support event="onchange" eventsQueue="default"
+									action="#{verificarInclusionMiembroFormController.limpiarDatosPersona()}" reRender="regionPersona,nomField,apeField,ciField" />
+									</h:selectOneMenu>
+								</s:decorate>
+								<a:status id="idSatatusPersonSearch"
+									onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+							<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px" 
+										value="#{verificarInclusionMiembroFormController.docIdentidad}">
+										<a:support event="onblur"
+											action="#{verificarInclusionMiembroFormController.buscarPersona()}"
+											reRender="outAdd,nomField,apeField"
+											focus="cvField" />
+									</h:inputText>
+								</s:decorate>
+
+							</h:panelGrid>
+						</a:region>	
+           		<a:outputPanel ajaxRendered="true" id="outAdd">
+           		<a:commandButton id="searchper" eventsQueue="default"
+						image="/img/Buscar.png"
+						action="#{verificarInclusionMiembroFormController.toFindPersonaList()}" />
+					<s:button  id="createPersona"  rendered="#{verificarInclusionMiembroFormController.habBtnAddPersons}"
+							eventsQueue="default" value="Agregar Persona" propagation="join"
+						action="#{verificarInclusionMiembroFormController.toFindPersona()}" />
+           		</a:outputPanel>
+             	<a:region >
+							 <s:decorate id="puestoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU165_puesto}</ui:define>
+                 <h:inputText id="ci"
+                      
+                           size="50"
+                      maxlength="50"
+                          value="#{verificarInclusionMiembroFormController.puesto}">
+            <a:support event="onchange" reRender="puestoField" eventsQueue="default"/>
+            </h:inputText>
+               
+            </s:decorate>
+            </a:region>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+			
+
+
+           
+            
+             <s:decorate id="nomField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU165_nom}</ui:define>
+                <h:inputText id="usuMod"
+                           size="50" disabled="true"
+                      maxlength="50" required="true"
+                          value="#{verificarInclusionMiembroFormController.persona.nombres}"/>
+             </s:decorate>
+        
+            	  <s:decorate id="rolField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU165_rol}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="rol" value="#{verificarInclusionMiembroFormController.idRol}" style="width:250px">
+						<f:selectItems value="#{rolesByComsSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+             
+            
+			</h:panelGrid>
+			<h:panelGrid columns="4" >
+			 <s:decorate id="apeField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU165_ape}</ui:define>
+                <h:inputText id="ape"
+                           size="50" required="true" disabled="true"
+                      maxlength="50"
+                          value="#{verificarInclusionMiembroFormController.persona.apellidos}"/>
+               
+            </s:decorate>
+            	 <s:decorate template="/layout/display.xhtml"><span class="required">*</span>
+					
+					<h:selectOneRadio id="titularSuplente" value="#{verificarInclusionMiembroFormController.titularSuplente}" >
+						<s:selectItems var="val" value="#{enumAppHelper.titularSuplenteSeleccions}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				<a:region >
+				<s:decorate  id="exo" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU304_eq_tec}</ui:define>
+									<h:selectBooleanCheckbox 
+							value="#{verificarInclusionMiembroFormController.eqTec}" 
+							style="FONT-FAMILY: 'Bitstream Charter';" id="eqTec">
+							   <a:support event="onchange" reRender="exo" eventsQueue="default"/>
+						</h:selectBooleanCheckbox>
+								</s:decorate>
+             </a:region>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+								value="#{verificarInclusionMiembroFormController.nivelEntidad.nenCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{verificarInclusionMiembroFormController.findNivelEntidad()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{verificarInclusionMiembroFormController.nivelEntidad.nenNombre}"
+								size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{verificarInclusionMiembroFormController.getUrlToPageNivel()}" />
+						</s:decorate>
+					</a:region>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			
+					
+			 <a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+								value="#{verificarInclusionMiembroFormController.sinEntidads.entCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{verificarInclusionMiembroFormController.findEntidad()}"
+									reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{verificarInclusionMiembroFormController.sinEntidads.entNombre}"
+								size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{verificarInclusionMiembroFormController.getUrlToPageEntidad()}" />
+						</s:decorate>
+				</a:region>
+          
+				
+				</h:panelGrid>
+				<h:panelGrid columns="3" >
+				<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);" size="5"
+								value="#{verificarInclusionMiembroFormController.ordenUnidOrg}">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{verificarInclusionMiembroFormController.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{verificarInclusionMiembroFormController.configuracionUoCabs.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{verificarInclusionMiembroFormController.getUrlToPageOee()}" />
+						</s:decorate>
+					</a:region>
+					 
+					
+			</h:panelGrid>
+			
+			
+			</fieldset>
+             <div class="actionButtons">
+             <a:outputPanel >
+           <a:commandButton id="addTd" rendered="#{!verificarInclusionMiembroFormController.esEdit}"
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"  reRender="panelDetails,panelPrincipal"
+				action="#{verificarInclusionMiembroFormController.addItems()}">
+			</a:commandButton>
+		<a:commandButton id="update"  eventsQueue="default" rendered="#{verificarInclusionMiembroFormController.esEdit}"
+						 value="#{messages.msg_update}"  reRender="panelDetails,panelPrincipal"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{verificarInclusionMiembroFormController.update()}"/>
+       
+       
+            <a:commandButton id="cancelEdit" rendered="#{verificarInclusionMiembroFormController.esEdit}"  reRender="panelDetails,panelPrincipal"
+                   value="#{messages.msg_cancel}" action="#{verificarInclusionMiembroFormController.cancelar()}" />
+              
+			 
+			</a:outputPanel>
+        </div>	
+        <rich:panel id="panelDetails">
+				<f:facet name="header">Datos de los nuevos Integrantes de la Comision</f:facet>
+			<div class="results" id="repreList" style="overflow:auto;">
+								   	<rich:dataTable id="repreList" var="_items"  rows="5"
+						value="#{verificarInclusionMiembroFormController.comisionSeleccionDetList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU304_ci}
+													</f:facet>
+													<h:outputText value="#{_items.persona.documentoIdentidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU40_paises_expedicion}
+													</f:facet>
+													<h:outputText value="#{_items.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU304_nom_ape}
+													</f:facet>
+														<h:outputText 
+													value="#{_items.persona.nombreCompleto}" />
+													
+													</rich:column>
+												<rich:column >
+												
+													<f:facet name="header">
+													#{messages.CU304_oee}
+													</f:facet>
+														<h:outputText 
+													value="#{_items.configuracionUo.denominacionUnidad}" />
+											</rich:column>
+											
+									       <rich:column >
+									            <f:facet name="header">
+														Rol
+													</f:facet>
+									            	      	<h:outputText 
+													value="#{_items.rol.descripcion}" />
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU304_titular_supl}
+													</f:facet>
+													<h:outputText value="TITULAR" rendered="#{_items.titularSuplente=='T'}"/>
+													
+													<h:outputText value="SUPLENTE" rendered="#{_items.titularSuplente!='T'}"/>
+									       </rich:column>
+									        
+									       
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU165_eq_tec}
+													</f:facet>
+													<h:selectBooleanCheckbox value="#{_items.equipoTecnico}" disabled="true"/>
+												
+									       </rich:column>
+									      	<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+												 <h:commandLink id="delDet" value="Editar"  
+											    	 eventsQueue="default" 
+								                    action="#{verificarInclusionMiembroFormController.editar(rowNr)}" />
+								            #{' '}
+								              <h:commandLink id="delDets" value="Eliminar"  
+											    onclick="return confirm('#{messages.msg_confirm_delete}');"
+											    	 eventsQueue="default" 
+								                    action="#{verificarInclusionMiembroFormController.eliminar(rowNr)}" />
+								            
+											</rich:column>
+											
+										</rich:dataTable><rich:datascroller for="repreList" renderIfSinglePage="false"
+							id="scroll"></rich:datascroller>
+							 		 </div> 
+		         
+			</rich:panel>
+			
+			<rich:panel>
+			<f:facet name="header">#{messages['CU304_datos_inclusion']}</f:facet>
+			<h:panelGrid columns="4">
+				<s:decorate id="tituloField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU304_motivos_incl}</ui:define>
+                <h:inputTextarea id="titulo"
+                               cols="80"
+                               rows="6"
+                           required="true" 
+                              value="#{verificarInclusionMiembroFormController.excepcion.observacion}" style=" width : 367px;"/>
+            </s:decorate>
+            <s:button propagation="join"
+				action="#{verificarInclusionMiembroFormController.anexar()}"
+				id="anexos" value="#{messages.gral_anexos}"
+				style=" width : 76px;">
+			</s:button>
+            <s:decorate  template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU304_fecha_inclusion}</ui:define>
+								 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" 
+                       disabled="true"     inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{verificarInclusionMiembroFormController.excepcion.fechaSolicitud}" />
+			</s:decorate>
+			<s:decorate  template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU304_estado}</ui:define>
+			<h:inputText value="#{verificarInclusionMiembroFormController.excepcion.estado}" disabled="true"/>
+			</s:decorate>
+			</h:panelGrid>
+			
+			</rich:panel>
+			<rich:panel >
+			<f:facet name="header">#{messages['CU304_datos_aprobacion']}</f:facet>
+			<div class="results" id="expList" style="overflow:auto;">
+								   	<rich:dataTable id="expList" var="_exp"  rows="5"
+						value="#{verificarInclusionMiembroFormController.excepcionDetList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU304_nro}
+													</f:facet>
+													<h:outputText value="#{_exp.idExcepcionDet}" />
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU304_obs}
+													</f:facet>
+														<h:outputText 
+													value="#{_exp.observacion}" />
+													
+													</rich:column>
+												<rich:column >
+												<f:facet name="header">
+													#{messages.CU304_fec_obs}
+													</f:facet>
+														<h:outputText 
+													value="#{_exp.fechaObs}" />
+													
+											</rich:column>
+											
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU304_rpta}
+													</f:facet>
+									            	      	<h:outputText 
+													value="#{_exp.respuesta}" />
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU304_fec_rpta}
+													</f:facet>
+													<h:outputText value="#{_exp.fechaRpta}" >
+
+													 <s:convertDateTime type="both" pattern="dd/MM/yyyy " />
+													 </h:outputText>
+
+
+									       </rich:column>
+									        
+									       
+									        
+									      	<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+												 <s:link  value="Ver"  
+											      eventsQueue="default" 
+								                     view="/seleccion/excepcion/inclusionMiembroCom/Respuesta.xhtml" >
+								                  <f:param name="idExcepcionDet" value="#{_exp.idExcepcionDet}"/>
+								                 <f:param name="fromRpta" value="false"/>
+								                 <f:param name="from" value="seleccion/excepcion/inclusionMiembroCom/VerificarInclusionMiembro"/>
+								                    </s:link>
+								            #{' '}
+								              <s:link  value="Editar "  
+								              rendered="#{_exp.respuesta!= null and !_exp.ajustadoOee}"
+											  view="/seleccion/excepcion/inclusionMiembroCom/RespuestaEdit.xhtml" >
+								                 <f:param name="idExcepcionDet" value="#{_exp.idExcepcionDet}"/>
+								                 <f:param name="fromRpta" value="false"/>
+								                </s:link>  
+								                  #{' '}
+								             <s:link  value="Responder"  
+								              rendered="#{_exp.respuesta== null }"
+											      eventsQueue="default" propagation="join"
+								                     view="/seleccion/excepcion/inclusionMiembroCom/RespuestaEdit.xhtml" >
+								                     <f:param name="fromRpta"
+                     										  value="true"/>
+                     								<f:param name="idExcepcionDet" value="#{_exp.idExcepcionDet}"/>
+								                   </s:link>
+								            
+											</rich:column>
+											
+										</rich:dataTable><rich:datascroller for="repreList" renderIfSinglePage="false"
+							id="scrolles"></rich:datascroller>
+							 		 </div> 
+			</rich:panel>
+
+            
+
+
+           
+
+
+ 
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.CU304_solicitar_aprobacion}"
+                         action="#{verificarInclusionMiembroFormController.save()}"
+                        onclick="return confirm('#{messages.GENERICO_ESTA_SEGURO}');"/>
+
+
+         
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             propagation="none"
+                    view="/proceso/BandejaExcepcionList.xhtml"
+               >
+                </s:button>
+
+        </div>
+         <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+            <h:outputText value="#{messages.CU304_msg_obs}" styleClass="labelClass"/>
+            
+        </div>
+    </h:form>
+    
+
+
+</ui:define>
+
+</ui:composition>

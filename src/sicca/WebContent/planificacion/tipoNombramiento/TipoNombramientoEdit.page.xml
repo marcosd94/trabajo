@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/planificacion/tipoNombramiento/TipoNombramientoList.xhtml"
+      login-required="true">
+      
+
+
+   <begin-conversation flush-mode="MANUAL" join="true"/>
+
+   <action execute="#{tipoNombramientoHome.wire}"/>
+
+   <param name="tipoNombramientoFrom"/>
+   <param name="tipoNombramientoIdTipoNombramiento" value="#{tipoNombramientoHome.tipoNombramientoIdTipoNombramiento}"/>
+
+
+   <navigation from-action="#{tipoNombramientoHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoNombramiento/TipoNombramientoList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{tipoNombramientoHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoNombramiento/TipoNombramientoList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{tipoNombramientoHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoNombramiento/TipoNombramientoList.xhtml"/>
+      </rule>
+   </navigation>
+
+<restrict>#{identity.hasRole('tipo_nombramiento_edit')}</restrict>
+</page>

@@ -1,0 +1,192 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Ver Desvinculación</h1>
+
+		<h:form id="desvincularParticipantes" styleClass="edit"
+			enctype="multipart/form-data">
+			<rich:panel>
+				<f:facet name="header">#{messages.CU490_panel_capac}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_tit}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{admDesvinculacionCapacitacion.capacitaciones.nombre}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_tipo_capac}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{admDesvinculacionCapacitacion.capacitaciones.datosEspecificosTipoCap.datosGenerales}">
+						</h:inputText>
+					</s:decorate>
+
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU490_panel_organizado}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivel">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidad">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="oee">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml" id="unidad">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU494_panel_part}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="paisExpDocField">
+						<ui:define name="label">#{messages.CU494_pais_doc}
+						</ui:define>
+						<h:inputText id="paisExpDoc" size="50" disabled="true"
+							value="#{admDesvinculacionCapacitacion.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="ciField">
+						<ui:define name="label">#{messages.CU494_ci}
+						</ui:define>
+						<h:inputText id="ci" size="20" disabled="true"
+							value="#{admDesvinculacionCapacitacion.persona.documentoIdentidad}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml"
+						id="nombreApellidoField">
+						<ui:define name="label">#{messages.CU494_nombre_apellido}
+									</ui:define>
+						<h:inputText id="nombreApellido" size="50" disabled="true"
+							value="#{admDesvinculacionCapacitacion.nombreApellido}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="motivoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU494_motivo}
+						</ui:define>
+						<h:selectOneMenu id="motivo" disabled="true"
+							value="#{admDesvinculacionCapacitacion.idMotivo}"
+							style="width:250px">
+							<f:selectItems
+								value="#{admDesvinculacionCapacitacion.motivoSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="fechaDesvinculacionDecorate"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU494_fecha}
+						</ui:define>
+						<rich:calendar id="fechaDesvinculacion" disabled="true"
+							value="#{admDesvinculacionCapacitacion.fechaDesvinculacion}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="tipoDocField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU494_tipo_doc}
+						</ui:define>
+						<h:selectOneMenu id="tipoDoc" disabled="true"
+							value="#{admDesvinculacionCapacitacion.idTipoDoc}"
+							style="width:250px">
+							<f:selectItems
+								value="#{admDesvinculacionCapacitacion.tipoDocSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="DocField" template="/layout/display.xhtml">
+						
+						<h:commandButton value="#{messages.CU476_btn_descargar}" disabled="#{admDesvinculacionCapacitacion.idDoc == null}"
+							action="#{admDesvinculacionCapacitacion.abrirDoc()}" />
+								 #{' '}
+								 <h:inputText id="nombreDoc" size="50" value="#{admDesvinculacionCapacitacion.documentos.nombreFisicoDoc}" disabled="true"/>
+					</s:decorate>
+					
+
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate id="obsDecorate"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU494_obs}
+								</ui:define>
+								<h:inputTextarea value="#{admDesvinculacionCapacitacion.obs}" cols="80" disabled="true">
+								<f:validateLength maximum="500" />
+								</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			
+			<div class="actionButtons"> <s:button
+				id="cancelAdd" value="Volver" propagation="join"
+				view="/#{from}.xhtml" /></div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

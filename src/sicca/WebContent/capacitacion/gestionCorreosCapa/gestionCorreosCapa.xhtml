@@ -1,0 +1,332 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+.className {
+	vertical-align: top;
+}
+</style>
+		<rich:contextMenu event="onclick" attachTo="idDivAdjuntos"
+			submitMode="none">
+			<rich:menuItem value="Zoom In" onclick="enlarge();" id="zin" />
+			<rich:menuItem value="Zoom Out" onclick="decrease();" id="zout" />
+		</rich:contextMenu>
+
+		<rich:modalPanel id="modal" autosized="true" width="500"
+			resizeable="false" moveable="true">
+			<h:form id="idPanelAdjuntos" enctype="multipart/form-data">
+				<rich:panel id="idPanel">
+					<f:facet name="header">Documentos Adjuntos </f:facet>
+					<h:panelGrid columns="1">
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType1}"
+							data="#{gestionCorreosCapaFC.uFile1}"
+							fileName="#{gestionCorreosCapaFC.fName1}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType2}"
+							data="#{gestionCorreosCapaFC.uFile2}"
+							fileName="#{gestionCorreosCapaFC.fName2}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType3}"
+							data="#{gestionCorreosCapaFC.uFile3}"
+							fileName="#{gestionCorreosCapaFC.fName3}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType4}"
+							data="#{gestionCorreosCapaFC.uFile4}"
+							fileName="#{gestionCorreosCapaFC.fName4}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType5}"
+							data="#{gestionCorreosCapaFC.uFile5}"
+							fileName="#{gestionCorreosCapaFC.fName5}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+					</h:panelGrid>
+				</rich:panel>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="idBtnAceptar" value="Aceptar"
+					action="#{gestionCorreosCapaFC.adjuntarArchivos()}" /> <s:button
+					id="idBtnCancelar" value="Cancelar"
+					oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h1>#{messages.CU529_title}</h1>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="2">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codNivelEntidad}">
+						</h:inputText>						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}">
+						</h:inputText>						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+							disabled="true" value="#{nivelEntidadOeeUtil.nombreSinEntidad}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							styleClass="numeric" value="#{nivelEntidadOeeUtil.ordenUnidOrg}" />								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+					<s:decorate id="idRegionUnOrg" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+						</ui:define>
+						<h:inputText id="orgCodigo" size="10"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="panelBusqueda">
+								<s:conversationPropagation type="join" />
+							</a:support>
+
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep"
+							image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('/capacitacion/gestionCorreosCapa/gestionCorreosCapa')}" />
+
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate id="paisExpField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU529_grupos}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="idGrupos"
+								value="#{gestionCorreosCapaFC.idGrupo}" style="width:250px">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="idBecasCapa,idPanelDestinatarios"
+									action="#{gestionCorreosCapaFC.updateCapaBeca()}" />
+								<f:selectItems value="#{gestionCorreosCapaFC.comboGruposSI}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<a:outputPanel id="idPanelDestinatarios" ajaxRendered="true">
+						<h:panelGrid columns="1"
+							rendered="#{gestionCorreosCapaFC.mostrarDestinatarios}"
+							style="border-style: dotted;border-color: gray;">
+							<h:outputText value="Destinatarios" />
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU529_capaBeca}</ui:define>
+								<h:selectOneMenu id="idBecasCapa"
+									value="#{gestionCorreosCapaFC.idCapa}" style="width:250px">
+
+									<f:selectItems value="#{gestionCorreosCapaFC.comboCapaBecaSI}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU529_destinatarios}</ui:define>
+								<h:selectOneMenu id="estado" style="width : 250px;"
+									value="#{gestionCorreosCapaFC.idDestinatario}">
+									<f:selectItem itemLabel="TODOS LOS PARTICIPANTES"
+										itemValue="#{null}" />
+									<f:selectItem itemLabel="LISTA DE ESPERA" itemValue="L" />
+									<f:selectItem itemLabel="LISTA DE NO SELECCIONADOS"
+										itemValue="N" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</h:panelGrid>
+					</a:outputPanel>
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{gestionCorreosCapaFC.search()}"
+				reRender="idPanelResultados,idPanelModal">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{gestionCorreosCapaFC.limpiar()}" id="reset"
+				value="Limpiar" includePageParams="false">
+				<f:param name="from" value="#{from}" />
+			</s:button></div>
+		</a:form>
+		<h:form>
+			<rich:panel id="idPanelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty gestionCorreosCapaFC.lista ? 0 : gestionCorreosCapaFC.lista.size()})</f:facet>
+				<div class="results" id="idListado"><rich:extendedDataTable
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					id="matrizEval"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="700" border="0" var="record"
+					height="#{empty gestionCorreosCapaFC.lista?'50px':'300px'}"
+					value="#{gestionCorreosCapaFC.lista}">
+
+					<rich:column width="24%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU529_persona}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.nombres} #{record.apellidos}" />
+					</rich:column>
+					<rich:column width="24%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_docIdentidad}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.documentoIdentidad}" />
+					</rich:column>
+					<rich:column width="24%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_paisExpe}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.paisByIdPaisExpedicionDoc.descripcion}" />
+					</rich:column>
+					<rich:column width="24%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_email}" />
+						</f:facet>
+						<h:outputText style="white-space:normal" value="#{record.EMail}" />
+					</rich:column>
+					<rich:column width="4%">
+						<f:facet name="header">
+							<h:selectBooleanCheckbox id="checkAllMail"
+								value="#{gestionCorreosCapaFC.selectAll}">
+								<a:support event="onclick"
+									action="#{gestionCorreosCapaFC.seleccionarTodo()}"
+									reRender="idPanelResultados" />
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<h:selectBooleanCheckbox id="checkEnviarMail"
+							value="#{record.selected}">
+							<a:support event="onclick" />
+						</h:selectBooleanCheckbox>
+					</rich:column>
+				</rich:extendedDataTable></div>
+			</rich:panel>
+			<table>
+				<tr>
+					<td><h:panelGrid columns="1" columnClasses="className">
+						<h:panelGrid columns="3" columnClasses="className">
+							<a:commandButton id="idCopiarCorreos" reRender="idTxtAreaPara"
+								action="#{gestionCorreosCapaFC.copiarCorreo()}"
+								value="#{messages.CU529_copiarCorreos}"></a:commandButton>
+							<a:commandButton id="idBtnAdjuntos" reRender="pnlDocsAdj"
+								onclick="#{rich:component('modal')}.show();return false;"
+								value="#{messages.CU529_adjuntarArchivos}" />
+						</h:panelGrid>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU529_para}<span
+									class="required">*</span>
+							</ui:define>
+
+
+							<h:inputTextarea id="idTxtAreaPara" style=" width : 580px;"
+								title="Debe separar los correos con ; (punto y coma)"
+								value="#{gestionCorreosCapaFC.para}">
+								<a:support event="onblur" />
+							</h:inputTextarea>
+							<p:tooltip for="idTxtAreaPara" showEvent="focus" hideEvent="blur" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU529_asunto}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="idTxtAsunto" style=" width : 580px;"
+								value="#{gestionCorreosCapaFC.asunto}">
+								<a:support event="onblur" />
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU529_mensaje}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:editor id="editor" width="580" height="300"
+								theme="advanced" value="#{gestionCorreosCapaFC.textoMail}">
+								<f:param name="theme_advanced_buttons1"
+									value="bold,italic,underline, cut,copy,paste,pasteword,separator,insertdate,inserttime,preview,zoom,separator,forecolor, fontselect,fontsizeselect,backcolor,separator,undo,redo,justifyleft,justifycenter,justifyright,justifyfull" />
+								<f:param name="theme_advanced_toolbar_location" value="top" />
+								<f:param name="theme_advanced_toolbar_align" value="left" />
+								<a:support event="onchange" />
+							</rich:editor>
+						</s:decorate>
+						<h:panelGrid columns="2" columnClasses="className">
+							<h:commandButton id="enviarCorreo"
+								action="#{gestionCorreosCapaFC.enviarCorreo()}"
+								value="#{messages.CU529_enviarCorreo}"></h:commandButton>
+							<s:button id="cancelAdd" value="Volver" propagation="none"
+								view="/home.xhtml" />
+						</h:panelGrid>
+					</h:panelGrid></td>
+					<td valign="top"><p:panel id="pnlDocsAdj" style="width:400px"
+						header="Documentos Adjuntos" toggleable="true" closable="false"
+						toggleSpeed="500" widgetVar="panel">
+						<p:ajax event="toggle" listener="#{panelBean.handleToggle}"
+							update="growl" />
+						<rich:dataTable
+							noDataLabel="#{messages.msg_list_search_no_results}"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							id="matDocAdjuntos"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							width="300" border="0" var="record2"
+							rendered="#{!empty gestionCorreosCapaFC.lDocAdjuntos}"
+							value="#{gestionCorreosCapaFC.lDocAdjuntos}">
+							<h:column width="96%">
+								<f:facet name="header">
+									<h:outputText value="#{messages.CU529_nombreDoc}" />
+								</f:facet>
+								<h:outputText style="white-space:normal"
+									value="#{record2.nombre}" />
+							</h:column>
+							<h:column width="4%">
+								<f:facet name="header">
+
+								</f:facet>
+								<h:selectBooleanCheckbox id="checkEnviarMail"
+									value="#{record2.seleccted}" />
+							</h:column>
+						</rich:dataTable>
+					</p:panel></td>
+				</tr>
+			</table>
+		</h:form>
+
+		<div class="actionButtons"></div>
+
+
+	</ui:define>
+</ui:composition>

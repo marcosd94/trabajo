@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="excepciones">
+
+
+	<start-state name="Inicio">
+		<transition to="APROBAR_SFP" name="start_TO_aprSfp"></transition>
+		<transition to="ADJUNTAR_DOC_CANCELACION_AUTOMATICA" name="start_TO_adjDocCanAut"></transition>
+	</start-state>
+
+
+	<task-node name="APROBAR_SFP">
+		<task name="APROBAR_SFP">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="Fin" name="aprSfp_TO_end"></transition>
+		<transition to="REVISAR_OEE" name="aprSfp_TO_revOee"></transition>
+	</task-node>
+
+	<task-node name="REVISAR_OEE">
+		<task name="REVISAR_OEE">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_SFP" name="revOee_TO_aprSFP"></transition>
+	</task-node>
+
+	<task-node name="ADJUNTAR_DOC_CANCELACION_AUTOMATICA">
+		<task name="ADJUNTAR_DOC_CANCELACION_AUTOMATICA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="Fin" name="adjDocCanAut_TO_end"></transition>
+	</task-node>
+
+
+	<end-state name="Fin"></end-state>
+
+
+</process-definition>

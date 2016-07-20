@@ -1,0 +1,299 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU426_tittle}</h1>
+		<h:form id="bandejaExcepcionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+
+				<h:panelGrid columns="3" id="idPanelCampos">
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="#{!bandejaExcepcionFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											reRender="idPanelCampos" focus="entidadCodigo"
+											action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageNivel('proceso/BandejaExcepcionList')}" 
+										rendered="#{bandejaExcepcionFormController.esAdministradorSFP}"/>
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="#{!bandejaExcepcionFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findEntidad()}"
+											reRender="idPanelCampos" focus="unidadOrgCodigo" />
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('proceso/BandejaExcepcionList')}" 
+										rendered="#{bandejaExcepcionFormController.esAdministradorSFP}"/>
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="#{!bandejaExcepcionFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion" 
+											focus="orgCodigo2"/>
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageOee('proceso/BandejaExcepcionList')}" 
+										rendered="#{bandejaExcepcionFormController.esAdministradorSFP}"/>
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+				
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_rol}</ui:define>
+						<h:selectOneMenu id="idRol"
+							value="#{bandejaExcepcionFormController.idRol}"
+							style="width:250px">
+							<f:selectItems value="#{seguridadUtilFormController.obtenerRolesUsuarioSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concurso" size="60"
+							value="#{bandejaExcepcionFormController.concursoDesc}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					eventsQueue="default" value="#{messages.msg_list_search_button}"
+					reRender="panelResultado"
+					action="#{bandejaExcepcionFormController.search()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				
+				<a:commandButton id="reset" eventsQueue="default"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{bandejaExcepcionFormController.searchAll()}"
+					reRender="panelResultado,concurso,descripcion,codigo,idRol,unidadOrgCodigo,idPanelCampos" />
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty bandejaExcepcionList.resultList ? 0 : (bandejaExcepcionList.paginated ? bandejaExcepcionList.resultCount : bandejaExcepcionList.resultList.size)})</f:facet>
+			<div class="results" id="bandejaExcepcionList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty bandejaExcepcionList.resultList}" /> <rich:dataTable
+				id="bandejaExcepcionList" var="_bandejaExcepcion" value="#{bandejaExcepcionList.resultList}"
+				rendered="#{not empty bandejaExcepcionList.resultList}">
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.configuracionUoCab.denominacionUnidad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.configuracionUoCab.denominacionUnidad}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.gral_concurso}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.concurso.nombre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.concurso.nombre}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_tarea}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.actividad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.actividad.descripcion}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU426_tipo}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.excepcion.tipo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.excepcion.tipo}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.gral_grupo}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.concursoPuestoAgr.descripcionGrupo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.concursoPuestoAgr.descripcionGrupo}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_fecha_recepcion}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.fechaRecepcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.fechaRecepcion}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_fecha_inicio}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.fechaInicio" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.fechaInicio}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_dias_trans_rec}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.diasCreacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.diasCreacion}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_dias_trans_ini}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.diasInicio" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_bandejaExcepcion.diasInicio}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{bandejaExcepcionList}" />
+							<ui:param name="propertyLabel" value="#{messages.proceso_atraso}" />
+							<ui:param name="propertyPath" value="bandejaExcepcion.atraso" />
+						</ui:include>
+					</f:facet>
+					<span class="required">
+						<h:outputText value="#{_bandejaExcepcion.atraso}" rendered="#{_bandejaExcepcion.atraso &gt; 0}"/>
+					</span>
+					<h:outputText value="#{_bandejaExcepcion.atraso}" rendered="#{_bandejaExcepcion.atraso &lt;= 0}"/>
+					
+				</h:column>
+
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<s:link id="gestionar1" eventsQueue="default"
+							value="#{messages.proceso_gestionar}"
+							action="#{bandejaExcepcionFormController.redirect()}">
+							<f:param name="actividad" value="#{_bandejaExcepcion.actividad.codActividad}" /> 
+							<f:param name="idExcepcion" value="#{_bandejaExcepcion.excepcion.idExcepcion}" />
+					</s:link>
+				</rich:column>
+				
+				
+				
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link
+			view="/seleccion/bandejaExcepcion/BandejaExcepcionList.xhtml"
+			rendered="#{bandejaExcepcionList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/bandejaExcepcion/BandejaExcepcionList.xhtml"
+			rendered="#{bandejaExcepcionList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{bandejaExcepcionList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/bandejaExcepcion/BandejaExcepcionList.xhtml"
+			rendered="#{bandejaExcepcionList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{bandejaExcepcionList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/bandejaExcepcion/BandejaExcepcionList.xhtml"
+			rendered="#{bandejaExcepcionList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{bandejaExcepcionList.lastFirstResult}" />
+		</s:link></div>
+
+	</ui:define>
+
+</ui:composition>

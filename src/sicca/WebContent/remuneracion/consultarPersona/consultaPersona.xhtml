@@ -1,0 +1,81 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h:form id="persona" styleClass="edit" enctype="multipart/form-data">
+			<rich:panel id="panelPrincipal">
+				<f:facet name="header">Consultar Persona</f:facet>
+
+				<h:panelGrid>
+
+					<a:region>
+						<h:panelGrid columns="2">
+							<s:decorate id="paisExpField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU40_paises_expedicion}<s:div
+										style="float:right">
+										<span class="required">*</span>
+									</s:div>
+								</ui:define>
+								<h:selectOneMenu id="idPaisExped"
+									disabled="#{usuarioHome.managed}"
+									value="#{usuarioFormController.idPaisExp}"
+									style="width: 
+							250px">
+									<a:support event="onchange"
+										reRender="nombreField,apellidoField,docCI" focus="docCI"
+										action="#{usuarioFormController.limpiarDatosPersona()}"></a:support>
+									<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<a:status id="idSatatusPersonSearch"
+								onstart="Richfaces.showModalPanel('espera')"
+								onstop="#{rich:component('espera')}.hide()" />
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU528_docIdentidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="docCI" size="30"
+									value="#{usuarioFormController.docIdentidad}"
+									style=" width : 154px;">
+									<a:support event="onchange"
+										reRender="nombreField,apellidoField"
+										action="#{usuarioFormController.buscarPersonaLocal()}"></a:support>
+								</h:inputText>
+							</s:decorate>
+
+
+						</h:panelGrid>
+					</a:region>
+
+
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Usuario_nombre}</ui:define>
+						<h:inputText id="nombre" disabled="true" size="69"
+							value="#{usuarioFormController.persona.nombres}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Usuario_apellido}</ui:define>
+						<h:inputText id="apellido" disabled="true" size="69"
+							value="#{usuarioFormController.persona.apellidos}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons">
+				<s:button id="volver"
+				value="#{messages.msg_done}" propagation="none" includePageParams="false"
+				view="/#{empty personaFrom ? 'home' : personaFrom}.xhtml"
+				rendered="#{!usuarioHome.managed}" />
+				</div>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

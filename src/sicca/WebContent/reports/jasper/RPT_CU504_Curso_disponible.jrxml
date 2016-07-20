@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU504_Curso_disponible" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="oeeUsuarioLogueado" class="java.lang.String"/>
+	<parameter name="idOee" class="java.lang.Long"/>
+	<parameter name="idUo" class="java.lang.Long"/>
+	<parameter name="tipoCapacitacion" class="java.lang.String"/>
+	<parameter name="idtipoCapacitacion" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT CC.ID_CAPACITACION, OEE.DENOMINACION_UNIDAD, CC.NOMBRE, DE.DESCRIPCION AS TIPO_CAPACITACION,
+                CASE
+                    WHEN CC.DESTINADO_A::TEXT = 'A'::TEXT THEN 'ABIERTO A TODA LA CIUDADANIA'::TEXT
+                    WHEN CC.DESTINADO_A::TEXT = 'F'::TEXT THEN 'ABIERTO A TODOS LOS FUNC. PÚBLICOS'::TEXT
+                    WHEN CC.DESTINADO_A::TEXT = 'C'::TEXT THEN 'CERRADO'::TEXT ||' - INSTITUCION/ES: '||CAPACITACION.FNC_CAP_OEE_CERRADO(CC.ID_CAPACITACION)
+                    ELSE NULL::TEXT
+                END AS MODALIDAD, CC.FECHA_INICIO, CC.FECHA_FIN, CC.FECHA_RECEP_HASTA AS FECHA_LIMITE, CAPACITACION.FNC_EMAIL_CONSULTA(CC.ID_CAPACITACION),DE.id_datos_especificos AS ID
+           FROM CAPACITACION.CAPACITACIONES CC
+      JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE ON OEE.ID_CONFIGURACION_UO = CC.ID_CONFIGURACION_UO
+   JOIN SELECCION.DATOS_ESPECIFICOS DE ON DE.ID_DATOS_ESPECIFICOS = CC.ID_DATOS_ESPECIFICOS_TIPO_CAP
+   JOIN GENERAL.CIUDAD CIU ON CIU.ID_CIUDAD = CC.ID_CIUDAD
+   JOIN GENERAL.DEPARTAMENTO D ON CIU.ID_DEPARTAMENTO = D.ID_DEPARTAMENTO
+   JOIN GENERAL.PAIS P ON P.ID_PAIS = D.ID_PAIS
+   JOIN SELECCION.REFERENCIAS REF ON REF.VALOR_NUM = CC.ESTADO
+  WHERE
+  ((CC.ACTIVO = TRUE  AND REF.DOMINIO::TEXT = 'ESTADOS_CAPACITACION'::TEXT AND CC.TIPO::TEXT = 'CAP_SFP'::TEXT  AND CC.RECEPCION_POSTULACION = TRUE AND  CC.FECHA_RECEP_DESDE::DATE <= 'NOW'::TEXT::DATE AND CC.FECHA_RECEP_HASTA::DATE >= 'NOW'::TEXT::DATE)
+  OR
+  (CC.ACTIVO = TRUE  AND REF.DOMINIO::TEXT = 'ESTADOS_CAPACITACION'::TEXT AND CC.RECEPCION_POSTULACION = TRUE AND CC.TIPO::TEXT = 'CAP_OG290'::TEXT AND CC.FECHA_PUB_DESDE::DATE <= 'NOW'::TEXT::DATE AND CC.FECHA_PUB_HASTA::DATE >= 'NOW'::TEXT::DATE))
+AND  (CC.ID_CONFIGURACION_UO = $P{idOee} or $P{idOee} is null)
+AND (CC.ID_CONFIGURACION_UO_DET =$P{idUo} or $P{idUo} is null )
+AND (DE.id_datos_especificos =$P{idtipoCapacitacion} or $P{idtipoCapacitacion} is null )
+GROUP BY DE.DESCRIPCION,CC.ID_CAPACITACION,OEE.DENOMINACION_UNIDAD, CC.NOMBRE,CC.DESTINADO_A,CC.FECHA_INICIO,CC.FECHA_RECEP_HASTA,CC.FECHA_FIN,DE.id_datos_especificos
+ORDER BY  TIPO_CAPACITACION,CC.NOMBRE,DE.DESCRIPCION]]>
+	</queryString>
+	<field name="id_capacitacion" class="java.lang.Long"/>
+	<field name="denominacion_unidad" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="tipo_capacitacion" class="java.lang.String"/>
+	<field name="modalidad" class="java.lang.String"/>
+	<field name="fecha_inicio" class="java.sql.Timestamp"/>
+	<field name="fecha_fin" class="java.sql.Timestamp"/>
+	<field name="fecha_limite" class="java.sql.Timestamp"/>
+	<field name="fnc_email_consulta" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<group name="tipoCapacitacionGroup">
+		<groupExpression><![CDATA[$F{tipo_capacitacion}]]></groupExpression>
+		<groupHeader>
+			<band height="65">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="43" width="89" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Capacitación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="89" y="43" width="92" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Institución]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="181" y="43" width="51" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Inicio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="232" y="43" width="52" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Fin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="284" y="43" width="91" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Destinado a]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="375" y="43" width="77" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Fecha Límite de Inscripción]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="452" y="43" width="103" height="22" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Consultas]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="0" width="118" height="22"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Tipo de Capacitación:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="119" y="2" width="410" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_capacitacion}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="149" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement mode="Transparent" x="1" y="103" width="554" height="26" forecolor="#0099FF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[CURSOS DISPONIBLES]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="61" width="555" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{oeeUsuarioLogueado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="88" height="44"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="89" y="0" width="92" height="44"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{denominacion_unidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="181" y="0" width="51" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_inicio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="232" y="0" width="52" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_fin}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="375" y="0" width="77" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_limite}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="452" y="0" width="103" height="44"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fnc_email_consulta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="284" y="0" width="91" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{modalidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="496" y="2" width="60" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="207" y="2" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="1" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="442" y="2" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="307" y="2" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="1" width="555" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="22">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="495" y="2" width="60" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="206" y="2" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="441" y="2" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="306" y="2" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="555" height="1"/>
+			</line>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="556" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

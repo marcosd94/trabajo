@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU316_title}</h1>
+		<rich:panel id="panelParametro">
+			<h:panelGrid columns="3">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_concurso}</ui:define>
+						<h:inputText id="concurso" size="30"
+							value="#{admDesVacPlaFC.concursoFil}" style=" width : 300px;">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_estado}</ui:define>
+						<h:selectOneMenu id="estado" style="width : 330px;"
+							value="#{admDesVacPlaFC.valorNumEstado}">
+							<f:selectItems value="#{admDesVacPlaFC.estadosSI}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ConfiguracionUoDet_unidadOrganizativa}</ui:define>
+						<h:inputText id="orgCodigo" size="10"
+							value="#{administrarVacanciasListFormController.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{administrarVacanciasListFormController.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo,orgDenominacion" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="40" disabled="true"
+							value="#{administrarVacanciasListFormController.configuracionUoDet.denominacionUnidad}"
+							style=" width : 267px;" />
+#{' '}
+                <a:commandButton id="searchDependencia"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{administrarVacanciasListFormController.getUrlToPageDependencia()}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_puesto}</ui:define>
+						<h:inputText id="puestoCodigo" size="10"
+							value="#{administrarVacanciasListFormController.codigoPuesto}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{administrarVacanciasListFormController.obtenerPuesto()}"
+								reRender="puestoCodigo,puestoDenominacion" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="puestoDenominacion" size="40" disabled="true"
+							value="#{administrarVacanciasListFormController.plantaCargoDet.descripcion}" />
+							#{' '}
+									<h:outputLabel value="Ej.: P14, P1" style="color:red" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{admDesVacPlaFC.search()}" reRender="idPanelResultados ">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{admDesVacPlaFC.limpiar()}" id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false">
+				<f:param name="from" value="#{from}" />
+			</s:button></div>
+		</a:form>
+		<rich:panel id="idPanelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty excepcionGrPuestoList2.resultList ? 0 : (excepcionGrPuestoList2.paginated ? excepcionGrPuestoList2.resultCount : excepcionGrPuestoList2.resultList.size)})</f:facet>
+			<div class="results" id="concursoListFormController"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty excepcionGrPuestoList2.resultList}" /> <rich:dataTable
+				id="excepcionList" var="_excepcion"
+				value="#{excepcionGrPuestoList2.resultList}"
+				rendered="#{not empty excepcionGrPuestoList2.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_concursoDesc}" />
+							<ui:param name="propertyPath"
+								value="concursoPuestoAgr.concurso.nombre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_excepcion.concursoPuestoAgr.concurso.nombre}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_grupoPuesto}" />
+							<ui:param name="propertyPath"
+								value="concursoPuestoAgr.descripcionGrupo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_excepcion.concursoPuestoAgr.descripcionGrupo}">
+						<s:convertDateTime type="both" dateStyle="short" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_undOrganizativa}" />
+							<ui:param name="propertyPath"
+								value="plantaCargoDet.configuracionUoDet.denominacionUnidad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_excepcion.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel" value="#{messages.CU316_puesto}" />
+							<ui:param name="propertyPath" value="plantaCargoDet.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_excepcion.plantaCargoDet.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_fechaBloqueo}" />
+							<ui:param name="propertyPath" value="excepcion.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_excepcion.excepcion.fechaAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_fechaLimite}" />
+							<ui:param name="propertyPath" value="excepcion.fechaLimite" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_excepcion.excepcion.fechaLimite}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel" value="#{messages.CU316_estado}" />
+							<ui:param name="propertyPath" value="excepcion.estado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_excepcion.excepcion.tipoBloqueo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{excepcionGrPuestoList2}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU316_fechaDesbloqueo}" />
+							<ui:param name="propertyPath" value="fechaDesbloqueo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_excepcion.fechaDesbloqueo}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.GENERICO_ACCION}</f:facet>
+					<s:link view="/planificacion/admDesVacPla/AdmDesVacPlaEdit.xhtml"
+						rendered="#{_excepcion.fechaDesbloqueo == null}"
+						value="#{messages.CU316_liberarPuesto}" propagation="none"
+						id="liberarPuestoId">
+						<f:param name="idExcepcionGrPuesto"
+							value="#{_excepcion.idExcepcionGrPuesto}" />
+						<f:param name="from"
+							value="planificacion/admDesVacPla/AdmDesVacPla" />
+					</s:link>
+					#{' '}
+					<s:link view="/planificacion/admDesVacPla/AdmDesVacPlaVer.xhtml"
+						value="#{messages.CU316_ver}" propagation="none"
+						rendered="#{_excepcion.excepcionByIdExcepcionDesbloq.idExcepcion != null}"
+						id="verId">
+						<f:param name="idExcepcionDebloqueo"
+							value="#{_excepcion.excepcionByIdExcepcionDesbloq.idExcepcion}" />
+						<f:param name="from"
+							value="planificacion/admDesVacPla/AdmDesVacPla" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<div class="tableControl"><s:link
+			view="/planificacion/admDesVacPla/AdmDesVacPla.xhtml"
+			rendered="#{excepcionGrPuestoList2.previousExists}"
+			value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/admDesVacPla/AdmDesVacPla.xhtml"
+			rendered="#{excepcionGrPuestoList2.previousExists}"
+			value="#{messages.left}  #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{excepcionGrPuestoList2.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/admDesVacPla/AdmDesVacPla.xhtml"
+			rendered="#{excepcionGrPuestoList2.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{excepcionGrPuestoList2.nextExists}" />
+		</s:link> <s:link view="/planificacion/admDesVacPla/AdmDesVacPla.xhtml"
+			rendered="#{excepcionGrPuestoList2.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{excepcionGrPuestoList2.lastFirstResult}" />
+		</s:link></div>
+	</ui:define>
+</ui:composition>

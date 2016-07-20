@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Accion inconst det Details</f:facet>
+
+        <s:decorate id="idAccionDet" template="layout/display.xhtml">
+            <ui:define name="label">Id accion det</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.idAccionDet}"/>
+        </s:decorate>
+
+        <s:decorate id="idDatosEspecifLey" template="layout/display.xhtml">
+            <ui:define name="label">Id datos especif ley</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.idDatosEspecifLey}"/>
+        </s:decorate>
+
+        <s:decorate id="otraLey" template="layout/display.xhtml">
+            <ui:define name="label">Otra ley</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.otraLey}"/>
+        </s:decorate>
+
+        <s:decorate id="artTodos" template="layout/display.xhtml">
+            <ui:define name="label">Art todos</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.artTodos}"/>
+        </s:decorate>
+
+        <s:decorate id="artEspecif" template="layout/display.xhtml">
+            <ui:define name="label">Art especif</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.artEspecif}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{accionInconstDetHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/AccionInconstDetEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty accionInconstDetFrom ? 'AccionInconstDetList' : accionInconstDetFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Accion inconst cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="accionInconstCabParent">
+
+        <h:outputText value="There is no accionInconstCab associated with this accionInconstDet."
+                   rendered="#{accionInconstDetHome.instance.accionInconstCab == null}"/>
+
+        <rich:dataTable var="_accionInconstCab"
+                   value="#{accionInconstDetHome.instance.accionInconstCab}"
+                rendered="#{accionInconstDetHome.instance.accionInconstCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="accionInconstCabTable">
+            <h:column>
+                <f:facet name="header">Id accion cab</f:facet>
+                <h:outputText value="#{_accionInconstCab.idAccionCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empleado puesto id empleado puesto</f:facet>
+                <h:outputText value="#{_accionInconstCab.empleadoPuesto.idEmpleadoPuesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_accionInconstCab.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_accionInconstCab.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resultado</f:facet>
+                <h:outputText value="#{_accionInconstCab.resultado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_accionInconstCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_accionInconstCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_accionInconstCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_accionInconstCab.usuMod}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewaccionInconstCab"
+                     value="View"
+                      view="/AccionInconstCab.xhtml">
+                    <f:param name="accionInconstCabIdAccionCab"
+                           value="#{_accionInconstCab.idAccionCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

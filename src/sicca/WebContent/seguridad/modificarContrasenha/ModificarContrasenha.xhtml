@@ -1,0 +1,60 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="#{template}">
+
+<ui:define name="body">
+	
+	<h:form id="modifPassForm" styleClass="edit">
+    	<h1>#{messages.Usuario_modif_pass_}</h1>
+	        <rich:panel>
+	            <f:facet name="header">#{messages.Usuario_modif_pass_}</f:facet>
+	
+				<s:decorate id="codigoAnteriorUsuarioField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_modif_pass_viejo}</ui:define>
+	                <h:inputSecret id="codigoAnteriorUsuario" 
+	                			value="#{modificarPassFormController.passAnterior}" 
+	                			 size="60" 
+	                	     required="true">
+					</h:inputSecret>
+				</s:decorate>
+				<s:decorate id="codigoNuevoUsuarioField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_modif_pass_nueva}</ui:define>
+					<h:inputSecret id="codigoNuevoUsuario" required="true" size="60"
+						value="#{modificarPassFormController.passNuevo}">
+					</h:inputSecret>
+				</s:decorate>
+				<s:decorate id="codigoConfirmUsuarioField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_modif_pass_confirmar}</ui:define>
+					<h:inputSecret id="codigoConfirm" required="true" size="60"
+						value="#{modificarPassFormController.confirmPass}">
+					</h:inputSecret>
+				</s:decorate>
+				
+	            <div style="clear:both">
+	                <span class="required">*</span>
+	                #{messages.msg_required_fields}
+	        	</div>
+			</rich:panel>
+		
+	    	<div class="actionButtons">
+	    		<h:commandButton id="update"
+	                          value="#{messages.msg_update}"
+	                         action="#{modificarPassFormController.save()}"
+	                         onclick="return confirm('#{messages.msg_confirm_update}');"/>
+	                         
+		        <s:button view="#{from}"
+		                    id="cancel"
+		                 value="Volver"
+		                 propagation="none"/>
+		    </div>
+		</h:form>
+</ui:define>
+
+</ui:composition>

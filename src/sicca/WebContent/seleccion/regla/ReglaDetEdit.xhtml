@@ -1,0 +1,219 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU510_titulo}</h1>
+		<h:form id="reglaCab" styleClass="edit">
+
+			<rich:panel id="panelCarga">
+				<f:facet name="header">Cargar Detalle de Regla</f:facet>
+
+				<fieldset id="fieldSetReglaCab"><legend>Regla</legend> <h:panelGrid
+					columns="1">
+
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU510_descripcion}</ui:define>
+						<h:inputTextarea id="descripcion" cols="80" rows="2"
+							disabled="true" value="#{reglaCabHome.instance.descripcion}" />
+					</s:decorate>
+
+				</h:panelGrid> <h:panelGrid columns="2">
+					<s:decorate id="fechaVigenciaDesdeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU510_fecha_vigencia_desde}</ui:define>
+						<rich:calendar id="fechaVigenciaDesde" disabled="true"
+							value="#{reglaCabHome.instance.fechaVigenciaDesde}"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+
+
+					<s:decorate id="fechaVigenciaHastaField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU510_fecha_vigencia_hasta}</ui:define>
+						<rich:calendar id="fechaVigenciaHasta" disabled="true"
+							value="#{reglaCabHome.instance.fechaVigenciaHasta}"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+				<br />
+
+				<fieldset id="fieldSetReglaDet"><legend>Detalle
+				de la Regla</legend> <h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU510_puestos}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="puestos" styleClass="numeric"
+							value="#{admReglaDetalleFC.cantVacancia}" size="10">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{admReglaDetalleFC.calcularRelacion()}"
+								reRender="relacion" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU510_postulantes}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="postulantes" styleClass="numeric"
+							value="#{admReglaDetalleFC.cantPostulantes}" size="10">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{admReglaDetalleFC.calcularRelacion()}"
+								reRender="relacion" />
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU510_relacion}
+						</ui:define>
+						<h:inputText id="relacion" styleClass="numeric"
+							value="#{admReglaDetalleFC.cantRelacion}" size="10"
+							disabled="true">
+
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU510_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="2"
+							 value="#{admReglaDetalleFC.reglaDet.observacion}">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+
+					<s:decorate id="activoField" template="/layout/edit.xhtml" rendered="#{admReglaDetalleFC.isEdit}">
+						<ui:define name="label">#{messages.CU510_activo}</ui:define>
+						<h:selectBooleanCheckbox
+							value="#{admReglaDetalleFC.reglaDet.activo}" />
+					</s:decorate>
+
+				</h:panelGrid></fieldset>
+
+				<rich:panel id="panelBotones" style="border:none;">
+					<div class="actionButton"><a:commandButton id="agregar"
+						value="Agregar" rendered="#{!admReglaDetalleFC.isEdit}"
+						action="#{admReglaDetalleFC.agregarDetalle()}"
+						reRender="panelCarga,panelBotones,panelResultadoDetalle" /> <a:commandButton
+						id="limpiar" value="Limpiar"
+						rendered="#{!admReglaDetalleFC.isEdit}"
+						action="#{admReglaDetalleFC.limpiarCamposDatos()}"
+						reRender="panelCarga,panelBotones" /> <a:commandButton
+						id="actualizar" value="Actualizar"
+						rendered="#{admReglaDetalleFC.isEdit}"
+						action="#{admReglaDetalleFC.actualizarDetalle()}"
+						reRender="panelCarga,panelBotones,panelResultadoDetalle" /> <a:commandButton
+						id="cancel" value="Cancelar"
+						rendered="#{admReglaDetalleFC.isEdit}"
+						action="#{admReglaDetalleFC.cancelarEdit()}"
+						reRender="panelCarga,panelBotones" /></div>
+
+				</rich:panel>
+				<rich:panel id="panelResultadoDetalle">
+					<f:facet name="header">Detalle de Regla (#{admReglaDetalleFC.listaReglaDets.size()})</f:facet>
+					<div class="results" id="tbldetList"
+						style="FONT-SIZE: medium; overflow: scroll; width: 1000px; HEIGHT: 230px">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty admReglaDetalleFC.listaReglaDets}" /> <rich:dataTable
+						id="itemsList" var="_items" first="0"
+						value="#{admReglaDetalleFC.listaReglaDets}" rowKeyVar="rowNr"
+						rendered="#{admReglaDetalleFC.listaReglaDets.size() > 0}">
+						<h:column>
+							<f:facet name="header">
+							Cant. Puestos
+						</f:facet>
+							<h:outputText value="#{_items.cantVacancias}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU510_postulantes}
+						</f:facet>
+							<h:outputText value="#{_items.cantPostulantes}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							Rel. Puesto/Vac.
+						</f:facet>
+							<h:outputText value="#{_items.relacionPuestoVac}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU510_obs}
+						</f:facet>
+
+
+							<h:outputText value="#{_items.observacion}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU510_activo}
+						</f:facet>
+
+							<h:selectBooleanCheckbox value="#{_items.activo}" disabled="true" />
+						</h:column>
+
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<a:commandLink value="Editar"
+								action="#{admReglaDetalleFC.editar(rowNr)}"
+								reRender="panelCarga,panelBotones" />
+
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" action="#{admReglaDetalleFC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/regla/ReglaCabList.xhtml" /></div>
+
+			<h:panelGrid columns="2">
+				<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+					rendered="#{reglaCabHome.managed}">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText id="usuAlta" value="#{reglaCabHome.instance.usuAlta}" />
+				</s:decorate>
+				<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+					rendered="#{reglaCabHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText id="fechaAlta"
+						value="#{reglaCabHome.instance.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+				<s:decorate id="usuModField" template="/layout/edit.xhtml"
+					rendered="#{reglaCabHome.managed}">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText id="usuMod" value="#{reglaCabHome.instance.usuMod}" />
+				</s:decorate>
+				<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+					rendered="#{reglaCabHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+					<h:outputText id="fechaMod"
+						value="#{reglaCabHome.instance.fechaMod}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,228 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+         xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU576_titulo_list}</h1>
+    <h:form id="alertasEvalSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel  label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+			<h:panelGrid columns="1">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('/evaluacionDesempenho/configurarAlerta/AlertasEvalList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('/evaluacionDesempenho/configurarAlerta/AlertasEvalList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('/evaluacionDesempenho/configurarAlerta/AlertasEvalList')}" />
+						</s:decorate>
+					</a:region>
+			</h:panelGrid>
+            
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+       <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResulado,links"
+				action="#{alertasEvalListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+				<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{alertasEvalListFC.searchAll()}"
+				reRender="panelBusqueda,panelResulado,links" >
+				<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+        </div>
+
+   
+
+    <rich:panel id="panelResulado">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty alertasEvalListFC.alertasEvalLista.size() ? 0 : (alertasEvalList.paginated ? alertasEvalList.resultCount : alertasEvalListFC.alertasEvalLista.size)})</f:facet>
+    <div class="results" id="alertasEvalList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty alertasEvalListFC.alertasEvalLista}"/>
+
+    <rich:dataTable id="alertasEvalList"
+                var="_alertasEval"
+              value="#{alertasEvalListFC.alertasEvalLista}"
+           rendered="#{not empty alertasEvalListFC.alertasEvalLista}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{alertasEvalList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.gral_oee}"/>
+                    <ui:param name="propertyPath" value="alertasEval.idAlertasEval"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_alertasEval.configuracionUoCab.denominacionUnidad}"/>
+        </h:column>
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{alertasEvalList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU576_periodo}"/>
+                    <ui:param name="propertyPath" value="alertasEval.periodo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_alertasEval.periodo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{alertasEvalList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU576_alerta_activa}"/>
+                    <ui:param name="propertyPath" value="alertasEval.activarAlerta"/>
+                </ui:include>
+            </f:facet>
+            <h:selectBooleanCheckbox value="#{_alertasEval.activarAlerta}" disabled="true"/>
+        </h:column>
+      
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'evaluacionDesempenho/configurarAlerta/AlertasEval' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : ''}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="alertasEvalViewId">
+                <f:param name="alertasEvalIdAlertasEval"
+                        value="#{_alertasEval.idAlertasEval}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/evaluacionDesempenho/configurarAlerta/AlertasEvalEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="alertasEvalEdit"
+                rendered="#{empty from}">
+                <f:param name="alertasEvalIdAlertasEval"
+                        value="#{_alertasEval.idAlertasEval}"/>
+            </s:link>
+              #{' '}
+            <h:commandLink   id="del"
+            reRender="panelResultado,links" rendered="#{empty ver}"
+                          value="#{messages.CU471_eliminar}"
+                        action="#{alertasEvalListFC.eliminar(_alertasEval)}"
+                          onclick="return confirm('#{messages.CU576_eliminar}');"
+                      />
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+	 </h:form>
+	<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+            rendered="#{alertasEvalList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+            rendered="#{alertasEvalList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{alertasEvalList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+            rendered="#{alertasEvalList.nextExists}"
+               value="#{messages.msg_list_next_page}  #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{alertasEvalList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+            rendered="#{alertasEvalList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{alertasEvalList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/evaluacionDesempenho/configurarAlerta/AlertasEvalEdit.xhtml"
+                    id="create"
+           propagation="none" includePageParams="false"
+                 value="#{messages.msg_create_male}">
+            <f:param name="alertasEvalIdAlertasEval"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

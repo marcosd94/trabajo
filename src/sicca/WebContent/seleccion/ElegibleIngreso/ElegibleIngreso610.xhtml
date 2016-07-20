@@ -1,0 +1,265 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU610_title}</h1>
+		<a:outputPanel id="idPanelModal" ajaxRendered="true">
+
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{ajustesPuestoPostConcuFC.indexObs!=null}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU544_cargarObs}</f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate id="observacionField" template="/layout/edit.xhtml">
+
+								<h:inputTextarea id="observacion" cols="80" rows="20"
+									value="#{ajustesPuestoPostConcuFC.observacion}" />
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="idBtnAceptar" value="Guardar"
+						action="#{ajustesPuestoPostConcuFC.saveObs()}" /> <a:commandButton
+						id="idBtnCancelObs" value="Cancelar"
+						action="#{ajustesPuestoPostConcuFC.limpiarObs()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}				
+			</script>
+		</a:outputPanel>
+		<h:panelGrid columns="1">
+
+			<rich:panel id="panelParametro">
+				<f:facet name="header">
+				</f:facet>
+				<h:panelGrid columns="3" id="idPanelCampos">
+
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="70"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+
+					<a:outputPanel>
+
+					</a:outputPanel>
+				</h:panelGrid>
+
+			</rich:panel>
+			<a:form>
+				<rich:simpleTogglePanel id="idPanelGrilla1"
+					label="#{messages.CU610_grilla1_title} (#{elegibleIngreso610FC.lGrilla1.size()})"
+					switchType="ajax">
+
+					<rich:extendedDataTable var="_var" rowKeyVar="rowKey1"
+						enableContextMenu="false" height="100px"
+						value="#{elegibleIngreso610FC.lGrilla1}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="33%" id="COL1">
+							<f:facet name="header">#{messages.CU544_codigoPuesto}</f:facet>
+							<h:outputText
+								value="#{detallePlantaCargoListFormController.obtenerCodigoPuesto(_var.plantaCargoDet)}" />
+						</rich:column>
+
+						<rich:column width="33%">
+							<f:facet name="header">#{messages.CU544_puesto}</f:facet>
+							<h:outputText value="#{_var.plantaCargoDet.descripcion}" />
+						</rich:column>
+
+
+						<rich:column width="33%">
+							<f:facet name="header">Acciones</f:facet>
+							<h:selectBooleanCheckbox value="#{_var.selecciono}">
+								<a:support event="onchange"
+									reRender="idPanelGrilla1,idPanelGrilla2"
+									action="#{elegibleIngreso610FC.checkGrilla('GRILLA1',rowKey1)}"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+					</rich:extendedDataTable>
+				</rich:simpleTogglePanel>
+			</a:form>
+
+			<a:form>
+				<rich:simpleTogglePanel id="idPanelGrilla2"
+					label="#{messages.CU610_grilla2Title} (#{elegibleIngreso610FC.lGrilla2.size()})"
+					switchType="ajax">
+					<rich:extendedDataTable var="_var2" rowKeyVar="rowKey2"
+						enableContextMenu="false" height="100px"
+						value="#{elegibleIngreso610FC.lGrilla2}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="33%" id="COL1">
+							<f:facet name="header">#{messages.CU610_codigoPuesto}</f:facet>
+							<h:outputText
+								value="#{detallePlantaCargoListFormController.obtenerCodigoPuesto(_var2.plantaCargoDet)}" />
+						</rich:column>
+
+						<rich:column width="33%">
+							<f:facet name="header">#{messages.CU610_denoPuesto}</f:facet>
+							<h:outputText value="#{_var.plantaCargoDet.descripcion}" />
+						</rich:column>
+
+
+						<rich:column width="33%">
+							<f:facet name="header">Acciones</f:facet>
+							<h:selectBooleanCheckbox value="#{_var2.selecciono2}">
+								<a:support event="onchange"
+									reRender="idPanelGrilla2,idPanelGrillaIntermedia,idPanelGrilla3"
+									action="#{elegibleIngreso610FC.checkGrilla('GRILLA2',rowKey2)}"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+					</rich:extendedDataTable>
+
+				</rich:simpleTogglePanel>
+			</a:form>
+			<rich:panel id="idPanelGrillaIntermedia">
+				<f:facet name="header">
+				</f:facet>
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU269_concurso}</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{elegibleIngreso610FC.concurso}" style=" width : 250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU269_grupoPuestos}</ui:define>
+						<h:inputText id="usuMod" disabled="true"
+							value="#{elegibleIngreso610FC.grupo}" style=" width : 250px;" />
+					</s:decorate>
+
+				</h:panelGrid>
+			</rich:panel>
+			<a:form>
+
+				<rich:simpleTogglePanel id="idPanelGrilla3"
+					rendered="#{ajustesPuestoPostConcuFC.habPanel()}"
+					label="#{messages.CU610_grilla3Title} (#{elegibleIngreso610FC.lGrilla3.size()})"
+					switchType="ajax">
+					<rich:extendedDataTable var="_var3" rowKeyVar="rowKey3"
+						enableContextMenu="false" height="100px"
+						value="#{elegibleIngreso610FC.lGrilla3}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="15%" id="COL1">
+							<f:facet name="header">#{messages.CU544_codigoPostulante}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.codPostulante(_var3.postulacion)}" />
+						</rich:column>
+
+						<rich:column width="20%" id="COL2">
+							<f:facet name="header">#{messages.CU544_personNombre}</f:facet>
+							<h:outputText value="#{_var3.postulacion.persona.nombres}" />
+						</rich:column>
+
+						<rich:column width="20%">
+							<f:facet name="header">#{messages.CU544_personApellidos}</f:facet>
+							<h:outputText value="#{_var3.postulacion.persona.apellidos}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_puntaje}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.calcPuntaje(_var3.postulacion)}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU610_seleccionar}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var3.seleccionado}">
+								<a:support event="onchange" reRender="idPanelGrilla3"
+									action="#{elegibleIngreso610FC.checkGrilla('GRILLA3',rowKey2)}"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="25%">
+							<f:facet name="header">#{messages.CU610_obs}</f:facet>
+							<h:inputTextarea value="#{_var3.obsEstado}"
+								style=" width : 164px; height : 51px;" />
+						</rich:column>
+					</rich:extendedDataTable>
+				</rich:simpleTogglePanel>
+			</a:form>
+		</h:panelGrid>
+		<h:form>
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" action="#{elegibleIngreso610FC.save()}" />
+			<s:button id="cancelAdd" value="#{messages.GENERICO_VOLVER}"
+				propagation="end"
+				view="/#{empty elegibleIngreso610FC.from?'home':from}.xhtml" /></div>
+		</h:form>
+
+		<script type="text/javascript">
+
+// Deshabilita los drag and drop
+
+/*Abiertas*/
+DnD_ExtSimpleDraggable_COL1.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL2.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL3.isDragEnabled=false;
+
+</script>
+
+
+
+	</ui:define>
+
+</ui:composition>

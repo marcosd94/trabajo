@@ -1,0 +1,129 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<rich:panel xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib" style=" width : 1000px; height : 500px;">
+	
+			
+	<h:panelGrid columns="3" style=" height : 100px; width : 900">
+						<a:region>
+							<s:decorate id="cptPadreField" template="/layout/edit.xhtml"
+								rendered="#{administrarCptFormController.tipo == 'especifico'}">
+								<ui:define name="label">CPT</ui:define>
+			                		<h:inputText id="denominacionCptPadre" required="true"
+									value="#{administrarCptFormController.cptPopUp.denominacion}"
+									size="50" disabled="true" />
+                			
+                			</s:decorate>
+						</a:region>
+
+						
+					
+						<a:region >
+							<s:decorate id="nivelField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_nivel}</ui:define>
+								<h:inputText id="nivel" required="true" size="10"
+									disabled="true" styleClass="numeric"
+									value="#{administrarCptFormController.cptPopUp.nivel}">	
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="TipoCceField" template="/layout/edit.xhtml">
+								<ui:define name="label" >Tipo CCE</ui:define>
+								<h:selectOneMenu  required="true"
+									id="tipoCce" disabled="true" style="width:175px;" 
+									value="#{administrarCptFormController.idTipoCcePopUp}">
+										<f:selectItems  value="#{tipoCcesSelectItems}" />				
+								</h:selectOneMenu>
+								
+																
+					</s:decorate></a:region>
+					<a:region>
+							<s:decorate id="gradoSalarialMinField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMin}<span
+										class="required">*</span>
+								</ui:define>
+								
+								<h:selectOneMenu id="gradoSalarialMin" style="width:20;"
+									disabled="true"
+									value="#{administrarCptFormController.idGradoSalarialMinPopUp}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" focus="gradoSalarialMaxField" />
+								</h:selectOneMenu>
+							</s:decorate>
+							</a:region>
+							<a:region>
+							<s:decorate id="gradoSalarialMaxField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMax}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoSalarialMax"  style="width:20;"
+									disabled="true"
+									value="#{administrarCptFormController.idGradoSalarialMaxPopUp}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+  
+						<a:region>
+							<s:decorate id="numeroField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_numero}</ui:define>
+								<h:inputText id="numero" disabled="true" required="true" size="10"
+									styleClass="numeric" 
+									value="#{administrarCptFormController.cptPopUp.numero}">
+									
+								</h:inputText>
+								#{' '}
+								
+							</s:decorate>
+						</a:region>
+
+						
+				</h:panelGrid>		
+			
+			
+			
+			
+			
+			<rich:tabPanel switchType="client" id="tagGeneral"
+				selectedTab="#{administrarCptFormController.selectedTab}"
+				style=" height : 336px;">
+				<rich:tab label="Tipo de Vinculación" id="tabNombramiento">
+					<a:include id="includeTab01Edit"
+						viewId="/planificacion/cpt/detalles/Tab1Detalles.xhtml" />
+				</rich:tab>
+
+				<rich:tab 
+					label="Contenido Funcional" id="tabContenidoFuncional">
+					<h:panelGrid columns="1">
+						<s:decorate id="btnField" template="/layout/edit.xhtml">
+							<a:commandButton id="showValoracionModalButton"
+								value="Ver Escala"
+								onclick="Richfaces.showModalPanel('valoracionMiniModal');" />
+						</s:decorate>
+
+						<a:include id="includeTab02Edit"
+							viewId="/planificacion/cpt/detalles/Tab2Detalles.xhtml" />
+
+					</h:panelGrid>
+				</rich:tab>
+			</rich:tabPanel>
+			
+			
+			
+			
+		
+		
+		
+</rich:panel>

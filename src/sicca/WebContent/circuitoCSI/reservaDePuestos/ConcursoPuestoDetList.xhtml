@@ -1,0 +1,460 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU30_title}</h1>
+		<h:form id="concursoPuestoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+				<h:panelGrid columns="4">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{reservaDePuestosCU682FC.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{reservaDePuestosCU682FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{reservaDePuestosCU682FC.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{reservaDePuestosCU682FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{reservaDePuestosCU682FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{reservaDePuestosCU682FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="40" disabled="true"
+							value="#{reservaDePuestosCU682FC.concurso.nombre}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate id="searchField" template="/layout/display.xhtml">
+						<ui:define name="label">Unidad Organizativa</ui:define>
+						<h:inputText id="codigo" size="10"
+							value="#{reservaDePuestosCU682FC.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{reservaDePuestosCU682FC.obtenerUnidadOrganizativaDep()}"
+								reRender="codigo,descripcion" />
+						</h:inputText>
+                #{' '}
+                <h:inputText id="descripcion" size="60" disabled="true"
+							value="#{reservaDePuestosCU682FC.configuracionUoDet.denominacionUnidad}" />
+                #{' '}
+                <a:commandButton id="search" eventsQueue="default"
+							image="/img/Buscar.png"
+							action="#{reservaDePuestosCU682FC.getUrlToPageSearch()}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate id="dptoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dpto" style="width : 250px;"
+							value="#{admPuestoEntidadConcursoFormController.idDpto}">
+							<f:selectItems
+								value="#{reservaDePuestosCU682FC.departamentosSelecItem}" />
+							<a:support event="onchange"
+								action="#{reservaDePuestosCU682FC.updateCiudad()}"
+								reRender="ciudad,barrio" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="cptField" template="/layout/display.xhtml">
+						<ui:define name="label">Tipo de CPT</ui:define>
+						<h:selectOneMenu id="cpt" style="width : 250px;"
+							value="#{reservaDePuestosCU682FC.idCpt}">
+							<f:selectItems value="#{cptsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+
+					<s:decorate id="ciudadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+						<h:selectOneMenu id="ciudad" style="width : 250px;"
+							value="#{reservaDePuestosCU682FC.idCiudad}">
+							<f:selectItems
+								value="#{reservaDePuestosCU682FC.ciudadSelecItem}" />
+							<a:support event="onchange"
+								action="#{reservaDePuestosCU682FC.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU30_modalidad}</ui:define>
+						<h:selectOneMenu id="modalidad" style="width : 250px;"
+							value="#{reservaDePuestosCU682FC.modalidadOcupacion}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.modalidadOcupacions}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="barrioField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+						<h:selectOneMenu id="barrio" style="width :250px;"
+							value="#{reservaDePuestosCU682FC.idBarrio}">
+							<f:selectItems
+								value="#{reservaDePuestosCU682FC.barrioSelecItem}" />
+							<a:support event="onchange" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="descripcion" template="/layout/display.xhtml">
+						<ui:define name="label">Denominación</ui:define>
+						<h:inputText id="denomin" size="50"
+							value="#{reservaDePuestosCU682FC.denominacion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons"><a:commandButton id="search"
+					value="#{messages['msg_list_search_button']}"
+					action="#{reservaDePuestosCU682FC.search()}"
+					reRender="panelResultado">
+
+				</a:commandButton> <a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{reservaDePuestosCU682FC.searchAll()}"
+					reRender="panelResultado, panelParametro">
+
+				</a:commandButton> <a:commandButton id="marcar" value="Marcar Todos"
+					action="#{reservaDePuestosCU682FC.marcarTodos()}"
+					reRender="panelResultado,panelParametro">
+				</a:commandButton> <a:commandButton id="desmarcar" value="Desmarcar Todos"
+					action="#{reservaDePuestosCU682FC.desmarcarTodos()}"
+					rendered="#{reservaDePuestosCU682FC.cantReservados > 0}"
+					reRender="panelResultado,panelParametro">
+				</a:commandButton></div>
+			</rich:simpleTogglePanel>
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">Puestos Sin Grupo (#{reservaDePuestosCU682FC.listaPlantaCargoDto.size()})</f:facet>
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty reservaDePuestosCU682FC.listaPlantaCargoDto}" />
+				<rich:dataTable id="concursoList" var="_dto" rowKeyVar="row"
+					value="#{reservaDePuestosCU682FC.listaPlantaCargoDto}"
+					rows="10"
+					rendered="#{not empty reservaDePuestosCU682FC.listaPlantaCargoDto}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.Ciudad_idDepartamento}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Persona_idCiudadDirecc}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.ciudad.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU212_tab1_localidad_dir}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.barrio.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.ConfiguracionUoDet_unidadOrganizativa}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU30_tipo_cpt}
+						</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.cpt.denominacion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU253_puesto}
+					</f:facet>
+						<h:outputText
+							value="#{reservaDePuestosCU682FC.obtenerCodigo(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Cpt_denominacion}
+					</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.PlantaCargoDet_estado}
+					</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.estadoCab.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_mod}
+					</f:facet>
+						<h:outputText value="Contratado"
+							rendered="#{_dto.plantaCargoDet.contratado}" />
+						<h:outputText value="Permanente"
+							rendered="#{_dto.plantaCargoDet.permanente}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_categoria} Modelo
+					</f:facet>
+						<h:outputText
+							value="#{reservaDePuestosCU682FC.obtenerCategoria(_dto.plantaCargoDet)}" />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_categoria} Reservada
+					</f:facet>
+						<h:outputText
+							value="#{reservaDePuestosCU682FC.obtenerCategoriaDistintoModelo(_dto.plantaCargoDet)}" />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_reservar}
+					</f:facet>
+						<h:selectBooleanCheckbox id="reservar" value="#{_dto.reservar}"
+							disabled="#{reservaDePuestosCU682FC.habilitarCategoria(_dto.plantaCargoDet)
+							or reservaDePuestosCU682FC.concursoFinalizado()}">
+							<a:support event="onclick"
+								reRender="panelResultado,panelParametro,panelBoton"
+								action="#{reservaDePuestosCU682FC.actualizarLista(row)}"
+								bypassUpdates="true" ajaxSingle="true" />
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+					#{' '}
+            		<s:link
+							view="/seleccion/asignarCategoria/AsignarCategoria.xhtml"
+							value="Asignar Categoria" propagation="none" id="categoria"
+							rendered="#{reservaDePuestosCU682FC.habilitarCategoria(_dto.plantaCargoDet) and !reservaDePuestosCU682FC.concursoFinalizado()}">
+							<f:param name="plantaCargoDetFrom"
+								value="circuitoCSI/reservaDePuestos/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{reservaDePuestosCU682FC.concurso.idConcurso}" />
+							<f:param name="fromConcurso"
+								value="#{reservaDePuestosCU682FC.fromConcurso}" />
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_dto.plantaCargoDet.idPlantaCargoDet}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{reservaDePuestosCU682FC.idAgr}" />
+							<f:param name="nroActividad"
+								value="#{reservaDePuestosCU682FC.nroActividad}" />
+						</s:link>#{' '}
+						<s:link
+							view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+							value="Ver Datos de Puesto" propagation="join"
+							id="plantaCargoDetVerId">
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_dto.plantaCargoDet.id}" />
+							<f:param name="plantaCargoDetFrom" value="ver" />
+							<f:param name="from"
+								value="circuitoCSI/reservaDePuestos/ConcursoPuestoDetList" />
+						</s:link>
+
+					</h:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="concursoList" id="sc2"
+					reRender="sc1"
+					rendered="#{reservaDePuestosCU682FC.listaPlantaCargoDto.size() > 10}" />
+				<h:outputLabel
+					value="Cant. de Puestos en Reserva : #{reservaDePuestosCU682FC.cantReservados}"
+					style="font-weight:bold"
+					rendered="#{reservaDePuestosCU682FC.listaPlantaCargoDto.size() > 0}" />
+
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="obs" cols="50"
+							value="#{reservaDePuestosCU682FC.obs}">
+							<f:validateLength maximum="250" />
+
+						</h:inputTextarea>
+					</s:decorate>
+					<a:commandButton id="guardar" value="Guardar"
+						action="#{reservaDePuestosCU682FC.save()}"
+						rendered="#{!reservaDePuestosCU682FC.concursoFinalizado()}"
+						reRender="panelResultado,panelParametro,panelBoton">
+					</a:commandButton>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelBoton" style="border:none">
+				<s:div styleClass="actionButtons">
+					<s:button
+						rendered="#{reservaDePuestosCU682FC.cantReservados > 0}"
+						view="/circuitoCSI/creacionDeGrupos/ConcursoPuestoAgrEdit.xhtml"
+						id="create" propagation="none" value="Nuevo Grupo"
+						includePageParams="false">
+						<f:param name="concursoPuestoAgrFrom"
+							value="circuitoCSI/reservaDePuestos/ConcursoPuestoDetList" />
+						<f:param name="concursoIdConcurso"
+							value="#{reservaDePuestosCU682FC.concurso.idConcurso}" />
+						<f:param name="fromConcurso"
+							value="#{reservaDePuestosCU682FC.fromConcurso}" />
+						<f:param name="idConcursoPuestoAgr"
+							value="#{reservaDePuestosCU682FC.idAgr}" />
+						<f:param name="nroActividad"
+							value="#{reservaDePuestosCU682FC.nroActividad}" />
+					</s:button>
+					<s:button
+						view="#{reservaDePuestosCU682FC.fromConcurso}"
+						id="volver" propagation="none" value="Volver"
+						includePageParams="false">
+
+					</s:button>
+				</s:div>
+			</rich:panel>
+			<rich:panel id="panelAgrupados">
+				<f:facet name="header">Puestos Agrupados (#{reservaDePuestosCU682FC.listaPuestosAgrupados.size()})</f:facet>
+				<div class="results" id="agrupadosList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty reservaDePuestosCU682FC.listaPuestosAgrupados}" />
+				<rich:dataTable id="agrupadosList" var="_agr" rowKeyVar="row"
+					value="#{reservaDePuestosCU682FC.listaPuestosAgrupados}"
+					rows="10"
+					rendered="#{not empty reservaDePuestosCU682FC.listaPuestosAgrupados}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.Ciudad_idDepartamento}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Persona_idCiudadDirecc}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.ciudad.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU212_tab1_localidad_dir}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.barrio.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.ConfiguracionUoDet_unidadOrganizativa}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU30_tipo_cpt}
+						</f:facet>
+						<h:outputText value="#{_agr.plantaCargoDet.cpt.denominacion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Cod. Grupo
+					</f:facet>
+						<h:outputText value="#{_agr.concursoPuestoAgr.codGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Cpt_denominacion}
+					</f:facet>
+						<h:outputText value="#{_agr.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_cant_puesto}
+					</f:facet>
+						<h:outputText value="#{_agr.cantidad}" />
+					</h:column>
+
+
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+#{' '}
+            		<s:link
+							view="/circuitoCSI/creacionDeGrupos/ConcursoPuestoAgrEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="none"
+							id="clasificadorUoEdit"
+							rendered="#{_agr.concursoPuestoAgr.idProcessInstance == null and 
+							!reservaDePuestosCU682FC.concursoFinalizado()}">
+							<f:param name="concursoPuestoAgrFrom"
+								value="circuitoCSI/reservaDePuestos/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{reservaDePuestosCU682FC.concurso.idConcurso}" />
+
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_agr.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromConcurso"
+								value="#{reservaDePuestosCU682FC.fromConcurso}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{reservaDePuestosCU682FC.idAgr}" />
+						</s:link>
+
+#{' '}
+            		<s:link
+							view="/circuitoCSI/creacionDeGrupos/ConcursoPuestoAgr.xhtml"
+							value="Ver" propagation="none" id="clasificadorUo">
+							<f:param name="concursoPuestoAgrFrom"
+								value="circuitoCSI/reservaDePuestos/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{reservaDePuestosCU682FC.concurso.idConcurso}" />
+
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_agr.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromConcurso"
+								value="#{reservaDePuestosCU682FC.fromConcurso}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{reservaDePuestosCU682FC.idAgr}" />
+
+						</s:link>
+
+					</h:column>
+				</rich:dataTable></div>
+				<rich:datascroller align="center" for="agrupadosList" maxPages="10"
+					id="scr2" reRender="scr1"
+					rendered="#{reservaDePuestosCU682FC.listaPuestosAgrupados.size() > 10}" />
+			</rich:panel>
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subRPT_CU239_Idioma" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="0.9575681974766541"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="idPersona" class="java.lang.Long"/>
+	<parameter name="whereExProfe" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+ Extract(day from EXPERIENCIA_LABORAL.FECHA_DESDE) || '/' ||
+ Extract(month from EXPERIENCIA_LABORAL.FECHA_DESDE) || '/' ||
+ Extract(year from EXPERIENCIA_LABORAL.FECHA_DESDE)||' ' AS Desde
+,	CASE WHEN Extract(year from EXPERIENCIA_LABORAL.FECHA_HASTA) IS NULL THEN 'HASTA LA FECHA'
+WHEN Extract(year from EXPERIENCIA_LABORAL.FECHA_HASTA) IS NOT NULL THEN
+    Extract(day from EXPERIENCIA_LABORAL.FECHA_HASTA) || '/' ||
+    Extract(month from EXPERIENCIA_LABORAL.FECHA_HASTA) || '/' ||
+    Extract(year from EXPERIENCIA_LABORAL.FECHA_HASTA)||' '  END  AS Hasta
+,	EXPERIENCIA_LABORAL.EMPRESA AS institucionEmpresa
+,	EXPERIENCIA_LABORAL.REFERENCIAS_LABORALES AS referenciasLaborales
+,	EXPERIENCIA_LABORAL.FUNCIONES_REALIZADAS AS descripcionBreve, EXPERIENCIA_LABORAL.puesto_cargo as puesto,
+CASE WHEN EXPERIENCIA_LABORAL.ESPECIFICA IS TRUE THEN 'EXPERIENCIA ESPECIFICA'
+WHEN EXPERIENCIA_LABORAL.GENERAL IS TRUE THEN 'EXPERIENCIA GENERAL' ELSE '' END AS EXPERIENCIA
+FROM seleccion.experiencia_laboral EXPERIENCIA_LABORAL
+$P!{whereExProfe}]]>
+	</queryString>
+	<field name="desde" class="java.lang.String"/>
+	<field name="hasta" class="java.lang.String"/>
+	<field name="institucionempresa" class="java.lang.String"/>
+	<field name="referenciaslaborales" class="java.lang.String"/>
+	<field name="descripcionbreve" class="java.lang.String"/>
+	<field name="puesto" class="java.lang.String"/>
+	<field name="experiencia" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="2" y="2" width="231" height="23" forecolor="#0F4229" backcolor="#999977"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C. EXPERIENCIA PROFESIONAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="219" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="2" y="126" width="552" height="23" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descripción breve de las funciones asignadas:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="2" y="148" width="552" height="66" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcionbreve}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="2" y="3" width="183" height="22" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.0" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+"Desde: "+$F{desde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="2" y="25" width="183" height="19" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.0" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.0" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+"Hasta: "+$F{hasta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Opaque" x="185" y="3" width="369" height="20" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.75" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.0" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+"Institución/Empresa: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-2" mode="Opaque" x="185" y="43" width="369" height="20" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.0" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.0" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+"Referencias Laborales:"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Opaque" x="185" y="23" width="369" height="20" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.0" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineStyle="Solid" lineColor="#006666"/>
+					<bottomPen lineWidth="0.0" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["   "+$F{institucionempresa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-2" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="185" y="63" width="369" height="20" isPrintWhenDetailOverflows="true" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.0" lineStyle="Double" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineStyle="Solid" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineStyle="Solid" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["   "+$F{referenciaslaborales}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" stretchType="RelativeToTallestObject" mode="Opaque" x="2" y="44" width="183" height="39" backcolor="#F29900"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#006666"/>
+					<topPen lineWidth="0.0" lineColor="#006666"/>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="2" y="83" width="552" height="23" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[     Puesto:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="2" y="105" width="552" height="20" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.75" lineColor="#006666"/>
+					<bottomPen lineWidth="0.75" lineColor="#006666"/>
+					<rightPen lineWidth="0.75" lineColor="#006666"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["  "+$F{puesto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

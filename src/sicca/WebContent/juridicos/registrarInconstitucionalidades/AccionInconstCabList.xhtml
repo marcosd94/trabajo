@@ -1,0 +1,228 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU453_titulo_list}</h1>
+		<h:form id="accionInconstCabSearch" styleClass="edit">
+			<h:outputText value="#{messages.CU453_msg}" style="color:red;"/>
+			<br />
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+
+				<h:panelGrid columns="1">
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU453_pais}</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{accionesInconstitucionalesListFC.idPais}"
+							style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU159_ci}</ui:define>
+
+						<h:inputText id="ci" size="20"
+							value="#{accionesInconstitucionalesListFC.persona.documentoIdentidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU159_nombre}</ui:define>
+						<h:inputText id="nombre" size="50"
+							value="#{accionesInconstitucionalesListFC.persona.nombres}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU159_apellido}</ui:define>
+						<h:inputText id="apellido" size="50"
+							value="#{accionesInconstitucionalesListFC.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate id="estadoField" template="/layout/edit.xhtml">
+						<ui:define name="label">Estado</ui:define>
+						<h:selectOneMenu id="estado"
+							value="#{accionesInconstitucionalesListFC.estado}">
+							<f:selectItem id="item1" itemLabel="TODOS" itemValue="T" />
+							<f:selectItem id="item2"
+								itemLabel="PENDIENTE CON MEDIDA CAUTELAR" itemValue="P" />
+							<f:selectItem id="item3" itemLabel="ACUERDO Y SENTENCIA"
+								itemValue="A" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">Fecha Desde
+						</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{accionesInconstitucionalesListFC.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label"> Fecha Hasta</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{accionesInconstitucionalesListFC.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+				
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParametro,lista,listaVirtual"
+				action="#{accionesInconstitucionalesListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" propagation="none"
+						value="Todos"/>
+			 <h:commandButton id="print"
+				value="#{messages.msg_list_search_print_button}"
+				action="#{accionesInconstitucionalesListFC.imprimirCU461()}" /></div>
+
+		</h:form>
+		<a:outputPanel id="listaVirtual">
+		<rich:panel id="panelVacio"
+			rendered="#{!accionesInconstitucionalesListFC.mostrarGrillaResultante}">
+			<f:facet name="header">#{messages['msg_list_search_results']}(0)</f:facet>
+
+			<div class="results" id="accionInconstCabList"><h:outputText
+				value="#{messages.msg_list_search_no_results}" /></div>
+		</rich:panel>
+	</a:outputPanel>
+	<a:outputPanel id="lista">
+		<rich:panel id="panelResultado"
+			rendered="#{accionesInconstitucionalesListFC.mostrarGrillaResultante}">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty accionInconstCabList.resultList ? 0 : (accionInconstCabList.paginated ? accionInconstCabList.resultCount : accionInconstCabList.resultList.size)})</f:facet>
+
+
+			<div class="results" id="accionInconstCabList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty accionInconstCabList.resultList}" /> <rich:dataTable
+				id="accionInconstCabList" var="_accionInconstCab"
+				value="#{accionInconstCabList.resultList}"
+				rendered="#{not empty accionInconstCabList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{accionInconstCabList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU440_ci}" />
+							<ui:param name="propertyPath"
+								value="accionInconstCab.empleadoPuesto.persona.documentoIdentidad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_accionInconstCab.empleadoPuesto.persona.documentoIdentidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{accionInconstCabList}" />
+							<ui:param name="propertyLabel" value="Nombre y Apellido" />
+							<ui:param name="propertyPath"
+								value="accionInconstCab.empleadoPuesto.persona.nombres" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_accionInconstCab.empleadoPuesto.persona.nombres} #{_accionInconstCab.empleadoPuesto.persona.apellidos}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{accionInconstCabList}" />
+							<ui:param name="propertyLabel" value="Estado" />
+							<ui:param name="propertyPath" value="accionInconstCab.estado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="PENDIENTE CON MEDIDA CAUTELAR"
+						rendered="#{_accionInconstCab.estado == 'P'}" />
+					<h:outputText value="ACUERDO Y SENTENCIA"
+						rendered="#{_accionInconstCab.estado == 'A'}" />
+				</h:column>
+
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{accionInconstCabList}" />
+							<ui:param name="propertyLabel" value="Fecha Alta" />
+							<ui:param name="propertyPath" value="accionInconstCab.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_accionInconstCab.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+
+					<s:link
+						view="/juridicos/registrarInconstitucionalidades/AccionInconstCabEdit.xhtml"
+						value="Editar" propagation="none" id="accionInconstCabEdit"
+						rendered="#{accionesInconstitucionalesListFC.mostrarLinkEditar(_accionInconstCab)}">
+						<f:param name="accionInconstCabIdAccionCab"
+							value="#{_accionInconstCab.idAccionCab}" />
+					</s:link>
+					     #{' '}
+					       <s:link
+						view="/juridicos/registrarInconstitucionalidades/AccionInconstCab.xhtml"
+						value="Ver" propagation="none" id="accionInconstCabVer">
+						<f:param name="accionInconstCabIdAccionCab"
+							value="#{_accionInconstCab.idAccionCab}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+</a:outputPanel>
+		<div class="tableControl"><s:link
+			view="/juridicos/registrarInconstitucionalidades/AccionInconstCabList.xhtml"
+			rendered="#{accionInconstCabList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link
+			view="/juridicos/registrarInconstitucionalidades/AccionInconstCabList.xhtml"
+			rendered="#{accionInconstCabList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{accionInconstCabList.previousFirstResult}" />
+		</s:link> <s:link
+			view="/juridicos/registrarInconstitucionalidades/AccionInconstCabList.xhtml"
+			rendered="#{accionInconstCabList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{accionInconstCabList.nextFirstResult}" />
+		</s:link> <s:link
+			view="/juridicos/registrarInconstitucionalidades/AccionInconstCabList.xhtml"
+			rendered="#{accionInconstCabList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{accionInconstCabList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button
+				view="/juridicos/registrarInconstitucionalidades/AccionInconstCabEdit.xhtml"
+				id="create" propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="accionInconstCabIdAccionCab" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

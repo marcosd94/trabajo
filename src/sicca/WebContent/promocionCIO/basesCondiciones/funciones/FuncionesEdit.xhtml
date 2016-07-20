@@ -1,0 +1,216 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Contenido Funcional</h1>
+
+		<rich:modalPanel id="valoracionMiniModal" width="550" height="350"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">#{messages.Tab02_Title_Popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab1">
+					<div style="clear: both; overflow: auto; HEIGHT: 250px"><rich:dataTable
+						id="tablaPopupTab2" cellpadding="0" cellspacing="0" width="600"
+						border="0" var="var"
+						value="#{funcionComisionFormController.listaValoracion}">
+
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column rowspan="2" width="350px">
+									<h:outputText value="#{messages.Tab02_Tipo}" />
+								</rich:column>
+								<rich:column colspan="3" width="150px">
+									<h:outputText value="#{messages.Tab02_Escalas}" />
+								</rich:column>
+								<rich:column breakBefore="true">
+									<h:outputText value="#{messages.Tab02_Descripcion}" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Desde}" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Hasta}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column colspan="4" style="background-color:lightgrey;"
+							width="50px">
+							<h:outputText value="#{var.descripcion}" />
+						</rich:column>
+						<rich:subTable var="detalle" value="#{funcionComisionFormController.traerValorNivelOrgs(var.idContenidoFuncional)}"
+							rowKeyVar="subRow">
+							<rich:column>
+							</rich:column>
+							<rich:column width="100px;">
+								<h:outputText value="#{detalle.descripcion}" size="50" />
+							</rich:column>
+							<rich:column width="100px;" style="text-align: center;">
+								<h:outputText value="#{detalle.desde}" size="50" />
+							</rich:column>
+							<rich:column width="100px;" style="text-align: center;">
+								<h:outputText value="#{detalle.hasta}" />
+							</rich:column>
+						</rich:subTable>
+					</rich:dataTable></div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="cancel_tap03" value="Cancelar" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('valoracionMiniModal')" /></div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<h:form id="funciones" styleClass="edit">
+			<h:panelGrid columns="1">
+				<rich:panel style="border:none;">
+					<table align="right">
+						<tr>
+							<td><s:decorate id="nivelField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_nivel}</ui:define>
+								<h:inputText
+									value="#{funcionComisionFormController.nivelEntidad.nenNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="entidadField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_entidad}</ui:define>
+								<h:inputText
+									value="#{funcionComisionFormController.sinEntidad.entNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="concursoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_concurso}</ui:define>
+								<h:inputText
+									value="#{funcionComisionFormController.concurso.nombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+							<td><s:decorate id="tipoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_tipo}</ui:define>
+								<h:inputText
+									value="#{funcionComisionFormController.concurso.datosEspecificosTipoConc.descripcion}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="puestoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_puesto}</ui:define>
+								<h:inputText
+									value="#{funcionComisionFormController.concursoPuestoAgr.descripcionGrupo}"
+									disabled="true" size="60" />
+							</s:decorate></td>
+						</tr>
+					</table>
+				</rich:panel>
+
+				<rich:panel style="border:none;">
+
+
+
+					<rich:panel style="width : 900px;" id="panelContenido">
+						<f:facet name="header">Cargar Contenido Funcional</f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate id="btnField" template="/layout/edit.xhtml">
+								<a:commandButton id="showValoracionModalButton"
+									value="Ver Escala" reRender="valoracionMiniModal"
+									action="#{funcionComisionFormController.buscarValoracion()}"
+									oncomplete="#{rich:component('valoracionMiniModal')}.show()" />
+							</s:decorate>
+
+							<s:decorate id="msgField" template="/layout/edit.xhtml">
+								<h:outputText id="msg"
+									value="#{funcionComisionFormController.mensaje}"
+									style="color:red;" />
+							</s:decorate>
+
+						</h:panelGrid>
+						<div style="overflow: auto; HEIGHT: 450px;"><rich:dataTable
+							id="tabla" cellpadding="0" cellspacing="0" width="700" border="0"
+							var="record"
+							value="#{funcionComisionFormController.listaFuncionesDTO}"
+							rowKeyVar="row">
+
+							<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column rowspan="1" width="30px">
+						<h:outputText value="#{messages.Tab02_Contenido_Funcional}" />
+					</rich:column>
+					<rich:column colspan="1" width="30px">
+						<h:outputText value="#{messages.Tab02_Puntaje}" />
+					</rich:column>
+					<rich:column colspan="1" width="660px">
+						<h:outputText value="#{messages.Tab02_Descripcion}" />
+					</rich:column>
+					
+					
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column colspan="1" width="30px">
+
+				<h:outputText value="#{record.contenidoFuncional.descripcion}" />
+
+			</rich:column>
+			<rich:column colspan="1" width="30px">
+
+				<h:inputText value="#{record.puntaje}" size="15"   style="background-color:lightgrey;" disabled="#{!funcionComisionFormController.habilitar}"
+					styleClass="numeric" >
+
+				</h:inputText>
+
+			</rich:column>
+			
+				
+				<rich:column>
+					<h:inputTextarea value="#{record.listaDetDescripContFuncional.get(0).descripcion}" size="140" disabled="#{!funcionComisionFormController.habilitar}"
+						cols="140"
+                        rows="6"
+						 style="background-color:lightgrey;"
+						maxlength="3000" >
+						
+				<f:validateLength maximum="3000" />		
+				</h:inputTextarea>
+
+				</rich:column>
+						</rich:dataTable></div>
+					</rich:panel>
+
+				</rich:panel>
+			</h:panelGrid>
+
+			<h:panelGrid columns="3">
+				<h:commandButton id="save" value="#{messages.msg_save}"
+					action="#{funcionComisionFormController.guardar()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					rendered="#{funcionComisionFormController.habilitar and funcionComisionFormController.listaAux.size() == 0}" />
+
+				<h:commandButton id="updated" value="#{messages.msg_update}"
+					action="#{funcionComisionFormController.updated()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+					rendered="#{funcionComisionFormController.habilitar and funcionComisionFormController.listaAux.size() > 0}" />
+				<s:button id="cancelEdit" value="Volver"
+					propagation="nest"
+					view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+			</h:panelGrid>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

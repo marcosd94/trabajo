@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+      login-required="true">
+      
+	<action execute="#{detalleConfUoFormController.init()}" on-postback="false"/>
+	<param name="configuracionUoCabIdConfiguracionUo" value="#{detalleConfUoFormController.codConfCab}"/>
+	<param name="configuracionUoDetIdConfiguracionUoDetPadre" value="#{detalleConfUoFormController.idConfiguracionPadre}"/>
+
+   <begin-conversation flush-mode="MANUAL" join="true"/>
+
+   <action execute="#{configuracionUoDetHome.wire}"/>
+
+   <param name="configuracionUoDetFrom"/>
+   <param name="configuracionUoDetIdConfiguracionUoDet" value="#{configuracionUoDetHome.configuracionUoDetIdConfiguracionUoDet}"/>
+   
+   <param name="clasificadorUoIdClasificadorUo" value="#{detalleConfUoFormController.idClasificadorUo}"/>
+
+
+   <navigation from-action="#{detalleConfUoFormController.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml">
+         	<param name="configuracionUoCabIdConfiguracionUo" value="#{detalleConfUoFormController.codConfCab}"/>
+         </redirect>
+      </rule>
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml">
+         	<param name="configuracionUoCabIdConfiguracionUo" value="#{detalleConfUoFormController.codConfCab}"/>
+         </redirect>
+      </rule>
+      <rule if-outcome="irAProceso">
+         <end-conversation/>
+         <redirect view-id="/planificacion/procesoGestion/ProcesoGestionEdit.xhtml">
+         	<param name="configuracionUoDetIdConfiguracionUoDet" value="#{detalleConfUoFormController.configuracionUoDet.idConfiguracionUoDet}" />
+         </redirect>
+      </rule>
+   </navigation>
+
+  <navigation from-action="#{configuracionUoDetHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"/>
+      </rule>
+   </navigation>
+
+	<restrict>#{identity.hasRole('configuracionUoDet_edit')}</restrict>
+</page>

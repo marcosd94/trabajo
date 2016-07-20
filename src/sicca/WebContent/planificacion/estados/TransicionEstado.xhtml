@@ -1,0 +1,185 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Transicion estado Details</f:facet>
+
+        <s:decorate id="idTrancisionEstado" template="layout/display.xhtml">
+            <ui:define name="label">Id trancision estado</ui:define>
+            <h:outputText value="#{transicionEstadoHome.instance.idTrancisionEstado}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{transicionEstadoHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{transicionEstadoHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{transicionEstadoHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{transicionEstadoHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/TransicionEstadoEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty transicionEstadoFrom ? 'TransicionEstadoList' : transicionEstadoFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Estado cab by id estado cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="estadoCabByIdEstadoCabParent">
+
+        <h:outputText value="There is no estadoCabByIdEstadoCab associated with this transicionEstado."
+                   rendered="#{transicionEstadoHome.instance.estadoCabByIdEstadoCab == null}"/>
+
+        <rich:dataTable var="_estadoCab"
+                   value="#{transicionEstadoHome.instance.estadoCabByIdEstadoCab}"
+                rendered="#{transicionEstadoHome.instance.estadoCabByIdEstadoCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="estadoCabByIdEstadoCabTable">
+            <h:column>
+                <f:facet name="header">Id estado cab</f:facet>
+                <h:outputText value="#{_estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_estadoCab.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_estadoCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_estadoCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_estadoCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_estadoCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_estadoCab.activo}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewestadoCab"
+                     value="View"
+                      view="/EstadoCab.xhtml">
+                    <f:param name="estadoCabIdEstadoCab"
+                           value="#{_estadoCab.idEstadoCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Estado cab by posible estado</h:panelGroup>
+        </f:facet>
+    <div class="association" id="estadoCabByPosibleEstadoParent">
+
+        <h:outputText value="There is no estadoCabByPosibleEstado associated with this transicionEstado."
+                   rendered="#{transicionEstadoHome.instance.estadoCabByPosibleEstado == null}"/>
+
+        <rich:dataTable var="_estadoCab"
+                   value="#{transicionEstadoHome.instance.estadoCabByPosibleEstado}"
+                rendered="#{transicionEstadoHome.instance.estadoCabByPosibleEstado != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="estadoCabByPosibleEstadoTable">
+            <h:column>
+                <f:facet name="header">Id estado cab</f:facet>
+                <h:outputText value="#{_estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_estadoCab.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_estadoCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_estadoCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_estadoCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_estadoCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_estadoCab.activo}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewestadoCab"
+                     value="View"
+                      view="/EstadoCab.xhtml">
+                    <f:param name="estadoCabIdEstadoCab"
+                           value="#{_estadoCab.idEstadoCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

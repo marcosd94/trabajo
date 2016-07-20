@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml" concurrent-request-timeout="500000"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('plantaCargoDet_puestos_edit')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{plantaCargoDetHome.wire}"/>
+
+ <action execute="#{administrarPuestosTrabajoFormController.initPromocionSalarial()}" on-postback="false"/>
+ <param name="plantaCargoDetFrom" value="#{administrarPuestosTrabajoFormController.plantaCargoDetFrom}"/>
+ <param name="plantaCargoDetIdPlantaCargoDet" value="#{administrarPuestosTrabajoFormController.idPromocionSalarial}"/>
+ <param name="sinAnxIdAnx" value="#{administrarPuestosTrabajoFormController.idSinAnx}"/>
+ <param name="configuracionUoDetIdConfiguracionUoDet" value="#{administrarPuestosTrabajoFormController.idBusqUnOrgDep}"/>
+ <param name="cptIdCpt" value="#{administrarPuestosTrabajoFormController.idCptFromList}"/>
+ <param name="from" value="#{administrarPuestosTrabajoFormController.elFrom}"/>
+ <param name="isEdit" value="#{administrarPuestosTrabajoFormController.isEdit}"/>
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{administrarPuestosTrabajoFormController.idGrupo}"/>
+ <navigation from-action="#{administrarPuestosTrabajoFormController.replicarPuestos()}">
+  <rule if-outcome="persisted">
+   <end-conversation/>
+   <redirect view-id="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml"/>
+  </rule>
+ </navigation>
+ <navigation from-action="#{plantaCargoDetHome.remove}">
+  <rule if-outcome="removed">
+   <end-conversation/>
+   <redirect view-id="/planificacion/plantaCargoDet/PlantaCargoDetList.xhtml"/>
+  </rule>
+ </navigation>
+ 
+   <restrict>#{identity.hasRole('edit_puestos_trabajo')}</restrict>
+</page>

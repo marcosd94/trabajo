@@ -1,0 +1,198 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="accionInconstDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{accionInconstDetHome.managed ? 'Edit' : 'Add'} Accion inconst det</f:facet>
+
+
+            <s:decorate id="idAccionDetField" template="layout/edit.xhtml">
+                <ui:define name="label">Id accion det</ui:define>
+                <h:inputText id="idAccionDet"
+                       required="true"
+                       disabled="#{accionInconstDetHome.managed}"
+                          value="#{accionInconstDetHome.instance.idAccionDet}">
+                    <a:support event="onblur" reRender="idAccionDetField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="idDatosEspecifLeyField" template="layout/edit.xhtml">
+                <ui:define name="label">Id datos especif ley</ui:define>
+                <h:inputText id="idDatosEspecifLey"
+                          value="#{accionInconstDetHome.instance.idDatosEspecifLey}">
+                    <a:support event="onblur" reRender="idDatosEspecifLeyField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="otraLeyField" template="layout/edit.xhtml">
+                <ui:define name="label">Otra ley</ui:define>
+                <h:inputText id="otraLey"
+                           size="100"
+                      maxlength="100"
+                          value="#{accionInconstDetHome.instance.otraLey}">
+                    <a:support event="onblur" reRender="otraLeyField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="artTodosField" template="layout/edit.xhtml">
+                <ui:define name="label">Art todos</ui:define>
+                <h:selectBooleanCheckbox id="artTodos"
+                                   required="true"
+                                      value="#{accionInconstDetHome.instance.artTodos}"/>
+            </s:decorate>
+
+
+            <s:decorate id="artEspecifField" template="layout/edit.xhtml">
+                <ui:define name="label">Art especif</ui:define>
+                <h:inputText id="artEspecif"
+                           size="100"
+                      maxlength="100"
+                          value="#{accionInconstDetHome.instance.artEspecif}">
+                    <a:support event="onblur" reRender="artEspecifField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{accionInconstDetHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{accionInconstDetHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{accionInconstDetHome.persist}"
+                       disabled="#{!accionInconstDetHome.wired}"
+                       rendered="#{!accionInconstDetHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{accionInconstDetHome.update}"
+                       rendered="#{accionInconstDetHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{accionInconstDetHome.remove}"
+                      immediate="true"
+                       rendered="#{accionInconstDetHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/AccionInconstDet.xhtml"
+                rendered="#{accionInconstDetHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty accionInconstDetFrom ? 'AccionInconstDetList' : accionInconstDetFrom}.xhtml"
+                rendered="#{!accionInconstDetHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Accion inconst cab *" labelClass="required">
+    <div class="association" id="accionInconstCabParent">
+
+        <h:outputText value="There is no accionInconstCab associated with this accionInconstDet."
+                   rendered="#{accionInconstDetHome.instance.accionInconstCab == null}"/>
+
+        <rich:dataTable var="_accionInconstCab"
+                   value="#{accionInconstDetHome.instance.accionInconstCab}"
+                rendered="#{accionInconstDetHome.instance.accionInconstCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="accionInconstCabTable">
+            <h:column>
+                <f:facet name="header">Id accion cab</f:facet>
+                <h:outputText value="#{_accionInconstCab.idAccionCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empleado puesto id empleado puesto</f:facet>
+                <h:outputText value="#{_accionInconstCab.empleadoPuesto.idEmpleadoPuesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_accionInconstCab.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_accionInconstCab.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resultado</f:facet>
+                <h:outputText value="#{_accionInconstCab.resultado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_accionInconstCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_accionInconstCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_accionInconstCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_accionInconstCab.usuMod}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{accionInconstDetHome.instance.accionInconstCab != null ? 'changeParent' : 'selectParent'}" value="#{accionInconstDetHome.instance.accionInconstCab != null ? 'Change' : 'Select'} accionInconstCab"
+                       view="/AccionInconstCabList.xhtml">
+                <f:param name="from" value="AccionInconstDetEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

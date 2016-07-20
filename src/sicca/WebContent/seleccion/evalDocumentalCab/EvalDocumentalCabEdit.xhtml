@@ -1,0 +1,448 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="evalDocumentalCab" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{evalDocumentalCabHome.managed ? 'Edit' : 'Add'} Eval documental cab</f:facet>
+
+
+            <s:decorate id="idEvalDocumentalCabField" template="layout/edit.xhtml">
+                <ui:define name="label">Id eval documental cab</ui:define>
+                <h:inputText id="idEvalDocumentalCab"
+                       required="true"
+                       disabled="#{evalDocumentalCabHome.managed}"
+                          value="#{evalDocumentalCabHome.instance.idEvalDocumentalCab}">
+                    <a:support event="onblur" reRender="idEvalDocumentalCabField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+
+            <s:decorate id="tipoField" template="layout/edit.xhtml">
+                <ui:define name="label">Tipo</ui:define>
+                <h:inputText id="tipo"
+                           size="20"
+                      maxlength="20"
+                          value="#{evalDocumentalCabHome.instance.tipo}">
+                    <a:support event="onblur" reRender="tipoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="aprobadoField" template="layout/edit.xhtml">
+                <ui:define name="label">Aprobado</ui:define>
+                <h:selectBooleanCheckbox id="aprobado"
+                                      value="#{evalDocumentalCabHome.instance.aprobado}"/>
+            </s:decorate>
+
+
+            <s:decorate id="evaluadoField" template="layout/edit.xhtml">
+                <ui:define name="label">Evaluado</ui:define>
+                <h:selectBooleanCheckbox id="evaluado"
+                                      value="#{evalDocumentalCabHome.instance.evaluado}"/>
+            </s:decorate>
+
+
+            <s:decorate id="fechaEvaluacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha evaluacion</ui:define>
+                <rich:calendar id="fechaEvaluacion"
+                          value="#{evalDocumentalCabHome.instance.fechaEvaluacion}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="observacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputTextarea id="observacion"
+                               cols="80"
+                               rows="3"
+                              value="#{evalDocumentalCabHome.instance.observacion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{evalDocumentalCabHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{evalDocumentalCabHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{evalDocumentalCabHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{evalDocumentalCabHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{evalDocumentalCabHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{evalDocumentalCabHome.persist}"
+                       disabled="#{!evalDocumentalCabHome.wired}"
+                       rendered="#{!evalDocumentalCabHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{evalDocumentalCabHome.update}"
+                       rendered="#{evalDocumentalCabHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{evalDocumentalCabHome.remove}"
+                      immediate="true"
+                       rendered="#{evalDocumentalCabHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/EvalDocumentalCab.xhtml"
+                rendered="#{evalDocumentalCabHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty evalDocumentalCabFrom ? 'EvalDocumentalCabList' : evalDocumentalCabFrom}.xhtml"
+                rendered="#{!evalDocumentalCabHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Comision seleccion det">
+    <div class="association" id="comisionSeleccionDetParent">
+
+        <h:outputText value="There is no comisionSeleccionDet associated with this evalDocumentalCab."
+                   rendered="#{evalDocumentalCabHome.instance.comisionSeleccionDet == null}"/>
+
+        <rich:dataTable var="_comisionSeleccionDet"
+                   value="#{evalDocumentalCabHome.instance.comisionSeleccionDet}"
+                rendered="#{evalDocumentalCabHome.instance.comisionSeleccionDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="comisionSeleccionDetTable">
+            <h:column>
+                <f:facet name="header">Id comision sel det</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion cab id comision sel</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id rol</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idRol}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Titular suplente</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.titularSuplente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id documento</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idDocumento}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Puesto</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.puesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documentos</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.documentos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Equipo tecnico</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.equipoTecnico}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalCabHome.instance.comisionSeleccionDet != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalCabHome.instance.comisionSeleccionDet != null ? 'Change' : 'Select'} comisionSeleccionDet"
+                       view="/ComisionSeleccionDetList.xhtml">
+                <f:param name="from" value="EvalDocumentalCabEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Empresa persona">
+    <div class="association" id="empresaPersonaParent">
+
+        <h:outputText value="There is no empresaPersona associated with this evalDocumentalCab."
+                   rendered="#{evalDocumentalCabHome.instance.empresaPersona == null}"/>
+
+        <rich:dataTable var="_empresaPersona"
+                   value="#{evalDocumentalCabHome.instance.empresaPersona}"
+                rendered="#{evalDocumentalCabHome.instance.empresaPersona != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="empresaPersonaTable">
+            <h:column>
+                <f:facet name="header">Id sel empresa persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empr tercerizada id empresa tercerizada</f:facet>
+                <h:outputText value="#{_empresaPersona.emprTercerizada.idEmpresaTercerizada}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cargo</f:facet>
+                <h:outputText value="#{_empresaPersona.cargo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_empresaPersona.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_empresaPersona.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_empresaPersona.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalCabHome.instance.empresaPersona != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalCabHome.instance.empresaPersona != null ? 'Change' : 'Select'} empresaPersona"
+                       view="/EmpresaPersonaList.xhtml">
+                <f:param name="from" value="EvalDocumentalCabEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Postulacion *" labelClass="required">
+    <div class="association" id="postulacionParent">
+
+        <h:outputText value="There is no postulacion associated with this evalDocumentalCab."
+                   rendered="#{evalDocumentalCabHome.instance.postulacion == null}"/>
+
+        <rich:dataTable var="_postulacion"
+                   value="#{evalDocumentalCabHome.instance.postulacion}"
+                rendered="#{evalDocumentalCabHome.instance.postulacion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="postulacionTable">
+            <h:column>
+                <f:facet name="header">Id postulacion</f:facet>
+                <h:outputText value="#{_postulacion.idPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_postulacion.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Persona postulante id persona postulante</f:facet>
+                <h:outputText value="#{_postulacion.personaPostulante.idPersonaPostulante}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_postulacion.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu postulacion</f:facet>
+                <h:outputText value="#{_postulacion.usuPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha postulacion</f:facet>
+                <h:outputText value="#{_postulacion.fechaPostulacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Obs cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.obsCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.usuCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.fechaCancelacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Interes cargo</f:facet>
+                <h:outputText value="#{_postulacion.interesCargo}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalCabHome.instance.postulacion != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalCabHome.instance.postulacion != null ? 'Change' : 'Select'} postulacion"
+                       view="/PostulacionList.xhtml">
+                <f:param name="from" value="EvalDocumentalCabEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Eval documental dets">
+        <h:form styleClass="association" id="evalDocumentalDetsChildren">
+
+            <h:outputText value="There are no evalDocumentalDets associated with this evalDocumentalCab."
+                       rendered="#{empty evalDocumentalCabHome.evalDocumentalDets}"/>
+
+            <rich:dataTable value="#{evalDocumentalCabHome.evalDocumentalDets}"
+                           var="_evalDocumentalDet"
+                      rendered="#{not empty evalDocumentalCabHome.evalDocumentalDets}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="evalDocumentalDetsTable">
+                <rich:column sortBy="#{_evalDocumentalDet.idEvalDocumentalDet}">
+                    <f:facet name="header">Id eval documental det</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.idEvalDocumentalDet}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.aprobadoConDocumentos}">
+                    <f:facet name="header">Aprobado con documentos</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.aprobadoConDocumentos}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.aprobadoPorComision}">
+                    <f:facet name="header">Aprobado por comision</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.aprobadoPorComision}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.activo}">
+                    <f:facet name="header">Activo</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.activo}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.usuAlta}">
+                    <f:facet name="header">Usu alta</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.usuAlta}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.fechaAlta}">
+                    <f:facet name="header">Fecha alta</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.fechaAlta}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.usuMod}">
+                    <f:facet name="header">Usu mod</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.usuMod}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalDet.fechaMod}">
+                    <f:facet name="header">Fecha mod</f:facet>
+                    <h:outputText value="#{_evalDocumentalDet.fechaMod}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{evalDocumentalCabHome.managed}" id="evalDocumentalDets">
+        <div class="actionButtons">
+            <s:button id="addevalDocumentalDet"
+                   value="Add evalDocumentalDet"
+                    view="/EvalDocumentalDetEdit.xhtml"
+             propagation="none">
+                 <f:param name="evalDocumentalCabIdEvalDocumentalCab"
+                         value="#{evalDocumentalCabHome.instance.idEvalDocumentalCab}"/>
+                 <f:param name="evalDocumentalDetFrom" value="EvalDocumentalCab"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

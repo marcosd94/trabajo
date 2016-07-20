@@ -1,0 +1,215 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU477_ver}</h1>
+    <h:form id="capacitacionesSearch" styleClass="edit" enctype="multipart/form-data">
+    
+    	<rich:panel  id="pantenCapa">  <f:facet name="header">#{messages.CU474_capacitacion}</f:facet>
+    	<h:panelGrid columns="1">
+    	<s:decorate id="idDatosEspecificosTipoCapField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{revisionCapacitacionFC.capacitaciones.nombre}">
+                </h:inputText>
+            </s:decorate>
+         
+
+
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+                 <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{revisionCapacitacionFC.tipoCapac}">
+                </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+    	</rich:panel>
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+				
+			<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" disabled="true"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			
+	               			</s:decorate>
+				</a:outputPanel>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:panel>
+		<rich:panel id="panelDescargas">
+				<f:facet name="header">#{messages.CU477_modificar_datos}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate id="docInfoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU477_doc_info}</ui:define>
+						<h:inputText id="docInfo" size="100" disabled="true"
+							value="#{revisionCapacitacionFC.nomDoc}">
+						</h:inputText>
+					</s:decorate>
+					<s:div styleClass="botones">
+						<h:commandButton value="#{messages.CU476_btn_descargar}" rendered="#{revisionCapacitacionFC.capacitaciones.documentos.idDocumento!=null}"
+							action="#{revisionCapacitacionFC.abrirDocumento()}" />
+						<s:button view="/capacitacion/datosCapacitacion/VerDatosCapacitacion.xhtml" id="ver_capac" propagation="join"
+							value="Ver Datos Capacitación">
+					<f:param name="capacitacionesIdCapacitacion" value="#{revisionCapacitacionFC.idCapacitacion}"/>
+				   <f:param name="fromCU" value="473"/>
+				    <f:param name="capacitacionesFrom" value="/capacitacion/revisionCapacitacion/RevisionCapacitacion.xhtml"/>
+						</s:button>
+						<s:button view="/capacitacion/instructores/Instructores.xhtml" id="ver_instructores" propagation="join"
+							value="Ver Instructores">
+							 <f:param name="capacitacionesIdCapacitacion" value="#{revisionCapacitacionFC.idCapacitacion}"/>
+                              <f:param name="instructoresFrom" value="/capacitacion/revisionCapacitacion/RevisionCapacitacion.xhtml"/>
+						</s:button>
+					</s:div>
+					
+				</h:panelGrid>
+			</rich:panel>
+   
+		<rich:panel id="panelGrillaRevision">
+				<f:facet name="header">#{messages.CU477_revisiones_solicitadas}</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="revision" var="_record" 
+					value="#{revisionCapacitacionFC.revisionCapacitacionList}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_obs}
+						</f:facet>
+						<h:outputText value="#{_record.observacion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_fecha_obs}
+						</f:facet>
+						<h:outputText value="#{_record.fechaObs}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_usu_obs}
+						</f:facet>
+						<h:outputText value="#{_record.usuObs}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_respuesta}
+						</f:facet>
+						<h:outputText value="#{_record.respuesta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_fecha_rpta}
+						</f:facet>
+						<h:outputText value="#{_record.fechaRpta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_usu_rpta}
+						</f:facet>
+						<h:outputText value="#{_record.usuRpta}" />
+					</h:column>
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           
+            
+
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join"
+               view="/#{empty from ? 'capacitacion/bandeja/admBandeja/BandejaCapacitacionList' : from}.xhtml"
+                />
+
+        </div>
+       
+       
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

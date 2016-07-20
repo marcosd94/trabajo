@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/EstadoDetList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{estadoDetHome.wire}"/>
+
+   <param name="estadoDetFrom"/>
+   <param name="estadoDetIdEstadoDet" value="#{estadoDetHome.estadoDetIdEstadoDet}"/>
+   <param name="estadoCabFrom"/>
+   <param name="estadoCabIdEstadoCab" value="#{estadoCabHome.estadoCabIdEstadoCab}"/>
+
+
+
+   <navigation from-action="#{estadoDetHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/planificacion/estados/EstadoDetList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{estadoDetHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/planificacion/estados/EstadoDetList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{estadoDetHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/planificacion/estados/EstadoDetList.xhtml"/>
+      </rule>
+   </navigation>
+    <restrict>#{identity.hasRole('estadoDet_edit')}</restrict>
+
+</page>

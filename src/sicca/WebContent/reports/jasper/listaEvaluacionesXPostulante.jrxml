@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listaEvaluacionesXPostulante" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="eval_id_postulante" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\dataworks\\repositorio\\trunk\\src\\sicca\\WebContent\\reports\\jasper\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+eval_ref.id_eval_referencial,
+datos_especificos.descripcion,
+(
+        SELECT
+            SUM(refconfenc.puntaje_maximo)
+        FROM
+            seleccion.matriz_ref_conf_enc refconfenc, seleccion.matriz_ref_conf refconf
+        WHERE
+            refconfenc.id_datos_especificos_tipo_eval = tipo_eval.id_datos_especificos_tipo_eval
+            and refconf.id_matriz_ref_conf = refconfenc.id_matriz_ref_conf
+            and refconf.id_concurso_puesto_agr = pos.id_concurso_puesto_agr
+            and refconf.tipo = 'GRUPO'
+    )AS puntaje_maximo,
+eval_ref.puntaje_realizado,
+eval_ref.porc_realizado
+
+from seleccion.eval_referencial eval_ref
+
+join seleccion.eval_referencial_tipoeval tipo_eval on tipo_eval.id_eval_referencial_tipoeval = eval_ref.id_eval_referencial_tipoeval
+
+join seleccion.datos_especificos on tipo_eval.id_datos_especificos_tipo_eval = datos_especificos.id_datos_especificos
+
+join seleccion.postulacion pos on eval_ref.id_postulacion = pos.id_postulacion
+
+where eval_ref.id_postulacion = $P{eval_id_postulante}]]>
+	</queryString>
+	<field name="id_eval_referencial" class="java.lang.Long"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="puntaje_maximo" class="java.lang.Float"/>
+	<field name="puntaje_realizado" class="java.lang.Float"/>
+	<field name="porc_realizado" class="java.lang.Float"/>
+	<group name="id_eval_referencial">
+		<groupExpression><![CDATA[$F{id_eval_referencial}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="47" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="1" width="555" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion} + " - Puntaje Máximo : "+ $F{puntaje_maximo}  + " - Puntaje Realizado : " +$F{puntaje_realizado}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="36" y="22" width="304" height="23"/>
+				<subreportParameter name="id_eval_ref">
+					<subreportParameterExpression><![CDATA[$F{id_eval_referencial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ListaCabecerasdeEvaluaciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

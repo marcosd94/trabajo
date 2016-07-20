@@ -1,0 +1,128 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h1>#{messages.MatrizReferencial_factorEvaluacion}</h1>
+        <rich:panel>
+           <f:facet name="header">#{matrizReferencialEncHome.managed ? messages.msg_edit : messages.msg_save} #{messages.MatrizReferencial_factorEvaluacion}</f:facet>
+		
+		<rich:panel id="panelSuperiorEncabezadoPlantilla" style="border:none;">
+			<fieldset><legend>#{messages.MatrizReferencial_encabezadoPlantilla}</legend>
+				
+				<rich:panel style="border:none;">
+					<h:panelGrid columns="2" id="gridSuperior">
+						<a:region>				
+							<s:decorate id="plantillaMatrizRefField" template="/layout/display.xhtml">
+				                <ui:define name="label">#{messages.MatrizReferencial_plantillaMatrizRef}<span class="required">*</span></ui:define>
+				                <h:selectOneMenu id="plantillaMatrizRef" 
+				                			  value="#{factorEvaluacionFormController.idMatrizReferencial}"
+				                			  disabled="#{matrizReferencialEncHome.managed}"
+				                			  style="width:377px">
+									<f:selectItems value="#{factorEvaluacionFormController.plantillaMatrizSelectItems}"/>
+									<a:support event="onchange" 
+											  action="#{factorEvaluacionFormController.obtenerMatrizReferencial()}"
+											reRender="gridSuperior"
+											   focus="tipoEvaluacion"
+											   eventsQueue="default"/>
+				                </h:selectOneMenu>
+				            </s:decorate>
+				        </a:region>
+			            <br />
+						<s:decorate id="tipoConcursoField" template="/layout/edit.xhtml">
+		                	<ui:define name="label">#{messages.MatrizReferencial_tipoConcurso}<span class="required">*</span></ui:define>
+			                <h:inputText id="tipoConcurso"
+			                       disabled="true"
+			                       	   size="60"
+			                          value="#{factorEvaluacionFormController.matrizReferencial.datosEspecificos.descripcion}">
+			                </h:inputText>
+			            </s:decorate>
+			            <s:decorate id="puntajeMaximoCabField" template="/layout/edit.xhtml">
+		                	<ui:define name="label">#{messages.MatrizReferencial_puntajeMaximo}<span class="required">*</span></ui:define>
+			                <h:inputText id="puntajeMaximoCab"
+			                       disabled="true"
+			                     styleClass="numeric"
+			                       	   size="5"
+			                          value="#{factorEvaluacionFormController.matrizReferencial.puntajeMaximo}">
+			                </h:inputText>
+			            </s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</fieldset>
+		</rich:panel>
+		
+		<rich:panel id="panelInferiorDetails" style="border:none;">
+			<rich:panel id="panelDetails">
+				<f:facet name="header">#{messages['MatrizReferencial_factorEvaluacion_plural']} (#{factorEvaluacionFormController.listDetails.size()})</f:facet>
+				<div class="results" id="factorEvaluacionList">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty factorEvaluacionFormController.listDetails}" /> 
+					
+					<rich:dataTable id="factoresEvaluacion" var="_factores"
+								 value="#{factorEvaluacionFormController.listDetails}"
+							  rendered="#{not empty factorEvaluacionFormController.listDetails}"
+							  rowKeyVar="_index">
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}">
+						<f:facet name="header">#{messages.MatrizReferencial_tipoEvaluacion}</f:facet>
+						<h:outputText value="#{_factores.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}" 
+								      style="text-align:right;" width="5%">
+						<f:facet name="header">#{messages.MatrizReferencial_nroOrden}</f:facet>
+						<h:outputText value="#{_factores.nroOrden}" />
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}">
+						<f:facet name="header">#{messages.MatrizReferencial_descripcion}</f:facet>
+						<h:outputText value="#{_factores.descripcion}" />
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}" 
+									  style="text-align:right" width="10%">
+						<f:facet name="header">#{messages.MatrizReferencial_graduacionPuntaje}</f:facet>
+						<h:outputText value="#{_factores.puntajeMaximo}"/>
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}" 
+									  style="text-align:center" width="10%">
+						<f:facet name="header">#{messages.MatrizReferencial_obligatorio_question}</f:facet>
+						<h:selectBooleanCheckbox value="#{_factores.obligatorioSN}" disabled="true"/>
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}" 
+								      style="text-align:center" width="10%">
+						<f:facet name="header">#{messages.MatrizReferencial_sumItems}</f:facet>
+						<h:selectBooleanCheckbox value="#{_factores.sumItemsSN}" disabled="true"/>
+					</rich:column>
+					<rich:column styleClass="#{factorEvaluacionFormController.getRowClass(_index)}" 
+									  style="text-align:center" width="10%">
+						<f:facet name="header">#{messages.MatrizReferencial_activo}</f:facet>
+						<h:selectBooleanCheckbox value="#{_factores.activo}" 
+											  disabled="true"/>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>			            
+		</rich:panel>
+
+    	<br />
+        <div style="clear:both">
+               <span class="required">*</span>
+               #{messages.msg_required_fields}
+        </div>
+        </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/#{empty matrizReferencialFrom ? 'seleccion/matrizReferencial/MatrizReferencialList' : matrizReferencialFrom}.xhtml"
+                    id="done"
+                 value="#{messages.msg_done}"/>
+
+    </div>
+
+</ui:define>
+
+</ui:composition>

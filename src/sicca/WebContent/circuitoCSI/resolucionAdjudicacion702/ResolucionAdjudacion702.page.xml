@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('elaborarResolucionAdjudicacion_editConcursoSimplificado')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{resolucionAdjudacion702FC.idConcurso}"/>
+ 
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{resolucionAdjudacion702FC.idConcursoPuestoAgr}"/>
+ 
+ <action execute="#{resolucionAdjudacion702FC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{resolucionAdjudacion702FC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{resolucionAdjudacion702FC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionAdjudacion702FC.idSave}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{resolucionAdjudacion702FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionAdjudacion702FC.paramIdConcurso}"/>
+     <param name="fromCU" value="417"/>
+     <param name="plantillaResolucionHomologacionFrom" value="seleccion/resolucionAdjudicacion/ElaborarResolucionAdjudicacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{resolucionAdjudacion702FC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionAdjudacion702FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{resolucionAdjudacion702FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionAdjudacion702FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="seleccion/resolucionAdjudicacion/ElaborarResolucionAdjudicacion"/>
+     <param name="fromCU" value="none"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{resolucionAdjudacion702FC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{resolucionAdjudacion702FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{resolucionAdjudacion702FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{resolucionAdjudacion702FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="seleccion/resolucionAdjudicacion/ElaborarResolucionAdjudicacion"/>
+     <param name="fromCU" value="none"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{resolucionAdjudacion702FC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

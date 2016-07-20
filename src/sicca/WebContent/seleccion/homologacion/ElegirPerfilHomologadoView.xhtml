@@ -1,0 +1,450 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionarioOee" styleClass="edit">
+			<h1>#{messages.CU255_title}</h1>
+
+			<rich:panel style="border:none;">
+				<rich:tabPanel switchType="client" id="tagGeneral">
+
+					<rich:tab label="F1" id="tabF1">
+						<fieldset><legend>CPT</legend> <f:facet name="header">CPT</f:facet>
+						<h:panelGrid>
+							<s:decorate id="tipoCpt" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_tipo_cpt}</ui:define>
+
+								<h:inputText id="tipoCptId" size="60" disabled="true"
+									readonly="true"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.cpt.tipoCpt.descripcion}" />
+							</s:decorate>
+
+							<s:decorate id="nivelField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_cpt}</ui:define>
+
+								<h:inputText id="nivelDesc" size="60" disabled="true"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.cpt.denominacion}" />
+							</s:decorate>
+						</h:panelGrid></fieldset>
+
+						<h:panelGrid>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_denominacion}</ui:define>
+
+								<h:inputText size="60" disabled="true"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.denominacion}" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_objetivo}</ui:define>
+
+								<h:inputText size="60" disabled="true"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.objetivo}" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_mision}</ui:define>
+
+								<h:inputText size="60" disabled="true"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.mision}" />
+							</s:decorate>
+						</h:panelGrid>
+
+						<br />
+						<fieldset><legend>#{messages.CU255_principales_tareas_puesto}</legend>
+						<rich:dataTable id="contenidoFuncionalList"
+							var="_detContenidoFuncional"
+							value="#{elegirPerfilHomologadoFormController.detContenidoFuncionals}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_contenido_funcional}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.gral_descripcion}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+
+							<rich:column colspan="2">
+								<h:outputText
+									value="#{_detContenidoFuncional.contenidoFuncional.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detDescripcionContFuncional"
+								value="#{_detContenidoFuncional.detDescripcionContFuncionals}">
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText
+										value="#{detDescripcionContFuncional.descripcion}"></h:outputText>
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+
+						<br />
+
+						<fieldset><legend>#{messages.CU255_req_min_puesto}</legend>
+						<rich:dataTable id="reqminList" var="_detReqMin"
+							value="#{elegirPerfilHomologadoFormController.requisitosMinimosPuesto}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_componentes}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_min_requeridos}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+
+							<rich:column colspan="2">
+								<h:outputText
+									value="#{_detReqMin.requisitoMinimoCpt.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detMinimosRequeridos"
+								value="#{_detReqMin.detMinimosRequeridoses}">
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{detMinimosRequeridos.minimosRequeridos}"></h:outputText>
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+					</rich:tab>
+
+
+					<rich:tab label="ANEXO 1" id="tabAnexo1"
+						rendered="#{elegirPerfilHomologadoFormController.mismaOee()}">
+						<fieldset><legend>#{messages.CU255_principales_tareas_puesto}</legend>
+						<rich:dataTable id="contenidoFuncionalListA1"
+							var="_detContenidoFuncional"
+							value="#{elegirPerfilHomologadoFormController.detContenidoFuncionals}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_contenido_funcional}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.gral_descripcion}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+
+							<rich:column colspan="2">
+								<h:outputText
+									value="#{_detContenidoFuncional.contenidoFuncional.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detDescripcionContFuncional"
+								value="#{_detContenidoFuncional.detDescripcionContFuncionals}">
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText
+										value="#{detDescripcionContFuncional.descripcion}"></h:outputText>
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+
+						<br />
+
+						<fieldset><legend>#{messages.CU255_req_min_puesto}</legend>
+						<rich:dataTable id="reqminListA1" var="_detReqMin"
+							value="#{elegirPerfilHomologadoFormController.requisitosMinimosPuestoA1}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_componentes}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_opc_convenientes}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+
+							<rich:column colspan="2">
+								<h:outputText
+									value="#{_detReqMin.requisitoMinimoCpt.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detOpcionesConvenientes"
+								value="#{_detReqMin.detOpcionesConvenienteses}">
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText
+										value="#{detOpcionesConvenientes.opcConvenientes}"></h:outputText>
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+					</rich:tab>
+
+
+					<rich:tab label="F2" id="f2">
+						<fieldset><legend>#{messages.CU255_factores_items_evaluacion}</legend>
+						<rich:dataTable id="factoresEval" var="_matrizRefConfEnc"
+							value="#{elegirPerfilHomologadoFormController.factoresEvaluacion}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_tipo_evaluacion}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_nro_orden}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_factor}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_obligatorio}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_graduacion}" />
+									</rich:column>
+
+									<rich:column>
+										<h:outputText value="#{messages.CU255_items}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_minimo}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{messages.CU255_maximo}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+
+							<rich:column>
+								<h:outputText
+									value="#{_matrizRefConfEnc.datosEspecificos.descripcion}" />
+							</rich:column>
+
+							<rich:column>
+								<h:outputText value="#{_matrizRefConfEnc.nroOrden}" />
+							</rich:column>
+
+							<rich:column>
+								<h:outputText value="#{_matrizRefConfEnc.descripcion}" />
+							</rich:column>
+
+							<rich:column>
+								<h:outputText
+									value="#{_matrizRefConfEnc.sumItemsSN? 'Si' : 'No'}" />
+							</rich:column>
+
+							<rich:column colspan="4">
+								<h:outputText value="#{_matrizRefConfEnc.puntajeMaximo}" />
+							</rich:column>
+
+							<rich:subTable var="matrizRefConfDet"
+								value="#{_matrizRefConfEnc.matrizRefConfDets}">
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value=" "></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{matrizRefConfDet.descripcion}"></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{matrizRefConfDet.puntajeMinimo}"></h:outputText>
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{matrizRefConfDet.puntajeMaximo}"></h:outputText>
+								</rich:column>
+							</rich:subTable>
+
+							<f:facet name="footer">
+								<rich:columnGroup>
+									<rich:column></rich:column>
+									<rich:column></rich:column>
+									<rich:column colspan="2">#{messages.CU255_total_puntos}</rich:column>
+									<rich:column>
+										<h:outputText
+											value="#{elegirPerfilHomologadoFormController.totalGraduacion}"></h:outputText>
+									</rich:column>
+									<rich:column></rich:column>
+									<rich:column></rich:column>
+									<rich:column>
+										<h:outputText
+											value="#{elegirPerfilHomologadoFormController.totalPuntajeMaximo}"></h:outputText>
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+						</rich:dataTable></fieldset>
+					</rich:tab>
+
+
+					<rich:tab label="ANEXO 2" id="tabAnexo2"
+						rendered="#{elegirPerfilHomologadoFormController.mismaOee()}">
+						<fieldset><legend>#{messages.CU255_informacion_complement_puesto}</legend>
+						<h:panelGrid>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_modalidad_vinculacion}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.modalidad}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_fuente_financiacion}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.fuenteFinanciacion}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_remuneracion_basica}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.remuneracion}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_otros_beneficios}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.otrosBeneficios}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_ubic_fisica_puesto}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.oficinas}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_horario_trabajo}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.horario}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_condiciones_laborales}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.condLaborales}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_otras_info}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.otrasInf}"
+									disabled="true" />
+							</s:decorate>
+
+						</h:panelGrid></fieldset>
+
+						<br />
+						<fieldset><legend>#{messages.CU255_info_ref_postulaciones}</legend>
+						<h:panelGrid>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_postulantes_habilitados}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.postHabilitados}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_postulantes_no_habilitados}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.postNoHabilitados}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_doc_postulacion}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.documentos}"
+									disabled="true" />
+							</s:decorate>
+						</h:panelGrid></fieldset>
+
+						<br />
+						<fieldset><legend>#{messages.CU255_info_ref_present_post}</legend>
+						<h:panelGrid>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_fecha_limite}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.fechaLimite}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_lugar}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.lugar}"
+									disabled="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU255_contacto}</ui:define>
+								<h:inputText size="60"
+									value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.contacto}"
+									disabled="true" />
+							</s:decorate>
+						</h:panelGrid></fieldset>
+
+					</rich:tab>
+
+				</rich:tabPanel>
+			</rich:panel>
+
+			<h:panelGrid>
+				<s:decorate id="activo" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_activo}</ui:define>
+					<h:selectBooleanCheckbox
+						value="#{elegirPerfilHomologadoFormController.homologacionPerfilMatriz.activo}"
+						disabled="true" />
+				</s:decorate>
+			</h:panelGrid>
+
+
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="#{messages.msg_done}" propagation="join"
+				view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml">
+				<f:param name="fromx"
+					value="#{from}" />
+			</s:button></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

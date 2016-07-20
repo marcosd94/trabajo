@@ -1,0 +1,467 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<h:form id="formacionAcadeciaform" prependId="false"  enctype="multipart/form-data"  styleClass="edit">
+		
+		<a:outputPanel ajaxRendered="true" id="outPanelMsgConfirm">
+		<h:outputText 
+			rendered="#{!tab2FormacionAcademicaPorCarpetaFC.primeraVezEstudio}"
+		value="#{messages.CU516_msg_copia}"
+			style="color:red;font-size:15px;" />
+		</a:outputPanel>
+		<div style="clear: both">
+							
+	<h:panelGrid >
+	
+	<rich:panel id="panelPrincipal" switchType="ajax" style=" width : 872px;" >
+		<f:facet name="header">#{messages.CU82_estudios_realizados}</f:facet>
+		
+		<h:panelGrid columns="2" > 
+		<a:region>
+		<s:decorate id="nivelEsudioField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_niveles_estudios}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="nivelEsudio" value="#{tab2FormacionAcademicaPorCarpetaFC.idNivelEstudio}" style="width:250px">
+							<f:selectItems value="#{nivelEstudioSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{tab2FormacionAcademicaPorCarpetaFC.upTituloAcademico()}" 
+							 reRender="panelPrincipal"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+			<a:outputPanel id="panelOtroNivel">
+							<s:decorate id="otroNivelField" template="/layout/edit.xhtml"
+								rendered="#{tab2FormacionAcademicaPorCarpetaFC.esOtroNivel}">
+								<ui:define name="label">Descripción Charla/Conferencia<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="otroNivel" style="width:250px" maxlength="100"
+									value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.otroNivel}">
+								</h:inputText>
+							</s:decorate>
+						</a:outputPanel>
+			<a:region>
+			<s:decorate id="tituloField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU82_titulo_obt}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="titulo" value="#{tab2FormacionAcademicaPorCarpetaFC.idTituloAcademico}" style="width:250px">
+							<f:selectItems value="#{tab2FormacionAcademicaPorCarpetaFC.tituloSelecItem}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{tab2FormacionAcademicaPorCarpetaFC.upEspecialidad()}" reRender="otroField,paisField,paisPanel,panelOtros,paneletiempo,adjuntoDoc,panelDocumentosAdjuntos,panelDoc"/>
+						</h:selectOneMenu>
+					</s:decorate>
+			
+			</a:region>
+			<a:outputPanel  id="panelOtros" >
+			<s:decorate id="otroField" template="/layout/edit.xhtml" rendered="#{tab2FormacionAcademicaPorCarpetaFC.esOtro}">
+				<ui:define name="label">#{messages.CU82_otro}<span class="required">*</span></ui:define>
+				<h:inputText id="otro" style="width:250px"  maxlength="100"
+					value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.otroTituloObt}">
+				</h:inputText>
+			</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+				<h:panelGrid >
+				 <s:decorate id="profesiOfiField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_Profesion_oficio}</ui:define>
+				<h:selectOneMenu id="profesiOfi"  value="#{tab2FormacionAcademicaPorCarpetaFC.idProfesion}" style="width:250px">
+							<f:selectItems value="#{especialidadesSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			
+				</h:panelGrid>
+		<h:panelGrid columns="3">
+		<a:region>
+			<s:decorate id="institucionUniField" template="/layout/edit.xhtml">
+				<ui:define name="label">Institución/Univ<span class="required">*</span></ui:define>
+				<h:selectOneMenu id="institucionUni" value="#{tab2FormacionAcademicaPorCarpetaFC.idIstUniversidad}" style="width:250px">
+							<f:selectItems value="#{institucionEducativaSelectItems}"/>
+						<a:support event="onchange" eventsQueue="default"
+							 action="#{tab2FormacionAcademicaPorCarpetaFC.upInstitucionOtro()}" 
+							 reRender="otraInstField,paisField,paisPanel,paneletiempo,adjuntoDoc,panelDocumentosAdjuntos,panelDoc"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+			<a:outputPanel  id="otraInstField">
+				<s:decorate template="/layout/edit.xhtml" rendered="#{tab2FormacionAcademicaPorCarpetaFC.esOtraInst}">
+				<ui:define name="label">Otra<span class="required">*</span></ui:define>
+				<h:inputText id="otraInst" style="width:250px"  maxlength="150"
+					value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.otraInstit}">
+				</h:inputText>
+			</s:decorate> 
+			</a:outputPanel> 
+			<a:outputPanel  id="paisPanel">
+			<a:region>
+				<s:decorate id="paisField" template="/layout/edit.xhtml" rendered="#{tab2FormacionAcademicaPorCarpetaFC.habPais and !tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+						<ui:define name="label">#{messages.Departamento_idPais}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="pais" value="#{tab2FormacionAcademicaPorCarpetaFC.idPais}" style="width:250px">
+							<f:selectItems value="#{tab2FormacionAcademicaPorCarpetaFC.paisSelecItem}"/>
+							<a:support event="onchange" eventsQueue="default"  reRender="paisField"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+			</a:outputPanel>
+		
+		</h:panelGrid >
+			
+			<a:outputPanel id="paneletiempo">
+				<h:panelGrid columns="3">
+			<a:region>
+			 <s:decorate template="/layout/edit.xhtml" id="fechaIniField" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+					<ui:define name="label">#{messages.CU82_fecIni}<span class="required">*</span></ui:define>
+					 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.fechaInicio}" >
+                             <a:support event="onchanged" eventsQueue="default"  reRender="fechaIniField"/>
+                           </rich:calendar>
+				</s:decorate>
+				</a:region>
+				<a:region>
+			 <s:decorate template="/layout/edit.xhtml" id="fechafinField" rendered="#{tab2FormacionAcademicaPorCarpetaFC.habFechaFin()}">
+					<ui:define name="label">#{messages.CU82_fecFin}<span class="required">*</span></ui:define>
+					<rich:calendar id="fechaFin" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.fechaFin}" >
+                             <a:support event="onchanged" eventsQueue="default"  reRender="fechafinField"/>
+                          </rich:calendar>
+				</s:decorate>
+				</a:region>
+			<a:region>
+			<s:decorate id="duracionHorasField" template="/layout/edit.xhtml" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit and tab2FormacionAcademicaPorCarpetaFC.tieneTitulo}">
+				<ui:define name="label">#{messages.CU82_duracion}<span class="required">*</span></ui:define>
+				<h:inputText id="duracionHoras" onkeypress="return soloNumeros(event);"
+					value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizados.duracionHoras}">
+				 <a:support event="onchange" eventsQueue="default"  reRender="duracionHorasField"/>
+				</h:inputText>
+				<h:selectOneMenu id="estado" immediate="true" style="width : 80px;"
+						value="#{tab2FormacionAcademicaPorCarpetaFC.horasAnios}" >
+						<s:selectItems var="tipo" label="#{tipo.descripcion}"
+							value="#{enumAppHelper.horasAnios}" />
+						<s:convertEnum />
+						 <a:support event="onchange" eventsQueue="default"  reRender="duracionHorasField"/>
+					</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+			</h:panelGrid>
+			</a:outputPanel>
+			
+			 
+		
+			
+		
+			
+		
+		<h:panelGrid columns="3">
+		<a:outputPanel  id="panelDocumentosAdjuntos"  >
+			<s:decorate id="tipoDocField" template="/layout/edit.xhtml" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+				<ui:define name="label">#{messages.CU1556_tipo_doc}</ui:define>
+				<h:selectOneMenu id="tipoDo" value="#{tab2FormacionAcademicaPorCarpetaFC.idTipoDoc}" style="width:250px">
+							<f:selectItems value="#{datosEspecificossByTipoDocumentoFPFACSelectItems}">
+							 <a:support event="onchange" eventsQueue="default"  />
+							 </f:selectItems>
+						</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate id="documentoField" template="/layout/edit.xhtml" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+				<ui:define name="label">#{messages.CU156_doc}</ui:define>
+				<h:inputText disabled="true" id="nomFinal" value="#{tab2FormacionAcademicaPorCarpetaFC.nombreDoc}"/>
+				
+			</s:decorate>
+				</a:outputPanel>
+				<a:outputPanel id="panelDoc">
+		<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"  rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+        	<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="30"  id="archivo" 
+						contentType="#{tab2FormacionAcademicaPorCarpetaFC.contentType}"
+						data="#{tab2FormacionAcademicaPorCarpetaFC.uploadedFile}"
+						fileName="#{tab2FormacionAcademicaPorCarpetaFC.fileName}"
+						style=" width : 382px;" >
+						<a:support event="onchange" eventsQueue="default"
+						action="#{tab2FormacionAcademicaPorCarpetaFC.nombre()}"	 reRender="documentoField"/>
+					</s:fileUpload>
+			</s:decorate>
+			</a:outputPanel>
+			</h:panelGrid>
+					
+					
+				
+	
+						
+	</rich:panel>
+	
+	</h:panelGrid>
+	<span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+	<div style="clear: both"><h:outputText
+							value="#{messages.CU289_obs_add}/Actualizar"
+							styleClass="labelClass" /></div>
+	<h:panelGrid columns="3">
+	
+	<a:outputPanel id="panelBotones" ajaxRendered="true">
+	<h:commandButton id="add"  eventsQueue="default" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esEdit and !tab2FormacionAcademicaPorCarpetaFC.primeraVezEstudio}"
+	onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="itemsList,discapacidadPanel,discap"
+						action="#{tab2FormacionAcademicaPorCarpetaFC.addEstudios()}"/>
+		<h:commandButton id="add2"  eventsQueue="default" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esEdit and tab2FormacionAcademicaPorCarpetaFC.primeraVezEstudio}"
+		 onclick="if(!confirm('#{messages.CU516_msg_sav}')){return false;}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="itemsList,discapacidadPanel,discap"
+						action="#{tab2FormacionAcademicaPorCarpetaFC.addEstudios()}"/>
+       <h:commandButton id="limpiar"  eventsQueue="default" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esEdit}"
+						value="Limpiar" reRender="itemsList,discapacidadPanel,discap"
+						action="#{tab2FormacionAcademicaPorCarpetaFC.limpiar()}"/>
+       
+       
+       <h:commandButton id="update"  eventsQueue="default" rendered="#{tab2FormacionAcademicaPorCarpetaFC.esEdit}"
+						 value="#{messages.msg_update}" reRender="itemsList,discapacidadPanel,discap"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{tab2FormacionAcademicaPorCarpetaFC.update()}"/>
+       
+       
+            <h:commandButton id="cancelEdit" rendered="#{tab2FormacionAcademicaPorCarpetaFC.esEdit}"
+                   value="#{messages.msg_cancel}" action="#{tab2FormacionAcademicaPorCarpetaFC.cancelar()}" />
+              
+</a:outputPanel>
+	</h:panelGrid>
+	
+		
+	<h:panelGrid >
+
+		         <rich:panel id="discapacidadPanel" style=" width : 872px;"><f:facet name="header">#{messages.CU82_titulo}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;"  width="310" >
+								   	<rich:dataTable id="itemsList" var="_items"  rows="5" first="0"
+												value="#{tab2FormacionAcademicaPorCarpetaFC.estudiosRealizadosList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU82_nivel_estu}
+													</f:facet>
+													<h:outputText value="#{_items.tituloAcademico.nivelEstudio.descripcion}" rendered="#{!_items.tituloAcademico.nivelEstudio.descripcion.equalsIgnoreCase('Cursos, charlas y conferencias')}"/>
+													<h:outputText value="#{_items.otroNivel}" rendered="#{_items.tituloAcademico.nivelEstudio.descripcion.equalsIgnoreCase('Cursos, charlas y conferencias')}"/>
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU82_titulo_obt}
+													</f:facet>
+														<h:outputText 
+													value="#{_items.tituloAcademico.descripcion}"  rendered="#{!_items.tituloAcademico.descripcion.equalsIgnoreCase('otros')}"/>
+													<h:outputText 
+													value="#{_items.otroTituloObt}"  rendered="#{_items.tituloAcademico.descripcion.equalsIgnoreCase('otros')}"/>
+													
+													</rich:column>
+												<rich:column >
+												
+													<f:facet name="header">
+													#{messages.CU82_Profesion_oficio}
+													</f:facet>
+														<h:outputText 
+													value="#{_items.especialidades.descripcion}" />
+											</rich:column>
+											<rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_institucion_universidad}
+													</f:facet>
+									            	<h:outputText 
+													value="#{_items.institucionEducativa.descripcion}" rendered="#{!_items.institucionEducativa.descripcion.equalsIgnoreCase('otras')}"/>
+													<h:outputText 
+													value="#{_items.otraInstit}" rendered="#{_items.institucionEducativa.descripcion.equalsIgnoreCase('otras')}"/>
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.Departamento_idPais}
+													</f:facet>
+									            	      	<h:outputText 
+													value="#{_items.pais.descripcion}" />
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_fecIni}
+													</f:facet>
+									            	<h:outputText value="#{_items.fechaInicio}"/>
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_fecFin}
+													</f:facet>
+													<h:outputText value="#{_items.fechaFin}"/>
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_finalizo}
+													</f:facet>
+									            	<h:outputText value="#{_items.finalizo== 'true' ? 'SI':'No'}"/>
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_duracion}
+													</f:facet>
+									            	<h:outputText value="#{_items.duracionHoras} Horas " rendered="#{_items.tipoDuracion=='H' and _items.duracionHoras!=null}"/>
+									            	<h:outputText value=" #{_items.duracionHoras} Año/s"  rendered="#{_items.tipoDuracion=='A' and _items.duracionHoras!=null}"/>
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_tipo_d}
+													</f:facet>
+									            	<h:outputText value="#{_items.documentos.datosEspecificos.descripcion}"/>
+									       </rich:column>
+									          <rich:column >
+									            <f:facet name="header">
+														Documento
+													</f:facet>
+									            	<h:outputText value="#{_items.documentos.nombreFisicoDoc}"/>
+									       </rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet" value="#{messages.msg_edit}" 
+								                    reRender="panelPrincipal,panelBotones"  eventsQueue="default" rendered="#{_items.idEstudiosRealizados!=null}"
+								                    action="#{tab2FormacionAcademicaPorCarpetaFC.editar(rowNr)}" />
+											  #{' '}
+											  
+											  
+								               <a:commandLink id="removeRow" 
+													action="#{tab2FormacionAcademicaPorCarpetaFC.delEstudio(rowNr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="discapacidadPanel"/>
+								              #{' '}
+								              <h:commandLink value="Descargar"   target="_blank" rendered="#{_items.documentos.idDocumento!=null}"
+													action="#{tab2FormacionAcademicaPorCarpetaFC.abrirDoc(rowNr)}" />
+								                    
+											</rich:column>
+											
+										</rich:dataTable>
+							 		 </div> 
+		     
+		         </rich:panel>
+		         </h:panelGrid>
+		         <a:outputPanel ajaxRendered="true" id="outPanelMsgIdioma">
+		         <div style="clear: both"><h:outputText rendered="#{!tab2FormacionAcademicaPorCarpetaFC.primeraVezIdioma}"
+							value="#{messages.CU516_msg_copia_idioma}"
+							style="color:red;font-size:15px;"/> </div></a:outputPanel>
+		         <rich:panel id="idiomaPanel" style=" width : 872px;"><f:facet name="header">#{messages.CU82_idiomas}</f:facet>
+		         <h:panelGrid  columns="1">
+		        
+		         <rich:panel  >
+		         <h:panelGrid columns="4">
+		         <s:decorate id="idiomaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_idioma}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="idioma" value="#{tab2FormacionAcademicaPorCarpetaFC.idIdioma}" style="width:180px">
+							<f:selectItems value="#{datosEspecificossByIdiomasSelectItems}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="hablaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_habla}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="habla" value="#{tab2FormacionAcademicaPorCarpetaFC.idHabla}" style="width:180px">
+							<f:selectItems value="#{idiomaOpcSelectItems}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="escribeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_escribe}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="escribe" value="#{tab2FormacionAcademicaPorCarpetaFC.idEscribe}" style="width:180px">
+							<f:selectItems value="#{idiomaOpcSelectItems}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="leeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_lee}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="lee" value="#{tab2FormacionAcademicaPorCarpetaFC.idLee}" style="width:180px">
+							<f:selectItems value="#{idiomaOpcSelectItems}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+		         </h:panelGrid>
+		         </rich:panel>
+		         <h:commandButton id="addIdioma"  eventsQueue="default" 
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" 
+						action="#{tab2FormacionAcademicaPorCarpetaFC.addIdiomas()}"/>
+						 <a:outputPanel ajaxRendered="true" id="panelIdiomas">
+		         
+		          <div class="results" id="tblIdiomaList" style=" overflow: scroll;"  width="310" >
+								   	<rich:dataTable id="itemsIdiomaList" var="_items"  rows="5"
+												value="#{tab2FormacionAcademicaPorCarpetaFC.idiomasPersonasList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU82_idioma}
+													</f:facet>
+													<h:outputText value="#{_items.datosEspecificos.descripcion}" />
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU82_habla}
+													</f:facet>
+														<h:outputText rendered="#{_items.habla =='B'}" 
+													value="BASICO" />
+													<h:outputText rendered="#{_items.habla =='M'}" 
+													value="MEDIO" />
+													<h:outputText rendered="#{_items.habla =='A'}" 
+													value="AVANZADO" />
+													
+													</rich:column>
+												<rich:column >
+												
+													<f:facet name="header">
+													#{messages.CU82_escribe}
+													</f:facet>
+													<h:outputText rendered="#{_items.escribe =='B'}" 
+													value="BASICO" />
+													<h:outputText rendered="#{_items.escribe =='M'}" 
+													value="MEDIO" />
+													<h:outputText rendered="#{_items.escribe =='A'}" 
+													value="AVANZADO" />
+											</rich:column>
+											<rich:column >
+									            <f:facet name="header">
+														#{messages.CU82_lee}
+													</f:facet>
+									            	<h:outputText rendered="#{_items.lee =='B'}" 
+													value="BASICO" />
+													<h:outputText rendered="#{_items.lee =='M'}" 
+													value="MEDIO" />
+													<h:outputText rendered="#{_items.lee =='A'}" 
+													value="AVANZADO" />
+									       </rich:column>
+									    
+									    
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 
+											 
+								                    <a:commandLink id="delidiom" 
+													action="#{tab2FormacionAcademicaPorCarpetaFC.delIdioma(rowNr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="panelIdiomas"/>
+											</rich:column>
+										</rich:dataTable>
+							 		 </div> 
+							 		 </a:outputPanel>
+		         </h:panelGrid>
+		        <div style="clear: both"><h:outputText
+							value="#{messages.CU516_msg_obs}"
+							styleClass="labelClass" /></div>
+		        
+		         </rich:panel>
+	
+	
+
+	
+	
+	<div class="actionButtons">
+	<s:button 
+                   value="#{messages.msg_done}"
+             propagation="none"
+             view="/#{empty from ? 'cargarCarpeta/cargarCarpeta' : from}.xhtml"/>
+
+            
+            
+
+          
+        </div>
+</h:form>
+</ui:composition>

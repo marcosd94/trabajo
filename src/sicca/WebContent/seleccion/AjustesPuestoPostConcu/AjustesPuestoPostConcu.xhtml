@@ -1,0 +1,298 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU544_title}</h1>
+		<a:outputPanel id="idPanelModal" ajaxRendered="true">
+
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{ajustesPuestoPostConcuFC.indexObs!=null}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU544_cargarObs}</f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate id="observacionField" template="/layout/edit.xhtml">
+
+								<h:inputTextarea id="observacion" cols="80" rows="20"
+									value="#{ajustesPuestoPostConcuFC.observacion}" />
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="idBtnAceptar" value="Guardar"
+						action="#{ajustesPuestoPostConcuFC.saveObs()}" /> <a:commandButton
+						id="idBtnCancelObs" value="Cancelar"
+						action="#{ajustesPuestoPostConcuFC.limpiarObs()}" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}				
+			</script>
+		</a:outputPanel>
+		<h:panelGrid columns="1">
+
+			<rich:panel id="panelParametro">
+				<f:facet name="header">
+				</f:facet>
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU269_concurso}</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU269_grupoPuestos}</ui:define>
+						<h:inputText id="usuMod" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+							style=" width : 250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU420_vacancias}</ui:define>
+						<h:inputText id="vacancias" disabled="true"
+							value="#{ajustesPuestoPostConcuFC.vacanciaOriginal}"
+							style=" width : 250px;" />
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+			<a:form id="idFormPanel1">
+				<rich:simpleTogglePanel
+					label="Puestos (#{ajustesPuestoPostConcuFC.lPuestos.size()})"
+					switchType="ajax">
+					<h:panelGrid columns="3">
+						<h:form>
+							<h:commandButton id="iiiii" value="Listado de Puestos"
+								action="#{ajustesPuestoPostConcuFC.pdfListadoPuestos()}" />
+							<h:commandButton value="Listado de Seleccionados"
+								action="#{ajustesPuestoPostConcuFC.pdfSeleccionados()}" />
+							<h:commandButton value="Listado de Elegibles"
+								action="#{ajustesPuestoPostConcuFC.pdfElegibles()}" />
+						</h:form>
+					</h:panelGrid>
+					<rich:extendedDataTable var="_var" rowKeyVar="rowKey1"
+						enableContextMenu="false" height="100px"
+						value="#{ajustesPuestoPostConcuFC.lPuestos}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="10%" id="COL1">
+							<f:facet name="header">#{messages.CU544_codigoPuesto}</f:facet>
+							<h:outputText
+								value="#{detallePlantaCargoListFormController.obtenerCodigoPuesto(_var.plantaCargoDet)}" />
+						</rich:column>
+
+						<rich:column width="15%">
+							<f:facet name="header">#{messages.CU544_puesto}</f:facet>
+							<h:outputText value="#{_var.plantaCargoDet.descripcion}" />
+						</rich:column>
+
+						<rich:column width="15%" id="COL2">
+							<f:facet name="header">#{messages.CU544_excepcion}</f:facet>
+							<h:outputText value="#{_var.excepcion.idExcepcion}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_desierto}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var.desierto}" disabled="#{ajustesPuestoPostConcuFC.lElegibles.size() != 0}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_excepcionar}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var.excepcionar}" disabled="#{ajustesPuestoPostConcuFC.lElegibles.size() != 0}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_idExc}</f:facet>
+							<h:outputText value="#{_var.excepcion.idExcepcion}"/>
+						</rich:column>
+						<rich:column width="30%">
+							<f:facet name="header">Acciones</f:facet>
+							<s:link propagation="join"
+								action="#{ajustesPuestoPostConcuFC.cargarTipoObs(ajustesPuestoPostConcuFC.TIPO_OBS_PUESTO)}"
+								value="Obs. Puesto" disabled="#{ajustesPuestoPostConcuFC.lElegibles.size() != 0}">
+								<f:param name="indice" value="#{rowKey1}" />
+							</s:link>
+						</rich:column>
+					</rich:extendedDataTable>
+				</rich:simpleTogglePanel>
+
+			</a:form>
+			<a:form>
+				<rich:simpleTogglePanel
+					label="Postulantes Seleccionados (#{ajustesPuestoPostConcuFC.lPostusSelected.size()})"
+					switchType="ajax">
+					<rich:extendedDataTable var="_var2" rowKeyVar="rowKey2"
+						enableContextMenu="false" height="100px"
+						value="#{ajustesPuestoPostConcuFC.lPostusSelected}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="10%" id="COL1">
+							<f:facet name="header">#{messages.CU544_codigoPostulante}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.codPostulante(_var2.postulacion)}" />
+						</rich:column>
+
+						<rich:column width="10%" id="COL2">
+							<f:facet name="header">#{messages.CU544_personNombre}</f:facet>
+							<h:outputText
+								value="#{_var2.postulacion.personaPostulante.nombres}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_personApellidos}</f:facet>
+							<h:outputText
+								value="#{_var2.postulacion.personaPostulante.apellidos}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_puntaje}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.calcPuntaje(_var2.puntajeRealizado)}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_excluir}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var2.excluir}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_pasarAElegible}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var2.pasaAelegible}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_cambiar}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var2.cambiar}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_inlcuido}</f:facet>
+							<h:selectBooleanCheckbox value="#{_var2.incluido}"
+								disabled="true">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_idExc}</f:facet>
+							<h:outputText value="#{_var2.excepcion.idExcepcion}" />
+						</rich:column>
+						<rich:column width="10%">
+							<f:facet name="header">Acciones</f:facet>
+							<s:link propagation="join"
+								action="#{ajustesPuestoPostConcuFC.cargarTipoObs(ajustesPuestoPostConcuFC.TIPO_OBS_SELE)}"
+								value="#{messages.CU544_obsExclusion}">
+								<f:param name="indice" value="#{rowKey2}" />
+							</s:link>
+						</rich:column>
+					</rich:extendedDataTable>
+
+				</rich:simpleTogglePanel>
+			</a:form>
+
+			<a:form>
+
+				<rich:simpleTogglePanel
+					rendered="#{ajustesPuestoPostConcuFC.habPanel()}"
+					label="Elgibles Disponibles (#{ajustesPuestoPostConcuFC.lElegibles.size()})"
+					switchType="ajax">
+					<rich:extendedDataTable var="_var3" rowKeyVar="rowKey3"
+						enableContextMenu="false" height="100px"
+						value="#{ajustesPuestoPostConcuFC.lElegibles}"
+						noDataLabel="#{messages.GENERICO_NODATA}"
+						rowClasses="rvgRowOne,rvgRowTwo">
+						<rich:column width="20%" id="COL1">
+							<f:facet name="header">#{messages.CU544_codigoPostulante}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.codPostulante(_var3.postulacion)}" />
+						</rich:column>
+
+						<rich:column width="20%" id="COL2">
+							<f:facet name="header">#{messages.CU544_personNombre}</f:facet>
+							<h:outputText
+								value="#{_var3.postulacion.personaPostulante.nombres}" />
+						</rich:column>
+
+						<rich:column width="20%">
+							<f:facet name="header">#{messages.CU544_personApellidos}</f:facet>
+							<h:outputText
+								value="#{_var3.postulacion.personaPostulante.apellidos}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_puntaje}</f:facet>
+							<h:outputText
+								value="#{ajustesPuestoPostConcuFC.calcPuntaje(_var3.postulacion)}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header">#{messages.CU544_incluir}</f:facet>
+							<h:selectBooleanCheckbox
+								disabled="#{!ajustesPuestoPostConcuFC.habOperacionED(_var3.listaElegiblesCab.vtoValidezLista)}"
+								value="#{_var3.incluir}">
+								<a:support event="onchange"></a:support>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column width="20%">
+							<f:facet name="header">Acciones</f:facet>
+							<s:link propagation="join"
+								action="#{ajustesPuestoPostConcuFC.cargarTipoObs(ajustesPuestoPostConcuFC.TIPO_OBS_ELE)}"
+								value="#{messages.CU544_obsElegible}">
+								<f:param name="indice" value="#{rowKey3}" />
+							</s:link>
+						</rich:column>
+					</rich:extendedDataTable>
+				</rich:simpleTogglePanel>
+			</a:form>
+		</h:panelGrid>
+		<h:form>
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{ajustesPuestoPostConcuFC.save()}">
+				<f:param name="codActividad"
+					value="#{ajustesPuestoPostConcuFC.codActividad}" />
+					
+				<f:param name="bloquearNoAprobados"
+					value="#{ajustesPuestoPostConcuFC.bloquearNoAprobados}" />
+					
+			</h:commandButton> 
+			
+			<s:button id="cancelAdd" value="#{messages.GENERICO_VOLVER}"
+				propagation="end"
+				view="/#{empty ajustesPuestoPostConcuFC.from?'home':from}.xhtml" /></div>
+		</h:form>
+
+		<script type="text/javascript">
+
+// Deshabilita los drag and drop
+
+/*Abiertas*/
+DnD_ExtSimpleDraggable_COL1.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL2.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL3.isDragEnabled=false;
+
+</script>
+
+
+
+	</ui:define>
+
+</ui:composition>

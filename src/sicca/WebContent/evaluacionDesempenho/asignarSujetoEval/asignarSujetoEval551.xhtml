@@ -1,0 +1,393 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU551_titulo}</h1>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+
+				<h:panelGrid columns="">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+						<h:inputText size="100" id="evaluacion" disabled="true"
+							value="#{asignarSujetosEval551FC.evaluacion}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2" id="idPanelCampos">
+
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+
+					<ui:remove>
+						<a:outputPanel>
+												<s:decorate template="/layout/display.xhtml">
+													<ui:define name="label">#{messages.CU398_unidadOrganiza}
+															</ui:define>
+													<h:inputText id="orgCodigo2" size="10" disabled="true"
+														value="#{asignarSujetosEval551FC.codUoDet}">
+													</h:inputText>
+															#{' '}
+															<h:inputText id="orgDenominacion2" size="70" disabled="true"
+														value="#{asignarSujetosEval551FC.descUoDet}" />
+						
+												</s:decorate>
+											</a:outputPanel>
+					</ui:remove>
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU563_periodo}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIni" datePattern="dd/MM/yyyy"
+							inputSize="10" enableManualInput="true"
+							oninputkeypress="ponerBarra(event);"
+							value="#{asignarSujetosEval551FC.fechaDesde}">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU563_hasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechafin" datePattern="dd/MM/yyyy"
+							inputSize="10" enableManualInput="true"
+							oninputkeypress="ponerBarra(event);"
+							value="#{asignarSujetosEval551FC.fechaHasta}">
+						</rich:calendar>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel label="#{messages.CU551_definirAlcance}"
+				id="idPanelDefAlcance" switchType="ajax">
+				<table>
+					<tr>
+						<td width="500px">
+						<fieldset><legend>Sujetos</legend> <h:panelGrid
+							columns="1">
+							<s:decorate id="idRegionUnOrg" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU398_unidadOrganiza}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="orgCodigo" size="10"
+									value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+									<a:support event="onblur" eventsQueue="default"
+										action="#{asignarSujetosEval551FC.refreshDefAlcance()}"
+										reRender="idPanelDefAlcance">
+										<s:conversationPropagation type="join" />
+									</a:support>
+
+								</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="50" disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep" eventsQueue="default" 
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('evaluacionDesempenho/asignarSujetoEval/asignarSujetoEval551')}" />
+				#{' '}
+				<a:commandButton id="searchAll" value="Limpiar"
+									action="#{asignarSujetosEval551FC.searchGrilla0(true)}" reRender="orgDenominacion,orgCodigo" />
+							</s:decorate>
+							<a:outputPanel id="idPanelGrila0" ajaxRendered="true">
+								<rich:extendedDataTable
+									noDataLabel="#{messages.msg_list_search_no_results}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									cellpadding="0" cellspacing="0" width="500" border="0"
+									var="_record" height="250px"
+									value="#{asignarSujetosEval551FC.lGrilla0}">
+									<rich:column width="50%">
+										<f:facet name="header">
+						#{messages.CU551_codigo}
+						</f:facet>
+										<h:outputText style="white-space:normal;word-wrap: break-word"
+											value="#{asignarSujetosEval551FC.genCodigoUoDet(_record.idConfiguracionUoDet)}" />
+									</rich:column>
+									<rich:column width="40%">
+										<f:facet name="header">
+						#{messages.CU551_uoDetDesc}
+						</f:facet>
+										<h:outputText style="white-space:normal"
+											value="#{_record.denominacionUnidad}" />
+									</rich:column>
+									<rich:column width="10%">
+										<f:facet name="header">
+											<h:selectBooleanCheckbox id="idSelAll1"
+												value="#{asignarSujetosEval551FC.selAllGrilla0}">
+												<a:support event="onclick" reRender="idPanelGrila0"
+													action="#{asignarSujetosEval551FC.seleAll('0')}"></a:support>
+											</h:selectBooleanCheckbox>
+										</f:facet>
+										<h:selectBooleanCheckbox value="#{_record.selected}" />
+									</rich:column>
+								</rich:extendedDataTable>
+							</a:outputPanel>
+						</h:panelGrid></fieldset>
+						</td>
+
+						<td valign="top">
+						<fieldset><legend>Filtros</legend> <h:panelGrid
+							columns="2">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU551_tipoNombramiento}</ui:define>
+								<h:selectOneMenu id="idTipoNombramiento"
+									value="#{asignarSujetosEval551FC.idTipoNombramiento}"
+									style="width:150px">
+									<f:selectItems
+										value="#{asignarSujetosEval551FC.traerTipoNombramientoSI()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU484_pais_exp}</ui:define>
+								<h:selectOneMenu id="idPaisExped"
+									value="#{asignarSujetosEval551FC.idPaisExpede}"
+									style="width:150px">
+									<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<span class="required">#{messages.CU551_especifiqueEntreComas}</span>
+								<ui:define name="label">#{messages.CU551_objGasto}</ui:define>
+								<h:inputText size="50"
+									value="#{asignarSujetosEval551FC.objGasto}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU551_cedIden}</ui:define>
+								<h:inputText size="50"
+									value="#{asignarSujetosEval551FC.nroDocIden}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Puesto</ui:define>
+								<h:inputText size="50"
+									value="#{asignarSujetosEval551FC.descPuesto}" />
+							</s:decorate>
+							<h:panelGrid columns="2">
+								<h:commandButton value="Buscar"
+									action="#{asignarSujetosEval551FC.searchGrilla1()}" />
+								<s:button value="Limpiar"
+									action="#{asignarSujetosEval551FC.limpiar()}" />
+							</h:panelGrid>
+						</h:panelGrid></fieldset>
+
+						</td>
+					</tr>
+				</table>
+			</rich:simpleTogglePanel>
+
+			<rich:panel id="idPanelBusqueda">
+				<f:facet name="header">#{messages.CU551_grilla1_title} (#{empty asignarSujetosEval551FC.lGrilla1? 0 : asignarSujetosEval551FC.lGrilla1.size()})</f:facet>
+				<rich:extendedDataTable
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="800" border="0"
+					var="_record2" height="250px"
+					value="#{asignarSujetosEval551FC.lGrilla1}">
+					<rich:column width="26%">
+						<f:facet name="header">
+						#{messages.CU551_uoDesc}
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{_record2.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_funcionario}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.persona.nombres} #{_record2.persona.apellidos}" />
+					</rich:column>
+
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_cedula}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_puesto}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.plantaCargoDet.descripcion}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_fechaIngreso}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record2.fechaInicio}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_antiguedad}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{asignarSujetosEval551FC.calcAntiguedadPuesto(_record2.fechaInicio)}" />
+					</rich:column>
+					<rich:column width="10%">
+						<f:facet name="header">
+							<a:region>
+								<h:selectBooleanCheckbox id="idSelAll1"
+									value="#{asignarSujetosEval551FC.selAllGrilla1}">
+									<a:support event="onclick" reRender="idPanelBusqueda"
+										action="#{asignarSujetosEval551FC.seleAll('1')}"></a:support>
+								</h:selectBooleanCheckbox>
+							</a:region>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_record2.selecciono}" />
+					</rich:column>
+				</rich:extendedDataTable>
+
+			</rich:panel>
+
+			<a:outputPanel>
+				<a:commandButton id="showValoracionModalButton"
+					reRender="panelGrillagruposAsig,idPanelBusqueda"
+					eventsQueue="default" value="#{messages.CU551_agregar}"
+					action="#{asignarSujetosEval551FC.agregarGrilla2()}" />
+			</a:outputPanel>
+			<rich:panel id="panelGrillagruposAsig">
+				<f:facet name="header">#{messages.CU551_grilla2_title} (#{empty asignarSujetosEval551FC.lGrilla2? 0 : asignarSujetosEval551FC.lGrilla2.size()})</f:facet>
+				<rich:extendedDataTable
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					rowKeyVar="rowIdVar"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="800" border="0"
+					var="_record3" height="250px"
+					value="#{asignarSujetosEval551FC.lGrilla2}">
+					
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_uoDesc}
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{_record3.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</rich:column>
+					<rich:column width="26%">
+						<f:facet name="header">
+						#{messages.CU551_funcionario}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.empleadoPuesto.persona.nombres} #{_record3.empleadoPuesto.persona.apellidos}" />
+					</rich:column>
+
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_cedula}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.empleadoPuesto.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_puesto}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</rich:column>
+					<rich:column width="10%">
+						<f:facet name="header">
+						#{messages.CU551_fechaIngreso}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.empleadoPuesto.fechaInicio}" />
+					</rich:column>
+					<rich:column width="13%">
+						<f:facet name="header">
+						#{messages.CU551_antiguedad}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{asignarSujetosEval551FC.calcAntiguedadPuesto(_record3.empleadoPuesto.fechaInicio)}" />
+					</rich:column>
+					<rich:column width="10%">
+						<a:commandLink value="Eliminar" reRender="panelGrillagruposAsig"
+							action="#{asignarSujetosEval551FC.eliminar(rowIdVar)}" />
+					</rich:column>
+				</rich:extendedDataTable>
+			</rich:panel>
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass" /></div>
+			<s:div styleClass="actionButtons">
+				<h:commandButton id="aprobar" value="Guardar"
+					action="#{asignarSujetosEval551FC.save()}"
+					onclick="return confirm('#{messages.CU563_msg_aprobar}');" />
+				<s:button id="cancelAdd" value="Volver" propagation="join"
+					view="#{asignarSujetosEval551FC.elFrom}" />
+			</s:div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

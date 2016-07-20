@@ -1,0 +1,367 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h:form id="interrupcionForm" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>MOVILIDAD: Ver</h1>
+			<rich:panel id="panelAdj">
+				<f:facet name="header">Datos de Acto Administrativo</f:facet>
+				<div class="results" id="tblList"
+					style="overflow: scroll; width: 400; HEIGHT: 230px"><h:panelGrid>
+					<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{interrupcionTrasladoTmpCU747FC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+
+
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText
+								value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{interrupcionTrasladoTmpCU747FC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+
+				</h:panelGrid></div>
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea id="obs" disabled="true"
+							value="#{interrupcionTrasladoTmpCU747FC.observacion}" cols="80">
+							<f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+
+			<rich:panel id="panelAnterior">
+				<f:facet name="header">Datos del Puesto Anterior</f:facet>
+
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{interrupcionTrasladoTmpCU747FC.codNivelEntidad}"
+								size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{interrupcionTrasladoTmpCU747FC.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{interrupcionTrasladoTmpCU747FC.entCodigo}" size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{interrupcionTrasladoTmpCU747FC.entidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{interrupcionTrasladoTmpCU747FC.orden}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true" value="#{interrupcionTrasladoTmpCU747FC.oee}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+								</ui:define>
+							<h:inputText id="orgCodigo" size="10" disabled="true"
+								value="#{interrupcionTrasladoTmpCU747FC.codUnigOrg}">
+								
+							</h:inputText>
+								#{' '}
+								<h:inputText id="orgDenominacion" size="50" disabled="true"
+								value="#{interrupcionTrasladoTmpCU747FC.unidadOrg}" />
+							 	
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml" id="puestoField">
+							<ui:define name="label">Puesto Anterior</ui:define>
+							<h:inputText id="codPuesto" size="15"
+								value="#{seleccionUtilFormController.obtenerCodigoPuesto(interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.plantaCargoDet)}"
+								disabled="true" />#{' '}<h:inputText id="puesto" size="45"
+								value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.plantaCargoDet.descripcion}"
+								disabled="true" />
+								#{' '}
+									
+									<a:commandButton id="searchper" eventsQueue="default"
+								value="#{messages.CU541_ver_datos_persona}"
+								action="#{interrupcionTrasladoTmpCU747FC.toFindPersonaView()}" />
+
+						</s:decorate>
+						<h:panelGrid columns="2">
+							<s:decorate template="/layout/display.xhtml" id="nroDocumento">
+								<ui:define name="label">#{messages.CU747_nro}</ui:define>
+								<h:inputText id="ci" size="20"
+									value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.persona.documentoIdentidad}"
+									disabled="true">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml" id="nombresField">
+								<ui:define name="label">#{messages.CU747_nombres}</ui:define>
+								<h:inputText id="nombres" size="45"
+									value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.persona.nombres}"
+									disabled="true">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml" id="paisField">
+								<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+								<h:inputText id="pais" size="45"
+									value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.persona.paisByIdPaisExpedicionDoc.descripcion}"
+									disabled="true">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml" id="apellidosField">
+								<ui:define name="label">#{messages.CU747_apellidos}</ui:define>
+								<h:inputText id="apellidos" size="45"
+									value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoAnterior.persona.apellidos}"
+									disabled="true">
+								</h:inputText>
+							</s:decorate>
+
+
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<rich:panel>
+						<f:facet name="header">Categoria/Remuneración en Puesto Anterior</f:facet>
+						<div class="results" id="tbldetList"
+							style="overflow: scroll; width: 400; HEIGHT: 200px"><rich:dataTable
+							id="itemsList2" var="_pagos" first="0"
+							value="#{interrupcionTrasladoTmpCU747FC.listaEmpleadoConceptoPagoOld}"
+							rowKeyVar="rowNr2">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pagos.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pagos.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pagos.monto}" />
+							</rich:column>
+						</rich:dataTable></div>
+					</rich:panel>
+
+
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="panelNuevo">
+				<f:facet name="header">Datos del Nuevo Puesto</f:facet>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+
+						<s:decorate template="/layout/display.xhtml" id="nivelCodField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCod" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDesc"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+
+
+						<s:decorate template="/layout/display.xhtml" id="entidadCodField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCod" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDesc"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+
+
+
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCod" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenom" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+	                	<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+								</ui:define>
+							<h:inputText id="orgCodigo2" size="10" disabled="true"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								
+							</h:inputText>
+								#{' '}
+								<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+							 	
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml" id="nuevoPuestoField">
+							<ui:define name="label">Nuevo Puesto</ui:define>
+							<h:inputText id="codNuevoPuesto" size="15"
+								value="#{seleccionUtilFormController.obtenerCodigoPuesto(interrupcionTrasladoTmpCU747FC.empleadoPuestoNuevo.plantaCargoDet)}"
+								disabled="true" />#{' '}<h:inputText id="nuevoPuesto" size="45"
+								value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoNuevo.plantaCargoDet.descripcion}"
+								disabled="true" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha de Inicio
+						</ui:define>
+							<rich:calendar id="fechaInicio" enableManualInput="true"
+								disabled="true" inputSize="10"
+								value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoNuevo.fechaInicio}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml" id="tipoMovField">
+							<ui:define name="label">Tipo de Movilidad
+									</ui:define>
+
+							<h:inputText id="tipoMov" size="50" disabled="true"
+								value="#{interrupcionTrasladoTmpCU747FC.empleadoPuestoNuevo.datosEspecificosByIdDatosEspTipoIngresoMovilidad.descripcion}" />
+						</s:decorate>
+					</h:panelGrid>
+					<rich:panel>
+						<f:facet name="header">Categoria/Remuneración en nuevo puesto</f:facet>
+						<div class="results" id="tblList"
+							style="overflow: scroll; width: 500; HEIGHT: 210px"><rich:dataTable
+							id="itemList" var="_pago" first="0"
+							value="#{interrupcionTrasladoTmpCU747FC.listaEmpleadoConceptoPagoNew}"
+							rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pago.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pago.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pago.monto}" />
+							</rich:column>
+						</rich:dataTable></div>
+					</rich:panel>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/movilidadLaboral/interrupcionTrasladoTmp/InterrupcionTrasladoTmpCU747.xhtml" />
+
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

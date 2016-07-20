@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remun_mes05" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="anio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[2015]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT distinct anho, mes, oee_nombre as oee_nombre, activo FROM
+(
+
+select distinct $P{anio} as anho,
+    CASE
+h_r_t.mes::text
+when '1' then 'a1'
+when '2' then 'b2'
+when '3' then 'c3'
+when '4' then 'd4'
+when '5' then 'e5'
+when '6' then 'f6'
+when '7' then 'g7'
+when '8' then 'h8'
+when '9' then 'i9'
+when '10' then 'j10'
+when '11' then 'k11'
+when '12' then 'l12'
+else ''
+end as mes,
+    h_r_t.oee,
+    true as activo,
+    '*'||c_uo.denominacion_unidad as oee_nombre
+
+
+
+from remuneracion.historico_remuneraciones_tmp h_r_t
+join planificacion.configuracion_uo_cab c_uo
+on c_uo.id_configuracion_uo = h_r_t.id_configuracion_uo
+
+where h_r_t.devengado is not null
+and h_r_t.anho = $P{anio}
+and h_r_t.activo = true
+and h_r_t.entidad in (select distinct entidad from remuneracion.historico_remuneraciones_tmp
+                where devengado is not null
+                and anho = $P{anio})
+
+
+group by oee_nombre ,h_r_t.mes,entidad,oee
+
+
+union all
+
+select distinct $P{anio} as anho,
+    CASE
+h_r_t.mes::text
+when '1' then 'a1'
+when '2' then 'b2'
+when '3' then 'c3'
+when '4' then 'd4'
+when '5' then 'e5'
+when '6' then 'f6'
+when '7' then 'g7'
+when '8' then 'h8'
+when '9' then 'i9'
+when '10' then 'j10'
+when '11' then 'k11'
+when '12' then 'l12'
+else ''
+end as mes,
+    h_r_t.oee,
+    true as activo,
+
+    '*'||c_uo.denominacion_unidad as oee_nombre
+
+from remuneracion.remuneraciones_tmp h_r_t
+join planificacion.configuracion_uo_cab c_uo
+on c_uo.id_configuracion_uo = h_r_t.id_configuracion_uo
+
+
+where h_r_t.devengado is not null
+and h_r_t.anho = $P{anio}
+and h_r_t.activo = true
+and h_r_t.entidad in (select distinct entidad from remuneracion.remuneraciones_tmp
+                where devengado is not null
+                and anho = $P{anio})
+
+
+group by oee_nombre ,h_r_t.mes,entidad,oee
+
+
+
+union all
+SELECT  $P{anio} as anho, 'a1' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'b2' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'c3' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'd4' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'e5' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'f6' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'g7' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'h8' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'i9' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'j10' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'k11' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+union all
+SELECT  $P{anio} as anho, 'l12' as mes, 0 AS oee,  false as activo, 'z ' AS oee_nombre
+
+union all
+SELECT $P{anio} as anho, 'a1' as mes, 0 AS oee,  false as activo, '*'||c_uo.denominacion_unidad as oee_nombre
+FROM planificacion.configuracion_uo_cab as c_uo
+WHERE NOT EXISTS (SELECT * FROM remuneracion.remuneraciones_tmp as rem WHERE rem.id_configuracion_uo = c_uo.id_configuracion_uo) and activo = true
+
+
+union all
+SELECT $P{anio} as anho, 'a1' as mes, 0 AS oee,  false as activo, '*'||c_uo.denominacion_unidad as oee_nombre
+FROM planificacion.configuracion_uo_cab as c_uo
+WHERE NOT EXISTS (SELECT * FROM remuneracion.historico_remuneraciones_tmp as rem WHERE rem.id_configuracion_uo = c_uo.id_configuracion_uo) and activo = true
+
+) alias
+ORDER BY mes]]>
+	</queryString>
+	<field name="anho" class="java.lang.Integer"/>
+	<field name="mes" class="java.lang.String"/>
+	<field name="oee_nombre" class="java.lang.String"/>
+	<field name="activo" class="java.lang.Boolean"/>
+	<title>
+		<band height="55" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="-16" width="555" height="65" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+				<subreport>
+					<reportElement x="4" y="3" width="539" height="61"/>
+					<subreportParameter name="path_logo">
+						<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="2" y="6" width="553" height="23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Planillas de Altas y Bajas]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="33">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="443" y="10" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="10" width="100" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{anho}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="49" splitType="Stretch">
+			<crosstab>
+				<reportElement x="3" y="6" width="540" height="30"/>
+				<crosstabParameter name="path">
+					<parameterValueExpression><![CDATA[$P{path_logo}]]></parameterValueExpression>
+				</crosstabParameter>
+				<parametersMapExpression><![CDATA[]]></parametersMapExpression>
+				<crosstabHeaderCell>
+					<cellContents/>
+				</crosstabHeaderCell>
+				<rowGroup name="oee_nombre" width="184">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{oee_nombre}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" x="0" y="2" width="184" height="11"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{oee_nombre}.substring(1)]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="mes" height="19">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[""+$F{mes}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="1" y="2" width="21" height="15"/>
+								<textElement>
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{mes}.substring(1).compareTo("1")==0?"ENE":
+$V{mes}.substring(1).compareTo("2")==0?"FEB":
+$V{mes}.substring(1).compareTo("3")==0?"MAR":
+$V{mes}.substring(1).compareTo("4")==0?"ABR":
+$V{mes}.substring(1).compareTo("5")==0?"MAY":
+$V{mes}.substring(1).compareTo("6")==0?"JUN":
+$V{mes}.substring(1).compareTo("7")==0?"JUL":
+$V{mes}.substring(1).compareTo("8")==0?"AGO":
+$V{mes}.substring(1).compareTo("9")==0?"SET":
+$V{mes}.substring(1).compareTo("10")==0?"OCT":
+$V{mes}.substring(1).compareTo("11")==0?"NOV":
+$V{mes}.substring(1).compareTo("12")==0?"DIC":""]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="activoMeasure" class="java.lang.Boolean">
+					<measureExpression><![CDATA[$F{activo}]]></measureExpression>
+				</measure>
+				<crosstabCell width="23" height="17">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<image onErrorType="Icon">
+							<reportElement style="Crosstab Data Text" x="7" y="5" width="10" height="6">
+								<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+								<printWhenExpression><![CDATA[$V{activoMeasure}.equals(true)]]></printWhenExpression>
+							</reportElement>
+							<imageExpression class="java.lang.String"><![CDATA[$P{path}+"/right2.png"]]></imageExpression>
+						</image>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="mes">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Boolean"><![CDATA[$V{activoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="oee_nombre">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Boolean"><![CDATA[$V{activoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="oee_nombre" columnTotalGroup="mes">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Boolean"><![CDATA[$V{activoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="18" y="9" width="525" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

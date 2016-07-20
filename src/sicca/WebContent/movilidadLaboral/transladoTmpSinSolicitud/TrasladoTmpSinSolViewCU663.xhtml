@@ -1,0 +1,391 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redtransladoConsol" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>MOVILIDAD: Ver</h1>
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+				<div class="results" id="tblList"
+					style="overflow: scroll; width: 400; HEIGHT: 230px"><h:panelGrid>
+					<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{trasladoTmpSinSolEditCU663FC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+
+
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText
+								value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{trasladoTmpSinSolEditCU663FC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+					<s:decorate template="/layout/display.xhtml"
+						id="comisionamientoField">
+						<h:selectBooleanCheckbox
+							value="#{trasladoTmpSinSolEditCU663FC.comisionamiento}"
+							disabled="true" />
+								#{' '}
+								<h:outputText value="#{messages.CU747_comisionamiento}" />
+					</s:decorate>
+				</h:panelGrid></div>
+			</rich:panel>
+			<rich:panel id="panelPuestoAnterior">
+				<f:facet name="header">Datos del Puesto Anterior</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.codNivelEntidad}"
+								size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="uoCodigoField">
+						<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+						<h:inputText id="uoCodigo" styleClass="numeric" size="5"
+							value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.codigoUnidOrgDep}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion" size="50" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="puestoField">
+						<ui:define name="label">Puesto Anterior
+						</ui:define>
+						<h:inputText id="puesto" styleClass="numeric" size="20"
+							value="#{seleccionUtilFormController.obtenerCodigoPuesto(trasladoTmpSinSolEditCU663FC.funcionario.plantaCargoDet)}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="80"
+							disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.funcionario.plantaCargoDet.descripcion}" />
+									#{' '}
+									
+									<a:commandButton id="searchper" eventsQueue="default"
+							value="#{messages.CU541_ver_datos_persona}"
+							action="#{trasladoTmpSinSolEditCU663FC.toFindPersonaView()}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+						<h:inputText id="nroCedula" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.documentoIdentidad}"
+							size="20" maxlength="30">
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+						<h:inputText id="nombres" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.nombres}"
+							size="60" maxlength="100">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+						<h:inputText id="paisExpDoc" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+						<h:inputText id="apellidos" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.apellidos}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<rich:panel style="border:none;">
+
+					<h:panelGrid columns="1">
+						<h:outputText value="Categoria/Remuneración en Puesto Anterior"
+							style="font-size:12px;font-weight:bold;" />
+						<rich:dataTable id="itemsList2" var="_pago"
+							value="#{trasladoTmpSinSolEditCU663FC.empleadoConceptoPagosAnterior}"
+							rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pago.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pago.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pago.monto}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</h:panelGrid>
+
+				</rich:panel>
+			</rich:panel>
+
+			<rich:panel id="panelNuevoPuesto">
+				<f:facet name="header">Datos del Nuevo Puesto</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="nivelCodigo2Field">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigo2Field">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigo2Field">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="uoCodigo2Field">
+						<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+						<h:inputText id="uoCodigo2" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+							onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="puesto2Field">
+						<ui:define name="label">Nuevo Puesto
+
+						</ui:define>
+						<h:inputText id="puesto2" styleClass="numeric" size="20"
+							value="#{seleccionUtilFormController.obtenerCodigoPuesto(trasladoTmpSinSolEditCU663FC.plantaCargoDetView)}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="80"
+							disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.plantaCargoDetView.descripcion}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml" id="fecha2Field">
+						<ui:define name="label">Fecha de Inicio
+						</ui:define>
+						<rich:calendar id="fechaIngreso" disabled="true"
+							value="#{trasladoTmpSinSolEditCU663FC.fechaInicio}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="tipo2Field">
+						<ui:define name="label">Tipo Movilidad</ui:define>
+						<h:inputText id="tipo2" size="80"
+							value="#{trasladoTmpSinSolEditCU663FC.empleadoPuesto.datosEspecificosByIdDatosEspTipoIngresoMovilidad.descripcion}"
+							disabled="true">
+						</h:inputText>
+
+					</s:decorate>
+				</h:panelGrid>
+
+				<rich:panel style="border:none;">
+
+					<h:panelGrid columns="1">
+						<h:outputText value="Categoria/Remuneración en Nuevo Puesto"
+							style="font-size:12px;font-weight:bold;" />
+						<rich:dataTable id="itemsList" var="_pagos"
+							value="#{trasladoTmpSinSolEditCU663FC.empleadoConceptoPagosActual}"
+							rowKeyVar="rowNr2">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pagos.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pagos.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pagos.monto}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</h:panelGrid>
+
+				</rich:panel>
+
+
+			</rich:panel>
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/movilidadLaboral/transladoTmpSinSolicitud/TrasladoTmpSinSolCU663.xhtml" />
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

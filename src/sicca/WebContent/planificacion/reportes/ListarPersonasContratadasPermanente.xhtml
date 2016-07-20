@@ -1,0 +1,80 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="sinAnxSearch" styleClass="edit">
+		<h1>#{messages.CU35_}</h1>
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+			<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" 
+							value="#{listarPersonasContratadasPermanenteFormController.sinEntidad.entCodigo}" size="5">
+							<a:support event="onblur" reRender="entidadDescripcion,entCodigoField" eventsQueue="default"
+								action="#{listarPersonasContratadasPermanenteFormController.findEntidad()}" />
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="entidadDescripcion" 
+	                		  value="#{listarPersonasContratadasPermanenteFormController.sinEntidad.entNombre}" 
+	                		   size="60" 
+	                	   disabled="true"/>
+	                	   <a:commandButton value="Buscar" eventsQueue="default" rendered="false"
+											action="#{listarPersonasContratadasPermanenteFormController.getUrlToPage()}"/>
+					</s:decorate>
+				</a:region>
+					
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ConfiguracionUoDet_dep}</ui:define>
+						<h:inputText id="orden" disabled="true"
+							value="#{listarPersonasContratadasPermanenteFormController.orden}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="depDescripcion"
+								value="#{listarPersonasContratadasPermanenteFormController.configuracionUoCab.denominacionUnidad}"
+								size="60" disabled="true" />
+					</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_uno_org}</ui:define>
+					<h:inputText id="denominacionUnidad"
+						value="#{listarPersonasContratadasPermanenteFormController.denominacion}" />
+				</s:decorate>
+
+	     </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+			<a:commandButton id="search"
+				value="#{messa
+				ges.msg_list_search_button}"
+				action="#{listarCategoriasFormController.search()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{listarCategoriasFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<h:commandButton id="print"   rendered="#{not empty sinAnxList.resultList}"
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{listarCategoriasFormController.pdf()}" />
+		</div>
+
+    </h:form>
+	
+   
+
+	
+</ui:define>
+
+</ui:composition>

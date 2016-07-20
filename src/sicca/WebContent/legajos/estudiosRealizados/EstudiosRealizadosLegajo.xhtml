@@ -1,0 +1,537 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<h1>#{messages.CU647_titulo}</h1>
+	<rich:panel id="discapa" switchType="ajax" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU82_estudios_realizados}</f:facet>
+		<h:panelGrid columns="2">
+			<a:region>
+				<s:decorate id="nivelEsudioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU82_niveles_estudios}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="nivelEsudio" disabled="#{estudiosRealizadosLegajoFC.esEdit}"
+						value="#{estudiosRealizadosLegajoFC.idNivelEstudio}"
+						style="width:250px">
+						<f:selectItems value="#{nivelEstudioSelectItems}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{estudiosRealizadosLegajoFC.upTituloAcademico()}"
+							reRender="tituloField, otroNivelField, panelOtros" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_estado_actual}</ui:define>
+							<h:selectOneMenu id="estadoActual" style="width : 200px;" required="true" 
+								onchange="#{estudiosRealizadosLegajoFC.actualizarEstadoActual()}"
+								value="#{estudiosRealizadosLegajoFC.idEstadoActual}">
+						
+								<f:selectItems value="#{referenciasByEstadoActualSelectItems}" />
+								
+							</h:selectOneMenu>
+					</s:decorate>
+			
+			<a:outputPanel id="panelTituloObtenido">
+				<s:decorate id="tituloField" template="/layout/display.xhtml"
+				rendered="#{!estudiosRealizadosLegajoFC.esOtroNivel}"	>
+					<ui:define name="label">#{messages.CU82_titulo_obt}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="titulo" disabled="#{estudiosRealizadosLegajoFC.esEdit}"
+						value="#{estudiosRealizadosLegajoFC.idTituloAcademico}"
+						style="width:250px">
+						<f:selectItems
+							value="#{estudiosRealizadosLegajoFC.tituloSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+						 	action="#{estudiosRealizadosLegajoFC.upEspecialidad()}"
+							reRender="panelOtros" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate id="otroNivelField" template="/layout/edit.xhtml"
+								rendered="#{estudiosRealizadosLegajoFC.esOtroNivel}">
+								<ui:define name="label">Descripción de Nivel de Estudio<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="otroNivel" style="width:250px" maxlength="100"
+									value="#{estudiosRealizadosLegajoFC.estudiosRealizados.otroTituloObt}">
+								</h:inputText>
+							</s:decorate>
+			</a:outputPanel>
+			<a:outputPanel id="panelOtroNivel">
+							
+						</a:outputPanel>
+		
+			<a:outputPanel id="panelOtros">
+				<s:decorate id="otroField" template="/layout/edit.xhtml"
+					rendered="#{estudiosRealizadosLegajoFC.esOtro and !estudiosRealizadosLegajoFC.esOtroNivel}">
+					<ui:define name="label">#{messages.CU82_otro}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="otro" style="width:250px" maxlength="100"
+						value="#{estudiosRealizadosLegajoFC.estudiosRealizados.otroTituloObt}">
+					</h:inputText>
+				</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+
+		<h:panelGrid>
+			<s:decorate id="profesiOfiField"   rendered="false" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_Profesion_oficio}</ui:define>
+				<h:selectOneMenu id="profesiOfi"
+					value="#{estudiosRealizadosLegajoFC.idProfesion}"
+					style="width:250px">
+					<f:selectItems value="#{especialidadesSelectItems}" />
+					
+				</h:selectOneMenu>
+			</s:decorate>
+		</h:panelGrid>
+
+		<h:panelGrid columns="3">
+			<a:region>
+				<s:decorate id="institucionUniField" template="/layout/edit.xhtml">
+					<ui:define name="label">Institución/Univ<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="institucionUni" onclick="#{estudiosRealizadosLegajoFC.upInstitucionOtro()}" onchange="submit()"
+						value="#{estudiosRealizadosLegajoFC.idIstUniversidad}"
+						style="width:250px">
+						<f:selectItems value="#{estudiosRealizadosLegajoFC.getNivelesEstudioSelectItems(estudiosRealizadosLegajoFC.idNivelEstudio)}" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<a:outputPanel id="otraInstField">
+				<s:decorate template="/layout/edit.xhtml"
+					rendered="#{estudiosRealizadosLegajoFC.esOtraInst}">
+					<ui:define name="label">Otra<span class="required">*</span>
+					</ui:define>
+					<h:inputText id="otraInst" style="width:250px" maxlength="150"
+						value="#{estudiosRealizadosLegajoFC.estudiosRealizados.otraInstit}">
+					</h:inputText>
+				</s:decorate>
+			</a:outputPanel>
+			<a:outputPanel id="paisPanel">
+				<a:region>
+					<s:decorate id="paisField" template="/layout/edit.xhtml"
+						rendered="#{estudiosRealizadosLegajoFC.habPais and !estudiosRealizadosLegajoFC.esNingunaInsNingunTit}">
+						<ui:define name="label">#{messages.Departamento_idPais}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{estudiosRealizadosLegajoFC.idPais}" style="width:250px">
+							<f:selectItems
+								value="#{estudiosRealizadosLegajoFC.paisSelecItem}" />
+							
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+			</a:outputPanel>
+		</h:panelGrid>
+
+		<a:outputPanel id="paneletiempo">
+			<h:panelGrid columns="3">
+			<!-- 
+				<a:region>
+					<s:decorate template="/layout/edit.xhtml" id="fechaIniField"
+						rendered="#{!estudiosRealizadosLegajoFC.esNingunaInsNingunTit}">
+						<ui:define name="label">#{messages.CU82_fecIni}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIni" datePattern="dd/MM/yyyy"
+							inputSize="10" enableManualInput="true"
+							oninputkeypress="ponerBarra(event);"
+							value="#{estudiosRealizadosLegajoFC.estudiosRealizados.fechaInicio}">
+							<a:support event="onchanged" eventsQueue="default"
+								reRender="fechaIniField" />
+						</rich:calendar>
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate template="/layout/edit.xhtml" id="fechafinField"
+						rendered="#{estudiosRealizadosLegajoFC.habFechaFin()}">
+						<ui:define name="label">#{messages.CU82_fecFin}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaFin" datePattern="dd/MM/yyyy"
+							inputSize="10" enableManualInput="true"
+							oninputkeypress="ponerBarra(event);"
+							value="#{estudiosRealizadosLegajoFC.estudiosRealizados.fechaFin}">
+							<a:support event="onchanged" eventsQueue="default"
+								reRender="fechafinField" />
+						</rich:calendar>
+					</s:decorate>
+				</a:region>
+				-->
+				<a:region>
+					<s:decorate id="duracionHorasField" template="/layout/edit.xhtml"
+						rendered="#{!estudiosRealizadosLegajoFC.esNingunaInsNingunTit and estudiosRealizadosLegajoFC.tieneTitulo}">
+						<ui:define name="label">#{messages.CU82_duracion}
+						</ui:define>
+						<h:inputText id="duracionHoras"
+							onkeypress="return soloNumeros(event);"
+							value="#{estudiosRealizadosLegajoFC.estudiosRealizados.duracionHoras}">
+							
+						</h:inputText>
+						<h:selectOneMenu id="estado" 
+							style="width : 80px;"
+							value="#{estudiosRealizadosLegajoFC.horasAnios}">
+							<s:selectItems var="tipo" label="#{tipo.descripcion}"
+											value="#{estudiosRealizadosLegajoFC.listarHorasAnioCombo()}" />
+							<s:convertEnum />
+							
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+								<s:decorate template="/layout/edit.xhtml" id="fechafinField2"
+									rendered="#{estudiosRealizadosLegajoFC.habFechaFin() and 
+									estudiosRealizadosLegajoFC.estadoActual != 'CURSANDO'}">
+									<ui:define name="label">#{messages.CU82_fecFin}</ui:define>
+							
+									
+									<rich:calendar id="fechaFin" datePattern="dd/MM/yyyy"
+										inputSize="10" enableManualInput="true"
+										oninputkeypress="ponerBarra(event);"
+										value="#{estudiosRealizadosLegajoFC.estudiosRealizados.fechaFin}">
+										
+									</rich:calendar>
+								</s:decorate>								
+								
+								
+							</a:region>
+			</h:panelGrid>
+		</a:outputPanel>
+
+
+		<h:panelGrid columns="3">
+			<a:outputPanel id="panelDocumentosAdjuntos">
+				<s:decorate id="tipoDocField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU1556_tipo_doc}</ui:define>
+					<h:selectOneMenu id="tipoDo" 
+						value="#{estudiosRealizadosLegajoFC.idTipoDoc}"
+						style="width:250px">
+						<f:selectItems
+							value="#{estudiosRealizadosLegajoFC.tipoDocumentos}" />
+					
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="documentoField" template="/layout/edit.xhtml"
+					rendered="#{!estudiosRealizadosLegajoFC.esNingunaInsNingunTit}">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomFinal"
+						value="#{estudiosRealizadosLegajoFC.nombreDoc}" />
+
+				</s:decorate>
+			</a:outputPanel>
+			<a:outputPanel id="panelDoc">
+				<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"
+					rendered="#{!estudiosRealizadosLegajoFC.esNingunaInsNingunTit}">
+					<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="30" id="archivo"
+						contentType="#{estudiosRealizadosLegajoFC.contentType}"
+						data="#{estudiosRealizadosLegajoFC.uploadedFile}"
+						fileName="#{estudiosRealizadosLegajoFC.fileName}"
+						style=" width : 382px;">
+
+					</s:fileUpload>
+				</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+		<div style="clear: both"><h:outputText
+			value="#{messages.CU289_obs_add}/Actualizar" styleClass="labelClass" /></div>
+
+		<h:panelGrid columns="3">
+
+			<a:outputPanel id="panelBotones" ajaxRendered="true">
+				<h:commandButton id="add" eventsQueue="default"
+					rendered="#{!estudiosRealizadosLegajoFC.esEdit}"
+					value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+					reRender="itemsList,discapacidadPanel,discap"
+					action="#{estudiosRealizadosLegajoFC.addEstudios()}" />
+				<h:commandButton id="limpiar" eventsQueue="default"
+					rendered="#{!estudiosRealizadosLegajoFC.esEdit}" value="Limpiar"
+					reRender="itemsList,discapacidadPanel,discap"
+					action="#{estudiosRealizadosLegajoFC.limpiar()}" />
+
+
+				<h:commandButton id="update" eventsQueue="default"
+					rendered="#{estudiosRealizadosLegajoFC.esEdit}"
+					value="#{messages.msg_update}"
+					reRender="itemsList,discapacidadPanel,discap"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{estudiosRealizadosLegajoFC.update()}" />
+
+
+				<h:commandButton id="cancelEdit"
+					rendered="#{estudiosRealizadosLegajoFC.esEdit}"
+					reRender="discapacidadPanel,discap" value="#{messages.msg_cancel}"
+					action="#{estudiosRealizadosLegajoFC.cancelar()}" />
+
+			</a:outputPanel>
+		</h:panelGrid>
+	</rich:panel>
+
+
+	<rich:panel id="discapacidadPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU82_titulo}</f:facet>
+
+		<div class="results" id="tbldetList" style="overflow: scroll;"
+			width="310"><rich:dataTable id="itemsList" var="_items"
+			rows="5" first="0"
+			value="#{estudiosRealizadosLegajoFC.estudiosRealizadosList}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">
+					#{messages.CU82_nivel_estu}
+				</f:facet>
+					<h:outputText
+					value="#{_items.tituloAcademico.nivelEstudio.descripcion}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU82_titulo_obt}
+				</f:facet>
+					<h:outputText value="#{_items.otroTituloObt}"
+					rendered="#{_items.otroTituloObt != null}" />
+					<h:outputText value="#{_items.tituloAcademico.descripcion}"
+					rendered="#{_items.otroTituloObt == null}" />
+			</rich:column>
+<!-- 			<rich:column> -->
+
+<!-- 				<f:facet name="header"> -->
+<!-- 													#{messages.CU82_Profesion_oficio} -->
+<!-- 													</f:facet> -->
+<!-- 				<h:outputText value="#{_items.otroNivel}" /> -->
+<!-- 			</rich:column> -->
+			<rich:column>
+				<f:facet name="header">
+														#{messages.CU82_institucion_universidad}
+													</f:facet>
+				<h:outputText value="#{estudiosRealizadosLegajoFC.descInstitucionEducativa(_items)}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+														#{messages.Departamento_idPais}
+													</f:facet>
+				<h:outputText value="#{_items.pais.descripcion}" />
+			</rich:column>
+<!-- 			<rich:column> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 														#{messages.CU82_fecIni} -->
+<!-- 													</f:facet> -->
+<!-- 				<h:outputText value="#{_items.fechaInicio}" /> -->
+<!-- 			</rich:column> -->
+			<rich:column>
+				<f:facet name="header">
+														#{messages.CU82_fecFin}
+													</f:facet>
+				<h:outputText value="#{_items.fechaFin}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+			</rich:column>
+			
+			<rich:column>
+				<f:facet name="header">
+														#{messages.CU82_duracion}
+													</f:facet>
+				<h:outputText value="#{estudiosRealizadosLegajoFC.getDuracionTipo(_items)}"/>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+														#{messages.CU82_tipo_d}
+													</f:facet>
+				<h:outputText
+					value="#{_items.documentos.datosEspecificos.descripcion}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+														Documento
+													</f:facet>
+				<h:outputText value="#{_items.documentos.nombreFisicoDoc}" />
+			</rich:column>
+			
+			<h:column>
+				          <f:facet name="header">Estado</f:facet>
+				            <h:outputText value="#{_items.documentos.validoLegajo? 'Validado' : 'Pendiente de Validación'}"/>
+				        </h:column>
+			<rich:column>
+				<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+				<a:commandLink id="editDet" value="#{messages.msg_edit}"
+					reRender="fechaFin,itemsList,discapacidadPanel,discap,update,cancelEdit,panelBotones"
+					eventsQueue="default"
+					rendered="#{_items.idEstudiosRealizados!=null}"
+					action="#{estudiosRealizadosLegajoFC.editar(rowNr)}" />
+											  #{' '}
+											  
+											  
+								               <a:commandLink id="removeRow"
+					action="#{estudiosRealizadosLegajoFC.delItems(rowNr)}"
+					value="#{messages.msg_list_remove}"
+					onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+					reRender="discapacidadPanel" />
+								              #{' '}
+								              <h:commandLink value="Descargar" target="_blank"
+					rendered="#{_items.documentos.idDocumento!=null}"
+					action="#{estudiosRealizadosLegajoFC.abrirDoc(rowNr)}" />
+					
+					#{' '}
+											  
+								  
+				 <a:commandLink id="validarLegajo"
+				 	rendered="#{!_items.documentos.validoLegajo}"
+					action="#{estudiosRealizadosLegajoFC.validarLegajo(rowNr)}"
+					value="Validar"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					reRender="discapacidadPanel" />#{' '}
+								  
+								  
+					<a:commandLink id="invalidarLegajo"
+					rendered="#{_items.documentos.validoLegajo}"
+					action="#{estudiosRealizadosLegajoFC.invalidarLegajo(rowNr)}"
+					value="Invalidar"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					reRender="discapacidadPanel" />
+					#{' '}
+					<s:link view="/legajos/estudiosRealizados/AccionAgregarDocumento.xhtml"
+							
+							value="Otros Adjuntos" propagation="none" id="agregarDocumento"
+							>
+							<f:param name="idEstudiosRealizados"
+								value="#{_items.idEstudiosRealizados}" />
+							<f:param name="texto" value="GShow647" />
+							<f:param name="accion" value="EDITAR" />
+							<f:param name="idPersona" value="#{_items.persona.idPersona}" />
+							<f:param name="from" value="legajos/GestionarLegajo/GestionarLegajo660" />
+						</s:link>
+
+			</rich:column>
+
+		</rich:dataTable><rich:datascroller for="itemsList" id="scrollEstudios"
+			renderIfSinglePage="false" /></div>
+
+	</rich:panel>
+
+	<rich:panel id="idiomaPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU82_idiomas}</f:facet>
+
+
+
+		<h:panelGrid columns="4">
+			<s:decorate id="idiomaField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_idioma}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="idioma"
+					value="#{estudiosRealizadosLegajoFC.idIdioma}" style="width:180px">
+					<f:selectItems value="#{datosEspecificossByIdiomasSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate id="hablaField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_habla}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="habla"
+					value="#{estudiosRealizadosLegajoFC.idHabla}" style="width:180px">
+					<f:selectItems value="#{idiomaOpcSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate id="escribeField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_escribe}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="escribe"
+					value="#{estudiosRealizadosLegajoFC.idEscribe}" style="width:180px">
+					<f:selectItems value="#{idiomaOpcSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate id="leeField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU82_lee}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="lee"
+					value="#{estudiosRealizadosLegajoFC.idLee}" style="width:180px">
+					<f:selectItems value="#{idiomaOpcSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<a:commandButton id="addIdioma" eventsQueue="default"
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+				reRender="itemsIdiomaList,idiomaPanel"
+				action="#{estudiosRealizadosLegajoFC.addIdiomas()}" />
+
+			<a:outputPanel ajaxRendered="true" id="panelIdiomas">
+				<div class="results" id="tblIdiomaList" style="overflow: auto;">
+				<rich:dataTable id="itemsIdiomaList" var="_items" rows="5" style=" width : 850px;"
+					value="#{estudiosRealizadosLegajoFC.idiomasPersonasList}"
+					rowKeyVar="rowNr">
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU82_idioma}
+													</f:facet>
+						<h:outputText value="#{_items.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU82_habla}
+													</f:facet>
+						<h:outputText rendered="#{_items.habla =='B'}" value="BASICO" />
+						<h:outputText rendered="#{_items.habla =='M'}" value="MEDIO" />
+						<h:outputText rendered="#{_items.habla =='A'}" value="AVANZADO" />
+
+					</rich:column>
+					<rich:column>
+
+						<f:facet name="header">
+													#{messages.CU82_escribe}
+													</f:facet>
+						<h:outputText rendered="#{_items.escribe =='B'}" value="BASICO" />
+						<h:outputText rendered="#{_items.escribe =='M'}" value="MEDIO" />
+						<h:outputText rendered="#{_items.escribe =='A'}" value="AVANZADO" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU82_lee}
+													</f:facet>
+						<h:outputText rendered="#{_items.lee =='B'}" value="BASICO" />
+						<h:outputText rendered="#{_items.lee =='M'}" value="MEDIO" />
+						<h:outputText rendered="#{_items.lee =='A'}" value="AVANZADO" />
+					</rich:column>
+
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+
+
+						<a:commandLink id="delidiom"
+							action="#{estudiosRealizadosLegajoFC.delIdioma(rowNr)}"
+							value="#{messages.msg_list_remove}"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="panelIdiomas" />
+					</rich:column>
+				</rich:dataTable><rich:datascroller for="itemsIdiomaList" id="scrolIdioma"
+					renderIfSinglePage="false" /></div>
+			</a:outputPanel>
+		</h:panelGrid>
+	</rich:panel>
+
+
+
+
+</ui:composition>

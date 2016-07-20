@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU367_title} - Portal</h1>
+		<h:form id="reclamoSugerenciaSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<s:decorate id="tipoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU367_tipo}
+					</ui:define>
+					<h:selectOneMenu id="tipoReclamo" immediate="true" style="width : 330px;"
+						value="#{reclamoSugerenciaList.tipoReclamo}">
+						<s:selectItems var="tipo" label="#{tipo.descripcion}"
+							value="#{enumAppHelper.tipoReclamos}" />
+						<s:convertEnum />
+
+					</h:selectOneMenu>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{reclamoSugerenciaList.listaResultadosCU367()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{reclamoSugerenciaList.limpiarCU367()}"
+				reRender="panelResultados, panelBusqueda">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty reclamoSugerenciaList.resultList ? 0 : (reclamoSugerenciaList.paginated ? reclamoSugerenciaList.resultCount : reclamoSugerenciaList.resultList.size)})</f:facet>
+			<div class="results" id="reclamoSugerenciaList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty reclamoSugerenciaList.resultList}" /> <rich:dataTable
+				id="reclamoSugerenciaList" var="_reclamoSugerencia"
+				value="#{reclamoSugerenciaList.resultList}"
+				rendered="#{not empty reclamoSugerenciaList.resultList}">
+			
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU367_asunto}" />
+							<ui:param name="propertyPath" value="reclamoSugerencia.asunto" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_reclamoSugerencia.asunto}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU367_tipo}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.reclamoSugerencia" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="FELICITACION" rendered="#{_reclamoSugerencia.reclamoSugerencia == 'F'}"/>
+					<h:outputText value="RECLAMO" rendered="#{_reclamoSugerencia.reclamoSugerencia == 'R'}"/>
+					<h:outputText value="SUGERENCIA" rendered="#{_reclamoSugerencia.reclamoSugerencia == 'S'}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="Fecha del Reclamo" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.fechaReclamoSugerencia" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_reclamoSugerencia.fechaReclamoSugerencia}">
+						<s:convertDateTime type="date"
+                            pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</h:column>
+				
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link view="/#{empty from ? 'ReclamoSugerencia' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="reclamoSugerenciaViewId">
+						<f:param name="reclamoSugerenciaIdReclamoSugerencia"
+							value="#{_reclamoSugerencia.idReclamoSugerencia}" />
+					</s:link>
+            #{' '}
+            <s:link view="/seleccion/reclamoSugerencia/ReclamoSugerencia.xhtml" value="Ver"
+						propagation="none" id="reclamoSugerenciaEdit"
+						rendered="#{empty from}">
+						<f:param name="reclamoSugerenciaIdReclamoSugerencia"
+							value="#{_reclamoSugerencia.idReclamoSugerencia}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link
+			view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+			rendered="#{reclamoSugerenciaList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}" id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+			rendered="#{reclamoSugerenciaList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}" id="previousPage">
+			<f:param name="firstResult"
+				value="#{reclamoSugerenciaList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+			rendered="#{reclamoSugerenciaList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}" id="nextPage">
+			<f:param name="firstResult"
+				value="#{reclamoSugerenciaList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml"
+			rendered="#{reclamoSugerenciaList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}" id="lastPage">
+			<f:param name="firstResult"
+				value="#{reclamoSugerenciaList.lastFirstResult}" />
+		</s:link></div>
+
+		
+
+	</ui:define>
+
+</ui:composition>

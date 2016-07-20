@@ -1,0 +1,152 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="planMejora" styleClass="edit">
+		<h1>#{planMejoraEditFC.modoUpdate ? messages.msg_edit : messages.msg_add_male}  #{messages.CU575_titulo_edit}</h1>
+        <rich:panel>
+       		<rich:panel>
+       		 <f:facet name="header">#{messages.CU40_oee}</f:facet>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true" styleClass="numeric"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				
+			</rich:panel>
+			<rich:panel>
+			 <f:facet name="header">#{planMejoraEditFC.modoUpdate ? messages.msg_edit : messages.msg_create_female} #{messages.CU575_titulo_edit}</f:facet>
+			<h:panelGrid columns="1">
+			 <s:decorate id="identificadorField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU575_codigo}</ui:define>
+                <h:inputText id="identificador" required="true" styleClass="numeric" onkeypress="return soloNumeros(event);"
+                          value="#{planMejoraEditFC.planMejora.identificador}">
+                 </h:inputText>
+            </s:decorate>
+			
+			<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU575_criterio_plan}</ui:define>
+                <h:inputText  id="descripcion"
+                            required="true" size="100" maxlength="250"
+                              value="#{planMejoraEditFC.planMejora.descripcion}"/>
+            </s:decorate>
+             <s:decorate id="activoField" template="/layout/edit.xhtml" rendered="#{planMejoraEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{planMejoraEditFC.planMejora.activo}"/>
+            </s:decorate>
+            
+
+           
+			</h:panelGrid>
+			</rich:panel>
+			
+           
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{planMejoraEditFC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!planMejoraEditFC.modoUpdate}"/>
+
+            <h:commandButton id="update"
+                        value="#{messages.msg_update}"
+                         action="#{planMejoraEditFC.update()}"
+                             onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{planMejoraEditFC.modoUpdate}"/>
+			<s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/evaluacionDesempenho/criterioPlanMejora/PlanMejora.xhtml"
+                rendered="#{planMejoraHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty planMejoraFrom ? 'evaluacionDesempenho/criterioPlanMejora/PlanMejoraList' : planMejoraFrom}.xhtml"
+                rendered="#{!planMejoraHome.managed}"/>
+
+        </div>
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+		<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!planMejoraEditFC.modoUpdate}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{planMejoraEditFC.modoUpdate}" styleClass="labelClass"/>
+        </div>
+        
+    </h:form>
+	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{planMejoraEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{planMejoraEditFC.planMejora.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{planMejoraEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{planMejoraEditFC.planMejora.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{planMejoraEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{planMejoraEditFC.planMejora.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{planMejoraEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{planMejoraEditFC.planMejora.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

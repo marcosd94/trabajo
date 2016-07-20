@@ -1,0 +1,1 @@
+﻿UPDATE sinarh.sin_entidad SET ent_nombre = 'SECRETARIA NACIONAL DE LA VIVIENDA Y EL HABITAT' where ent_nomabre like 'SENAVITAT';

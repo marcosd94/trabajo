@@ -1,0 +1,137 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.Persona_}</h1>
+
+		<h:form id="persona" styleClass="edit">
+
+			<rich:panel id="panelPrincipal">
+				<f:facet name="header">Ver Persona</f:facet>
+
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate id="paisExpField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU513_pais_exp} <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="paisExp"
+								value="#{admPersonaPorCarpetaFC.idPaisExpe}" style="width:250px"
+								disabled="true">
+								<f:selectItems value="#{paissSelectItems}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate id="documentoIdentidadField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU513_c_I}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="documentoIdentidad" disabled="true"
+								value="#{admPersonaPorCarpetaFC.documentoCi}"
+								style=" width : 253px;">
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+
+				</h:panelGrid>
+				<h:panelGrid>
+					<s:decorate id="nombresField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU513_nombres}</ui:define>
+						<h:inputText id="nombres" maxlength="100" disabled="true"
+							required="true" style=" width : 253px;"
+							value="#{admPersonaPorCarpetaFC.persona.nombres}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="apellidosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU513_apellido_completo}</ui:define>
+						<h:inputText id="apellidos" required="true"
+							style=" width : 253px;" maxlength="80" disabled="true"
+							value="#{admPersonaPorCarpetaFC.persona.apellidos}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="fechaNacField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_fecha_nac}</ui:define>
+						<rich:calendar id="fechaNac" required="true"
+							oninputkeyup="ponerBarra(event);"
+							locale="#{siccaAppHelper.localeCode}" disabled="true"
+							value="#{admPersonaPorCarpetaFC.persona.fechaNacimiento}"
+							datePattern="dd/MM/yyyy" enableManualInput="true" />
+					</s:decorate>
+					<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_nacionalidad}</ui:define>
+						<h:selectOneMenu disabled="true" id="nacionalidad"
+							value="#{admPersonaPorCarpetaFC.idNacionalidad}" required="true"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByNacionalidadSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<a:region>
+
+
+						<s:decorate id="telefonosField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Persona_telefonos}</ui:define>
+							<h:inputText id="telefonos" required="false" disabled="true"
+								maxlength="50"
+								value="#{admPersonaPorCarpetaFC.persona.telefonos}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="correoElectField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU513_correo}</ui:define>
+							<h:inputText id="correoElectronico" size="30" disabled="true"
+								required="true" maxlength="50" style=" width : 509px;"
+								value="#{admPersonaPorCarpetaFC.persona.EMail}">
+							</h:inputText>
+						</s:decorate>
+
+					</a:region>
+				</h:panelGrid>
+
+				
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelAdd"
+				value="#{messages.msg_done}" propagation="join"
+				view="/#{empty from ? 'cargarCarpeta/cargarCarpeta' : personaFrom}.xhtml"
+				rendered="#{!personaHome.managed}" /></div>
+		</h:form>
+
+<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{admPersonaPorCarpetaFC.persona.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{admPersonaPorCarpetaFC.persona.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{admPersonaPorCarpetaFC.persona.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{admPersonaPorCarpetaFC.persona.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

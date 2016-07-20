@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{gestionarResolucionEvalFC.init()}"
+		on-postback="false" />
+	<param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{gestionarResolucionEvalFC.idEvaluacionDesempeno}" />
+
+	<navigation from-action="#{gestionarResolucionEvalFC.aprobar()}">
+		<rule if-outcome="next">
+			<end-conversation before-redirect="true" />
+			<redirect
+				view-id="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml">
+				<param name="mensaje" value="ok" />
+			</redirect>
+		</rule>
+	</navigation>
+	
+	<restrict>#{identity.hasRole('gestionar_resolucion_eval_edit')}</restrict>
+</page>

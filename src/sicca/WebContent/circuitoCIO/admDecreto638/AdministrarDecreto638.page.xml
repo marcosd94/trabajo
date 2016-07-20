@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('administrarDecreto_edit_ConcursoInterno')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{administrarDecreto638FC.idConcurso}"/>
+ 
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{administrarDecreto638FC.idConcursoPuestoAgr}"/>
+ 
+ <action execute="#{administrarDecreto638FC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{administrarDecreto638FC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{administrarDecreto638FC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{administrarDecreto638FC.idSave}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{administrarDecreto638FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{administrarDecreto638FC.paramIdConcurso}"/>
+     <param name="fromCU" value="333"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/admDecreto638/AdministrarDecreto638"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{administrarDecreto638FC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{administrarDecreto638FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{administrarDecreto638FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{administrarDecreto638FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/admDecreto638/AdministrarDecreto638"/>
+     <param name="fromCU" value="333"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{administrarDecreto638FC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{administrarDecreto638FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{administrarDecreto638FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{administrarDecreto638FC.idResoConsurso}" />
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/admDecreto638/AdministrarDecreto638"/>
+     <param name="fromCU" value="333"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{administrarDecreto638FC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

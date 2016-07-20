@@ -1,0 +1,481 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<!-- Modales  -->
+		<rich:modalPanel id="modalObservacion" width="450" height="250"
+			resizeable="false" moveable="true">
+			<f:facet name="header">#{messages.CU87_popup_empate}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalObservacion')}.hide()" />
+			</f:facet>
+			<h:form>
+				<s:decorate id="msgField" template="/layout/edit.xhtml">
+					<h:outputText id="msg" value="#{messages.CU87_msg_popup_empate}"
+						style="color:red;" />
+				</s:decorate>
+				<a:region>
+					<s:decorate id="ObsField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU87_obs}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea
+							value="#{listaCortaCU699FC.obsPopUp}" cols="35">
+							<a:support event="onblur" eventsQueue="default" />
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+				</a:region>
+				<div style="clear: both" />
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Guardar"
+					action="#{listaCortaCU699FC.updateDatosEmpatados()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalObservacion')"
+					reRender="panelEmpatados" /> <a:commandButton id="cancel"
+					value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalObservacion')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="publicacionMiniModal" width="250" height="200"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Publicar Lista Corta</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('publicacionMiniModal')}.hide()" />
+			</f:facet>
+			<h:form>
+
+
+				<s:decorate id="postulantesField" template="/layout/display.xhtml">
+					<ui:define name="label">Postulantes
+					</ui:define>
+					<h:selectOneRadio id="opciones"
+						value="#{listaCortaCU699FC.conCedula}">
+						<f:selectItem id="item1" itemLabel="#{messages.CU87_con_cedula}"
+							itemValue="S" />
+						<f:selectItem id="item2" itemLabel="#{messages.CU87_sin_cedula}"
+							itemValue="N" />
+							 <a:support event="onclick"/>
+							 
+					</h:selectOneRadio>
+				</s:decorate>
+
+				<div style="clear: both" />
+
+
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Publicar" ajaxSingle="true"
+					action="#{listaCortaCU699FC.publicar()}"
+					oncomplete="Richfaces.hideModalPanel('publicacionMiniModal')" /> <a:commandButton
+					id="cancel" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('publicacionMiniModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="printMiniModal" width="350" height="200"
+			resizeable="false" moveable="true">
+			<f:facet name="header">#{messages.CU87_popup_imprimir_title}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer"
+					onclick="#{rich:component('printMiniModal')}.hide()" />
+			</f:facet>
+			<h:form>
+				<h:panelGrid columns="1">
+					<s:decorate id="postulantesField" template="/layout/display.xhtml">
+						<ui:define name="label">Postulantes
+					</ui:define>
+						<h:selectOneRadio id="opciones"
+							value="#{listaCortaCU699FC.conCedula}">
+							<f:selectItem id="item1" itemLabel="#{messages.CU87_con_cedula}"
+								itemValue="S" />
+							<f:selectItem id="item2" itemLabel="#{messages.CU87_sin_cedula}"
+								itemValue="N" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+					<s:decorate id="evaluacionesField" template="/layout/display.xhtml">
+						<ui:define name="label">Evaluaciones
+					</ui:define>
+						<h:selectOneRadio id="opcionesEval"
+							value="#{listaCortaCU699FC.conDetalle}">
+							<f:selectItem id="itemd1"
+								itemLabel="#{messages.CU87_con_detalle}" itemValue="S" />
+							<f:selectItem id="itemd2"
+								itemLabel="#{messages.CU87_sin_detalle}" itemValue="N" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				<div style="clear: both" />
+
+
+				<div class="actionButtons" align="center"><h:commandButton
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					id="print" value="#{messages['msg_list_search_print_button']}"
+					action="#{listaCortaCU699FC.imprimir()}" /> <a:commandButton
+					id="cancel" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('printMiniModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<h:form id="listaCortaSearch" styleClass="edit">
+			<h1>#{publicacionListaCortaFormController.titulo}</h1>
+			<rich:panel style="border:none;"
+				rendered="#{!listaCortaCU699FC.conEmpates}">
+				<rich:simpleTogglePanel id="panel" switchType="ajax">
+					<h:panelGrid columns="3">
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" disabled="true"
+								value="#{listaCortaCU699FC.nivelEntidad.nenCodigo}"
+								size="4">
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{listaCortaCU699FC.nivelEntidad.nenNombre}"
+								size="40" disabled="true" />
+						</s:decorate>
+
+
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								disabled="true"
+								value="#{listaCortaCU699FC.sinEntidad.entCodigo}"
+								size="4">
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{listaCortaCU699FC.sinEntidad.entNombre}"
+								size="40" disabled="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+								disabled="true"
+								value="#{listaCortaCU699FC.configuracionUoCab.orden}">
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+								disabled="true"
+								value="#{listaCortaCU699FC.configuracionUoCab.denominacionUnidad}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+							<h:inputText id="codConcurso" size="20" disabled="true"
+								value="#{listaCortaCU699FC.codConcurso}" />
+							#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+								value="#{listaCortaCU699FC.concurso.nombre}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'M'}">
+							<ui:define name="label">#{messages.CU87_seleccion}</ui:define>
+							<h:inputText id="seleccionM" size="20" disabled="true"
+								value="Puntaje" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'T'}">
+							<ui:define name="label">#{messages.CU87_seleccion}</ui:define>
+							<h:inputText id="seleccionT" size="20" disabled="true"
+								value="Terna" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'M'}">
+							<ui:define name="label">#{messages.CU87_vacancia}</ui:define>
+							<h:inputText id="vacanciaM" size="10" disabled="true"
+								value="#{listaCortaCU699FC.cantVacancia}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'T'}">
+							<ui:define name="label">#{messages.CU87_vacancia}</ui:define>
+							<h:inputText id="vacanciaT" size="10" disabled="true"
+								value="#{listaCortaCU699FC.cantVacancia}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'T'}">
+							<ui:define name="label">#{messages.CU87_cant_min_post}</ui:define>
+							<h:inputText id="minimoT" size="10" disabled="true"
+								value="#{listaCortaCU699FC.cantVacancia + 2}" />
+						</s:decorate>
+					</h:panelGrid>
+					<rich:panel>
+						<f:facet name="header">#{messages.CU87_grupo}</f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU86_agr}</ui:define>
+
+								<h:inputText id="grupo" size="80" disabled="true"
+									value="#{listaCortaCU699FC.concursoPuestoAgr.descripcionGrupo}" />
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+				</rich:simpleTogglePanel>
+				<div align="center"><rich:panel style="width: 600px;">
+					<f:facet name="header">#{messages.CU87_lista_corta}</f:facet>
+					<div style="clear: both; overflow: auto; HEIGHT: 150px"><rich:dataTable
+						id="tablaTab2" cellpadding="0" cellspacing="0" width="500"
+						border="0" var="record"
+						value="#{listaCortaCU699FC.listaCortaPostulantes}"
+						rowKeyVar="row">
+
+						<rich:column>
+							<f:facet name="header">
+							#{messages.CU87_cod_postulante}
+							</f:facet>
+							<h:outputText
+								value="#{listaCortaCU699FC.obtenerCodUsuario(record.idEvalReferencialPostulante)}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+							#{messages.CU87_puntaje}
+							</f:facet>
+							<h:outputText value="#{record.puntajeRealizado}" />
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel></div>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU86_obs}</ui:define>
+
+						<h:inputTextarea cols="80"
+							value="#{listaCortaCU699FC.observacion}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<div class="actionButtons"><a:commandButton id="convocatoria"
+					eventsQueue="default" value="#{messages.CU87_btnConv}"
+					rendered="#{listaCortaCU699FC.tipoMT == 'T'}"
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					action="#{listaCortaCU699FC.getUrlToPageConvocatoriaFinal()}" />
+				<a:commandButton id="showPublicacionModalButton"
+					rendered="#{!listaCortaCU699FC.estaPublicado}"
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					value="Publicar" reRender="publicacionMiniModal"
+					action="#{listaCortaCU699FC.esConCedula()}"
+					oncomplete="#{rich:component('publicacionMiniModal')}.show()" /><a:commandButton
+					id="showPrintModalButton" value="Imprimir"
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					reRender="printMiniModal"
+					oncomplete="#{rich:component('printMiniModal')}.show()" /> <s:button
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					id="anexo" value="Anexo" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{listaCortaCU699FC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="elaborar_lista_corta" />
+					<f:param name="idCU"
+						value="#{listaCortaCU699FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="circuitoCSI/listaCortaCU699/ElaboracionListaCortaCU699" />
+				</s:button> <s:button
+					disabled="#{!listaCortaCU699FC.asignarCategoria}"
+					id="asignar" value="Asignar Categorias" propagation="join"
+					view="/seleccion/validarCategoriaAdReferendum/ValidarCategorias.xhtml">
+
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+						value="#{listaCortaCU699FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+					<f:param name="from"
+						value="circuitoCSI/listaCortaCU699/ElaboracionListaCortaCU699" />
+				</s:button> <s:button id="cancelEdit" value="Volver" propagation="none"
+					view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+			</rich:panel>
+
+			<rich:panel style="border:none;"
+				rendered="#{listaCortaCU699FC.conEmpates}">
+				<rich:simpleTogglePanel id="panelConEmpates" switchType="ajax">
+					<h:panelGrid columns="3">
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" disabled="true"
+								value="#{listaCortaCU699FC.nivelEntidad.nenCodigo}"
+								size="4">
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{listaCortaCU699FC.nivelEntidad.nenNombre}"
+								size="40" disabled="true" />
+						</s:decorate>
+
+
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								disabled="true"
+								value="#{listaCortaCU699FC.sinEntidad.entCodigo}"
+								size="4">
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{listaCortaCU699FC.sinEntidad.entNombre}"
+								size="40" disabled="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+								disabled="true"
+								value="#{listaCortaCU699FC.configuracionUoCab.orden}">
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+								disabled="true"
+								value="#{listaCortaCU699FC.configuracionUoCab.denominacionUnidad}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+							<h:inputText id="codConcurso" size="20" disabled="true"
+								value="#{listaCortaCU699FC.codConcurso}" />
+							#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+								value="#{listaCortaCU699FC.concurso.nombre}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'M'}">
+							<ui:define name="label">#{messages.CU87_seleccion}</ui:define>
+							<h:inputText id="seleccionM" size="20" disabled="true"
+								value="Puntaje" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{listaCortaCU699FC.tipoMT == 'T'}">
+							<ui:define name="label">#{messages.CU87_seleccion}</ui:define>
+							<h:inputText id="seleccionT" size="20" disabled="true"
+								value="Terna" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU87_vacancia}</ui:define>
+							<h:inputText id="vacanciaM" size="10" disabled="true"
+								value="#{listaCortaCU699FC.cantVacancia}" />
+						</s:decorate>
+
+
+					</h:panelGrid>
+					<rich:panel>
+						<f:facet name="header">#{messages.CU87_grupo}</f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU86_agr}</ui:define>
+								<h:inputText id="grupo" size="80" disabled="true"
+									value="#{listaCortaCU699FC.concursoPuestoAgr.descripcionGrupo}" />
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Cantidad a Desempatar</ui:define>
+							<h:inputText id="grupo" size="10" disabled="true"
+								value="#{listaCortaCU699FC.cantDesempatar}" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+				<div align="center"><rich:panel id="panelEmpatados"
+					style="width: 600px;">
+					<f:facet name="header">#{messages.CU87_lista_corta}</f:facet>
+					<div style="clear: both; overflow: auto; HEIGHT: 150px"><rich:dataTable
+						id="tabla2" cellpadding="0" cellspacing="0" width="500" border="0"
+						var="fil"
+						value="#{listaCortaCU699FC.listaEmpatados}"
+						rowKeyVar="rows">
+
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+							#{messages.CU87_cod_postulante}
+							</f:facet>
+							<h:outputText
+								value="#{listaCortaCU699FC.obtenerCodUsuario(fil.idEvalReferencialPostulante)}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+							#{messages.CU87_puntaje}
+							</f:facet>
+							<h:outputText value="#{fil.puntajeRealizado}">
+								<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+									locale="es" />
+							</h:outputText>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+							Seleccionar?<span class="required">*</span>
+							</f:facet>
+							<h:selectBooleanCheckbox value="#{fil.seleccionado}" />
+
+
+						</rich:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}<span
+									class="required">*</span>
+							</f:facet>
+							<a:commandLink value="#{messages.CU87_link_empate}"
+								reRender="modalObservacion"
+								rendered="#{!listaCortaCU699FC.bloquearTodo}"
+								action="#{listaCortaCU699FC.prepararPopUpObs(rows)}"
+								oncomplete="#{rich:component('modalObservacion')}.show()" />
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel></div>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+				<div class="actionButtons"><h:commandButton id="saveEmpatados"
+					disabled="#{listaCortaCU699FC.bloquearTodo}"
+					value="#{messages.msg_save}"
+					action="#{listaCortaCU699FC.guardarEmpatados()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+					disabled="#{!listaCortaCU699FC.asignarCategoria}"
+					id="asignar2" value="Asignar Categorias" propagation="join"
+					view="/seleccion/validarCategoriaAdReferendum/ValidarCategorias.xhtml">
+
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+						value="#{listaCortaCU699FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+					<f:param name="from"
+						value="circuitoCSI/listaCortaCU699/ElaboracionListaCortaCU699" />
+				</s:button> <s:button id="volver" value="Volver" propagation="none"
+					view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+			</rich:panel>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

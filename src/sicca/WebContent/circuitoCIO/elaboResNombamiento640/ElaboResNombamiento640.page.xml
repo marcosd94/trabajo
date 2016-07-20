@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('resolucionNombramiento_edit_ConcursoInterno')}</restrict>
+ 
+ 
+ <param name="resolucionHomologacionIdResolucionHomologacion" />
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{elaboResNombamiento640FC.idConcurso}"/>
+ 
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{elaboResNombamiento640FC.idConcursoPuestoAgr}"/>
+ 
+ <action execute="#{elaboResNombamiento640FC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{elaboResNombamiento640FC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{elaboResNombamiento640FC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{elaboResNombamiento640FC.idSave}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{elaboResNombamiento640FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{elaboResNombamiento640FC.paramIdConcurso}"/>
+     <param name="fromCU" value="419"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/elaboResNombamiento640/ElaboResNombamiento640"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{elaboResNombamiento640FC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{elaboResNombamiento640FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{elaboResNombamiento640FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{elaboResNombamiento640FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/elaboResNombamiento640/ElaboResNombamiento640"/>
+     <param name="fromCU" value="419"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{elaboResNombamiento640FC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{elaboResNombamiento640FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{elaboResNombamiento640FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{elaboResNombamiento640FC.idResoConsurso}" />
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCIO/elaboResNombamiento640/ElaboResNombamiento640"/>
+     <param name="fromCU" value="419"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{elaboResNombamiento640FC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

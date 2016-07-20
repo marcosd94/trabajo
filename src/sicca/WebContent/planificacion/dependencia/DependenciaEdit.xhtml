@@ -1,0 +1,120 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Dependencia_}</h1>
+
+    <h:form id="dependencia" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{dependenciaHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Dependencia_}</f:facet>
+
+	            <s:decorate id="nombreField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_nombre}</ui:define>
+	                <h:inputText id="nombre"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.nombre}">
+	                    <a:support event="onblur" reRender="nombreField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="nombreAbrField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_nombreAbr}</ui:define>
+	                <h:inputText id="nombreAbr"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.nombreAbr}">
+	                    <a:support event="onblur" reRender="nombreAbrField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="siglaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_sigla}</ui:define>
+	                <h:inputText id="sigla"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.sigla}">
+	                    <a:support event="onblur" reRender="siglaField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="cofCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_cofCodigo}</ui:define>
+	                <h:inputText id="cofCodigo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.cofCodigo}">
+	                    <a:support event="onblur" reRender="cofCodigoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="entRucField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_entRuc}</ui:define>
+	                <h:inputText id="entRuc"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.entRuc}">
+	                    <a:support event="onblur" reRender="entRucField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{dependenciaHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{dependenciaHome.persist}"
+                       disabled="#{!dependenciaHome.wired}"                      
+                       rendered="#{!dependenciaHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{dependenciaHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{dependenciaHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{dependenciaHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{dependenciaHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/dependencia/DependenciaList.xhtml"
+                rendered="#{dependenciaHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty dependenciaFrom ? 'planificacion/dependencia/DependenciaList' : dependenciaFrom}.xhtml"
+                rendered="#{!dependenciaHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

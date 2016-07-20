@@ -1,0 +1,184 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	
+		<h1>#{messages.CU653_titulo}</h1>
+		<rich:panel  >
+		 
+		<rich:panel id="panelSuperior" style=" width : 872px;" >
+			<f:facet name="header">#{messages.CU653_desvinculacion}</f:facet>
+		
+			<div class="results" id="details" style=" overflow: scroll;"  width="310" >
+			<rich:dataTable id="detailsDesvinculacion" var="_detail" rows="5"
+				value="#{desvinculacionLegajoFC.desvinculacionLista}"
+				rowKeyVar="_index">
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.gral_oee}</f:facet>
+					<h:outputText value="#{_detail.empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}">
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_fec_desvinculacion}</f:facet>
+					<h:outputText value="#{_detail.fechaDesvinculacion}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_motivo_desvinculacion}</f:facet>
+					<h:outputText value="#{_detail.datosEspecifMotivo.descripcion}">
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_monto}</f:facet>
+					<h:outputText value="#{_detail.montoLiquidacion}">
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_concepto}</f:facet>
+					<h:outputText value="#{_detail.concepto}">
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_obs}</f:facet>
+					<h:outputText value="#{_detail.observacion}">
+						</h:outputText>
+				</rich:column>
+				<rich:column styleClass="action">
+            <f:facet name="header">#{messages.CU653_adjuntos}</f:facet>
+            <a:commandLink  id="gestionar1" eventsQueue="default"
+										value="#{messages.CU200_ver_anexos}"
+										action="#{desvinculacionLegajoFC.verAnexos(_detail.idDesvinculacion,'D')}">
+		</a:commandLink>
+            </rich:column>
+			</rich:dataTable>
+		</div>
+
+			
+
+
+		</rich:panel>
+
+		<br />
+		<br />
+		<br />
+			<rich:panel id="panelinhabilitados" style=" width : 872px;" >
+			<f:facet name="header">#{messages.CU653_inhabilitaciones}</f:facet>
+		
+			<div class="results" id="detailsInhabilitaciones" style=" overflow: scroll;"  width="310" >
+			<rich:dataTable id="detailsInhabilitados" var="_detail2" rows="5"
+				value="#{desvinculacionLegajoFC.inhabilitadoLista}"
+				rowKeyVar="_index2">
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.gral_oee}</f:facet>
+					<h:outputText value="#{_detail2.empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}">
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_fec_desde}</f:facet>
+					<h:outputText value="#{_detail2.fechaDesde}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_fec_hasta}</f:facet>
+					<h:outputText value="#{_detail2.fechaHasta}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_inhabi}</f:facet>
+					<h:outputText value="#{_detail2.inhabilitado==true?'SI':'NO'}">
+					
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_motivo_habilitacion}</f:facet>
+					<h:outputText value="#{_detail2.motivoHabilit}">
+					
+					</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_fecha_habilitacion}</f:facet>
+					<h:outputText value="#{_detail2.fechaHabilit}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column styleClass="action">
+            <f:facet name="header">#{messages.CU653_adjuntos}</f:facet>
+            <a:commandLink  id="gestionar1" eventsQueue="default"
+										value="#{messages.CU200_ver_anexos}"
+										action="#{desvinculacionLegajoFC.verAnexos(_detail2.idInhabilitado,'I')}">
+		</a:commandLink>
+            </rich:column>
+			</rich:dataTable>
+		</div>
+
+			
+
+
+		</rich:panel>
+	<br />
+	<br />
+	<br />
+	
+		
+		<rich:panel id="panelJubilacion" style=" width : 872px;">
+			<f:facet name="header">#{messages['CU653_jubilacion']} </f:facet>
+			<div class="results" id="detailsJubilacion" style=" overflow: scroll;"  width="310" >
+			<rich:dataTable id="detailsJubilacion" var="_detail3" rows="5"
+				value="#{desvinculacionLegajoFC.jubiladoLista}"
+				rowKeyVar="_index3">
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.gral_oee}</f:facet>
+					<h:outputText value="#{_detail3.configuracionUoCab.denominacionUnidad}">
+						</h:outputText>
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.CU653_fec_jubilacion}</f:facet>
+					<h:outputText value="#{_detail3.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+					<h:column>
+					<f:facet name="header">#{messages.CU653_tipo_jubilacion}</f:facet>
+					<h:outputText value="#{_detail3.datosEspecifTipo.descripcion}" rendered="#{_detail3.datosEspecifTipo.idDatosEspecificos!=null}" />
+					<h:outputText value="#{_detail3.otroTipo}" rendered="#{_detail3.datosEspecifTipo.idDatosEspecificos==null}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Inhabilitado?</f:facet>
+					<h:outputText value="#{_detail3.inhabilitado=='true'?'SI':'NO'}" />
+				</h:column>
+				
+			
+			
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.CU653_adjuntos}</f:facet>
+					<a:commandLink id="gestionar1" eventsQueue="default"
+						value="#{messages.CU200_ver_anexos}"
+						action="#{desvinculacionLegajoFC.verAnexos(_detail3.idJubilado,'J')}">
+					</a:commandLink>
+				</rich:column>
+			</rich:dataTable> 
+			</div>
+		</rich:panel>
+		</rich:panel>
+		
+		
+		
+
+		
+	
+
+</ui:composition>

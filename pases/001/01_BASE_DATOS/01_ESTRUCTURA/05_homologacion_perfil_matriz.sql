@@ -1,0 +1,1 @@
+﻿ALTER TABLE seleccion.homologacion_perfil_matriz ALTER COLUMN remuneracion TYPE character varying(5000);

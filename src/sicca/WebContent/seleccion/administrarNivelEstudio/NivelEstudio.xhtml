@@ -1,0 +1,150 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Nivel estudio Details</f:facet>
+
+        <s:decorate id="idNivelEstudio" template="layout/display.xhtml">
+            <ui:define name="label">Id nivel estudio</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.idNivelEstudio}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{nivelEstudioHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/NivelEstudioEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty nivelEstudioFrom ? 'NivelEstudioList' : nivelEstudioFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Titulo academicos</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="tituloAcademicosChildren">
+
+        <h:outputText value="There are no tituloAcademicos associated with this nivelEstudio."
+                   rendered="#{empty nivelEstudioHome.tituloAcademicos}"/>
+
+        <rich:dataTable value="#{nivelEstudioHome.tituloAcademicos}"
+                       var="_tituloAcademico"
+                  rendered="#{not empty nivelEstudioHome.tituloAcademicos}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="tituloAcademicosTable">
+            <rich:column sortBy="#{_tituloAcademico.idTituloAcademico}">
+                <f:facet name="header">Id titulo academico</f:facet>
+                <h:outputText value="#{_tituloAcademico.idTituloAcademico}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.descripcion}">
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_tituloAcademico.descripcion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.idEspecialidad}">
+                <f:facet name="header">Id especialidad</f:facet>
+                <h:outputText value="#{_tituloAcademico.idEspecialidad}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_tituloAcademico.activo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_tituloAcademico.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_tituloAcademico.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_tituloAcademico.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_tituloAcademico.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_tituloAcademico.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selecttituloAcademico"
+                     value="Select"
+                      view="/TituloAcademico.xhtml">
+                    <f:param name="tituloAcademicoIdTituloAcademico"
+                            value="#{_tituloAcademico.idTituloAcademico}"/>
+                    <f:param name="tituloAcademicoFrom" value="NivelEstudio"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add tituloAcademico"
+                view="/TituloAcademicoEdit.xhtml">
+            <f:param name="nivelEstudioIdNivelEstudio"
+                    value="#{nivelEstudioHome.instance.idNivelEstudio}"/>
+            <f:param name="tituloAcademicoFrom" value="NivelEstudio"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

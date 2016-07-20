@@ -1,0 +1,241 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU487_titulo}</h1>
+		<h:form id="publicarSeleccionados" styleClass="edit">
+			<rich:panel>
+				<f:facet name="header">#{messages.CU487_panel_capac}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU487_tit}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{publicarSeleccionadosFC.capacitacion.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU487_tipo}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{publicarSeleccionadosFC.capacitacion.datosEspecificosTipoCap.descripcion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU487_panel_organizado}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivel">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidad">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="oee">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml" id="unidad">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="panelFiltro">
+				<f:facet name="header">#{messages.CU487_filtros}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU487_pais_doc}
+						</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{publicarSeleccionadosFC.idPais}" style="width:200px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="ci">
+						<ui:define name="label">#{messages.CU487_ci}
+									</ui:define>
+						<h:inputText id="cedula" size="20"
+							value="#{publicarSeleccionadosFC.ci}" />
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+			<div class="buttons"><a:commandButton
+				action="#{publicarSeleccionadosFC.search()}"
+				value="#{messages.CU487_btn_buscar}" reRender="panelSeleccionados" />
+			<a:commandButton action="#{publicarSeleccionadosFC.searchAll()}"
+				value="#{messages.CU487_btn_todos}"
+				reRender="panelFiltro,panelSeleccionados" /> <h:commandButton
+				action="#{publicarSeleccionadosFC.imprimir()}"
+				value="#{messages.CU487_btn_imprimir}" /></div>
+			<rich:panel id="panelSeleccionados">
+				<f:facet name="header">#{messages.CU487_panel_seleccionados}(#{publicarSeleccionadosFC.listaPostulaciones.size()})</f:facet>
+				<rich:dataTable id="postulantes" var="_p" rows="10"
+					rowKeyVar="rowNr"
+					value="#{publicarSeleccionadosFC.listaPostulaciones}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_cod_postulante}
+						</f:facet>
+						<h:outputText value="#{_p.usuFicha}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_postulante}
+						</f:facet>
+						<h:outputText value="#{_p.persona.nombres}" />#{' '}
+						<h:outputText value="#{_p.persona.apellidos}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_ci}
+						</f:facet>
+						<h:outputText value="#{_p.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_pais_doc}
+						</f:facet>
+						<h:outputText
+							value="#{_p.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_email}
+						</f:facet>
+						<h:outputText value="#{_p.persona.EMail}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU487_oee}
+						</f:facet>
+						<h:outputText
+							value="#{_p.empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+
+				</rich:dataTable>
+				<rich:datascroller align="center" for="postulantes" id="sc2"
+					reRender="sc1"
+					rendered="#{publicarSeleccionadosFC.listaPostulaciones.size() > 10}" />
+			</rich:panel>
+
+			<rich:panel style="border:none">
+				<fieldset><legend><span class="required">#{messages.CU487_portal}*</span></legend>
+				<table>
+					<tr>
+					<td></td>
+						<td></td>
+						<td><s:decorate template="/layout/display.xhtml" id="cedu">
+							<ui:define name="label">#{messages.CU487_portal_ci}
+									</ui:define>
+							<h:selectBooleanCheckbox id="ced"
+								value="#{publicarSeleccionadosFC.cedula}" />
+						</s:decorate></td>
+						<td></td>
+						<td></td>
+						<td><s:decorate template="/layout/display.xhtml" id="codPost">
+							<ui:define name="label">#{messages.CU487_portal_codigo}
+									</ui:define>
+							<h:selectBooleanCheckbox id="cod"
+								value="#{publicarSeleccionadosFC.codigo}" />
+						</s:decorate></td>
+					</tr>
+					<tr>
+					<td></td>
+						<td></td>
+						<td><s:decorate template="/layout/display.xhtml" id="nomb">
+							<ui:define name="label">#{messages.CU487_portal_nombre}
+									</ui:define>
+							<h:selectBooleanCheckbox id="nombr"
+								value="#{publicarSeleccionadosFC.nombre}" />
+						</s:decorate></td>
+						<td></td>
+						<td></td>
+						<td><s:decorate template="/layout/display.xhtml"
+							id="unidadOrgOEE">
+							<ui:define name="label">#{messages.CU487_oee}
+									</ui:define>
+							<h:selectBooleanCheckbox id="unidad"
+								value="#{publicarSeleccionadosFC.oee}" />
+						</s:decorate></td>
+					</tr>
+				</table>
+				</fieldset>
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.CU487_msg}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="publicar"
+				value="#{messages.CU487_btn_publicar}"
+				action="#{publicarSeleccionadosFC.publicarSeleccionados()}"
+				onclick="return confirm('#{messages.CU487_msg_publicar}');" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				includePageParams="false"
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml" />
+			</div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

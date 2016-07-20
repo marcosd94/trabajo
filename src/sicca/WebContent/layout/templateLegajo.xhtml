@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:a="http://richfaces.org/a4j"
+   xmlns:s="http://jboss.com/products/seam/taglib"
+   xmlns:rich="http://richfaces.org/rich"
+   xmlns:p="http://primefaces.prime.com.tr/ui"
+   contentType="text/html">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <title>#{messages.system_title}</title>
+      <link rel="shortcut icon" href="#{request.contextPath}/img/favicon.ico"/>
+      <a:loadStyle src="resource:///stylesheet/theme.xcss"/>
+      <a:loadStyle src="/stylesheet/theme.css"/>
+      <p:resources />
+      <ui:insert name="head"/>
+      <script src="#{request.contextPath}/javascript/utils.js" type="text/javascript"></script>
+      
+      <script type="text/javascript">
+		    if (window.history) {
+		            function noBack(){window.history.forward()}
+		            noBack();
+		            window.onload=noBack;
+		            window.onpageshow=function(evt){if(evt.persisted)noBack()}
+		            window.onunload=function(){void(0)}
+		    }
+
+		    function stopRKey(evt) {
+		    	  var evt = (evt) ? evt : ((event) ? event : null);
+		    	  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+		    	  if (evt.keyCode == 13){
+		    		  if (node.type=="text"){
+		    	        return false;
+		    		  }
+		    	  }
+		    }
+
+		    document.onkeypress = stopRKey; 
+	  </script>
+
+   </head>
+   
+   <rich:modalPanel id="espera" width="200" height="100"
+		resizeable="false">
+		<f:facet name="header"> #{messages.msg_procesando}</f:facet>
+		<h:form>
+			<table>
+				<tr>
+					<td style="height: 40px; width: 40px;"></td>
+					<td><h:outputText value="#{messages.msg_please_wait}"
+						style="text-align:center;" /> <rich:spacer width="4px" /> <h:graphicImage
+						value="/img/spinner.gif" /></td>
+				</tr>
+			</table>
+		</h:form>
+	</rich:modalPanel>
+   <body>
+   		<rich:jQuery selector="form:input:visible:enabled:first"
+			timing="onload" query="focus()" />
+		<a:status onstart="Richfaces.showModalPanel('espera')"
+			onstop="#{rich:component('espera')}.hide()" />
+			
+      <ui:include src="cabeceraPortal.xhtml">
+         <ui:param name="projectName" value="#{messages.system_title_abr}"/>
+      </ui:include>
+      
+      <ui:include src="menu.xhtml">
+         <ui:param name="projectName" value="#{messages.system_title_abr}"/>
+      </ui:include>
+      
+      <div>
+      	<a:outputPanel id="_prinfaces_messages_panel" ajaxRendered="true">
+      	 	<p:messages id="messagesGral" showDetail="false" autoUpdate="true"
+			globalOnly="true" rendered="#{showGlobalMessages != 'false'}" />
+      	 </a:outputPanel>
+      	 <a:outputPanel id="error_messages_panel">
+	         <h:messages id="messages" globalOnly="true" styleClass="message"
+	            errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+	            rendered="false"/>
+	     </a:outputPanel>
+      </div>
+
+      <div>
+         <ui:insert name="portal"/>
+      </div>
+      
+      <div style="padding:30px;" >
+         <ui:insert name="body"/>
+      </div>
+      
+      <a:outputPanel ajaxRendered="true">
+	         <script type="text/javascript">
+	               agregarValidaciones();
+	         </script>
+	  </a:outputPanel>
+      
+      <div class="footer">
+      	
+		<s:link 
+			    value="#{messages.template_aviso_legal}"
+			    id="avisoLegalId">
+		</s:link>
+		<s:label value="  |  "/>  
+		<s:link 
+			    value="#{messages.template_politica_privacidad}"
+			    id="politicaSegId">
+		</s:link>
+				
+      
+      	 <p><b>#{messages.template_presidencia}</b></p>
+         <b>#{messages.template_inst}</b>
+         <br></br>
+         #{messages.template_direccion_inst}
+         <br></br>
+         #{messages.template_horario_atencion}
+         <br></br>
+         #{messages.template_localidad_inst}
+         
+         <br></br>
+         <br></br>
+         #{messages.template_info_reclamo}
+         <A HREF="mailto:direccion@correo.com">infopublica@sfp.gov.py</A>
+
+         <br></br>
+         <br></br>
+         <s:fragment rendered="#{init.debug}">
+	         <a:log hotkey="D"/>
+	         <p style="margin-top: -0.5em;">#{messages.template_powered_by} <a href="http://www.excelsis.com.py">#{messages.template_excelsis}</a></p>
+	         <p style="margin-top: -0.5em;">#{messages.template_all_rights_reserved}</p>
+         </s:fragment>
+      </div>
+      
+   </body>
+</html>
+</f:view>

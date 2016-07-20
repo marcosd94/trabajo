@@ -1,0 +1,199 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="rol" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{rolHome.managed ? 'Edit' : 'Add'} Rol</f:facet>
+
+
+            <s:decorate id="idRolField" template="layout/edit.xhtml">
+                <ui:define name="label">Id rol</ui:define>
+                <h:inputText id="idRol"
+                       required="true"
+                       disabled="#{rolHome.managed}"
+                          value="#{rolHome.instance.idRol}">
+                    <a:support event="onblur" reRender="idRolField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="descripcionField" template="layout/edit.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputTextarea id="descripcion"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{rolHome.instance.descripcion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{rolHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{rolHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{rolHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{rolHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{rolHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{rolHome.persist}"
+                       disabled="#{!rolHome.wired}"
+                       rendered="#{!rolHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{rolHome.update}"
+                       rendered="#{rolHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{rolHome.remove}"
+                      immediate="true"
+                       rendered="#{rolHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/Rol.xhtml"
+                rendered="#{rolHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty rolFrom ? 'RolList' : rolFrom}.xhtml"
+                rendered="#{!rolHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Rol funcions">
+        <h:form styleClass="association" id="rolFuncionsChildren">
+
+            <h:outputText value="There are no rolFuncions associated with this rol."
+                       rendered="#{empty rolHome.rolFuncions}"/>
+
+            <rich:dataTable value="#{rolHome.rolFuncions}"
+                           var="_rolFuncion"
+                      rendered="#{not empty rolHome.rolFuncions}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="rolFuncionsTable">
+                <rich:column sortBy="#{_rolFuncion.idRolFuncion}">
+                    <f:facet name="header">Id rol funcion</f:facet>
+                    <h:outputText value="#{_rolFuncion.idRolFuncion}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{rolHome.managed}" id="rolFuncions">
+        <div class="actionButtons">
+            <s:button id="addrolFuncion"
+                   value="Add rolFuncion"
+                    view="/RolFuncionEdit.xhtml"
+             propagation="none">
+                 <f:param name="rolIdRol"
+                         value="#{rolHome.instance.idRol}"/>
+                 <f:param name="rolFuncionFrom" value="Rol"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+
+    <rich:tab label="Usuario rols">
+        <h:form styleClass="association" id="usuarioRolsChildren">
+
+            <h:outputText value="There are no usuarioRols associated with this rol."
+                       rendered="#{empty rolHome.usuarioRols}"/>
+
+            <rich:dataTable value="#{rolHome.usuarioRols}"
+                           var="_usuarioRol"
+                      rendered="#{not empty rolHome.usuarioRols}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="usuarioRolsTable">
+                <rich:column sortBy="#{_usuarioRol.idUsuarioRol}">
+                    <f:facet name="header">Id usuario rol</f:facet>
+                    <h:outputText value="#{_usuarioRol.idUsuarioRol}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{rolHome.managed}" id="usuarioRols">
+        <div class="actionButtons">
+            <s:button id="addusuarioRol"
+                   value="Add usuarioRol"
+                    view="/UsuarioRolEdit.xhtml"
+             propagation="none">
+                 <f:param name="rolIdRol"
+                         value="#{rolHome.instance.idRol}"/>
+                 <f:param name="usuarioRolFrom" value="Rol"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

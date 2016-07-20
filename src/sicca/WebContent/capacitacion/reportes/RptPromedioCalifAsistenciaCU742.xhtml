@@ -1,0 +1,205 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU742_titulo}</h1>
+		<h:form id="planCapacitacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['CU433_filtros']}"
+				switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="1" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="idPanelCampos,panelCombos" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+													#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('capacitacion/reportes/RptPromedioCalifAsistenciaCU742')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="idPanelCampos,panelCombos" focus="unidadOrgCodigo" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+														#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('capacitacion/reportes/RptPromedioCalifAsistenciaCU742')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+									
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{rptPromedioCalAsisCU742FC.cambiarOee()}"
+									reRender="idPanelCampos,panelCombos" focus="orgCodigo2" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+								#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('capacitacion/reportes/RptPromedioCalifAsistenciaCU742')}" />
+						</s:decorate>
+					</a:region>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="idPanelCampos,panelCombos" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/reportes/RptPromedioCalifAsistenciaCU742')}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml" id="sexoField">
+						<ui:define name="label">#{messages.CU738_sexo}  </ui:define>
+						<h:selectOneMenu id="sexo" immediate="true" style="width : 200px;"
+							value="#{rptPromedioCalAsisCU742FC.idSexo}">
+							<f:selectItems
+								value="#{rptPromedioCalAsisCU742FC.sexoSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU742_fecha_desde}
+						</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{rptPromedioCalAsisCU742FC.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy">
+							<a:support event="onchanged" eventsQueue="default" 
+								action="#{rptPromedioCalAsisCU742FC.cargarTipoCapacitacionSelectItems()}"
+								reRender="tipoCapacitacionField" />
+							</rich:calendar>
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU742_fecha_hasta}
+						</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{rptPromedioCalAsisCU742FC.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy">
+							<a:support event="onchanged" eventsQueue="default" 
+								action="#{rptPromedioCalAsisCU742FC.cargarTipoCapacitacionSelectItems()}"
+								reRender="tipoCapacitacionField" />
+							</rich:calendar>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml"
+						id="tipoCapacitacionField">
+						<ui:define name="label">#{messages.CU743_tipo_capacitacion}  </ui:define>
+						<h:selectOneMenu id="tipoPersona" immediate="true"
+							style="width : 200px;"
+							value="#{rptPromedioCalAsisCU742FC.idTipoCapacitacion}">
+							<f:selectItems
+								value="#{rptPromedioCalAsisCU742FC.tipoCapacitacionSelectItems}" />
+							<a:support event="onchange"
+								action="#{rptPromedioCalAsisCU742FC.cargarCapacitacionSelectItems()}"
+								reRender="capacitacionField" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml" id="capacitacionField">
+						<ui:define name="label">#{messages.CU743_capacitacion_beca}  </ui:define>
+						<h:selectOneMenu id="capacitacion" immediate="true"
+							style="width : 200px;"
+							value="#{rptPromedioCalAsisCU742FC.idCapacitacion}">
+							<f:selectItems
+								value="#{rptPromedioCalAsisCU742FC.capacitacionSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml" id="nivelAgrupamientoField">
+						<ui:define name="label">#{messages.CU742_nivel}  </ui:define>
+						<h:selectOneMenu id="nivelAgrupamiento" immediate="true"
+							style="width : 200px;"
+							value="#{rptPromedioCalAsisCU742FC.idNivelAgrupamiento}">
+							<f:selectItems
+								value="#{rptPromedioCalAsisCU742FC.nivelAgrupamientoSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+
+
+
+			</rich:simpleTogglePanel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+
+
+			<div class="actionButtons" id="botones"><h:commandButton
+				value="Generar Informe PDF"
+				action="#{rptPromedioCalAsisCU742FC.imprimir('PDF')}">
+			</h:commandButton> <h:commandButton value="Generar Informe Excel"
+				action="#{rptPromedioCalAsisCU742FC.imprimir('EXCEL')}">
+			</h:commandButton> <s:button id="reset" propagation="none"
+				value="#{messages.msg_list_search_clear_button}" /></div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

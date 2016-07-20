@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      login-required="true">
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+  <action execute="#{evaluacionDocPostulantesListCU629FC.init()}" on-postback="false"/>
+  
+   <param name="firstResult" value="#{evalDocumentalCabList.firstResult}"/>
+   <param name="sort" value="#{evalDocumentalCabList.orderColumn}"/>
+   <param name="dir" value="#{evalDocumentalCabList.orderDirection}"/>
+   <param name="logic" value="#{evalDocumentalCabList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}"/>
+   <param name="tipo" value="#{evalDocumentalCabList.evalDocumentalCab.tipo}"/>
+   <param name="observacion" value="#{evalDocumentalCabList.evalDocumentalCab.observacion}"/>
+   <param name="usuAlta" value="#{evalDocumentalCabList.evalDocumentalCab.usuAlta}"/>
+   <param name="usuMod" value="#{evalDocumentalCabList.evalDocumentalCab.usuMod}"/>
+    <param name="msg" value="#{evaluacionDocPostulantesListCU629FC.mensaje}"/>
+    <param name="aprobo" value="#{evaluacionDocPostulantesListCU629FC.aprobo}"/>
+     <param name="codActividad" value="#{evaluacionDocPostulantesListCU629FC.codActividad}"/>
+	<param name="isEdit" value="#{evaluacionDocPostulantesListCU629FC.isEdit}" />
+
+<navigation from-action="#{evaluacionDocPostulantesListCU629FC.nextTask()}">
+      <rule if-outcome="next">
+         <end-conversation/>
+         <redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   
+   </navigation>
+   
+   <restrict>#{identity.hasRole('evaluacion_doc_postulante_CIO_list')}</restrict>
+</page>

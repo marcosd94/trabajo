@@ -1,0 +1,139 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Institucion educativa Details</f:facet>
+
+        <s:decorate id="idInstEducativa" template="layout/display.xhtml">
+            <ui:define name="label">Id inst educativa</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.idInstEducativa}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{institucionEducativaHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/InstitucionEducativaEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty institucionEducativaFrom ? 'InstitucionEducativaList' : institucionEducativaFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Pais</h:panelGroup>
+        </f:facet>
+    <div class="association" id="paisParent">
+
+        <h:outputText value="There is no pais associated with this institucionEducativa."
+                   rendered="#{institucionEducativaHome.instance.pais == null}"/>
+
+        <rich:dataTable var="_pais"
+                   value="#{institucionEducativaHome.instance.pais}"
+                rendered="#{institucionEducativaHome.instance.pais != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="paisTable">
+            <h:column>
+                <f:facet name="header">Id pais</f:facet>
+                <h:outputText value="#{_pais.idPais}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_pais.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_pais.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_pais.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Pais codigo sinarh</f:facet>
+                <h:outputText value="#{_pais.paisCodigoSinarh}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_pais.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_pais.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_pais.activo}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewpais"
+                     value="View"
+                      view="/Pais.xhtml">
+                    <f:param name="paisIdPais"
+                           value="#{_pais.idPais}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

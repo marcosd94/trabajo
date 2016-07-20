@@ -1,0 +1,120 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CptCondicionTrabajoEspecif_}</h1>
+
+    <h:form id="cptCondicionTrabajoEspecif" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{cptCondicionTrabajoEspecifHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CptCondicionTrabajoEspecif_}</f:facet>
+
+	            <s:decorate id="condicionTrabajoEspecifField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_idCondicionTrabajoEspecif}</ui:define>
+	                <h:selectOneMenu id="condicionTrabajoEspecif"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.idCondicionTrabajoEspecif}">
+	                    <f:selectItems value="#{condicionTrabajoEspecifsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="cptField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_idCpt}</ui:define>
+	                <h:selectOneMenu id="cpt"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.idCpt}">
+	                    <f:selectItems value="#{cptsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="justificacionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_justificacion}</ui:define>
+	                <h:inputText id="justificacion"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.instance.justificacion}">
+	                    <a:support event="onblur" reRender="justificacionField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="ajustesField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_ajustes}</ui:define>
+	                <h:inputText id="ajustes"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.instance.ajustes}">
+	                    <a:support event="onblur" reRender="ajustesField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="puntajeCondTrabEspecifField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_puntajeCondTrabEspecif}</ui:define>
+	                <h:inputText id="puntajeCondTrabEspecif"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.instance.puntajeCondTrabEspecif}">
+	                    <a:support event="onblur" reRender="puntajeCondTrabEspecifField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CptCondicionTrabajoEspecif_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{cptCondicionTrabajoEspecifHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{cptCondicionTrabajoEspecifHome.persist}"
+                       disabled="#{!cptCondicionTrabajoEspecifHome.wired}"                      
+                       rendered="#{!cptCondicionTrabajoEspecifHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{cptCondicionTrabajoEspecifHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{cptCondicionTrabajoEspecifHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{cptCondicionTrabajoEspecifHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{cptCondicionTrabajoEspecifHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/cptCondicionTrabajoEspecif/CptCondicionTrabajoEspecifList.xhtml"
+                rendered="#{cptCondicionTrabajoEspecifHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty cptCondicionTrabajoEspecifFrom ? 'planificacion/cptCondicionTrabajoEspecif/CptCondicionTrabajoEspecifList' : cptCondicionTrabajoEspecifFrom}.xhtml"
+                rendered="#{!cptCondicionTrabajoEspecifHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

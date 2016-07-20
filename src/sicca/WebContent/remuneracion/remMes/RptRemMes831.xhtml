@@ -1,0 +1,73 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU831_titulo}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+		
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="anio"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png" reRender="idPanelCampos" focus="anio"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('remuneracion/remMes/RptRemMes831')}"
+									 />
+							</s:decorate>
+						</a:region>
+
+						<a:region>		
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU456_anio}
+								</ui:define>
+								<h:selectOneMenu  id="anio" immediate="true" style="width : 200px;" 
+								value="#{rptCobroFuncionario749FC.anio}" >
+								<f:selectItems value="#{rptCobroFuncionario749FC.getAnios()}"  />
+								
+							</h:selectOneMenu>
+							</s:decorate>
+					</a:region>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton 
+				value="#{messages.CU737_imp1}" action="#{rptCobroFuncionario749FC.seleccionReporteAltasYBajas()}">
+			</h:commandButton>
+			</div>
+
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

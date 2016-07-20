@@ -1,0 +1,631 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/templateCapacitacion.xhtml">
+	<ui:define name="body">
+		<h1>Ver #{messages.CU480_titulo_ficha}</h1>
+
+		<h:form id="ficha" styleClass="edit" enctype="multipart/form-data">
+			<h:panelGrid columns="2">
+				<rich:panelMenu style="width:200px" itemMode="ajax" groupMode="ajax"
+					groupExpandedLeftIcon="triangleUp"
+					groupCollapsedLeftIcon="triangleDown"
+					topGroupExpandedRightIcon="chevronUp"
+					topGroupCollapsedRightIcon="chevronDown" itemLeftIcon="disc">
+					<rich:panelMenuGroup label="#{messages.CU480_datos_solicitante}"
+						expanded="true">
+						<rich:panelMenuItem label="#{messages.CU480_paso1}"
+							name="Item_1_1"
+							action="#{fichaInscripcionFC.cambiarPaos('paso1')}"
+							reRender="paso1,paso2" />
+						<rich:panelMenuItem label="#{messages.CU480_paso2}"
+							name="Item_1_2"
+							action="#{fichaInscripcionFC.cambiarPaos('paso2')}"
+							reRender="paso1,paso2" />
+					</rich:panelMenuGroup>
+				</rich:panelMenu>
+				<rich:panel id="paso1"
+					rendered="#{fichaInscripcionFC.paso.equalsIgnoreCase('paso1')}"
+					style="border:none;">
+					<f:facet name="header">#{messages.CU480_paso1}</f:facet>
+					<table align="right">
+						<tr>
+							<td><a:commandButton value="#{messages.CU480_btn_copiar}"
+								rendered="false" action="#{fichaInscripcionFC.copiarFicha()}"
+								reRender="paso2" /></td>
+						</tr>
+					</table>
+					<h:panelGrid columns="1">
+
+
+						<rich:panel id="datosPersonales">
+							<f:facet name="header">#{messages.CU480_panel_datos_personales}</f:facet>
+							<h:panelGrid columns="2">
+								<s:decorate id="nombreField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_nombres}</ui:define>
+									<h:inputText id="nombres" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.nombreCompleto}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_ci}</ui:define>
+									<h:inputText id="ci" size="30" disabled="true"
+										value="#{fichaInscripcionFC.persona.documentoIdentidad}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="edadField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_edad}</ui:define>
+									<h:inputText id="edad" size="10" disabled="true"
+										value="#{fichaInscripcionFC.obtenerEdad()}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="paisExpDocField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_pais_ci}</ui:define>
+									<h:inputText id="paisExpDoc" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.paisByIdPaisExpedicionDoc.descripcion}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="sexoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_sexo}</ui:define>
+									<h:inputText id="sexo" size="10" disabled="true"
+										value="#{fichaInscripcionFC.persona.sexo}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_nacionalidad}</ui:define>
+									<h:inputText id="nacionalidad" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.ciudadByIdCiudadNac.departamento.pais.descripcion}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="telefonosField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_tel}</ui:define>
+									<h:inputText id="telefonos" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.telefonos}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="emailField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_email}</ui:define>
+									<h:inputText id="email" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.EMail}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="direccionField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_dir}</ui:define>
+									<h:inputText id="direccion" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.callePrincipal}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="ciudadDirField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_ciu_dir}</ui:define>
+									<h:inputText id="ciudadDir" size="60" disabled="true"
+										value="#{fichaInscripcionFC.persona.ciudadByIdCiudadDirecc.descripcion}">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+						<rich:panel id="datosEstudios">
+							<f:facet name="header">#{messages.CU480_panel_estudios}</f:facet>
+							<br />
+							<rich:dataTable id="estudios" var="_e" rows="5" rowKeyVar="row"
+								value="#{fichaInscripcionFC.listaEstudios}"
+								rendered="#{fichaInscripcionFC.listaEstudios.size() > 0}">
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_nivel}
+						</f:facet>
+									<h:outputText
+										value="#{_e.tituloAcademico.nivelEstudio.descripcion}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_titulo}
+						</f:facet>
+									<h:outputText value="#{_e.tituloAcademico.descripcion}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_especialidad}
+						</f:facet>
+									<h:outputText value="#{_e.especialidades.descripcion}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_universidad}
+						</f:facet>
+									<h:outputText value="#{_e.institucionEducativa.descripcion}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_pais}
+						</f:facet>
+									<h:outputText value="#{_e.pais.descripcion}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_finalizo}
+						</f:facet>
+									<h:selectBooleanCheckbox value="#{_e.finalizo}" disabled="true" />
+								</h:column>
+
+								<rich:column styleClass="action">
+									<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+									<h:commandLink value="Descargar" target="_blank"
+										rendered="#{_e.documentos.idDocumento!=null}"
+										action="#{fichaInscripcionFC.abrirDocEstudios(row)}" />
+
+								</rich:column>
+							</rich:dataTable>
+							<rich:datascroller align="center" for="estudios" id="sc2"
+								reRender="sc1"
+								rendered="#{fichaInscripcionFC.listaEstudios.size() > 5}" />
+							<br />
+							<rich:dataTable id="idiomas" var="_i" rows="5" rowKeyVar="fil"
+								value="#{fichaInscripcionFC.listaIdiomas}"
+								rendered="#{fichaInscripcionFC.listaIdiomas.size() > 0}">
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_idioma}
+						</f:facet>
+									<h:outputText value="#{_i.datosEspecificos.descripcion}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_habla}
+						</f:facet>
+									<h:outputText rendered="#{_i.habla =='B'}" value="BASICO" />
+									<h:outputText rendered="#{_i.habla =='M'}" value="MEDIO" />
+									<h:outputText rendered="#{_i.habla =='A'}" value="AVANZADO" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_escribe}
+						</f:facet>
+									<h:outputText rendered="#{_i.escribe =='B'}" value="BASICO" />
+									<h:outputText rendered="#{_i.escribe =='M'}" value="MEDIO" />
+									<h:outputText rendered="#{_i.escribe =='A'}" value="AVANZADO" />
+
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_lee}
+						</f:facet>
+									<h:outputText rendered="#{_i.lee =='B'}" value="BASICO" />
+									<h:outputText rendered="#{_i.lee =='M'}" value="MEDIO" />
+									<h:outputText rendered="#{_i.lee =='A'}" value="AVANZADO" />
+								</h:column>
+
+							</rich:dataTable>
+							<rich:datascroller align="center" for="idiomas" id="s2"
+								reRender="s1"
+								rendered="#{fichaInscripcionFC.listaIdiomas.size() > 5}" />
+						</rich:panel>
+						
+						<rich:panel id="discapacidadPanel" >
+						<f:facet name="header">Discapacidades</f:facet>
+						
+							<div class="results" id="tbldetList" style=" overflow: scroll;"  width="310">
+							<rich:dataTable id="itemsList" var="_items"
+								value="#{fichaInscripcionFC.discapacidadsList}"
+								rowKeyVar="rowNr"
+								rendered="#{fichaInscripcionFC.discapacidadsList.size() > 0}">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_discapacidad}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosDiscapac.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_grado}
+													</f:facet>
+									<h:outputText value="#{_items.grado}" />
+
+								</rich:column>
+								<rich:column>
+
+									<f:facet name="header">
+													#{messages.CU156_causa}
+													</f:facet>
+									<h:outputText value="#{_items.causa}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_grado_auto}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosGradoAutonom.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_nro_certif}
+													</f:facet>
+									<h:outputText value="#{_items.nroCertificado}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_fech_emi}
+													</f:facet>
+									<h:outputText value="#{_items.fechaEmision}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU1556_tipo_doc}
+													</f:facet>
+									<h:outputText
+										value="#{_items.documentos.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_doc}
+													</f:facet>
+									<h:outputText value="#{_items.documentos.nombreFisicoDoc}" />
+								</rich:column>
+								<!--  <rich:column>
+									<f:facet name="header">
+														#{messages.CU156_dif_en}
+													</f:facet>
+									<h:outputText value="#{_items.dificultadActividad}" />
+								</rich:column>-->
+								<!--<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_act_a_realizar}
+													</f:facet>
+									<h:outputText value="#{_items.actividadRealizar}" />
+								</rich:column>-->
+								
+							</rich:dataTable></div>
+					</rich:panel>
+						
+						<rich:panel id="OeeUo">
+							<f:facet name="header">OEE - Unidad Organizativa</f:facet>
+						<h:panelGrid columns="2">
+							<s:decorate id="oeeField" template="/layout/edit.xhtml">
+								<ui:define name="label">OEE</ui:define>
+								<h:inputText id="oee" size="100" disabled="#{not fichaInscripcionFC.puedeEditarOEEyUO}"
+									value="#{fichaInscripcionFC.oee}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate id="uoField" template="/layout/edit.xhtml">
+								<ui:define name="label">Unidad Organizativa</ui:define>
+								<h:inputText id="uo" size="100" disabled="#{not fichaInscripcionFC.puedeEditarOEEyUO}"
+									value="#{fichaInscripcionFC.uo}">
+								</h:inputText>
+							</s:decorate>
+						</h:panelGrid>
+						</rich:panel>
+						
+						<rich:panel id="institucion">
+							<f:facet name="header">#{messages.CU480_panel_institucion}</f:facet>
+							<br />
+							<rich:dataTable id="experiencia" var="_exp" rows="5"
+								rowKeyVar="exp" value="#{fichaInscripcionFC.listaExperiencia}"
+								rendered="#{fichaInscripcionFC.listaExperiencia.size() > 0}">
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_desde}
+						</f:facet>
+									<h:outputText value="#{_exp.fechaDesde}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_hasta}
+						</f:facet>
+									<h:outputText value="#{_exp.fechaHasta}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_empresa}
+						</f:facet>
+									<h:outputText value="#{_exp.empresa}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_puesto}
+						</f:facet>
+									<h:outputText value="#{_exp.puestoCargo}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_sector}
+						</f:facet>
+									<h:outputText value="#{_exp.otroSector}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_funciones}
+						</f:facet>
+									<h:outputText value="#{_exp.funcionesRealizadas}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+							#{messages.CU480_ref_lab}
+						</f:facet>
+									<h:outputText value="#{_exp.referenciasLaborales}" />
+								</h:column>
+
+								<rich:column styleClass="action">
+									<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+									<h:commandLink value="Descargar" target="_blank"
+										rendered="#{_exp.documentos.idDocumento!=null}"
+										action="#{fichaInscripcionFC.abrirDocExperiencia(exp)}" />
+
+								</rich:column>
+							</rich:dataTable>
+							<rich:datascroller align="center" for="experiencia" id="c2"
+								reRender="c1"
+								rendered="#{fichaInscripcionFC.listaEstudios.size() > 5}" />
+
+						</rich:panel>
+
+						<rich:panel id="documentos">
+							<f:facet name="header">#{messages.CU480_panel_adj_doc}</f:facet>
+							<h:panelGrid columns="2">
+								<s:decorate id="tipoDocumento1Field"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_tipo_doc}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectOneMenu id="tipoDocumento1" disabled="true"
+										value="#{fichaInscripcionFC.idTipoDoc1}" style="width:200px">
+										<f:selectItems value="#{fichaInscripcionFC.doc1SelecItem}" />
+									</h:selectOneMenu>
+
+								</s:decorate>
+
+								<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml">
+									<ui:define name="label">Adjunto</ui:define>
+
+
+									<h:outputText id="nomFin" size="60"
+										value="#{fichaInscripcionFC.nombreDoc1}" />
+
+									<h:commandButton value="Descargar" target="_blank"
+										rendered="#{fichaInscripcionFC.idDoc1 != null}"
+										action="#{fichaInscripcionFC.abrirDocumento1()}" />
+								</s:decorate>
+
+								<s:decorate id="tipoDocumento2Field"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_tipo_doc}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectOneMenu id="tipoDocumento2" disabled="true"
+										value="#{fichaInscripcionFC.idTipoDoc2}" style="width:200px">
+										<f:selectItems value="#{fichaInscripcionFC.doc2SelecItem}" />
+									</h:selectOneMenu>
+
+								</s:decorate>
+
+								<s:decorate id="adjuntoDoc2" template="/layout/edit.xhtml">
+									<ui:define name="label">Adjunto</ui:define>
+
+									<h:outputText id="nomFin" size="60"
+										value="#{fichaInscripcionFC.nombreDoc2}" />
+									<h:commandButton value="Descargar" target="_blank"
+										rendered="#{fichaInscripcionFC.idDoc2 != null}"
+										action="#{fichaInscripcionFC.abrirDocumento2()}" />
+
+								</s:decorate>
+
+							</h:panelGrid>
+						</rich:panel>
+
+					</h:panelGrid>
+				</rich:panel>
+				<rich:panel id="paso2"
+					rendered="#{fichaInscripcionFC.paso.equalsIgnoreCase('paso2')}"
+					style="border:none;">
+					<f:facet name="header">#{messages.CU480_paso2}</f:facet>
+
+					<h:panelGrid columns="1">
+						<rich:panel id="datosAutoridad">
+							<f:facet name="header">#{messages.CU480_panel_autoridad}</f:facet>
+							<h:panelGrid columns="1">
+								<s:decorate id="nombreApField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_nombres} <span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nombreAp" size="60" maxlength="200"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.nombreAp}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="cargoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_cargo_inst} <span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="cargo" size="60" maxlength="200"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.cargo}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="dirInstField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_dir_inst} <span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="dirInst" size="100" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.direccion}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="correoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_email} <span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="correo" size="60" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.EMail}">
+									</h:inputText>
+								</s:decorate>
+
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<s:decorate id="telefonoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.ConfiguracionUoDet_telefono} <span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="telefono" size="60" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.telefono}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="faxField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_fax}</ui:define>
+									<h:inputText id="fax" size="60" maxlength="500" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.fax}">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+
+						<rich:panel id="datosExperiencia">
+							<f:facet name="header">#{messages.CU480_panel_experiencia}</f:facet>
+							<h:panelGrid columns="1">
+								<s:decorate id="proyectoCordField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_proy_coor}</ui:define>
+									<h:inputText id="proyectoCord" size="100" maxlength="1000"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.proyectoCord}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="proyectoPartField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_proy_part}</ui:define>
+									<h:inputText id="proyectoPart" size="100" maxlength="1000"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.proyectoPart}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="proyectoActField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_act}</ui:define>
+									<h:inputTextarea cols="70" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.proyectoActi}">
+										<f:validateLength maximum="5000" />
+									</h:inputTextarea>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+						<rich:panel id="datosFunciones">
+							<f:facet name="header">#{messages.CU480_panel_funciones}</f:facet>
+							<h:panelGrid columns="1">
+								<s:decorate id="funcionGralField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_funcion_gral}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputTextarea cols="70" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.funcionGral}">
+										<f:validateLength maximum="5000" />
+									</h:inputTextarea>
+								</s:decorate>
+								<s:decorate id="funcionEspecField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_funcion_esp}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputTextarea cols="70" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.funcionEspecif}">
+										<f:validateLength maximum="5000" />
+									</h:inputTextarea>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+						<rich:panel id="datosPotenciales">
+							<f:facet name="header">#{messages.CU480_panel_beneficios}</f:facet>
+							<h:panelGrid columns="1">
+								<s:decorate id="potencialField" template="/layout/edit.xhtml">
+									<span class="required">*</span>
+									<h:inputTextarea cols="70" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.potencialBenef}">
+										<f:validateLength maximum="5000" />
+									</h:inputTextarea>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+						<rich:panel id="datosOtrasAct">
+							<f:facet name="header">#{messages.CU480_panel_otras_act}</f:facet>
+							<h:panelGrid columns="1">
+								<s:decorate id="cursoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_curso}
+								</ui:define>
+									<h:inputText id="curso" size="100" maxlength="1000"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.cursoRealiza}">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<s:decorate id="diasAsisteField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_dias}
+								</ui:define>
+									<h:inputText id="diasAsiste" size="80" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.diasAsisCur}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="horarioAsisteField"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_horario}
+								</ui:define>
+									<h:inputText id="horarioAsiste" size="40" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.horarioCur}">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								<s:decorate id="otrasActField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_otras_act}
+								</ui:define>
+									<h:inputTextarea cols="70" disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.otraAct}">
+										<f:validateLength maximum="5000" />
+									</h:inputTextarea>
+								</s:decorate>
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<s:decorate id="diasActField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_dias}
+								</ui:define>
+									<h:inputText id="diasAsisteAct" size="80" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.diasAsisAct}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="horarioAsisteActField"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU480_horario}
+								</ui:define>
+									<h:inputText id="horarioAsisteAct" size="40" maxlength="500"
+										disabled="true"
+										value="#{fichaInscripcionFC.postulacionCap.horarioAct}">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+						</rich:panel>
+					</h:panelGrid>
+
+				</rich:panel>
+
+			</h:panelGrid>
+
+
+			<div class="actionButtons"><s:button id="cancelAdd"
+				value="Volver" propagation="join" includePageParams="false"
+				view="/#{from}.xhtml">
+			 
+			</s:button></div>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

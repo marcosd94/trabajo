@@ -1,0 +1,489 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<!-- Modales  -->
+		<rich:modalPanel id="modal" width="540" height="290"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Observaciones</f:facet>
+			<h:form id="formModal">
+
+				<s:decorate id="fechaField" template="/layout/display.xhtml">
+					<ui:define name="label">Fecha</ui:define>
+					<rich:calendar id="fecha" disabled="true"
+						value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.fechaObs}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event)"
+						datePattern="dd/MM/yyyy" />
+
+				</s:decorate>
+				 <s:decorate id="observacionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU86_obs}<span class="required">*</span> </ui:define>
+                <h:inputTextarea id="observacion" 
+                               cols="80"
+                               rows="6"
+                         value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.observacion}">
+                <a:support event="onchange"  eventsQueue="default"  reRender="observacionField"/>
+                  <f:validateLength maximum="1000" />
+        		</h:inputTextarea>
+            </s:decorate>
+				<a:region>
+					<s:decorate id="activoField" template="/layout/display.xhtml"
+						rendered="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.idPublicacionConcRevDet != null}">
+						<ui:define name="label">Activo</ui:define>
+						<h:selectBooleanCheckbox
+							disabled="#{publicarConcursoSFPCU693FC.isEdit}"
+							value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.activo}">
+							<a:support event="onclick" />
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+				</a:region>
+
+
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="save" value="Guardar"
+					rendered="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.idPublicacionConcRevDet == null}"
+					action="#{publicarConcursoSFPCU693FC.guardarModal()}"
+					ajaxSingle="true"
+					oncomplete="#{publicarConcursoSFPCU693FC.onComplete()}"
+					reRender="panelAjustes,obsField" /> <a:commandButton id="update"
+					value="Actualizar"
+					rendered="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.idPublicacionConcRevDet != null and !publicarConcursoSFPCU693FC.isEdit}"
+					action="#{publicarConcursoSFPCU693FC.actualizarModal()}"
+					ajaxSingle="true"
+					oncomplete="#{publicarConcursoSFPCU693FC.onComplete()}"
+					reRender="panelAjustes" /> <a:commandButton id="cancel"
+					value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalVer" width="500" height="530"
+			resizeable="false" moveable="true">
+			<f:facet name="header"> Ver Observaciones</f:facet>
+			<h:form>
+				<rich:panel style="border:none;">
+					<fieldset><legend>#{messages.CU86_obs}</legend> <h:panelGrid
+						columns="2">
+						<s:decorate id="nroField" template="/layout/display.xhtml"
+							rendered="false">
+							<ui:define name="label">Nro</ui:define>
+							<h:inputText
+								value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.idPublicacionConcRevDet}"
+								disabled="true" size="10" />
+						</s:decorate>
+						<s:decorate id="fechaField" template="/layout/display.xhtml">
+							<ui:define name="label">Fecha</ui:define>
+							<rich:calendar id="fecha" disabled="true"
+								value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.fechaObs}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+					</h:panelGrid> <h:panelGrid columns="1">
+						<s:decorate id="obsField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_obs}</ui:define>
+							<h:inputTextarea cols="50" disabled="true"
+								value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.observacion}">
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid></fieldset>
+				</rich:panel>
+
+				<rich:panel style="border:none;">
+					<fieldset><legend>Respuesta</legend> <h:panelGrid
+						columns="1">
+
+						<s:decorate id="fechaRespField" template="/layout/display.xhtml">
+							<ui:define name="label">Fecha</ui:define>
+							<rich:calendar id="fechaRpta" disabled="true"
+								value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.fechaRpta}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="ajustadoField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU254_acepta_obs}</ui:define>
+							<h:selectOneRadio id="ajustado" disabled="true"
+								value="#{publicarConcursoSFPCU693FC.valorRadio}">
+								<f:selectItem id="item1" itemLabel="SI" itemValue="SI" />
+								<f:selectItem id="item2" itemLabel="NO" itemValue="NO" />
+							</h:selectOneRadio>
+						</s:decorate>
+						<s:decorate id="obsRptaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU86_obs}</ui:define>
+							<h:inputTextarea cols="50" disabled="true"
+								value="#{publicarConcursoSFPCU693FC.publicacionConcursoRevDet.respuesta}">
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid></fieldset>
+				</rich:panel>
+
+				<div style="clear: both" />
+				<rich:spacer height="10px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="cancel" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalVer')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<h:form id="publicacionConcursoCabSearch" styleClass="edit">
+			<h1>#{messages.CU254_title}</h1>
+			<rich:panel id="panelParametro">
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{publicarConcursoSFPCU693FC.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{publicarConcursoSFPCU693FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{publicarConcursoSFPCU693FC.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{publicarConcursoSFPCU693FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{publicarConcursoSFPCU693FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{publicarConcursoSFPCU693FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concursoCodigo" size="15" disabled="true"
+							value="#{publicarConcursoSFPCU693FC.codConcurso}">
+						</h:inputText>
+									#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{publicarConcursoSFPCU693FC.concurso.nombre}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Nro. Expediente</ui:define>
+						<h:inputText id="nroExpediente" size="15" disabled="true"
+							value="#{publicarConcursoSFPCU693FC.concurso.nroExpediente}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Fecha Expediente</ui:define>
+						<rich:calendar id="fecha" disabled="true"
+							value="#{publicarConcursoSFPCU693FC.concurso.fechaExpediente}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<div class="actionButtons"><a:commandButton id="marcar"
+					value="Seleccionar Todos"
+					action="#{publicarConcursoSFPCU693FC.marcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton> <a:commandButton id="desmarcar" value="#{messages.CU74_quitar}"
+					action="#{publicarConcursoSFPCU693FC.desmarcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton></div>
+
+			</rich:panel>
+			<rich:panel id="panelResultado">
+				<f:facet name="header">Grupos de Puestos(#{publicarConcursoSFPCU693FC.listaGruposDTO.size()})</f:facet>
+				<div class="results" id="puestList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty publicarConcursoSFPCU693FC.listaGruposDTO}" />
+				<rich:dataTable id="grupoList" var="_dto" rowKeyVar="row"
+					value="#{publicarConcursoSFPCU693FC.listaGruposDTO}"
+					rows="10"
+					rendered="#{not empty publicarConcursoSFPCU693FC.listaGruposDTO}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_puesto}
+						</f:facet>
+						<h:outputText value="#{_dto.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU74_seleccionar}
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_dto.seleccionado}" />
+					</rich:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+						<s:link
+							view="/circuitoCSI/publicacionConcursoCU692/PublicacionConcursoCabList.xhtml"
+							value="Medios de Public." propagation="none" id="ver">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="publicacionConcursoCabFrom"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+						
+						#{' '}
+						<s:link propagation="none" id="concursoViewId"
+							action="#{publicarConcursoSFPCU693FC.imprimirPerfilMatriz()}"
+							value="Perfil y Matriz">
+
+							<f:param name="idGrupo"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+						#{' '}
+						<s:link id="cargarFechas" value="Cargar Fechas" 
+							rendered="false"
+							view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml">
+							<f:param name="modoConcurso" value="#{false}" />
+							<f:param name="puesto_agr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+						#{' '}
+						<s:link id="verFechas" value="Ver Fechas"
+							rendered="#{publicarConcursoSFPCU693FC.existeFecha(_dto.concursoPuestoAgr.idConcursoPuestoAgr)  and identity.hasRole('verFechasGrupoPuesto')}"
+							view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuesto.xhtml">
+							<f:param name="modoConcurso" value="#{false}" />
+							<f:param name="puesto_agr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+	#{' '}
+						<s:link id="cargarCronograma" value="Cronograma"
+							rendered="#{publicarConcursoSFPCU693FC.existeCronograma(_dto.concursoPuestoAgr.idConcursoPuestoAgr)}"
+							view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml">
+							<f:param name="modoConcurso" value="#{false}" />
+							<f:param name="puesto_agr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+				#{' '}		
+						<s:link id="cargarPresentacion" value="Cargar #{messages.CU414_popup_concurso_link2}"
+							rendered="false"
+							view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+							propagation="join">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="concursoIdConcurso" />
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+						#{' '}	
+						<s:link id="verPresentacion" value="Ver #{messages.CU414_popup_concurso_link2}"
+							rendered="#{publicarConcursoSFPCU693FC.existePresentacion(_dto.concursoPuestoAgr.idConcursoPuestoAgr) and identity.hasRole('lugarPreseAclaracion_ver')}"
+							view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracionVer.xhtml"
+							propagation="join">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="concursoIdConcurso" />
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+						#{' '}		
+					<s:link view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+							id="basesycondiciones" propagation="none"
+							value="Ver B. y Condiciones" rendered="false">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+						</s:link>
+					</h:column>
+				</rich:dataTable> <rich:datascroller align="center" for="grupoList" id="scr2"
+					reRender="scr1"
+					rendered="#{publicarConcursoSFPCU693FC.listaGruposDTO.size() > 10}" />
+				</div>
+
+				<h:panelGrid columns="1">
+					<rich:panel style="border:none;">
+						<fieldset style="width: 500px;"><legend>Cargar
+						a Nivel de Concurso</legend> <h:panelGrid columns="3">
+							<s:decorate template="/layout/display.xhtml">
+								<s:button value="Cronograma" propagation="join"
+									id="cargarCronograma"
+									view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+									disabled="#{!publicarConcursoSFPCU693FC.existeCronogramaConcurso()}">
+									<f:param name="modoConcurso" value="#{true}" />
+									<f:param name="puesto_agr"
+										value="#{publicarConcursoSFPCU693FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="agr"
+										value="#{publicarConcursoSFPCU693FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="from"
+										value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+								</s:button>
+							</s:decorate>
+
+							
+
+							<s:decorate template="/layout/display.xhtml">
+								<s:button value="#{messages.CU414_popup_concurso_link2}" rendered="false"
+									view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+									propagation="join"
+									disabled="#{!publicarConcursoSFPCU693FC.existePresentacionConcurso()}">
+									<f:param name="concursoIdConcurso"
+										value="#{publicarConcursoSFPCU693FC.concurso.idConcurso}" />
+									<f:param name="idConcursoPuestoAgr" />
+									<f:param name="from"
+										value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+								</s:button>
+							</s:decorate>
+						</h:panelGrid></fieldset>
+					</rich:panel>
+					<rich:panel style="border:none;">
+						<fieldset style="width: 500px;"><legend>Obs.
+						de Tarea Autorizar Publicaciones de Concurso</legend> <s:decorate
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+							<h:inputTextarea id="obs" cols="40"
+								value="#{publicarConcursoSFPCU693FC.obs}" />
+						</s:decorate></fieldset>
+					</rich:panel>
+				</h:panelGrid>
+
+				<a:commandButton value="Nueva Obs." reRender="modal"
+					action="#{publicarConcursoSFPCU693FC.crearNuevoModal()}"
+					oncomplete="#{rich:component('modal')}.show()" />
+
+				<rich:panel id="panelAjustes">
+					<f:facet name="header">Solicitud de Ajustes a OEE(#{publicarConcursoSFPCU693FC.listaRevDet.size()})</f:facet>
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty publicarConcursoSFPCU693FC.listaRevDet}" />
+					<rich:dataTable id="publicarRevDetList" var="_det" rowKeyVar="rows"
+						value="#{publicarConcursoSFPCU693FC.listaRevDet}" rows="10"
+						rendered="#{not empty publicarConcursoSFPCU693FC.listaRevDet}">
+						<h:column rendered="false">
+							<f:facet name="header">
+						Nro.
+						</f:facet>
+							<h:outputText value="#{_det.idPublicacionConcRevDet}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU86_obs}
+						</f:facet>
+							<h:outputText value="#{_det.observacion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						Fecha Obs.
+						</f:facet>
+							<h:outputText value="#{_det.fechaObs}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						Respuesta
+						</f:facet>
+							<h:outputText value="#{_det.respuesta}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						Fecha Rpta.
+						</f:facet>
+							<h:outputText value="#{_det.fechaRpta}" />
+						</h:column>
+
+						<rich:column>
+							<f:facet name="header">
+						Enviado?
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_det.enviadoSfp}"
+								disabled="true" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+						Ajustado por OEE?
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_det.ajustadoOee}"
+								disabled="true" />
+						</rich:column>
+
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							<a:commandLink value="Ver" rendered="#{!_det.enviadoSfp}"
+								reRender="modalVer"
+								action="#{V.cargarModalVer(_det.idPublicacionConcRevDet)}"
+								oncomplete="#{rich:component('modalVer')}.show()" />
+							
+							#{' '}	
+							
+								<a:commandLink value="Editar" reRender="modal"
+								action="#{publicarConcursoSFPCU693FC.cargarModal(_det.idPublicacionConcRevDet)}"
+								oncomplete="#{rich:component('modal')}.show()" />
+						</h:column>
+					</rich:dataTable>
+					<rich:datascroller align="center" for="publicarRevDetList" id="sc2"
+						reRender="sc1"
+						rendered="#{publicarConcursoSFPCU693FC.listaRevDet.size() > 10}" />
+				</rich:panel>
+			</rich:panel>
+
+			<h:panelGrid columns="4">
+
+				<h:commandButton id="devolver" value="Devolver p/Ajustes"
+					action="#{publicarConcursoSFPCU693FC.devolver()}"
+					onclick="return confirm('#{messages.CU254_msg5}');" />
+				<h:commandButton id="autorizar" value="#{messages.CU254_btn1}"
+					action="#{publicarConcursoSFPCU693FC.autorizar()}"
+					onclick="return confirm('#{messages.CU254_msg1}');" />
+
+				<s:button id="anexo" value="Anexo" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{publicarConcursoSFPCU693FC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="publicacion_concursos_sfp_693" />
+					<f:param name="idCU"
+						value="#{publicarConcursoSFPCU693FC.concurso.idConcurso}" />
+					<f:param name="nombreTabla" value="Concurso" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="circuitoCSI/publicacionConcursoSFPCU693/PublicacionConcursoCabList" />
+				</s:button>
+				<s:button id="cancelEdit" value="Volver" propagation="none"
+					view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml" />
+
+
+			</h:panelGrid>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

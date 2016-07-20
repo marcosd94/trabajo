@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page no-conversation-view-id="/CapacitacionesList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<restrict>#{identity.hasRole('publicarCursosOG290')}</restrict>
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{nivelEntidadOeeUtil.init()}" on-postback="false" />
+	<action execute="#{publicarCursoOG290FC.init()}" on-postback="false" />
+	<action execute="#{capacitacionesHome.wire}" />
+	<param name="capacitacionesIdCapacitacion" value="#{publicarCursoOG290FC.idCapacitacion}" />
+	<param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{publicarCursoOG290FC.nivelEntidadOeeUtilCerrado.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{publicarCursoOG290FC.nivelEntidadOeeUtilCerrado.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{publicarCursoOG290FC.nivelEntidadOeeUtilCerrado.idConfigCab}" />
+	<param name="configuracionUoDetIdConfiguracionUoDet"
+		value="#{publicarCursoOG290FC.nivelEntidadOeeUtilCerrado.idUnidadOrganizativa}" />
+
+	<navigation from-action="#{publicarCursoOG290FC.cancelarCapacitacion()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/capacitacion/registrarCursosOg290/CursosOg290List.xhtml"/>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{publicarCursoOG290FC.publicar()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/capacitacion/registrarCursosOg290/CursosOg290List.xhtml"/>
+		</rule>
+	</navigation>
+
+</page>

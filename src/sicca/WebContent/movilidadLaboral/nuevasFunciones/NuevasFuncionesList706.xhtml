@@ -1,0 +1,287 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+
+
+
+		<h1>#{messages.CU706_titulo}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit">
+			<rich:panel >
+			<h:panelGrid columns="3" id="filtros">
+						<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="idPanelCampos,panelCombos" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+													#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('movilidadLaboral/nuevasFunciones/NuevasFuncionesList706')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									<span class="required">*</span>
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="idPanelCampos,panelCombos" focus="unidadOrgCodigo" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+														#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+							rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('movilidadLaboral/nuevasFunciones/NuevasFuncionesList706')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="idPanelCampos,panelCombos" focus="orgCodigo2" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+								#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('movilidadLaboral/nuevasFunciones/NuevasFuncionesList706')}" />
+						</s:decorate>
+					</a:region>
+
+				</h:panelGrid>
+			</rich:panel>
+<rich:panel id="panelParametro">
+<f:facet name="header">#{messages['msg_list_search_filter']}</f:facet>
+			
+				<h:panelGrid columns="3">
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_documentoIdentidad}</ui:define>
+						<h:inputText id="documentoIdentidad"
+							value="#{nuevasFuncionesList706FC.persona.documentoIdentidad}" />
+					</s:decorate>
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU541_pais}</ui:define>
+						<h:selectOneMenu id="idPaisExp" value="#{nuevasFuncionesList706FC.idPais}"  style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombres"
+							value="#{nuevasFuncionesList706FC.persona.nombres}" />
+					</s:decorate>
+					<s:decorate id="fechaDesdeDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU503_fecha_desde}
+						</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{nuevasFuncionesList706FC.fechaDesde}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="fechaHastaDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU503_fecha_hasta}
+						</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{nuevasFuncionesList706FC.fechaHasta}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="false" 
+							oninputkeyup="ponerBarra(event)">
+							
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+						<h:inputText id="apellidos"
+							value="#{nuevasFuncionesList706FC.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="outPanelResul,links"
+				action="#{nuevasFuncionesList706FC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <h:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{nuevasFuncionesList706FC.searchAll()}"
+				reRender="panelParametro,outPanelResul,links">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton></div>
+
+
+		</h:form>
+		<a:outputPanel ajaxRendered="true" id="outPanelResul">
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty empleadoPuestoList.resultList ? 0 : (empleadoPuestoList.paginated ?empleadoPuestoList.resultCount : empleadoPuestoList.resultList.size)})</f:facet>
+				<div class="results" id="empleadoPuestoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty empleadoPuestoList.resultList}" /> <rich:dataTable
+					id="empleadoPuestoList" var="_empleadoPuesto"
+					value="#{empleadoPuestoList.resultList}"
+					rendered="#{not empty empleadoPuestoList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU541_doc_id}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.persona.documentoIdentidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU541_nom_ape}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.persona.nombres" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU706_cod_puesto}" />
+								<ui:param name="propertyPath" value="empleadoPuesto.idEmpleadoPuesto" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{seleccionUtilFormController.obtenerCodigoPuesto(_empleadoPuesto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU706_desc_puesto}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.plantaCargoDet.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU706_fec_ini}" />
+								<ui:param name="propertyPath" value="empleadoPuesto.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.fechaInicio}" />
+					</h:column>
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.CU534_acciones}</f:facet>
+						<s:link value="Ver" propagation="join"
+							view="/movilidadLaboral/nuevasFunciones/NuevasFunciones706.xhtml">
+							<f:param name="empleadoPuestoIdEmpleadoPuesto" value="#{_empleadoPuesto.idEmpleadoPuesto}"/>
+						</s:link>
+           				
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</a:outputPanel>
+
+
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesList706.xhtml"
+				rendered="#{empleadoPuestoList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesList706.xhtml"
+				rendered="#{empleadoPuestoList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesList706.xhtml"
+				rendered="#{empleadoPuestoList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesList706.xhtml"
+				rendered="#{empleadoPuestoList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+		<s:button view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesEdit706.xhtml"
+                    id="create" 
+           propagation="none" rendered="#{!seguridadUtilFormController.esAdministradorSFP}"
+              value="#{messages.msg_create_male}">
+            <f:param name="empleadoPuestoIdEmpleadoPuesto"/>
+        </s:button>
+
+	</ui:define>
+
+
+
+</ui:composition>

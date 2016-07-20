@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/seleccion/persona/PersonaList.xhtml"
+      login-required="true">
+      
+
+
+   <begin-conversation flush-mode="MANUAL" join="true"/>
+
+   <action execute="#{personaHome.wire}"/>
+
+   <param name="personaFrom" value="#{admPersonaEditFormController.from}"/>
+   <param name="personaIdPersona" value="#{admPersonaEditFormController.idPersona}"/>
+   <param name="idPersonaFamiliar" value="#{admPersonaEditFormController.idPersonaFamiliar}"/>
+   
+ <action execute="#{admPersonaEditFormController.init()}" on-postback="false"/>
+
+   <navigation from-action="#{admPersonaEditFormController.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/seleccion/persona/PersonaList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{admPersonaEditFormController.update()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/seleccion/persona/PersonaList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{personaHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/seleccion/persona/PersonaList.xhtml"/>
+      </rule>
+   </navigation>
+   
+   <restrict>#{identity.hasRole('persona_edit')}</restrict>
+
+</page>

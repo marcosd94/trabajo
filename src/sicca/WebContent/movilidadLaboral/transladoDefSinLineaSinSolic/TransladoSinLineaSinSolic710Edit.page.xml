@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<param name="empleadoPuestoIdEmpleadoPuesto" value="#{transladoLineaSinSolic711EditFC.idFuncionario}" />
+	<param name="from" />
+	<action execute="#{transladoLineaConSolic710EditFC.init()}"
+		on-postback="false" />
+	<param name="idSolicitud" value="#{transladoLineaConSolic710EditFC.idSolicitud}" />
+
+	<param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}" />
+
+
+	<navigation from-action="#{transladoLineaSinSolic711EditFC.save()}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect
+				view-id="/#{empty from? 'movilidadLaboral/transladoDefSinLineaSinSolic/TransladoSinLineaSinSolic710List': from}.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('transladoLineaConSolic710EditFC_edit')}</restrict>
+</page>

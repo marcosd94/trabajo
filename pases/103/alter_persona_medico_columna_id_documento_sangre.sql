@@ -1,0 +1,3 @@
+﻿--TABLA GENERAL.PERSONA, AGREGAR LA COLUMNA ID_DOCUMENTO_SANGRE 
+
+ALTER TABLE general.persona ADD COLUMN id_documento_sangre bigint

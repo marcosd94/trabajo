@@ -1,0 +1,262 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml" xmlns:a="http://richfaces.org/a4j">
+
+
+	<ui:define name="body">
+		<h1>#{messages.CU523_titulo}</h1>
+		<h:form id="detValidacionOeeSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				id="panelBusqueda" switchType="client">
+
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('general/validacionOEE/detalle/DetValidacionOeeList')}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									focus="unidadOrgCodigo" reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('general/validacionOEE/detalle/DetValidacionOeeList')}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion,grupo" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('general/validacionOEE/detalle/DetValidacionOeeList')}" />
+								#{' '}
+								<h:commandButton id="reestablecer"
+								onclick="return confirm('#{messages.CU523_msg}');"
+								value="#{messages.CU523_btn_reestablecer}"
+								action="#{admValidacionesOeeListFC.reestablecerOee()}" />
+						</s:decorate>
+					</a:region>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU521_grupo}</ui:define>
+						<h:selectOneMenu id="grupo" disabled="#{nivelEntidadOeeUtil.idConfigCab == null}"
+							value="#{admValidacionesOeeListFC.idGrupo}" style="width:250px">
+							<f:selectItems value="#{admValidacionesOeeListFC.cargarSelectItem()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU521_descripcion}</ui:define>
+						<h:inputText id="nombreValidacion"
+							value="#{admValidacionesOeeListFC.descripcion}" size="50" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado"
+							value="#{admValidacionesOeeListFC.estado}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="Buscar" reRender="panelBusqueda,panelResultado,links"
+				action="#{admValidacionesOeeListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" value="#{messages.CU522_btn_mostrar}"
+				propagation="none"
+				view="/general/validacionOEE/detalle/DetValidacionOeeList.xhtml"
+				includePageParams="false" /></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty detValidacionOeeList.resultList ? 0 : (detValidacionOeeList.paginated ? detValidacionOeeList.resultCount : detValidacionOeeList.resultList.size)})</f:facet>
+			<div class="results" id="detValidacionOeeList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty detValidacionOeeList.resultList}" /> <rich:dataTable
+				id="detValidacionOeeList" var="_detValidacionOee"
+				value="#{detValidacionOeeList.resultList}"
+				rendered="#{not empty detValidacionOeeList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_codigo}" />
+							<ui:param name="propertyPath"
+								value="detValidacionOee.idDetValidacionOee" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.idDetValidacionOee}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_grupo}" />
+							<ui:param name="propertyPath"
+								value="detValidacionOee.cabValidacionOee.nombreGrupoValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_detValidacionOee.cabValidacionOee.nombreGrupoValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_nombre}" />
+							<ui:param name="propertyPath"
+								value="detValidacionOee.nombreValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.nombreValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_tipo}" />
+							<ui:param name="propertyPath" value="detValidacionOee.tipo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.tipo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="Activo" />
+							<ui:param name="propertyPath" value="detValidacionOee.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.activo ? 'SI' : 'NO'}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU521_justificacion}" />
+							<ui:param name="propertyPath"
+								value="detValidacionOee.justifEstado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.justifEstado}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_bloqueo}" />
+							<ui:param name="propertyPath" value="detValidacionOee.bloquea" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacionOee.bloquea ? 'SI' : 'NO'}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					 <s:link view="/general/validacionOEE/detalle/DetValidacionOee.xhtml" value="Ver"
+						propagation="none" id="detValidacionOeeView"
+						rendered="#{empty from}">
+						<f:param name="detValidacionOeeIdDetValidacionOee"
+							value="#{_detValidacionOee.idDetValidacionOee}" />
+					</s:link>
+            #{' '}
+            <s:link view="/general/validacionOEE/detalle/DetValidacionOeeEdit.xhtml" value="Editar"
+						propagation="none" id="detValidacionOeeEdit"
+						rendered="#{empty from}">
+						<f:param name="detValidacionOeeIdDetValidacionOee"
+							value="#{_detValidacionOee.idDetValidacionOee}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/general/validacionOEE/detalle/DetValidacionOeeList.xhtml"
+				rendered="#{detValidacionOeeList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/general/validacionOEE/detalle/DetValidacionOeeList.xhtml"
+				rendered="#{detValidacionOeeList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{detValidacionOeeList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/general/validacionOEE/detalle/DetValidacionOeeList.xhtml"
+				rendered="#{detValidacionOeeList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{detValidacionOeeList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/general/validacionOEE/detalle/DetValidacionOeeList.xhtml"
+				rendered="#{detValidacionOeeList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{detValidacionOeeList.lastFirstResult}" />
+			</s:link></div>
+
+
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

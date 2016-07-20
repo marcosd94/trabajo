@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page no-conversation-view-id="/CapacitacionesList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<restrict>#{identity.hasRole('reprogramarCapacitacion')}</restrict>
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{nivelEntidadOeeUtil.init()}" on-postback="false" />
+	<action execute="#{reprogramarCapacitacionFC.init()}"
+		on-postback="false" />
+	<action execute="#{capacitacionesHome.wire}" />
+	<param name="capacitacionesIdCapacitacion" value="#{reprogramarCapacitacionFC.idCapacitacion}" />
+	<param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.idConfigCab}" />
+	<param name="configuracionUoDetIdConfiguracionUoDet"
+		value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.idUnidadOrganizativa}" />
+
+	<navigation from-action="#{reprogramarCapacitacionFC.cancelarCapacitacion()}">
+		<rule if-outcome="ok">
+			<end-conversation before-redirect="true" />
+			<redirect
+				view-id="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml">
+				<param name="mensaje" value="ok" />
+			</redirect>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{reprogramarCapacitacionFC.reprogramarPublicar()}">
+		<rule if-outcome="ok">
+			<end-conversation before-redirect="true" />
+			<redirect
+				view-id="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml">
+				<param name="mensaje" value="ok" />
+			</redirect>
+		</rule>
+	</navigation>
+
+</page>

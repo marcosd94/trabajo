@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubRpt_CU432" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.1000000000000025"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codGradoSalarial" class="java.lang.Long"/>
+	<parameter name="nen_codigo" class="java.math.BigDecimal"/>
+	<parameter name="id_entidad " class="java.lang.Long"/>
+	<parameter name="id_configuracion_uo" class="java.lang.Long"/>
+	<parameter name="id_configuracion_uo_det" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="whereContrado" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+ estado.descripcion, count(estado.descripcion) as cantidad
+
+FROM
+    sinarh.sin_nivel_entidad nivel,
+    sinarh.sin_entidad sin_entidad
+    inner join
+    planificacion.entidad entidad
+    on
+    entidad.id_sin_entidad = sin_entidad.id_sin_entidad
+    inner join
+    planificacion.configuracion_uo_cab oee
+    on
+    oee.id_entidad = entidad.id_entidad
+    inner join
+    planificacion.configuracion_uo_det uo
+    on
+    uo.id_configuracion_uo = oee.id_configuracion_uo
+    inner join
+    planificacion.planta_cargo_det puesto
+    on
+    puesto.id_configuracion_uo_det = uo.id_configuracion_uo_det
+    inner join
+    planificacion.estado_cab    estado
+    on
+    puesto.id_estado_cab = estado.id_estado_cab
+$P!{whereContrado}]]>
+	</queryString>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="19" y="0" width="554" height="23" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Puestos Contratados]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="3" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="202" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="19" y="0" width="519" height="201"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{descripcion}+" ("+$F{cantidad}+")"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{descripcion}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{cantidad}]]></valueExpression>
+						<labelExpression><![CDATA[$F{cantidad}+""]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

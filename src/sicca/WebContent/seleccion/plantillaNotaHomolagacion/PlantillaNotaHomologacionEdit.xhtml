@@ -1,0 +1,378 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU249_titulo_lis}</h1>
+	<!--******************** MODAL ******************-->
+		<!-- ****Modal tab02**** -->
+	<a:region >
+	
+	<rich:modalPanel id="modalContacto" width="400" height="185" styleClass="centerbox">
+			
+			<f:facet name="controls">
+				
+			</f:facet>
+			 <h:form>
+                 <rich:panel>
+               
+            		<rich:dataTable id="tablaContactos"
+						value="#{plantillaNotaHomologacionHome.tagList}" var="tag" rows="5"
+						reRender="panelContacto">
+						
+						<rich:column >
+							<f:facet name="header"> Etiquetas</f:facet>
+							<h:outputText id="tag1" value="#{tag.tag}" />
+						</rich:column>
+						<rich:column >
+							<f:facet name="header"> Descripción</f:facet>
+							<h:outputText id="outputText1" value="#{tag.descripcion}" />
+						</rich:column>
+						
+					</rich:dataTable>
+					<rich:datascroller for="tablaContactos" renderIfSinglePage="false"
+						id="scrc" reRender="tdPr">
+					</rich:datascroller>
+               
+                </rich:panel>
+               	<h:outputText value="Nota:puede seleccionar las etiquetas, luego copiarlas en el lugar que desee de la plantilla "/>
+              	<rich:spacer height="20px" />
+              	<div class="actionButtons" align="center">
+                <a:commandLink value="Cerrar" onclick="#{rich:component('modalContacto')}.hide()" />
+               </div>
+                </h:form>
+			
+			
+
+			<h:panelGrid>
+				<h:form>
+				
+				</h:form>
+			</h:panelGrid>
+		</rich:modalPanel>
+	
+		
+		<!-- ****Fin Modal**** -->
+		</a:region>
+    <h:form id="plantillaNotaHomologacion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{plantillaNotaHomologacionHome.managed ? 'Editar' : 'Cargar'} #{messages.CU249_titulo_lis}</f:facet>
+
+			<rich:tabPanel switchType="server" id="tabGeneral">
+					<rich:tab label="#{messages.CU249_tab1}" id="tabCargaDatos">
+					<h:panelGrid columns="2">
+					
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">Descripción</ui:define>
+								<h:inputText id="descripcion" required="true" size="100"
+									maxlength="150"
+									value="#{plantillaNotaHomologacionHome.instance.descripcion}">
+								</h:inputText>
+							</s:decorate>
+					 <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{plantillaNotaHomologacionHome.instance.activo}"/>
+            </s:decorate>
+            	
+					
+					</h:panelGrid>
+					<fieldset><legend>Plantilla</legend>
+	            <h:panelGrid columns="1">
+	            <a:region >
+							<a:commandButton id="showValoracionModalButton"
+										value="Ver etiquetas"
+										onclick="Richfaces.showModalPanel('modalContacto');" />
+						</a:region>
+						 <s:decorate id="referenciaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_refe}</ui:define>
+                <h:inputTextarea id="referencia"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.referencia}"/>
+            </s:decorate>
+            <s:decorate id="titulo1Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU56_titulo1}</ui:define>
+                <h:inputTextarea id="titulo1"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.titulo1}"/>
+            </s:decorate>
+
+
+            <s:decorate id="titulo2Field" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU56_titulo2}</ui:define>
+                <h:inputTextarea id="titulo2"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.titulo2}"/>
+            </s:decorate>
+             <s:decorate id="cuerpoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_cuerpo}</ui:define>
+                <h:inputTextarea id="cuerpo"
+                               cols="80"
+                               rows="10"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.cuerpo}"/>
+            </s:decorate>
+             <s:decorate id="firmaField" template="/layout/edit.xhtml">
+                <ui:define name="label">Firma</ui:define>
+                <h:inputTextarea id="firma"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.firma}"/>
+            </s:decorate>
+            
+             <s:decorate id="cargoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_cargo_firma}</ui:define>
+                <h:inputTextarea id="cargo"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.cargo}"/>
+            </s:decorate>
+            
+            <s:decorate id="institucionFirmaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_institucion}</ui:define>
+                <h:inputTextarea id="institucionFirma"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.institucionFirma}"/>
+            </s:decorate>
+            
+            <s:decorate id="aField" template="/layout/edit.xhtml">
+                <ui:define name="label">A</ui:define>
+                <h:inputTextarea id="a"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.a}"/>
+            </s:decorate>
+
+
+            <s:decorate id="donField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_dona}</ui:define>
+                <h:inputTextarea id="don"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.don}"/>
+            </s:decorate>
+            <s:decorate id="institucionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_institucion}</ui:define>
+                <h:inputTextarea id="institucion"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{plantillaNotaHomologacionHome.instance.institucion}"/>
+            </s:decorate>
+            
+            
+            <s:decorate id="itemFinalField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU249_item_fin}</ui:define>
+                <h:inputTextarea id="itemFinal"
+                               cols="80"
+                               rows="3"
+                              value="#{plantillaNotaHomologacionHome.instance.itemFinal}"/>
+            </s:decorate>
+            
+						
+	            </h:panelGrid>
+				</fieldset>
+				</rich:tab>
+				<rich:tab label="#{messages.CU248_vista_preliminar}" id="tabVistaPreliminar"   >
+					    		<table style="width:700px;">
+        <tr>
+            <td class="style1" align="center" colspan="4">
+                <h:graphicImage value="/img/cabecera.jpg" alt="Cabecera" /></td>
+        </tr>
+        <tr>
+            <td class="style6">
+                &nbsp;</td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td align="right">
+                <h:outputText id="fec" required="true" size="100"
+                                    maxlength="150"
+                                    value="Lugar,fecha" style="text-align:right;">
+                                </h:outputText></td>
+        </tr>
+        <tr>
+            <td class="style6">
+                &nbsp;</td>
+            <td class="style5" align="right" style="font-style: normal; font-weight: bold"
+                valign="top" colspan="2">
+                <h:outputText size="10"
+                                    maxlength="150"
+                                    value="Referencia:">
+                                </h:outputText></td>
+            <td align="justify" style="font-style: normal; font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.referencia}" >
+                                    </h:outputText></td>
+        </tr>
+        <tr>
+            <td class="style6" align="left" style="font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.titulo1}" style="font-style:oblique;">
+                                </h:outputText></td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style6" align="left" style="font-weight: bold">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.titulo2}" style="font-style:oblique;">
+                                </h:outputText></td>
+            <td class="style5" colspan="2">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style4" align="justify" colspan="4">
+               <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.cuerpo}" style="text-align:justify;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.firma}" style="text-align:right;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.cargo}" style="text-align:right;font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.institucionFirma}" style="font-style:oblique;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.a}" style="text-align:right;font-style:oblique;font-weight:bolder;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"
+                                    value="#{plantillaNotaHomologacionHome.instance.don}"  style="text-align:right;font-style:oblique;font-weight:bolder;"/></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"  style="text-align:right;font-style:oblique;font-weight:bolder;"
+                                    value="#{plantillaNotaHomologacionHome.instance.institucion}" /></td>
+        </tr>
+        <tr>
+            <td class="style8" align="justify" colspan="2">
+                &nbsp;</td>
+            <td class="style4" align="justify" colspan="2">
+                <h:outputText size="100"
+                                    maxlength="150"  style="text-align:right;font-style:oblique;font-weight:bolder;"
+                                    value="#{plantillaNotaHomologacionHome.instance.itemFinal}" /></td>
+        </tr>
+        
+       
+    </table>
+					    		
+					    	
+							
+							
+							
+					</rich:tab>
+					
+			</rich:tabPanel>
+
+
+           
+           
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!plantillaNotaHomologacionHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{plantillaNotaHomologacionHome.managed}" styleClass="labelClass"/>
+        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{plantillaNotaHomologacionHome.persist()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!plantillaNotaHomologacionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{plantillaNotaHomologacionHome.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{plantillaNotaHomologacionHome.managed}"/>
+
+            
+
+            <s:button id="cancelEdit"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+                rendered="#{plantillaNotaHomologacionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/#{empty plantillaNotaHomologacionFrom ? 'seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList' : plantillaNotaHomologacionFrom}.xhtml"
+                rendered="#{!plantillaNotaHomologacionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

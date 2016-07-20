@@ -1,0 +1,381 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.title_configuracion_uo_det}</h1>
+		<!-- MODAL PARA SELECCION DE REPORTE  -->
+		<rich:modalPanel id="printMiniModal" width="350" height="200"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Imprimir Listados</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer" width="18" height="18"
+					onclick="#{rich:component('printMiniModal')}.hide()" />
+			</f:facet>
+			<h:form>
+				<h:panelGrid columns="1">
+					<s:decorate id="postulantesField" template="/layout/display.xhtml">
+						<ui:define name="label">Listados
+					</ui:define>
+						<h:selectOneRadio id="opciones"
+							value="#{detalleConfUoListFormController.tipoReporte}">
+							<f:selectItem id="item1" itemLabel="Reporte Lineal"
+								itemValue="LINEAL" />
+							<f:selectItem id="item2" itemLabel="Reporte Detallado"
+								itemValue="DETALLADO" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				
+				</h:panelGrid>
+				<div style="clear: both" />
+
+
+				<div class="actionButtons" align="center"><h:commandButton
+					
+					
+					id="printReporte" value="#{messages['msg_list_search_print_button']}"
+					action="#{detalleConfUoListFormController.imprimirListado()}" />
+					 <a:commandButton
+					 
+					id="cancelImprimir" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('printMiniModal')" />
+				</div>
+			</h:form>
+		</rich:modalPanel>
+		
+		
+		
+				
+		<!-- MODAL PANEL PARA CARGA -->
+		<rich:modalPanel id="modalSelect" height="200" width="310">
+			<f:facet name="header">Descargar Organigrama</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form id="modalForm">
+				<h:panelGrid>
+				    <s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_formato}</ui:define>
+						<h:selectOneMenu id="idTipo" value="#{detalleConfUoListFormController.tipoOrganigrama}" required ="true">
+							<f:selectItems value="#{detalleConfUoListFormController.tipoOrganigramaSelecItem}"/>
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU136_imprimir_puestos}</ui:define>
+						<h:selectOneRadio id="idImpPuesto" value="#{detalleConfUoListFormController.imprimirPuestos}" required ="true">
+							<f:selectItems value="#{detalleConfUoListFormController.siNoSelecItem}"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				
+				<br></br>
+				
+				<h:panelGrid columns="2">
+						<h:commandButton id="desc"
+							value="#{messages.gral_descargar}"
+							action="#{detalleConfUoListFormController.imprimirOrganigrama()}">
+						</h:commandButton>
+						
+						<a:commandButton id="cerrar"
+							onclick="#{rich:component('modalSelect')}.hide();"
+							value="#{messages['msg_done']}" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<div style="clear:both">
+					         <span class="required">*</span>
+					          #{messages.msg_required_fields}
+					</div>
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+		
+		
+
+		<h:form id="configuracionUoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<fieldset><rich:panel style="border:none;">
+					<h:panelGrid columns="2" rowClasses="rowTop">
+						<h:panelGrid columns="1">
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.ClasificadorUo_nivel}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+											disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+											<a:support event="onchange" eventsQueue="default"
+												reRender="idPanelCampos,idPanelCampos2" focus="entidadCodigo"
+												action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+										</h:inputText>	
+						                #{' '}
+						                <h:inputText id="nivelDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+													disabled="true" />
+									 	#{' '}
+		               
+						  				<a:commandButton id="searchNi" eventsQueue="default"
+											image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/configuracionUoDet/ConfiguracionUoDetList')}" 
+											rendered="#{seguridadUtilFormController.esAdministradorSFP}"/>
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.Usuario_entidad}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+											disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+											<a:support event="onchange" eventsQueue="default"
+												action="#{nivelEntidadOeeUtil.findEntidad()}"
+												reRender="idPanelCampos,idPanelCampos2" focus="unidadOrgCodigo" />
+										</h:inputText>
+						                #{' '}
+						                <h:inputText id="entidadDescripcion"
+														value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+														disabled="true" />
+										#{' '}
+		                				<a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/configuracionUoDet/ConfiguracionUoDetList')}" 
+											rendered="#{seguridadUtilFormController.esAdministradorSFP}"/>
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.gral_oee}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+											value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+											onkeypress="return soloNumeros(event);"
+											disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+											<a:support event="onchange" eventsQueue="default"
+												action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+												reRender="unidadOrgCodigo,unidadOrgDenominacion" 
+												focus="orgCodigo2"/>
+										</h:inputText>
+											#{' '}
+											<h:inputText id="unidadOrgDenominacion" size="50"
+											disabled="true"
+											value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+										#{' '}
+		                				<a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageOee('planificacion/configuracionUoDet/ConfiguracionUoDetList')}" 
+											rendered="#{seguridadUtilFormController.esAdministradorSFP}"/>
+								</s:decorate>
+							</a:region>
+						</h:panelGrid>
+						
+						<rich:panel style="border:none;">
+							<fieldset><legend>#{messages.ConfiguracionUoDet_vigencia}</legend>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.msg_desde}</ui:define>
+								<rich:calendar id="vigenciaDesde"
+									value="#{detalleConfUoListFormController.configuracionUoCab.vigenciaDesde}"
+									datePattern="dd/MM/yyyy" disabled="true"
+									locale="#{siccaAppHelper.localeCode}" inputSize="10" />
+							</s:decorate> <s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.msg_hasta}</ui:define>
+								<rich:calendar id="vigenciaHasta"
+									value="#{detalleConfUoListFormController.configuracionUoCab.vigenciaHasta}"
+									datePattern="dd/MM/yyyy" disabled="true"
+									locale="#{siccaAppHelper.localeCode}" inputSize="10" />
+							</s:decorate></fieldset>
+						</rich:panel>
+					</h:panelGrid>
+				</rich:panel></fieldset>
+				<br />
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_denominacionUnidad}</ui:define>
+					<h:inputText id="denominacionUnidad"
+						value="#{detalleConfUoListFormController.configuracionUoDet.denominacionUnidad}"
+						size="60" />
+						
+					#{' '}
+					<a:commandButton id="imprimirOrgan"
+						onclick="#{rich:component('modalSelect')}.show();"
+						value="#{messages['ConfiguracionUoDet_imprimirOrganigrama']}" />
+						
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_codigo}</ui:define>
+					<h:inputText id="denominacionUnidad"
+						value="#{detalleConfUoListFormController.configuracionUoDet.codigoUo}"
+						size="60" />
+						
+					
+						
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_estado}</ui:define>
+					<h:selectOneRadio id="estado"
+						value="#{detalleConfUoListFormController.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{detalleConfUoListFormController.search()}"
+				reRender="panelResultados,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{detalleConfUoListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			<a:commandButton
+					id="showPrintModalButton" value="#{messages.msg_list_search_print_button}"
+					reRender="printMiniModal"
+					oncomplete="#{rich:component('printMiniModal')}.show()" />
+						
+						 <s:button
+				id="cancelAdd" value="Volver" propagation="end"
+				view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"/>
+			 </div>
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty configuracionUoDetList.resultList ? 0 : (configuracionUoDetList.paginated ? configuracionUoDetList.resultCount : configuracionUoDetList.resultList.size)})</f:facet>
+				<div class="results" id="tblActividadList" style="overflow:auto;"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty configuracionUoDetList.listaConfiguracionUoDets}" />
+				<rich:dataTable id="configuracionUoDetList"
+					var="_configuracionUoDet"
+					value="#{configuracionUoDetList.resultList}"
+					rendered="#{not empty configuracionUoDetList.resultList}">
+					<rich:column width="15%">
+						<f:facet name="header">#{messages.ConfiguracionUoDet_codigo}</f:facet>
+						<h:outputText
+							value="#{_configuracionUoDet.codigoUo}" />
+					</rich:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{configuracionUoDetList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.ConfiguracionUoDet_denominacionUnidad}" />
+								<ui:param name="propertyPath"
+									value="configuracionUoDet.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<rich:column style="text-align:center" width="10%">
+						<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+						<h:selectBooleanCheckbox value="#{_configuracionUoDet.activo}"
+							disabled="true" />
+					</rich:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/#{empty from ? 'planificacion/configuracionUoDet/ConfiguracionUoDet' : from}.xhtml"
+							value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="configuracionUoDetViewId">
+							<f:param name="configuracionUoCabIdConfiguracionUo"
+								value="#{_configuracionUoDet.configuracionUoCab.idConfiguracionUo}" />
+							<f:param name="configuracionUoDetIdConfiguracionUoDet"
+								value="#{_configuracionUoDet.idConfiguracionUoDet}" />
+						</s:link>
+            		#{' - '}
+            		<s:link
+							view="/planificacion/configuracionUoDet/ConfiguracionUoDetEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="none"
+							id="configuracionUoDetEdit" rendered="#{empty from}">
+							<f:param name="configuracionUoCabIdConfiguracionUo"
+								value="#{_configuracionUoDet.configuracionUoCab.idConfiguracionUo}" />
+							<f:param name="configuracionUoDetIdConfiguracionUoDet"
+								value="#{_configuracionUoDet.idConfiguracionUoDet}" />
+						</s:link>
+					#{' - '}
+            		<s:link
+							view="/planificacion/configuracionUoDet/ConfiguracionUoDetEdit.xhtml"
+							value="#{messages.ConfiguracionUoDet_addSubUnidad}"
+							propagation="none" id="addSubUnidad" rendered="#{empty from}" includePageParams="false">
+							<f:param name="configuracionUoCabIdConfiguracionUo"
+								value="#{_configuracionUoDet.configuracionUoCab.idConfiguracionUo}" />
+							<f:param name="configuracionUoDetIdConfiguracionUoDetPadre"
+								value="#{_configuracionUoDet.idConfiguracionUoDet}" />
+							
+						</s:link>
+					#{' - '}
+            		<s:link
+							view="/planificacion/procesoGestion/ProcesoGestionEdit.xhtml"
+							value="#{messages.ConfiguracionUoDet_addProcesosGestion}"
+							propagation="none" id="addProcesosGestion"
+							rendered="#{empty from}">
+							<f:param name="configuracionUoDetIdConfiguracionUoDet"
+								value="#{_configuracionUoDet.idConfiguracionUoDet}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<a:outputPanel ajaxRendered="true"  id="links">
+			<div class="tableControl"><s:link
+				view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+				rendered="#{configuracionUoDetList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+				rendered="#{configuracionUoDetList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{configuracionUoDetList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+				rendered="#{configuracionUoDetList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{configuracionUoDetList.nextFirstResult}" />
+			</s:link> <s:link view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+				rendered="#{configuracionUoDetList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{configuracionUoDetList.lastFirstResult}" />
+			</s:link></div>
+</a:outputPanel>
+			<s:div styleClass="actionButtons" rendered="#{empty from}">
+				<h:commandButton id="new" value="#{messages.msg_create_male}"
+					action="#{detalleConfUoListFormController.getUrlToEditPage()}"/>
+			</s:div>
+			
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

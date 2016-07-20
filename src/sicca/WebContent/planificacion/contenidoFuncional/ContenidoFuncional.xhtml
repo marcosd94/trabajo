@@ -1,0 +1,112 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.ContenidoFuncional_}</h1>
+
+    <h:form id="contenidoFuncional" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{contenidoFuncionalHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.ContenidoFuncional_}</f:facet>
+
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{contenidoFuncionalHome.instance.descripcion}">
+	                    <a:support event="onblur" reRender="descripcionField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	               <s:decorate id="ordenField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ContenidoFuncional_orden}</ui:define>
+	                <h:inputText id="orden"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{contenidoFuncionalHome.instance.orden}">
+	                    <a:support event="onblur" reRender="ordenField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ContenidoFuncional_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{contenidoFuncionalHome.instance.activo}" />
+	            </s:decorate>
+	         
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+		<br />
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!valorNivelOrgHome.managed}" styleClass="labelClass"/>
+	            <h:outputText value="#{messages.msg_obs_update}" rendered="#{valorNivelOrgHome.managed}" styleClass="labelClass"/>
+	        </div>
+		
+        </rich:panel>
+
+        <div class="actionButtons">
+
+   
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty contenidoFuncionalFrom ? 'planificacion/contenidoFuncional/ContenidoFuncionalList' : contenidoFuncionalFrom}.xhtml"
+               />
+
+        </div>
+        
+         <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"     template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}:</ui:define>
+						<h:outputText 
+							value="#{contenidoFuncionalHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  >
+						<ui:define name="label">#{messages.msg_fecha_alta_}:</ui:define>
+						<h:outputText
+							value="#{contenidoFuncionalHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"   >
+						<ui:define name="label">#{messages.msg_usu_mod}:</ui:define>
+						<h:outputText
+							value="#{contenidoFuncionalHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"   >
+						<ui:define name="label">#{messages.msg_fecha_mod}:</ui:define>
+
+						<h:outputText
+							value="#{contenidoFuncionalHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+        
+        
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

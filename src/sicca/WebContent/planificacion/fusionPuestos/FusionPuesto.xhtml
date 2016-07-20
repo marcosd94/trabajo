@@ -1,0 +1,433 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Fusion puesto Details</f:facet>
+
+        <s:decorate id="idFusionPuesto" template="layout/display.xhtml">
+            <ui:define name="label">Id fusion puesto</ui:define>
+            <h:outputText value="#{fusionPuestoHome.instance.idFusionPuesto}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/FusionPuestoEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty fusionPuestoFrom ? 'FusionPuestoList' : fusionPuestoFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Planta cargo det by puesto fusionado</h:panelGroup>
+        </f:facet>
+    <div class="association" id="plantaCargoDetByPuestoFusionadoParent">
+
+        <h:outputText value="There is no plantaCargoDetByPuestoFusionado associated with this fusionPuesto."
+                   rendered="#{fusionPuestoHome.instance.plantaCargoDetByPuestoFusionado == null}"/>
+
+        <rich:dataTable var="_plantaCargoDet"
+                   value="#{fusionPuestoHome.instance.plantaCargoDetByPuestoFusionado}"
+                rendered="#{fusionPuestoHome.instance.plantaCargoDetByPuestoFusionado != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="plantaCargoDetByPuestoFusionadoTable">
+            <h:column>
+                <f:facet name="header">Id planta cargo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Entidad id entidad</f:facet>
+                <h:outputText value="#{_plantaCargoDet.entidad.idEntidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_plantaCargoDet.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Oficina id oficina</f:facet>
+                <h:outputText value="#{_plantaCargoDet.oficina.idOficina}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado cab id estado cab</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Configuracion uo det id configuracion uo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.configuracionUoDet.idConfiguracionUoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Especialidades id especialidades</f:facet>
+                <h:outputText value="#{_plantaCargoDet.especialidades.idEspecialidades}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado det id estado det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoDet.idEstadoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fundamentacion tecnica</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fundamentacionTecnica}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_plantaCargoDet.mision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.objetivo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contratado</f:facet>
+                <h:outputText value="#{_plantaCargoDet.contratado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Permanente</f:facet>
+                <h:outputText value="#{_plantaCargoDet.permanente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Orden</f:facet>
+                <h:outputText value="#{_plantaCargoDet.orden}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewplantaCargoDet"
+                     value="View"
+                      view="/PlantaCargoDet.xhtml">
+                    <f:param name="plantaCargoDetIdPlantaCargoDet"
+                           value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Planta cargo det by id planta cargo det</h:panelGroup>
+        </f:facet>
+    <div class="association" id="plantaCargoDetByIdPlantaCargoDetParent">
+
+        <h:outputText value="There is no plantaCargoDetByIdPlantaCargoDet associated with this fusionPuesto."
+                   rendered="#{fusionPuestoHome.instance.plantaCargoDetByIdPlantaCargoDet == null}"/>
+
+        <rich:dataTable var="_plantaCargoDet"
+                   value="#{fusionPuestoHome.instance.plantaCargoDetByIdPlantaCargoDet}"
+                rendered="#{fusionPuestoHome.instance.plantaCargoDetByIdPlantaCargoDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="plantaCargoDetByIdPlantaCargoDetTable">
+            <h:column>
+                <f:facet name="header">Id planta cargo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Entidad id entidad</f:facet>
+                <h:outputText value="#{_plantaCargoDet.entidad.idEntidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_plantaCargoDet.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Oficina id oficina</f:facet>
+                <h:outputText value="#{_plantaCargoDet.oficina.idOficina}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado cab id estado cab</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Configuracion uo det id configuracion uo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.configuracionUoDet.idConfiguracionUoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Especialidades id especialidades</f:facet>
+                <h:outputText value="#{_plantaCargoDet.especialidades.idEspecialidades}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado det id estado det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoDet.idEstadoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fundamentacion tecnica</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fundamentacionTecnica}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_plantaCargoDet.mision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.objetivo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contratado</f:facet>
+                <h:outputText value="#{_plantaCargoDet.contratado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Permanente</f:facet>
+                <h:outputText value="#{_plantaCargoDet.permanente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Orden</f:facet>
+                <h:outputText value="#{_plantaCargoDet.orden}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewplantaCargoDet"
+                     value="View"
+                      view="/PlantaCargoDet.xhtml">
+                    <f:param name="plantaCargoDetIdPlantaCargoDet"
+                           value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

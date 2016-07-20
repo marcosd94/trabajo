@@ -1,0 +1,103 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU150_menu}</h1>
+    <rich:panel>
+        <f:facet name="header">#{messages.msg_list_view} #{messages.CU150_single_title}</f:facet>
+
+        <s:decorate id="dominioField" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.CU150_dominio}</ui:define>
+            <h:inputText id="dominio" 
+            		  value="#{referenciasHome.instance.dominio}"
+            		   size="60" 
+            	   disabled="true"/>
+        </s:decorate>
+
+        <s:decorate id="descAbrevField" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.CU150_descripcionAbrev}</ui:define>
+            <h:inputText id="descAbrev" 
+            		  value="#{referenciasHome.instance.descAbrev}"
+            		   size="60" 
+            	   disabled="true"/>
+        </s:decorate>
+
+        <s:decorate id="descLargaField" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.CU150_descripcionLarga}</ui:define>
+            <h:inputText id="descLarga" 
+            		  value="#{referenciasHome.instance.descLarga}"
+            		   size="60" 
+            	   disabled="true"/>
+        </s:decorate>
+
+        <s:decorate id="valorAlfField" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.CU150_valorAlfanumerico}</ui:define>
+            <h:inputText id="valorAlf" 
+            		  value="#{referenciasHome.instance.valorAlf}"
+            		   size="60" 
+            	   disabled="true"/>
+        </s:decorate>
+
+        <s:decorate id="valorNumField" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.CU150_valorNumerico}</ui:define>
+            <h:inputText id="valorNum" 
+            		  value="#{referenciasHome.instance.valorNum}"
+            		   size="5"
+            	 styleClass="numeric" 
+            	   disabled="true"/>
+        </s:decorate>
+        
+        <s:decorate id="activoField" template="/layout/edit.xhtml">
+            <ui:define name="label">#{messages.CU150_activo}</ui:define>
+            <h:selectBooleanCheckbox id="activo"
+		            		   required="true"
+		                       disabled="true"
+		                          value="#{referenciasHome.instance.activo}" />
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+    
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{referenciasHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{referenciasHome.instance.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{referenciasHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{referenciasHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{referenciasHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{referenciasHome.instance.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{referenciasHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{referenciasHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+    <div class="actionButtons">
+
+        <s:button view="/#{empty referenciasFrom ? 'seleccion/administrarReferencias/ReferenciasList' : referenciasFrom}.xhtml"
+                    id="done"
+                 value="#{messages.msg_done}"/>
+
+    </div>
+
+</ui:define>
+
+</ui:composition>

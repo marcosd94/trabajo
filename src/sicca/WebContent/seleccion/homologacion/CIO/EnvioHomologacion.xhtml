@@ -1,0 +1,168 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU410_title}</h1>
+
+		<h:form id="envioHomologacionSearch" styleClass="edit">
+
+			<rich:panel id="panelParametro">
+				<f:facet name="header">Grupo de Puestos</f:facet>
+
+				<h:panelGrid columns="3">
+
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Concurso</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 514px;" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo de Puestos</ui:define>
+						<h:inputText id="usuMod" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+							style=" width : 514px;" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+			<br></br>
+			<rich:panel>
+				<f:facet name="header">Datos</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea id="obs"
+							value="#{admEnvioHomologacionFormController.observacion.observacion}"
+							cols="60" rows="5"
+							onkeypress="return imposeMaxLength(event, this, 250);"
+							disabled="#{admEnvioHomologacionFormController.homologacionEnviada}">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+
+
+			<s:div styleClass="actionButtons">
+				<s:button view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					id="anexos" value="#{messages.gral_anexos}"
+					disabled="#{!admEnvioHomologacionFormController.homologacionEnviada}">
+					<f:param name="direccionFisica"
+						value="#{admEnvioHomologacionFormController.ubicacionFisica}" />
+					<f:param name="nombrePantalla"
+						value="EnvioDeGruposAHomologacionPorConcursoSimplificado" />
+					<f:param name="idCU"
+						value="#{admEnvioHomologacionFormController.observacion.idObservacion}" />
+					<f:param name="nombreTabla"
+						value="#{admEnvioHomologacionFormController.entity}" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="seleccion/homologacion/EnvioHomologacion" />
+				</s:button>
+
+				<h:commandButton id="homologacion"
+					value="#{messages.CU410_enviar_solicitud_homologacion}"
+					action="#{admEnvioHomologacionFormController.save()}"
+					onclick="return confirm('#{messages.CU410_confirmar_enviar_homologacion}');"
+					disabled="#{admEnvioHomologacionFormController.homologacionEnviada}" />
+
+				<h:commandButton id="tarea" value="#{messages.proceso_sgte_tarea}"
+					action="#{admEnvioHomologacionFormController.nextTask('APROBAR_HOMOLOG_SFP_I')}"
+					onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" />
+
+				<s:button view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+					id="volver" propagation="none" value="#{messages.msg_done}">
+				</s:button>
+			</s:div>
+
+
+			<div><h:panelGrid columns="2">
+				<s:decorate id="usuarioAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.usuAlta}" />
+				</s:decorate>
+
+				<s:decorate id="fechaAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.fechaAlta}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.usuMod}" />
+				</s:decorate>
+
+				<s:decorate id="fechaModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.fechaMod}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

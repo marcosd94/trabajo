@@ -1,0 +1,515 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="postulacion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{postulacionHome.managed ? 'Edit' : 'Add'} Postulacion</f:facet>
+
+
+            <s:decorate id="idPostulacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Id postulacion</ui:define>
+                <h:inputText id="idPostulacion"
+                       required="true"
+                       disabled="#{postulacionHome.managed}"
+                          value="#{postulacionHome.instance.idPostulacion}">
+                    <a:support event="onblur" reRender="idPostulacionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{postulacionHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuPostulacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu postulacion</ui:define>
+                <h:inputText id="usuPostulacion"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{postulacionHome.instance.usuPostulacion}">
+                    <a:support event="onblur" reRender="usuPostulacionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaPostulacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha postulacion</ui:define>
+                <rich:calendar id="fechaPostulacion"
+                       required="true"
+                          value="#{postulacionHome.instance.fechaPostulacion}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="obsCancelacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Obs cancelacion</ui:define>
+                <h:inputTextarea id="obsCancelacion"
+                               cols="80"
+                               rows="10"
+                              value="#{postulacionHome.instance.obsCancelacion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuCancelacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu cancelacion</ui:define>
+                <h:inputText id="usuCancelacion"
+                           size="50"
+                      maxlength="50"
+                          value="#{postulacionHome.instance.usuCancelacion}">
+                    <a:support event="onblur" reRender="usuCancelacionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaCancelacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha cancelacion</ui:define>
+                <rich:calendar id="fechaCancelacion"
+                          value="#{postulacionHome.instance.fechaCancelacion}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="interesCargoField" template="layout/edit.xhtml">
+                <ui:define name="label">Interes cargo</ui:define>
+                <h:inputTextarea id="interesCargo"
+                               cols="80"
+                               rows="10"
+                              value="#{postulacionHome.instance.interesCargo}"/>
+            </s:decorate>
+
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{postulacionHome.persist}"
+                       disabled="#{!postulacionHome.wired}"
+                       rendered="#{!postulacionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{postulacionHome.update}"
+                       rendered="#{postulacionHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{postulacionHome.remove}"
+                      immediate="true"
+                       rendered="#{postulacionHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/Postulacion.xhtml"
+                rendered="#{postulacionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty postulacionFrom ? 'PostulacionList' : postulacionFrom}.xhtml"
+                rendered="#{!postulacionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Concurso puesto agr *" labelClass="required">
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this postulacion."
+                   rendered="#{postulacionHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{postulacionHome.instance.concursoPuestoAgr}"
+                rendered="#{postulacionHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion homologacion id resolucion homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionHomologacion.idResolucionHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nota homologacion id nota homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.notaHomologacion.idNotaHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Memo homologacion id memo homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.memoHomologacion.idMemoHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.estado}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{postulacionHome.instance.concursoPuestoAgr != null ? 'changeParent' : 'selectParent'}" value="#{postulacionHome.instance.concursoPuestoAgr != null ? 'Change' : 'Select'} concursoPuestoAgr"
+                       view="/ConcursoPuestoAgrList.xhtml">
+                <f:param name="from" value="PostulacionEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Persona postulante *" labelClass="required">
+    <div class="association" id="personaPostulanteParent">
+
+        <h:outputText value="There is no personaPostulante associated with this postulacion."
+                   rendered="#{postulacionHome.instance.personaPostulante == null}"/>
+
+        <rich:dataTable var="_personaPostulante"
+                   value="#{postulacionHome.instance.personaPostulante}"
+                rendered="#{postulacionHome.instance.personaPostulante != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="personaPostulanteTable">
+            <h:column>
+                <f:facet name="header">Id persona postulante</f:facet>
+                <h:outputText value="#{_personaPostulante.idPersonaPostulante}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos especificos id datos especificos</f:facet>
+                <h:outputText value="#{_personaPostulante.datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombres</f:facet>
+                <h:outputText value="#{_personaPostulante.nombres}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Apellidos</f:facet>
+                <h:outputText value="#{_personaPostulante.apellidos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documento identidad</f:facet>
+                <h:outputText value="#{_personaPostulante.documentoIdentidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">E mail</f:facet>
+                <h:outputText value="#{_personaPostulante.EMail}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sexo</f:facet>
+                <h:outputText value="#{_personaPostulante.sexo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado civil</f:facet>
+                <h:outputText value="#{_personaPostulante.estadoCivil}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha nacimiento</f:facet>
+                <h:outputText value="#{_personaPostulante.fechaNacimiento}">
+                    <s:convertDateTime type="date" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id pais expedicion doc</f:facet>
+                <h:outputText value="#{_personaPostulante.idPaisExpedicionDoc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id ciudad nac</f:facet>
+                <h:outputText value="#{_personaPostulante.idCiudadNac}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Calle principal</f:facet>
+                <h:outputText value="#{_personaPostulante.callePrincipal}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Primera lateral</f:facet>
+                <h:outputText value="#{_personaPostulante.primeraLateral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Segunda lateral</f:facet>
+                <h:outputText value="#{_personaPostulante.segundaLateral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Departamento nro</f:facet>
+                <h:outputText value="#{_personaPostulante.departamentoNro}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Piso</f:facet>
+                <h:outputText value="#{_personaPostulante.piso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_personaPostulante.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id ciudad direcc</f:facet>
+                <h:outputText value="#{_personaPostulante.idCiudadDirecc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Direccion laboral</f:facet>
+                <h:outputText value="#{_personaPostulante.direccionLaboral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Otras direcciones</f:facet>
+                <h:outputText value="#{_personaPostulante.otrasDirecciones}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Telefonos</f:facet>
+                <h:outputText value="#{_personaPostulante.telefonos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_personaPostulante.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_personaPostulante.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_personaPostulante.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_personaPostulante.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_personaPostulante.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_personaPostulante.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id barrio</f:facet>
+                <h:outputText value="#{_personaPostulante.idBarrio}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{postulacionHome.instance.personaPostulante != null ? 'changeParent' : 'selectParent'}" value="#{postulacionHome.instance.personaPostulante != null ? 'Change' : 'Select'} personaPostulante"
+                       view="/PersonaPostulanteList.xhtml">
+                <f:param name="from" value="PostulacionEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Postulacion adjuntoses">
+        <h:form styleClass="association" id="postulacionAdjuntosesChildren">
+
+            <h:outputText value="There are no postulacionAdjuntoses associated with this postulacion."
+                       rendered="#{empty postulacionHome.postulacionAdjuntoses}"/>
+
+            <rich:dataTable value="#{postulacionHome.postulacionAdjuntoses}"
+                           var="_postulacionAdjuntos"
+                      rendered="#{not empty postulacionHome.postulacionAdjuntoses}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="postulacionAdjuntosesTable">
+                <rich:column sortBy="#{_postulacionAdjuntos.idPostulacionAdjuntos}">
+                    <f:facet name="header">Id postulacion adjuntos</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.idPostulacionAdjuntos}"/>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.idDocumento}">
+                    <f:facet name="header">Id documento</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.idDocumento}"/>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.activo}">
+                    <f:facet name="header">Activo</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.activo}"/>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.usuAlta}">
+                    <f:facet name="header">Usu alta</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.usuAlta}"/>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.fechaAlta}">
+                    <f:facet name="header">Fecha alta</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.fechaAlta}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.usuMod}">
+                    <f:facet name="header">Usu mod</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.usuMod}"/>
+                </rich:column>
+                <rich:column sortBy="#{_postulacionAdjuntos.fechaMod}">
+                    <f:facet name="header">Fecha mod</f:facet>
+                    <h:outputText value="#{_postulacionAdjuntos.fechaMod}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{postulacionHome.managed}" id="postulacionAdjuntoses">
+        <div class="actionButtons">
+            <s:button id="addpostulacionAdjuntos"
+                   value="Add postulacionAdjuntos"
+                    view="/PostulacionAdjuntosEdit.xhtml"
+             propagation="none">
+                 <f:param name="postulacionIdPostulacion"
+                         value="#{postulacionHome.instance.idPostulacion}"/>
+                 <f:param name="postulacionAdjuntosFrom" value="Postulacion"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+
+    <rich:tab label="Eval documental cabs">
+        <h:form styleClass="association" id="evalDocumentalCabsChildren">
+
+            <h:outputText value="There are no evalDocumentalCabs associated with this postulacion."
+                       rendered="#{empty postulacionHome.evalDocumentalCabs}"/>
+
+            <rich:dataTable value="#{postulacionHome.evalDocumentalCabs}"
+                           var="_evalDocumentalCab"
+                      rendered="#{not empty postulacionHome.evalDocumentalCabs}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="evalDocumentalCabsTable">
+                <rich:column sortBy="#{_evalDocumentalCab.idEvalDocumentalCab}">
+                    <f:facet name="header">Id eval documental cab</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.tipo}">
+                    <f:facet name="header">Tipo</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.tipo}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.aprobado}">
+                    <f:facet name="header">Aprobado</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.aprobado}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.evaluado}">
+                    <f:facet name="header">Evaluado</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.evaluado}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.fechaEvaluacion}">
+                    <f:facet name="header">Fecha evaluacion</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.observacion}">
+                    <f:facet name="header">Observacion</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.observacion}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.activo}">
+                    <f:facet name="header">Activo</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.activo}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.usuAlta}">
+                    <f:facet name="header">Usu alta</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.usuAlta}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.fechaAlta}">
+                    <f:facet name="header">Fecha alta</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.fechaAlta}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.usuMod}">
+                    <f:facet name="header">Usu mod</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.usuMod}"/>
+                </rich:column>
+                <rich:column sortBy="#{_evalDocumentalCab.fechaMod}">
+                    <f:facet name="header">Fecha mod</f:facet>
+                    <h:outputText value="#{_evalDocumentalCab.fechaMod}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{postulacionHome.managed}" id="evalDocumentalCabs">
+        <div class="actionButtons">
+            <s:button id="addevalDocumentalCab"
+                   value="Add evalDocumentalCab"
+                    view="/EvalDocumentalCabEdit.xhtml"
+             propagation="none">
+                 <f:param name="postulacionIdPostulacion"
+                         value="#{postulacionHome.instance.idPostulacion}"/>
+                 <f:param name="evalDocumentalCabFrom" value="Postulacion"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

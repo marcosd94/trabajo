@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU270_title}</h1>
+		<h:form id="organizacionDiscapacitados" styleClass="edit">
+			<rich:panel>
+				<f:facet name="header">Ver #{messages.CU270_title}</f:facet>
+				<s:decorate id="nombreField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU270_organizacion}</ui:define>
+					<h:inputText id="nombre" size="100" maxlength="150"  style=" width : 500px;" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.nombre}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="direccionField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU270_direccion}</ui:define>
+					<h:inputTextarea id="direccion" cols="80" rows="2" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.direccion}" style=" width : 500px;"/>
+				</s:decorate>
+				<s:decorate id="rucField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU270_ruc}</ui:define>
+					<h:inputText id="ruc" size="30" maxlength="30" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.ruc}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="telefonoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU270_telefono}</ui:define>
+					<h:inputText id="telefono" size="100" maxlength="100"  style=" width : 500px;" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.telefono}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="EMailField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU270_email}</ui:define>
+					<h:inputText id="EMail" size="50" maxlength="50"  style=" width : 500px;" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.EMail}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="paisField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU270_pais}</ui:define>
+					<h:selectOneMenu id="pais" style="width : 500px;" disabled="true" 
+						value="#{admOrgDisFC.idPais}">
+						<f:selectItems value="#{admOrgDisFC.paisSelecItem}" />
+						 
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="dptoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+					<h:selectOneMenu id="dpto" style="width : 500px;" disabled="true"
+						value="#{admOrgDisFC.idDpto}">
+						<f:selectItems value="#{admOrgDisFC.departamentosSelecItem}" />
+						<a:support event="onchange" action="#{admOrgDisFC.updateCiudad()}" 
+							reRender="ciudad" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="ciudadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+					<h:selectOneMenu id="ciudad" style="width : 500px;" disabled="true"
+						value="#{admOrgDisFC.idCiudad}">
+						<f:selectItems value="#{admOrgDisFC.ciudadSelecItem}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="activoField" template="/layout/edit.xhtml"
+					rendered="#{organizacionDiscapacitadosHome.managed}">
+					<ui:define name="label">#{messages.CU270_activo}</ui:define>
+					<h:selectBooleanCheckbox id="activo" required="true" disabled="true"
+						value="#{organizacionDiscapacitadosHome.instance.activo}" />
+				</s:decorate>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!organizacionDiscapacitadosHome.managed}"
+					styleClass="labelClass" />  
+					</div>
+			</rich:panel>
+			<div class="actionButtons">  <h:commandButton
+				id="cancelEdit" value="#{messages.GENERICO_VOLVER}"
+				propagation="end" action="#{admOrgDisFC.limpiar()}"
+				rendered="#{organizacionDiscapacitadosHome.managed}">
+				<f:param name="organizacionDiscapacitadosIdOrganizacion"
+					value="#{0}" />
+			</h:commandButton> </div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{organizacionDiscapacitadosHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{organizacionDiscapacitadosHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{organizacionDiscapacitadosHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{organizacionDiscapacitadosHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{organizacionDiscapacitadosHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{organizacionDiscapacitadosHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{organizacionDiscapacitadosHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{organizacionDiscapacitadosHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

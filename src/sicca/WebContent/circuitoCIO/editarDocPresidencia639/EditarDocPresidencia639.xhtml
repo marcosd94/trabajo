@@ -1,0 +1,207 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU639_titulo}</h1>
+    <h:form id="matrizDocConfigDetSearch" styleClass="edit">
+    <rich:panel >
+    <h:panelGrid columns="2">
+	<s:decorate id="buttonsField" template="/layout/display.xhtml">
+		<h:commandButton id="tarea"
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{editarDocPresidencia639FC.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+    
+    		<s:button view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+    
+    </s:decorate>    
+    
+		<rich:panel >
+		<h:panelGrid columns="1">
+       
+			<rich:panel id="panelParametro" >	
+			
+			 	<h:panelGrid columns="3">
+           		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	          
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" disabled="true"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+								
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+					</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{editarDocPresidencia639FC.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+          
+			</h:panelGrid>
+			</rich:panel>
+		
+        
+       
+   			<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+						<h:inputTextarea id="obs" cols="40" 
+							value="#{editarDocPresidencia639FC.obs}" style=" width : 859px;">
+							    <f:validateLength maximum="250" />
+					</h:inputTextarea>
+					</s:decorate>
+					
+				</h:panelGrid>
+				 
+   				<h:panelGrid columns="2">
+   		<div>
+			<rich:panel id="panelResultado" style=" width : 859px;">
+				<f:facet name="header">Grupos (#{editarDocPresidencia639FC.puestoAgrList.size()})</f:facet>
+									<div class="results"
+										style="clear: both; overflow: auto; HEIGHT: 230px"
+										id="puestList"><rich:dataTable id="grupoList" var="_agr"
+										rowKeyVar="row"
+										value="#{editarDocPresidencia639FC.puestoAgrList}">
+										<h:column>
+											<f:facet name="header">
+						#{messages.CU411_cod_grupo}
+						</f:facet>
+											<h:outputText value="#{_agr.codGrupo}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+						#{messages.CU411_denominacion}
+						</f:facet>
+											<h:outputText value="#{_agr.descripcionGrupo}">
+											</h:outputText>
+										</h:column>
+
+
+										<rich:column styleClass="action">
+											<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+											<a:commandLink id="gestionar1" eventsQueue="default"
+												value="#{messages.gral_anexos}"
+												action="#{editarDocPresidencia639FC.anexar(_agr.idConcursoPuestoAgr)}">
+											</a:commandLink>
+										</rich:column>
+
+									</rich:dataTable></div>
+
+								</rich:panel>
+			</div>	
+     </h:panelGrid>
+		<h:panelGrid columns="1" >
+		
+      	  
+  			 <div style="clear:both">
+            <h:outputText value="#{messages.CU540_decreto}"  styleClass="labelClass"/>
+        </div>
+		
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+				
+		<rich:dataTable
+				value="#{editarDocPresidencia639FC.decretoList}"
+				id="tablaData" var="reso" rows="5" first="0" width="264">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU540_nro_decreto}" />
+						</f:facet>
+						<h:outputText value="#{reso.nroResolucion}"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU411_fecha}" />
+						</f:facet>
+						<h:outputText value="#{reso.fecha}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>	
+					</rich:column>
+					<rich:column>
+					<h:commandLink  action="#{editarDocPresidencia639FC.finIdConcursoReso(reso.idResolucion,'view')}"
+                   value="Ver"
+             propagation="none" >
+            </h:commandLink>#{' '}
+            		<h:commandLink  action="#{editarDocPresidencia639FC.finIdConcursoReso(reso.idResolucion,'edit')}"
+                   value="Editar"
+              >
+            </h:commandLink>
+					</rich:column>
+			</rich:dataTable>
+			<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+		</h:panelGrid>
+		</h:panelGrid>
+		</rich:panel>
+		
+	</h:panelGrid>
+	</rich:panel>
+		</h:form>
+
+</ui:define>
+
+</ui:composition>

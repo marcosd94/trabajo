@@ -1,0 +1,302 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+			<rich:modalPanel
+				id="editFactorItemPanel"
+				opened="#{confMatrizEvalFormController.mostrarFormEditFactorItem}"
+				width="550" height="350">
+				<f:facet name="header">#{messages.CU85_planMatRef}</f:facet>
+				<h:form>
+				<h:panelGrid columns="1" border="0" id="elpanelGrid">
+				<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU85_descripcion}</ui:define>
+						<h:inputText id="descripcionTextField"  
+						 value="#{confMatrizEvalFormController.descripcion}" disabled="true" size="100"/>
+				</s:decorate>
+				<s:decorate id="criteriosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU85_criteriosEvaluacion}</ui:define>
+						<h:inputTextarea
+							 style="text-transform: uppercase"
+						 onblur="value=value.toUpperCase()"
+							value="#{confMatrizEvalFormController.criteriosEvaluacion}"
+							cols="80" >
+							 
+						</h:inputTextarea>
+				</s:decorate>
+				
+					<s:decorate id="montoMinField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU85_montoMinimo}</ui:define>
+						<h:inputText id="montoMin" style="width :100px;" maxlength="10"
+							value="#{confMatrizEvalFormController.montoMinFactor}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="montoMaxField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU85_montoMaximo}</ui:define>
+						<h:inputText id="montoMax" style="width :100px;" maxlength="10"
+							value="#{confMatrizEvalFormController.montoMaxFactor}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+
+				<div id="divBotonesFormulario"><a:commandButton id="modifEdit"
+					value="#{messages.CU85_modificar}"
+					action="#{confMatrizEvalFormController.saveFactorItem()}"
+					disabled="#{!confMatrizEvalFormController.mostrarFormEditFactorItem}"
+					reRender="editFactorItemPanel,factItemsPanel">
+				</a:commandButton> <a:commandButton id="cancelEdit" value="#{messages.msg_cancel}"
+					reRender="editFactorItemPanel"
+					disabled="#{!confMatrizEvalFormController.mostrarFormEditFactorItem}"
+					action="#{confMatrizEvalFormController.cancelarEditFactorItems()}">
+				</a:commandButton></div>
+			</h:form>
+			</rich:modalPanel>	
+	
+		<!-- MODAL PANEL PARA ALERTAR EL CAMBIO DE MATRIZ REFERENCIAL -->
+		<rich:modalPanel id="modalSelect" height="150" width="200">
+			<f:facet name="header">#{messages.CU84_confirmacion}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form id="formSelect">
+				<table>
+					<tr>
+						<td><h:outputText
+							value="#{messages.CU84_cambioMatrizReferencial}" /></td>
+					</tr>
+					<tr>
+						<td>
+						<div class="actionButtons"><a:commandButton id="confirm"
+							value="#{messages.msg_acept}"
+							action="#{confMatrizEvalFormController.cargarListaSelCrear(rich:findComponent('formSelect:laFilaSeleccionada').value)}"
+							reRender="factItemsPanel"
+							onclick="#{rich:component('modalSelect')}.hide()">
+						</a:commandButton> <a:commandButton id="clear" value="#{messages.msg_cancel}"
+							onclick="#{rich:component('modalSelect')}.hide()" /></div>
+						</td>
+					</tr>
+				</table>
+				<h:inputHidden id="laFilaSeleccionada" />
+
+			</h:form>
+		</rich:modalPanel>
+		<a:form id="formPanelMatRef">
+			<rich:simpleTogglePanel label="#{messages.CU85_planMatRef}"
+				id="panelMatRef"
+				rendered="#{!confMatrizEvalFormController.modoEditado}"
+				switchType="ajax">
+				<rich:extendedDataTable var="_elDetalle" rowKeyVar="fila"
+					enableContextMenu="false" height="100px"
+					value="#{confMatrizEvalFormController.listaMatrizRefercial}"
+					rendered="#{confMatrizEvalFormController.listaMatrizRefercial != null}"
+					rowClasses="rvgRowOne,rvgRowTwo" id="matrizReferencialTable">
+					<rich:column width="45%" id="COL1">
+						<f:facet name="header">#{messages.CU84_descripcion}</f:facet>
+						<h:outputText value="#{_elDetalle.descripcion}" />
+					</rich:column>
+					<rich:column width="15%" id="COL2">
+						<f:facet name="header">#{messages.CU84_fecAlta}</f:facet>
+						<h:outputText value="#{_elDetalle.fechaAlta}" />
+					</rich:column>
+					<rich:column width="40%" id="COL3">
+						<f:facet name="header">#{messages.CU84_accion}</f:facet>
+						<h:outputText value="#{messages.CU357_warnVerifFactItems}"
+							rendered="#{!confMatrizEvalFormController.completarMatriz(_elDetalle)}" />
+						<a:commandLink id="seleccionar"
+							rendered="#{confMatrizEvalFormController.mostrarLinkSelect(_elDetalle.idMatrizReferencial)}"
+							onclick="#{rich:component('modalSelect')}.show();return setValue('formSelect:laFilaSeleccionada',#{fila});"
+							value="#{messages.msg_list_select}">
+						</a:commandLink>
+					</rich:column>
+				</rich:extendedDataTable>
+
+			</rich:simpleTogglePanel>
+		</a:form>
+		<a:form id="editFactorItemForm">
+
+		</a:form>
+		<a:form id="factItemsForm">
+			<rich:simpleTogglePanel label="#{messages.CU85_factItems}"
+				id="factItemsPanel" switchType="ajax">
+				<table>
+					<tr>
+						<td><a:commandLink id="activo"
+							value="#{messages.GENERICO_ACTIVOS}">
+							<a:support event="onclick"
+								action="#{confMatrizEvalFormController.mostrarActivos()}"
+								reRender="factItemsPanel" />
+						</a:commandLink></td>
+
+
+						<td><a:commandLink id="inactivos"
+							value="#{messages.GENERICO_INACTIVOS}">
+							<a:support event="onclick"
+								action="#{confMatrizEvalFormController.mostrarInactivos()}"
+								reRender="factItemsPanel" />
+						</a:commandLink></td>
+
+						<td><a:commandLink id="todos"
+							value="#{messages.GENERICO_TODOS}">
+							<a:support event="onclick"
+								action="#{confMatrizEvalFormController.mostrarTodos()}"
+								reRender="factItemsPanel" />
+						</a:commandLink></td>
+					</tr>
+				</table>
+				<rich:dataTable var="_dto" rowKeyVar="fila" 
+					value="#{confMatrizEvalFormController.listaSeleccionadosMatrizRefDTO}"
+					rendered="#{confMatrizEvalFormController.listaSeleccionadosMatrizRefDTO!= null}"
+					rowClasses="rvgRowOne,rvgRowTwo" id="factItemsTable">
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':'border-right: 0px;'}border-bottom: 0px solid #C0C0C0;">
+						<f:facet name="header">
+						#{messages.CU85_tipoEval}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.matrizReferencialEnc.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':'border-right: 0px;'}border-bottom: 0px solid #C0C0C0;"
+						sortBy="#{_dto.matrizReferencialEnc.nroOrden}"
+						>
+						<f:facet name="header">
+						#{messages.CU85_nroOrden}
+						</f:facet>
+						<h:outputText value="#{_dto.matrizReferencialEnc.nroOrden}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':'border-right: 0px;'}border-bottom: 0px solid #C0C0C0;">
+						<f:facet name="header">
+						#{messages.CU85_factor}
+						</f:facet>
+						<h:outputText value="#{_dto.matrizReferencialEnc.descripcion}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':'border-right: 0px;'}border-bottom: 0px solid #C0C0C0;">
+						<f:facet name="header">
+						#{messages.CU85_obligatorio}
+						</f:facet>
+						<h:outputText rendered="#{!_dto.mostrarAcciones}"
+							value="#{confMatrizEvalFormController.formatObligatorio(_dto.matrizReferencialEnc.obligatorioSN)}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':'border-right: 0px;'}border-bottom: 0px solid #C0C0C0;">
+						<f:facet name="header">
+						#{messages.CU85_sumatoria}
+						</f:facet>
+						<h:outputText
+							value="#{confMatrizEvalFormController.formatObligatorio(_dto.matrizReferencialEnc.sumItemsSN)}"
+							rendered="#{!_dto.mostrarAcciones}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}border-bottom: 0px solid #C0C0C0;">
+						<f:facet name="header">
+						#{messages.CU85_graduacion}
+						</f:facet>
+						<h:outputText rendered="#{!_dto.mostrarAcciones}"
+							value="#{_dto.matrizReferencialEnc.puntajeMaximo}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}">
+						<f:facet name="header">
+						#{messages.CU85_items}
+						</f:facet>
+						<h:outputText value="#{_dto.matrizReferencialDet.descripcion}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}">
+						<f:facet name="header">
+						#{messages.CU85_minimo}
+						</f:facet>
+						<h:outputText value="#{_dto.matrizReferencialDet.puntajeMinimo}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}">
+						<f:facet name="header">
+						#{messages.CU85_maximo}
+						</f:facet>
+						<h:outputText value="#{_dto.matrizReferencialDet.puntajeMaximo}" />
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}">
+						<f:facet name="header">
+						#{messages.GENERICO_ACCION}                  
+						</f:facet>
+						<a:commandLink id="editar" value="#{messages.msg_edit}"
+							rendered="#{_dto.mostrarAcciones}">
+							<a:support event="onclick"
+								action="#{confMatrizEvalFormController.cargarEditarFactorItem(fila)}"
+								reRender="editFactorItemPanel" 
+								oncomplete="Richfaces.showModalPanel('editFactorItemPanel');"/>
+						</a:commandLink>
+
+					</rich:column>
+					<rich:column
+						style="#{!_dto.mostrarAcciones?'background-color:lightgrey;':''}">
+						<f:facet name="header">
+						#{messages.GENERICO_ACTIVAR}                  
+						</f:facet>
+						<h:selectBooleanCheckbox rendered="#{_dto.mostrarAcciones}"
+							value="#{_dto.matrizReferencialDet.activo}">
+						</h:selectBooleanCheckbox>
+					</rich:column>
+				</rich:dataTable>
+			</rich:simpleTogglePanel>
+		<!-- </a:form> -->
+		<!-- <h:form> -->
+		<rich:simpleTogglePanel id="otrosDatosPnl" template="/layout/edit.xhtml">
+			<f:facet name="header">#{messages.CU85_otrosDatos}</f:facet>
+				<h:inputTextarea
+					id="otrosDatosTextarea"
+					 style="text-transform: uppercase"
+						 onblur="value=value.toUpperCase()"
+					value="#{confMatrizEvalFormController.otrosDatos}"
+					cols="200" >
+				
+				</h:inputTextarea>
+		</rich:simpleTogglePanel>
+			<div class="actionButtons"><a:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{confMatrizEvalFormController.guardar()}"
+				rendered="#{!cronogramaConcCabHome.managed}" 
+				reRender="factItemsPanel,otrosDatosPnl"/><a:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{confMatrizEvalFormController.update()}"
+				rendered="#{cronogramaConcCabHome.managed}" 
+				reRender="factItemsPanel,otrosDatosPnl"/> <s:button
+				id="cancelEdit" value="#{messages.GENERICO_VOLVER}"
+				propagation="join"
+				view="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml"
+				rendered="#{cronogramaConcCabHome.managed}" /> <s:button
+				id="cancelAdd" value="#{messages.GENERICO_VOLVER}" propagation="end"
+				view="/#{empty cronogramaConcCabFrom ? 'seleccion/confMatrizEvaluacion/MatrizRefConfList' : cronogramaConcCabFrom}.xhtml"
+				rendered="#{!cronogramaConcCabHome.managed}" /></div>
+		</a:form>
+
+		<script type="text/javascript">
+
+// Deshabilita los drag and drop
+
+/*Abiertas*/
+DnD_ExtSimpleDraggable_COL1.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL2.isDragEnabled=false;
+DnD_ExtSimpleDraggable_COL3.isDragEnabled=false;
+
+</script>
+
+
+
+	</ui:define>
+
+</ui:composition>

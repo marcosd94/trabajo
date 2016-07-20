@@ -1,0 +1,1 @@
+ALTER TABLE eval_desempeno.evaluacion_desempeno ADD COLUMN es_eval_rapida boolean;

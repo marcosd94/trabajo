@@ -1,0 +1,249 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="excepcionDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{excepcionDetHome.managed ? 'Edit' : 'Add'} Excepcion det</f:facet>
+
+
+            <s:decorate id="idExcepcionDetField" template="layout/edit.xhtml">
+                <ui:define name="label">Id excepcion det</ui:define>
+                <h:inputText id="idExcepcionDet"
+                       required="true"
+                       disabled="#{excepcionDetHome.managed}"
+                          value="#{excepcionDetHome.instance.idExcepcionDet}">
+                    <a:support event="onblur" reRender="idExcepcionDetField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="observacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputTextarea id="observacion"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{excepcionDetHome.instance.observacion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuObsField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu obs</ui:define>
+                <h:inputText id="usuObs"
+                           size="50"
+                      maxlength="50"
+                          value="#{excepcionDetHome.instance.usuObs}">
+                    <a:support event="onblur" reRender="usuObsField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaObsField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha obs</ui:define>
+                <rich:calendar id="fechaObs"
+                       required="true"
+                          value="#{excepcionDetHome.instance.fechaObs}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="respuestaField" template="layout/edit.xhtml">
+                <ui:define name="label">Respuesta</ui:define>
+                <h:inputTextarea id="respuesta"
+                               cols="80"
+                               rows="6"
+                              value="#{excepcionDetHome.instance.respuesta}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuRptaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu rpta</ui:define>
+                <h:inputText id="usuRpta"
+                           size="50"
+                      maxlength="50"
+                          value="#{excepcionDetHome.instance.usuRpta}">
+                    <a:support event="onblur" reRender="usuRptaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaRptaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha rpta</ui:define>
+                <rich:calendar id="fechaRpta"
+                          value="#{excepcionDetHome.instance.fechaRpta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{excepcionDetHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="ajustadoOeeField" template="layout/edit.xhtml">
+                <ui:define name="label">Ajustado oee</ui:define>
+                <h:selectBooleanCheckbox id="ajustadoOee"
+                                   required="true"
+                                      value="#{excepcionDetHome.instance.ajustadoOee}"/>
+            </s:decorate>
+
+
+            <s:decorate id="enviadoSfpField" template="layout/edit.xhtml">
+                <ui:define name="label">Enviado sfp</ui:define>
+                <h:selectBooleanCheckbox id="enviadoSfp"
+                                   required="true"
+                                      value="#{excepcionDetHome.instance.enviadoSfp}"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{excepcionDetHome.persist}"
+                       disabled="#{!excepcionDetHome.wired}"
+                       rendered="#{!excepcionDetHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{excepcionDetHome.update}"
+                       rendered="#{excepcionDetHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{excepcionDetHome.remove}"
+                      immediate="true"
+                       rendered="#{excepcionDetHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/ExcepcionDet.xhtml"
+                rendered="#{excepcionDetHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty excepcionDetFrom ? 'ExcepcionDetList' : excepcionDetFrom}.xhtml"
+                rendered="#{!excepcionDetHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Excepcion *" labelClass="required">
+    <div class="association" id="excepcionParent">
+
+        <h:outputText value="There is no excepcion associated with this excepcionDet."
+                   rendered="#{excepcionDetHome.instance.excepcion == null}"/>
+
+        <rich:dataTable var="_excepcion"
+                   value="#{excepcionDetHome.instance.excepcion}"
+                rendered="#{excepcionDetHome.instance.excepcion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="excepcionTable">
+            <h:column>
+                <f:facet name="header">Id excepcion</f:facet>
+                <h:outputText value="#{_excepcion.idExcepcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_excepcion.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_excepcion.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion cab id comision sel</f:facet>
+                <h:outputText value="#{_excepcion.comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_excepcion.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_excepcion.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_excepcion.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_excepcion.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_excepcion.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_excepcion.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_excepcion.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu solicitud</f:facet>
+                <h:outputText value="#{_excepcion.usuSolicitud}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha solicitud</f:facet>
+                <h:outputText value="#{_excepcion.fechaSolicitud}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu aprobacion</f:facet>
+                <h:outputText value="#{_excepcion.usuAprobacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha aprobacion</f:facet>
+                <h:outputText value="#{_excepcion.fechaAprobacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_excepcion.idProcessInstance}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{excepcionDetHome.instance.excepcion != null ? 'changeParent' : 'selectParent'}" value="#{excepcionDetHome.instance.excepcion != null ? 'Change' : 'Select'} excepcion"
+                       view="/ExcepcionList.xhtml">
+                <f:param name="from" value="ExcepcionDetEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,386 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU451_title}</h1>
+		<h:panelGrid columns="3">
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU193_nivel}<span
+						class="required">*</span>
+				</ui:define>
+				<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+					disabled="true"
+					value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+				</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+					value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+			</s:decorate>
+			<s:decorate id="entidadField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU193_entidad}<span
+						class="required">*</span>
+				</ui:define>
+				<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+					disabled="true"
+					value="#{grupoPuestosController.sinEntidad.entCodigo}">
+				</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+					disabled="true"
+					value="#{grupoPuestosController.sinEntidad.entNombre}" />
+			</s:decorate>
+			<s:decorate id="oeeField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+						class="required">*</span>
+				</ui:define>
+				<h:inputText id="orden" size="10" disabled="true"
+					value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+					disabled="true"
+					value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+			</s:decorate>
+		</h:panelGrid>
+		<rich:panel id="panelParametro">
+			<f:facet name="header">#{messages.CU451_concurso_y_grupo}</f:facet>
+
+			<h:panelGrid columns="2">
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Concurso</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Grupo</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<rich:panel id="panelPostulacionesVacancias">
+			<f:facet name="header">#{messages.CU451_postulacionesVacancias}</f:facet>
+			<h:panelGrid columns="3">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU451_vacancias}</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{admDisPue451FC.cantVacancia}" style=" width : 100px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU451_cantPostulantes}</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{admDisPue451FC.cantPostulantes}" style=" width : 100px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU451_cantASacar}</ui:define>
+					<h:inputText id="cantSacar" disabled="true"
+						value="#{admDisPue451FC.cantSacar}" style=" width : 100px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+
+		<h:form id="concursoSearch" styleClass="edit">
+			<rich:simpleTogglePanel label=" " switchType="ajax">
+				<h:panelGrid columns="2"
+					columnClasses="sb_test_column1,sb_test_column2">
+					<h:panelGrid columns="1"
+						columnClasses="sb_test_column1,sb_test_column2">
+						<s:decorate id="dptoField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+							<h:selectOneMenu id="dpto" style="width : 250px;"
+								value="#{admDisPue451FC.paisDptoCiudadBarrio.idDpto}">
+								<f:selectItems
+									value="#{admDisPue451FC.paisDptoCiudadBarrio.departamentosSelecItem}" />
+								<a:support event="onchange"
+									action="#{admDisPue451FC.paisDptoCiudadBarrio.updateCiudad()}"
+									reRender="ciudad" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="ciudadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+							<h:selectOneMenu id="ciudad" style="width : 250px;"
+								value="#{admDisPue451FC.paisDptoCiudadBarrio.idCiudad}">
+								<f:selectItems
+									value="#{admDisPue451FC.paisDptoCiudadBarrio.ciudadSelecItem}" />
+								<a:support event="onchange"
+									action="#{admDisPue451FC.paisDptoCiudadBarrio.updateBarrio()}"
+									reRender="barrioField" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate id="barrioField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+							<h:selectOneMenu id="barrio" style="width :250px;"
+								value="#{admDisPue451FC.paisDptoCiudadBarrio.idBarrio}">
+								<f:selectItems
+									value="#{admDisPue451FC.paisDptoCiudadBarrio.barrioSelecItem}" />
+								<a:support event="onchange" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</h:panelGrid>
+					<h:panelGrid columns="1"
+						columnClasses="sb_test_column1,sb_test_column2">
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU70_modalidadOcupacion}</ui:define>
+							<h:selectOneMenu id="modalidad" style="width :250px;"
+								value="#{admDisPue451FC.modalidadOcupacion}">
+								<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+									value="#{enumAppHelper.modalidadOcupacions}" />
+								<s:convertEnum />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				reRender="idPanelResultados" action="#{admDisPue451FC.search()}">
+				<f:param name="idConcursoPuestoAgr"
+					value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+				<f:param name="idDpto"
+					value="#{admDisPue451FC.paisDptoCiudadBarrio.idDpto}" />
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton reRender="idPanelResultados" id="marcarTodos"
+				value="#{messages.CU451_marcarTodos}"
+				action="#{admDisPue451FC.marcarTodos()}" /> <a:commandButton
+				reRender="idPanelResultados" id="desMarcarTodos"
+				value="#{messages.CU451_desmarcarTodos}"
+				action="#{admDisPue451FC.desMarcarTodos()}" /> <s:button id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admDisPue451FC.todos()}" includePageParams="true" /> <f:param
+				name="idConcursoPuestoAgr"
+				value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+			<s:button id="volverAdd" value="Volver" propagation="join"
+				view="/#{admDisPue451FC.from}.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+			</s:button></div>
+
+		</h:form>
+		<h:form>
+			<a:outputPanel id="idAjaxPanel" ajaxRendered="true">
+				<rich:panel id="idPanelResultados">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty admDisPue451FC.lista ? 0 : (concursoPuestoDetListCustom.paginated ? concursoPuestoDetListCustom.resultCount :admDisPue451FC.lista.size())})</f:facet>
+					<div class="results" id="concursoListFormController"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty admDisPue451FC.lista}" /> <rich:dataTable
+						 
+						id="concursoListFormController" var="_elVar"
+						value="#{admDisPue451FC.lista}"
+						rendered="#{not empty admDisPue451FC.lista}">
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_dptoNombre}" />
+									<ui:param name="propertyPath"
+										value="plantaCargoDet.oficina.ciudad.departamento.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_elVar.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU451_ciudad}" />
+									<ui:param name="propertyPath"
+										value="plantaCargoDet.oficina.ciudad.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_elVar.plantaCargoDet.oficina.ciudad.descripcion}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_companhia_barrio}" />
+									<ui:param name="propertyPath"
+										value="plantaCargoDet.oficina.barrio.descripcion" />
+								</ui:include>
+							</f:facet>
+
+							<h:outputText
+								value="#{_elVar.plantaCargoDet.oficina.barrio.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel" value="Unid. Organizativa" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoDet.plantaCargoDet.configuracionUoDet.denominacionUnidad" />
+								</ui:include>
+							</f:facet>
+
+							<h:outputText
+								value="#{ _elVar.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_codigoPuesto}" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoAgr.concurso.nombre" />
+								</ui:include>
+							</f:facet>
+
+							<h:outputText
+								value="#{detallePlantaCargoListFormController.obtenerCodigoPuesto(_elVar.plantaCargoDet)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_denominacion}" />
+									<ui:param name="propertyPath"
+										value="plantaCargoDet.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_elVar.plantaCargoDet.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_modalidad}" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoAgr.descripcionGrupo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{admDisPue451FC.modalidadString(_elVar.plantaCargoDet)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{concursoPuestoDetListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU451_categoria}" />
+									<ui:param name="propertyPath" value="concurso.observacion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{admDisPue451FC.categoriaString(_elVar.plantaCargoDet)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								#{messages.CU451_disminuir}
+					</f:facet>
+							<h:selectBooleanCheckbox value="#{_elVar.seleccionado}" />
+						</h:column>
+						<rich:column styleClass="action" style="width:50px;">
+							<f:facet name="header">
+								#{messages.CU451_observacion} <span class="required">*</span>
+							</f:facet>
+							<rich:inplaceInput layout="block" value="#{_elVar.observacion}"
+								defaultLabel="#{messages.CU88_click_para_editar}" id="inplace"
+								changedClass="inplace" selectOnEdit="true"
+								editEvent="ondblclick">
+							</rich:inplaceInput>
+						</rich:column>
+						<rich:column styleClass="action" style="width:50px;">
+							<s:link view="/planificacion/puestosTrabajo/PlantaCargoDet.xhtml"
+								value="#{messages.CU404_ver_datos_puesto}" propagation="join"
+								id="plantaCargoDetVerId">
+								<f:param name="plantaCargoDetIdPlantaCargoDet"
+									value="#{_elVar.plantaCargoDet.idPlantaCargoDet}" />
+								<f:param name="plantaCargoDetFrom" value="ver" />
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+									value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+								<f:param name="plantaFrom"
+									value="seleccion/admDisPue/admDisPue451" />
+								<f:param name="propaga" value="join" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+
+
+
+
+				<div class="tableControl"><s:link
+					view="/seleccion/admDisPue/admDisPue451.xhtml"
+					rendered="#{concursoPuestoDetListCustom.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+					<f:param name="idConcursoPuestoAgr"
+						value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+				</s:link> <s:link view="/seleccion/admDisPue/admDisPue451.xhtml"
+					rendered="#{concursoPuestoDetListCustom.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoDetListCustom.previousFirstResult}" />
+					<f:param name="idConcursoPuestoAgr"
+						value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+				</s:link> <s:link view="/seleccion/admDisPue/admDisPue451.xhtml"
+					rendered="#{concursoPuestoDetListCustom.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoDetListCustom.nextFirstResult}" />
+					<f:param name="idConcursoPuestoAgr"
+						value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+				</s:link> <s:link view="/seleccion/admDisPue/admDisPue451.xhtml"
+					rendered="#{concursoPuestoDetListCustom.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoDetListCustom.lastFirstResult}" />
+					<f:param name="idConcursoPuestoAgr"
+						value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+				</s:link></div>
+				<h:panelGrid columns="1">
+
+					<h:outputText value="#{messages.msg_obs_save}"
+						styleClass="labelClass" />
+					<a:commandButton id="cancelEdit" action="#{admDisPue451FC.save()}"
+						value="#{messages.CU451_guardar}">
+						<f:param name="idConcursoPuestoAgr"
+							value="#{admDisPue451FC.grupoPuestosController.idConcursoPuestoAgr}" />
+					</a:commandButton>
+				</h:panelGrid>
+			</a:outputPanel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

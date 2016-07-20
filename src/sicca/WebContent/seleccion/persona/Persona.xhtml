@@ -1,0 +1,254 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Persona_}</h1>
+
+    <h:form id="persona" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.Persona_}</f:facet>
+			
+			<h:panelGrid columns="1">
+			<s:decorate id="paisExpField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_pais_expedi}</ui:define>
+						<h:selectOneMenu disabled="true" id="paisExp" required="true" value="#{admPersonaEditFormController.idPaisExpe}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			<a:region >
+			<s:decorate id="documentoIdentidadField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_documentoIdentidad}</ui:define>
+	                <h:inputText id="documentoIdentidad"
+	                		required ="true"
+	                      disabled="true"
+	                          value="#{admPersonaEditFormController.persona.documentoIdentidad}">
+	                
+	                </h:inputText>
+	            </s:decorate>
+				</a:region>
+			</h:panelGrid>
+			<h:panelGrid >
+	            <s:decorate id="nombresField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_nombres}</ui:define>
+	                <h:inputText id="nombres"
+	                		required ="true"
+	                     disabled="true"
+	                          value="#{admPersonaEditFormController.persona.nombres}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="apellidosField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+	                <h:inputText id="apellidos"
+	                		required ="true"
+	                   disabled="true"
+	                          value="#{admPersonaEditFormController.persona.apellidos}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_sexo}</ui:define>
+					<h:selectOneMenu id="sexo" style="width : 250px;" required="true"
+					disabled="true"	value="#{admPersonaEditFormController.idSexo}">
+						<f:selectItems value="#{referenciasBySexoSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+	            <s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Persona_estadoCivil}</ui:define>
+					<h:selectOneMenu id="estadoCivil" style="width : 250px;" disabled="true"
+						value="#{admPersonaEditFormController.idEstadoCivil}">
+						<f:selectItems value="#{referenciasByEstadoCivilSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="fechaNacField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_fecha_nac}<span class="required">*</span></ui:define>
+					<rich:calendar id="fechaNac" disabled="true"
+						value="#{admPersonaEditFormController.persona.fechaNacimiento}"
+						datePattern="MM/dd/yyyy" enableManualInput="true" />
+				</s:decorate>
+					<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_nacionalidad}<span class="required">*</span></ui:define>
+						<h:selectOneMenu  disabled="true" id="nacionalidad" value="#{admPersonaEditFormController.idNacionalidad}" style="width:250px">
+							<f:selectItems value="#{admPersonaEditFormController.getNacionalidadSelectItems()}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+				<a:region >
+	           <s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_nac}</ui:define>
+						<h:selectOneMenu id="paisNac" style="width : 250px;" disabled="true"
+							value="#{admPersonaEditFormController.idPaisNac}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateDepartamento()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region >
+				<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_nac}</ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;" disabled="true"
+							value="#{admPersonaEditFormController.idDptoNac}">
+							<f:selectItems
+								value="#{admPersonaEditFormController.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateCiudad()}"
+								reRender="ciudadNac" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_ciudad_nac}</ui:define>
+					<h:selectOneMenu id="ciudadNac" style="width : 250px;" disabled="true"
+						value="#{admPersonaEditFormController.idCiudadNac}">
+						<f:selectItems
+							value="#{admPersonaEditFormController.ciudadSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				<a:region >
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_dir}</ui:define>
+						<h:selectOneMenu id="paisDir" style="width : 250px;" disabled="true"
+							value="#{admPersonaEditFormController.idPaisDir}">
+							<f:selectItems value="#{paissSelectItems}" /> 
+							<a:support event="onchange" reRender="dptoDir,ciudadDir" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateDepartamentoDir()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region >
+					<s:decorate id="dptoDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_dir}</ui:define>
+						<h:selectOneMenu id="dptoDir" style="width : 250px;" disabled="true"
+							value="#{admPersonaEditFormController.idDptoDir}">
+							<f:selectItems disabled="true"
+								value="#{admPersonaEditFormController.departamentosDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateCiudadDir()}"
+								reRender="ciudadDir" />
+						</h:selectOneMenu>
+					</s:decorate>
+			</a:region>
+			<a:region >
+					<s:decorate id="ciudadDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_ciudad_dir}</ui:define>
+						<h:selectOneMenu id="ciudadDir" style="width : 250px;" disabled="true"
+							value="#{admPersonaEditFormController.idCiudadDir}">
+							<f:selectItems disabled="true"
+								value="#{admPersonaEditFormController.ciudadDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="barrioField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+					<h:selectOneMenu id="barrio" style="width :250px;" disabled="true"
+						value="#{admPersonaEditFormController.idLocalidadDir}">
+						<f:selectItems
+							value="#{admPersonaEditFormController.localidadDirSelecItem}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				 
+	            <s:decorate id="dirParticularField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CU239_dir_particular}</ui:define>
+	                <h:inputText id="dirParticular"
+	                		required ="false"
+	                      disabled="true" style=" width : 509px;"
+	                          value="#{admPersonaEditFormController.persona.otrasDirecciones}">
+	                 </h:inputText>
+	            </s:decorate>
+	          <s:decorate id="direccionLaboralField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_direccionLaboral}</ui:define>
+	                <h:inputText id="direccionLaboral"
+	                		required ="false"
+	                       disabled="true"  style=" width : 509px;"
+	                          value="#{admPersonaEditFormController.persona.direccionLaboral}">
+	               </h:inputText>
+	            </s:decorate>
+	          
+	            <s:decorate id="telefonosField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_telefonos}</ui:define>
+	                <h:inputText id="telefonos"
+	                		required ="false" 
+	                       disabled="true"
+	                          value="#{admPersonaEditFormController.persona.telefonos}">
+	               </h:inputText>
+	            </s:decorate>
+	          <s:decorate id="correoElectField" template="/layout/edit.xhtml">
+					<ui:define name="label">Correo personal</ui:define>
+					<h:inputText id="correoElectronico" size="30" 
+						required="true" disabled="true"
+						value="#{admPersonaEditFormController.persona.EMail}" maxlength="50" style=" width : 509px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="correoElectFuncionarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">Correo funcionario</ui:define>
+					<h:inputText id="correoElectronico2" size="30" 
+						required="true" disabled="true"
+						value="#{admPersonaEditFormController.persona.EMailFuncionario}" maxlength="50" style=" width : 509px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" disabled="true"
+                                      value="#{admPersonaEditFormController.persona.activo}"/>
+            </s:decorate>
+             <s:decorate id="motivoField" template="/layout/edit.xhtml"  rendered="#{personaHome.managed}" >
+                <ui:define name="label">Motivo Cambio Estado</ui:define>
+                <h:inputText disabled="true" value="#{admPersonaEditFormController.persona.datosEspecificosMotivo.descripcion}" style=" width : 509px;"/>
+              </s:decorate>
+            <s:decorate template="/layout/edit.xhtml"  rendered="#{personaHome.managed}" >
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea disabled="true" value="#{admPersonaEditFormController.persona.obsMotivo}" style="height : 58px; width : 509px;"/>
+					</s:decorate>
+	          </h:panelGrid>
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+			<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!personaHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{personaHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           
+
+            
+
+     
+
+            <s:button id="cancelEdit" rendered="#{not empty personaFrom }"
+            	value="#{messages.msg_done}"
+            	propagation="join"
+                view="/#{empty personaFrom ? 'seleccion/persona/PersonaList' : personaFrom}.xhtml"  >
+                <f:param name="personaIdPersona" value="#{admPersonaEditFormController.idPersona}"/>
+			</s:button>
+ 			<s:button id="cancelEdit2" rendered="#{empty personaFrom }"
+				value="#{messages.msg_done}"
+				propagation="none"
+                view="/#{empty personaFrom ? 'seleccion/persona/PersonaList' : personaFrom}.xhtml"  />
+
+            
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

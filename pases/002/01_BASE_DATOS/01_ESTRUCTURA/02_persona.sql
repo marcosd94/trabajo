@@ -1,0 +1,1 @@
+ALTER TABLE general.persona ADD COLUMN tiene_pariente BOOLEAN DEFAULT TRUE;

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('admDocHomologacion_edit')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+ <param name="idConcurso" value="#{admDocHomologacionFormController.idConcurso}"/>
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+
+ <param name="obs" value="#{admDocHomologacionFormController.obs}"/>
+ 
+ <action execute="#{admDocHomologacionFormController.init()}" on-postback="false"/>
+
+ <navigation from-action="#{admDocHomologacionFormController.memo()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/memoHomologacion/MemoHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{admDocHomologacionFormController.paramMemo}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{admDocHomologacionFormController.idMemoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.paramIdConcurso}"/>
+     <param name="memoHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.nota()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/notaHomologacion/NotaHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{admDocHomologacionFormController.paramNota}"/>
+    <param name="notaHomologacionIdNotaHomologacion" value="#{admDocHomologacionFormController.idNotaEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.paramIdConcurso}"/>
+     <param name="notaHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.resolucion()}">
+  <rule if-outcome="ir">
+  <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{admDocHomologacionFormController.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{admDocHomologacionFormController.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.paramIdConcurso}"/>
+    <param name="plantillaResolucionHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+        <param name="fromCU" value="411"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoMemo(memo.idMemoHomologacion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/memoHomologacion/MemoHomologacionEdit.xhtml">
+    <param name="memoHomologacionIdMemoHomologacion" value="#{admDocHomologacionFormController.idMemoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idMemoConcurso}"/>
+     <param name="memoHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoMemo(memo.idMemoHomologacion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/memoHomologacion/MemoHomologacion.xhtml">
+    <param name="memoHomologacionIdMemoHomologacion" value="#{admDocHomologacionFormController.idMemoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idMemoConcurso}"/>
+     <param name="memoHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoNota(nota.idNotaHomologacion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/notaHomologacion/NotaHomologacionEdit.xhtml">
+    <param name="notaHomologacionIdNotaHomologacion" value="#{admDocHomologacionFormController.idNotaEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idNotaConcurso}"/>
+     <param name="notaHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoNota(nota.idNotaHomologacion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/notaHomologacion/NotaHomologacion.xhtml">
+    <param name="notaHomologacionIdNotaHomologacion" value="#{admDocHomologacionFormController.idNotaEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idNotaConcurso}"/>
+     <param name="notaHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{admDocHomologacionFormController.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idResoConsurso}"/>
+    <param name="plantillaResolucionHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+      <param name="fromCU" value="none"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{admDocHomologacionFormController.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{admDocHomologacionFormController.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admDocHomologacionFormController.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{admDocHomologacionFormController.idResoConsurso}"/>
+    <param name="plantillaResolucionHomologacionFrom" value="seleccion/admDocHomologacion/AdmDocHomologacion"/>
+      <param name="fromCU" value="none"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+<navigation from-action="#{admDocHomologacionFormController.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+
+
+</page>

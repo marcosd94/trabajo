@@ -1,0 +1,209 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.Usuario_}</h1>
+		
+
+		<h:form id="usuarioSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_nombreUsuario}</ui:define>
+					<h:inputText id="nombreUsuario"
+						value="#{usuarioList.usuario.nombreUsuario}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_clave}</ui:define>
+					<h:inputText id="clave"
+						value="#{usuarioList.usuario.clave}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_usuAlta}</ui:define>
+					<h:inputText id="usuAlta"
+						value="#{usuarioList.usuario.usuAlta}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_usuMod}</ui:define>
+					<h:inputText id="usuMod"
+						value="#{usuarioList.usuario.usuMod}" />
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="/planificacion/usuario/UsuarioList.xhtml">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false" /> <s:button id="print"
+				value="#{messages.msg_list_search_print_button}"
+				view="/planificacion/usuario/UsuarioListPdf.xhtml" /></div>
+
+		</h:form>
+
+		<rich:panel>
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty usuarioList.resultList ? 0 : (usuarioList.paginated ? usuarioList.resultCount : usuarioList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty usuarioList.obtenerListaUsuarios()}" /> <rich:dataTable
+				id="usuarioList" var="_usuario"
+				value="#{usuarioList.resultList}"
+				rendered="#{not empty usuarioList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_nombreUsuario}" />
+							<ui:param name="propertyPath" value="usuario.nombreUsuario" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.nombreUsuario}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_clave}" />
+							<ui:param name="propertyPath" value="usuario.clave" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.clave}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_idPersona}" />
+							<ui:param name="propertyPath" value="usuario.persona.nombres" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.persona.nombres}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_activo}" />
+							<ui:param name="propertyPath" value="usuario.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.activo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_usuAlta}" />
+							<ui:param name="propertyPath" value="usuario.usuAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.usuAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_fechaAlta}" />
+							<ui:param name="propertyPath" value="usuario.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.fechaAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_usuMod}" />
+							<ui:param name="propertyPath" value="usuario.usuMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.usuMod}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{usuarioList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_fechaMod}" />
+							<ui:param name="propertyPath" value="usuario.fechaMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_usuario.fechaMod}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/usuario/Usuario' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="usuarioViewId">
+						<f:param name="usuarioIdUsuario"
+							value="#{_usuario.idUsuario}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/usuario/UsuarioEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="usuarioEdit" rendered="#{empty from}">
+						<f:param name="usuarioIdUsuario"
+							value="#{_usuario.idUsuario}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link view="/planificacion/usuario/UsuarioList.xhtml"
+			rendered="#{usuarioList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/usuario/UsuarioList.xhtml"
+			rendered="#{usuarioList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{usuarioList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/usuario/UsuarioList.xhtml"
+			rendered="#{usuarioList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{usuarioList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/usuario/UsuarioList.xhtml"
+			rendered="#{usuarioList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{usuarioList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/usuario/UsuarioEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="usuarioIdUsuario" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

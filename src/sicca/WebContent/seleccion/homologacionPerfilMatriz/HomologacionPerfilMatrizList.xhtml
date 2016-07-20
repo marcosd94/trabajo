@@ -1,0 +1,430 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="homologacionPerfilMatrizSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="HomologacionPerfilMatriz Search Filter" switchType="ajax">
+	<rich:panel id="panelParametro" >	<f:facet name="header">#{messages.CU243_grupo_puesto}</f:facet>
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{firmarResolucionHomologacionFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{firmarResolucionHomologacionFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadbField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{firmarResolucionHomologacionFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{firmarResolucionHomologacionFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{firmarResolucionHomologacionFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{firmarResolucionHomologacionFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{firmarResolucionHomologacionFormController.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU252_grupoPuestos}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{firmarResolucionHomologacionFormController.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+        
+			</h:panelGrid>
+			</rich:panel>
+
+        </rich:simpleTogglePanel>
+
+       
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">#{messages.CU52_obs_resp} (#{empty homologacionPerfilMatrizList.resultList ? 0 : (homologacionPerfilMatrizList.paginated ? homologacionPerfilMatrizList.resultCount : homologacionPerfilMatrizList.resultList.size)})</f:facet>
+    <div class="results" id="homologacionPerfilMatrizList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty homologacionPerfilMatrizList.resultList}"/>
+
+    <rich:dataTable id="homologacionPerfilMatrizList"
+                var="_homologacionPerfilMatriz"
+              value="#{homologacionPerfilMatrizList.resultList}"
+           rendered="#{not empty homologacionPerfilMatrizList.resultList}">
+       
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_nro_obs}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.numero"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.numero}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Anio"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.anio"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.anio}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Estado"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.estado"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.estado}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha presentacion"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaPresentacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaPresentacion}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha vencimiento"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaVencimiento"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaVencimiento}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Usu homolog"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.usuHomolog"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.usuHomolog}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha homolog"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaHomolog"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaHomolog}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Id cpt"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.idCpt"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.idCpt}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Objetivo"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.objetivo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.objetivo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Denominacion"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.denominacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.denominacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Mision"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.mision"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.mision}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Contacto"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.contacto"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.contacto}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Lugar"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.lugar"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.lugar}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Post habilitados"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.postHabilitados"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.postHabilitados}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Fecha limite"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.fechaLimite"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.fechaLimite}">
+                <s:convertDateTime type="date" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Cond laborales"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.condLaborales"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.condLaborales}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Otras inf"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.otrasInf"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.otrasInf}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Remuneracion"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.remuneracion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.remuneracion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Modalidad"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.modalidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.modalidad}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Mision especifica"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.misionEspecifica"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.misionEspecifica}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Documentos"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.documentos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.documentos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizList}"/>
+                    <ui:param name="propertyLabel" value="Horario"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatriz.horario"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatriz.horario}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'HomologacionPerfilMatriz' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="homologacionPerfilMatrizViewId">
+                <f:param name="homologacionPerfilMatrizIdHomologacion"
+                        value="#{_homologacionPerfilMatriz.idHomologacion}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/HomologacionPerfilMatrizEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="homologacionPerfilMatrizEdit"
+                rendered="#{empty from}">
+                <f:param name="homologacionPerfilMatrizIdHomologacion"
+                        value="#{_homologacionPerfilMatriz.idHomologacion}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/HomologacionPerfilMatrizList.xhtml"
+            rendered="#{homologacionPerfilMatrizList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/HomologacionPerfilMatrizList.xhtml"
+            rendered="#{homologacionPerfilMatrizList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/HomologacionPerfilMatrizList.xhtml"
+            rendered="#{homologacionPerfilMatrizList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/HomologacionPerfilMatrizList.xhtml"
+            rendered="#{homologacionPerfilMatrizList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/HomologacionPerfilMatrizEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create homologacionPerfilMatriz">
+            <f:param name="homologacionPerfilMatrizIdHomologacion"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

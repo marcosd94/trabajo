@@ -1,0 +1,156 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.ClasificadorUo_}</h1>
+    <h:form id="clasificadorUo" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{clasificadorUoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.ClasificadorUo_}</f:facet>
+				<h:panelGrid columns="1">
+	            <s:decorate id="nivelField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+	                <h:inputText id="nivel"
+	                styleClass="numeric" onkeypress="return soloNumeros(event);"
+	                		required ="true"
+	                       disabled="#{clasificadorUoHome.managed}"
+	                          value="#{clasificadorUoHome.instance.nivel}">
+	                 
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="subnivelField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_subnivel}</ui:define>
+	                <h:inputText id="subnivel"
+	                styleClass="numeric" onkeypress="return soloNumeros(event);"
+	                		required ="true"
+	                       disabled="#{clasificadorUoHome.managed}"
+	                          value="#{clasificadorUoHome.instance.subnivel}" style="FONT-SIZE: small;">
+	                  
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="nroField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_nro}</ui:define>
+	                <h:inputText id="nro"
+	                styleClass="numeric" onkeypress="return soloNumeros(event);"
+	                		required ="true"
+	                       disabled="#{clasificadorUoHome.managed}"
+	                          value="#{clasificadorUoHome.instance.nro}">
+	                
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="denominacionUnidadField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_denominacionUnidad}</ui:define>
+	                <h:inputText id="denominacionUnidad"
+	                		required ="true"
+	                       disabled="false"
+	                       size="100"
+	                       maxlength="200"
+	                          value="#{clasificadorUoHome.instance.denominacionUnidad}">
+	              
+	                </h:inputText>
+	            </s:decorate>
+	           </h:panelGrid>
+	           <h:panelGrid columns="2">
+	            <s:decorate id="politicaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_linea_politica}</ui:define>
+	                <h:selectOneRadio id="politica"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoHome.valorOneRadio}">
+	                          <f:selectItem id="item1" itemLabel="Politica" itemValue="1" />
+	                           <f:selectItem id="item2" itemLabel="Linea" itemValue="2" />
+	                          </h:selectOneRadio>
+	            </s:decorate>
+	          
+	            </h:panelGrid>
+	            <h:panelGrid columns="1">
+	             <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoHome.instance.activo}" />
+	            </s:decorate>
+				</h:panelGrid>
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+		 <div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_actualizar}"
+				rendered="#{clasificadorUoHome.managed}" /></div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}"
+				rendered="#{!clasificadorUoHome.managed}" /></div>
+			<br />
+
+        </rich:panel>
+      
+        
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{clasificadorUoHome.persist}"
+                         onclick="return confirm('#{messages.msg_confirm_save}');"
+                       disabled="#{!clasificadorUoHome.wired}"                      
+                       rendered="#{!clasificadorUoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{clasificadorUoHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{clasificadorUoHome.managed}"/>
+
+            
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/clasificadorUo/ClasificadorUoList.xhtml"
+                rendered="#{clasificadorUoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty clasificadorUoFrom ? 'planificacion/clasificadorUo/ClasificadorUoList' : clasificadorUoFrom}.xhtml"
+                rendered="#{!clasificadorUoHome.managed}"/>
+
+        </div>
+    </h:form>
+<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{clasificadorUoHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{clasificadorUoHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{clasificadorUoHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{clasificadorUoHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+
+        
+</ui:define>
+
+</ui:composition>

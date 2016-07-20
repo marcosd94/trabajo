@@ -1,0 +1,367 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<rich:modalPanel id="modalPrint" autosized="true">
+			<f:facet name="header">#{messages.CU197_}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalPrint')}.hide()" />
+			</f:facet>
+
+			<h:form id="formPrint">
+				<table width="100%">
+					<tr>
+						<td>
+						<fieldset>
+						<table>
+							<tr>
+								<td><h:outputText value="#{messages.CU197_mostrar}" /></td>
+								<td><h:selectOneRadio id="activo"
+									value="#{staffEmpresaFormController.estadoImpresion}">
+									<f:selectItems
+										value="#{enumAppHelper.enumsValueItems('Estado', 'getValor', false)}" />
+								</h:selectOneRadio></td>
+							</tr>
+						</table>
+						</fieldset>
+						</td>
+					</tr>
+					<tr style="text-align: right;">
+						<td>
+						<div class="actionButtons"><h:commandButton id="accept"
+							value="#{messages.msg_acept}"
+							action="#{staffEmpresaFormController.print()}"
+							onclick="#{rich:component('modalPrint')}.hide()" /> <a:region>
+							<a:commandButton id="clearPrintParameters"
+								value="#{messages.msg_cancel}"
+								action="#{staffEmpresaFormController.clearPrintParameters()}"
+								onclick="#{rich:component('modalPrint')}.hide()" />
+						</a:region></div>
+						</td>
+
+					</tr>
+				</table>
+
+			</h:form>
+
+		</rich:modalPanel>
+
+
+		<h:form id="empresaPersona" styleClass="edit">
+			<h1>#{messages.CU196_}</h1>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU196_title}</f:facet>
+
+				<fieldset><legend>#{messages.CU196_datosEmpresa}</legend>
+				<rich:panel style="border:none;">
+					<h:panelGrid columns="2" rowClasses="rowTop">
+						<s:decorate id="empresaField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.EmprTercerizada_nombre}</ui:define>
+							<h:inputText id="empresa" size="60"
+								value="#{staffEmpresaFormController.emprTercerizada.nombre}"
+								disabled="true">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="departamentoField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.EmprTercerizada_departamento}</ui:define>
+							<h:inputText id="departamento" size="60"
+								value="#{staffEmpresaFormController.emprTercerizada.ciudad.departamento.descripcion}"
+								disabled="true">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="paisField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.EmprTercerizada_pais}</ui:define>
+							<h:inputText id="pais" size="60"
+								value="#{staffEmpresaFormController.emprTercerizada.ciudad.departamento.pais.descripcion}"
+								disabled="true">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="ciudadField" template="/layout/display.xhtml">
+							<ui:define name="label">Ciudad</ui:define>
+							<h:inputText id="ciudad" size="60"
+								value="#{staffEmpresaFormController.emprTercerizada.ciudad.descripcion}"
+								disabled="true">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel></fieldset>
+				<br />
+				<fieldset><legend>#{messages.CU196_persona}</legend> <rich:panel
+					style="border:none;" id="panelPersonas">
+					<h:panelGrid columns="2" rowClasses="rowTop">
+
+						<h:panelGrid columns="2"
+							style="border-style: dotted;border-color: gray;">
+							<a:region>
+								<h:panelGrid columns="2" style=" width : 454px;">
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU40_paises_expedicion}<span
+												class="required">*</span>
+										</ui:define>
+										<h:selectOneMenu id="idTipoConcurso"
+											disabled="#{staffEmpresaFormController.persona.idPersona != null}"
+											value="#{staffEmpresaFormController.idPais}"
+											style="width:250px">
+											<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+											<a:support event="onchange"
+												action="#{staffEmpresaFormController.limpiarDatosPersona()}"
+												reRender="panelPersonas" />
+										</h:selectOneMenu>
+									</s:decorate>
+									<a:status id="idSatatusPersonSearch"
+										onstart="Richfaces.showModalPanel('espera')"
+										onstop="#{rich:component('espera')}.hide()" />
+									<s:decorate id="documentoIdentidadField"
+										template="/layout/edit.xhtml">
+										<ui:define name="label">#{messages.CU196_documentoIdentidad}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="documentoIdentidad"
+											value="#{staffEmpresaFormController.cedulaPersona}"
+											styleClass="numeric" style="width:250px" size="10"
+											disabled="#{staffEmpresaFormController.persona.idPersona != null}">
+											<a:support event="onblur"
+												action="#{staffEmpresaFormController.buscarPersona()}"
+												reRender="panelPersonas" />
+										</h:inputText>
+									</s:decorate>
+									<a:commandButton id="searchper" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{staffEmpresaFormController.toFindPersonaList()}" />
+									<a:commandButton id="addPerson"
+										rendered="#{staffEmpresaFormController.habBtnAddPersons}"
+										eventsQueue="default" value="Agregar Persona"
+										action="#{staffEmpresaFormController.toFindPersona()}" />
+
+								</h:panelGrid>
+							</a:region>
+
+
+						</h:panelGrid>
+
+
+
+
+						<s:decorate id="fechaNacimientoField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_fechaNacimiento}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaNacimiento"
+								value="#{staffEmpresaFormController.persona.fechaNacimiento}"
+								enableManualInput="true" datePattern="dd/MM/yyyy"
+								oninputkeyup="ponerBarra(event);"
+								locale="#{siccaAppHelper.localeCode}" inputSize="10"
+								disabled="#{staffEmpresaFormController.persona.idPersona != null}" />
+						</s:decorate>
+						<s:decorate id="nombreField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_nombres}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nombre" size="50"
+								value="#{staffEmpresaFormController.persona.nombres}"
+								disabled="#{staffEmpresaFormController.persona.idPersona != null}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="direccionParticularField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_direccionParticular}</ui:define>
+							<h:inputTextarea id="direccionParticular"
+								value="#{staffEmpresaFormController.persona.direccionLaboral}"
+								cols="60" rows="1" />
+						</s:decorate>
+						<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_apellidos}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="apellido" size="50"
+								value="#{staffEmpresaFormController.persona.apellidos}"
+								disabled="#{staffEmpresaFormController.persona.idPersona != null}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="telefParticularField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_telefonos}</ui:define>
+							<h:inputTextarea id="telefParticular"
+								value="#{staffEmpresaFormController.persona.telefonos}"
+								cols="60" rows="1" />
+						</s:decorate>
+						<s:decorate id="eMailField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_email}</ui:define>
+							<h:inputText id="eMail" size="50"
+								value="#{staffEmpresaFormController.email}">
+
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="cargoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_cargo}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="cargo" size="74" maxlength="100"
+								value="#{staffEmpresaFormController.empresaPersona.cargo}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="sexoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_sexo}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="cboSexo"
+								value="#{staffEmpresaFormController.persona.sexo}"
+								style="width:150px">
+								<f:selectItems
+									value="#{staffEmpresaFormController.referenciasBySexoSelectItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<br />
+						<s:decorate id="estadoCivilField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_estadoCivil}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="cboEstadoCivil"
+								value="#{staffEmpresaFormController.persona.estadoCivil}"
+								style="width:150px">
+								<f:selectItems
+									value="#{staffEmpresaFormController.referenciasByEstadoCivilSelectItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel></fieldset>
+
+				<a:outputPanel id="panelBotones">
+					<a:commandButton id="add" value="#{messages.msg_list_add}"
+						action="#{staffEmpresaFormController.addToList()}"
+						reRender="panelPersonas,panelEmpresaPersona"
+						rendered="#{!staffEmpresaFormController.esParaEditar}" />
+
+					<a:commandButton id="updateRecord" value="#{messages.msg_update}"
+						action="#{staffEmpresaFormController.updateOnList()}"
+						rendered="#{staffEmpresaFormController.esParaEditar}"
+						reRender="panelPersonas,panelEmpresaPersona,panelBotones" />
+					<a:region>
+						<a:commandButton id="clear"
+							value="#{messages.msg_list_search_clear_button}"
+							action="#{staffEmpresaFormController.clear()}"
+							reRender="panelPersonas,panelBotones" />
+					</a:region>
+				</a:outputPanel>
+				<br />
+				<br />
+
+				<rich:panel id="panelEmpresaPersona">
+					<f:facet name="header">#{messages.CU196_staffFuncionarios} (#{staffEmpresaFormController.listStaff.size})</f:facet>
+					<div class="results" id="empresaPersonaList"
+						style="overflow: auto;"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty empresaPersonaList.resultList}" /> <rich:dataTable
+						id="empresaPersonaList" var="_empresaPersona"
+						value="#{staffEmpresaFormController.listStaff}"
+						rendered="#{not empty staffEmpresaFormController.listStaff}"
+						rowKeyVar="_index">
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{empresaPersonaList}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU196_funcionario}" />
+									<ui:param name="propertyPath"
+										value="empresaPersona.persona.nombres" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_empresaPersona.persona.nombres} #{_empresaPersona.persona.apellidos}" />
+						</h:column>
+						<rich:column styleClass="numeric" width="100">
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{empresaPersonaList}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU196_documentoIdentidad}" />
+									<ui:param name="propertyPath"
+										value="empresaPersona.persona.documentoIdentidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_empresaPersona.persona.documentoIdentidad}" />
+						</rich:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU196_email}</f:facet>
+							<h:outputText value="#{_empresaPersona.persona.EMail}" />
+						</h:column>
+						<rich:column style="text-align:center;" width="10%">
+							<f:facet name="header">#{messages.CU196_sexo}</f:facet>
+							<h:outputText
+								value="#{_empresaPersona.persona.sexo == 'M' ? 'MASCULINO' : (_empresaPersona.persona.sexo == 'F' ? 'FEMENINO' : 'INDEFINIDO')}" />
+						</rich:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU196_telefonos}</f:facet>
+							<h:outputText value="#{_empresaPersona.persona.telefonos}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{empresaPersonaList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU196_cargo}" />
+									<ui:param name="propertyPath" value="empresaPersona.cargo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_empresaPersona.cargo}" />
+						</h:column>
+						<rich:column style="text-align:center" width="10%">
+							<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+							<h:selectBooleanCheckbox value="#{_empresaPersona.activo}"
+								disabled="#{_empresaPersona.idSelEmpresaPersona == null}" />
+						</rich:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<a:region>
+								<a:status onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+								<a:commandLink id="editEmpresaPersona"
+									value="#{messages.msg_edit}"
+									action="#{staffEmpresaFormController.selectToEdit(_index)}"
+									reRender="panelPersonas,panelBotones" />
+							</a:region>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+
+				<br />
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{staffEmpresaFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!empresaPersonaHome.managed}" /> <a:commandButton
+				id="print" value="#{messages.msg_list_search_print_button}"
+				onclick="#{rich:component('modalPrint')}.show();return false"
+				reRender="modalPrint"
+				disabled="#{empty empresaPersonaList.resultList}" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				view="/seleccion/empresasTercerizadas/EmprTercerizadaList.xhtml" />
+
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

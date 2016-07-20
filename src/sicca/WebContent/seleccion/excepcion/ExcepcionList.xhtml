@@ -1,0 +1,316 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="excepcionSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="Excepcion Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Tipo</ui:define>
+                <h:inputText id="tipo" value="#{excepcionList.excepcion.tipo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Estado</ui:define>
+                <h:inputText id="estado" value="#{excepcionList.excepcion.estado}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{excepcionList.excepcion.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{excepcionList.excepcion.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu solicitud</ui:define>
+                <h:inputText id="usuSolicitud" value="#{excepcionList.excepcion.usuSolicitud}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu aprobacion</ui:define>
+                <h:inputText id="usuAprobacion" value="#{excepcionList.excepcion.usuAprobacion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Fecha aprobacion</ui:define>
+                <h:inputText id="fechaAprobacion" value="#{excepcionList.excepcion.fechaAprobacion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{excepcionList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/ExcepcionList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">Excepcion Search Results (#{empty excepcionList.resultList ? 0 : (excepcionList.paginated ? excepcionList.resultCount : excepcionList.resultList.size)})</f:facet>
+    <div class="results" id="excepcionList">
+
+    <h:outputText value="The excepcion search returned no results."
+               rendered="#{empty excepcionList.resultList}"/>
+
+    <rich:dataTable id="excepcionList"
+                var="_excepcion"
+              value="#{excepcionList.resultList}"
+           rendered="#{not empty excepcionList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Id excepcion"/>
+                    <ui:param name="propertyPath" value="excepcion.idExcepcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.idExcepcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Concurso puesto agr id concurso puesto agr"/>
+                    <ui:param name="propertyPath" value="excepcion.concursoPuestoAgr.idConcursoPuestoAgr"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Concurso id concurso"/>
+                    <ui:param name="propertyPath" value="excepcion.concurso.idConcurso"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.concurso.idConcurso}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Comision seleccion cab id comision sel"/>
+                    <ui:param name="propertyPath" value="excepcion.comisionSeleccionCab.idComisionSel"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.comisionSeleccionCab.idComisionSel}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Tipo"/>
+                    <ui:param name="propertyPath" value="excepcion.tipo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.tipo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Estado"/>
+                    <ui:param name="propertyPath" value="excepcion.estado"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.estado}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="excepcion.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="excepcion.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="excepcion.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="excepcion.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="excepcion.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Usu solicitud"/>
+                    <ui:param name="propertyPath" value="excepcion.usuSolicitud"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.usuSolicitud}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha solicitud"/>
+                    <ui:param name="propertyPath" value="excepcion.fechaSolicitud"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.fechaSolicitud}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Usu aprobacion"/>
+                    <ui:param name="propertyPath" value="excepcion.usuAprobacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.usuAprobacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha aprobacion"/>
+                    <ui:param name="propertyPath" value="excepcion.fechaAprobacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.fechaAprobacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionList}"/>
+                    <ui:param name="propertyLabel" value="Id process instance"/>
+                    <ui:param name="propertyPath" value="excepcion.idProcessInstance"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcion.idProcessInstance}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'Excepcion' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="excepcionViewId">
+                <f:param name="excepcionIdExcepcion"
+                        value="#{_excepcion.idExcepcion}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/ExcepcionEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="excepcionEdit"
+                rendered="#{empty from}">
+                <f:param name="excepcionIdExcepcion"
+                        value="#{_excepcion.idExcepcion}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/ExcepcionList.xhtml"
+            rendered="#{excepcionList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/ExcepcionList.xhtml"
+            rendered="#{excepcionList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{excepcionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/ExcepcionList.xhtml"
+            rendered="#{excepcionList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{excepcionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/ExcepcionList.xhtml"
+            rendered="#{excepcionList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{excepcionList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/ExcepcionEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create excepcion">
+            <f:param name="excepcionIdExcepcion"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

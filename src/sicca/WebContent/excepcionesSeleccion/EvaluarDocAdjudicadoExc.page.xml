@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('EVAL_DOC_ADJUDICADOS_EXC')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{evalDocAdjudicadoExcFC.init()}" on-postback="false"/>
+ <param name="from"/>
+ <param name="CU544" value="#{evalDocAdjudicadoExcFC.volvio}"/>
+ <param name="idGrupo" value="#{evalDocAdjudicadoExcFC.idConcursoPuestoAgr}"/>
+ <param name="idExcepcion" value="#{evalDocAdjudicadoExcFC.idExcepcion}"/>
+ <param name="texto" value="#{evalDocAdjudicadoExcFC.texto}"/>
+ <navigation from-action="#{evalDocAdjudicadoExcFC.nextTask()}">
+  <rule if-outcome="ok">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+  </rule>
+ </navigation>
+</page>

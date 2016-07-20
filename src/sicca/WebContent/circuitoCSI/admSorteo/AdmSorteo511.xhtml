@@ -1,0 +1,226 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="concursoPuestoAgrSearch" styleClass="edit">
+	<rich:panel>
+	<h:panelGrid columns="2">
+	 <s:decorate id="buttonsField" template="/layout/display.xhtml">
+		<h:commandButton id="tarea" disabled="#{!admSorteo511.realizoSorteo}"
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{admSorteo511.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+    
+    		<s:button view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+    
+    </s:decorate>
+    <rich:panel>
+        <h1>#{messages.CU511_titulo}</h1>
+        <h:panelGrid columns="1">
+			<rich:panel id="panelParametro" style=" height : 125px;">	
+			
+		<h:panelGrid columns="3" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{admSorteo511.nombreConcurso}" style=" width : 514px;"/>
+            </s:decorate>
+
+        
+			
+			</rich:panel>
+        
+	<rich:panel >
+	 <f:facet name="header">#{messages['CU511_sorte_post']}</f:facet>
+	<h:panelGrid columns="1">
+	<h:outputText value="#{messages.CU511_msg_1}" style="color:Red;" styleClass="labelClass"/>
+	<h:outputText value="#{admSorteo511.msg1}" style="color:Red;"  styleClass="labelClass"/>
+	<h:outputText value="#{admSorteo511.msg2}" style="color:Red;"  styleClass="labelClass"/>
+	</h:panelGrid>
+	<h:panelGrid columns="3">
+	<h:outputText value="#{messages.CU511_msg_2}" style="color:Red;"  styleClass="labelClass" rendered="#{admSorteo511.realizoSorteo}"/>
+		<h:commandButton id="iniciarSorteo"   disabled="#{admSorteo511.realizoSorteo}"
+				 value="#{messages.CU511_iniciar_sorteo}"
+				 onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+				 action="#{admSorteo511.iniciarSorteo()}" />
+	<h:commandButton id="imprimirSorteo"   disabled="#{!admSorteo511.realizoSorteo}"
+				  value="#{messages.CU511_imprimir_seleccionados}"
+				 action="#{admSorteo511.imprimir()}" />
+
+	</h:panelGrid>
+	</rich:panel>
+
+
+    <rich:panel>
+        <f:facet name="header">#{messages['CU511_titulo_grilla']} ( #{admSorteo511.postulacionLista.size()})</f:facet>
+    <div class="results" style=" overflow: scroll;"  width="310"  id="posatulantesList">
+
+   
+
+    <rich:dataTable id="concursoPuestoAgrList"
+                var="_postulante" rowKeyVar="_indice"
+              value="#{admSorteo511.postulacionLista}" >
+       
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                   <ui:param name="propertyLabel" value="#{messages.CU511_nro}"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_indice+1}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="propertyLabel" value="#{messages.CU511_codigo}"/>
+                 </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulante.usuPostulacion}" >
+             </h:outputText>
+            	
+        </h:column>
+        
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="propertyLabel" value="#{messages.CU511_fecha_sorte}"/>
+                 </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulante.fechaSorteo}" >
+             </h:outputText>
+            	
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="propertyLabel" value="#{messages.CU511_postulacion}"/>
+                 </ui:include>
+            </f:facet>
+            <h:outputText value="PORTAL" rendered="#{_postulante.tipo==null}" />
+            <h:outputText value="CARPETA" rendered="#{_postulante.tipo!=null}" >
+             </h:outputText>
+            	
+        </h:column>
+           <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="propertyLabel" value="#{messages.CU511_estado}"/>
+                 </ui:include>
+            </f:facet>
+            <h:outputText value="SELECCIONADO" rendered="#{_postulante.seleccionado}" />
+            <h:outputText value="NO SELECCIONADO" rendered="#{!_postulante.seleccionado}" />
+            	
+        </h:column>
+        
+      
+			
+	
+		
+    </rich:dataTable>
+
+    </div>
+    
+    </rich:panel>
+  <h:panelGrid columns="2">
+	
+	<a:region >
+	 <s:decorate id="obsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU412_obs}</ui:define>
+                <h:inputTextarea id="obs"
+                               cols="80"
+                               rows="6"
+                         value="#{admSorteo511.obs}">
+                <a:support event="onchange" eventsQueue="default"  reRender="obsField"/>
+                  <f:validateLength maximum="250" />
+               </h:inputTextarea>
+            </s:decorate>
+            </a:region>
+            <s:button propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anesxos" value="#{messages.gral_anexos}"
+				>
+				<f:param name="direccionFisica" value="#{admSorteo511.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{admSorteo511.nombrePantalla}" />
+				<f:param name="idCU" value="#{admSorteo511.idConcursoPuestoAgr}" />
+				<f:param name="nombreTabla" value="#{admSorteo511.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="circuitoCSI/admSorteo/AdmSorteo511" />
+			</s:button>
+            </h:panelGrid >
+	</h:panelGrid>
+   </rich:panel>
+	</h:panelGrid>
+	</rich:panel>
+	
+
+        
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

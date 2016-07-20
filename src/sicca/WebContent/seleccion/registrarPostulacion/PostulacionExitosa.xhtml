@@ -1,0 +1,65 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">#{messages.CU241_confirm_postula}</f:facet>
+
+			<h:form id="formSelect">
+				<rich:panel>
+					<f:facet name="header">#{''}</f:facet>
+					<h:panelGrid columns="1">
+						<h:inputHidden id="campoError"
+							value="#{registrarPostulacionFormController.msjError}" />
+
+						<h1>#{messages.CU241_registroExitoso}</h1>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU241_nroConcurso}:</ui:define>
+							<h:outputText
+								value="#{registrarPostulacionFormController.codConcurso}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU241_puesto}:</ui:define>
+							<h:outputText
+								value="#{registrarPostulacionFormController.concursoPuestoAgr.descripcionGrupo}" />
+						</s:decorate>
+						<!-- <h:outputText value="#{messages.CU241_enBreveMail}" />
+						<s:decorate template="/layout/display.xhtml">
+							<fieldset><legend>#{messages.CU241_obs}</legend><rich:dataList
+								var="elItem"
+								rendered="#{!empty registrarPostulacionFormController.listaDocsNoPresentados}"
+								value="#{registrarPostulacionFormController.listaDocsNoPresentados}">
+								<h:outputText value="#{elItem}" />
+								<br />
+							</rich:dataList> <h:outputText
+								rendered="#{empty registrarPostulacionFormController.listaDocsNoPresentados}"
+								value="#{messages.CU241_noObs}" /></fieldset>
+						</s:decorate> -->
+
+
+					</h:panelGrid>
+
+				</rich:panel>
+
+				<div class="actionButtons"><h:commandButton id="confirm"
+					value="Imprimir"
+					action="#{registrarPostulacionFormController.imprimir()}"
+					onclick="#{rich:component('modalSelect')}.hide()" /> <a:commandButton
+					action="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml"
+					id="clear" value="#{messages.GENERICO_ACEPTAR}" /></div>
+
+			</h:form>
+
+		</rich:panel>
+
+	</ui:define>
+</ui:composition>

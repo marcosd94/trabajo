@@ -1,0 +1,211 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU636_titulo}</h1>
+    <h:form id="matrizDocConfigDetSearch" styleClass="edit">
+    <rich:panel >
+    <h:panelGrid columns="2">
+	<s:decorate id="buttonsField" template="/layout/display.xhtml">
+		<h:commandButton id="tarea" rendered="#{elaboracionResoAdjudicacion636FC.habBotones}"
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{elaboracionResoAdjudicacion636FC.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+    
+    		<s:button view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+    
+    </s:decorate>    
+    
+		<rich:panel >
+		<h:panelGrid columns="1">
+       
+			<rich:panel id="panelParametro" >	
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{elaboracionResoAdjudicacion636FC.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{elaboracionResoAdjudicacion636FC.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{elaboracionResoAdjudicacion636FC.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{elaboracionResoAdjudicacion636FC.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{elaboracionResoAdjudicacion636FC.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{elaboracionResoAdjudicacion636FC.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{elaboracionResoAdjudicacion636FC.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+          
+			</h:panelGrid>
+			</rich:panel>
+		
+     
+        
+       
+   			<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+						<h:inputTextarea id="obs" cols="40" 
+							value="#{elaboracionResoAdjudicacion636FC.obs}" style=" width : 859px;">
+							    <f:validateLength maximum="250" />
+							</h:inputTextarea>
+					</s:decorate>
+					
+				</h:panelGrid>
+				 <h:panelGrid columns="2">
+        		<a:commandButton id="marcar" value="#{messages.CU411_marcar_todos}" rendered="false"
+					action="#{elaboracionResoAdjudicacion636FC.marcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton> <a:commandButton id="desmarcar" value="#{messages.CU411_desmarcar_todos}" rendered="false"
+					action="#{elaboracionResoAdjudicacion636FC.desmarcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton>
+        </h:panelGrid>
+   				<h:panelGrid columns="2">
+   		<div >
+			<rich:panel id="panelResultado" style=" width : 859px;">
+				<f:facet name="header">Grupos (#{elaboracionResoAdjudicacion636FC.puestoAgrList.size()})</f:facet>
+				<div class="results" id="puestList" style="clear: both; overflow: auto; HEIGHT: 230px">
+				<rich:dataTable
+					id="grupoList" var="_agr" rowKeyVar="row"
+					value="#{elaboracionResoAdjudicacion636FC.puestoAgrList}"
+					>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU411_cod_grupo}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.concurso.datosEspecificosTipoConc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU411_denominacion}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.descripcionGrupo}">
+						</h:outputText>
+					</h:column>
+					
+					
+					<rich:column rendered="false">
+						<f:facet name="header">
+						#{messages.CU411_homologar}
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_agr.seleccionado}" />
+					</rich:column>
+					<rich:column reRender="#{elaboracionResoAdjudicacion636FC.mostrar()}">
+					<a:commandLink  eventsQueue="default"
+									value="#{messages.gral_anexos}"
+										action="#{elaboracionResoAdjudicacion636FC.anexar(_concursoPuestoAgr.idConcursoPuestoAgr)}">
+							</a:commandLink>
+					</rich:column>
+					
+
+					
+				</rich:dataTable></div>
+		
+			</rich:panel>
+			</div>	
+     </h:panelGrid>
+		<h:panelGrid columns="1" >
+		<s:button id="controlPostulante" value="#{messages.CU417_control_puesto}"  
+		rendered="#{elaboracionResoAdjudicacion636FC.habcControles}"
+		view="/seleccion/AjustesPuestoPostConcu/AjustesPuestoPostConcu.xhtml">
+		<f:param name="idGrupo" value="#{elaboracionResoAdjudicacion636FC.idConcursoPuestoAgr}"/>
+		<f:param name="codActividad" value="#{elaboracionResoAdjudicacion636FC.codActividad}"/>
+		<f:param name="from" value="circuitoCIO/editarDocPresidencia639/EditarDocPresidencia639"/>
+		</s:button>
+				
+      	  <a:commandButton id="createReso" value="#{messages.CU417_gen_reso}" 
+      	  rendered="#{elaboracionResoAdjudicacion636FC.habBotones}"
+      	   disabled="#{!elaboracionResoAdjudicacion636FC.habReso}"
+					action="#{elaboracionResoAdjudicacion636FC.resolucion()}">
+				</a:commandButton>
+   <div style="clear:both">
+            <h:outputText value="Resoluciones"  styleClass="labelClass"/>
+        </div>
+		
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+				
+		<rich:dataTable
+				value="#{elaboracionResoAdjudicacion636FC.resolucionAdjudicacionList}"
+				id="tablaData" var="reso" rows="5" first="0" width="264">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU411_nro_resolucion}" />
+						</f:facet>
+						<h:outputText value="#{reso.nroResolucion}"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU411_fecha}" />
+						</f:facet>
+						<h:outputText value="#{reso.fecha}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>	
+					</rich:column>
+					<rich:column rendered="#{elaboracionResoAdjudicacion636FC.habBotones}">
+					<h:commandLink  action="#{elaboracionResoAdjudicacion636FC.finIdConcursoReso(reso.idResolucion,'view')}"
+                   value="Ver"
+             propagation="none" >
+            </h:commandLink>#{' '}
+            		<h:commandLink  action="#{elaboracionResoAdjudicacion636FC.finIdConcursoReso(reso.idResolucion,'edit')}"
+                   value="Editar"
+             propagation="none" >
+            </h:commandLink>
+					</rich:column>
+			</rich:dataTable>
+			<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+		</h:panelGrid>
+		</h:panelGrid>
+		</rich:panel>
+		
+	</h:panelGrid>
+	</rich:panel>
+		</h:form>
+
+</ui:define>
+
+</ui:composition>

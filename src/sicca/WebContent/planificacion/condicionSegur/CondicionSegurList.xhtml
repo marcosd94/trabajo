@@ -1,0 +1,164 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CondicionSegur_}</h1>
+
+
+		<h:form id="condicionSegurSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				id="parametroBusqueda" switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CondicionSegur_descripcion}</ui:define>
+					<h:inputText id="descripcion" size="100"
+						value="#{condicionSegurList.condicionSegur.descripcion}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{condicionSegurList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				reRender="parametroBusqueda,resultado,links"
+				action="#{condicionSegurList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{condicionSegurList.limpiar()}"
+				reRender="parametroBusqueda,resultado,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <h:commandButton id="print"
+				value="#{messages.msg_list_search_print_button}"
+				action="#{condicionSegurList.pdf()}" /></div>
+
+		</h:form>
+
+		<rich:panel id="resultado">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty condicionSegurList.resultList ? 0 : (condicionSegurList.paginated ? condicionSegurList.resultCount : condicionSegurList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty condicionSegurList.obtenerListaCondicionSegurs()}" />
+			<rich:dataTable id="condicionSegurList" var="_condicionSegur"
+				value="#{condicionSegurList.resultList}"
+				rendered="#{not empty condicionSegurList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{condicionSegurList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CondicionSegur_orden}" />
+							<ui:param name="propertyPath" value="condicionSegur.orden" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_condicionSegur.orden}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{condicionSegurList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CondicionSegur_descripcion}" />
+							<ui:param name="propertyPath" value="condicionSegur.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_condicionSegur.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages.RequisitoMinimoCpt_activo}</f:facet>
+					<h:selectBooleanCheckbox value="#{_condicionSegur.activo}"
+						disabled="true" />
+				</h:column>
+
+
+
+
+
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/condicionSegur/CondicionSegur' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="condicionSegurViewId">
+						<f:param name="condicionSegurIdCondicionSegur"
+							value="#{_condicionSegur.idCondicionSegur}" />
+					</s:link>
+            		#{' '}
+            			<s:link
+						view="/planificacion/condicionSegur/CondicionSegur.xhtml"
+						value="Ver" propagation="none" id="condicionSegur"
+						rendered="#{empty from}">
+						<f:param name="condicionSegurIdCondicionSegur"
+							value="#{_condicionSegur.idCondicionSegur}" />
+					</s:link>
+					<s:link
+						view="/planificacion/condicionSegur/CondicionSegurEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="condicionSegurEdit" rendered="#{empty from}">
+						<f:param name="condicionSegurIdCondicionSegur"
+							value="#{_condicionSegur.idCondicionSegur}" />
+					</s:link>
+
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/planificacion/condicionSegur/CondicionSegurList.xhtml"
+				rendered="#{condicionSegurList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/planificacion/condicionSegur/CondicionSegurList.xhtml"
+				rendered="#{condicionSegurList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{condicionSegurList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/condicionSegur/CondicionSegurList.xhtml"
+				rendered="#{condicionSegurList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{condicionSegurList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/condicionSegur/CondicionSegurList.xhtml"
+				rendered="#{condicionSegurList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{condicionSegurList.lastFirstResult}" />
+			</s:link></div>
+
+			<s:div styleClass="actionButtons" rendered="#{empty from}">
+				<s:button
+					view="/planificacion/condicionSegur/CondicionSegurEdit.xhtml"
+					id="create" propagation="none" value="#{messages.msg_create_male}">
+					<f:param name="condicionSegurIdCondicionSegur" />
+				</s:button>
+			</s:div>
+		</a:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

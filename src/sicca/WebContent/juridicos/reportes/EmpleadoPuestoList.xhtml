@@ -1,0 +1,135 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU457_title}</h1>
+
+
+		<h:form id="empleadoPuestoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" style="text-align:right"
+								value="#{historialSancionFuncionarioReportController.nivelEntidad.nenCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{historialSancionFuncionarioReportController.findNivelEntidad()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{historialSancionFuncionarioReportController.nivelEntidad.nenNombre}"
+								size="50" disabled="true" />
+							 #{' '}
+                <s:button id="searchNivel"
+								image="#{request.contextPath}/img/Buscar.png"
+								view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml"
+								propagation="'default'">
+								<f:param name="from"
+									value="juridicos/reportes/EmpleadoPuestoList" />
+							</s:button>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								value="#{historialSancionFuncionarioReportController.sinEntidad.entCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{historialSancionFuncionarioReportController.findEntidad()}"
+									reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{historialSancionFuncionarioReportController.sinEntidad.entNombre}"
+								size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{historialSancionFuncionarioReportController.getUrlToPageEntidad()}" />
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{historialSancionFuncionarioReportController.configuracionUoCab.orden}">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{historialSancionFuncionarioReportController.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{historialSancionFuncionarioReportController.configuracionUoCab.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{historialSancionFuncionarioReportController.getUrlToPageOee()}" />
+						</s:decorate>
+					</a:region>
+					<s:decorate id="paisExpField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_pais_expedi} </ui:define>
+						<h:selectOneMenu id="paisExp"
+							value="#{historialSancionFuncionarioReportController.idPais}"
+							style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU433_ci}</ui:define>
+						<h:inputText id="ci" size="30"
+							value="#{historialSancionFuncionarioReportController.persona.documentoIdentidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU440_fecha_alta_desde}</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{historialSancionFuncionarioReportController.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU440_fecha_hasta}</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{historialSancionFuncionarioReportController.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons" id="botones">  <h:commandButton value="#{messages['msg_list_search_print_button']}"
+				action="#{historialSancionFuncionarioReportController.print()}" />
+				<s:button id="reset" propagation="none"
+						value="Limpiar"/>
+				</div>
+
+
+
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

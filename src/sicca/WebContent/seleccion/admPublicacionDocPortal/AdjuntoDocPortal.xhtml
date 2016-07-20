@@ -1,0 +1,145 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU328_titulo}</h1>
+    <h:form id="adjuntoDocPortal" prependId="false"  enctype="multipart/form-data"  styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.CU328_titulo}</f:facet>
+
+			<h:panelGrid columns="1">
+			<a:region>
+			<s:decorate id="nroOrfen" template="/layout/edit.xhtml">
+                <ui:define name="label">Nro Orden<span class="required">*</span></ui:define>
+                <h:inputText id="ci"
+                          size="30" disabled="true"
+                      maxlength="30" 
+                          value="#{adjuntoDocPortalEditFormController.nroOrden}">
+           <a:support event="onchange" 
+                			  action="#{adjuntoDocPortalEditFormController.chkOrden()}" 
+                			reRender="nroOrfen" focus="anxDescrip"/>
+                </h:inputText>
+             </s:decorate>
+           </a:region>
+			
+			 <s:decorate id="nomAdjuntoDocPortalField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU328_nombre_doc}</ui:define>
+                <h:inputText id="nomAdjuntoDocPortal"
+                       required="true"
+                    disabled="true"
+                          value="#{adjuntoDocPortalEditFormController.nomLog}" style=" width : 417px;">
+                </h:inputText>
+            </s:decorate>
+			 <s:decorate id="descripcionDocumentoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU328_descripcion}</ui:define>
+                <h:inputTextarea  id="descripcionDocumento"
+                       required="true"  disabled="true"
+                          value="#{adjuntoDocPortalEditFormController.descripcion}" style="width : 417px; height : 66px;">
+                </h:inputTextarea>
+            </s:decorate>
+			
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			<s:decorate id="datosGralField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span></ui:define>
+					<h:selectOneMenu  id="datosGral" value="#{adjuntoDocPortalEditFormController.idTipoDoc}" style="width:250px"  disabled="true">
+						<f:selectItems value="#{adjuntoDocPortalEditFormController.tipoDocPORTALSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+				
+				
+            <s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"  >
+        	<ui:define name="label">Adjunto</ui:define>
+					
+				 
+               <h:inputTextarea disabled="true" id="nomFinal" value="#{adjuntoDocPortalEditFormController.nombreDoc}" style="width : 347px; height : 27px;" />
+              
+            </s:decorate>
+           
+			</h:panelGrid>
+			<h:panelGrid >
+			
+			 <s:decorate template="/layout/display.xhtml">
+                  <ui:define name="label">#{messages.CU328_publicado_en_portal}</ui:define>
+					<h:selectOneRadio id="esFuncionarioOee" required="true" disabled="true"
+							value="#{adjuntoDocPortalEditFormController.adjuntoDocPortal.publicado}">
+							<f:selectItems
+								value="#{enumAppHelper.enumsValueItems('EsFuncionario', 'getValor', false)}" />
+						</h:selectOneRadio>
+				
+            </s:decorate>
+           </h:panelGrid>
+ 			<h:panelGrid columns="5">
+ 			 <s:decorate  template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU328_mostrar_doc_en}<span class="required">*</span></ui:define>
+			</s:decorate>
+			
+			<h:selectBooleanCheckbox id="cuentaUsuario" disabled="true"
+                 required="true"   value="#{adjuntoDocPortalEditFormController.adjuntoDocPortal.cuentaUsuario}">
+                        <f:selectItem itemLabel="CuentaUsuario" itemValue="true" />
+               </h:selectBooleanCheckbox>
+               <h:outputText value="#{messages.CU328_cuenta_usu}"/>
+             
+			
+			<h:selectBooleanCheckbox	value="#{adjuntoDocPortalEditFormController.adjuntoDocPortal.portal}" disabled="true"  
+							style="FONT-FAMILY: 'Bitstream Charter';" id="interior" >
+							<f:selectItem itemLabel="portal" itemValue="true" />
+			</h:selectBooleanCheckbox>
+			  <h:outputText value="#{messages.CU328_portal_sicca}"/>
+			
+			
+						 
+			
+			
+ 			</h:panelGrid>
+ 			<h:panelGrid columns="">
+			 <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"   rendered="#{adjuntoDocPortalHome.managed}"
+                                   required="true" disabled="true"
+                                      value="#{adjuntoDocPortalEditFormController.adjuntoDocPortal.activo}"/>
+            </s:decorate>
+			</h:panelGrid>
+          
+			
+
+        <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none" includePageParams="false"
+                    view="/seleccion/admPublicacionDocPortal/AdjuntoDocPortalList.xhtml"
+                rendered="#{adjuntoDocPortalHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none" includePageParams="false"
+                    view="/#{empty adjuntoDocPortalFrom ? 'seleccion/admPublicacionDocPortal/AdjuntoDocPortalList' : adjuntoDocPortalFrom}.xhtml"
+                rendered="#{!adjuntoDocPortalHome.managed}"/>
+
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

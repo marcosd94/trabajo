@@ -1,0 +1,240 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.gral_oee}</h1>
+
+		<h:form id="configuracionUoCab" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{configuracionUoCabHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.gral_oee}</f:facet>
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="#{configuracionUoCabHome.managed}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png" rendered="#{!configuracionUoCabHome.managed}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/configuracionUoCab/ConfiguracionUoCabEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="#{configuracionUoCabHome.managed}"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{administrarUoCabEditFormController.cargarEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion,entCodigoField,ordenField" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" rendered="#{!configuracionUoCabHome.managed}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/configuracionUoCab/ConfiguracionUoCabEdit')}" />
+						</s:decorate>
+					</a:region>
+				
+				
+				
+					
+	                  <s:decorate id="vigenciaDesdeField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaDesde}</ui:define>
+	                <rich:calendar id="vigenciaDesde" enableManualInput="true"
+                          datePattern="dd/MM/yyyy" oninputkeyup="ponerBarra(event);"
+                			   locale="#{localeSelector.localeString}"
+                                value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaDesde}" />
+	            </s:decorate>
+	            <s:decorate id="vigenciaHastaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaHasta}</ui:define>
+	                <rich:calendar id="vigenciaHasta" 
+                          datePattern="dd/MM/yyyy" enableManualInput="true"
+                			   locale="#{localeSelector.localeString}"  oninputkeyup="ponerBarra(event);"
+                                value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaHasta}" />
+	            </s:decorate>
+	              <s:decorate id="misionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_mis_fin}</ui:define>
+	                <h:inputTextarea id="mision"
+                               cols="80" 
+                               rows="6"
+                         value="#{administrarUoCabEditFormController.configuracionUoCab.mision}" style=" width : 514px; height : 60px;">
+                <f:validateLength maximum="1000" />
+                  </h:inputTextarea>
+	            </s:decorate>
+				
+	            <s:decorate id="denominacionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_denominacion} Unidad</ui:define>
+	                <h:inputText id="denominacion"
+	                	 disabled="false" required="true"
+	                	  size="100"
+	                		maxlength="256"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.denominacionUnidad}">
+	                </h:inputText>
+	            </s:decorate>
+			
+	             <s:decorate id="nenCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_descr_corta}</ui:define>
+	                <h:inputText id="nenCodigo"
+	                		 disabled="false"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.descripcionCorta}"
+	                          required="true">
+	                </h:inputText>
+	            </s:decorate>
+	              <a:region >
+	            <s:decorate id="ordenField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CondicionSegur_orden}</ui:define>
+	                <h:inputText id="orden" onkeypress="return soloNumeros(event);"
+	                	 disabled="false" required="true"  styleClass="numeric"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.orden}">
+	                 <a:support event="onchange" eventsQueue="default"
+								  action="#{administrarUoCabEditFormController.obtenerCod()}" 
+								reRender="entCodigoField"
+								focus="direccionField"/>
+	                </h:inputText>
+	            </s:decorate>
+	            </a:region>
+				<s:decorate id="vigenciaDesdeAyBField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaDesdeAyB}</ui:define>
+					<rich:calendar id="vigenciaAyB" datePattern="dd/MM/yyyy"
+						enableManualInput="true" locale="#{localeSelector.localeString}"
+						oninputkeyup="ponerBarra(event);"
+						value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaDesdeAyB}" 
+						required="true"/>
+				</s:decorate>
+				<s:decorate id="entCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_cod}</ui:define>
+	                <h:inputText id="entCodigo"
+	                	  disabled="true"
+	                          value="#{administrarUoCabEditFormController.codigo}">
+	                </h:inputText>
+	            </s:decorate>
+	              <s:decorate id="direccionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_dir}</ui:define>
+	                <h:inputText id="direccion"
+	                  size="100"
+	                		maxlength="150"
+	                	   disabled="false"
+	                        value="#{administrarUoCabEditFormController.configuracionUoCab.direccion}">
+	                </h:inputText>
+	            </s:decorate>
+	             <s:decorate id="telefonoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_tl}</ui:define>
+	                <h:inputText id="telefono"
+	                	 disabled="false"
+	                	 	maxlength="50"
+	                     value="#{administrarUoCabEditFormController.configuracionUoCab.telefono}">
+	                </h:inputText>
+	            </s:decorate>
+				<s:decorate id="urlField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_pagina_web}</ui:define>
+					<h:inputText id="url" size="70" disabled="false" maxlength="100"
+						value="#{administrarUoCabEditFormController.configuracionUoCab.url}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="entCodigoSinarhField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_cod_sinhar}</ui:define>
+	                <h:inputText id="entCodigoSinarh"
+	                	  disabled="false" maxlength="100"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.codigoSinarh}"  size="100">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                	   disabled="false"
+	                       value="#{administrarUoCabEditFormController.configuracionUoCab.activo}" />
+	            </s:decorate>
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+			</rich:panel>
+
+			<div class="actionButtons">
+				<h:commandButton id="save" value="#{messages.msg_save}"
+					action="#{administrarUoCabEditFormController.save()}"
+					disabled="#{!configuracionUoCabHome.wired}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					rendered="#{!configuracionUoCabHome.managed}" />
+				<h:commandButton id="update" value="#{messages.msg_update}"
+					action="#{administrarUoCabEditFormController.update()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+					rendered="#{configuracionUoCabHome.managed}" />
+				<s:button id="cancelEdit" value="Volver" propagation="end"
+					view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"
+					rendered="#{configuracionUoCabHome.managed}" />
+				<s:button id="cancelAdd" value="Volver" propagation="end"
+					view="/#{empty configuracionUoCabFrom ? 'planificacion/configuracionUoCab/ConfiguracionUoCabList' : configuracionUoCabFrom}.xhtml"
+					rendered="#{!configuracionUoCabHome.managed}" />
+			</div>
+			<div>
+
+				<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"
+						rendered="#{configuracionUoCabHome.managed}"
+						template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText value="#{configuracionUoCabHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"
+						rendered="#{configuracionUoCabHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText value="#{configuracionUoCabHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"
+						rendered="#{configuracionUoCabHome.managed}">
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText value="#{configuracionUoCabHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"
+						rendered="#{configuracionUoCabHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText value="#{configuracionUoCabHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+
+			</div>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,75 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU367_title}</h1>
+		<h:form id="reclamoSugerencia" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU367_title_panel_edit}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="fechaField" template="/layout/edit.xhtml">
+						<ui:define name="label">Fecha</ui:define>
+						<rich:calendar id="fecha"
+							value="#{adminReclamoSugPortalFormController.reclamoSugerencia.fechaReclamoSugerencia}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							disabled="true" datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="tipoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU367_tipo}
+					</ui:define>
+						<h:selectOneMenu id="tipo" immediate="true" style="width : 330px;"
+							value="#{adminReclamoSugPortalFormController.tipoReclamo}"
+							disabled="true">
+							<s:selectItems var="tipo" label="#{tipo.descripcion}"
+								value="#{enumAppHelper.tipoReclamos}" />
+							<s:convertEnum />
+
+						</h:selectOneMenu>
+					</s:decorate>
+
+
+					<s:decorate id="asuntoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU367_asunto}</ui:define>
+						<h:inputText id="asunto" disabled="true" size="100"
+							maxlength="150"
+							value="#{adminReclamoSugPortalFormController.reclamoSugerencia.asunto}">
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU367_descripcion}</ui:define>
+						<h:inputTextarea id="descripcion" cols="80" rows="5"
+							disabled="true"
+							value="#{adminReclamoSugPortalFormController.reclamoSugerencia.descripcion}" />
+					</s:decorate>
+
+					<s:decorate id="adjuntoField" template="/layout/edit.xhtml">
+						<ui:define name="label">Adjunto</ui:define>
+						<h:inputText id="archivo" size="50"
+							value="#{adminReclamoSugPortalFormController.reclamoSugerencia.documentos.nombreFisicoDoc}"
+							disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelAdd"
+				value="Volver" propagation="none"
+				view="/seleccion/reclamoSugerencia/ReclamoSugerenciaList.xhtml" />
+			<h:commandButton value="Descargar"
+				rendered="#{adminReclamoSugPortalFormController.reclamoSugerencia.documentos != null}"
+				action="#{adminReclamoSugPortalFormController.abrirDoc()}" /></div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

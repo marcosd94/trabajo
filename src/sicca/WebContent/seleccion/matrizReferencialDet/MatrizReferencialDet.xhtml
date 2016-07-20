@@ -1,0 +1,204 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU287_titulo_list}</h1>
+    <h:form id="matrizReferencialDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.CU287_titulo_list}</f:facet>
+			<h:panelGrid >
+
+           <rich:panel > 
+			 <f:facet name="header">#{messages.CU287_encabezado}</f:facet>
+			<h:panelGrid columns="1" >
+			 <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_desri}</ui:define>
+                <h:inputText id="descripcion" disabled="true" size="70" value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.matrizReferencial.descripcion}"/>
+            </s:decorate>
+            
+			 <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_tipo_concurso}</ui:define>
+                <h:inputText id="tipoConcurso" disabled="true" value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.matrizReferencial.datosEspecificos.descripcion}" size="70"/>
+            </s:decorate>
+           
+			</h:panelGrid>
+			</rich:panel>
+			<rich:panel > 
+		  <f:facet name="header">#{messages.CU287_factor}</f:facet>
+			<h:panelGrid columns="3" >
+			  <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_fac_eval}</ui:define>
+                <h:inputText id="facEval" disabled="true"  size="70" value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.descripcion}"/>
+            </s:decorate>
+			 
+			 <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_nro}</ui:define>
+                <h:inputText id="nrOrden"  disabled="true" value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.nroOrden}" size="8"/>
+            </s:decorate>
+            
+			 <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_grad_punt}</ui:define>
+                <h:inputText id="gradPunt" disabled="true"  value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.puntajeMaximo}" size="10"/>
+            </s:decorate>
+             <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_oblig}</ui:define>
+                <h:inputText id="obligatorio" disabled="true"  value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.obligatorioSN=='true'?'SI':'NO'}" size="5"/>
+            </s:decorate>
+             <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_tip_eval}</ui:define>
+                <h:inputText id="tipoeval" disabled="true"  value="#{matrizReferencialDetEditFormController.matrizReferencialEnc.datosEspecificos.descripcion}" size="50"/>
+            </s:decorate>
+            
+			</h:panelGrid>
+			</rich:panel>      
+
+				<rich:panel  rendered="#{!matrizReferencialDetHome.managed}" >  <f:facet name="header">#{messages.CU287_addDes}</f:facet>
+				<h:panelGrid columns="3" >
+				  <s:decorate id="descripcionAddField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_desri} <span class="required">*</span></ui:define>
+                <h:inputText id="descripcionAdd"
+                         size="70"
+                      maxlength="100"
+                          value="#{matrizReferencialDetEditFormController.descripcion}">
+                </h:inputText>
+            </s:decorate>
+               <s:decorate id="puntajeMinimoAddField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_min} <span class="required">*</span></ui:define>
+                <h:inputText id="puntajeAddMinimo"
+                         value="#{matrizReferencialDetEditFormController.puntajeMinimo}">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="puntajeMaximoAddField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU287_max} <span class="required">*</span></ui:define>
+                <h:inputText id="puntajeAddMaximo"
+                        value="#{matrizReferencialDetEditFormController.puntajeMaximo}">
+                </h:inputText>
+            </s:decorate>
+            
+				 
+				</h:panelGrid>
+				</rich:panel> 
+			<a:commandButton id="add"  eventsQueue="default"  rendered="#{!matrizReferencialDetHome.managed}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="itemsList,itemsPanel"
+						action="#{matrizReferencialDetEditFormController.addItems()}"/>
+           
+
+		         <rich:panel id="itemsPanel"><f:facet name="header">#{messages.CU287_item}</f:facet>
+		         <h:panelGrid >
+		         <div class="results" id="tbldetList" style="overflow:auto;">
+								   	<rich:dataTable id="itemsList" var="_items" 
+												value="#{matrizReferencialDetEditFormController.itemsDetsList}"
+											 rowKeyVar="rowNr">
+												<rich:column styleClass="#{matrizReferencialDetEditFormController.getRowClass(rowNr)}" >
+													<f:facet name="header">
+														#{messages.CU287_desri}
+													</f:facet>
+													<h:outputText value="#{_items.descripcion}" />
+											</rich:column>
+												<rich:column styleClass="#{matrizReferencialDetEditFormController.getRowClass(rowNr)}" >
+													<f:facet name="header">
+														#{messages.CU287_min}
+													</f:facet>
+														<h:outputText disabled="true" 
+													value="#{_items.puntajeMinimo}" />
+													
+													</rich:column>
+												<rich:column styleClass="#{matrizReferencialDetEditFormController.getRowClass(rowNr)}" >
+												
+													<f:facet name="header">
+													#{messages.CU287_max}
+													</f:facet>
+														<h:outputText disabled="true" 
+													value="#{_items.puntajeMaximo}" />
+											</rich:column>
+											<rich:column styleClass="#{matrizReferencialDetEditFormController.getRowClass(rowNr)}" >
+									            <f:facet name="header">
+														#{messages.DatosEspecificos_activo}
+													</f:facet>
+									            	<h:selectBooleanCheckbox value="#{_items.activo}" 
+									            	disabled="true" />
+									       </rich:column>
+											
+										</rich:dataTable>
+							 		 </div> 
+		         
+		         </h:panelGrid> 
+		         </rich:panel>
+
+           </h:panelGrid>
+
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+	<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!matrizReferencialDetHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{matrizReferencialDetHome.managed}" styleClass="labelClass"/>
+        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            
+
+            
+            
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_done}"
+            
+                    view="/seleccion/matrizReferencialDet/MatrizReferencialDetList.xhtml"
+                rendered="#{matrizReferencialDetHome.managed}">
+                <f:param  name="matrizReferencialEncIdMatrizReferencialEnc" value="#{matrizReferencialDetEditFormController.idMatrizReferencialEnc}"/>
+                </s:button>
+				
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+            view="/#{empty matrizReferencialDetFrom ? 'seleccion/matrizReferencialDet/MatrizReferencialDetList' : matrizReferencialDetFrom}.xhtml"
+                rendered="#{!matrizReferencialDetHome.managed}">
+                <f:param  name="matrizReferencialEncIdMatrizReferencialEnc" value="#{matrizReferencialDetEditFormController.idMatrizReferencialEnc}"/>
+                </s:button>
+
+        </div>
+    </h:form>
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{matrizReferencialDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{matrizReferencialDetEditFormController.matrizReferencialDet.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{matrizReferencialDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{matrizReferencialDetEditFormController.matrizReferencialDet.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{matrizReferencialDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{matrizReferencialDetEditFormController.matrizReferencialDet.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{matrizReferencialDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{matrizReferencialDetEditFormController.matrizReferencialDet.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+
+</ui:define>
+
+</ui:composition>

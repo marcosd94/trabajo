@@ -1,0 +1,378 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU456_titulo_listad}</h1>
+    <h:form id="excepcionadosSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+			<h:panelGrid columns="1">
+           		<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+				
+				
+				
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU456_ci}</ui:define>
+					<h:inputText id="documentoIdentidad" size="30"
+						value="#{excepcionadoListFC.persona.documentoIdentidad}" />
+				</s:decorate>
+				<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU156_pais_expedi}</ui:define>
+						<h:selectOneMenu id="idPaisExp" value="#{excepcionadoListFC.idPaisExp}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU456_nombres}</ui:define>
+					<h:inputText id="nombres" size="50"
+						value="#{excepcionadoListFC.persona.nombres}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU456_apellido}</ui:define>
+					<h:inputText id="apellidos" size="50"
+						value="#{excepcionadoListFC.persona.apellidos}" />
+				</s:decorate>
+				
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU456_anio}</ui:define>
+					<h:inputText id="anio" size="10" styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{excepcionadoListFC.anio}" />
+				</s:decorate>
+				 <s:decorate id="fechaExcField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fec_ex_desde}</ui:define>
+                <rich:calendar id="fechaExcDesde"
+                     locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadoListFC.fechaExcDesde}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+             <s:decorate id="fechaExcHastaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fec_ex_hasta}</ui:define>
+                <rich:calendar id="fechaExcHasta"
+                     locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadoListFC.fechaExcHasta}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+				 <s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fec_alt_desde}</ui:define>
+                <rich:calendar id="fechaAltaDesde"
+                     locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadoListFC.fechaAltaDesde}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+             <s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fec_alt_hasta}</ui:define>
+                <rich:calendar id="fechaAltaHasta"
+                     locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadoListFC.fechaAltaHasta}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+            
+            
+            
+            	<s:decorate id="usuAltaField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU456_usu_alta} </ui:define>
+						<h:selectOneMenu id="usuarioAltaExp" value="#{excepcionadoListFC.usuarioAltaExp}" style="width:250px">
+							<f:selectItems value="#{excepcionadoListFC.usuariosAltasSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			 <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{excepcionadoListFC.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				
+				 
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResulado,links,panelBusqueda"
+				action="#{excepcionadoListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+					<s:button id="reset" propagation="none"
+						value="#{messages['msg_list_search_reset_button']}"/>
+				<h:commandButton id="print"
+						  value="#{messages.msg_list_search_print_button}"
+						  action="#{excepcionadoListFC.imprimir()}"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel id="panelResulado">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty excepcionadosList.resultList ? 0 : (excepcionadosList.paginated ? excepcionadosList.resultCount : excepcionadosList.resultList.size)})</f:facet>
+    <div class="results" id="excepcionadosList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty excepcionadosList.resultList}"/>
+
+    <rich:dataTable id="excepcionadosList"
+                var="_excepcionados"
+              value="#{excepcionadosList.resultList}"
+           rendered="#{not empty excepcionadosList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_cedula}"/>
+                    <ui:param name="propertyPath" value="excepcionados.persona.documentoIdentidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.persona.documentoIdentidad}"/>
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="País Exp."/>
+                    <ui:param name="propertyPath" value="excepcionados.persona.paisByIdPaisExpedicionDoc.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.persona.paisByIdPaisExpedicionDoc.descripcion}"/>
+        </h:column>
+        
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_nom_ape}"/>
+                    <ui:param name="propertyPath" value="excepcionados.persona.nombres"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.persona.nombreCompleto}"/>
+        </h:column>
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.gral_oee}"/>
+                    <ui:param name="propertyPath" value="excepcionados.configuracionUoCab.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.configuracionUoCab.denominacionUnidad}"/>
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_anio}"/>
+                    <ui:param name="propertyPath" value="excepcionados.anio"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.anio}"/>
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_fec_ex_desde}"/>
+                    <ui:param name="propertyPath" value="excepcionados.fecha"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.fecha}"/>
+        </h:column>
+      <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_fec_ex_hasta}"/>
+                    <ui:param name="propertyPath" value="excepcionados.fechaHasta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.fechaHasta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU472_fecha_alta}"/>
+                    <ui:param name="propertyPath" value="excepcionados.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.fechaAlta}"/>
+        </h:column>
+       
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU456_usu_alta}"/>
+                    <ui:param name="propertyPath" value="excepcionados.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_excepcionados.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{excepcionadosList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.DatosEspecificos_activo}"/>
+                    <ui:param name="propertyPath" value="excepcionados.fecha"/>
+                </ui:include>
+            </f:facet>
+            <h:selectBooleanCheckbox value="#{_excepcionados.activo}" disabled="true"/>
+        </h:column>
+      
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'juridicos/excepcionados/Excepcionados' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : 'Selecionar'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="excepcionadosViewId">
+                <f:param name="excepcionadosIdExcepcionado"
+                        value="#{_excepcionados.idExcepcionado}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/juridicos/excepcionados/ExcepcionadosEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="excepcionadosEdit"
+                rendered="#{empty from}">
+                <f:param name="excepcionadosIdExcepcionado"
+                        value="#{_excepcionados.idExcepcionado}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+            rendered="#{excepcionadosList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+            rendered="#{excepcionadosList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{excepcionadosList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+            rendered="#{excepcionadosList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{excepcionadosList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+            rendered="#{excepcionadosList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{excepcionadosList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+    </a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/juridicos/excepcionados/ExcepcionadosEdit.xhtml"
+                    id="create"
+           propagation="none" includePageParams="false"
+                 value="#{messages.msg_create_male}">
+				<f:param name="excepcionadosIdExcepcionado" />
+			</s:button>
+    </s:div>
+     <s:div styleClass="actionButtons" rendered="#{empty from}">
+       
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

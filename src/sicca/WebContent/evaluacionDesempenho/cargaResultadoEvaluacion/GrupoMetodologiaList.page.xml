@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+ login-required="true">
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{nivelEntidadOeeUtil.init()}" on-postback="false"/>
+ <action execute="#{grupoPuestosController.initCabecera()}" on-postback="false"/>
+ <action execute="#{cargaResultadosEvaluacionListFC.init()}" on-postback="false"/>
+ <param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{cargaResultadosEvaluacionListFC.idEvaluacionDesempeno}"/>
+ <param name="firstResult" value="#{grupoMetodologiaList.firstResult}"/>
+ <param name="sort" value="#{grupoMetodologiaList.orderColumn}"/>
+ <param name="dir" value="#{grupoMetodologiaList.orderDirection}"/>
+ <param name="logic" value="#{grupoMetodologiaList.restrictionLogicOperator}"/>
+ <param name="from" value="#{cargaResultadosEvaluacionListFC.from}"/>
+ <param name="tipo" value="#{grupoMetodologiaList.grupoMetodologia.tipo}"/>
+ <param name="usuAlta" value="#{grupoMetodologiaList.grupoMetodologia.usuAlta}"/>
+ <param name="usuMod" value="#{grupoMetodologiaList.grupoMetodologia.usuMod}"/>
+ <param name="valor" value="#{grupoMetodologiaList.grupoMetodologia.valor}"/>
+ 
+  <navigation from-action="#{aprobarCapacitacionFormController.aprobar()}">
+      <rule if-outcome="ok">
+         <end-conversation/>
+         <redirect view-id="/#{cargaResultadosEvaluacionListFC.from}.xhtml">
+         </redirect>
+      </rule>
+   </navigation>
+   
+    <navigation from-action="#{cargaResultadosEvaluacionListFC.finalizarEvaluacion()}">
+      <rule if-outcome="ok">
+         <end-conversation/>
+         <redirect view-id="/evaluacionDesempenho/admGestionEvaluacion/AdmGestionEvaluacionList.xhtml">
+         </redirect>
+      </rule>
+   </navigation>
+   
+   <restrict>#{identity.hasRole('cargaResultadosEvaluacionList')}</restrict>
+</page>

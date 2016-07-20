@@ -1,0 +1,524 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Estado cab Details</f:facet>
+
+        <s:decorate id="idEstadoCab" template="layout/display.xhtml">
+            <ui:define name="label">Id estado cab</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.idEstadoCab}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{estadoCabHome.instance.activo}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/EstadoCabEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty estadoCabFrom ? 'EstadoCabList' : estadoCabFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Transicion estados for posible estado</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="transicionEstadosForPosibleEstadoChildren">
+
+        <h:outputText value="There are no transicionEstadosForPosibleEstado associated with this estadoCab."
+                   rendered="#{empty estadoCabHome.transicionEstadosForPosibleEstado}"/>
+
+        <rich:dataTable value="#{estadoCabHome.transicionEstadosForPosibleEstado}"
+                       var="_transicionEstado"
+                  rendered="#{not empty estadoCabHome.transicionEstadosForPosibleEstado}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="transicionEstadosForPosibleEstadoTable">
+            <rich:column sortBy="#{_transicionEstado.idTrancisionEstado}">
+                <f:facet name="header">Id trancision estado</f:facet>
+                <h:outputText value="#{_transicionEstado.idTrancisionEstado}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_transicionEstado.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_transicionEstado.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_transicionEstado.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_transicionEstado.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selecttransicionEstado"
+                     value="Select"
+                      view="/TransicionEstado.xhtml">
+                    <f:param name="transicionEstadoIdTrancisionEstado"
+                            value="#{_transicionEstado.idTrancisionEstado}"/>
+                    <f:param name="transicionEstadoFrom" value="EstadoCab"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add transicionEstado"
+                view="/TransicionEstadoEdit.xhtml">
+            <f:param name="estadoCabIdEstadoCab"
+                    value="#{estadoCabHome.instance.idEstadoCab}"/>
+            <f:param name="transicionEstadoFrom" value="EstadoCab"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Transicion estados for id estado cab</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="transicionEstadosForIdEstadoCabChildren">
+
+        <h:outputText value="There are no transicionEstadosForIdEstadoCab associated with this estadoCab."
+                   rendered="#{empty estadoCabHome.transicionEstadosForIdEstadoCab}"/>
+
+        <rich:dataTable value="#{estadoCabHome.transicionEstadosForIdEstadoCab}"
+                       var="_transicionEstado"
+                  rendered="#{not empty estadoCabHome.transicionEstadosForIdEstadoCab}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="transicionEstadosForIdEstadoCabTable">
+            <rich:column sortBy="#{_transicionEstado.idTrancisionEstado}">
+                <f:facet name="header">Id trancision estado</f:facet>
+                <h:outputText value="#{_transicionEstado.idTrancisionEstado}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_transicionEstado.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_transicionEstado.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_transicionEstado.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_transicionEstado.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_transicionEstado.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selecttransicionEstado"
+                     value="Select"
+                      view="/TransicionEstado.xhtml">
+                    <f:param name="transicionEstadoIdTrancisionEstado"
+                            value="#{_transicionEstado.idTrancisionEstado}"/>
+                    <f:param name="transicionEstadoFrom" value="EstadoCab"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add transicionEstado"
+                view="/TransicionEstadoEdit.xhtml">
+            <f:param name="estadoCabIdEstadoCab"
+                    value="#{estadoCabHome.instance.idEstadoCab}"/>
+            <f:param name="transicionEstadoFrom" value="EstadoCab"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Planta cargo dets</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="plantaCargoDetsChildren">
+
+        <h:outputText value="There are no plantaCargoDets associated with this estadoCab."
+                   rendered="#{empty estadoCabHome.plantaCargoDets}"/>
+
+        <rich:dataTable value="#{estadoCabHome.plantaCargoDets}"
+                       var="_plantaCargoDet"
+                  rendered="#{not empty estadoCabHome.plantaCargoDets}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="plantaCargoDetsTable">
+            <rich:column sortBy="#{_plantaCargoDet.idPlantaCargoDet}">
+                <f:facet name="header">Id planta cargo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.descripcion}">
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.descripcion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.codigoPuesto}">
+                <f:facet name="header">Codigo puesto</f:facet>
+                <h:outputText value="#{_plantaCargoDet.codigoPuesto}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.fundamentacionTecnica}">
+                <f:facet name="header">Fundamentacion tecnica</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fundamentacionTecnica}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.mision}">
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_plantaCargoDet.mision}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.objetivo}">
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.objetivo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.categoria}">
+                <f:facet name="header">Categoria</f:facet>
+                <h:outputText value="#{_plantaCargoDet.categoria}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.contratado}">
+                <f:facet name="header">Contratado</f:facet>
+                <h:outputText value="#{_plantaCargoDet.contratado}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.jornalero}">
+                <f:facet name="header">Jornalero</f:facet>
+                <h:outputText value="#{_plantaCargoDet.jornalero}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.permanente}">
+                <f:facet name="header">Permanente</f:facet>
+                <h:outputText value="#{_plantaCargoDet.permanente}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.justificacion}">
+                <f:facet name="header">Justificacion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.justificacion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.activo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.luHoraDesde}">
+                <f:facet name="header">Lu hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.maHoraDesde}">
+                <f:facet name="header">Ma hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.miHoraDesde}">
+                <f:facet name="header">Mi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.juHoraDesde}">
+                <f:facet name="header">Ju hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.viHoraDesde}">
+                <f:facet name="header">Vi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.saHoraDesde}">
+                <f:facet name="header">Sa hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.doHoraDesde}">
+                <f:facet name="header">Do hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.luHoraHasta}">
+                <f:facet name="header">Lu hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.maHoraHasta}">
+                <f:facet name="header">Ma hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.miHoraHasta}">
+                <f:facet name="header">Mi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.juHoraHasta}">
+                <f:facet name="header">Ju hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.viHoraHasta}">
+                <f:facet name="header">Vi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.saHoraHasta}">
+                <f:facet name="header">Sa hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.doHoraHasta}">
+                <f:facet name="header">Do hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_plantaCargoDet.idEntidad}">
+                <f:facet name="header">Id entidad</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idEntidad}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectplantaCargoDet"
+                     value="Select"
+                      view="/PlantaCargoDet.xhtml">
+                    <f:param name="plantaCargoDetIdPlantaCargoDet"
+                            value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+                    <f:param name="plantaCargoDetFrom" value="EstadoCab"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add plantaCargoDet"
+                view="/PlantaCargoDetEdit.xhtml">
+            <f:param name="estadoCabIdEstadoCab"
+                    value="#{estadoCabHome.instance.idEstadoCab}"/>
+            <f:param name="plantaCargoDetFrom" value="EstadoCab"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Historicos estados</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="historicosEstadosChildren">
+
+        <h:outputText value="There are no historicosEstados associated with this estadoCab."
+                   rendered="#{empty estadoCabHome.historicosEstados}"/>
+
+        <rich:dataTable value="#{estadoCabHome.historicosEstados}"
+                       var="_historicosEstado"
+                  rendered="#{not empty estadoCabHome.historicosEstados}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="historicosEstadosTable">
+            <rich:column sortBy="#{_historicosEstado.idHistoricoEstado}">
+                <f:facet name="header">Id historico estado</f:facet>
+                <h:outputText value="#{_historicosEstado.idHistoricoEstado}"/>
+            </rich:column>
+            <rich:column sortBy="#{_historicosEstado.observacion}">
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_historicosEstado.observacion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_historicosEstado.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_historicosEstado.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_historicosEstado.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_historicosEstado.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selecthistoricosEstado"
+                     value="Select"
+                      view="/HistoricosEstado.xhtml">
+                    <f:param name="historicosEstadoIdHistoricoEstado"
+                            value="#{_historicosEstado.idHistoricoEstado}"/>
+                    <f:param name="historicosEstadoFrom" value="EstadoCab"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add historicosEstado"
+                view="/HistoricosEstadoEdit.xhtml">
+            <f:param name="estadoCabIdEstadoCab"
+                    value="#{estadoCabHome.instance.idEstadoCab}"/>
+            <f:param name="historicosEstadoFrom" value="EstadoCab"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Estado dets</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="estadoDetsChildren">
+
+        <h:outputText value="There are no estadoDets associated with this estadoCab."
+                   rendered="#{empty estadoCabHome.estadoDets}"/>
+
+        <rich:dataTable value="#{estadoCabHome.estadoDets}"
+                       var="_estadoDet"
+                  rendered="#{not empty estadoCabHome.estadoDets}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="estadoDetsTable">
+            <rich:column sortBy="#{_estadoDet.idEstadoDet}">
+                <f:facet name="header">Id estado det</f:facet>
+                <h:outputText value="#{_estadoDet.idEstadoDet}"/>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.descripcion}">
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_estadoDet.descripcion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_estadoDet.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_estadoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_estadoDet.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_estadoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_estadoDet.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_estadoDet.activo}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectestadoDet"
+                     value="Select"
+                      view="/EstadoDet.xhtml">
+                    <f:param name="estadoDetIdEstadoDet"
+                            value="#{_estadoDet.idEstadoDet}"/>
+                    <f:param name="estadoDetFrom" value="EstadoCab"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add estadoDet"
+                view="/EstadoDetEdit.xhtml">
+            <f:param name="estadoCabIdEstadoCab"
+                    value="#{estadoCabHome.instance.idEstadoCab}"/>
+            <f:param name="estadoDetFrom" value="EstadoCab"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

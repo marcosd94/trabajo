@@ -1,0 +1,180 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU558_titulo_ver}</h1>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+			<rich:panel>
+				<rich:simpleTogglePanel label="#{messages['CU471_organizado_por']}"
+					switchType="ajax" id="panelParametro">
+
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+							<h:inputText size="100" id="evaluacion" disabled="true"
+								value="#{configurarPlantillaEvaCU558FC.evaluacion}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2" id="idPanelCampos">
+
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="true">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="true">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);" disabled="true">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+
+						<a:outputPanel>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+								<h:inputText id="orgCodigo2" size="10" disabled="true"
+									value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="70" disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+							</s:decorate>
+						</a:outputPanel>
+
+
+
+
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+				<rich:panel id="panelGrupo">
+
+					<h:panelGrid columns="2">
+
+						<s:decorate id="grupoEvaluacionField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU557_grupo}</ui:define>
+							<h:inputText value="#{configurarPlantillaEvaCU558FC.grupo}"
+								disabled="true" style=" width : 250px;" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU557_plantilla}
+						</ui:define>
+							<h:inputText value="#{configurarPlantillaEvaCU558FC.plantilla}"
+								disabled="true" style=" width : 250px;" />
+						</s:decorate>
+
+
+					</h:panelGrid>
+				</rich:panel>
+
+
+
+				<rich:panel id="panelItems">
+					<f:facet name="header">#{messages.CU558_items} (#{configurarPlantillaEvaCU558FC.plantillaEvalConfDets.size()})<span
+							class="required">*</span>
+					</f:facet>
+					<div class="results" id="tblsinAgruparList"
+						style="overflow: scroll; width: 610; HEIGHT: 230px"><rich:dataTable
+						id="sinAgrupar" var="_record" rowKeyVar="rowNr"
+						value="#{configurarPlantillaEvaCU558FC.plantillaEvalConfDets}"
+						style=" width : 600px;">
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU558_orden}
+						</f:facet>
+							<h:outputText value="#{_record.orden}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU558_resultado_esperado}
+						</f:facet>
+							<h:outputText value="#{_record.resultadoEsperado}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU558_actividades}
+						</f:facet>
+							<h:outputText value="#{_record.actividades}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU558_indicadores}
+						</f:facet>
+							<h:outputText value="#{_record.indicadoresCump}" />
+						</h:column>
+
+
+
+					</rich:dataTable></div>
+
+				</rich:panel>
+
+			</rich:panel>
+
+			<s:div styleClass="actionButtons">
+				<h:commandButton id="imprimirComision"
+					action="#{configurarPlantillaEvaCU558FC.imprimir()}"
+					value="#{messages.msg_list_search_print_button}" />
+				<s:button id="volver" value="Volver" propagation="join"
+					view="#{empty from ? '/evaluacionDesempenho/metodologiaGrupo/VerConfigPlantillaEvaluacion.xhtml' : from}" />
+
+
+			</s:div>
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

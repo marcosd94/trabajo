@@ -1,0 +1,15 @@
+INSERT INTO general.mensaje VALUES (1, 'Bienvenidos al Portal Paraguay Concursa, la página en la cual todo ciudadano paraguayo o extranjero, puede registrarse cargando sus documentos para postularse a los diversos concursos que se realizan en territorio paraguayo.', 'msg_bienvenida');
+INSERT INTO general.mensaje VALUES (2, 'Si desea una ayuda telefónica para registrarse, comuníquese a la Secretaria de la Función Pública  teléf.…', 'msg_ayuda_tel');
+INSERT INTO general.mensaje VALUES (3, 'http://www.gasl.org/refbib/Bible_King_James_Version.pdf', 'msg_pdf_link');
+INSERT INTO general.mensaje VALUES (4, 'Ayuda para el funcionario', 'msg_ayuda_funcionario');
+INSERT INTO general.mensaje VALUES (5, 'Para recibir instrucciones de cómo realizar su registro como usuario del Portal, ', 'msg_contacto_1');
+INSERT INTO general.mensaje VALUES (6, '/sicca/AyudaUsuarioPortal.seam', 'msg_link');
+INSERT INTO general.mensaje VALUES (7, 'Si desea una ayuda telefónica para registrarse, comuníquese a la Secretaria de la Función Pública teléfono 451 925 / 492 109 / 497 308.', 'msg_contacto_2');
+INSERT INTO general.mensaje VALUES (8, 'Declaración Jurada de estar o no estar incurso o incursa en relación de parentesco en la Función Pública.', 'msg_perentezco_1');
+INSERT INTO general.mensaje VALUES (9, 'En caso de poseer parientes en la Función Pública, completar el listado siguiente:', 'msg_perentezco_2');
+INSERT INTO general.mensaje VALUES (10, 'CODIGO PENAL DE PARAGUAY LEY Nº. 1.160/97', 'msg_perentezco_3');
+INSERT INTO general.mensaje VALUES (11, 'Artículo 243.-', 'msg_perentezco_4');
+INSERT INTO general.mensaje VALUES (12, 'Declaración falsa', 'msg_perentezco_5');
+INSERT INTO general.mensaje VALUES (13, '1º El que presentara una declaración jurada falsa ante un ente facultado para recibirla o invocando tal declaración, formulara una declaración falsa, será castigado con pena privativa de libertad de hasta cinco años.', 'msg_perentezco_6');
+INSERT INTO general.mensaje VALUES (14, '2º El que actuara culposamente respeto a la falsedad, será castigado con pena privativa de libertad de hasta un año o con multa.', 'msg_perentezco_7');
+INSERT INTO general.mensaje VALUES (15, 'sicca@sfp.gov.py', 'msg_correo');

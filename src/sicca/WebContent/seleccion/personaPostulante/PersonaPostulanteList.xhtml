@@ -1,0 +1,486 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="personaPostulanteSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="PersonaPostulante Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Nombres</ui:define>
+                <h:inputText id="nombres" value="#{personaPostulanteList.personaPostulante.nombres}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Apellidos</ui:define>
+                <h:inputText id="apellidos" value="#{personaPostulanteList.personaPostulante.apellidos}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Documento identidad</ui:define>
+                <h:inputText id="documentoIdentidad" value="#{personaPostulanteList.personaPostulante.documentoIdentidad}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">E mail</ui:define>
+                <h:inputText id="EMail" value="#{personaPostulanteList.personaPostulante.EMail}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Sexo</ui:define>
+                <h:inputText id="sexo" value="#{personaPostulanteList.personaPostulante.sexo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Estado civil</ui:define>
+                <h:inputText id="estadoCivil" value="#{personaPostulanteList.personaPostulante.estadoCivil}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Calle principal</ui:define>
+                <h:inputText id="callePrincipal" value="#{personaPostulanteList.personaPostulante.callePrincipal}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Primera lateral</ui:define>
+                <h:inputText id="primeraLateral" value="#{personaPostulanteList.personaPostulante.primeraLateral}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Segunda lateral</ui:define>
+                <h:inputText id="segundaLateral" value="#{personaPostulanteList.personaPostulante.segundaLateral}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Departamento nro</ui:define>
+                <h:inputText id="departamentoNro" value="#{personaPostulanteList.personaPostulante.departamentoNro}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Piso</ui:define>
+                <h:inputText id="piso" value="#{personaPostulanteList.personaPostulante.piso}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputText id="observacion" value="#{personaPostulanteList.personaPostulante.observacion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Direccion laboral</ui:define>
+                <h:inputText id="direccionLaboral" value="#{personaPostulanteList.personaPostulante.direccionLaboral}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Otras direcciones</ui:define>
+                <h:inputText id="otrasDirecciones" value="#{personaPostulanteList.personaPostulante.otrasDirecciones}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Telefonos</ui:define>
+                <h:inputText id="telefonos" value="#{personaPostulanteList.personaPostulante.telefonos}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{personaPostulanteList.personaPostulante.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{personaPostulanteList.personaPostulante.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{personaPostulanteList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/PersonaPostulanteList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">PersonaPostulante Search Results (#{empty personaPostulanteList.resultList ? 0 : (personaPostulanteList.paginated ? personaPostulanteList.resultCount : personaPostulanteList.resultList.size)})</f:facet>
+    <div class="results" id="personaPostulanteList">
+
+    <h:outputText value="The personaPostulante search returned no results."
+               rendered="#{empty personaPostulanteList.resultList}"/>
+
+    <rich:dataTable id="personaPostulanteList"
+                var="_personaPostulante"
+              value="#{personaPostulanteList.resultList}"
+           rendered="#{not empty personaPostulanteList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id persona postulante"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idPersonaPostulante"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idPersonaPostulante}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Datos especificos id datos especificos"/>
+                    <ui:param name="propertyPath" value="personaPostulante.datosEspecificos.idDatosEspecificos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.datosEspecificos.idDatosEspecificos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Nombres"/>
+                    <ui:param name="propertyPath" value="personaPostulante.nombres"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.nombres}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Apellidos"/>
+                    <ui:param name="propertyPath" value="personaPostulante.apellidos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.apellidos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Documento identidad"/>
+                    <ui:param name="propertyPath" value="personaPostulante.documentoIdentidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.documentoIdentidad}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="E mail"/>
+                    <ui:param name="propertyPath" value="personaPostulante.EMail"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.EMail}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Sexo"/>
+                    <ui:param name="propertyPath" value="personaPostulante.sexo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.sexo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Estado civil"/>
+                    <ui:param name="propertyPath" value="personaPostulante.estadoCivil"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.estadoCivil}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Fecha nacimiento"/>
+                    <ui:param name="propertyPath" value="personaPostulante.fechaNacimiento"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.fechaNacimiento}">
+                <s:convertDateTime type="date" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id pais expedicion doc"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idPaisExpedicionDoc"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idPaisExpedicionDoc}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id ciudad nac"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idCiudadNac"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idCiudadNac}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Calle principal"/>
+                    <ui:param name="propertyPath" value="personaPostulante.callePrincipal"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.callePrincipal}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Primera lateral"/>
+                    <ui:param name="propertyPath" value="personaPostulante.primeraLateral"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.primeraLateral}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Segunda lateral"/>
+                    <ui:param name="propertyPath" value="personaPostulante.segundaLateral"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.segundaLateral}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Departamento nro"/>
+                    <ui:param name="propertyPath" value="personaPostulante.departamentoNro"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.departamentoNro}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Piso"/>
+                    <ui:param name="propertyPath" value="personaPostulante.piso"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.piso}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Observacion"/>
+                    <ui:param name="propertyPath" value="personaPostulante.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.observacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id ciudad direcc"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idCiudadDirecc"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idCiudadDirecc}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Direccion laboral"/>
+                    <ui:param name="propertyPath" value="personaPostulante.direccionLaboral"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.direccionLaboral}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Otras direcciones"/>
+                    <ui:param name="propertyPath" value="personaPostulante.otrasDirecciones"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.otrasDirecciones}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Telefonos"/>
+                    <ui:param name="propertyPath" value="personaPostulante.telefonos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.telefonos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="personaPostulante.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="personaPostulante.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="personaPostulante.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="personaPostulante.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="personaPostulante.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id persona"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idPersona"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idPersona}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{personaPostulanteList}"/>
+                    <ui:param name="propertyLabel" value="Id barrio"/>
+                    <ui:param name="propertyPath" value="personaPostulante.idBarrio"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_personaPostulante.idBarrio}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'PersonaPostulante' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="personaPostulanteViewId">
+                <f:param name="personaPostulanteIdPersonaPostulante"
+                        value="#{_personaPostulante.idPersonaPostulante}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/PersonaPostulanteEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="personaPostulanteEdit"
+                rendered="#{empty from}">
+                <f:param name="personaPostulanteIdPersonaPostulante"
+                        value="#{_personaPostulante.idPersonaPostulante}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/PersonaPostulanteList.xhtml"
+            rendered="#{personaPostulanteList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/PersonaPostulanteList.xhtml"
+            rendered="#{personaPostulanteList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{personaPostulanteList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/PersonaPostulanteList.xhtml"
+            rendered="#{personaPostulanteList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{personaPostulanteList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/PersonaPostulanteList.xhtml"
+            rendered="#{personaPostulanteList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{personaPostulanteList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/PersonaPostulanteEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create personaPostulante">
+            <f:param name="personaPostulanteIdPersonaPostulante"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

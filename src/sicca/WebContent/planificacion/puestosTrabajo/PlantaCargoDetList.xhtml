@@ -1,0 +1,368 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU120_titulo_puesto}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/puestosTrabajo/PlantaCargoDetList')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/puestosTrabajo/PlantaCargoDetList')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('planificacion/puestosTrabajo/PlantaCargoDetList')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+								</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+									reRender="orgCodigo2,orgDenominacion2,orden2" />
+							</h:inputText>
+								#{' '}
+								<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+							 	#{' '}
+		               			<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('planificacion/puestosTrabajo/PlantaCargoDetList')}" />
+						</s:decorate>
+					</a:outputPanel>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU120_puesto}</ui:define>
+						<h:inputText id="puesto" size="50"
+							value="#{detallePlantaCargoListFormController.puesto}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Estado</ui:define>
+						<h:selectOneMenu id="estado" style="width : 330px;"
+							value="#{detallePlantaCargoListFormController.idEstado}">
+							<f:selectItems value="#{estadosCabsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Tipo #{messages.Cpt_especifico}</ui:define>
+							<h:selectOneMenu id="cpt" style="width : 330px;"
+								value="#{detallePlantaCargoListFormController.idTipoCpt}">
+								<f:selectItems value="#{tipoCptsSelectItems}" />
+								<a:support event="onchange" eventsQueue="default" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Cpt_especifico}</ui:define>
+							<h:inputText id="cpt"
+								value="#{detallePlantaCargoListFormController.codigoCpt}"
+								size="20">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{detallePlantaCargoListFormController.findCpt()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{detallePlantaCargoListFormController.cpt.denominacion}"
+								size="50" disabled="true" />
+                #{' '}
+                <a:commandButton id="searchCpt" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{detallePlantaCargoListFormController.getUrlToPageCpt()}" />
+						</s:decorate>
+					</a:region>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado"
+							value="#{detallePlantaCargoListFormController.activo}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{detallePlantaCargoListFormController.search()}"
+				reRender="panelResultados,panelControl">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{detallePlantaCargoListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda,panelControl">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty plantaCargoDetList.resultList ? 0 : (plantaCargoDetList.paginated ? plantaCargoDetList.resultCount : plantaCargoDetList.resultList.size)})</f:facet>
+			<div class="results" id="plantaCargoList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty plantaCargoDetList.resultList}" /> <rich:dataTable
+				id="plantaCargoDetList" var="_plantaCargoDet"
+				value="#{plantaCargoDetList.resultList}"
+				rendered="#{not empty plantaCargoDetList.resultList }">
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="OEE" />
+							<ui:param name="propertyPath"
+								value="plantaCargoDet.configuracionUoDet" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU253_unid_org}" />
+							<ui:param name="propertyPath"
+								value="plantaCargoDet.configuracionUoDet" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU253_puesto}" />
+							<ui:param name="propertyPath" value="plantaCargoDet.orden" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{detallePlantaCargoListFormController.obtenerCodigoPuesto(_plantaCargoDet)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="Puesto" />
+							<ui:param name="propertyPath" value="plantaCargoDet.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_plantaCargoDet.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU253_estado}" />
+							<ui:param name="propertyPath" value="plantaCargoDet.estadoCab" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_plantaCargoDet.estadoCab.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="CPT" />
+							<ui:param name="propertyPath" value="plantaCargoDet.cpt" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_plantaCargoDet.cpt.denominacion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantaCargoDetList}" />
+							<ui:param name="propertyLabel" value="Fecha" />
+							<ui:param name="propertyPath" value="plantaCargoDet.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_plantaCargoDet.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+					</h:outputText>
+				</h:column>
+				
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'adm/plantaCargoDet/PlantaCargoDet' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="plantaCargoDetViewId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_plantaCargoDet.idPlantaCargoDet}" />
+					</s:link>
+            		#{' '}
+            		
+					<s:link
+						view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="plantaCargoDetEditId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_plantaCargoDet.idPlantaCargoDet}" />
+							<f:param name="plantaCargoDetFrom" value="editar" />
+					</s:link>
+						#{' '}
+            		
+					<s:link
+						view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+						value="Ver" propagation="none" id="plantaCargoDetVerId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_plantaCargoDet.idPlantaCargoDet}" />
+						<f:param name="plantaCargoDetFrom" value="ver" />
+					</s:link>
+					
+					#{' '}
+            		
+					<s:link value="Imprimir"
+						action="#{detallePlantaCargoListFormController.imprimirPuestoParametros()}"
+						id="printId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_plantaCargoDet.idPlantaCargoDet}" />
+					</s:link>
+					
+					#{' '}
+            		
+					<s:link value="Inactivar"
+						action="#{detallePlantaCargoListFormController.eliminarPuestoDeTrabajo()}"
+						id="deleteId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_plantaCargoDet.idPlantaCargoDet}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<rich:panel id="panelControl" style="border:none;">
+			<div class="tableControl"><s:link
+				view="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml"
+				rendered="#{plantaCargoDetList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml"
+				rendered="#{plantaCargoDetList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{plantaCargoDetList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml"
+				rendered="#{plantaCargoDetList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{plantaCargoDetList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/puestosTrabajo/PlantaCargoDetList.xhtml"
+				rendered="#{plantaCargoDetList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{plantaCargoDetList.lastFirstResult}" />
+			</s:link></div>
+		</rich:panel>
+
+		<s:div styleClass="actionButtons">
+			<s:button
+				view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+				id="create" propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="plantaCargoDetIdPlantaCargoDet" />
+				<f:param name="plantaCargoDetFrom" value="nuevo" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

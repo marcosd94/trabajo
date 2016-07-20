@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBREPORT_CU753_Estudios" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT  E.OTRO_TITULO_OBT TITULO,
+	E.DURACION_HORAS || ' '|| CASE WHEN E.TIPO_DURACION = 'A' THEN 'AÑO(S)' ELSE 'HORA(S)' END DURACION,
+	ES.DESCRIPCION ESPECIALIDAD,
+	PAIS.DESCRIPCION pais
+  FROM SELECCION.ESTUDIOS_REALIZADOS E
+  LEFT JOIN PLANIFICACION.ESPECIALIDADES ES
+  ON ES.ID_ESPECIALIDADES = E.ID_ESPECIALIDAD
+  JOIN GENERAL.PAIS PAIS
+  ON PAIS.ID_PAIS = E.ID_PAIS
+ JOIN LEGAJO.MIGRACIONES M
+  ON M.ID_TABLA = E.ID_ESTUDIOS_REALIZADOS
+  WHERE  M.tabla_sicca = 'seleccion.estudios_realizados'
+ and E.ID_PERSONA = $P{id}]]>
+	</queryString>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="duracion" class="java.lang.String"/>
+	<field name="especialidad" class="java.lang.String"/>
+	<field name="pais" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Bloque Estudios Realizados/Otros Cursos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="0" y="20" width="165" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Título Obtenido/Nombre Curso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="165" y="20" width="98" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Duración]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="263" y="20" width="169" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Especialidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="432" y="20" width="123" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[País]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="165" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="165" y="0" width="98" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{duracion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="263" y="0" width="169" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{especialidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="432" y="0" width="123" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

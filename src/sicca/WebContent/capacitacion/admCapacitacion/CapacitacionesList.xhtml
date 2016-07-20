@@ -1,0 +1,276 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU471_titulo_list}</h1>
+    <h:form id="capacitacionesSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+			
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+			<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" disabled="#{!admCapacitacionListFC.habUo}"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2" rendered="#{admCapacitacionListFC.habUo}" 
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/admCapacitacion/CapacitacionesList')}" />
+							</s:decorate>
+				</a:outputPanel>
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU471_capacitacion}</ui:define>
+                <h:inputText size="100" id="nombre" value="#{admCapacitacionListFC.capacitaciones.nombre}"/>
+            </s:decorate>
+		<s:decorate id="tipoField" template="/layout/display.xhtml" >
+				<ui:define name="label">#{messages.CU471_tipo}</ui:define>
+						<h:selectOneMenu id="idTipo" value="#{admCapacitacionListFC.idTipo}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoCapacitacionSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+          
+</h:panelGrid>
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="links,botons,outPanelResul"
+				action="#{admCapacitacionListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admCapacitacionListFC.searchAll()}" 
+				 reRender="panelParametro,links,botons,outPanelResul" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+   
+</h:form>
+<h:form >
+<a:outputPanel ajaxRendered="true" id="outPanelResul">
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty capacitacionesList.resultList ? 0 : (capacitacionesList.paginated ? capacitacionesList.resultCount : capacitacionesList.resultList.size)})</f:facet>
+    <div class="results" id="capacitacionesList">
+
+    <h:outputText	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty capacitacionesList.resultList}"/>
+
+    <rich:dataTable id="capacitacionesList"
+                var="_capacitaciones"
+              value="#{admCapacitacionListFC.capacitacionesLista}"
+           rendered="#{not empty capacitacionesList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{capacitacionesList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.gral_oee}"/>
+                    <ui:param name="propertyPath" value="capacitaciones.configuracionUoCab.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_capacitaciones.configuracionUoCab.denominacionUnidad}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{capacitacionesList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU471_uo}"/>
+                    <ui:param name="propertyPath" value="capacitaciones.configuracionUoDet.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_capacitaciones.configuracionUoDet.denominacionUnidad}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{capacitacionesList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU471_capacitacion}"/>
+                    <ui:param name="propertyPath" value="capacitaciones.nombre"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_capacitaciones.nombre}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{capacitacionesList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU471_tipo}"/>
+                    <ui:param name="propertyPath" value="capacitaciones.datosEspecificosTipoCap.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_capacitaciones.datosEspecificosTipoCap.descripcion}"/>
+        </h:column>
+          <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{capacitacionesList}"/>
+                    <ui:param name="propertyLabel" value="Estado"/>
+                    <ui:param name="propertyPath" value="capacitaciones.estado"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{admCapacitacionListFC.estado(_capacitaciones.estado)}"/>
+        </h:column>
+        
+       
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/capacitacion/admCapacitacion/Capacitaciones.xhtml"
+                   value="Ver"
+             propagation="#{empty from ? 'none' : 'none'}"
+                      id="capacitacionesViewId">
+                <f:param name="capacitacionesIdCapacitacion"
+                        value="#{_capacitaciones.idCapacitacion}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/capacitacion/admCapacitacion/CapacitacionesEdit.xhtml" rendered="#{admCapacitacionListFC.habLink(_capacitaciones.estado)}"
+                   value="#{messages.msg_edit}"
+             propagation="none" disabled="#{!admCapacitacionListFC.habLink(_capacitaciones.estado)}"
+                      id="capacitacionesEdit"
+                >
+                <f:param name="capacitacionesIdCapacitacion"
+                        value="#{_capacitaciones.idCapacitacion}"/>
+            </s:link>
+            #{' '}
+            <h:commandLink  id="del"
+                          value="#{messages.CU471_eliminar}"
+                          rendered="#{admCapacitacionListFC.habLinkEliminar(_capacitaciones.estado)}"
+                         action="#{admCapacitacionListFC.eliminar(_capacitaciones.idCapacitacion)}"
+                          onclick="return confirm('#{messages.CU471_eliminar_msg}');"
+                      />
+                       
+           #{' '}
+            <h:commandLink id="initprocess"
+            				rendered="#{_capacitaciones.idProcessInstance==null}"
+							value="#{messages.CU496_iniciar}"
+							action="#{admCapacitacionListFC.iniciarProceso(_capacitaciones.idCapacitacion)}"
+							onclick="return confirm('#{messages.CU471_inicio}');" />
+				
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel></a:outputPanel></h:form>
+ 
+ <a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/capacitacion/admCapacitacion/CapacitacionesList.xhtml"
+            rendered="#{capacitacionesList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admCapacitacion/CapacitacionesList.xhtml"
+            rendered="#{capacitacionesList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{capacitacionesList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admCapacitacion/CapacitacionesList.xhtml"
+            rendered="#{capacitacionesList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{capacitacionesList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/capacitacion/admCapacitacion/CapacitacionesList.xhtml"
+            rendered="#{capacitacionesList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{capacitacionesList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/capacitacion/admCapacitacion/CapacitacionesEdit.xhtml"
+                    id="create"
+           propagation="none"
+              value="#{messages.msg_create_male}">
+            <f:param name="capacitacionesIdCapacitacion"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

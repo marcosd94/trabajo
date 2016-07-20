@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+ <action execute="#{verificarModifFechaSFPListFormController.init()}" on-postback="false"/>
+ 
+<param name="excepcionIdExcepcion" value="#{verificarModifFechaSFPListFormController.idExcepcion}"/>
+ 
+ <param name="solicProrrogaCabIdSolicCab" value="#{verificarModifFechaSFPListFormController.idSolicCab}"/>
+
+ <param name="firstResult" value="#{solicProrrogaDetList.firstResult}"/>
+ <param name="sort" value="#{solicProrrogaDetList.orderColumn}"/>
+ <param name="dir" value="#{solicProrrogaDetList.orderDirection}"/>
+ <param name="logic" value="#{solicProrrogaDetList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ 
+ <navigation from-action="#{verificarModifFechaSFPListFormController.autorizarRechazar()}">
+      <rule if-outcome="ok">
+         <end-conversation/>
+         <redirect view-id="/seleccion/modificacionFechaSFP/VerificarModificacionFechaSFPList.xhtml"/>
+      </rule>
+ </navigation>
+ <navigation from-action="#{verificarModifFechaSFPListFormController.publicar()}">
+       <rule if-outcome="ok">
+      <end-conversation/>
+         <redirect view-id="/proceso/BandejaExcepcionList.xhtml"/>
+        </rule>
+ </navigation>
+
+ 
+   <restrict>#{identity.hasRole('verificarModificacionFechaSFP_list')}</restrict>
+
+</page>

@@ -1,0 +1,76 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Observaciones</h1>
+		<h:form id="excepcionDet" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{excepcionDetHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU305_panel_aprobacion_sfp_obs}</f:facet>
+
+
+				<s:decorate id="idExcepcionDetField" template="/layout/edit.xhtml">
+					<ui:define name="label">Fecha</ui:define>
+					<rich:calendar id="fecha" disabled="true"
+								value="#{aprobacionInclusionSFPFormController.fechaObs}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+				</s:decorate>
+
+
+
+				<s:decorate id="observacionField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU305_panel_aprobacion_sfp_obs}</ui:define>
+					<h:inputTextarea id="observacion" cols="80" rows="6"
+						required="true"
+						value="#{aprobacionInclusionSFPFormController.excepcionDet.observacion}" />
+				</s:decorate>
+				
+				<s:decorate id="activoField" template="/layout/edit.xhtml" rendered="#{excepcionDetHome.managed}">
+					<ui:define name="label">Activo</ui:define>
+					<h:selectBooleanCheckbox id="activo"
+						value="#{aprobacionInclusionSFPFormController.excepcionDet.activo}" />
+				</s:decorate>
+
+
+				
+
+			<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!excepcionDetHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{excepcionDetHome.managed}" styleClass="labelClass" />
+				</div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" action="#{aprobacionInclusionSFPFormController.guardarObservacion()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!excepcionDetHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}" action="#{aprobacionInclusionSFPFormController.actualizarObservacion()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{excepcionDetHome.managed}" /> 
+
+			<s:button id="cancelAdd" value="Volver" propagation="none"
+				view="/seleccion/aprobacionInclusionSFP/ExcepcionList.xhtml">
+				<f:param name="excepcionIdExcepcion"
+								value="#{aprobacionInclusionSFPFormController.excepcion.idExcepcion}" />
+				</s:button>
+				</div>
+		</h:form>
+
+	
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,267 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU398_title}</h1>
+		<rich:simpleTogglePanel label=" " switchType="client">
+			<h:form id="idFormPrincipal">
+				<h:panelGrid columns="2">
+					<h:panelGrid>
+						<a:region>
+							<fieldset><legend>#{messages.CU398_origen}</legend> <a:outputPanel
+								id="idPanelCampos" ajaxRendered="true">
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.codNivelEntidad}"
+										size="10">
+										<a:support event="onblur" reRender="idPanelCampos"
+											ajaxSingle="true"
+											action="#{moverPuestosFC.findNivelEntidadOrigen()}">
+											<f:param value="sinNivelEntidadIdSinNivelEntidad"
+												name="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.idSinNivelEntidad}" />
+										</a:support>
+									</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.nombreNivelEntidad}"
+										size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.getUrlToPageNivel('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.codSinEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.findEntidadOrigen()}"
+											reRender="idPanelCampos">
+											<f:param value="sinNivelEntidadIdSinNivelEntidad"
+												name="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.idSinNivelEntidad}" />
+										</a:support>
+									</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.nombreSinEntidad}"
+										size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.getUrlToPageEntidad('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric"
+										size="10"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.findUnidadOrganizativaOrigen()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.getUrlToPageOee('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+
+
+								<s:decorate id="idRegionUnOrg" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="orgCodigo" size="10"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.codigoUnidOrgDep}">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.obtenerUnidadOrganizativaDepOrigen()}"
+											reRender="idPanelCampos,idPanelListShuttle">
+											<s:conversationPropagation type="join" />
+										</a:support>
+
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="50" disabled="true"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep"
+										image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilOrigen.getUrlToPageUnidadOrgDep('planificacion/moverPuestos/moverPuestos')}" />
+
+								</s:decorate>
+							</a:outputPanel></fieldset>
+						</a:region>
+					</h:panelGrid>
+					<h:panelGrid>
+
+						<a:outputPanel id="idPanelCampos2" ajaxRendered="true">
+							<fieldset><legend>#{messages.CU398_destino}</legend> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.codNivelEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											reRender="idPanelCampos2"
+											action="#{moverPuestosFC.findNivelEntidadDestino()}" />
+									</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion2"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.nombreNivelEntidad}"
+										size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi2" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilDestino.getUrlToPageNivel('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo2" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.codSinEntidad}"
+										size="10">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.findEntidadDestino()}"
+											reRender="idPanelCampos" />
+									</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion2"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.nombreSinEntidad}"
+										size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilDestino.getUrlToPageEntidad('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo2" styleClass="numeric"
+										size="10"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.findUnidadOrganizativaDestino()}"
+											reRender="unidadOrgCodigo2,unidadOrgDenominacion2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion2" size="50"
+										disabled="true"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilDestino.getUrlToPageOee('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+							</a:region> <a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10"
+										disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.codigoUnidOrgDep}">
+										<a:support event="onblur" eventsQueue="default"
+											action="#{moverPuestosFC.obtenerUnidadOrganizativaDepDestino()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{moverPuestosFC.nivelEntidadOeeUtilDestino.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep2"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{moverPuestosFC.nivelEntidadOeeUtilDestino.getUrlToPageUnidadOrgDep('planificacion/moverPuestos/moverPuestos')}" />
+								</s:decorate>
+							</a:region></fieldset>
+						</a:outputPanel>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+
+				<a:outputPanel id="idPanelListShuttle" ajaxRendered="true"
+					style="overflow: auto; HEIGHT: 100px;">
+					<s:link value="Todos" action="#{moverPuestosFC.selectAll()}"
+						rendered="idPanelListShuttle" />
+					<div style="overflow: auto; HEIGHT: 100px;"><rich:dataTable  
+						id="puestoList" var="_dto" rowKeyVar="row"
+						rendered="#{not empty moverPuestosFC.lPlantaCargoDetOrigen}"
+						value="#{moverPuestosFC.lPlantaCargoDetOrigen}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU398_puesto}
+						</f:facet>
+							<h:outputText value="#{_dto.descripcion}" />
+						</h:column>
+						<h:column >
+							<f:facet name="header" >
+								<a:region>
+									<h:selectBooleanCheckbox  value="#{moverPuestosFC.selTodo}">
+										<a:support event="onclick" eventsQueue="default"
+											action="#{moverPuestosFC.selectAll()}"
+											reRender="idPanelListShuttle">
+										</a:support>
+									</h:selectBooleanCheckbox>
+								</a:region>
+							</f:facet>
+							<h:selectBooleanCheckbox value="#{_dto.selected}" />
+						</h:column>
+					</rich:dataTable></div>
+
+
+				</a:outputPanel>
+				<br />
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}<br />
+				<h:outputText value="#{messages.msg_obs_guardar}" /></div>
+				<h:commandButton id="print" value="#{messages.msg_save}"
+					action="#{moverPuestosFC.save()}" />
+
+				<s:button value="#{messages.GENERICO_LIMPIAR}" propagation="none"
+					includePageParams="false"
+					view="/planificacion/moverPuestos/moverPuestos.xhtml">
+				</s:button>
+				<s:button value="#{messages.CU412_volver}" propagation="nest"
+					view="/#{empty from? 'home':from}.xhtml">
+				</s:button>
+			</h:form>
+		</rich:simpleTogglePanel>
+
+	</ui:define>
+</ui:composition>

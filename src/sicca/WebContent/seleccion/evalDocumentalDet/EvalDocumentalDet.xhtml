@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Eval documental det Details</f:facet>
+
+        <s:decorate id="idEvalDocumentalDet" template="layout/display.xhtml">
+            <ui:define name="label">Id eval documental det</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.idEvalDocumentalDet}"/>
+        </s:decorate>
+
+        <s:decorate id="aprobadoConDocumentos" template="layout/display.xhtml">
+            <ui:define name="label">Aprobado con documentos</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.aprobadoConDocumentos}"/>
+        </s:decorate>
+
+        <s:decorate id="aprobadoPorComision" template="layout/display.xhtml">
+            <ui:define name="label">Aprobado por comision</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.aprobadoPorComision}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{evalDocumentalDetHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/EvalDocumentalDetEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty evalDocumentalDetFrom ? 'EvalDocumentalDetList' : evalDocumentalDetFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Matriz doc config det</h:panelGroup>
+        </f:facet>
+    <div class="association" id="matrizDocConfigDetParent">
+
+        <h:outputText value="There is no matrizDocConfigDet associated with this evalDocumentalDet."
+                   rendered="#{evalDocumentalDetHome.instance.matrizDocConfigDet == null}"/>
+
+        <rich:dataTable var="_matrizDocConfigDet"
+                   value="#{evalDocumentalDetHome.instance.matrizDocConfigDet}"
+                rendered="#{evalDocumentalDetHome.instance.matrizDocConfigDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="matrizDocConfigDetTable">
+            <h:column>
+                <f:facet name="header">Id matriz doc config det</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.idMatrizDocConfigDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Matriz doc config enc id matriz doc config enc</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.matrizDocConfigEnc.idMatrizDocConfigEnc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos especificos id datos especificos</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Obligatorio</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.obligatorio}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Evaluacion doc</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.evaluacionDoc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Adjudicacion</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.adjudicacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_matrizDocConfigDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewmatrizDocConfigDet"
+                     value="View"
+                      view="/MatrizDocConfigDet.xhtml">
+                    <f:param name="matrizDocConfigDetIdMatrizDocConfigDet"
+                           value="#{_matrizDocConfigDet.idMatrizDocConfigDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Eval documental cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="evalDocumentalCabParent">
+
+        <h:outputText value="There is no evalDocumentalCab associated with this evalDocumentalDet."
+                   rendered="#{evalDocumentalDetHome.instance.evalDocumentalCab == null}"/>
+
+        <rich:dataTable var="_evalDocumentalCab"
+                   value="#{evalDocumentalDetHome.instance.evalDocumentalCab}"
+                rendered="#{evalDocumentalDetHome.instance.evalDocumentalCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="evalDocumentalCabTable">
+            <h:column>
+                <f:facet name="header">Id eval documental cab</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion det id comision sel det</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empresa persona id sel empresa persona</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Postulacion id postulacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.postulacion.idPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Aprobado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.aprobado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Evaluado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.evaluado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha evaluacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewevalDocumentalCab"
+                     value="View"
+                      view="/EvalDocumentalCab.xhtml">
+                    <f:param name="evalDocumentalCabIdEvalDocumentalCab"
+                           value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,104 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU521_titulo}</h1>
+		<h:form id="detValidacion" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">Ver #{messages.CU521_validacion}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_grupo}</ui:define>
+						<h:selectOneMenu id="grupo"
+							value="#{admValidacionesFC.idGrupoVal}" disabled="true"
+							style="width:250px">
+							<f:selectItems value="#{cabValidacionesSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="nombreValidacionField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre</ui:define>
+						<h:inputText id="nombreValidacion" size="20" disabled="true"
+							maxlength="20"
+							value="#{admValidacionesFC.detValidacion.nombreValidacion}">
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate id="explicValidacionField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_explicacion}</ui:define>
+						<h:inputTextarea id="explicValidacion" cols="80" rows="3"
+							disabled="true"
+							value="#{admValidacionesFC.detValidacion.explicValidacion}">
+							<f:validateLength maximum="255" />
+						</h:inputTextarea>
+					</s:decorate>
+
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_tipo}</ui:define>
+						<h:selectOneMenu id="tipo"
+							value="#{admValidacionesFC.tipoValidacion}" disabled="true"
+							style="width:250px">
+							<s:selectItems var="tipo" label="#{tipo.valor}"
+								value="#{enumAppHelper.tipoValidacions}" />
+							<s:convertEnum />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+
+
+					<s:decorate id="activoField" template="/layout/edit.xhtml">
+						<ui:define name="label">Activo</ui:define>
+						<h:selectBooleanCheckbox id="activo" disabled="true"
+							value="#{admValidacionesFC.detValidacion.activo}" />
+					</s:decorate>
+
+
+					<s:decorate id="justifEstadoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_justificacion}</ui:define>
+						<h:inputTextarea id="justifEstado" cols="80" rows="3"
+							value="#{admValidacionesFC.detValidacion.justifEstado}"
+							disabled="true">
+							<f:validateLength maximum="255" />
+						</h:inputTextarea>
+					</s:decorate>
+
+
+					<s:decorate id="bloqueaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_condicion}</ui:define>
+						<h:selectBooleanCheckbox id="bloquea" disabled="true"
+							value="#{admValidacionesFC.detValidacion.bloquea}" />
+					</s:decorate>
+
+					<s:decorate id="mensajeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU521_mensaje}</ui:define>
+						<h:inputText id="mensaje" size="75" maxlength="75" disabled="true"
+							value="#{admValidacionesFC.detValidacion.mensaje}">
+						</h:inputText>
+					</s:decorate>
+
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/general/validaciones/DetValidacionList.xhtml" /></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

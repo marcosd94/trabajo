@@ -1,0 +1,129 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<h3>#{messages.CU120_link3_title}</h3>
+	<rich:panel id="plink3" style="border:none;">
+		<h:panelGrid columns="1" id="panelGrid">
+			<s:decorate id="msgField" template="/layout/edit.xhtml">
+				<h:outputText id="msg03"
+					value="#{administrarPuestosTrabajoFormController.mensajeLink03}"
+					style="color:red;" />
+			</s:decorate>
+			<s:decorate id="idDecorateCodigo" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU120_link3_codigo}
+			</ui:define>
+				<h:inputText id="codigo" styleClass="numeric"
+					onkeypress="return soloNumeros(event);"
+					disabled="#{not empty plantaCargoDetFrom}"
+					value="#{administrarPuestosTrabajoFormController.codigoObj}"
+					size="10">
+					<a:support event="onblur" eventsQueue="default"
+						reRender="msg03,objDescripcion"
+						action="#{administrarPuestosTrabajoFormController.findObj()}" />
+				</h:inputText>
+				#{' '}
+		                <h:inputText id="objDescripcion"
+					onkeypress="return soloNumeros(event);"
+					value="#{administrarPuestosTrabajoFormController.valorObj}"
+					size="80" disabled="true" />
+			</s:decorate>
+			<s:decorate id="idDecorateSearchCat" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU120_link3_categoria}
+			</ui:define>
+				<h:inputText id="categoria"
+					disabled="#{not empty plantaCargoDetFrom}"
+					value="#{administrarPuestosTrabajoFormController.codigoCategoria}"
+					size="10">
+					<a:support event="onblur" eventsQueue="default"
+						reRender="msg03,categoriaDescripcion,monto"
+						action="#{administrarPuestosTrabajoFormController.findCategoria()}" />
+				</h:inputText>
+				#{' '}
+		                <h:inputText id="categoriaDescripcion"
+					value="#{administrarPuestosTrabajoFormController.categoria}"
+					size="80" disabled="true" />
+				 #{' '}
+               <a:commandButton id="searchCategoria"
+					eventsQueue="default" disabled="#{not empty plantaCargoDetFrom}"
+					image="/img/Buscar.png"
+					action="#{administrarPuestosTrabajoFormController.getUrlToPageCategoria()}"
+					rendered="#{administrarPuestosTrabajoFormController.tieneCodigoSinarh()}" />
+
+				<h:outputText id="msg03"
+					value="#{messages.CU120_falta_codigo_sinarh}." style="color:red;"
+					rendered="#{!administrarPuestosTrabajoFormController.tieneCodigoSinarh()}" />
+
+			</s:decorate>
+			<a:region>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Monto
+			</ui:define>
+					<h:inputText id="monto" styleClass="numeric"
+						onkeypress="return soloNumeros(event);"
+						disabled="#{not empty plantaCargoDetFrom or administrarPuestosTrabajoFormController.monto != null}"
+						value="#{administrarPuestosTrabajoFormController.monto}" size="10">
+						<a:support event="onblur" eventsQueue="default" />
+					</h:inputText>
+				</s:decorate>
+			</a:region>
+			<s:decorate id="idDecorateAgregar" template="/layout/display.xhtml">
+				<a:commandButton value="Agregar" id="idBtnAgregar"
+					action="#{administrarPuestosTrabajoFormController.agregarListaLink3()}"
+					reRender="tabla,panelGrid" rendered="#{empty plantaCargoDetFrom}" />
+
+				<a:commandButton value="#{messages.msg_list_search_clear_button}"
+					action="#{administrarPuestosTrabajoFormController.limpiarValorEconomico()}"
+					reRender="panelGrid" rendered="#{empty plantaCargoDetFrom}" />
+			</s:decorate>
+
+			<rich:dataTable cellpadding="0" cellspacing="0" width="400px"
+				border="0" var="record" rowKeyVar="row" id="tabla" rows="10"
+				value="#{administrarPuestosTrabajoFormController.listaLink3}"
+				rendered="#{administrarPuestosTrabajoFormController.listaLink3.size() > 0}">
+
+				<f:facet name="header">
+					<rich:columnGroup>
+						<rich:column width="250px">
+							<h:outputText value="Objeto de Gasto" />
+						</rich:column>
+						<rich:column width="250px">
+							<h:outputText value="Categoria" />
+						</rich:column>
+						<rich:column width="100px">
+							<h:outputText value="Monto" />
+						</rich:column>
+						<rich:column width="100px">
+
+						</rich:column>
+
+					</rich:columnGroup>
+				</f:facet>
+				<rich:column width="250px">
+					<h:outputText value="#{record.objCodigo}" />
+				</rich:column>
+
+				<rich:column width="250px">
+					<h:outputText value="#{record.categoria}" />
+				</rich:column>
+
+				<rich:column width="100px">
+					<h:outputText value="#{record.monto}" />
+				</rich:column>
+				<rich:column width="100px">
+					<a:commandButton value="-" rendered="#{empty plantaCargoDetFrom}"
+						action="#{administrarPuestosTrabajoFormController.eliminarListaLink3(row)}"
+						reRender="tabla,panelGrid" />
+				</rich:column>
+			</rich:dataTable>
+			<rich:datascroller align="center" for="tabla" id="s2" reRender="s1"
+				rendered="#{administrarPuestosTrabajoFormController.listaLink3.size() > 10}" />
+
+		</h:panelGrid>
+	</rich:panel>
+</ui:composition>

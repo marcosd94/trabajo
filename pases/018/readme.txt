@@ -1,0 +1,1 @@
+Tres campos más: no_loggin_ci; no_loggin_nom_ape; no_loggin_email en el esquema seleccion, tabla reclamo_sugerencia

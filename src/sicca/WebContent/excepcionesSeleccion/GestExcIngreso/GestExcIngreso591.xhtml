@@ -1,0 +1,294 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU591_title}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages.CU589_titlePanel1}"
+				switchType="client" id="panelParametro">
+				<h:panelGrid columns="3" id="idPanelCampos">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU591_tipoExcepcion}</ui:define>
+					<h:selectOneMenu value="#{gestExcIngreso591FC.idTipoExcepcion}"
+						style="width:250px">
+						<f:selectItems
+							value="#{gestExcIngreso591FC.traerTipoExcepcionSI()}" />
+						<a:support event="onchange" reRender="idPD1,idPD2,idPD3" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<a:outputPanel id="idPD1" ajaxRendered="true">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_concurso}</ui:define>
+						<h:selectOneMenu value="#{gestExcIngreso591FC.idConcurso}"
+							style="width:250px">
+							<f:selectItems value="#{gestExcIngreso591FC.traerConcursoSI()}" />
+							<a:support event="onchange" reRender="idPD2" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:outputPanel>
+
+				<a:outputPanel id="idPD2" ajaxRendered="true">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU591_grupo}</ui:define>
+						<h:selectOneMenu value="#{gestExcIngreso591FC.idGrupoPuesto}"
+							style="width:250px">
+							<f:selectItems
+								value="#{gestExcIngreso591FC.traerGrupoPuestoSI()}" />
+							<a:support event="onchange" reRender="idPD3" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:outputPanel>
+				<a:outputPanel id="idPD3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU591_estado}</ui:define>
+						<h:selectOneMenu id="idLovEstado"
+							value="#{gestExcIngreso591FC.idEstado}" style="width:250px">
+							<f:selectItems value="#{gestExcIngreso591FC.traerEstadoSI()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:outputPanel>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				reRender="links,botons,outPanelResul"
+				action="#{gestExcIngreso591FC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" propagation="none" value="Mostrar Todo">
+				<f:param name="firstResult" value="0" />
+			</s:button> <s:button propagation="none" view="/home.xhtml" value="Volver">
+				<f:param name="firstResult" value="0" />
+			</s:button></div>
+
+
+		</h:form>
+		<h:form>
+			<a:outputPanel ajaxRendered="true" id="outPanelResul">
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty excepcionListCustom.resultList ? 0 : (excepcionListCustom.paginated ? excepcionListCustom.resultCount : excepcionListCustom.resultList.size())})</f:facet>
+					<div class="results" id="excepcionesList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty excepcionListCustom.resultList}" /> <rich:dataTable
+						var="_record" value="#{excepcionListCustom.resultList}"
+						rendered="#{not empty excepcionListCustom.resultList}">
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{excepcionListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU591_id}" />
+									<ui:param name="propertyPath" value="idExcepcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.idExcepcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{excepcionListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU591_descripcion}" />
+									<ui:param name="propertyPath" value="observacion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.observacion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{excepcionListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU591_tipo}" />
+									<ui:param name="propertyPath" value="tipo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.tipo}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{excepcionListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU591_estado}" />
+									<ui:param name="propertyPath" value="estado" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.estado}" />
+						</h:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<s:link
+								rendered="#{gestExcIngreso591FC.habLinks(_record) and gestExcIngreso591FC.habLinkEvalDoc}"
+								view="/excepcionesSeleccion/EvaluarDocAdjudicadoExc.xhtml"
+								value="#{messages.CU591_lnkEvalDoc}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+								<f:param name="texto" value="EXC" />
+
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkPublicar}"
+								view="/excepcionesSeleccion/listaSeleccionadosExc/ListaSeleccionadosExcList.xhtml"
+								value="#{messages.CU591_lnkPublicar}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+								<f:param name="texto" value="EXC" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkElabResAdj}"
+								view="/excepcionesSeleccion/elaborarResolucionAdjuExc/ElaborarResolucionAdjuExc.xhtml"
+								value="#{messages.CU591_lnkElabResAdj}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkFirmaResAdj}"
+								view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml" value="#{messages.CU591_lnkFirmaResAdj}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+								<f:param name="texto" value="ADJ" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkElabDecreto}"
+								view="/excepcionesSeleccion/elaborarDecretoExcepcion/ElaborarDecretoExcepcion.xhtml"
+								value="#{messages.CU591_lnkElabDecreto}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkFirmaDecreto}"
+								view="/excepcionesSeleccion/firmarDecretoExc/FirmarDecretoExc.xhtml"
+								value="#{messages.CU591_lnkFirmaDecreto}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkElabResNomb}"
+								view="/excepcionesSeleccion/resolucionNombramientoExc/ResolucionNombramientoExc.xhtml"
+								value="#{messages.CU591_lnkElabResNomb}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+								<f:param name="texto" value="NOM" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkFirmaResNomb}"
+								view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml"
+								value="#{messages.CU591_lnkFirmaResNomb}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+								<f:param name="texto" value="NOM" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkIngreso}"
+								view="#{gestExcIngreso591FC.urlIngreso(_record)}" value="#{messages.CU591_lnkIngreso}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+							</s:link>
+							#{' '}
+							<s:link rendered="#{gestExcIngreso591FC.habLinkHistorial}"
+								view="/excepcionesSeleccion/historialExcepcionIngreso/HistorialExcepcionIngreso.xhtml"
+								value="#{messages.CU591_lnkHistorial}">
+								<f:param name="idGrupo"
+									value="#{_record.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idExcepcion" value="#{_record.idExcepcion}" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+			</a:outputPanel>
+		</h:form>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				rendered="#{excepcionListCustom.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				rendered="#{excepcionListCustom.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{excepcionListCustom.previousFirstResult}" />
+			</s:link> <s:link
+				view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				rendered="#{excepcionListCustom.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{excepcionListCustom.nextFirstResult}" />
+			</s:link> <s:link
+				view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				rendered="#{excepcionListCustom.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{excepcionListCustom.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<param name="from" />
+	<param name="idGrupo" value="#{cargarCarpeta508FC.idGrupo}" />
+	<param name="codActividad" value="#{cargarCarpeta508FC.codActividad}" />
+	<action  execute="#{cargarCarpeta508FC.init()}" on-postback="false" />
+	<navigation from-action="#{cargarCarpeta508FC.nextTask()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{cargarCarpeta508FC.init()}">
+		<rule if-outcome="FAIL">
+			<end-conversation />
+			<redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+</page>

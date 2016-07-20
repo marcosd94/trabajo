@@ -1,0 +1,242 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU165_titulo}</h1>
+    <h:form id="comisionSeleccionCab" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">#{comisionSeleccionCabHome.managed ? 'Ver ' : 'Cargar '}#{messages.CU165_titulo}</f:facet>
+
+			<fieldset>
+          <h:panelGrid columns="3">
+			
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigo0Field">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo0" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion0" focus="entidadCodigo0"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion0"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+					</s:decorate>
+					</a:region>
+					
+			 <a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigo0Field">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo0" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo0"
+									reRender="entidadDescripcion0" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion0"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigo0Field">
+							<ui:define name="label">#{messages.gral_oee}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo0" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo0,unidadOrgDenominacion0" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion0" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+			</h:panelGrid>
+			<h:panelGrid columns="2" >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{comisionSeleccionCabEditFormController.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU165_descri_comi}<span class="required">*</span></ui:define>
+                <h:inputText id="descripcion" value="#{comisionSeleccionCabEditFormController.descripcionCab}" disabled="true" style=" width : 336px;"/>
+            </s:decorate>
+            
+	         <s:decorate template="/layout/display.xhtml">
+	          <ui:define name="label">Tipo de Documento </ui:define>
+	          <h:inputText id="tipoDoc" value="PDF" disabled="true" style=" width : 336px;"/>
+			</s:decorate>
+			 <s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Documento </ui:define>
+				<h:inputText id="Doc" value="#{comisionSeleccionCabEditFormController.documentos.nombreFisicoDoc}" disabled="true" style=" width : 336px;"/>
+			</s:decorate>
+
+          </h:panelGrid>
+
+			</fieldset>
+		
+         
+        <rich:panel id="panelDetails">
+				<f:facet name="header">#{messages['CU165_integrantes']}</f:facet>
+			<div class="results" id="repreList" style="overflow:auto;">
+								   	<rich:dataTable id="repreList" var="_items"  rows="5"
+						value="#{comisionSeleccionCabEditFormController.comisionSeleccionDetList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU165_doc_iden}
+													</f:facet>
+													<h:outputText value="#{_items.persona.documentoIdentidad}" />
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU165_nom_ape}
+													</f:facet>
+														<h:outputText 
+													value="#{_items.persona.nombreCompleto}" />
+													
+													</rich:column>
+													<rich:column>
+					<f:facet name="header">
+						#{messages.CU456_pais_expe}
+						</f:facet>
+					<h:outputText value="#{_items.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</rich:column>
+												<rich:column >
+												
+													<f:facet name="header">
+													OEE
+													</f:facet>
+														<h:outputText 
+													value="#{_items.configuracionUo.denominacionUnidad}" />
+											</rich:column>
+											
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU165_puesto}
+													</f:facet>
+									            	      	<h:outputText 
+													value="#{_items.puesto}" />
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU165_rol}
+													</f:facet>
+													<h:outputText value="#{_items.rol.descripcion}">
+													</h:outputText>
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU165_titular_suplente}
+													</f:facet>
+													<h:outputText value="TITULAR" rendered="#{_items.titularSuplente=='T'}">
+													</h:outputText>
+													<h:outputText value="SUPLENTE" rendered="#{_items.titularSuplente=='S'}"/>
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU165_eq_tec}
+													</f:facet>
+													<h:selectBooleanCheckbox disabled="true" value="#{_items.equipoTecnico}" />
+												
+									       </rich:column>
+									  
+											
+										</rich:dataTable><rich:datascroller for="repreList" renderIfSinglePage="false"
+							id="scroll"></rich:datascroller>
+							 		 </div> 
+		         
+			</rich:panel>
+
+            
+
+
+           
+
+
+
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            
+
+            
+
+         
+
+            <s:button id="cancelEdit"
+                   value="#{messages.CU412_volver}"
+             propagation="end"
+                    view="/seleccion/comisionSeleccionCab/ComisionSeleccionCabList.xhtml"
+                rendered="#{comisionSeleccionCabHome.managed}">
+                  <f:param name="idConcursoPuestoAgr" value="#{comisionSeleccionCabEditFormController.idConcursoPuestoAgr}" />
+                  <f:param name="from" value="#{comisionSeleccionCabEditFormController.from}" />
+                  </s:button>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.CU412_volver}"
+             propagation="end"
+                    view="/#{empty comisionSeleccionCabFrom ? 'seleccion/comisionSeleccionCab/ComisionSeleccionCabList' : comisionSeleccionCabFrom}.xhtml"
+                rendered="#{!comisionSeleccionCabHome.managed}">
+                <f:param name="idConcursoPuestoAgr" value="#{comisionSeleccionCabEditFormController.idConcursoPuestoAgr}" />
+                <f:param name="from" value="#{comisionSeleccionCabEditFormController.from}" />
+                </s:button>
+
+        </div>
+    </h:form>
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{comisionSeleccionCabHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{comisionSeleccionCabEditFormController.comisionSeleccionCab.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{comisionSeleccionCabHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{comisionSeleccionCabEditFormController.comisionSeleccionCab.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{comisionSeleccionCabHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{comisionSeleccionCabEditFormController.comisionSeleccionCab.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{comisionSeleccionCabHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{comisionSeleccionCabEditFormController.comisionSeleccionCab.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+
+</ui:define>
+
+</ui:composition>

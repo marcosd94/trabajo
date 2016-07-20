@@ -1,0 +1,164 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{estudiosRealizadosLegajoFC.estudiosRealizados.persona.nombreCompleto}</h1>
+		<h1>#{messages.CU289_titulo} - #{estudiosRealizadosLegajoFC.estudiosRealizados.tituloAcademico.descripcion}</h1>
+		<h:form id="concurso" styleClass="edit" prependId="false"  enctype="multipart/form-data">
+
+			<rich:panel id="panel">
+				<f:facet name="header"> #{messages.CU289_titulo}</f:facet>
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="2">
+						<a:region>
+						
+						<s:decorate id="tipoDocField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU1556_tipo_doc}</ui:define>
+					<h:selectOneMenu id="tipoDo" 
+						value="#{estudiosRealizadosLegajoFC.idTipoDoc}"
+						style="width:250px">
+						<f:selectItems
+							value="#{estudiosRealizadosLegajoFC.tipoDocumentos}" />
+					
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="nombreField2" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_documento} </ui:define>
+							<s:fileUpload size="60" 
+									contentType="#{estudiosRealizadosLegajoFC.contentType}"
+									data="#{estudiosRealizadosLegajoFC.uploadedFile}"
+									fileName="#{estudiosRealizadosLegajoFC.fileName}"
+									fileSize="#{estudiosRealizadosLegajoFC.tamArchivo}"
+									style=" width : 260px;" />
+							</s:decorate>
+							
+				</a:region>
+					
+					
+				</h:panelGrid>
+							
+				
+				
+			</h:panelGrid>
+			
+				
+							
+
+			<h:commandButton id="search"
+				
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+
+				action="#{estudiosRealizadosLegajoFC.btnAgregarDocumento()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			
+
+			<br />
+			<br />
+			
+
+				<div class="results" id="datosEspecificosList">
+				 <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty estudiosRealizadosLegajoFC.estudiosRealizadosDocList}"/>
+				
+				<rich:dataTable
+					id="concursoPuestoAgrList" var="_documento" rowKeyVar="_index"
+					value="#{estudiosRealizadosLegajoFC.estudiosRealizadosDocList}" >
+					<h:column>
+						<f:facet name="header">#{messages.CU1556_tipo_doc}	</f:facet>
+						<h:outputFormat  
+							value="#{_documento.datosEspecificos.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU156_documento}	</f:facet>
+						<h:outputFormat  
+							value="#{_documento.nombreFisicoDoc}" />
+					</h:column>
+					
+				
+															
+					<rich:column styleClass="action">
+										<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+								
+			          #{' '}
+
+			         <h:commandLink id="eliminar" value="Eliminar"
+							
+							action="#{estudiosRealizadosLegajoFC.eliminarDocumento(_documento.idDocumento)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');" 
+							rendered="#{!estudiosRealizadosLegajoFC.isOriginal(_documento.idDocumento)}"/>
+							
+					#{' '}
+
+		         	<h:commandLink id="verAdjunto" value="Ver Adjunto"
+						
+						action="#{estudiosRealizadosLegajoFC.imprimirDocumento(_documento.idDocumento)}" />
+						
+						
+						
+							
+					</rich:column>	
+					
+					 
+					
+					
+			</rich:dataTable></div>
+			
+			
+			<div class="tableControl"><s:link
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{documentosList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{documentosList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{documentosList.lastFirstResult}" />
+			</s:link></div>
+						
+			
+			<div class="actionButtons">
+				<h:commandButton id="volver"
+				
+				value="Volver"
+
+				action="#{estudiosRealizadosLegajoFC.volverEstudiosRealizados()}">
+				<f:param name="texto" value="GShow647" />
+				<f:param name="accion" value="EDITAR" />
+				<f:param name="from" value="legajos/GestionarLegajo/GestionarLegajo660" />
+			</h:commandButton>
+			 
+				
+			</div>
+			
+			</rich:panel>
+		</h:form>
+		
+
+	</ui:define>
+
+</ui:composition>

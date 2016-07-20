@@ -1,0 +1,80 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.DatosGenerales_list}</h1>
+    <h:form id="datosGenerales" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{datosGeneralesHome.managed ? messages.msg_edit :  messages.msg_add_male} #{messages.Mensaje_List}</f:facet>
+
+
+
+
+            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="300"
+                      maxlength="300" 
+                          value="#{mensajeListFormController.getMensajeByIdMensaje(mensajeListFormController.idMensaje)}" 
+                          style=" height : 60px; width : 550px;">
+                </h:inputText>
+            </s:decorate>
+
+
+          
+ 		<div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+			<br />
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" styleClass="labelClass"/>
+	            <h:outputText value="#{messages.msg_obs_update}"  styleClass="labelClass"/>
+	        </div>
+
+        </rich:panel>
+			<div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{mensajeHome.persist}"
+                       
+                       disabled="#{!mensajeHome.wired}"     
+                          onclick="return confirm('#{messages.msg_confirm_save}');"                 
+                       rendered="#{!mensajeHome.managed}"/>
+
+        
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/seleccion/adminMensajes/MensajesList.xhtml"
+                rendered="#{mensajeHomeHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty mensajesFrom ? 'seleccion/adminMensajes/MensajesList' : mensajesFrom}.xhtml"
+                rendered="#{!mensajeHome.managed}"/>
+
+        </div>
+       
+					
+			
+				
+				
+				
+				</h:form>
+       </ui:define>
+
+</ui:composition>

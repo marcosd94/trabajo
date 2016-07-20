@@ -1,0 +1,184 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU129_titulo}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+								value="#{reporteDetallePlantaCargoReportController.nivelEntidad.nenCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{reporteDetallePlantaCargoReportController.findNivelEntidad()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{reporteDetallePlantaCargoReportController.nivelEntidad.nenNombre}"
+								size="50" disabled="true" />
+							 #{' '}
+                <s:button id="searchNivel"
+								image="#{request.contextPath}/img/Buscar.png"
+								view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml"
+								propagation="'default'">
+								<f:param name="from"
+									value="reports/reportes/ReporteDetallePlantaCargo" />
+							</s:button>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+								value="#{reporteDetallePlantaCargoReportController.sinEntidad.entCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{reporteDetallePlantaCargoReportController.findEntidad()}"
+									reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{reporteDetallePlantaCargoReportController.sinEntidad.entNombre}"
+								size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{reporteDetallePlantaCargoReportController.getUrlToPageEntidad()}" />
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							onkeypress="return soloNumeros(event);"
+								value="#{reporteDetallePlantaCargoReportController.configuracionUoCab.orden}">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{reporteDetallePlantaCargoReportController.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{reporteDetallePlantaCargoReportController.configuracionUoCab.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{reporteDetallePlantaCargoReportController.getUrlToPageOee()}" />
+						</s:decorate>
+					</a:region>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU021_unidad_org}</ui:define>
+						<h:inputText id="orgCodigo" size="10"
+							value="#{reporteDetallePlantaCargoReportController.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{reporteDetallePlantaCargoReportController.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo,orgDenominacion" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="40" disabled="true"
+							value="#{reporteDetallePlantaCargoReportController.configuracionUoDet.denominacionUnidad}" />
+								#{' '}
+                <a:commandButton id="searchDependencia"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{reporteDetallePlantaCargoReportController.getUrlToPageDependencia()}" />
+					</s:decorate>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU129_tipo_cpt}</ui:define>
+							<h:selectOneMenu id="cpt" style="width : 330px;"
+								value="#{reporteDetallePlantaCargoReportController.idTipoCpt}">
+								<f:selectItems value="#{tipoCptsSelectItems}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{reporteDetallePlantaCargoReportController.limpiarDatosCpt()}"
+									reRender="datosCpt" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml" id="datosCpt">
+							<ui:define name="label">#{messages.CU129_cpt}</ui:define>
+							<h:inputText id="cpt"
+								value="#{reporteDetallePlantaCargoReportController.codigoCpt}"
+								size="20">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{reporteDetallePlantaCargoReportController.findCpt()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{reporteDetallePlantaCargoReportController.cpt.denominacion}"
+								size="50" disabled="true" />
+                #{' '}
+                <a:commandButton id="searchCpt" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{reporteDetallePlantaCargoReportController.getUrlToPageCpt()}" />
+						</s:decorate>
+					</a:region>
+
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_nombre}</ui:define>
+							<h:inputText id="nombre" size="30"
+								value="#{reporteDetallePlantaCargoReportController.persona.nombres}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_apellido}</ui:define>
+							<h:inputText id="apellido" size="30"
+								value="#{reporteDetallePlantaCargoReportController.persona.apellidos}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_ci}</ui:define>
+							<h:inputText id="nroCi" size="20"
+								value="#{reporteDetallePlantaCargoReportController.persona.documentoIdentidad}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton id="print"
+				value="#{messages['msg_list_search_print_button']}"
+				action="#{reporteDetallePlantaCargoReportController.print()}" /> <a:commandButton
+				id="limpiar" eventsQueue="default" value="Limpiar" reRender="panelBusqueda"
+				action="#{reporteDetallePlantaCargoReportController.limpiar()}" />
+			</div>
+
+
+		</h:form>
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

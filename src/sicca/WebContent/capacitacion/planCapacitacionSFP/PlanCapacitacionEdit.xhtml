@@ -1,0 +1,193 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU495_titulo_edit}</h1>
+		<br />
+		<h1 align="center" style="color:#5882FA;">#{messages.CU495_anio}:
+		#{planCapacitacionSFPFC.planCapacitacion.anio}</h1>
+		<h:form id="planCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+
+
+
+			<rich:panel>
+				<f:facet name="header">#{messages.gral_oee}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<a:outputPanel>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+							<h:inputText id="orgCodigo2" size="10" disabled="true"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+						</s:decorate>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU495_plan_capacitacion}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="nroField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU538_mesa_entrada}
+						</ui:define>
+						<h:inputText id="nro" styleClass="numeric" disabled="true"
+							value="#{planCapacitacionSFPFC.planCapacitacion.nro}" size="6">
+						</h:inputText>
+						#{' '}
+						<h:inputText id="anio" styleClass="numeric" maxlength="4"
+							disabled="true"
+							value="#{planCapacitacionSFPFC.planCapacitacion.anio}" size="6">
+						</h:inputText>
+
+					</s:decorate>
+					<s:decorate id="montoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU538_monto}
+						</ui:define>
+						<h:inputText id="monto" styleClass="numeric" disabled="true"
+							value="#{planCapacitacionSFPFC.planCapacitacion.monto}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="tipoDocField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU538_tipo_doc}
+						</ui:define>
+						<h:inputText id="tipoDoc" disabled="true" size="50"
+							value="#{planCapacitacionSFPFC.planCapacitacion.documento.datosEspecificos.descripcion}">
+						</h:inputText>
+						#{' '}
+						<h:inputText id="doc" disabled="true" size="50"
+							value="#{planCapacitacionSFPFC.planCapacitacion.documento.nombreFisicoDoc}">
+						</h:inputText>
+						#{' '}
+						<h:commandButton value="Descargar" 
+										rendered="#{planCapacitacionSFPFC.planCapacitacion.documento != null}"
+										action="#{planCapacitacionSFPFC.abrirDoc(planCapacitacionSFPFC.planCapacitacion.documento.idDocumento)}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU538_panel_ejecucion}</f:facet>
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages.CU538_panel_ejecucion}(#{planCapacitacionSFPFC.listaDetalle.size()})</f:facet>
+					<div class="results" id="tbldetList"
+						style="overflow: scroll; width: 510; HEIGHT: 230px"> <rich:dataTable
+						id="revision" var="_det"
+						value="#{planCapacitacionSFPFC.listaDetalle}">
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU538_tipo_doc}
+						</f:facet>
+							<h:outputText
+								value="#{_det.documento.datosEspecificos.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU538_descripcion}
+						</f:facet>
+							<h:outputText value="#{_det.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU538_documento}
+						</f:facet>
+							<h:outputText value="#{_det.documento.nombreFisicoDoc}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU538_fec_alta}
+						</f:facet>
+							<h:outputText value="#{_det.fechaAlta}" />
+						</h:column>
+
+						<rich:column>
+							<f:facet name="header">	#{messages.CU538_accion}</f:facet>
+							<h:commandLink value="Descargar" target="_blank"
+										rendered="#{_det.documento.idDocumento!=null}"
+										action="#{planCapacitacionSFPFC.abrirDoc(_det.documento.idDocumento)}" />
+						</rich:column>
+					</rich:dataTable>
+					<span style="font-weight:bold">
+					<h:outputText 
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty planCapacitacionSFPFC.listaDetalle}" />
+						</span>
+					</div>
+				</rich:panel>
+			</rich:panel>
+
+
+
+
+			<div class="actionButtons"><s:button id="cancelAdd"
+				value="Volver" propagation="none" includePageParams="false"
+				view="/capacitacion/planCapacitacionSFP/PlanCapacitacionList.xhtml" /></div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

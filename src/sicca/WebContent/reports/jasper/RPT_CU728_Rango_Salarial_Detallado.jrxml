@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU727_Detallado" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="229"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="sql1">
+		<parameter name="nen_cod" class="java.math.BigDecimal" isForPrompting="false"/>
+		<parameter name="ent_cod" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="orden" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="desde" class="java.lang.Integer" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="hasta" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT DISTINCT
+    PERSONA.DOCUMENTO_IDENTIDAD AS CEDULA,
+    PAIS.DESCRIPCION AS PAIS,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION puesto ,
+    SUM(R.PRESUPUESTADO) VALOR_ECONOMICO
+FROM
+    REMUNERACION.REMUNERACIONES R
+JOIN GENERAL.EMPLEADO_PUESTO E
+ON
+    e.ID_EMPLEADO_PUESTO = R.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON
+    PUESTO.ID_PLANTA_CARGO_DET = E.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PERSONA
+ON
+    PERSONA.ID_PERSONA = E.ID_PERSONA
+JOIN GENERAL.PAIS
+ON
+    PERSONA.ID_PAIS_EXPEDICION_DOC = PAIS.ID_PAIS
+JOIN PLANIFICACION.CONFIGURACION_UO_DET UO
+ON
+    UO.ID_CONFIGURACION_UO_DET = PUESTO.ID_CONFIGURACION_UO_DET
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+    UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON
+    ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD
+ON
+    SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+JOIN SINARH.SIN_NIVEL_ENTIDAD SNE
+ON
+    (
+        SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE
+    AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO
+    )
+WHERE
+  PERSONA.SEXO = 'M'
+  AND  SNE.NEN_CODIGO =  $P{nen_cod}
+  AND   SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO =  $P{ent_cod}
+  AND SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN =  $P{orden}
+GROUP BY
+    SNE.NEN_CODIGO ,
+    SNE.NEN_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO ,
+    SIN_ENTIDAD.ENT_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN ,
+    OEE.DENOMINACION_UNIDAD,
+    PERSONA.DOCUMENTO_IDENTIDAD,
+    PAIS.DESCRIPCION,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION
+having   SUM(R.PRESUPUESTADO) between $P{desde} and $P{hasta}]]>
+		</queryString>
+		<field name="cedula" class="java.lang.String"/>
+		<field name="pais" class="java.lang.String"/>
+		<field name="nombres" class="java.lang.String"/>
+		<field name="apellidos" class="java.lang.String"/>
+		<field name="puesto" class="java.lang.String"/>
+		<field name="valor_economico" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="sql2">
+		<parameter name="nen_cod" class="java.math.BigDecimal" isForPrompting="false"/>
+		<parameter name="ent_cod" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="orden" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="desde" class="java.lang.Integer" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="hasta" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT DISTINCT
+    PERSONA.DOCUMENTO_IDENTIDAD AS CEDULA,
+    PAIS.DESCRIPCION AS PAIS,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION puesto,
+    SUM(R.PRESUPUESTADO) VALOR_ECONOMICO
+FROM
+    REMUNERACION.REMUNERACIONES R
+JOIN GENERAL.EMPLEADO_PUESTO E
+ON
+    e.ID_EMPLEADO_PUESTO = R.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON
+    PUESTO.ID_PLANTA_CARGO_DET = E.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PERSONA
+ON
+    PERSONA.ID_PERSONA = E.ID_PERSONA
+JOIN GENERAL.PAIS
+ON
+    PERSONA.ID_PAIS_EXPEDICION_DOC = PAIS.ID_PAIS
+JOIN PLANIFICACION.CONFIGURACION_UO_DET UO
+ON
+    UO.ID_CONFIGURACION_UO_DET = PUESTO.ID_CONFIGURACION_UO_DET
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+    UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON
+    ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD
+ON
+    SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+JOIN SINARH.SIN_NIVEL_ENTIDAD SNE
+ON
+    (
+        SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE
+    AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO
+    )
+WHERE
+   PERSONA.SEXO = 'F'
+AND  SNE.NEN_CODIGO =  $P{nen_cod}
+AND  SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO =  $P{ent_cod}
+AND SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN =  $P{orden}
+GROUP BY
+    SNE.NEN_CODIGO ,
+    SNE.NEN_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO ,
+    SIN_ENTIDAD.ENT_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN ,
+    OEE.DENOMINACION_UNIDAD,
+    PERSONA.DOCUMENTO_IDENTIDAD,
+    PAIS.DESCRIPCION,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION
+having   SUM(R.PRESUPUESTADO) between $P{desde} and $P{hasta}]]>
+		</queryString>
+		<field name="cedula" class="java.lang.String"/>
+		<field name="pais" class="java.lang.String"/>
+		<field name="nombres" class="java.lang.String"/>
+		<field name="apellidos" class="java.lang.String"/>
+		<field name="puesto" class="java.lang.String"/>
+		<field name="valor_economico" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="sql3">
+		<parameter name="nen_cod" class="java.math.BigDecimal" isForPrompting="false"/>
+		<parameter name="ent_cod" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="orden" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="desde" class="java.lang.Integer" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="hasta" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT DISTINCT
+    PERSONA.DOCUMENTO_IDENTIDAD AS CEDULA,
+    PAIS.DESCRIPCION AS PAIS,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION puesto,
+    SUM(R.PRESUPUESTADO) VALOR_ECONOMICO
+FROM
+    REMUNERACION.REMUNERACIONES R
+JOIN GENERAL.EMPLEADO_PUESTO E
+ON
+    e.ID_EMPLEADO_PUESTO = R.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON
+    PUESTO.ID_PLANTA_CARGO_DET = E.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PERSONA
+ON
+    PERSONA.ID_PERSONA = E.ID_PERSONA
+JOIN GENERAL.PAIS
+ON
+    PERSONA.ID_PAIS_EXPEDICION_DOC = PAIS.ID_PAIS
+JOIN PLANIFICACION.CONFIGURACION_UO_DET UO
+ON
+    UO.ID_CONFIGURACION_UO_DET = PUESTO.ID_CONFIGURACION_UO_DET
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+    UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON
+    ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD
+ON
+    SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+JOIN SINARH.SIN_NIVEL_ENTIDAD SNE
+ON
+    (
+        SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE
+    AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO
+    )
+WHERE
+    not(PERSONA.SEXO = 'F' or PERSONA.SEXO = 'M')
+    AND SNE.NEN_CODIGO =  $P{nen_cod}
+    AND   SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO =  $P{ent_cod}
+    AND SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN =  $P{orden}
+GROUP BY
+    SNE.NEN_CODIGO ,
+    SNE.NEN_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO ,
+    SIN_ENTIDAD.ENT_NOMBRE ,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN ,
+    OEE.DENOMINACION_UNIDAD,
+    PERSONA.DOCUMENTO_IDENTIDAD,
+    PAIS.DESCRIPCION,
+    PERSONA.NOMBRES,
+    PERSONA.APELLIDOS,
+    PUESTO.DESCRIPCION
+having   SUM(R.PRESUPUESTADO) between $P{desde} and $P{hasta}]]>
+		</queryString>
+		<field name="cedula" class="java.lang.String"/>
+		<field name="pais" class="java.lang.String"/>
+		<field name="nombres" class="java.lang.String"/>
+		<field name="apellidos" class="java.lang.String"/>
+		<field name="puesto" class="java.lang.String"/>
+		<field name="valor_economico" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="desde" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[2000000]]></defaultValueExpression>
+	</parameter>
+	<parameter name="hasta" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[4000000]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="oee" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="sql" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="nen_cod" class="java.math.BigDecimal"/>
+	<field name="nen_nom" class="java.lang.String"/>
+	<field name="ent_cod" class="java.lang.String"/>
+	<field name="ent_nombre" class="java.lang.String"/>
+	<field name="orden" class="java.lang.String"/>
+	<field name="oee" class="java.lang.String"/>
+	<group name="nivel">
+		<groupExpression><![CDATA[$F{nen_cod}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="48" y="0" width="100" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nen_cod}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="148" y="0" width="407" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nen_nom}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="48" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Nivel:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="entidad">
+		<groupExpression><![CDATA[$F{ent_cod}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="164" y="0" width="391" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ent_nombre}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="64" y="0" width="100" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ent_cod}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="16" y="0" width="48" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Entidad:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="oee">
+		<groupExpression><![CDATA[$F{orden}]]></groupExpression>
+		<groupHeader>
+			<band height="121">
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="177" y="0" width="378" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{oee}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="77" y="0" width="100" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{orden}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="38" y="0" width="39" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[OEE:]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement key="table 2" style="table 2" x="64" y="36" width="360" height="80"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="sql1">
+							<datasetParameter name="desde">
+								<datasetParameterExpression><![CDATA[$P{desde}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="hasta">
+								<datasetParameterExpression><![CDATA[$P{hasta}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="nen_cod">
+								<datasetParameterExpression><![CDATA[$F{nen_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="ent_cod">
+								<datasetParameterExpression><![CDATA[$F{ent_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="orden">
+								<datasetParameterExpression><![CDATA[$F{orden}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="90">
+							<jr:tableHeader height="30" rowSpan="1"/>
+							<jr:tableFooter height="1" rowSpan="1"/>
+							<jr:columnHeader height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[País Exp. Doc.]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="2" rowSpan="1"/>
+							<jr:detailCell height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="204">
+							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="204" height="30" isPrintInFirstWholeBand="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Masculino]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="204" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Funcionario]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="204" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}+" "+$F{apellidos}+" - "+$F{cedula}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="99">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="99" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Valor Económico]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="99" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.Long"><![CDATA[$F{valor_economico}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Puesto]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</band>
+			<band height="83">
+				<componentElement>
+					<reportElement key="table 2" style="table 2" x="64" y="0" width="360" height="80"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="sql2">
+							<datasetParameter name="desde">
+								<datasetParameterExpression><![CDATA[$P{desde}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="hasta">
+								<datasetParameterExpression><![CDATA[$P{hasta}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="nen_cod">
+								<datasetParameterExpression><![CDATA[$F{nen_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="ent_cod">
+								<datasetParameterExpression><![CDATA[$F{ent_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="orden">
+								<datasetParameterExpression><![CDATA[$F{orden}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="90">
+							<jr:tableHeader height="30" rowSpan="1"/>
+							<jr:tableFooter height="1" rowSpan="1"/>
+							<jr:columnHeader height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[País Exp. Doc.]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="2" rowSpan="1"/>
+							<jr:detailCell height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="204">
+							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="204" height="30" isPrintInFirstWholeBand="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Femenino]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="204" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Funcionario]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="204" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}+" "+$F{apellidos}+" - "+$F{cedula}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="99">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="99" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Valor Económico]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="99" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.Long"><![CDATA[$F{valor_economico}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Puesto]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</band>
+			<band height="84">
+				<componentElement>
+					<reportElement key="table 2" style="table 2" x="64" y="0" width="360" height="80"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="sql3">
+							<datasetParameter name="desde">
+								<datasetParameterExpression><![CDATA[$P{desde}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="hasta">
+								<datasetParameterExpression><![CDATA[$P{hasta}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="nen_cod">
+								<datasetParameterExpression><![CDATA[$F{nen_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="ent_cod">
+								<datasetParameterExpression><![CDATA[$F{ent_cod}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="orden">
+								<datasetParameterExpression><![CDATA[$F{orden}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="90">
+							<jr:tableHeader height="30" rowSpan="1"/>
+							<jr:tableFooter height="1" rowSpan="1"/>
+							<jr:columnHeader height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[País Exp. Doc.]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="2" rowSpan="1"/>
+							<jr:detailCell height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="204">
+							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="204" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[No Especificado]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="204" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Funcionario]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="204" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}+" "+$F{apellidos}+" - "+$F{cedula}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="99">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="99" height="30" backcolor="#99CCFF"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Valor Económico]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="99" height="15"/>
+									<box>
+										<pen lineWidth="0.25"/>
+										<topPen lineWidth="0.25"/>
+										<leftPen lineWidth="0.25"/>
+										<bottomPen lineWidth="0.25"/>
+										<rightPen lineWidth="0.25"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.Long"><![CDATA[$F{valor_economico}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" backcolor="#99CCFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Puesto]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="149" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="97" width="555" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Rangos Salariales Discriminados por Sexo - Detallado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="73" width="555" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{oee}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="123" width="85" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Rangos ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="123" width="65" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[desde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="123" width="65" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[hasta:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="197" y="123" width="98" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{desde}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="360" y="123" width="98" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{hasta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="3" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="277" y="2" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="2" width="551" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="22">
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="3" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="2" width="551" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="277" y="2" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="46">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

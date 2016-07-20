@@ -1,0 +1,142 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU286_title}</h1>
+		<h:form id="preguntasFrecuentes" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{preguntasFrecuentesHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU286_title}</f:facet>
+
+				<a:region>
+					<s:decorate id="tipoPreguntaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU286_tipo_pregunta}
+						</ui:define>
+						<h:selectOneMenu id="idTipoPregunta" required="true"
+							value="#{preguntasFrecuentesFormController.idTipoPregunta}"
+							style="width:250px">
+							<f:selectItems value="#{datosEspecificossByTipoPreguntaSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{preguntasFrecuentesFormController.buscarOrderCorrespondiente()}"
+								reRender="nroOrdenField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="nroOrdenField" template="/layout/edit.xhtml">
+					<ui:define name="label">Nro. Orden</ui:define>
+					<h:inputText id="nroOrden" required="true"
+						value="#{preguntasFrecuentesFormController.nroOrden}">
+					</h:inputText>
+				</s:decorate>
+
+
+				<s:decorate id="preguntaFrecuenteField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">Pregunta Frecuente</ui:define>
+					<h:inputTextarea id="preguntaFrecuente" cols="80" rows="3"
+						required="true"
+						value="#{preguntasFrecuentesFormController.preguntasFrecuentes.preguntaFrecuente}" />
+				</s:decorate>
+
+
+				<s:decorate id="respuestaPreguntaField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">Respuesta</ui:define>
+					<h:inputTextarea id="respuestaPregunta" cols="80" rows="10"
+						required="true"
+						value="#{preguntasFrecuentesFormController.preguntasFrecuentes.respuestaPregunta}" />
+				</s:decorate>
+
+
+				<s:decorate id="publicarSNField" template="/layout/edit.xhtml">
+					<ui:define name="label">Publicar en Portal?<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneRadio id="valor"
+						value="#{preguntasFrecuentesFormController.publicarPortal}">
+						<f:selectItem id="item1" itemLabel="SI" itemValue="S" />
+						<f:selectItem id="item2" itemLabel="NO" itemValue="N" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Activo</ui:define>
+					<h:selectBooleanCheckbox id="activo"
+						value="#{preguntasFrecuentesFormController.preguntasFrecuentes.activo}" />
+				</s:decorate>
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				 #{messages.msg_required_fields}</div>
+
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_actualizar}"
+					rendered="#{preguntasFrecuentesHome.managed}" /></div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}"
+					rendered="#{!preguntasFrecuentesHome.managed}" /></div>
+				<br />
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{preguntasFrecuentesFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!preguntasFrecuentesHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{preguntasFrecuentesFormController.updated()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{preguntasFrecuentesHome.managed}" /> <s:button
+				id="cancelEdit" value="Volver" propagation="end"
+				view="/seleccion/preguntasFrecuentes/PreguntasFrecuentesList.xhtml"
+				rendered="#{preguntasFrecuentesHome.managed}" /> <s:button
+				id="cancelAdd" value="Volver" propagation="end"
+				view="/seleccion/preguntasFrecuentes/#{empty preguntasFrecuentesFrom ? 'PreguntasFrecuentesList' : preguntasFrecuentesFrom}.xhtml"
+				rendered="#{!preguntasFrecuentesHome.managed}" /></div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{preguntasFrecuentesHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{preguntasFrecuentesHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{preguntasFrecuentesHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{preguntasFrecuentesHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{preguntasFrecuentesHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{preguntasFrecuentesHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{preguntasFrecuentesHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{preguntasFrecuentesHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

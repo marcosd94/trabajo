@@ -1,0 +1,349 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	<rich:modalPanel id="printMiniModal" width="350" height="200"
+			resizeable="false" moveable="true">
+			<f:facet name="header">#{messages.CU87_popup_imprimir_title}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer" width="18" height="18"
+					onclick="#{rich:component('printMiniModal')}.hide()" />
+			</f:facet>
+			<h:form>
+				<h:panelGrid columns="1">
+					<s:decorate id="postulantesField" template="/layout/display.xhtml">
+						<ui:define name="label">Postulantes
+					</ui:define>
+						<h:selectOneRadio id="opciones"
+							value="#{tachasReclamosModifFormController.conCedula}">
+							<f:selectItem id="item1" itemLabel="#{messages.CU87_con_cedula}"
+								itemValue="S" />
+							<f:selectItem id="item2" itemLabel="#{messages.CU87_sin_cedula}"
+								itemValue="N" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				<!-- 	<s:decorate id="evaluacionesField" template="/layout/display.xhtml">
+						<ui:define name="label">Evaluaciones
+					</ui:define>
+						<h:selectOneRadio id="opcionesEval"
+							value="#{publicacionListaCortaFormController.conDetalle}">
+							<f:selectItem id="itemd1"
+								itemLabel="#{messages.CU87_con_detalle}" itemValue="S" />
+							<f:selectItem id="itemd2"
+								itemLabel="#{messages.CU87_sin_detalle}" itemValue="N" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				 -->
+				</h:panelGrid>
+				<div style="clear: both" />
+
+
+				<div class="actionButtons" align="center"><h:commandButton
+					
+					rendered="#{tachasReclamosModifFormController.tipoMT.equals('M')}"
+					id="printMerito" value="#{messages['msg_list_search_print_button']}"
+					action="#{tachasReclamosModifFormController.imprimirListaFinalMerito()}" />
+					 <a:commandButton
+					 rendered="#{tachasReclamosModifFormController.tipoMT.equals('M')}"
+					id="cancelMerito" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('printMiniModal')" />
+				</div>
+				<div class="actionButtons" align="center"><h:commandButton
+					
+					rendered="#{tachasReclamosModifFormController.tipoMT.equals('T')}"
+					id="print" value="#{messages['msg_list_search_print_button']}"
+					action="#{tachasReclamosModifFormController.imprimirListaCortaTerna()}" /> 
+					<a:commandButton
+					id="cancel" value="Volver" ajaxSingle="true"
+					rendered="#{tachasReclamosModifFormController.tipoMT.equals('T')}"
+					oncomplete="Richfaces.hideModalPanel('printMiniModal')" />
+				</div>
+			</h:form>
+		</rich:modalPanel>
+		
+		
+		
+		<rich:modalPanel id="printMiniModalPublicar" width="350" height="200"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Seleccione una de las opciones para la Lista Corta</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer" width="18" height="18"
+					onclick="#{rich:component('printMiniModalPublicar')}.hide()" />
+			</f:facet>
+			<h:form>
+				<h:panelGrid columns="1">
+					<s:decorate id="postulantesField" template="/layout/display.xhtml">
+						<ui:define name="label">Postulantes
+					</ui:define>
+						<h:selectOneRadio id="opciones"
+							value="#{tachasReclamosModifFormController.conCedula}">
+							<f:selectItem id="item1" itemLabel="#{messages.CU87_con_cedula}"
+								itemValue="S" />
+							<f:selectItem id="item2" itemLabel="#{messages.CU87_sin_cedula}"
+								itemValue="N" />
+								 <a:support event="onclick"/>
+						</h:selectOneRadio>
+					</s:decorate>
+				
+				</h:panelGrid>
+				<div style="clear: both" />
+
+
+				<div class="actionButtons" align="center">
+				<h:commandButton
+										
+					id="printMerito" value="Publicar Listas Rectificadas" onclick="return confirm('#{messages.trm_confirmar_siguiente_tarea}');"
+					action="#{tachasReclamosModifFormController.SiguienteTarea()}" />
+					 <a:commandButton
+					id="cancel" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('printMiniModalPublicar')" />
+				</div>
+				
+				
+			</h:form>
+		</rich:modalPanel>
+	
+	
+	
+	
+		<p align="right" style=""></p>
+		<h:form id="listaLargaSearch" styleClass="edit">
+			<h1>#{messages.trm_titulo}</h1>
+			<rich:simpleTogglePanel id="panel" switchType="ajax">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{tachasReclamosModifFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{tachasReclamosModifFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{tachasReclamosModifFormController.sinEntidad.entCodigo}" size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{tachasReclamosModifFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{tachasReclamosModifFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{tachasReclamosModifFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="codConcurso" size="20" disabled="true"
+							value="#{tachasReclamosModifFormController.codConcurso}" />
+							#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{tachasReclamosModifFormController.concurso.nombre}" />
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel>
+					<f:facet name="header">#{messages.CU86_agr}</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU86_agr}</ui:define>
+
+							<h:inputText id="grupo" size="80" disabled="true"
+								value="#{tachasReclamosModifFormController.concursoPuestoAgr.descripcionGrupo}" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:simpleTogglePanel>
+
+			<div align="center" > <br />
+			<rich:panel style="width: 1000px;">
+				<f:facet name="header">#{messages.trm_titulo}</f:facet>
+				<div style="clear: both; overflow: auto;"><rich:dataTable
+					id="tablaTab2" cellpadding="0"  
+					border="0" var="record"
+					value="#{tachasReclamosModifFormController.listaEvalDocumentalCab}"
+					rowKeyVar="row">
+
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU86_cod_post}
+							</f:facet>
+						<h:outputText
+							value="#{record.postulacion.personaPostulante.usuAlta}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							#{messages.trm_aprobado_eval_documental}
+							</f:facet>
+						<h:outputText
+							value="#{record.aprobado ? 'SI': 'NO'}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							#{messages.trm_evalDocumentalModificada}
+							</f:facet>
+						<h:outputText
+							value="#{tachasReclamosModifFormController.evalDocumentalModificado(record.postulacion.idPostulacion)? 'SI': 'NO'}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							#{messages.trm_evaluacionesModificadas}
+							</f:facet>
+						<h:outputText
+							value="#{tachasReclamosModifFormController.evaluacionesModificado(record.postulacion.idPostulacion)? 'SI': 'NO'}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							#{messages.trm_cantidad_trm}
+							</f:facet>
+						<h:outputText
+							value="#{tachasReclamosModifFormController.obtenerCantidadTRM(record.idEvalDocumentalCab)}" />
+					</rich:column>
+					
+					
+					
+					<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					
+					<s:link
+							
+							view="/seleccion/tachasReclamosModif/AgregarTRM.xhtml"
+							value="Administrar TRM" propagation="none"
+							id="AdministrarTRM"
+							>
+							<f:param name="idEvalDocumentalCab"
+								value="#{record.idEvalDocumentalCab}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{tachasReclamosModifFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="codActividad"
+								value="#{evaluarDocPostulantesFormController.codActividad}" />
+							
+							
+						</s:link>
+					
+					#{' '}
+					<s:link
+							
+							view="/seleccion/tachasReclamosModif/EvalDocumentalCabEdit.xhtml"
+							value="Modificar Eval. Documental" propagation="none"
+							id="evalDocumentalCabEdit"
+							rendered="#{tachasReclamosModifFormController.permitirModificarEvalDocumental(tachasReclamosModifFormController.listaTRM)}"
+							>
+							<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+								value="#{record.idEvalDocumentalCab}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{tachasReclamosModifFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="codActividad"
+								value="#{evaluarDocPostulantesFormController.codActividad}" />
+							<f:param name="isEdit"
+								value="#{isEdit}" />
+							
+						</s:link>
+						
+						#{' '}
+						
+						<s:link
+										view="/seleccion/tachasReclamosModif/evalPuntajePostulante.xhtml"
+										value="#{messages.CU8_evaluar}" propagation="join"
+										id="evalPuntajePostulanteId"
+										rendered="#{tachasReclamosModifFormController.permitirModificarEvaluaciones(tachasReclamosModifFormController.listaTRM)}"
+										>
+										
+										
+										<f:param name="idDatosEspecificosVer" value="#{tachasReclamosModifFormController.idDatosEspecificosVer}" />
+										<f:param name="idConcursoPuestoAgr"
+											value="#{tachasReclamosModifFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+										<f:param name="tabActivo" value="tab1" />
+										<f:param name="idPostulacion"
+											value="#{record.postulacion.idPostulacion}" />
+											<f:param name="idEvalDocumentalCab"
+											value="#{record.idEvalDocumentalCab}" />
+										<f:param name="codPostulante"
+											value="#{record.postulacion.usuPostulacion}" />
+										<f:param name="idPersona"
+											value="#{record.postulacion.persona.idPersona}" />
+										<f:param name="ver" value="#{false}" />
+
+									</s:link>
+					
+					
+					
+				</rich:column>
+					
+				</rich:dataTable></div>
+			</rich:panel></div>
+			
+
+			<div class="actionButtons">
+
+
+ 
+				
+			<a:commandButton
+					id="showPrintModalButtonPublicar" value="Siguiente Tarea"
+					reRender="printMiniModalPublicar"
+				oncomplete="#{rich:component('printMiniModalPublicar')}.show()" />	
+				
+				
+						
+				<h:commandButton
+				
+				id="print" value="Imprimir Lista Larga"
+				action="#{tachasReclamosModifFormController.print()}" /> 
+				<h:commandButton
+				
+				id="printNoAdmitidos" value="Imprimir No Admitidos"
+				action="#{tachasReclamosModifFormController.printListaNoAdmitidos()}" />
+				
+				<a:commandButton
+					id="showPrintModalButton" value="Imprimir Lista Corta"
+					reRender="printMiniModal"
+					oncomplete="#{rich:component('printMiniModal')}.show()" />
+					
+					
+				<h:commandButton
+				
+				id="printEvalDet" value="Imprimir Matriz de Puntajes"
+				action="#{tachasReclamosModifFormController.imprimirEvaluacionesDetalladas()}" /> 
+					
+					
+				  <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

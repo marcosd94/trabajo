@@ -1,0 +1,1 @@
+ALTER TABLE remuneracion.importacion ALTER categoria DROP NOT NULL;

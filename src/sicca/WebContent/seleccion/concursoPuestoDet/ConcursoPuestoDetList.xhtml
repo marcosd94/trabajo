@@ -1,0 +1,518 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU30_title}</h1>
+		<h:form id="concursoPuestoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+				<h:panelGrid columns="4">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{admPuestoEntidadConcursoFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{admPuestoEntidadConcursoFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="40" disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.concurso.nombre}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate id="searchField" template="/layout/display.xhtml">
+						<ui:define name="label">Unidad Organizativa</ui:define>
+						<h:inputText id="codigo" size="10"
+							value="#{admPuestoEntidadConcursoFormController.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{admPuestoEntidadConcursoFormController.obtenerUnidadOrganizativaDep()}"
+								reRender="codigo,descripcion" />
+						</h:inputText>
+                #{' '}
+                <h:inputText id="descripcion" size="60" disabled="true"
+							value="#{admPuestoEntidadConcursoFormController.configuracionUoDet.denominacionUnidad}" />
+                #{' '}
+                <a:commandButton id="search" eventsQueue="default"
+							image="/img/Buscar.png"
+							action="#{admPuestoEntidadConcursoFormController.getUrlToPageSearch()}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate id="dptoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dpto" style="width : 250px;"
+							value="#{admPuestoEntidadConcursoFormController.idDpto}">
+							<f:selectItems
+								value="#{admPuestoEntidadConcursoFormController.departamentosSelecItem}" />
+							<a:support event="onchange"
+								action="#{admPuestoEntidadConcursoFormController.updateCiudad()}"
+								reRender="ciudad,barrio" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="cptField" template="/layout/display.xhtml">
+						<ui:define name="label">Tipo de CPT</ui:define>
+						<h:selectOneMenu id="cpt" style="width : 250px;"
+							value="#{admPuestoEntidadConcursoFormController.idCpt}">
+							<f:selectItems value="#{admPuestoEntidadConcursoFormController.getTipoCptSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+
+					<s:decorate id="ciudadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+						<h:selectOneMenu id="ciudad" style="width : 250px;"
+							value="#{admPuestoEntidadConcursoFormController.idCiudad}">
+							<f:selectItems
+								value="#{admPuestoEntidadConcursoFormController.ciudadSelecItem}" />
+							<a:support event="onchange"
+								action="#{admPuestoEntidadConcursoFormController.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU30_modalidad}</ui:define>
+						<h:selectOneMenu id="modalidad" style="width : 250px;"
+							value="#{admPuestoEntidadConcursoFormController.modalidadOcupacion}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.modalidadOcupacions}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="barrioField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+						<h:selectOneMenu id="barrio" style="width :250px;"
+							value="#{admPuestoEntidadConcursoFormController.idBarrio}">
+							<f:selectItems
+								value="#{admPuestoEntidadConcursoFormController.barrioSelecItem}" />
+							<a:support event="onchange" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="descripcion" template="/layout/display.xhtml">
+						<ui:define name="label">Denominación</ui:define>
+						<h:inputText id="denomin" size="50"
+							value="#{admPuestoEntidadConcursoFormController.denominacion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons"><a:commandButton id="search"
+					value="#{messages['msg_list_search_button']}"
+					action="#{admPuestoEntidadConcursoFormController.search()}"
+					reRender="panelResultado,panelParametro">
+
+				</a:commandButton> <a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{admPuestoEntidadConcursoFormController.searchAll()}"
+					reRender="panelResultado, panelParametro">
+
+				</a:commandButton> <a:commandButton id="marcar" value="Marcar Todos"
+					action="#{admPuestoEntidadConcursoFormController.marcarTodos()}"
+					reRender="panelResultado,panelParametro"
+					rendered="#{admPuestoEntidadConcursoFormController.listaPlantaCargoDto.size() > 0}">
+				</a:commandButton>
+				
+				 <a:commandButton id="desmarcar" value="Desmarcar Todos"
+					action="#{admPuestoEntidadConcursoFormController.desmarcarTodos()}"
+					rendered="#{admPuestoEntidadConcursoFormController.cantReservados > 0 and admPuestoEntidadConcursoFormController.listaPlantaCargoDto.size() > 0}"
+					reRender="panelResultado,panelParametro">
+				</a:commandButton>
+				
+			
+				
+				<s:link
+							view="/seleccion/asignarCategoria/AsignarCategoria.xhtml"
+							value="Asignar Categoria" propagation="none" id="categoria"
+							rendered="#{admPuestoEntidadConcursoFormController.asignarList() != '' }" >
+							
+							<f:param name="plantaCargoDetFrom"
+								value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{admPuestoEntidadConcursoFormController.concurso.idConcurso}" />
+							<f:param name="fromConcurso"
+								value="#{admPuestoEntidadConcursoFormController.fromConcurso}" />
+						
+								<f:param name="plantaCargoDetIdList"
+								value="#{admPuestoEntidadConcursoFormController.asignarList()}" /> 
+							<f:param name="idConcursoPuestoAgr"
+								value="#{admPuestoEntidadConcursoFormController.idAgr}" />
+							<f:param name="nroActividad"
+								value="#{admPuestoEntidadConcursoFormController.nroActividad}" />
+						</s:link>
+						
+				</div>
+			</rich:simpleTogglePanel>
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">Puestos Sin Grupo (#{admPuestoEntidadConcursoFormController.listaPlantaCargoDto.size()})</f:facet>
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty admPuestoEntidadConcursoFormController.listaPlantaCargoDto}" />
+				<rich:dataTable id="concursoList" var="_dto" rowKeyVar="row"
+					value="#{admPuestoEntidadConcursoFormController.listaPlantaCargoDto}"
+					rows="10"
+					rendered="#{not empty admPuestoEntidadConcursoFormController.listaPlantaCargoDto}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.Ciudad_idDepartamento}
+						</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerDepartamento(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Persona_idCiudadDirecc}
+						</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerCiudad(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU212_tab1_localidad_dir}
+						</f:facet>
+						<h:outputText
+							value="#{_admPuestoEntidadConcursoFormController.obtenerBarrio(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.ConfiguracionUoDet_unidadOrganizativa}
+						</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerUo(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU30_tipo_cpt}
+						</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerCpt(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU253_puesto}
+					</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerCodigo(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Cpt_denominacion}
+					</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.PlantaCargoDet_estado}
+					</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.estadoCab.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_mod}
+					</f:facet>
+						<h:outputText value="Contratado"
+							rendered="#{_dto.plantaCargoDet.contratado}" />
+						<h:outputText value="Permanente"
+							rendered="#{_dto.plantaCargoDet.permanente}" />
+						<h:outputText value="Comisionado"
+							rendered="#{_dto.plantaCargoDet.comisionado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_categoria} Modelo
+					</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerCategoria(_dto.plantaCargoDet)}" />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_categoria} Reservada
+					</f:facet>
+						<h:outputText
+							value="#{admPuestoEntidadConcursoFormController.obtenerCategoriaDistintoModelo(_dto.plantaCargoDet)}" />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_reservar}
+					</f:facet>
+						<h:selectBooleanCheckbox id="reservar" value="#{_dto.reservar}"
+							disabled="#{admPuestoEntidadConcursoFormController.habilitarCategoria(_dto.plantaCargoDet)
+							or admPuestoEntidadConcursoFormController.concursoFinalizado()}">
+							<a:support event="onclick"
+								reRender="panelResultado,panelParametro,panelBoton"
+								action="#{admPuestoEntidadConcursoFormController.actualizarLista(row)}"
+								bypassUpdates="true" ajaxSingle="true" />
+						</h:selectBooleanCheckbox>
+						
+						
+					</h:column>
+				<!-- 	<a:support event="onclick"
+								reRender="panelResultado,panelParametro,panelBoton"
+								action="#{admPuestoEntidadConcursoFormController.actualizarListaAsignar(row)}"
+								bypassUpdates="true" ajaxSingle="true" /> -->
+					<h:column>
+						<f:facet name="header">
+						<h:selectBooleanCheckbox id="asignarTodosCheck" value="#{admPuestoEntidadConcursoFormController.asignarTodos}" >
+						Asignar 
+						<a:support event="onclick"
+								reRender="panelParametro,panelBoton,panelResultado"
+								action="#{admPuestoEntidadConcursoFormController.marcarAsignarTodos()}"
+								 bypassUpdates="true" ajaxSingle="true" />
+						
+						</h:selectBooleanCheckbox>  
+						</f:facet>
+						<h:selectBooleanCheckbox id="asignarCat" value="#{_dto.asignarCat}"
+							disabled="#{!admPuestoEntidadConcursoFormController.habilitarCategoria(_dto.plantaCargoDet)
+							and !admPuestoEntidadConcursoFormController.concursoFinalizado()}">
+							<a:support event="onclick"
+								reRender="panelParametro,panelBoton,panelResultado"
+								
+								 />
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+					#{' '}
+            		<s:link
+							view="/seleccion/asignarCategoria/AsignarCategoria.xhtml"
+							value="Asignar Categoria" propagation="none" id="categoria"
+							rendered="#{admPuestoEntidadConcursoFormController.habilitarCategoria(_dto.plantaCargoDet) and !admPuestoEntidadConcursoFormController.concursoFinalizado()}">
+							<f:param name="plantaCargoDetFrom"
+								value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{admPuestoEntidadConcursoFormController.concurso.idConcurso}" />
+							<f:param name="fromConcurso"
+								value="#{admPuestoEntidadConcursoFormController.fromConcurso}" />
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_dto.plantaCargoDet.idPlantaCargoDet}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{admPuestoEntidadConcursoFormController.idAgr}" />
+							<f:param name="nroActividad"
+								value="#{admPuestoEntidadConcursoFormController.nroActividad}" />
+						</s:link>#{' '}
+						<s:link
+							view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+							value="Ver Datos de Puesto" propagation="join"
+							id="plantaCargoDetVerId">
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_dto.plantaCargoDet.id}" />
+							<f:param name="plantaCargoDetFrom" value="ver" />
+							<f:param name="from"
+								value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+						</s:link>
+
+					</h:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="concursoList" id="sc2"
+					reRender="sc1"
+					rendered="#{admPuestoEntidadConcursoFormController.listaPlantaCargoDto.size() > 10}" />
+				<h:outputLabel
+					value="Cant. de Puestos en Reserva : #{admPuestoEntidadConcursoFormController.cantReservados}"
+					style="font-weight:bold"
+					rendered="#{admPuestoEntidadConcursoFormController.listaPlantaCargoDto.size() > 0}" />
+
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="obs" cols="50"
+							value="#{admPuestoEntidadConcursoFormController.obs}">
+							<f:validateLength maximum="250" />
+
+						</h:inputTextarea>
+					</s:decorate>
+					<a:commandButton id="guardar" value="Guardar"
+						action="#{admPuestoEntidadConcursoFormController.save()}"
+						rendered="#{!admPuestoEntidadConcursoFormController.concursoFinalizado()}"
+						reRender="panelResultado,panelParametro,panelBoton">
+					</a:commandButton>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelBoton" style="border:none">
+				<s:div styleClass="actionButtons">
+					<s:button
+						rendered="#{admPuestoEntidadConcursoFormController.listaPuestosReservados.size() > 0}"
+						view="/seleccion/concursoPuestoAgr/ConcursoPuestoAgrEdit.xhtml"
+						id="create" propagation="none" value="Nuevo Grupo"
+						includePageParams="false">
+						<f:param name="concursoPuestoAgrFrom"
+							value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+						<f:param name="concursoIdConcurso"
+							value="#{admPuestoEntidadConcursoFormController.concurso.idConcurso}" />
+						<f:param name="fromConcurso"
+							value="#{admPuestoEntidadConcursoFormController.fromConcurso}" />
+						<f:param name="idConcursoPuestoAgr"
+							value="#{admPuestoEntidadConcursoFormController.idAgr}" />
+						<f:param name="nroActividad"
+							value="#{admPuestoEntidadConcursoFormController.nroActividad}" />
+					</s:button>
+					<s:button
+						view="#{admPuestoEntidadConcursoFormController.fromConcurso}"
+						id="volver" propagation="none" value="Volver"
+						includePageParams="false">
+
+					</s:button>
+				</s:div>
+			</rich:panel>
+			<rich:panel id="panelAgrupados">
+				<f:facet name="header">Puestos Agrupados (#{admPuestoEntidadConcursoFormController.listaPuestosAgrupados.size()})</f:facet>
+				<div class="results" id="agrupadosList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty admPuestoEntidadConcursoFormController.listaPuestosAgrupados}" />
+				<rich:dataTable id="agrupadosList" var="_agr" rowKeyVar="row"
+					value="#{admPuestoEntidadConcursoFormController.listaPuestosAgrupados}"
+					rows="10"
+					rendered="#{not empty admPuestoEntidadConcursoFormController.listaPuestosAgrupados}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.Ciudad_idDepartamento}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Persona_idCiudadDirecc}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.ciudad.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU212_tab1_localidad_dir}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.oficina.barrio.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.ConfiguracionUoDet_unidadOrganizativa}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU30_tipo_cpt}
+						</f:facet>
+						<h:outputText value="#{_agr.plantaCargoDet.cpt.denominacion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Cod. Grupo
+					</f:facet>
+						<h:outputText value="#{_agr.concursoPuestoAgr.codGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Cpt_denominacion}
+					</f:facet>
+						<h:outputText value="#{_agr.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_cant_puesto}
+					</f:facet>
+						<h:outputText value="#{_agr.cantidad}" />
+					</h:column>
+
+
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+#{' '}
+            		<s:link
+							view="/seleccion/concursoPuestoAgr/ConcursoPuestoAgrEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="none"
+							id="clasificadorUoEdit"
+							rendered="#{_agr.concursoPuestoAgr.idProcessInstance == null and 
+							!admPuestoEntidadConcursoFormController.concursoFinalizado()}">
+							<f:param name="concursoPuestoAgrFrom"
+								value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{admPuestoEntidadConcursoFormController.concurso.idConcurso}" />
+							<f:param name="nroActividad"
+								value="#{admPuestoEntidadConcursoFormController.nroActividad}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_agr.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromConcurso"
+								value="#{admPuestoEntidadConcursoFormController.fromConcurso}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{admPuestoEntidadConcursoFormController.idAgr}" />
+						</s:link>
+
+#{' '}
+            		<s:link
+							view="/seleccion/concursoPuestoAgr/ConcursoPuestoAgr.xhtml"
+							value="Ver" propagation="default" id="clasificadorUo">
+							<f:param name="concursoPuestoAgrFrom"
+								value="seleccion/concursoPuestoDet/ConcursoPuestoDetList" />
+							<f:param name="concursoIdConcurso"
+								value="#{admPuestoEntidadConcursoFormController.concurso.idConcurso}" />
+							<f:param name="nroActividad"
+							value="#{admPuestoEntidadConcursoFormController.nroActividad}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_agr.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromConcurso"
+								value="#{admPuestoEntidadConcursoFormController.fromConcurso}" />
+							<f:param name="idConcursoPuestoAgr"
+								value="#{admPuestoEntidadConcursoFormController.idAgr}" />
+
+						</s:link>
+
+					</h:column>
+				</rich:dataTable></div>
+				<rich:datascroller align="center" for="agrupadosList" maxPages="10"
+					id="scr2" reRender="scr1"
+					rendered="#{admPuestoEntidadConcursoFormController.listaPuestosAgrupados.size() > 10}" />
+			</rich:panel>
+
+		</h:form>
+
+			
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,252 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU723_menu}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+			<rich:panel style="border:none;" id="panelPrincipal">
+				<rich:simpleTogglePanel
+					label="#{messages['msg_list_search_filter']}" switchType="client"
+					id="panelBusqueda">
+					<h:panelGrid columns="1">
+						<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											reRender="idPanelCampos" focus="entidadCodigo"
+											action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+										value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+										disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageNivel('remuneracion/consultarAnexoOEE/ConsultarAnexoOEECU723')}"
+										rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+								</s:decorate>
+							</a:region>
+
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findEntidad()}"
+											reRender="idPanelCampos" focus="unidadOrgCodigo" />
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+										value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+										disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('remuneracion/consultarAnexoOEE/ConsultarAnexoOEECU723')}"
+										rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+								</s:decorate>
+							</a:region>
+
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion"
+											focus="orgCodigo2" />
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageOee('remuneracion/consultarAnexoOEE/ConsultarAnexoOEECU723')}"
+										rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+								</s:decorate>
+							</a:region>
+						</a:outputPanel>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU723_obj}
+								</ui:define>
+							<h:inputText id="objGasto" styleClass="numeric" size="10"
+								value="#{consultarAnexoOEECU723FC.objGasto}"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU723_categoria}
+								</ui:define>
+							<h:inputText id="categoria" size="20"
+								value="#{consultarAnexoOEECU723FC.categoria}">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+
+				</rich:simpleTogglePanel>
+
+				<div class="actionButtons"><a:commandButton
+					value="#{messages.CU723_btn_consultar}" eventsQueue="default"
+					action="#{consultarAnexoOEECU723FC.consultar()}"
+					reRender="panelPrincipal" /> <a:commandButton id="reset"
+					value="Limpiar" action="#{consultarAnexoOEECU723FC.limpiar()}"
+					reRender="panelPrincipal">
+				</a:commandButton></div>
+
+				<h:panelGrid columns="2" id="paneles">
+					<rich:panel id="panelSinAnx" style=" width : 600px;"
+						rendered="#{consultarAnexoOEECU723FC.mostrarGrilla}">
+						<f:facet name="header">#{messages.CU723_resultado_sin_anx}(#{consultarAnexoOEECU723FC.listaSinAnx.size()})</f:facet>
+
+						<div class="results" id="tblSinAnx"
+							style="overflow: scroll; width: 580; HEIGHT: 230px"><rich:dataTable
+							id="itemsList" var="_anx" first="0"
+							value="#{consultarAnexoOEECU723FC.listaSinAnx}" rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_cod_obj}</f:facet>
+								<h:outputText value="#{_anx.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_categoria}</f:facet>
+								<h:outputText value="#{_anx.ctgCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_descripcion}</f:facet>
+								<h:outputText value="#{_anx.anxDescrip}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_cargo}</f:facet>
+								<h:outputText value="#{_anx.anxCargos}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_disponible}</f:facet>
+								<h:outputText value="#{_anx.cantDisponible}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.gral_anho}</f:facet>
+								<h:outputText value="#{_anx.aniAniopre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Nivel</f:facet>
+								<h:outputText value="#{_anx.nenCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Entidad</f:facet>
+								<h:outputText value="#{_anx.entCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Tipo</f:facet>
+								<h:outputText value="#{_anx.tipCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Programa</f:facet>
+								<h:outputText value="#{_anx.proCodigo}" />
+							</rich:column>
+
+						</rich:dataTable></div>
+					</rich:panel>
+
+					<rich:panel id="panelSinAnxOrig" style=" width : 600px;"
+						rendered="#{consultarAnexoOEECU723FC.mostrarGrilla}">
+						<f:facet name="header">#{messages.CU723_resultado_original}(#{consultarAnexoOEECU723FC.listaSinAnxOriginal.size()})</f:facet>
+
+						<div class="results" id="tblSinAnxOrg"
+							style="overflow: scroll; width: 580; HEIGHT: 230px"><rich:dataTable
+							id="itemsOrgList" var="_org" first="0"
+							value="#{consultarAnexoOEECU723FC.listaSinAnxOriginal}"
+							rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_cod_obj}</f:facet>
+								<h:outputText value="#{_org.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_categoria}</f:facet>
+								<h:outputText value="#{_org.ctgCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_descripcion}</f:facet>
+								<h:outputText value="#{_org.anxDescrip}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Linea</f:facet>
+								<h:outputText value="#{_org.anxLinea}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">#{messages.CU723_col_cargo}</f:facet>
+								<h:outputText value="#{_org.anxCargos}" />
+							</rich:column>
+
+
+							<rich:column>
+								<f:facet name="header">#{messages.gral_anho}</f:facet>
+								<h:outputText value="#{_org.aniAniopre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Nivel</f:facet>
+								<h:outputText value="#{_org.nenCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Entidad</f:facet>
+								<h:outputText value="#{_org.entCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Tipo</f:facet>
+								<h:outputText value="#{_org.tipCodigo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">Programa</f:facet>
+								<h:outputText value="#{_org.proCodigo}" />
+							</rich:column>
+
+						</rich:dataTable></div>
+					</rich:panel>
+
+
+
+				</h:panelGrid>
+			</rich:panel>
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

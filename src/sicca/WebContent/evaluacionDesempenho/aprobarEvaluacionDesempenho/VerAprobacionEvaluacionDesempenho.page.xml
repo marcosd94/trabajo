@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	 <begin-conversation flush-mode="MANUAL" join="true"/>
+	
+	<param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{aprobarEvaluacionDesempenhoFC.idEvaluacionDesempeno}"/>
+	
+	<action execute="#{aprobarEvaluacionDesempenhoFC.initVer()}" on-postback="false"/>
+   
+
+   <param name="from" value="#{aprobarEvaluacionDesempenhoFC.from}"/>
+    <param name="ver"/>
+ 
+    <param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}"/>
+ <param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}"/>
+ <param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}"/>
+    <param name="configuracionUoDetIdConfiguracionUoDet" value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+ 
+ 
+  <navigation from-action="#{aprobarEvaluacionDesempenhoFC.aprobar()}">
+      <rule if-outcome="next">
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml">
+          <param name="mensaje" value="ok"/>
+         </redirect>
+      </rule>
+   </navigation>
+   <navigation from-action="#{aprobarEvaluacionDesempenhoFC.enviarRevision()}">
+      <rule if-outcome="next">
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml">
+          <param name="mensaje" value="ok"/>
+         </redirect>
+      </rule>
+   </navigation>
+ 
+ 	<restrict>#{identity.hasRole('ver_aprobacionEvaluacionDesempenho')}</restrict>
+</page>

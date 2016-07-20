@@ -1,0 +1,183 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU52_obs}</h1>
+    <h:form id="homologacionPerfilMatrizDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver Observaciones y Respuestas</f:facet>
+
+			<rich:panel >
+			<h:panelGrid columns="2">
+			
+            
+            
+
+            <s:decorate id="fechaObsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU52_fecha}</ui:define>
+                <rich:calendar id="fechaObs"
+                       required="true" disabled="true"
+                          value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaObs}" datePattern="dd/MM/yyyy"/>
+            </s:decorate>
+
+            
+			</h:panelGrid>
+
+
+
+			<h:panelGrid columns="1">
+            <s:decorate id="observacionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU52_obs}</ui:define>
+                <h:inputTextarea id="observacion"
+                               cols="80"
+                               rows="10" disabled="true"
+                           required="true"
+                              value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.observacion}" style="width : 602px; height : 186px;"/>
+            </s:decorate>
+            
+
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.CU52_usu_obs}</ui:define>
+                <h:outputText  value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.usuObs}"/>
+            </s:decorate>
+            <s:decorate template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.CU52_fecha_obs}</ui:define>
+                <h:outputText  value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaObs}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            </h:panelGrid>
+         </rich:panel>
+         <rich:panel >
+         
+         <h:panelGrid columns="2">
+			
+           
+
+            <s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU52_fecha}</ui:define>
+                <rich:calendar 
+                       required="true" disabled="true"
+                          value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaRpta}" datePattern="dd/MM/yyyy"/>
+            </s:decorate>
+
+            
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			 <s:decorate id="aceptaObsField" template="/layout/edit.xhtml">
+					<ui:define name="label">Acepta Observaciones Realizadas por la SFP?</ui:define>
+					<h:selectOneRadio id="aceptaObs" required="true" disabled="true"
+						value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.aceptaSfp}">
+						<f:selectItems
+							value="#{enumAppHelper.enumsValueItems('SiNo', 'getValor', false)}" />
+					</h:selectOneRadio>
+				</s:decorate>
+			</h:panelGrid>
+
+
+
+			<h:panelGrid columns="1">
+            <s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU52_repuesta}</ui:define>
+                <h:inputTextarea 
+                               cols="80"
+                               rows="10" disabled="true"
+                           required="true"
+                              value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.respuesta}" style="width : 602px; height : 186px;"/>
+            </s:decorate>
+             <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU52_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" disabled="true"
+                                      value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.activo}"/>
+            </s:decorate>
+
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.CU52_usu_rpta}</ui:define>
+                <h:outputText id="usuAlta" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.usuRpta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.CU52_fec_rtpa}</ui:define>
+                <h:outputText id="fechaAlta" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaRpta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            </h:panelGrid>
+         </rich:panel>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+			
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           
+             
+
+            
+
+      
+
+            <s:button id="cancelEdit"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/seleccion/HomologacionPerfilMatrizDet/HomologacionPerfilMatrizDetList.xhtml"
+                rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                 <f:param name="idGrupo" value="#{homologacionPerfilMatrizDetEditFormController.idConcursoPuestoAgr}"/>
+                     <f:param name="from" value="#{homologPerfilMatrizDetListFormController.from}"/>
+                </s:button>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/#{empty homologacionPerfilMatrizDetFrom ? 'seleccion/HomologacionPerfilMatrizDet/HomologacionPerfilMatrizDetList' : homologacionPerfilMatrizDetFrom}.xhtml"
+                rendered="#{!homologacionPerfilMatrizDetHome.managed}">
+                 <f:param name="idGrupo" value="#{homologacionPerfilMatrizDetEditFormController.idConcursoPuestoAgr}"/>
+                     <f:param name="from" value="#{homologPerfilMatrizDetListFormController.from}"/>
+                </s:button>
+
+        </div>
+    </h:form>
+<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{homologacionPerfilMatrizDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{homologacionPerfilMatrizDetEditFormController.homologacionPerfilMatrizDet.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

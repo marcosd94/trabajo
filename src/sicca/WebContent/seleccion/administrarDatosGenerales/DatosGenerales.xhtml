@@ -1,0 +1,154 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Datos generales Details</f:facet>
+
+        <s:decorate id="idDatosGenerales" template="layout/display.xhtml">
+            <ui:define name="label">Id datos generales</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.idDatosGenerales}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{datosGeneralesHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/DatosGeneralesEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty datosGeneralesFrom ? 'DatosGeneralesList' : datosGeneralesFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Datos especificoses</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="datosEspecificosesChildren">
+
+        <h:outputText value="There are no datosEspecificoses associated with this datosGenerales."
+                   rendered="#{empty datosGeneralesHome.datosEspecificoses}"/>
+
+        <rich:dataTable value="#{datosGeneralesHome.datosEspecificoses}"
+                       var="_datosEspecificos"
+                  rendered="#{not empty datosGeneralesHome.datosEspecificoses}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="datosEspecificosesTable">
+            <rich:column sortBy="#{_datosEspecificos.idDatosEspecificos}">
+                <f:facet name="header">Id datos especificos</f:facet>
+                <h:outputText value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.descripcion}">
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_datosEspecificos.descripcion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.valorAlf}">
+                <f:facet name="header">Valor alf</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.valorNum}">
+                <f:facet name="header">Valor num</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorNum}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_datosEspecificos.activo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_datosEspecificos.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectdatosEspecificos"
+                     value="Select"
+                      view="/DatosEspecificos.xhtml">
+                    <f:param name="datosEspecificosIdDatosEspecificos"
+                            value="#{_datosEspecificos.idDatosEspecificos}"/>
+                    <f:param name="datosEspecificosFrom" value="DatosGenerales"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add datosEspecificos"
+                view="/DatosEspecificosEdit.xhtml">
+            <f:param name="datosGeneralesIdDatosGenerales"
+                    value="#{datosGeneralesHome.instance.idDatosGenerales}"/>
+            <f:param name="datosEspecificosFrom" value="DatosGenerales"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

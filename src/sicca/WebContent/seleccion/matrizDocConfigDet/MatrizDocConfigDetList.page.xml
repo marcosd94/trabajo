@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('matrizDocConfigDet_list')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+ <param name="idConcursoPuestoAgr" value="#{matrizDocConfigDetListFormController.idConcursoPuestoAgr}"/>
+ <param name="from"/>
+   <param name="nomPantalla"/>
+ 
+ <action execute="#{matrizDocConfigDetListFormController.init()}" on-postback="false"/>
+ <param name="fromPantalla" value="#{matrizDocConfigDetEditFormController.fromCU}"/>
+ <param name="firstResult" value="#{matrizDocConfigDetList.firstResult}"/>
+ <param name="sort" value="#{matrizDocConfigDetList.orderColumn}"/>
+ <param name="dir" value="#{matrizDocConfigDetList.orderDirection}"/>
+ <param name="logic" value="#{matrizDocConfigDetList.restrictionLogicOperator}"/>
+
+ <param name="datosTdGral" value="#{matrizDocConfigDetListFormController.idTipoDocumento}"/>
+ <param name="usuMod" value="#{matrizDocConfigDetList.matrizDocConfigDet.usuMod}"/>
+ 
+ <navigation from-action="#{matrizDocConfigDetListFormController.eliminarPlantilla()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect view-id="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml" />
+		</rule>
+	</navigation>
+</page>

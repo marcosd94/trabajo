@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<a:form id="idFormuPrincipal">
+			<h1>#{messages.CU315_title}</h1>
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<a:outputPanel id="idOutputPanel1" ajaxRendered="true">
+				<rich:simpleTogglePanel label="#{messages.CU315_desbloqueoConcurso}"
+					rendered="#{admDesConGruPueEditFC.renderPanel1}"
+					id="desbloqConcursoPanelId" switchType="client">
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU315_concurso}</ui:define>
+							<h:selectOneMenu id="concurso1" style="width : 330px;"
+								value="#{admDesConGruPueEditFC.idExcepcionConcurso}">
+								<f:selectItems value="#{admDesConGruPueEditFC.concursosSI}" />
+								<a:support event="onchange"
+									reRender="idFormuPrincipal:idOutputPanel1"
+									action="#{admDesConGruPueEditFC.refreshFechaDesbloqueo()}">
+								</a:support>
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="fechaBloqueoField1"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU315_fechaDesbloqueo}</ui:define>
+							<rich:calendar id="fechaBloqueo1" disabled="true"
+								value="#{admDesConGruPueEditFC.fechaDebloqueo}"
+								datePattern="MM/dd/yyyy" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+			</a:outputPanel>
+			<rich:simpleTogglePanel
+				label="#{messages.CU315_desbloqueoGrupoPuesto}"
+				rendered="#{admDesConGruPueEditFC.renderPanel2}"
+				id="desbloqGrupoPuestoPanelId" switchType="client">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_concurso}</ui:define>
+						<h:selectOneMenu id="concurso2" style="width : 330px;"
+							value="#{admDesConGruPueEditFC.idExcepcionConcurso}">
+							<f:selectItems value="#{admDesConGruPueEditFC.concursosSI}" />
+							<a:support event="onchange"
+								reRender="fechaBloqueoField2,idPanelGrupos"
+								action="#{admDesConGruPueEditFC.refreshFechaDesbloqueo()}">
+							</a:support>
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="fechaBloqueoField2"
+						template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_fechaDesbloqueo}</ui:define>
+						<rich:calendar id="fechaBloqueo2" disabled="true"
+							value="#{admDesConGruPueEditFC.fechaDebloqueo}"
+							datePattern="MM/dd/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+				<a:outputPanel id="idPanelGrupos">
+					<rich:panel id="idGrupoPuesto">
+						<f:facet name="header">#{messages['msg_list_search_results']} (#{admDesConGruPueEditFC.lGrilla.size})</f:facet>
+						<div class="results" id="concursoListFormController"><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty admDesConGruPueEditFC.lGrilla}" /> <rich:dataTable
+							id="excepcionList" var="_var"
+							value="#{admDesConGruPueEditFC.lGrilla}"
+							rendered="#{not empty admDesConGruPueEditFC.lGrilla}">
+							<h:column>
+								<f:facet name="header">								 
+									#{messages.CU315_codigo}								 
+							</f:facet>
+								<h:outputText value="#{_var.codGrupo}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">								 
+									#{messages.CU315_grupoDePuesto}								 
+							</f:facet>
+								<h:outputText value="#{_var.descripcionGrupo}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+								#{messages.GENERICO_SELEC}
+							</f:facet>
+								<h:selectBooleanCheckbox value="#{_var.seleccionado}" />
+							</h:column>
+						</rich:dataTable></div>
+					</rich:panel>
+				</a:outputPanel>
+
+
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages.CU315_desbloqueoPuesto}"
+				rendered="#{admDesConGruPueEditFC.renderPanel3}"
+				id="desbloqPuestPanelId" switchType="client">
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_concurso}</ui:define>
+						<h:selectOneMenu id="concurso3" style="width : 330px;"
+							value="#{admDesConGruPueEditFC.idExcepcionConcurso}">
+							<f:selectItems value="#{admDesConGruPueEditFC.concursosSI}" />
+							<a:support event="onchange"
+								reRender="fechaBloqueoField3,grupoPuestos"
+								action="#{admDesConGruPueEditFC.refreshGrupo()}">
+							</a:support>
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_grupoDePuesto}</ui:define>
+						<h:selectOneMenu id="grupoPuestos" style="width : 330px;"
+							value="#{admDesConGruPueEditFC.idExcepcionGrupoPuestoAgr}">
+							<f:selectItems value="#{admDesConGruPueEditFC.grupoPuestosSI}" />
+							<a:support event="onchange"
+								reRender="fechaBloqueoField3,idPanelPuestos"
+								action="#{admDesConGruPueEditFC.refreshFechaDesbloqueo()}">
+							</a:support>
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="fechaBloqueoField3"
+						template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_fechaDesbloqueo}</ui:define>
+						<rich:calendar id="fechaBloqueo3" disabled="true"
+							value="#{admDesConGruPueEditFC.fechaDebloqueo}"
+							datePattern="MM/dd/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+				<a:outputPanel id="idPanelPuestos" ajaxRendered="true">
+					<rich:panel id="idPuesto">
+						<f:facet name="header">#{messages['msg_list_search_results']} (#{admDesConGruPueEditFC.lGrilla.size})</f:facet>
+						<div class="results" id="puestoDiv"><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty admDesConGruPueEditFC.lGrilla}" /> <rich:dataTable
+							id="puestoList" var="_var2"
+							value="#{admDesConGruPueEditFC.lGrilla}"
+							rendered="#{not empty admDesConGruPueEditFC.lGrilla}">
+							<h:column>
+								<f:facet name="header">								 
+									#{messages.CU315_puesto}								 
+							</f:facet>
+								<h:outputText value="#{_var2.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+								#{messages.GENERICO_SELEC}
+							</f:facet>
+								<h:selectBooleanCheckbox value="#{_var2.selected}" />
+							</h:column>
+						</rich:dataTable></div>
+					</rich:panel>
+				</a:outputPanel>
+
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages.CU315_datosDesbloqueo}"
+				switchType="client" id="panelDesbloqueo">
+				<h:panelGrid columns="1">
+					<s:decorate id="fechaField3" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU315_fecha}</ui:define>
+						<rich:calendar id="fecha3" disabled="true"
+							value="#{admDesConGruPueEditFC.fechaSistema}"
+							datePattern="MM/dd/yyyy" />
+					</s:decorate>
+					<s:decorate id="motivoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU315_motivo}</ui:define>
+						<h:inputTextarea id="motivo"
+							onkeypress="return imposeMaxLength(event, this, 200);" rows="4"
+							cols="60" value="#{admDesConGruPueEditFC.motivo}">
+							<a:support event="onchange" reRender="motivoField"/>
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="save"
+				value="#{messages.msg_save}"
+				rendered="#{admDesConGruPueEditFC.excepcionGenerada.idExcepcion==null}"
+				action="#{admDesConGruPueEditFC.save()}" reRender="actionButtons" /><s:button
+				id="anexo" value="Anexo" propagation="join"
+				disabled="#{admDesConGruPueEditFC.excepcionGenerada.idExcepcion==null}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{admDesConGruPueEditFC.direccionFisica}" />
+				<f:param name="nombrePantalla"
+					value="#{admDesConGruPueEditFC.nombrePantalla}" />
+				<f:param name="idCU"
+					value="#{admDesConGruPueEditFC.excepcionGenerada.idExcepcion}" />
+				<f:param name="nombreTabla" value="Excepcion" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="seleccion/admDesConGruPue/admDesConGruPueEdit" />
+			</s:button> <s:button value="#{messages.GENERICO_VOLVER}" propagation="nest"
+				view="#{empty from? '/home':from}.xhtml">
+			</s:button></div>
+
+		</a:form>
+	</ui:define>
+</ui:composition>

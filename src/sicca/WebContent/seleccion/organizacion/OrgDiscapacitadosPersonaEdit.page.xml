@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/ActividadProcesoList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{orgDiscapacitadosPersonaFC.init()}" on-postback="false"/>
+   <action execute="#{referenciasUtilFormController.init()}" on-postback="false"/>
+   <param name="idOrganizacion" value="#{orgDiscapacitadosPersonaFC.idOrganizacion}"/>
+   <param name="personaIdPersona" value="#{orgDiscapacitadosPersonaFC.idPersona}" />
+   
+   <navigation from-action="#{orgDiscapacitadosPersonaFC.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/seleccion/admOrgDis270/OrganizacionDiscapacitadosList.xhtml"/>
+      </rule>
+   </navigation>
+   
+ <restrict>#{identity.hasRole('orgDiscapacitadosPersona_edit')}</restrict>
+
+</page>

@@ -1,0 +1,358 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>#{messages.CU666_titulo_edit}</h1>
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_nr_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nroDoc" onkeypress="return soloNumeros(event);"
+								value="#{buscadorDocsFC.nroDoc}" style=" width : 45px;" />
+						</s:decorate>
+						<s:decorate id="fechaDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fecha" value="#{buscadorDocsFC.fechaDoc}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+								<a:support event="onchanged" eventsQueue="default"
+									action="#{rptDesvinculacionesCapacitacionFC.cargarSelectItem()}"
+									reRender="panelCombos" />
+							</rich:calendar>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+
+						<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_tipo_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="datosGral"
+								value="#{buscadorDocsFC.idTipoDoc}" style="width:200px">
+								<f:selectItems
+									value="#{promocionCategorialCU666FC.updateTipoDocSelectItems()}" />
+								<a:support event="onchange" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<h:panelGrid columns="3">
+							<a:commandButton value="#{messages.CU541_busca_acto}"
+								reRender="panelAdjuntar,idPanelAdjuntar"
+								action="#{buscadorDocsFC.buscarDocMovilidad()}" />
+							<s:button value="Descargar"
+								disabled="#{buscadorDocsFC.fNameMostrar==null}"
+								action="#{buscadorDocsFC.descargarDoc()}" />
+							<s:button value="#{messages.CU541_cambiar_acto}"
+								action="#{buscadorDocsFC.cambiarActo()}" />
+						</h:panelGrid>
+						<s:decorate id="fechaIngresoDecorate"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha de Inicio<span
+									class="required">*</span>
+							</ui:define>
+
+							<rich:calendar id="fechaIngreso"
+								value="#{promocionCategorialCU666FC.fechaInicio}" inputSize="10"
+								datePattern="dd/MM/yyyy" enableManualInput="false"
+								oninputkeyup="ponerBarra(event)">
+							</rich:calendar>
+						</s:decorate>
+					</h:panelGrid>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre del Archivo</ui:define>
+						<h:inputText value="#{buscadorDocsFC.fNameMostrar}"
+							disabled="true" style=" width : 250px;" />
+					</s:decorate>
+					<a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						<h:panelGrid columns="2"
+							rendered="#{buscadorDocsFC.mostrarPanelAdjunto}"
+							style="border-style: dotted;border-color: gray;">
+							<s:fileUpload size="30" contentType="#{buscadorDocsFC.cType}"
+								data="#{buscadorDocsFC.uFile}"
+								fileName="#{buscadorDocsFC.fName}" style=" width : 299px;">
+								<s:conversationPropagation type="join" />
+
+							</s:fileUpload>
+
+							<h:commandButton value="Adjuntar Documento"
+								action="#{buscadorDocsFC.adjuntarDoc()}" />
+						</h:panelGrid>
+					</a:outputPanel>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea id="obs"
+							value="#{promocionCategorialCU666FC.observacion}" cols="80">
+							<f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelFuncionario">
+				<f:facet name="header">#{messages.CU440_funcionario}<span
+						class="required">*</span>
+				</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+						<h:inputText id="nroCedula" disabled="true"
+							value="#{promocionCategorialCU666FC.funcionario.persona.documentoIdentidad}"
+							size="20" maxlength="30">
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+						<h:inputText id="nombres" disabled="true"
+							value="#{promocionCategorialCU666FC.funcionario.persona.nombres}"
+							size="60" maxlength="100">
+						</h:inputText>
+						#{' '}
+                <a:commandButton id="search" eventsQueue="default"
+							value="#{messages.CU440_btn_buscar_func}"
+							action="#{promocionCategorialCU666FC.getUrlToPageSearchFuncionario()}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+						<h:inputText id="paisExpDoc" disabled="true"
+							value="#{promocionCategorialCU666FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+						<h:inputText id="apellidos" disabled="true"
+							value="#{promocionCategorialCU666FC.funcionario.persona.apellidos}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigoField">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{promocionCategorialCU666FC.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{promocionCategorialCU666FC.nombreNivelEntidad}"
+									size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigoField">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.entidad.entCodigo}"
+									size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.entidad.descripcion}"
+									size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigoField">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.idConfiguracionUo}"
+									disabled="true" onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+
+						<s:decorate template="/layout/display.xhtml" id="uoCodigoField">
+							<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+							<h:inputText id="uoCodigo" styleClass="numeric" size="5"
+								value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.orden}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion" size="50" disabled="true"
+								value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml" id="puestoField">
+							<ui:define name="label">Puesto
+						</ui:define>
+							<h:inputText id="puesto" styleClass="numeric" size="20"
+								value="#{promocionCategorialCU666FC.obtenerCodigoPuesto(promocionCategorialCU666FC.funcionario)}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{promocionCategorialCU666FC.funcionario.plantaCargoDet.descripcion}" />
+
+						</s:decorate>
+
+					</h:panelGrid>
+
+					<rich:panel id="conceptoPagosPaneles">
+
+						<h:panelGrid id="panelGridX">
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU120_link3_codigo}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="codigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{seleccionUtilFormController.codigoObj}" size="10">
+									<a:support event="onblur" eventsQueue="default"
+										reRender="objDescripcion"
+										action="#{seleccionUtilFormController.findObj()}" />
+								</h:inputText>
+				#{' '}
+		                <h:inputText id="objDescripcion"
+									value="#{seleccionUtilFormController.valorObj}" size="50"
+									disabled="true" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU120_link3_categoria}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="categoria"
+									value="#{seleccionUtilFormController.codigoCategoria}"
+									size="10">
+									<a:support event="onblur" eventsQueue="default"
+										reRender="categoriaDescripcion,monto"
+										action="#{seleccionUtilFormController.findCategoria()}" />
+								</h:inputText>
+				#{' '}
+		                <h:inputText id="categoriaDescripcion"
+									value="#{seleccionUtilFormController.categoria}" size="50"
+									disabled="true" />
+				 #{' '}
+               
+					</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Monto<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="monto" styleClass="numeric" disabled="true"
+									onkeypress="return soloNumeros(event);"
+									value="#{seleccionUtilFormController.monto}" size="10">
+								</h:inputText>
+
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<a:commandButton value="Agregar"
+									onclick="if(!confirm('#{messages.CU541_msg_agregar}')){return false;}"
+									action="#{promocionCategorialCU666FC.agregar()}"
+									reRender="panelX,monto,codigo,objDescripcion,categoria,categoriaDescripcion" />
+							</s:decorate>
+						</h:panelGrid>
+						<rich:panel style="border:none;" id="panelX">
+							<div class="results" id="tbldet2List"
+								style="overflow: scroll; width: 230; HEIGHT: 150px"><rich:dataTable
+								id="itemsList2" var="_pagos" first="0"
+								value="#{promocionCategorialCU666FC.empleadoConceptoPagos}"
+								rowKeyVar="rowNr2">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+									<h:outputText value="#{_pagos.objCodigo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+									<h:outputText value="#{_pagos.categoria}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+									<h:outputText value="#{_pagos.monto}" />
+								</rich:column>
+
+
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+									<a:commandLink id="deledt" value="#{messages.msg_list_remove}"
+										reRender="conceptoPagosPaneles" eventsQueue="default"
+										action="#{promocionCategorialCU666FC.eliminar(rowNr2)}" />
+								</rich:column>
+
+							</rich:dataTable></div>
+						</rich:panel>
+					</rich:panel>
+				</h:panelGrid>
+
+			</rich:panel>
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{promocionCategorialCU666FC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/movilidadLaboral/promocionCategorial/PromocionCategorialListCU666.xhtml" />
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

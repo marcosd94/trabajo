@@ -1,0 +1,189 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="listaAdjudicadosSearch" styleClass="edit">
+			<h1>#{messages.CU350_title1}</h1>
+			<rich:simpleTogglePanel id="panel" switchType="ajax">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU86_agr}</ui:define>
+						<h:inputText id="grupo" size="80" disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Vacancias</ui:define>
+						<h:inputText id="vacancias" size="10" disabled="true"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.cantVacancia}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU86_obs}</ui:define>
+						<h:inputTextarea cols="80"
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.observacion}">
+							<f:validateLength maximum="250" />
+							</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+			<div align="center"><rich:panel style="width: 600px;">
+				<f:facet name="header">#{messages.CU350_panel1} (#{evaluacionDocumentosAdjudicadosCU634FC.listaAdjudicados.size()})</f:facet>
+				<div style="clear: both; overflow: auto; HEIGHT: 150px"><rich:dataTable
+					id="tabla" cellpadding="0" cellspacing="0" width="500" border="0"
+					var="record"
+					value="#{evaluacionDocumentosAdjudicadosCU634FC.listaAdjudicados}"
+					rowKeyVar="row">
+
+					<rich:column>
+						<f:facet name="header">
+							#{messages.msg_fecha}
+							</f:facet>
+						<h:outputText value="#{record.fechaEvaluacion}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU41_cod_postulante}
+							</f:facet>
+						<h:outputText
+							value="#{record.postulacion.personaPostulante.usuAlta}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							Verificado
+							</f:facet>
+						<h:selectBooleanCheckbox value="#{record.evaluado}" disabled="true"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							Estado
+							</f:facet>
+						<h:outputText
+							value="#{evaluacionDocumentosAdjudicadosCU634FC.obtenerEstadoAdjudicado(row)}" />
+
+					</rich:column>
+					<rich:column rendered="#{record.incluido}">
+						<h:outputText value="DE LISTA DE ELEGIBLES" />
+					</rich:column>
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							rendered="#{(record.evaluado == null or !record.evaluado) and record.tipo.equalsIgnoreCase('EVALUACION ADJUDICADOS')}"
+							view="/circuitoCIO/evaluacionDocumentosAdjudicados/EvalDocumentalCabEdit.xhtml"
+							value="#{messages.CU350_link1}" propagation="none"
+							id="ciudadEdit">
+							<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+								value="#{record.idEvalDocumentalCab}" />
+						</s:link>
+						<h:commandLink value="Ver Datos del Adjudicado" id="pdf"
+							action="#{evaluacionDocumentosAdjudicadosCU634FC.imprimir(record)}" />
+					</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel></div>
+			<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Cant. Evaluados</ui:define>
+					<h:inputText id="evaluados" size="10" disabled="true"
+						value="#{evaluacionDocumentosAdjudicadosCU634FC.cantEvaluados}" />
+				</s:decorate>
+			</h:panelGrid>
+
+			<div class="actionButtons"><s:button id="anexo" value="Anexo"
+				propagation="join"
+				rendered="#{evaluacionDocumentosAdjudicadosCU634FC.todosEvaluados}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{evaluacionDocumentosAdjudicadosCU634FC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="evaluacion_doc_adjudicados_CIO" />
+				<f:param name="idCU"
+					value="#{evaluacionDocumentosAdjudicadosCU634FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="circuitoCIO/evaluacionDocumentosAdjudicados/EvaluarDocAdjudicado" />
+			</s:button> <s:button id="control" value="Control Puesto/Postulante"
+				propagation="join"
+				rendered="#{evaluacionDocumentosAdjudicadosCU634FC.habilitarControPuesto}"
+				view="/seleccion/AjustesPuestoPostConcu/AjustesPuestoPostConcu.xhtml">
+				<f:param name="idGrupo"
+					value="#{evaluacionDocumentosAdjudicadosCU634FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="codActividad" />
+				<f:param name="codCU" value="CU350" />
+				<f:param name="idExcepcion" />
+				
+				<f:param name="from"
+					value="circuitoCIO/evaluacionDocumentosAdjudicados/EvaluarDocAdjudicado" />
+					
+			</s:button> <h:commandButton id="tarea" value="#{messages.proceso_sgte_tarea}"
+				action="#{evaluacionDocumentosAdjudicadosCU634FC.nextTask()}"
+				onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+			</h:commandButton> <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

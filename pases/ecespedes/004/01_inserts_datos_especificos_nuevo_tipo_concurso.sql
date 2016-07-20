@@ -1,0 +1,1 @@
+INSERT INTO datos_especificos VALUES (nextVal('seleccion.sel_datos_especificos_id_datos_especificos_seq'), 'CONCURSO INTERNO INSTITUCIONAL PARA LA DESPRECARIZACION LABORAL', 'CIID', NULL, 8, true, 'JSANTANDER', '2016-05-05 11:25:38.891', NULL, NULL, NULL);

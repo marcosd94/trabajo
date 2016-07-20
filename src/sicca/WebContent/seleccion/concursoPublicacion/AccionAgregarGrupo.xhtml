@@ -1,0 +1,439 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.public_grupo} - #{administrarConcursoFormController.concurso.nombre}</h1>
+		<h:form id="concurso" styleClass="edit" prependId="false"  enctype="multipart/form-data">
+
+			<rich:panel id="panel">
+				<f:facet name="header"> #{messages.public_grupo}</f:facet>
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="2">
+						<a:region>
+							<s:decorate id="nombreField1" template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre <span>*</span></ui:define>
+								<h:inputText id="nombre" size="100"
+									maxlength="100"
+									value="#{administrarConcursoFormController.concursoPuestoAgrNuevo.descripcionGrupo}">
+									<a:support event="onblur" eventsQueue="default"></a:support>
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+					
+					
+					</h:panelGrid>
+					
+					<h:panelGrid
+								columns="2">
+					
+					<s:decorate id="cantidad" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.public_cantidad_vacancias} <span>*</span></ui:define>
+								<h:inputText id="nombre" size="6" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									maxlength="9"
+									value="#{administrarConcursoFormController.concursoPuestoAgrNuevo.cantidadPuestos}">
+									<a:support event="onblur" eventsQueue="default"></a:support>
+								</h:inputText>
+					</s:decorate>
+					<br />
+					<s:decorate template="/layout/edit.xhtml"
+							rendered="#{true}">
+							<ui:define name="label">#{messages.CU235_seleccion_adjudicados}<span>*</span></ui:define>
+							<h:selectOneRadio id="sel_adj"
+								value="#{administrarConcursoFormController.seleccionAdjudicados}">
+								<f:selectItems
+									value="#{administrarConcursoFormController.seleccionAdjudicadosValueItems()}" />
+							</h:selectOneRadio>
+						</s:decorate>
+						<br />
+						<s:decorate id="plazoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU235_porc_minimo_evaluaciones}<span>*</span></ui:define>
+							<h:inputText id="porc_eval" disabled="false"
+								styleClass="numeric" size="10"
+								value="#{administrarConcursoFormController.minimoEvaluacion}">
+							</h:inputText>
+						</s:decorate>
+					
+					
+					</h:panelGrid>
+					
+					<h:panelGrid
+								columns="2">
+					
+					<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Bases y Condiciones<span>*</span></ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{administrarConcursoFormController.contentType}"
+						data="#{administrarConcursoFormController.uploadedFile}"
+						fileName="#{administrarConcursoFormController.fileName}"
+						fileSize="#{administrarConcursoFormController.tamArchivo}"
+						style=" width : 382px;" />
+				</s:decorate>
+				
+				
+				
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+						<s:decorate id="fechaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.public_fecha_publicacion_desde}<span>*</span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{administrarConcursoFormController.fechaPublicacionDesde}"
+								size="10" 
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+								
+						</s:decorate>
+						
+							
+							 <h:panelGrid
+								columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_hora}<span>*</span>
+									</ui:define>
+									<h:inputText id="horaDesde" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaPublicacionDesde}"/>
+										
+								</s:decorate>
+								</h:panelGrid>
+						
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaPublicHasta" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.public_fecha_publicacion_hasta}<span>*</span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{administrarConcursoFormController.fechaPublicacionHasta}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)" 
+								
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						
+							
+							 <h:panelGrid
+								columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_hora}<span>*</span>
+									</ui:define>
+									<h:inputText id="horaPublicHasta" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaPublicacionHasta}" />
+								</s:decorate>
+								</h:panelGrid>
+						
+					</h:panelGrid>
+									
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaRecepDesde" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.public_fecha_recepcion_desde}<span>*</span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{administrarConcursoFormController.fechaRecepcionDesde}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						
+							
+							 <h:panelGrid
+								columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_hora}<span>*</span>
+									</ui:define>
+									<h:inputText id="horaRecepDesde" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaRecepcionDesde}" />
+								</s:decorate>
+								</h:panelGrid>
+						
+					</h:panelGrid>
+
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaRecepHasta" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.public_fecha_recepcion_hasta}<span>*</span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{administrarConcursoFormController.fechaRecepcionHasta}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						
+							
+							 <h:panelGrid
+								columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU86_hora}<span>*</span>
+									</ui:define>
+									<h:inputText id="horaRecepHasta" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaRecepcionHasta}" />
+								</s:decorate>
+								</h:panelGrid>
+						
+					</h:panelGrid>
+					
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="3"
+							onkeypress="return imposeMaxLength(event, this, 250);"
+							value="#{administrarConcursoFormController.concursoPuestoAgrNuevo.observacion}">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+				<div style="clear: both"><span>*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				
+							
+
+			<h:commandButton id="search"
+				
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+
+				action="#{administrarConcursoFormController.btnAgregarGrupo()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			
+
+			<br />
+			<br />
+			
+
+				<div class="results" id="datosEspecificosList">
+				 <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty administrarConcursoFormController.concursoPuestoAgrList}"/>
+				
+				<rich:dataTable
+					id="concursoPuestoAgrList" var="_concursoPuestoAgr" rowKeyVar="_index"
+					value="#{administrarConcursoFormController.concursoPuestoAgrList}" >
+					<h:column>
+						<f:facet name="header">Nombre	</f:facet>
+						<h:outputText
+							value="#{_concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_vacancias} </f:facet>
+						<h:outputText
+							value="#{_concursoPuestoAgr.cantidadPuestos}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_tipo_grupo} </f:facet>
+						<h:outputText
+							value="#{administrarConcursoFormController.obtenerTipoEvaluacionGrupo(_concursoPuestoAgr.idConcursoPuestoAgr)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_cantidad_postulantes} </f:facet>
+						<h:outputText
+							value="#{administrarConcursoFormController.obtenerCantidadPostulantes(_concursoPuestoAgr.idConcursoPuestoAgr)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_estado_concurso} </f:facet>
+						<h:outputText
+							value="#{administrarConcursoFormController.obtenerEstadoConcurso(_concursoPuestoAgr.estado)}" />
+					</h:column>				
+					<h:column>
+						<f:facet name="header">#{messages.public_fecha_publicacion_desde}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatFecha(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().fechaPublicacionDesde) }"   />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_hora}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatHora(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().horaPublicacionDesde)}"   />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_fecha_publicacion_hasta}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatFecha(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().fechaPublicacionHasta)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_hora}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatHora(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().horaPublicacionHasta)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_fecha_recepcion_desde}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatFecha(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().fechaRecepcionDesde)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_hora}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatHora(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().horaRecepcionDesde)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_fecha_recepcion_hasta}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatFecha(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().fechaRecepcionHasta)}"  />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.public_hora}	</f:facet>
+						<h:outputText value="#{administrarConcursoFormController.formatHora(_concursoPuestoAgr.fechasGrupoPuestos.iterator().next().horaRecepcionHasta)}"  />
+					</h:column>
+
+					<rich:column styleClass="action">
+										<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<!--		<h:commandLink value="Descargar" target="_blank"
+										action="#{admDocAdjuntoFormController.abrirDocumento(_index)}" />
+										reRender="documentoList,panelResultado"
+							-->		
+					#{' '}
+		           	 
+		           		 <s:link
+								view="/seleccion/concursoPublicacion/ConcursoPuestoAgrEdit.xhtml"
+								value="#{messages.msg_edit}" propagation="none"
+								id="concursoPuestoAgrEdit"
+								disabled="#{administrarConcursoFormController.isEstadoFinalizado(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+						
+						#{' '}
+		           	 
+		           		 <s:link
+								view="/seleccion/concursoPublicacion/InsercionMasivaPostulantes.xhtml"
+								value="Insertar postulantes" propagation="none"
+								id="insertarPostulantes"
+								rendered="#{administrarConcursoFormController.isEstadoEvaluacion(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+								 
+							
+			          #{' '}
+			          	<s:link
+								view="/seleccion/concursoPublicacion/InsercionMasivaListaLarga.xhtml"
+								value="Insertar lista larga" propagation="none"
+								id="insertarListaLarga"
+								rendered="#{administrarConcursoFormController.isEstadoListaLarga(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+								 
+				          #{' '}
+			          	<s:link
+								view="/seleccion/concursoPublicacion/InsercionMasivaListaCorta.xhtml"
+								value="Insertar lista Corta" propagation="none"
+								id="insertarListaCorta"
+								rendered="#{administrarConcursoFormController.isEstadoListaCorta(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>						
+			          	#{' '}
+			          
+			           #{' '}
+			          	<s:link
+								view="/seleccion/concursoPublicacion/InsercionMasivaListaTernaFinal.xhtml"
+								value="Insertar lista Terna Final" propagation="none"
+								id="insertarListaTernaFinal"
+								rendered="#{administrarConcursoFormController.isEstadoListaTernaFinal(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>						
+			          #{' '}
+			          
+			          <s:link
+								view="/seleccion/concursoPublicacion/InsercionMasivaListaAdjudicados.xhtml"
+								value="Insertar lista Adjudicados" propagation="none"
+								id="insertarListaAdjudicados"
+								rendered="#{administrarConcursoFormController.isEstadoListaAdjudicados(_concursoPuestoAgr.estado)}">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>						
+			          #{' '}
+
+			         <h:commandLink id="eliminar" value="Eliminar"
+							
+							action="#{administrarConcursoFormController.eliminarConcursoPuestoAgr(_concursoPuestoAgr.idConcursoPuestoAgr)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');" 
+							disabled="#{administrarConcursoFormController.isEstadoFinalizado(_concursoPuestoAgr.estado)}"/>
+							
+					#{' '}
+
+		         	<h:commandLink id="verBasesConcidiones" value="Ver Bases y Condiciones"
+						
+						action="#{administrarConcursoFormController.imprimirBasesCondiciones(_concursoPuestoAgr.idConcursoPuestoAgr)}" />
+					
+					#{' '}
+					<br/>	
+						<s:link view="/seleccion/concursoPublicacion/AccionAgregarPublicacion.xhtml"
+							
+							value="#{messages.public_publicacion}" propagation="none" id="agregarPublicacion"
+							>
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+						#{' '}
+						<s:link view="/seleccion/concursoPublicacion/AccionRealizarProrroga.xhtml"
+							
+							value="#{messages.public_prorroga}" propagation="none" id="realizarProrroga" 
+							disabled="#{administrarConcursoFormController.isEstadoFinalizado(_concursoPuestoAgr.estado)}">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+						#{' '}
+						
+						<h:commandLink id="finalizar" value="#{messages.public_finalizar}"
+							
+							action="#{administrarConcursoFormController.finalizarConcursoPuestoAgr(_concursoPuestoAgr.idConcursoPuestoAgr)}"
+							onclick="return confirm('#{messages.msg_confirm_finalizar}');" 
+							disabled="#{administrarConcursoFormController.isEstadoFinalizado(_concursoPuestoAgr.estado)}"/>
+							
+					#{' '}
+						
+							
+					</rich:column>	
+					
+					 
+					
+					
+				</rich:dataTable></div>
+			
+			
+			<div class="tableControl"><s:link
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{documentosList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{documentosList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{documentosList.lastFirstResult}" />
+			</s:link></div>
+						
+			
+			<div class="actionButtons">
+				
+			 <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/concursoPublicacion/ConcursoList.xhtml" />
+				
+			</div>
+			</rich:panel>
+		</h:form>
+		
+
+	</ui:define>
+
+</ui:composition>

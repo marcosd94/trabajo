@@ -1,0 +1,233 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU570_titulo_gestionar}</h1>
+		<h:form id="grupoMetodologiaSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages.CU570_organizado_por}"
+				switchType="ajax">
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU570_evaluacion}</ui:define>
+						<h:inputText size="100" id="evaluacion" disabled="true"
+							value="#{cargaResultadosEvaluacionListFC.evaluacionDesempeno.titulo}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+					<ui:remove>
+						<s:decorate template="/layout/display.xhtml">
+												<ui:define name="label">#{messages.CU398_unidadOrganiza}
+														</ui:define>
+												<h:inputText id="orgCodigo2" size="10" disabled="true"
+													value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+						
+												</h:inputText>
+														#{' '}
+														<h:inputText id="orgDenominacion2" size="50" disabled="true"
+													value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						
+											</s:decorate>
+					</ui:remove>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesdeDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU570_periodo_evaluacion_desde}
+						</ui:define>
+						<rich:calendar id="fechaDesde" disabled="true"
+							value="#{cargaResultadosEvaluacionListFC.evaluacionDesempeno.fechaEvalDesde}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+
+						</rich:calendar>
+					</s:decorate>
+
+
+					<s:decorate id="fechaHastaDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU570_periodo_evaluacion_hasta}
+						</ui:define>
+						<rich:calendar id="fechaHasta" disabled="true"
+							value="#{cargaResultadosEvaluacionListFC.evaluacionDesempeno.fechaEvalHasta}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+
+						</rich:calendar>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+
+
+		
+
+		<rich:panel>
+			<f:facet name="header">#{messages.CU570_panel_grupo} (#{empty grupoMetodologiaList.resultList ? 0 : (grupoMetodologiaList.paginated ? grupoMetodologiaList.resultCount : grupoMetodologiaList.resultList.size)})</f:facet>
+			<div class="results" id="grupoMetodologiaList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty grupoMetodologiaList.resultList}" /> <rich:dataTable
+				id="grupoMetodologiaList" var="_grupoMetodologia"
+				value="#{grupoMetodologiaList.resultList}"
+				rendered="#{not empty grupoMetodologiaList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{grupoMetodologiaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU570_grupo}" />
+							<ui:param name="propertyPath"
+								value="grupoMetodologia.gruposEvaluacion.grupo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_grupoMetodologia.gruposEvaluacion.grupo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{grupoMetodologiaList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU570_plantilla}" />
+							<ui:param name="propertyPath"
+								value="grupoMetodologia.datosEspecifMetod.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_grupoMetodologia.datosEspecifMetod.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{grupoMetodologiaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU570_estado}" />
+							<ui:param name="propertyPath" value="grupoMetodologia.estado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{cargaResultadosEvaluacionListFC.valorEstado(_grupoMetodologia)}" />
+				</h:column>
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<s:link
+						view="#{cargaResultadosEvaluacionListFC.getUrlCargaResultado(_grupoMetodologia)}"
+						value="#{messages.CU570_link_cargar}" propagation="join"
+						id="grupoMetodologiaCarga"
+						rendered="#{(_grupoMetodologia.estado == null or _grupoMetodologia.estado == cargaResultadosEvaluacionListFC.estadoEnCurso)}">
+						<f:param name="grupoMetodologiaIdGrupoMetodologia"
+							value="#{_grupoMetodologia.idGrupoMetodologia}" />
+					</s:link>
+
+					<s:link
+						view="#{cargaResultadosEvaluacionListFC.getUrlVerResultado(_grupoMetodologia)}"
+						value="#{messages.CU570_link_ver}" propagation="join"
+						id="grupoMetodologiaCargaVer"
+						rendered="#{_grupoMetodologia.estado == cargaResultadosEvaluacionListFC.estadoFinalizada}">
+						<f:param name="grupoMetodologiaIdGrupoMetodologia"
+							value="#{_grupoMetodologia.idGrupoMetodologia}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link
+			view="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml"
+			rendered="#{grupoMetodologiaList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml"
+			rendered="#{grupoMetodologiaList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{grupoMetodologiaList.previousFirstResult}" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml"
+			rendered="#{grupoMetodologiaList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{grupoMetodologiaList.nextFirstResult}" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml"
+			rendered="#{grupoMetodologiaList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{grupoMetodologiaList.lastFirstResult}" />
+		</s:link></div>
+
+		<div style="clear: both"><h:outputText
+			value="#{messages.CU570_msg}" styleClass="labelClass" /></div>
+		<div>
+		
+		<s:button propagation="join" 
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexosObs" value="Adjuntar Informe Final"
+				>
+				<f:param name="direccionFisica" value="#{cargaResultadosEvaluacionListFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="adjuntarInformeFinal" />
+				<f:param name="idCU" value="#{cargaResultadosEvaluacionListFC.idEvaluacionDesempeno}" />
+				<f:param name="nombreTabla" value="GrupoMetodologia" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList" />
+			</s:button>
+			<h:commandButton id="finalizar" disabled="#{!cargaResultadosEvaluacionListFC.habilitandoFinalizar()}"
+				value="#{messages.CU570_btn_finalizar}"
+				action="#{cargaResultadosEvaluacionListFC.finalizarEvaluacion()}"
+				onclick="return confirm('#{messages.CU517_msg_add_gen}');" /> 
+			<s:button
+				id="cancelAdd" value="Volver" propagation="join"
+				view="/#{cargaResultadosEvaluacionListFC.from}.xhtml" />
+			
+		</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

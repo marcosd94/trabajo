@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+<begin-conversation flush-mode="MANUAL" join="true"/>
+	 <param name="from"/>
+  
+  <action execute="#{reportUtilFormController.init()}" on-postback="false"/>
+   <action execute="#{verifPerfilMatrizHomolog619.init()}" on-postback="false"/>
+   <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{verifPerfilMatrizHomolog619.idConcursoPuestoAgr}"/>
+   <param name="canEdit" value="#{perfilMatrizHomologacionFormController.canEdit}"/>
+   <param name="actividad" value="#{perfilMatrizHomologacionFormController.codActividad}"/>
+  
+
+  
+   
+   <navigation from-action="#{verifPerfilMatrizHomolog619.nextTask()}">
+      <rule if-outcome="next">
+         <redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+  
+
+ <restrict>#{identity.hasRole('VerificarPerfilYMatrizPorSFPConcursoInterno')}</restrict>
+</page>

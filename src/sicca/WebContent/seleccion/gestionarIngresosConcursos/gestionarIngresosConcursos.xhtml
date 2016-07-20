@@ -1,0 +1,561 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<style type="text/css">
+.extdt-hsep {
+	display: none;
+}
+</style>
+		<h1>#{messages.CU420_tile}</h1>
+		<rich:panel id="panelParametro">
+			<f:facet name="header">
+			</f:facet>
+			<h:panelGrid columns="3">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU269_concurso}</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU269_grupoPuestos}</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU420_vacancias}</ui:define>
+					<h:inputText id="vacancias" disabled="true"
+						value="#{gestionarIngresosConcursos.lPuestos.size()}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		
+		
+		<h:form enctype="multipart/form-data">
+			<rich:panel id="panelBuscadorDoc">
+				<f:facet name="header">Acto Administrativo</f:facet>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Nro. Doc.<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText value="#{gestionarIngresosConcursos.nroDoc}"
+							styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							maxlength="9"
+							id="idNroDoc" 
+							/>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha<span class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDoc"
+								value="#{gestionarIngresosConcursos.fechaDoc}" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<h:panelGrid columns="2">
+
+
+
+							<s:decorate id="tipoField" template="/layout/display.xhtml">
+								<ui:define name="label">Tipo Documento<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipo"
+									value="#{gestionarIngresosConcursos.idTipoDoc}" style=" width : 275px;">
+									<f:selectItems
+										value="#{gestionarIngresosConcursos.updateTipoDocSelectItems()}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<h:panelGrid columns="3" rendered = "false">
+								<a:commandButton value="Buscar" reRender="panelBuscadorDoc" 
+									action="#{gestionarIngresosConcursos.buscarDoc()}" />
+								<s:button value="Descargar" hidden="true"
+									action="#{gestionarIngresosConcursos.descargarDoc()}" />
+								<s:button value="Cambiar Documento" rendered="false" 
+									action="#{gestionarIngresosConcursos.cambiarDoc()}" />
+							</h:panelGrid>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre del Archivo</ui:define>
+								<h:inputText value="#{gestionarIngresosConcursos.fNameMostrar}"
+									disabled="true" style=" width : 250px;" />
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+						<a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						
+							<h:panelGrid columns="2" 
+						
+								style="border-style: dotted;border-color: gray;">
+								<s:fileUpload size="30" contentType="#{gestionarIngresosConcursos.cType}"
+									data="#{gestionarIngresosConcursos.uFile}"
+									fileName="#{gestionarIngresosConcursos.fName}" style=" width : 299px;">
+									<s:conversationPropagation type="join" />
+
+								</s:fileUpload>
+
+								<h:commandButton value="Adjuntar Documento"
+									action="#{gestionarIngresosConcursos.adjuntarDoc()}" />
+							</h:panelGrid>
+						</a:outputPanel>
+					</h:panelGrid>
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define  name="label">#{messages.CU420_observacion_actividad}</ui:define>
+						<h:inputTextarea value="#{gestionarIngresosConcursos.observacion}"
+							id="idObservacion" style=" width : 222px; height : 71px;" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+		</h:form>
+
+
+		<rich:simpleTogglePanel label=" " id="idPostuPuesto" switchType="ajax">
+			<a:form>
+				<h:outputLabel value="#{messages.CU420_observacion_empleadoPuesto}">
+
+				</h:outputLabel>#{'  '}
+
+				<h:inputTextarea value="#{gestionarIngresosConcursos.obsEmpleadoPuesto}"
+					id="idObservacionEmpleadoPuesto" style=" width : 222px; height : 71px;" />
+
+
+				<rich:separator style=" width : 266px; height : 18px;">
+
+				</rich:separator>
+				<h1>#{messages.CU420_postulantes}<span class="required">*</span></h1>
+				<rich:extendedDataTable id="postulantesList" var="_dto"
+					noDataLabel="#{messages.CU420_nohayDatos}" height="150px"
+					selection="#{gestionarIngresosConcursos.selePostulante2}"
+					selectionMode="single" value="#{gestionarIngresosConcursos.lPostulantes}">
+					<a:support reRender="selectiontable" id="take_selection_postulante"
+						action="#{gestionarIngresosConcursos.takeSelectionPostulante()}"
+						event="onselectionchange" />
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_nroDocumento}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.postulacion.personaPostulante.documentoIdentidad}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_codPostulante}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.postulacion.personaPostulante.usuAlta}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_nombres}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.postulacion.personaPostulante.persona.nombres}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_apellidos}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.postulacion.personaPostulante.persona.apellidos}" />
+					</rich:column>
+					<rich:column width="auto" >
+						<f:facet name="header">
+						#{messages.CU148_puntaje}
+						</f:facet>
+						<h:outputText 
+							value="#{gestionarIngresosConcursos.getTotalPuntosFormateado(_dto.puntajeRealizado)}"  />
+					</rich:column>
+				</rich:extendedDataTable>
+				<br> </br>
+
+
+				<h1>#{messages.cu420_puestos}<span class="required">*</span></h1>
+				<rich:extendedDataTable id="puestosList" var="_dto2" height="150px"
+					width="auto" noDataLabel="#{messages.CU420_nohayDatos}"
+					selectionMode="single" value="#{gestionarIngresosConcursos.lPuestos}"
+					selection="#{gestionarIngresosConcursos.selePuesto2}">
+					<a:support reRender="idOtrosCampos"
+						id="extended_table_bean_take_selection"
+						action="#{gestionarIngresosConcursos.takeSelectionPuesto()}"
+						event="onselectionchange" />
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_codPuesto}
+						</f:facet>
+						<h:outputText
+							value="#{gestionarIngresosConcursos.traerCodPuesto(_dto2.plantaCargoDet)}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_denominacion}
+						</f:facet>
+						<h:outputText value="#{_dto2.plantaCargoDet.descripcion}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_modalidad}
+						</f:facet>
+						<h:outputText
+							value="#{gestionarIngresosConcursos.traerModalidad(_dto2.plantaCargoDet)}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_tipoNombramiento}
+						</f:facet>
+						<h:outputText
+							value="#{gestionarIngresosConcursos.traerTipoNombramientos(_dto2.plantaCargoDet.idPlantaCargoDet)}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_un_org_dependiente}
+						</f:facet>
+						<h:outputText
+							value="#{_dto2.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_dpto}
+						</f:facet>
+						<s:label
+							value="#{_dto2.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_ciudad}
+						</f:facet>
+						<h:outputText
+							value="#{_dto2.plantaCargoDet.oficina.ciudad.descripcion}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CU420_compaBarrio}
+						</f:facet>
+						<h:outputText
+							value="#{_dto2.plantaCargoDet.oficina.barrio.descripcion}" />
+					</rich:column>
+					<rich:column width="auto">
+						<f:facet name="header">
+						#{messages.CategoriaCpt_categoria}
+						</f:facet>
+						<h:outputText
+							value="#{gestionarIngresosConcursos.traerCategoria (_dto2.concursoPuestoAgr)}" />
+					</rich:column>
+					
+					<rich:column width="auto">
+						<f:facet name="header">
+						Remuneraciónes
+						</f:facet>
+						<h:outputText
+							value="#{gestionarIngresosConcursos.traerRemuneraciones(_dto2.concursoPuestoAgr)}" />
+					</rich:column>
+				</rich:extendedDataTable>
+
+			</a:form>
+			<h:form enctype="multipart/form-data">
+				<a:outputPanel ajaxRendered="true" id="idOtrosCampos">
+					<fieldset><legend>#{messages.cu420_otrosCampos}</legend>
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaIngresoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU420_fechaIngreso}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaIngreso"
+								value="#{gestionarIngresosConcursos.fechaIngreso}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="nombramientoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU420_tipoNombramiento}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="nombramiento" style="width:200px;"
+								value="#{gestionarIngresosConcursos.idTipoNombramiento}">
+								<f:selectItems
+									value="#{gestionarIngresosConcursos.tipoNombramientoSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid></fieldset>
+				</a:outputPanel>
+				<a:outputPanel rendered="#{gestionarIngresosConcursos.mostrarContratado}"
+					ajaxRendered="true">
+					<fieldset><legend>#{messages.CU420_contratos}</legend> <h:panelGrid
+						columns="3">
+						<s:decorate id="fechaFirmaContratoField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU420_fechaFirmaContrato}</ui:define>
+							<rich:calendar id="fechaFirmaContrato"
+								value="#{gestionarIngresosConcursos.fechaFirmaContrato}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="fechaFinContratoField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU420_fechaFinContrato}</ui:define>
+							<rich:calendar id="fechaFinContrato"
+								value="#{gestionarIngresosConcursos.fechaFinContrato}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+
+						<s:decorate id="nroContratoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU420_nroContrato}</ui:define>
+							<h:inputText value="#{gestionarIngresosConcursos.nroContrato}" />
+							<s:fileUpload size="30"
+								contentType="#{gestionarIngresosConcursos.cTypeContrato}"
+								data="#{gestionarIngresosConcursos.uFileContrato}"
+								fileName="#{gestionarIngresosConcursos.fNameContrato}"
+								style=" width : 299px;">
+								<s:conversationPropagation type="join" />
+							</s:fileUpload>
+						</s:decorate>
+
+						<h:commandButton value="Adjuntar Contrato"
+							action="#{gestionarIngresosConcursos.adjuntarDocContrato()}" />
+					</h:panelGrid></fieldset>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+				</a:outputPanel>
+				<h:commandButton id="add" value="Agregar"
+					rendered="#{empty gestionarIngresosConcursos.lIngresos}"
+					action="#{gestionarIngresosConcursos.agregarAGrilla()}" />
+				<h:commandButton id="save" value="Guardar Cambios"
+					rendered="#{empty gestionarIngresosConcursos.lIngresos}"
+					action="#{gestionarIngresosConcursos.guardar()}" />
+				
+				<a:commandButton id="siguienteTareaEval" value="Fin"
+					action="#{gestionarIngresosConcursos.nextTask()}">
+					<f:param name="observacion"
+						value="#{rich:findComponent('idObservacion').value}" />
+				</a:commandButton>
+				<s:button id="volverAdd" value="Volver"
+					view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml">
+				</s:button>
+			</h:form>
+
+		</rich:simpleTogglePanel>
+
+		<br />
+		<a:form>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_agregar}" /></div>
+
+			<div class="actionButtons"></div>
+		
+		<rich:simpleTogglePanel id="idPanelIngresos"
+			label="#{messages.CU420_ingresos}" switchType="ajax">
+			
+			<rich:dataTable id="ingresosListTemp" var="_dto3" rowKeyVar="row"
+				value="#{gestionarIngresosConcursos.lIngresosTemp}"
+				rendered="#{not empty gestionarIngresosConcursos.lIngresosTemp and empty gestionarIngresosConcursos.lIngresos}">
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_codPuesto}
+						</f:facet>
+					<h:outputText
+						value="#{gestionarIngresosConcursos.traerCodPuesto(_dto3.plantaCargoDet)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_denominacion}
+						</f:facet>
+					<h:outputText value="#{_dto3.plantaCargoDet.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_tipoNombramiento}
+						</f:facet>
+					<h:outputText value="#{_dto3.tipoNombramiento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_un_org_dependiente}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_dpto}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_ciudad}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.ciudad.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_compaBarrio}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.barrio.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_nroDoc}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.documentoIdentidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_nombres}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.nombres}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_apellidos}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.apellidos}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+					</f:facet>
+					<h:commandLink id="delDets" value="Eliminar"
+								onclick="return confirm('#{messages.msg_confirm_delete}');"
+								reRender="idPanelIngresos" eventsQueue="default"
+								action="#{gestionarIngresosConcursos.eliminar(_dto3)}" />
+				</h:column>
+			</rich:dataTable>
+			
+			<rich:dataTable id="ingresosList" var="_dto3" rowKeyVar="row"
+				value="#{gestionarIngresosConcursos.lIngresos}"
+				rendered="#{not empty gestionarIngresosConcursos.lIngresos}">
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_dpto}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_ciudad}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.ciudad.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_compaBarrio}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.oficina.barrio.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_un_org_dependiente}
+						</f:facet>
+					<h:outputText
+						value="#{_dto3.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_codPuesto}
+						</f:facet>
+					<h:outputText
+						value="#{gestionarIngresosConcursos.traerCodPuesto(_dto3.plantaCargoDet)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_denominacion}
+						</f:facet>
+					<h:outputText value="#{_dto3.plantaCargoDet.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_modalidad}
+						</f:facet>
+					<h:outputText
+						value="#{gestionarIngresosConcursos.traerModalidad(_dto3.plantaCargoDet)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_tipoNombramiento}
+						</f:facet>
+					<h:outputText value="#{_dto3.tipoNombramiento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_nroDoc}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.documentoIdentidad}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_nombres}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.nombres}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU420_apellidos}
+						</f:facet>
+					<h:outputText value="#{_dto3.persona.apellidos}" />
+				</h:column>
+
+			</rich:dataTable>
+			
+		</rich:simpleTogglePanel>
+		</a:form>
+	</ui:define>
+</ui:composition>

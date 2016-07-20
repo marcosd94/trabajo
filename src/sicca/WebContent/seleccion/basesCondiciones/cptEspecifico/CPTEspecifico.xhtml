@@ -1,0 +1,71 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h:form>
+		<fieldset id="idFieldSetCpt" style="width: 700px;"><legend>CPT</legend>
+			<h:panelGrid columns="1" id="panelGridCpt">
+				<s:decorate id="idDecorateTipoClasificadorPT"
+					template="/layout/display.xhtml">
+					<ui:define name="label">Tipo Clasificador de Puestos de Trabajo
+					</ui:define>
+					<h:selectOneMenu id="cpt" style="width : 250px;"
+						value="#{cptEspecificoFormController.idTipoCpt}">
+						<f:selectItems value="#{tipoCptsSelectItems}" />
+						<a:support event="onchange"
+							action="#{cptEspecificoFormController.updateCpt()}"
+							reRender="cptSelect,cptField" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate id="cptField" template="/layout/display.xhtml">
+					<ui:define name="label">CPT</ui:define>
+					<h:inputText id="cpt"
+						value="#{cptEspecificoFormController.codigoCpt}"
+						size="20">
+						<a:support event="onblur" eventsQueue="default"
+							reRender="cptSelect,panelGridCpt"
+							action="#{cptEspecificoFormController.findCpt()}" />
+					</h:inputText>	
+		              	#{' '}
+
+					<h:selectOneMenu id="cptSelect" style="width : 250px;"
+						value="#{cptEspecificoFormController.idCpt}">
+						<f:selectItems
+							value="#{cptEspecificoFormController.cptSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{cptEspecificoFormController.obtenerCodigoCpt()}"
+							reRender="cptField,panelGridCpt" />
+					</h:selectOneMenu>
+
+               <a:commandButton id="searchCpt" eventsQueue="default"
+						image="/img/Buscar.png" reRender="cptField,panelGridCpt"
+						action="#{cptEspecificoFormController.getUrlToPageCpt()}" />
+				</s:decorate>
+
+			</h:panelGrid></fieldset>
+
+			<div class="actionButtons">
+				<a:commandButton id="guardar"
+					value="#{messages['msg_save']}"
+					action="#{cptEspecificoFormController.guardar()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+					
+				<s:button id="cancelEdit" value="Volver"
+					propagation="nest"
+					view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

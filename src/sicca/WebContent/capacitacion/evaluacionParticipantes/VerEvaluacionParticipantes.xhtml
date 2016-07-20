@@ -1,0 +1,260 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU490_titulo_edit}</h1>
+
+		<h:form id="evaluacionParticipantes" styleClass="edit">
+			<rich:panel>
+				<f:facet name="header">#{messages.CU490_panel_capac}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_tit}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{evaluacionParticipantesFC.capacitacion.nombre}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_tipo_capac}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{evaluacionParticipantesFC.capacitacion.datosEspecificosTipoCap.descripcion}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="totalAsistenciaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_cant_asistencia}
+						</ui:define>
+						<h:inputText id="totalAsistencia" size="10" styleClass="numeric"
+							onkeypress="return soloNumeros(event);" disabled="true"
+							value="#{evaluacionParticipantesFC.totalAsistencia}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU490_panel_organizado}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivel">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidad">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="oee">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml" id="unidad">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="panelFiltro">
+				<f:facet name="header">#{messages.CU490_fitros}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU490_pais}
+						</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{evaluacionParticipantesFC.idPais}" style="width:200px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml" id="ci">
+						<ui:define name="label">#{messages.CU490_ci}
+									</ui:define>
+						<h:inputText id="cedula" size="20"
+							value="#{evaluacionParticipantesFC.ci}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="mostrar">
+						<ui:define name="label">#{messages.CU490_mostrar}</ui:define>
+						<h:selectOneMenu id="idMostrar"
+							value="#{evaluacionParticipantesFC.valorMostrar}"
+							style="width:250px">
+							<f:selectItems
+								value="#{evaluacionParticipantesFC.mostrarSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+			<div class="buttons"><a:commandButton
+				action="#{evaluacionParticipantesFC.search()}"
+				value="#{messages.CU487_btn_buscar}" reRender="participantesPanel" />
+			<a:commandButton action="#{evaluacionParticipantesFC.searchAll()}"
+				value="#{messages.CU487_btn_todos}"
+				reRender="panelFiltro,participantesPanel" /> <h:commandButton
+				action="#{evaluacionParticipantesFC.imprimir()}" value="#{messages.CU487_btn_imprimir}" /></div>
+
+			<rich:panel id="participantesPanel" style=" width : 1200px;">
+				<f:facet name="header">#{messages.CU490_panel_participantes}(#{evaluacionParticipantesFC.listaEvalParticipantes.size()})</f:facet>
+
+				<div class="results" id="tbldetList"
+					style="FONT-SIZE: medium; overflow: scroll; width: 1190px; HEIGHT: 230px"><rich:dataTable
+					id="itemsList" var="_items" first="0"
+					value="#{evaluacionParticipantesFC.listaEvalParticipantes}"
+					rowKeyVar="rowNr">
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_participante}
+													</f:facet>
+						<h:outputText value="#{_items.postulacionCap.persona.nombres}" />
+													 #{' '}
+													<h:outputText
+							value="#{_items.postulacionCap.persona.apellidos}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_ci}
+													</f:facet>
+						<h:outputText
+							value="#{_items.postulacionCap.persona.documentoIdentidad}" />
+
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_pais}
+													</f:facet>
+						<h:outputText
+							value="#{_items.postulacionCap.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_asistencia}
+						</f:facet>
+						<h:outputText id="asistencia" value="#{_items.asistencia}" />
+
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_satisfactoriamente}
+						</f:facet>
+						<h:outputText id="si" value="Si"
+							rendered="#{_items.satisfactoriamente.booleanValue() == 't'}" />
+						<h:outputText id="no" value="No"
+							rendered="#{!_items.satisfactoriamente.booleanValue() == 'f'}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_calificacion}
+						</f:facet>
+						<h:outputText value="#{_items.calificacion}" />
+
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_descargo}
+						</f:facet>
+						<h:outputText value="#{_items.observacion}" />
+					</rich:column>
+
+					
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_doc}
+													</f:facet>
+						<h:outputText value="#{_items.documento.nombreFisicoDoc}" />
+
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+						<h:commandLink id="descargar"
+							value="#{messages.CU490_link_descargar}"
+							rendered="#{_items.activo and _items.documento != null}"
+							action="#{evaluacionParticipantesFC.abrirDocumento(rowNr)}" />
+
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU490_certificado}
+													</f:facet>
+						<h:outputText value="APROBACION"
+							rendered="#{_items.certificado.equals('A')}" />
+						<h:outputText value="PARTICIPACION"
+							rendered="#{_items.certificado.equals('P')}" />
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			
+
+			<div class="actionButtons"> <s:button
+				id="cancelAdd" value="Volver" propagation="join"
+				view="/#{evaluacionParticipantesFC.from}.xhtml" />
+			</div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

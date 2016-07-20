@@ -1,0 +1,352 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+
+
+
+	<ui:define name="body">
+		<h1>#{messages.CU350_title2}</h1>
+		<!-- ****Modal para adjuntar archivos**** -->
+		<rich:modalPanel id="adjuntarModal" width="550" height="200"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.CU350_title_popup1}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('adjuntarModal')}.hide()" />
+			</f:facet>
+			<h:form id="formPopup" styleClass="edit"
+				enctype="multipart/form-data">
+				<rich:panel id="tab1">
+					<h:panelGrid columns="1">
+						<a:region>
+							<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml">
+
+								<s:fileUpload size="60"
+									contentType="#{evaluacionAdjudicadoCU634FC.contentType}"
+									data="#{evaluacionAdjudicadoCU634FC.uploadedFile}"
+									fileName="#{evaluacionAdjudicadoCU634FC.fileName}"
+									style=" width : 400px;">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{evaluacionAdjudicadoCU634FC.changeNameDoc()}"
+										reRender="panelDocNomex" />
+								</s:fileUpload>
+
+							</s:decorate>
+
+						</a:region>
+					</h:panelGrid>
+
+
+
+				</rich:panel>
+
+				<div class="actionButtons" align="center"><h:commandButton
+					id="ok" value="Aceptar"
+					action="#{evaluacionAdjudicadoCU634FC.adjuntarDocumento()}" />
+				<a:commandButton id="cancel_tap03" value="Cancelar"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('adjuntarModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<rich:modalPanel id="VerDocumentosModal" width="550" height="350"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">Ver Documentos Adjuntos</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('VerDocumentosModal')}.hide()" />
+			</f:facet>
+			<h:form id="formVerPopUp">
+
+				<div style="clear: both; overflow: auto; HEIGHT: 250px"><rich:dataTable
+					id="tablaDocAdj" cellpadding="0" cellspacing="0" width="400"
+					border="0" var="var" rowKeyVar="col"
+					value="#{evaluacionAdjudicadoCU634FC.listaDocAmostrar}">
+					<rich:column width="300">
+						<f:facet name="header">
+						Documentos
+						</f:facet>
+						<h:outputText value="#{var.nombreFisicoDoc}" />
+					</rich:column>
+					<rich:column width="100">
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+						<h:commandLink value="Descargar" target="_blank"
+							rendered="#{var.idDocumento!=null}"
+							action="#{evaluacionAdjudicadoCU634FC.abrirDoc(col)}" />
+					</rich:column>
+				</rich:dataTable></div>
+
+
+				<div class="actionButtons" align="center"><a:commandButton
+					id="cancel_tap03" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('VerDocumentosModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalX" width="250" height="150"
+			resizeable="false" moveable="true">
+
+			<h:form>
+				<h:outputText value="#{messages.msg_confirm_save} "
+					style="font-weight:bold" />
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Aceptar"
+					action="#{evaluacionAdjudicadoCU634FC.save()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalX'), Richfaces.showModalPanel('modalSave');"
+					reRender="modalSave" /> <a:commandButton id="cancel"
+					action="#{evaluacionAdjudicadoCU634FC.cancelar()}"
+					value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalX')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="modalSave" width="250" height="150"
+			resizeable="false" moveable="true">
+
+			<h:form>
+				<h:outputText value="#{messages.CU41_msg} "
+					rendered="#{evaluacionAdjudicadoCU634FC.msgSave == null}"
+					style="font-weight:bold" />
+				<span class="required"><h:outputText
+					value="#{evaluacionAdjudicadoCU634FC.msgSave} "
+					rendered="#{evaluacionAdjudicadoCU634FC.msgSave != null}"
+					style="font-weight:bold" /></span>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center">
+				<a:commandButton id="cancelSinMsg"
+					value="Aceptar" ajaxSingle="true" rendered="#{evaluacionAdjudicadoCU634FC.msgSave != null}"
+					oncomplete="Richfaces.hideModalPanel('modalSave')" />
+				<a:commandButton
+					id="save" value="Aceptar"
+					rendered="#{evaluacionAdjudicadoCU634FC.msgSave == null}"
+					action="#{evaluacionAdjudicadoCU634FC.aceptar()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalSave');"
+					reRender="panelResultados" /> <a:commandButton id="cancel"
+					action="#{evaluacionAdjudicadoCU634FC.cancelar()}"
+					value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalSave')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalVolver" width="250" height="150"
+			resizeable="false" moveable="true">
+			<h:form>
+				<span style="font-weight: bold"><h:outputText escape="false"
+					value="#{messages.CU41_msg}" /></span>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="ok" value="Aceptar" ajaxSingle="true"
+					action="#{evaluacionAdjudicadoCU634FC.aceptar()}"
+					oncomplete="Richfaces.hideModalPanel('modalVolver')" /> <h:commandButton
+					id="cancel" value="Cancelar" ajaxSingle="true"
+					action="#{evaluacionAdjudicadoCU634FC.cancelar()}"
+					oncomplete="Richfaces.hideModalPanel('modalVolver')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<h:form id="evalDocumentalCab" styleClass="edit">
+
+			<rich:panel>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{evaluacionAdjudicadoCU634FC.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+
+						<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{evaluacionAdjudicadoCU634FC.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU41_cod_postulante}</ui:define>
+
+						<h:inputText id="codPostulante" size="30" disabled="true"
+							value="#{evaluacionAdjudicadoCU634FC.evalDocumentalCab.postulacion.personaPostulante.usuAlta}" />
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons"><a:commandButton id="marcar"
+					value="Seleccionar Todos"
+					action="#{evaluacionAdjudicadoCU634FC.marcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton> <a:commandButton id="desmarcar" value="#{messages.CU74_quitar}"
+					action="#{evaluacionAdjudicadoCU634FC.desmarcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton></div>
+				<br />
+				<div style="clear: both; overflow: auto; HEIGHT: 300px"><rich:panel
+					id="panelResultado">
+					<span class="required">Para aprobar un documento se debe
+					contar con el mismo. Verifique</span>
+					<f:facet name="header">Documentos Presentados(#{evaluacionAdjudicadoCU634FC.listaEvalDocumentalDetDTO.size()}) <span
+							class="required">*</span>
+					</f:facet>
+					<div class="results" id="evalList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty evaluacionAdjudicadoCU634FC.listaEvalDocumentalDetDTO}" />
+					<rich:dataTable id="evaluacionList" var="_eval" rowKeyVar="row"
+						value="#{evaluacionAdjudicadoCU634FC.listaEvalDocumentalDetDTO}"
+						rendered="#{not empty evaluacionAdjudicadoCU634FC.listaEvalDocumentalDetDTO}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_nro}
+						</f:facet>
+							<h:outputText value="#{_eval.nro}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_tipo_doc}
+						</f:facet>
+							<h:outputText value="#{_eval.tipoDocumento.descripcion}">
+							</h:outputText>
+						</h:column>
+
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_obligatorio}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.obligatorio}"
+								disabled="true" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_presento}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.presento}"
+								disabled="true" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_aprobado}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.aprobado}" />
+						</rich:column>
+
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_documento}
+						</f:facet>
+							<h:outputText value="#{_eval.documentos.nombreFisicoDoc}">
+							</h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+
+							<a:commandLink id="showDescargaLink" value="Ver"
+								reRender="VerDocumentosModal"
+								action="#{evaluacionAdjudicadoCU634FC.buscarDocumentosAlistar(row)}"
+								oncomplete="#{rich:component('VerDocumentosModal')}.show()" />
+							#{' '}
+							
+							<a:commandLink id="showAdjuntarLink" value="AdjuntarDoc"
+								reRender="adjuntarModal"
+								action="#{evaluacionAdjudicadoCU634FC.seleccionadoParaAdjuntar(row)}"
+								oncomplete="#{rich:component('adjuntarModal')}.show()" />
+						</h:column>
+					</rich:dataTable></div>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+							<h:inputTextarea id="obs" cols="40"
+								value="#{evaluacionAdjudicadoCU634FC.observacion}" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel></div>
+				<rich:panel id="panelEvaluadores">
+					<f:facet name="header">Evaluadores</f:facet>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU350_comision}</ui:define>
+							<h:inputText id="descComision" size="40" disabled="true"
+								value="#{evaluacionAdjudicadoCU634FC.comision}" />
+						</s:decorate>
+						<s:decorate id="integrante1Field" template="/layout/display.xhtml">
+							<ui:define name="label">Integrante  <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="integrante1"
+								value="#{evaluacionAdjudicadoCU634FC.idIntegranteComision}"
+								style="width:250px">
+								<f:selectItems
+									value="#{evaluacionAdjudicadoCU634FC.integrantesComisionSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<a:commandButton id="agregar" value="Agregar"
+						action="#{evaluacionAdjudicadoCU634FC.agregar()}"
+						reRender="panelEvaluadores" />
+					<br />
+
+					<rich:dataTable id="evaluadoresList" var="_evaluadores"
+						rowKeyVar="fil"
+						value="#{evaluacionAdjudicadoCU634FC.listaEvaluadoresDTO}"
+						rendered="#{not empty evaluacionAdjudicadoCU634FC.listaEvaluadoresDTO}">
+
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU350_integrante}
+						</f:facet>
+							<h:outputText
+								value="#{_evaluadores.personaComision.nombres} #{_evaluadores.personaComision.apellidos}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							<a:commandLink value="Eliminar" reRender="panelEvaluadores"
+								action="#{evaluacionAdjudicadoCU634FC.eliminar(fil)}" />
+
+						</h:column>
+					</rich:dataTable>
+				</rich:panel>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}" /></div>
+				<br />
+
+			</rich:panel>
+
+
+
+			<div class="actionButtons"><a:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{evaluacionAdjudicadoCU634FC.cancel()}"
+				eventsQueue="default"
+				oncomplete="#{rich:component('modalX')}.show()" /> <a:commandButton
+				value="Volver" reRender="modalVolver" eventsQueue="default"
+				oncomplete="#{rich:component('modalVolver')}.show()" /></div>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

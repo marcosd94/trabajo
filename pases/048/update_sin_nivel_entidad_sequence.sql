@@ -1,0 +1,1 @@
+SELECT setval('sinarh.sin_nivel_entidad_id_sin_nivel_entidad_seq', (select max(id_sin_nivel_entidad) from sinarh.sin_nivel_entidad));

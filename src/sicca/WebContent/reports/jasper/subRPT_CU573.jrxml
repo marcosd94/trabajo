@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subRPT_CU573" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="path_logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idGrupoMetodoLogia" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+PER.NOMBRES || ' '|| PER.APELLIDOS  || ' - '|| PER.DOCUMENTO_IDENTIDAD AS FUNCIONARIO, PUESTO.DESCRIPCION,
+CASE WHEN GS.PRESENTE = TRUE THEN 'SI' WHEN GS.PRESENTE = FALSE THEN 'NO' END AS PRESENTE, gs.observacion
+FROM EVAL_DESEMPENO.GRUPOS_SUJETOS GS
+JOIN EVAL_DESEMPENO.GRUPOS_EVALUACION GE
+ON GE.ID_GRUPOS_EVALUACION = gs.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.GRUPO_METODOLOGIA GM
+ON GM.id_grupos_evaluacion =ge.id_grupos_evaluacion
+JOIN EVAL_DESEMPENO.SUJETOS S
+ON S.ID_SUJETOS = GS.ID_SUJETOS
+JOIN GENERAL.EMPLEADO_PUESTO EMP
+ON EMP.ID_EMPLEADO_PUESTO = S.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PER
+ON PER.ID_PERSONA = EMP.ID_PERSONA
+WHERE GM.ID_GRUPO_METODOLOGIA = $P{idGrupoMetodoLogia} and gs.activo= true
+ORDER BY PER.NOMBRES || ' '|| PER.APELLIDOS  || ' - '|| PER.DOCUMENTO_IDENTIDAD]]>
+	</queryString>
+	<field name="funcionario" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="presente" class="java.lang.String"/>
+	<field name="observacion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="0" y="47" width="116" height="32" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Funcionario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="211" y="47" width="100" height="32" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Asistencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="311" y="47" width="235" height="32" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Observación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="116" y="47" width="95" height="32" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="0" y="14" width="62" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Asistencia:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="116" height="28"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{funcionario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="116" y="0" width="95" height="28"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="211" y="0" width="100" height="28"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[( $F{presente}=="SI" ?"PRESENTE" : "AUSENTE" )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="311" y="0" width="235" height="28"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{observacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

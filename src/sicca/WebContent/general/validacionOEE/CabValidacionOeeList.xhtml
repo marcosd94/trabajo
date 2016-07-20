@@ -1,0 +1,215 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml" xmlns:a="http://richfaces.org/a4j">
+
+	<ui:define name="body">
+		<h1>#{messages.CU522_titulo}</h1>
+		<h:form id="cabValidacionOeeSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				id="panelBusqueda" switchType="client">
+
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('general/validacionOEE/CabValidacionOeeList')}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									focus="unidadOrgCodigo" reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('general/validacionOEE/CabValidacionOeeList')}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('general/validacionOEE/CabValidacionOeeList')}" />
+						</s:decorate>
+					</a:region>
+
+					
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU520_descripcion}</ui:define>
+						<h:inputText id="nombreGrupoValidacion"
+							value="#{admGrupoValidacionesOeeListFC.descripcion}" size="50" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado"
+							value="#{admGrupoValidacionesOeeListFC.estado}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.CU520_btn_buscar_grupo}"
+				reRender="panelBusqueda,panelResultado,links"
+				action="#{admGrupoValidacionesOeeListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" value="#{messages.CU522_btn_mostrar}"
+				propagation="none"
+				view="/general/validacionOEE/CabValidacionOeeList.xhtml"
+				includePageParams="false" /></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty cabValidacionOeeList.resultList ? 0 : (cabValidacionOeeList.paginated ? cabValidacionOeeList.resultCount : cabValidacionOeeList.resultList.size)})</f:facet>
+			<div class="results" id="cabValidacionOeeList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty cabValidacionOeeList.resultList}" /> <rich:dataTable
+				id="cabValidacionOeeList" var="_cabValidacionOee"
+				value="#{cabValidacionOeeList.resultList}"
+				rendered="#{not empty cabValidacionOeeList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cabValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU520_cod}" />
+							<ui:param name="propertyPath"
+								value="cabValidacionOee.idCabValidacionOee" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cabValidacionOee.idCabValidacionOee}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cabValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_grupo}" />
+							<ui:param name="propertyPath"
+								value="cabValidacionOee.nombreGrupoValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cabValidacionOee.nombreGrupoValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cabValidacionOeeList}" />
+							<ui:param name="propertyLabel" value="Activo" />
+							<ui:param name="propertyPath" value="cabValidacionOee.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cabValidacionOee.activo ? 'SI' : 'NO'}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cabValidacionOeeList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU521_justificacion}" />
+							<ui:param name="propertyPath"
+								value="cabValidacionOee.justifEstado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cabValidacionOee.justifEstado}" />
+				</h:column>
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link view="/general/validacionOEE/CabValidacionOee.xhtml" value="Ver"
+						propagation="none" id="cabValidacionOee"
+						rendered="#{empty from}">
+						<f:param name="cabValidacionOeeIdCabValidacionOee"
+							value="#{_cabValidacionOee.idCabValidacionOee}" />
+					</s:link>
+            #{' '}
+            <s:link view="/general/validacionOEE/CabValidacionOeeEdit.xhtml" value="Editar"
+						propagation="none" id="cabValidacionOeeEdit"
+						rendered="#{empty from}">
+						<f:param name="cabValidacionOeeIdCabValidacionOee"
+							value="#{_cabValidacionOee.idCabValidacionOee}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/general/validacionOEE/CabValidacionOeeList.xhtml"
+				rendered="#{cabValidacionOeeList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/general/validacionOEE/CabValidacionOeeList.xhtml"
+				rendered="#{cabValidacionOeeList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{cabValidacionOeeList.previousFirstResult}" />
+			</s:link> <s:link view="/general/validacionOEE/CabValidacionOeeList.xhtml"
+				rendered="#{cabValidacionOeeList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{cabValidacionOeeList.nextFirstResult}" />
+			</s:link> <s:link view="/general/validacionOEE/CabValidacionOeeList.xhtml"
+				rendered="#{cabValidacionOeeList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{cabValidacionOeeList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+
+
+	</ui:define>
+
+</ui:composition>

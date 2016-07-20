@@ -1,0 +1,101 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Asignacion_}</h1>
+
+    <h:form id="asignacion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{asignacionHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Asignacion_}</f:facet>
+
+	            <s:decorate id="fechaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Asignacion_fecha}</ui:define>
+	                <rich:calendar id="fecha"
+                             required="true"
+                          datePattern="dd/MM/yyyy"
+                			   locale="#{localeSelector.localeString}"
+                                value="#{asignacionHome.instance.fecha}" />
+	            </s:decorate>
+	            <s:decorate id="valorField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Asignacion_valor}</ui:define>
+	                <h:inputText id="valor"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{asignacionHome.instance.valor}">
+	                    <a:support event="onblur" reRender="valorField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="tblPuestoCategoriaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Asignacion_idPuestoCategoria}</ui:define>
+	                <h:selectOneMenu id="tblPuestoCategoria"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{asignacionHome.idPuestoCategoria}">
+	                    <f:selectItems value="#{tblPuestoCategoriasSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Asignacion_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{asignacionHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{asignacionHome.persist}"
+                       disabled="#{!asignacionHome.wired}"                      
+                       rendered="#{!asignacionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{asignacionHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{asignacionHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{asignacionHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{asignacionHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/asignacion/AsignacionList.xhtml"
+                rendered="#{asignacionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty asignacionFrom ? 'planificacion/asignacion/AsignacionList' : asignacionFrom}.xhtml"
+                rendered="#{!asignacionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

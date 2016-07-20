@@ -1,0 +1,214 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="concursoPuestoAgrSearch" styleClass="edit">
+			<rich:panel>
+				<h:panelGrid columns="2">
+					<s:decorate id="buttonsField" template="/layout/display.xhtml">
+						<h:commandButton id="tarea"
+							disabled="#{empty concursoPuestoAgrExcList.resultList}"
+							value="#{messages.proceso_sgte_tarea}"
+							action="#{firmaResolucionHomologacionExcFC.nextTask()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" />
+
+						<s:button
+							view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+							id="volver" propagation="none" value="#{messages.CU412_volver}">
+						</s:button>
+
+					</s:decorate>
+					<rich:panel>
+						<h1><h:outputText value="#{messages.CU596_titulo_adj}"
+							rendered="#{firmaResolucionHomologacionExcFC.texto.equalsIgnoreCase('ADJ')}" />
+						<h:outputText value="#{messages.CU596_titulo_nom}"
+							rendered="#{firmaResolucionHomologacionExcFC.texto.equalsIgnoreCase('NOM')}" />
+						</h1>
+						<h:panelGrid columns="1">
+							<rich:panel id="panelParametro">
+
+								<h:panelGrid columns="3">
+
+									<s:decorate id="nivelField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_nivel}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+											disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.sinNivelEntidad.nenCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.sinNivelEntidad.nenNombre}" />
+									</s:decorate>
+									<s:decorate id="entidadbField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_entidad}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+											disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.sinEntidad.entCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+											disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.sinEntidad.entNombre}" />
+									</s:decorate>
+									<s:decorate id="oeeField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="orden" size="10" disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+											disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.configuracionUoCab.denominacionUnidad}" />
+
+									</s:decorate>
+								</h:panelGrid>
+								<h:panelGrid>
+
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU243_concurso}</ui:define>
+										<h:inputText id="concurso" disabled="true"
+											value="#{firmaResolucionHomologacionExcFC.concurso.nombre}"
+											style=" width : 514px;" />
+									</s:decorate>
+
+
+								</h:panelGrid>
+							</rich:panel>
+
+
+
+
+							<rich:panel>
+								<f:facet name="header">#{messages['msg_list_search_results']} (#{empty concursoPuestoAgrExcList.resultList ? 0 : (concursoPuestoAgrExcList.paginated ? concursoPuestoAgrExcList.resultCount : concursoPuestoAgrExcList.resultList.size)})</f:facet>
+								<div class="results" id="concursoPuestoAgrExcList"><h:outputText
+									value="#{messages.msg_list_search_no_results}"
+									rendered="#{empty concursoPuestoAgrExcList.resultList}" /> <rich:dataTable
+									id="concursoPuestoAgrExcList" var="_concursoPuestoAgrExc"
+									rowKeyVar="_indice"
+									value="#{concursoPuestoAgrExcList.resultList}"
+									rendered="#{not empty concursoPuestoAgrExcList.resultList}">
+
+
+									<h:column>
+										<f:facet name="header">
+											<ui:include src="/layout/sort.xhtml">
+												<ui:param name="entityList"
+													value="#{concursoPuestoAgrExcList}" />
+												<ui:param name="propertyLabel"
+													value="#{messages.CU412_cod_grupo}" />
+												<ui:param name="propertyPath"
+													value="concursoPuestoAgrExc.concursoPuestoAgr.codGrupo" />
+											</ui:include>
+										</f:facet>
+										<h:outputText
+											value="#{_concursoPuestoAgrExc.concursoPuestoAgr.codGrupo}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<ui:include src="/layout/sort.xhtml">
+												<ui:param name="entityList"
+													value="#{concursoPuestoAgrExcList}" />
+												<ui:param name="propertyLabel"
+													value="#{messages.CU412_denominacion}" />
+												<ui:param name="propertyPath"
+													value="concursoPuestoAgrExc.concursoPuestoAgr.descripcionGrupo" />
+											</ui:include>
+										</f:facet>
+										<h:outputText
+											value="#{_concursoPuestoAgrExc.concursoPuestoAgr.descripcionGrupo}">
+										</h:outputText>
+
+									</h:column>
+
+									<rich:column
+										rendered="#{firmaResolucionHomologacionExcFC.habNombramiento}">
+										<f:facet name="header">
+						Nombramiento?
+						</f:facet>
+										<h:selectBooleanCheckbox
+											value="#{_concursoPuestoAgrExc.nombramiento}"
+											rendered="#{firmaResolucionHomologacionExcFC.esPermanente(_concursoPuestoAgrExc.concursoPuestoAgr.idConcursoPuestoAgr, _concursoPuestoAgrExc.excepcion.idExcepcion)}"
+											id="nombramiento">
+										</h:selectBooleanCheckbox>
+
+									</rich:column>
+
+
+									<rich:column styleClass="action">
+										<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+										<a:commandLink id="gestionar1" eventsQueue="default"
+											value="#{messages.gral_anexos}"
+											action="#{firmaResolucionHomologacionExcFC.anexar(_concursoPuestoAgrExc.idConcursoPuestoAgrExc)}">
+										</a:commandLink>
+									</rich:column>
+
+								</rich:dataTable></div>
+								<div class="tableControl"><s:link
+									view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml"
+									rendered="#{concursoPuestoAgrExcList.previousExists}"
+									value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+									id="firstPage">
+									<f:param name="firstResult" value="0" />
+								</s:link> <s:link
+									view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml"
+									rendered="#{concursoPuestoAgrExcList.previousExists}"
+									value="#{messages.left} #{messages.msg_list_previous_page}"
+									id="previousPage">
+									<f:param name="firstResult"
+										value="#{concursoPuestoAgrExcList.previousFirstResult}" />
+								</s:link> <s:link
+									view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml"
+									rendered="#{concursoPuestoAgrExcList.nextExists}"
+									value="#{messages.msg_list_next_page} #{messages.right}"
+									id="nextPage">
+									<f:param name="firstResult"
+										value="#{concursoPuestoAgrExcList.nextFirstResult}" />
+								</s:link> <s:link
+									view="/excepcionesSeleccion/firmaResolucionExc/FirmarResolucionHomologacionExc.xhtml"
+									rendered="#{concursoPuestoAgrExcList.nextExists}"
+									value="#{messages.msg_list_last_page}#{messages.right}#{messages.right}"
+									id="lastPage">
+									<f:param name="firstResult"
+										value="#{concursoPuestoAgrExcList.lastFirstResult}" />
+								</s:link></div>
+
+
+							</rich:panel>
+
+
+							<a:region>
+								<s:decorate id="obsField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU412_obs}</ui:define>
+									<h:inputTextarea id="obs" cols="80" rows="6"
+										value="#{firmaResolucionHomologacionExcFC.obs}">
+										<a:support event="onchange" eventsQueue="default"
+											reRender="obsField" />
+										<f:validateLength maximum="500" />
+									</h:inputTextarea>
+								</s:decorate>
+							</a:region>
+						</h:panelGrid>
+					</rich:panel>
+				</h:panelGrid>
+			</rich:panel>
+
+
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

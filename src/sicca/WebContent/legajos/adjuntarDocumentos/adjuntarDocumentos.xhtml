@@ -1,0 +1,188 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<h1>#{messages.CU289_titulo}</h1>
+	
+	<rich:panel id="discap" switchType="ajax" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU289_titulo}</f:facet>
+		
+
+		
+		<h:panelGrid columns="2">
+			<a:outputPanel id="panelDocumentosAdjuntos">
+				<s:decorate id="tipoDocField" template="/layout/edit.xhtml"
+					>
+					<ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="datosTdGral" value="#{tab4AdjuntarDocumentosFormController.idTipoDoc}" style="width:250px">
+						<f:selectItems value="#{datosEspecificossByTipoDos}"/>
+						<a:support event="onchange" eventsQueue="default" limitToList="true"
+								action="#{tab4AdjuntarDocumentosFormController.esOtroTipo()}"
+								reRender="descripcion" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+			</a:outputPanel>
+			
+			
+			
+				<a:outputPanel id="numero">
+					<s:decorate id="numDocField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_nr_doc}</ui:define>
+						<h:inputText value="#{tab4AdjuntarDocumentosFormController.numTipoDoc}"
+							size="10" maxlength="100" />
+					</s:decorate>
+				</a:outputPanel>
+				
+				
+				
+				
+				
+				<a:outputPanel id="descripcion">
+					<s:decorate id="descDocField" template="/layout/edit.xhtml" rendered="#{tab4AdjuntarDocumentosFormController.esOtro}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{tab4AdjuntarDocumentosFormController.descTipoDoc}"
+							style="width:250px" maxlength="100" />
+					</s:decorate>
+				</a:outputPanel>
+				<a:outputPanel id="fecha">
+				<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU590_fechaDoc}
+							</ui:define>
+							<rich:calendar enableManualInput="true"
+								value="#{tab4AdjuntarDocumentosFormController.fechaActo}" datePattern="dd/MM/yyyy" />
+				</s:decorate>
+				</a:outputPanel>
+				<a:outputPanel id="panelDoc">
+				<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"
+					>
+					<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="30" id="archivo"
+						contentType="#{tab4AdjuntarDocumentosFormController.contentType}"
+						data="#{tab4AdjuntarDocumentosFormController.uploadedFile}"
+						fileName="#{tab4AdjuntarDocumentosFormController.fileName}"
+						style=" width : 382px;">
+
+					</s:fileUpload>
+				</s:decorate>
+				<s:decorate id="nombreDocField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomFinal"
+						value="#{tab4AdjuntarDocumentosFormController.nombreDoc}" />
+
+				</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+		
+		<h:panelGrid columns="3">
+
+			<a:outputPanel id="panelBotones" ajaxRendered="true">
+				<h:commandButton id="add" eventsQueue="default"
+					rendered="#{!tab4AdjuntarDocumentosFormController.esEdit}"
+					value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+					reRender="panelBotones"
+					action="#{tab4AdjuntarDocumentosFormController.adddocumentosLegajoValidado()}" />
+					
+					<h:commandButton id="update" eventsQueue="default"
+					rendered="#{tab4AdjuntarDocumentosFormController.esEdit}"
+					value="#{messages.msg_update}"
+					reRender="discap,panelBotones"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{tab4AdjuntarDocumentosFormController.updatedocumentosLegajoValidado()}" />
+
+				<h:commandButton id="cancelEdit"
+					rendered="#{tab4AdjuntarDocumentosFormController.esEdit}"
+					reRender="discap,panelBotones" value="#{messages.msg_cancel}"
+					action="#{tab4AdjuntarDocumentosFormController.cancelar()}" />
+		
+			</a:outputPanel>
+		</h:panelGrid>
+	</rich:panel>
+	
+	<rich:panel id="panelResultadoTd" style=" width : 900px;">
+	       <f:facet name="header">#{messages.CU289_titulo}</f:facet>
+	    <div class="results" id="docuList" style="FONT-SIZE: xx-small; overflow: scroll;"  width="310">
+	          
+		#{'  '}	
+		 <rich:dataTable id="documentosList" rowKeyVar="_index"
+	                var="_documentos" rows="10"
+	              value="#{tab4AdjuntarDocumentosFormController.documentoDTOList}"
+	           rendered="#{not empty tab4AdjuntarDocumentosFormController.documentoDTOList}">
+	           
+	        <h:column>
+	          <f:facet name="header">#{messages.CU289_tipo_doc}	</f:facet>
+	            <h:outputText value="#{_documentos.datosEspecificos.descripcion}"/>
+	        </h:column>
+	         <h:column>
+	          <f:facet name="header">#{messages.CU156_documento}	</f:facet>
+	            <h:outputText value="#{_documentos.nombreFisicoDoc}"/>
+	        </h:column>
+		<h:column>
+	          <f:facet name="header">Numero de Documento</f:facet>
+	            <h:outputText value="#{_documentos.nroDocumento}"/>
+	        </h:column>
+	        
+	        <h:column>
+	          <f:facet name="header">Descripcion</f:facet>
+	            <h:outputText value="#{_documentos.descripcion}"/>
+	        </h:column>
+	         <h:column>
+	          <f:facet name="header">Fecha	</f:facet>
+	            <h:outputText value="#{_documentos.fechaDoc}"/>
+	        </h:column>
+	        
+	         <h:column>
+	          <f:facet name="header">Estado</f:facet>
+	            <h:outputText value="#{_documentos.validoLegajo? 'Validado' : 'Pendiente de Validación'}"/>
+	        </h:column>
+					
+	        <rich:column styleClass="action">
+	            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+	          
+	         <a:commandLink id="editDet" value="#{messages.msg_edit}"
+	           		reRender="panelResultado,docuList,documentosList,listado,panelBotones"  eventsQueue="default"
+					action="#{tab4AdjuntarDocumentosFormController.editar(_index)}" />
+											  #{' '}
+	           <a:commandLink id="delDet" value="Eliminar" 
+	           		reRender="panelResultado,docuList,documentosList,listado,panelBotones"  eventsQueue="default"
+					onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+					action="#{tab4AdjuntarDocumentosFormController.eliminar(_index)}" />
+					<!-- rendered="#{tab4AdjuntarDocumentosFormController.verificar(_documentos.datosEspecificos.idDatosEspecificos)}" -->
+	            #{' '}
+	       <h:commandLink value="Descargar"   target="_blank" 
+			action="#{tab4AdjuntarDocumentosFormController.abrirDoc(_index)}" />
+			 #{' '}
+	        
+	       <a:commandLink id="validar" value="Validar" 
+	           		rendered="#{!_documentos.validoLegajo}"
+	           		reRender="panelResultado,docuList,documentosList,listado"  eventsQueue="default"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{tab4AdjuntarDocumentosFormController.validarLegajo(_index)}" />
+					
+			<a:commandLink id="invalidar" value="Invalidar" 
+	           		rendered="#{_documentos.validoLegajo}"
+	           		reRender="panelResultado,docuList,documentosList,listado"  eventsQueue="default"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{tab4AdjuntarDocumentosFormController.invalidarLegajo(_index)}" />  
+					
+					   
+	        </rich:column>
+	        
+	    </rich:dataTable><rich:datascroller for="documentosList" renderIfSinglePage="false"
+								id="scroll">
+								</rich:datascroller>
+	
+	    </div>
+	    </rich:panel>
+	
+</ui:composition>

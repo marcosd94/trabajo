@@ -1,0 +1,231 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/templateLegajo.xhtml">
+
+
+	<ui:define name="body">
+			<h1>#{admRecorridoLaboralFC.empleadoPuestoEvento.persona.nombreCompleto}</h1>
+						
+			<h2>#{admRecorridoLaboralFC.configuracionUoCabEvento.denominacionUnidad}</h2>
+			
+			<h3>#{admRecorridoLaboralFC.configuracionUoDetEvento.denominacionUnidad}</h3>
+			
+			<h4>#{admRecorridoLaboralFC.empleadoPuestoEvento.plantaCargoDet.descripcion}</h4>
+
+	<h:form id="idFormPrincipal"  prependId="false"
+			enctype="multipart/form-data" styleClass="edit">
+	<rich:panel id="panelSuperior"  switchType="ajax" style=" width : 90%;">
+		
+		<f:facet name="header">Cargar Eventos</f:facet>
+							
+				<h:panelGrid columns="1">		
+					
+					<s:decorate id="tipoFieldEvento" template="/layout/display.xhtml">
+							<ui:define name="label">Tipo de Eventos<span class="required">*</span></ui:define>
+									<h:selectOneMenu id="tipo" 
+										value="#{admRecorridoLaboralFC.idTipoEventoDatosEspecificos}" style=" width : 275px;" onclick="#{admRecorridoLaboralFC.esOtroTipoEven()}" onchange="submit()">
+										<f:selectItems
+											value="#{admRecorridoLaboralFC.updateTipoEventosSelectItems()}" />
+										<f:param name="personaIdPersona" value="#{admRecorridoLaboralFC.idPersona}" />
+									</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="tipoFieldesOtro" template="/layout/edit.xhtml" rendered="#{admRecorridoLaboralFC.esOtroTipo}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{admRecorridoLaboralFC.descTipoEvento}"
+							size="30" maxlength="100" disabled="#{admRecorridoLaboralFC.ver}"/>
+					</s:decorate>
+						<s:decorate id="tipoField" template="/layout/display.xhtml" rendered="#{!admRecorridoLaboralFC.ver}">
+								<ui:define name="label">#{messages.CU289_tipo_doc}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipo" disabled="#{admRecorridoLaboralFC.ver}"
+									value="#{admRecorridoLaboralFC.idTipoDoc}" style=" width : 275px;" onclick="#{admRecorridoLaboralFC.esOtroTipo()}" onchange="submit()">
+									<f:selectItems
+										value="#{admRecorridoLaboralFC.updateTipoDocSelectItems()}" />
+									<f:param name="personaIdPersona" value="#{admRecorridoLaboralFC.idPersona}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							
+					
+					<s:decorate id="descDocFieldesOtro" template="/layout/edit.xhtml" rendered="#{admRecorridoLaboralFC.esOtro}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{admRecorridoLaboralFC.descTipoDoc}"
+							size="30" maxlength="100" disabled="#{admRecorridoLaboralFC.ver}"/>
+					</s:decorate>
+					
+					<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto<span class="required">*</span>
+					</ui:define>
+					<s:fileUpload size="60"
+						contentType="#{admRecorridoLaboralFC.contentType}"
+						data="#{admRecorridoLaboralFC.uploadedFile}"
+						fileName="#{admRecorridoLaboralFC.fileName}"
+						style=" width : 275px;" />
+				</s:decorate>
+					<s:decorate id="documentoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomFinal"
+						value="#{admRecorridoLaboralFC.nombreDoc}" />
+
+				</s:decorate>
+														
+						
+		
+					<s:decorate id="descDocField" template="/layout/edit.xhtml">
+								
+								<ui:define name="label">#{messages.CU651_acto_administativo}<span class="required">*</span></ui:define>
+										<h:inputText value="#{admRecorridoLaboralFC.nroActoAdministrativo}" id="idNroDoc" styleClass="numeric" 
+											disabled="#{admRecorridoLaboralFC.ver}"		onkeypress="return soloNumeros(event);"/>
+					</s:decorate>
+		
+					<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU541_fecha}<span class="required">*</span></ui:define>
+								<rich:calendar enableManualInput="true" disabled="#{admRecorridoLaboralFC.ver}"
+										value="#{admRecorridoLaboralFC.fechaActoAdministrativo}" datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					
+			            
+		            <s:decorate  template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.encabezadoActoAdministrativo}<span class="required">*</span></ui:define>
+				                <h:inputTextarea id="descActo"
+				                               cols="80" disabled="#{admRecorridoLaboralFC.ver}"
+				                               rows="6"
+				                         value="#{admRecorridoLaboralFC.encabezado}" style="height : 60px; width : 299px;">
+						                 <f:validateLength maximum="500" />
+						        </h:inputTextarea>
+		            </s:decorate>
+		            
+		            <s:decorate  template="/layout/edit.xhtml">
+		                <ui:define name="label">Observaciones<span
+											class="required">*</span></ui:define>
+		                <h:inputTextarea id="obs"
+		                               cols="80" disabled="#{admRecorridoLaboralFC.ver}"
+		                               rows="6"
+		                         value="#{admRecorridoLaboralFC.observaciones}" style="height : 60px; width : 299px;">
+		                 <f:validateLength maximum="900" />
+				        </h:inputTextarea>
+		            </s:decorate>
+		            
+			
+				 <s:decorate  template="/layout/edit.xhtml">			    
+					<a:outputPanel ajaxRendered="true" >
+					<div class="actionButtons" align="right">
+						
+										
+						<h:commandButton id="addToList"
+							action="#{admRecorridoLaboralFC.addRowEvento()}"
+							value="#{messages.msg_list_add}" 
+							rendered="#{admRecorridoLaboralFC.eventoAdd.idEventoRecorridoLaboral == null}" />
+														
+						<h:commandButton id="updateOnList"
+							action="#{admRecorridoLaboralFC.addRowEvento()}"
+							value="#{messages.msg_update}"
+							ajaxSingle="true"
+							rendered="#{admRecorridoLaboralFC.eventoAdd.idEventoRecorridoLaboral != null }" />
+			
+						<a:commandButton id="cancelEditOnList"
+							action="#{admRecorridoLaboralFC.limpiarEvento()}"
+							value="#{messages.msg_cancel}"
+							reRender="panelDetalles,panelSuperior"
+							rendered="#{admRecorridoLaboralFC.eventoAdd.idEventoRecorridoLaboral != null}" />
+						
+						<a:commandButton id="ClearOnList"
+							action="#{admRecorridoLaboralFC.limpiarEvento()}"
+							value="Limpiar"
+							reRender="panelDetalles,panelSuperior"
+							rendered="#{admRecorridoLaboralFC.eventoAdd.idEventoRecorridoLaboral == null}" />
+							
+						
+										
+				</div>
+				</a:outputPanel>
+	            </s:decorate>			
+			</h:panelGrid>
+			
+		</rich:panel>
+		<rich:panel id="panelInferior"  switchType="ajax" style=" width : 90%;">
+			<f:facet name="header">Listado Eventos</f:facet>
+			<h:panelGrid columns="1">
+			<a:outputPanel ajaxRendered="true" id="panelEventoModal">
+				<div class="results" id="tblIdiomaList" style="overflow: scroll">
+				<rich:dataTable id="itemsList" var="_evento"  style=" width : 100%;" 
+					value="#{admRecorridoLaboralFC.eventos}"
+					rows="5" rowKeyVar="rowNr">
+					<rich:column>
+						<f:facet name="header">Tipo de Evento</f:facet>
+						<h:outputText value="#{_evento.tipoEventoDatosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Nro. Acto Administrativo</f:facet>
+						<h:outputText  value="#{_evento.nroActoAdministrativo}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Fecha de Acto Administrativo</f:facet>
+						<h:outputText value="#{_evento.fechaActoAdministrativo}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Cabecera de Acto Administrativo</f:facet>
+						<h:outputText value="#{_evento.encabezado}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Observaciones</f:facet>
+						<h:outputText value="#{_evento.observaciones}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Documento</f:facet>
+						#{' '}	
+						<h:commandLink value="Descargar"   target="_blank" 	
+					action="#{admRecorridoLaboralFC.abrirDocEvento(_evento.documento.idDocumento)}" /> 
+					</rich:column>
+					<rich:column >
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<a:commandLink id="removeRowEvento" 
+						action="#{admRecorridoLaboralFC.deleteRowEventos(rowNr)}"
+						value="#{messages.msg_list_remove}"
+						onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+						reRender="panelDetalles" />
+						
+	            		#{' '}
+	            		<h:commandLink id="editRow"
+						action="#{admRecorridoLaboralFC.editarEventos(rowNr)}"
+						value="#{messages.msg_edit}"
+						
+						/>
+						  
+					</rich:column>
+				</rich:dataTable><rich:datascroller for="itemsList" id="scrollEve"
+			renderIfSinglePage="false" /></div>
+			</a:outputPanel>
+		</h:panelGrid>
+		</rich:panel>
+		<div class="actionButtons">
+		
+		
+		<s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/#{admRecorridoLaboralFC.from}.xhtml">
+
+				<f:param name="texto" value="GShow651" />
+				<f:param name="accion" value="EDITAR" />
+		</s:button></div>			
+			
+			
+
+		
+		
+
+</h:form>
+
+	</ui:define>
+
+</ui:composition>

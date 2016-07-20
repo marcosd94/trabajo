@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Pais_}</h1>
+
+    <h:form id="pais" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{paisHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Pais_}</f:facet>
+
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true" maxlength="100"
+	                       disabled="false"  size="100"
+	                          value="#{paisHome.instance.descripcion}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="paisCodigoSinarhField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Pais_cod_sinarh}</ui:define>
+	                <h:inputText id="paisCodigoSinarh"
+	                		disabled="false"
+	                          value="#{paisHome.instance.paisCodigoSinarh}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="paisCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Pais_cod_int}</ui:define>
+	                <h:inputText id="paisCodigo"
+	                		disabled="false"
+	                          value="#{paisHome.instance.prefijo}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Pais_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{paisHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!paisHome.managed}" styleClass="labelClass"/>
+	            <h:outputText value="#{messages.msg_obs_update}" rendered="#{paisHome.managed}" styleClass="labelClass"/>
+	        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{paisHome.persist}"
+                       disabled="#{!paisHome.wired}"     
+                             onclick="return confirm('#{messages.msg_confirm_save}');"                       
+                       rendered="#{!paisHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{paisHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{paisHome.managed}"/>
+
+          
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/pais/PaisList.xhtml"
+                rendered="#{paisHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty paisFrom ? 'planificacion/pais/PaisList' : paisFrom}.xhtml"
+                rendered="#{!paisHome.managed}"/>
+
+        </div>
+        
+        	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{paisHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{paisHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{paisHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{paisHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{paisHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{paisHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{paisHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{paisHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+        
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

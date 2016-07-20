@@ -1,0 +1,287 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h:form id="parentesco" prependId="false" enctype="multipart/form-data"
+		styleClass="edit">
+		<rich:panel  id = "panelTienePariente" style=" width : 872px;">
+			<h1 id="titulo" style="text-align: left; font-size: 15pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_1')}</h1>
+			<h2 id="subtitulo" style="text-align: left; font-size: 10pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_2')}</h2>
+			<h2 id="subtitulo2" style="text-align: left; font-size: 10pt">Tiene
+				Parientes</h2>
+				<h:selectOneRadio value="#{tab7ParentescoFormController.tienePariente}">
+					<f:selectItems
+						value="#{tab7ParentescoFormController.tieneParientes()}" />
+					<a:support event="onclick" action="#{tab7ParentescoFormController.actualizarTieneParientes()}"/>
+				</h:selectOneRadio>
+				<ui:remove>
+					<a:commandButton
+										id="tieneParientes"
+										action="#{tab7ParentescoFormController.actualizarTieneParientes()}"
+										value="Confirmar"
+										reRender="panelTienePariente"
+									/>
+				</ui:remove>
+
+			<br />
+			<br />
+		</rich:panel>
+		<rich:panel id="panelSuperior" style=" width : 872px;">
+			<f:facet name="header">#{messages.CU212_tab7_agregarParentesco}</f:facet>
+
+			<h:panelGrid columns="1">
+					<s:decorate id="gradoParentField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU212_tab7_tipoParentesco}</ui:define>
+						<h:selectOneMenu id="tipoParentesco"
+							value="#{tab7ParentescoFormController.idDatosEspecificos}"
+							style="width:250px">
+							<a:support event="onchange" eventsQueue="default"
+								reRender="gradoParentField" />
+							<f:selectItems
+								value="#{datosEspecificossByGradoParentSelectItems}" />
+
+						</h:selectOneMenu>
+					</s:decorate>
+
+
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab7_Nombres}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText size="60" maxlength="100"
+						value="#{tab7ParentescoFormController.nombres}">
+					</h:inputText>
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab7_apellidos}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText size="60" maxlength="100"
+						value="#{tab7ParentescoFormController.apellidos}">
+					</h:inputText>
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab7_ci}
+					</ui:define>
+					<h:inputText size="60" maxlength="100"
+						value="#{tab7ParentescoFormController.documentoIdentidad}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab7_institucion}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText size="60" maxlength="100"
+						value="#{tab7ParentescoFormController.institucion}">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+
+
+			<h:panelGrid columns="">
+
+
+
+			</h:panelGrid>
+			<div style="clear: both">
+				<span class="required">*</span> #{messages.msg_required_fields}
+			</div>
+			<br />
+			<div style="clear: both">
+				<h:outputText value="#{messages.Parentesco_lbl_datos_requeridos}"
+					rendered="#{!PersonaHome.managed}" styleClass="labelClass" />
+			</div>
+			<br />
+
+			<div class="actionButtons">
+				<h:commandButton id="addToList"
+					action="#{tab7ParentescoFormController.addRow()}"
+					value="#{messages.msg_list_add}"
+					reRender="panelDetalles,panelSuperior,panelTienePariente"
+					rendered="#{tab7ParentescoFormController.parentesco.idParentesco == null}"
+					onclick="#{tab7ParentescoFormController.init()}" />
+
+
+				<a:commandButton id="ClearOnList"
+					action="#{tab7ParentescoFormController.clearDataDetail()}"
+					value="#{tab7ParentescoFormController.esEdit? 'Cancelar' : 'Limpiar'}"
+					reRender="panelDetalles,panelDetalles2,panelSuperior" />
+
+				<a:commandButton id="update"
+					action="#{tab7ParentescoFormController.update()}"
+					value="#{messages.msg_update}"
+					reRender="panelDetalles,panelDetalles2,panelSuperior"
+					rendered="#{tab7ParentescoFormController.esEdit}" />
+
+			</div>
+
+		</rich:panel>
+
+		<br />
+
+
+
+
+		<!-- LISTAR POR CONSANGUINIDAD -->
+		 <h:form ><a:outputPanel ajaxRendered="true" id="listado">
+		<rich:panel id="panelDetalles" style=" width : 872px;">
+			<f:facet name="header">#{messages.parentesco_consanguinidad} (#{tab7ParentescoFormController.listDetails.size})</f:facet>
+
+			<div class="results" id="details" style="overflow: scroll;"
+				width="310">
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty tab7ParentescoFormController.listDetails}" />
+
+				<rich:dataTable id="detailsParentesco" var="_detail" rows="5"
+					value="#{tab7ParentescoFormController.listDetails}"
+					rendered="#{not empty tab7ParentescoFormController.listDetails}"
+					rowKeyVar="_index">
+
+					<rich:column style="width:220px;">
+						<f:facet name="header">#{messages.CU212_tab7_tipoParentesco}</f:facet>
+						<h:outputText value="#{_detail.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_Nombres}</f:facet>
+						<h:outputText value="#{_detail.nombres}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_apellidos}</f:facet>
+						<h:outputText value="#{_detail.apellidos}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_ci}</f:facet>
+						<h:outputText value="#{_detail.documentoIdentidad}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_institucion}</f:facet>
+						<h:outputText value="#{_detail.institucion}" />
+					</rich:column>
+
+
+
+					<rich:column styleClass="action" style="width:90px;">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<a:commandLink id="removeRow" value="#{messages.msg_list_remove}"
+							action="#{tab7ParentescoFormController.removeRow1(_index)}"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="panelDetalles,details,detailsParentesco,listado,panelTienePariente" />
+					#{'  '}
+					<a:commandLink id="Edit" value="#{messages.msg_list_edit}"
+							eventsQueue="default" reRender="panelSuperior"
+							rendered="#{tab7ParentescoFormController.listDetails.size>0 ? 'true' : 'false'}"
+							action="#{tab7ParentescoFormController.editar1(_index)}" />
+
+
+
+
+
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller for="detailsParentesco" id="scrollparentesco"
+					renderIfSinglePage="false" />
+			</div>
+		</rich:panel>
+		<br />
+
+
+
+
+
+
+		<!-- LISTAR POR AFINIDAD -->
+		<rich:panel id="panelDetalles2" style=" width : 872px;">
+			<f:facet name="header">#{messages.parentesco_afinidad} (#{tab7ParentescoFormController.listDetails2.size})</f:facet>
+			<div class="results" id="details2" style="overflow: scroll;"
+				width="310">
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty tab7ParentescoFormController.listDetails2}" />
+
+
+				<rich:dataTable id="detailsParentesco2" var="_detail2" rows="5"
+					value="#{tab7ParentescoFormController.listDetails2}"
+					rendered="#{not empty tab7ParentescoFormController.listDetails2}"
+					rowKeyVar="_index2" columnClasses=".first {width: 250px;}">
+
+					<rich:column style="width:220px;">
+						<f:facet name="header">#{messages.CU212_tab7_tipoParentesco}</f:facet>
+						<h:outputText value="#{_detail2.datosEspecificos.descripcion}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_Nombres}</f:facet>
+						<h:outputText value="#{_detail2.nombres}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_apellidos}</f:facet>
+						<h:outputText value="#{_detail2.apellidos}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_ci}</f:facet>
+						<h:outputText value="#{_detail2.documentoIdentidad}" />
+					</rich:column>
+					<rich:column style="width:90px;">
+						<f:facet name="header">#{messages.CU212_tab7_institucion}</f:facet>
+						<h:outputText value="#{_detail2.institucion}" />
+					</rich:column>
+
+
+
+					<rich:column styleClass="action" style="width:90px;">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+
+						<a:commandLink id="removeRow" value="#{messages.msg_list_remove}"
+							action="#{tab7ParentescoFormController.removeRow2(_index)}"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="panelDetalles2,details2,detailsParentesco2,listado,panelTienePariente" />							
+							
+							
+					#{'  '}
+					<a:commandLink id="Edit2" value="#{messages.msg_list_edit}"
+							eventsQueue="default" reRender="panelSuperior"
+							rendered="#{tab7ParentescoFormController.listDetails2.size>0 ? 'true' : 'false'}"
+							action="#{tab7ParentescoFormController.editar2(_index2)}" />
+
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller for="detailsParentesco2" id="scrollparentesco2"
+					renderIfSinglePage="false" />
+			</div>
+		</rich:panel>
+		</a:outputPanel>
+		</h:form>
+
+
+
+		<!-- 		<div style="clear: both"><h:outputText
+			value="#{messages.ExperienciaLaboral_lbl_obs_add}"
+			rendered="#{!parentescoHome.managed}" styleClass="labelClass" />
+		</div> -->
+		<div class="actionButtons" width="310" style="width: 872px;">
+			<h:commandButton id="next" rendered="false"
+				value="#{messages.msg_to_next}" action="#" />
+			<s:button id="cancelEdit" value="#{messages.msg_done}"
+				propagation="none" view="/cuentaUsuarioPortal.xhtml"
+				onclick="#{tab7ParentescoFormController.init()}" />
+			<h3 id="subtitulo" style="text-align: left; font-size: 8pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_3')}</h3>
+			<p id="subtitulo" style="text-align: left; font-size: 8pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_4')}</p>
+			<p id="subtitulo" style="text-align: left; font-size: 8pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_5')}</p>
+			<br />
+			<p id="subtitulo" style="text-align: left; font-size: 8pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_6')}</p>
+			<br />
+			<p id="subtitulo" style="text-align: left; font-size: 8pt">#{mensajeListFormController.getValorByCodigo('msg_perentezco_7')}</p>
+		</div>
+
+	</h:form>
+
+</ui:composition>

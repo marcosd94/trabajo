@@ -1,0 +1,188 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.PuestoConceptoPago_}</h1>
+		
+
+		<h:form id="puestoConceptoPagoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.PuestoConceptoPago_usuAlta}</ui:define>
+					<h:inputText id="usuAlta"
+						value="#{puestoConceptoPagoList.puestoConceptoPago.usuAlta}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.PuestoConceptoPago_usuMod}</ui:define>
+					<h:inputText id="usuMod"
+						value="#{puestoConceptoPagoList.puestoConceptoPago.usuMod}" />
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false" /> <s:button id="print"
+				value="#{messages.msg_list_search_print_button}"
+				view="/planificacion/puestoConceptoPago/PuestoConceptoPagoListPdf.xhtml" /></div>
+
+		</h:form>
+
+		<rich:panel>
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty puestoConceptoPagoList.resultList ? 0 : (puestoConceptoPagoList.paginated ? puestoConceptoPagoList.resultCount : puestoConceptoPagoList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty puestoConceptoPagoList.obtenerListaPuestoConceptoPagos()}" /> <rich:dataTable
+				id="puestoConceptoPagoList" var="_puestoConceptoPago"
+				value="#{puestoConceptoPagoList.resultList}"
+				rendered="#{not empty puestoConceptoPagoList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_idPlantaCargoDet}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.plantaCargoDet.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.plantaCargoDet.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_idConceptoPago}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.conceptoPago.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.conceptoPago.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_monto}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.monto" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.monto}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_usuAlta}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.usuAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.usuAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_usuMod}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.usuMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.usuMod}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_fechaAlta}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.fechaAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{puestoConceptoPagoList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.PuestoConceptoPago_fechaMod}" />
+							<ui:param name="propertyPath" value="puestoConceptoPago.fechaMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_puestoConceptoPago.fechaMod}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/puestoConceptoPago/PuestoConceptoPago' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="puestoConceptoPagoViewId">
+						<f:param name="puestoConceptoPagoIdPuestoConceptoPago"
+							value="#{_puestoConceptoPago.idPuestoConceptoPago}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/puestoConceptoPago/PuestoConceptoPagoEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="puestoConceptoPagoEdit" rendered="#{empty from}">
+						<f:param name="puestoConceptoPagoIdPuestoConceptoPago"
+							value="#{_puestoConceptoPago.idPuestoConceptoPago}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link view="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml"
+			rendered="#{puestoConceptoPagoList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml"
+			rendered="#{puestoConceptoPagoList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{puestoConceptoPagoList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml"
+			rendered="#{puestoConceptoPagoList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{puestoConceptoPagoList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/puestoConceptoPago/PuestoConceptoPagoList.xhtml"
+			rendered="#{puestoConceptoPagoList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{puestoConceptoPagoList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/puestoConceptoPago/PuestoConceptoPagoEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="puestoConceptoPagoIdPuestoConceptoPago" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,199 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.Asignacion_}</h1>
+		
+
+		<h:form id="asignacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Asignacion_usuAlta}</ui:define>
+					<h:inputText id="usuAlta"
+						value="#{asignacionList.asignacion.usuAlta}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Asignacion_usuMod}</ui:define>
+					<h:inputText id="usuMod"
+						value="#{asignacionList.asignacion.usuMod}" />
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="/planificacion/asignacion/AsignacionList.xhtml">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false" /> <s:button id="print"
+				value="#{messages.msg_list_search_print_button}"
+				view="/planificacion/asignacion/AsignacionListPdf.xhtml" /></div>
+
+		</h:form>
+
+		<rich:panel>
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty asignacionList.resultList ? 0 : (asignacionList.paginated ? asignacionList.resultCount : asignacionList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty asignacionList.obtenerListaAsignacions()}" /> <rich:dataTable
+				id="asignacionList" var="_asignacion"
+				value="#{asignacionList.resultList}"
+				rendered="#{not empty asignacionList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_usuAlta}" />
+							<ui:param name="propertyPath" value="asignacion.usuAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.usuAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_usuMod}" />
+							<ui:param name="propertyPath" value="asignacion.usuMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.usuMod}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_fechaMod}" />
+							<ui:param name="propertyPath" value="asignacion.fechaMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.fechaMod}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_fechaAlta}" />
+							<ui:param name="propertyPath" value="asignacion.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.fechaAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_fecha}" />
+							<ui:param name="propertyPath" value="asignacion.fecha2" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.fecha2}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_valor}" />
+							<ui:param name="propertyPath" value="asignacion.valor" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.valor}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_idPuestoCategoria}" />
+							<ui:param name="propertyPath" value="asignacion.tblPuestoCategoria.codigoCategoria" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.tblPuestoCategoria.codigoCategoria}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{asignacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_activo}" />
+							<ui:param name="propertyPath" value="asignacion.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_asignacion.activo}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/asignacion/Asignacion' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="asignacionViewId">
+						<f:param name="asignacionIdAsignacion"
+							value="#{_asignacion.idAsignacion}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/asignacion/AsignacionEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="asignacionEdit" rendered="#{empty from}">
+						<f:param name="asignacionIdAsignacion"
+							value="#{_asignacion.idAsignacion}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link view="/planificacion/asignacion/AsignacionList.xhtml"
+			rendered="#{asignacionList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/asignacion/AsignacionList.xhtml"
+			rendered="#{asignacionList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{asignacionList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/asignacion/AsignacionList.xhtml"
+			rendered="#{asignacionList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{asignacionList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/asignacion/AsignacionList.xhtml"
+			rendered="#{asignacionList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{asignacionList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/asignacion/AsignacionEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="asignacionIdAsignacion" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

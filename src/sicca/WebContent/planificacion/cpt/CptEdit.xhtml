@@ -1,0 +1,748 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1></h1>
+		<!--******************** MODALES ******************-->
+		<!-- ****Modal tab02**** Escala Contenido Funcional-->
+		<rich:modalPanel id="valoracionMiniModal" width="550" height="350"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">#{messages.Tab02_Title_Popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab1">
+					<div style="clear: both; overflow: auto; HEIGHT: 250px">
+						<rich:dataTable id="tablaPopupTab2" cellpadding="0"
+							cellspacing="0" width="600" border="0" var="var"
+							value="#{administrarCptFormController.listaValoracionTab2}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="2" width="100px">
+										<h:outputText value="#{messages.Tab02_Tipo}" />
+									</rich:column>
+									<rich:column colspan="3" width="400px">
+										<h:outputText value="#{messages.Tab02_Escalas}" />
+									</rich:column>
+									<rich:column breakBefore="true">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="50px">
+								<h:outputText value="#{var.descripcion}" />
+							</rich:column>
+							<rich:subTable var="detalle"
+								value="#{administrarCptFormController.traerValorNivelOrg(var.idContenidoFuncional)}"
+								rowKeyVar="subRow">
+								<rich:column width="50px;" style="text-align: center;">
+									<h:outputText value="#{detalle.desde} - #{detalle.hasta}"
+										size="50" />
+								</rich:column>
+								<rich:column width="350px;">
+									<h:outputText value="#{detalle.descripcion}" size="50" />
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable>
+					</div>
+
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<a:commandButton id="cancel_tap03" value="Volver"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('valoracionMiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<!-- ****Modal tab03**** Escala Requisitos Minimos -->
+		<rich:modalPanel id="valoracionTab03MiniModal" width="550"
+			height="350" autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.Tab03_Title_popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab03">
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px">
+						<rich:dataTable id="tablaPopupTab3" cellpadding="0"
+							cellspacing="0" width="600" border="0" var="var"
+							value="#{administrarCptFormController.listaValoracionTab3}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="2" width="100px">
+										<h:outputText value="#{messages.Tab02_Tipo}" />
+									</rich:column>
+									<rich:column colspan="3" width="400px">
+										<h:outputText value="#{messages.Tab02_Escalas}" />
+									</rich:column>
+									<rich:column breakBefore="true">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="50px">
+								<h:outputText value="#{var.descripcion}" />
+							</rich:column>
+							<rich:subTable var="detalle"
+								value="#{administrarCptFormController.traerEscalaReqMin(var.idRequisitoMinimoCpt)}"
+								rowKeyVar="subRow">
+								<rich:column width="50px;" style="text-align: center;">
+									<h:outputText value="#{detalle.desde} - #{detalle.hasta}"
+										size="50" />
+								</rich:column>
+								<rich:column width="350px;">
+									<h:outputText value="#{detalle.descripcion}" size="50" />
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable>
+					</div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<a:commandButton id="cancel_tap03" value="Cancelar"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('valoracionTab03MiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+		<!-- ****Modal tab04**** -->
+		<rich:modalPanel id="valoracionTab04MiniModal" width="550"
+			height="350" autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.Tab04_Title_popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab03">
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px">
+						<rich:dataTable id="tablaPopupTab4" cellpadding="0"
+							cellspacing="0" width="600" border="0" var="var"
+							value="#{administrarCptFormController.listaValoracionTab4}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="2" width="100px">
+										<h:outputText value="#{messages.Tab02_Tipo}" />
+									</rich:column>
+									<rich:column colspan="3" width="400px">
+										<h:outputText value="#{messages.Tab02_Escalas}" />
+									</rich:column>
+									<rich:column breakBefore="true">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="50px">
+								<h:outputText value="#{var.descripcion}" />
+							</rich:column>
+							<rich:subTable var="detalle"
+								value="#{administrarCptFormController.traerEscalaCondTrab(var.idCondicionTrabajo)}"
+								rowKeyVar="subRow">
+								<rich:column width="50px;" style="text-align: center;">
+									<h:outputText value="#{detalle.desde} - #{detalle.hasta}"
+										size="50" />
+								</rich:column>
+								<rich:column width="350px;">
+									<h:outputText value="#{detalle.descripcion}" size="50" />
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable>
+					</div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<a:commandButton id="cancel_tap03" value="Cancelar"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('valoracionTab04MiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+		<!-- ****Modal tab05**** -->
+		<rich:modalPanel id="valoracionTab05MiniModal" width="650"
+			height="350" autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.Tab05_Title_popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab05">
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px">
+						<rich:dataTable id="tablaPopupTab5" cellpadding="0"
+							cellspacing="0" width="700" border="0" var="val"
+							value="#{administrarCptFormController.listaValoracionTab5}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="2" width="100px">
+										<h:outputText value="#{messages.Tab02_Tipo}" />
+									</rich:column>
+									<rich:column colspan="3" width="400px">
+										<h:outputText value="#{messages.Tab02_Escalas}" />
+									</rich:column>
+									<rich:column breakBefore="true">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column colspan="1" style="background-color:lightgrey;"
+								width="100px">
+								<h:outputText value="#{val.condicionTrabajoEspecif.tipo}" />
+							</rich:column>
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="100px">
+								<h:outputText value="#{val.condicionTrabajoEspecif.descripcion}" />
+							</rich:column>
+							<rich:subTable var="detalle" value="#{val.listaEscala}"
+								rowKeyVar="subRow">
+								<rich:column width="50px;" style="text-align: center;">
+									<h:outputText value="#{detalle.desde} - #{detalle.hasta}"
+										size="50" />
+								</rich:column>
+								<rich:column width="350px;">
+									<h:outputText value="#{detalle.descripcion}" size="50" />
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable>
+					</div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<a:commandButton id="cancel_tap03" value="Cancelar"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('valoracionTab05MiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+		<!-- ****Modal tab06**** -->
+		<rich:modalPanel id="valoracionTab06MiniModal" width="650"
+			height="350" autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.Tab06_Title_popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab06">
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px">
+						<rich:dataTable id="tablaPopupTab6" cellpadding="0"
+							cellspacing="0" width="700" border="0" var="valor"
+							value="#{administrarCptFormController.listaValoracionTab6}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="2" width="100px">
+										<h:outputText value="#{messages.Tab02_Tipo}" />
+									</rich:column>
+									<rich:column colspan="3" width="400px">
+										<h:outputText value="#{messages.Tab02_Escalas}" />
+									</rich:column>
+									<rich:column breakBefore="true">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column colspan="1" style="background-color:lightgrey;"
+								width="100px">
+								<h:outputText value="#{valor.condicionSegur.orden}" />
+							</rich:column>
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="100px">
+								<h:outputText value="#{valor.condicionSegur.descripcion}" />
+							</rich:column>
+							<rich:subTable var="detalle" value="#{valor.listaEscalaCondSeg}"
+								rowKeyVar="subRow">
+								<rich:column width="50px;" style="text-align: center;">
+									<h:outputText value="#{detalle.desde} - #{detalle.hasta}"
+										size="50" />
+								</rich:column>
+								<rich:column width="350px;">
+									<h:outputText value="#{detalle.descripcion}" size="50" />
+								</rich:column>
+							</rich:subTable>
+						</rich:dataTable>
+					</div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<a:commandButton id="cancel_tap03" value="Cancelar"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('valoracionTab06MiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<h:panelGrid rendered="#{tipo == 'general'}">
+			<h1>#{messages.CategoriaCpt_General}</h1>
+		</h:panelGrid>
+		<h:panelGrid rendered="#{tipo == 'especifico'}">
+			<h1>#{messages.CategoriaCpt_Especifico}</h1>
+		</h:panelGrid>
+		<!-- **************** FIN MODALES ********************** -->
+		<h:form id="cpt" styleClass="edit">
+			<rich:panel id="panelGral">
+				<!--  <f:facet name="header">#{cptHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Cpt_}</f:facet>-->
+				<f:facet name="header">#{cptHome.managed ? 'Editar'  : 'Nuevo'}</f:facet>
+
+
+				<h:panelGrid columns="2">
+					<rich:panel style="border:none;">
+						<a:region>
+							<s:decorate id="cptPadreField" template="/layout/edit.xhtml"
+								rendered="#{administrarCptFormController.tipo == 'especifico'}">
+								<ui:define name="label">CPT</ui:define>
+
+								<h:inputText id="cptPadre" disabled="true"
+									value="#{administrarCptFormController.codigoCpt}" size="20">
+								</h:inputText>	
+		                		#{' '}
+		                		<h:inputText id="denominacionCptPadre"
+									value="#{administrarCptFormController.cptPadre.denominacion}"
+									size="50" disabled="true" />
+                				#{' '}
+                				<a:commandButton id="searchCpt"
+									eventsQueue="default" image="/img/Buscar.png"
+									rendered="#{!cptHome.managed}"
+									propagation="default"
+									action="#{administrarCptFormController.getUrlToPageCpt()}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="tipoCptField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idTipoCpt}</ui:define>
+								<h:selectOneMenu id="tipoCpt" required="true"
+									style="width:250px;" disabled="#{tipo != 'general'}"
+									value="#{administrarCptFormController.idTipoCpt}">
+									<f:selectItems value="#{tipoCptsSelectItems}" />
+
+									<a:support event="onchange"
+										action="#{administrarCptFormController.cargarVariable()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+
+
+						<a:region>
+							<s:decorate id="nivelField" rendered="#{tipo == 'general'}"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_nivel}</ui:define>
+								<h:inputText id="nivel" required="true"
+									disabled="#{tipo != 'general'}" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{administrarCptFormController.cpt.nivel}">
+									<a:support event="onchange" reRender="nivelField,jefaturaField"
+										action="#{administrarCptFormController.valNivel()}"
+										eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="TipoCceField" rendered="#{tipo == 'general'}"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">Tipo CCE</ui:define>
+								<h:selectOneMenu rendered="#{tipoCcesSelectItems.size()>2}"
+									id="tipoCce" required="true" style="width:250px;"
+									value="#{administrarCptFormController.idTipoCce}">
+									<f:selectItems value="#{tipoCcesSelectItems}" />
+									<a:support event="onchange"
+										action="#{administrarCptFormController.updateGradoSalarial()}"
+										reRender="gradoSalarialMinField,gradoSalarialMaxField" />
+								</h:selectOneMenu>
+
+								<h:selectOneMenu rendered="#{tipoCcesSelectItems.size()==2}"
+									id="tipoCce2" required="true" style="width:250px;"
+									value="#{administrarCptFormController.idTipoCce}">
+									<f:selectItem value="#{tipoCcesSelectItems.get(1)}" />
+									<a:support event="onchange"
+										action="#{administrarCptFormController.updateGradoSalarial()}"
+										reRender="gradoSalarialMinField,gradoSalarialMaxField" />
+								</h:selectOneMenu>
+
+
+							</s:decorate>
+							<s:decorate id="gradoSalarialMinField"
+								rendered="#{tipo == 'general'}" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMin}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoSalarialMin" style="width:250px;"
+									disabled="#{tipo != 'general'}"
+									value="#{administrarCptFormController.idGradoSalarialMin}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" focus="gradoSalarialMaxField" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="gradoSalarialMaxField"
+								rendered="#{tipo == 'general'}" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMax}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoSalarialMax" style="width:250px;"
+									disabled="#{tipo != 'general'}"
+									value="#{administrarCptFormController.idGradoSalarialMax}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="numeroField" rendered="#{tipo == 'general'}"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_numero}</ui:define>
+								<h:inputText id="numero" disabled="#{tipo != 'general'}"
+									required="true" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{administrarCptFormController.cpt.numero}">
+									<a:support event="onblur"
+										reRender="numeroField, numeroEspecifField"
+										focus="numeroEspecif"
+										action="#{administrarCptFormController.cargarNroEspecifico()}" />
+								</h:inputText>
+								#{' '}
+								
+							</s:decorate>
+						</a:region>
+
+
+						<a:region>
+							<s:decorate id="denominacionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_denominacion}</ui:define>
+								<h:inputText id="denominacion" required="true" disabled="false"
+									size="50" maxlength="200"
+									value="#{administrarCptFormController.cpt.denominacion}">
+									<a:support event="onblur" />
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+						<s:decorate id="jefaturaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Cpt_jefatura}</ui:define>
+							<h:selectBooleanCheckbox id="jefatura"
+								disabled="#{!administrarCptFormController.habJefatura}"
+								value="#{administrarCptFormController.conJefatura}" />
+						</s:decorate>
+
+						<a:region>
+							<s:decorate id="cptCategoriaField" template="/layout/edit.xhtml">
+								<ui:define name="label"></ui:define>
+								<a:commandButton value="#{messages.Categorias_posibles}"
+									rendered="#{(tipo == 'general')? true : (administrarCptFormController.cptPadre.idCpt != null)? true : false }"
+									action="#{administrarCptFormController.mostrarCategoriasPosibles()}"
+									reRender="mostrarPanel" />
+
+								<a:commandButton value="Ver Datos CPT"
+									rendered="#{tipo != 'general' and administrarCptFormController.cptPadre.idCpt != null}"
+									onclick="#{administrarCptFormController.verDetalles(administrarCptFormController.cptPadre.idCpt,-1)}">
+
+								</a:commandButton>
+
+
+
+							</s:decorate>
+						</a:region>
+
+					</rich:panel>
+				</h:panelGrid>
+				<!-- ventana emergente 1 -->
+				<rich:modalPanel id="pnl1" autosized="true" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Ver Detalles CPT" />
+					</f:facet>
+					<f:facet name="controls">
+						<h:graphicImage value="/img/close.png" height="15px" width="15px"
+							style="cursor:pointer" onclick="Richfaces.hideModalPanel('pnl1')" />
+					</f:facet>
+					<a:include id="includeVerDetalles"
+						viewId="/planificacion/cpt/VerDetalles.xhtml" />
+				</rich:modalPanel>
+
+
+				<h:panelGrid id="mostrarPanel">
+					<rich:panel id="panel"
+						rendered="#{administrarCptFormController.mostrarCategoria}"
+						style="width: 450px">
+						<f:facet name="header">Carga de #{messages.Categorias_posibles}</f:facet>
+						<br />
+						<a:region>
+
+							<rich:panel width="300px" rendered="#{tipo == 'general'}">
+								<f:facet name="header"> Categoria -  Descripción </f:facet>
+								<h:selectOneMenu id="niveles" style="width:350px;"
+									value="#{administrarCptFormController.idNivelesDeCargos}">
+									<f:selectItems value="#{nivelesDeCargosSelectItems}" />
+								</h:selectOneMenu>
+								#{' '}
+								<a:commandButton value="+"
+									action="#{administrarCptFormController.agregarCptNivelesCargos()}"
+									reRender="tablaCptNivel, panel" />
+							</rich:panel>
+							<rich:panel width="300px" rendered="#{tipo == 'especifico'}">
+								<f:facet name="header"> Categoria -  Descripción </f:facet>
+								<h:selectOneMenu disabled="true" id="nivelesDisabled"
+									style="width:350px;">
+									<f:selectItem itemValue="Seleccionar..." />
+								</h:selectOneMenu>
+								#{' '}
+								<a:commandButton disabled="true" value="+"
+									reRender="tablaCptNivel, panel" />
+							</rich:panel>
+
+						</a:region>
+
+
+						<br />
+						<br />
+						<a:region>
+							<rich:dataTable cellpadding="0" cellspacing="0" width="300px"
+								id="tablaCptNivel" border="0" var="record" rowKeyVar="row"
+								style=" width : 402px;"
+								value="#{administrarCptFormController.listaNivelesDeCargos}"
+								rendered="#{tipo == 'general'}">
+								<rich:column>
+									<f:facet name="header">Nivel </f:facet>
+									<h:outputText value="#{record.tipo}" />
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">Descripción </f:facet>
+									<h:outputText value="#{record.descripcion}" />
+								</rich:column>
+
+								<rich:column styleClass="action">
+									<a:commandButton value="-"
+										action="#{administrarCptFormController.eliminarCptNivelesCargos(row)}"
+										reRender="panel" />
+								</rich:column>
+
+							</rich:dataTable>
+							<rich:dataTable cellpadding="0" cellspacing="0" width="300px"
+								id="tablaCptNivelDisabled" border="0" var="descripcionLista"
+								rowKeyVar="row" style=" width : 402px;"
+								value="#{administrarCptFormController.listaNivelesDeCargos}"
+								rendered="#{tipo == 'especifico'}">
+								<rich:column>
+									<f:facet name="header">Nivel </f:facet>
+									<h:outputText value="#{descripcionLista.tipo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Descripción </f:facet>
+									<h:outputText value="#{descripcionLista.descripcion}" />
+								</rich:column>
+
+								<rich:column styleClass="action">
+									<a:commandButton disabled="true" value="-" reRender="panel" />
+								</rich:column>
+
+
+							</rich:dataTable>
+
+						</a:region>
+					</rich:panel>
+
+				</h:panelGrid>
+				<rich:panel style="border:none;">
+
+					<rich:tabPanel switchType="client" id="tagGeneral"
+						rendered="#{not empty administrarCptFormController.codigoCpt or tipo == 'general'}"
+						selectedTab="#{administrarCptFormController.selectedTab}"
+						style=" height : 336px;">
+						<rich:tab rendered="#{tipo == 'general'}"
+							label="Tipo de Vinculación" id="tabNombramiento">
+							<a:include id="includeTab01Edit"
+								viewId="/planificacion/cpt/tabs/Tab1Nombramiento.xhtml" />
+
+						</rich:tab>
+
+
+						<rich:tab label="Contenido Funcional" id="tabContenidoFuncional">
+							<h:panelGrid columns="1">
+								<s:decorate id="btnField" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala"
+										onclick="Richfaces.showModalPanel('valoracionMiniModal');" />
+								</s:decorate>
+
+								<a:include id="includeTab02Edit"
+									viewId="/planificacion/cpt/tabs/Tab2ContenidoFuncional.xhtml" />
+
+							</h:panelGrid>
+						</rich:tab>
+
+						<rich:tab rendered="#{tipo != 'general'}"
+							label="Req. Minimos/Perfiles" id="tabRequisitosMin">
+							<h:panelGrid columns="1">
+								<s:decorate id="btn2Field" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala"
+										onclick="Richfaces.showModalPanel('valoracionTab03MiniModal');" />
+								</s:decorate>
+
+								<a:include id="includeTab03Edit"
+									viewId="/planificacion/cpt/tabs/Tab3RequisitosMinimos.xhtml" />
+							</h:panelGrid>
+						</rich:tab>
+
+						<!-- 	<rich:tab  label="Cond. de Trabajo" id="tabCondicionTrab">
+							<h:panelGrid columns="1">
+								<s:decorate id="btn3Field" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala"
+										onclick="Richfaces.showModalPanel('valoracionTab04MiniModal');" />
+								</s:decorate>
+
+								<a:include id="includeTab04Edit"
+									viewId="/planificacion/cpt/tabs/Tab4CondicionTrabajo.xhtml" />
+							</h:panelGrid>
+						</rich:tab> 
+						
+						<rich:tab label="#{messages.Tab05_title_tab}"
+							id="tabCondicionTrabEspecif">
+							<h:panelGrid columns="1">
+								<s:decorate id="btn4Field" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala"
+										onclick="Richfaces.showModalPanel('valoracionTab05MiniModal');" />
+								</s:decorate>
+
+								<a:include id="includeTab05Edit"
+									viewId="/planificacion/cpt/tabs/Tab5CondicionTrabajoEspecif.xhtml" />
+							</h:panelGrid>
+						</rich:tab>-->
+						<!-- <rich:tab label="Condicion de Seguridad"
+							id="tabCondicionSeguridad">
+							<h:panelGrid columns="1">
+								<s:decorate id="btn5Field" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala"
+										onclick="Richfaces.showModalPanel('valoracionTab06MiniModal');" />
+								</s:decorate>
+
+								<a:include id="includeTab06Edit"
+									viewId="/planificacion/cpt/tabs/Tab6CondicionSeguridad.xhtml" />
+							</h:panelGrid>
+						</rich:tab>-->
+					</rich:tabPanel>
+
+
+
+
+				</rich:panel>
+
+
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Cpt_activo}</ui:define>
+					<h:selectBooleanCheckbox id="activo" disabled="false"
+						value="#{administrarCptFormController.activo}" />
+				</s:decorate>
+
+				<div style="clear: both">
+					<span class="required">*</span> #{messages.msg_required_fields}
+				</div>
+				<br />
+				<div style="clear: both">
+					<h:outputText value="#{messages.msg_obs_actualizar}"
+						rendered="#{cptHome.managed}" />
+				</div>
+				<div style="clear: both">
+					<h:outputText value="#{messages.msg_obs_guardar}"
+						rendered="#{!cptHome.managed}" />
+				</div>
+
+			</rich:panel>
+
+			<div class="actionButtons">
+				<h:commandButton id="save" value="#{messages.msg_save}"
+					action="#{administrarCptFormController.save()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					disabled="#{!cptHome.wired}" rendered="#{!cptHome.managed}" />
+				<!-- 
+				 <h:commandButton
+				id="save2" value="Guardar +"
+				action="#{administrarCptFormController.saveMore()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				disabled="#{!cptHome.wired}" rendered="#{!cptHome.managed}" />
+				 -->
+				<h:commandButton id="update" value="#{messages.msg_update}"
+					action="#{administrarCptFormController.updated()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+					rendered="#{cptHome.managed}" />
+
+				<s:button id="cancelEdit" value="#{messages.msg_cancel}"
+					propagation="end" view="/planificacion/cpt/CptHomologacionList.xhtml"
+					rendered="#{cptHome.managed and tipo != 'general' and !cptListFormController.isEstadoParaHomologacion(administrarCptFormController.cpt.estadoHomologacion)}">
+					<f:param name="tipo" value="#{tipo}" />
+					
+				</s:button>
+					
+				<s:button id="cancelEditHomologacion" value="#{messages.msg_cancel}"
+					propagation="end" view="/planificacion/cpt/CptGestionarHomologacion.xhtml"
+					rendered="#{cptHome.managed and tipo != 'general' and cptListFormController.isEstadoParaHomologacion(administrarCptFormController.cpt.estadoHomologacion)}">
+					<f:param name="tipo" value="#{tipo}" />
+
+				</s:button>
+				<s:button id="cancelEditGeneral" value="#{messages.msg_cancel}"
+					propagation="end" view="/planificacion/cpt/CptList.xhtml"
+					rendered="#{cptHome.managed and tipo == 'general'}">
+					<f:param name="tipo" value="#{tipo}" />
+
+				</s:button>
+				<s:button id="cancelAdd" value="Volver" propagation="end"
+					view="/#{empty cptFrom ? 'planificacion/cpt/CptHomologacionList' : cptFrom}.xhtml"
+					rendered="#{!cptHome.managed and tipo != 'general'}">
+					<f:param name="tipo" value="#{tipo}" />
+				</s:button>
+				<s:button id="cancelAddGeneral" value="Volver" propagation="end"
+					view="/planificacion/cpt/CptList.xhtml"
+					rendered="#{!cptHome.managed and tipo  == 'general'}">
+					<f:param name="tipo" value="#{tipo}" />
+				</s:button>
+			</div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{cptHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta" value="#{cptHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{cptHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta" value="#{cptHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{cptHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod" value="#{cptHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{cptHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod" value="#{cptHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

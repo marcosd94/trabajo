@@ -1,0 +1,225 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU200_reclamos_sugerencias}</h1>
+		<h:form id="reclamoSugerenciaSearch" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{reclamoSugerenciaHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU107_listado_titulo}</f:facet>
+
+
+				<rich:panel>
+					<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{admReclamoSugConcursoFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{admReclamoSugConcursoFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{admReclamoSugConcursoFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{admReclamoSugConcursoFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{admReclamoSugConcursoFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{admReclamoSugConcursoFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{admReclamoSugConcursoFormController.concursoPuestoAgr.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_grupo_puesto}</ui:define>
+                <h:inputText id="usuMod" disabled="true" value="#{admReclamoSugConcursoFormController.concursoPuestoAgr.descripcionGrupo}" style=" width : 514px;"/>
+            </s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+				<br />
+				<rich:panel ><f:facet name="header">#{messages.CU243_grupo_puesto}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_postulante}</ui:define>
+
+						<h:inputText size="40" disabled="true"
+							value="#{admReclamoSugConcursoFormController.reclamoSugerencia.postulacion.personaPostulante.documentoIdentidad}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<h:inputText size="60" disabled="true"
+							value="#{admReclamoSugConcursoFormController.reclamoSugerencia.postulacion.personaPostulante.nombreCompleto}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_tipo}</ui:define>
+
+						<h:inputText size="40" disabled="true" rendered="#{admReclamoSugConcursoFormController.reclamoSugerencia.reclamoSugerencia =='R'}"
+							value="RECLAMO" />
+							<h:inputText size="40" disabled="true" rendered="{admReclamoSugConcursoFormController.reclamoSugerencia.reclamoSugerencia =='S'}"
+							value="SUGERENCIA" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU200_fecha_reclamo_sug}</ui:define>
+					 <rich:calendar id="fechaHasta" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"  disabled="true"
+                            value="#{admReclamoSugConcursoFormController.reclamoSugerencia.fechaReclamoSugerencia}" />
+				</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_estado}</ui:define>
+						<h:inputText size="40" disabled="true" rendered="#{admReclamoSugConcursoFormController.reclamoSugerencia.estado =='R'}"
+							value="RESPONDIDO " />
+							<h:inputText size="40" disabled="true" rendered="{#{admReclamoSugConcursoFormController.reclamoSugerencia.estado} =='S'}"
+							value="RESPONDIDO SFP" />
+					</s:decorate>
+					</h:panelGrid>
+					
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_asunto}</ui:define>
+							<h:inputText size="60" disabled="true"
+							value="#{admReclamoSugConcursoFormController.reclamoSugerencia.asunto}" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU200_descripicon}</ui:define>
+                <h:inputTextarea id="observacion"
+                              disabled="true" 
+                              value="#{admReclamoSugConcursoFormController.reclamoSugerencia.descripcion}" style="width : 602px; height : 186px;"/>
+            	</s:decorate>
+            	<s:button propagation="join" 
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml" 
+				id="anexos" value="#{messages.CU200_ver_anexos}"
+				>
+				<f:param name="direccionFisica" value="#{admReclamoSugConcursoFormController.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{admReclamoSugConcursoFormController.nombrePantalla}" />
+				<f:param name="idCU" value="#{admReclamoSugConcursoFormController.idReclamoSugerencia}" />
+				<f:param name="nombreTabla" value="#{admReclamoSugConcursoFormController.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoEdit" />
+			</s:button>
+				</h:panelGrid>
+				</rich:panel>
+				<br />
+				<rich:panel ><f:facet name="header">#{messages.CU200_repsuesta_oee}</f:facet>
+				<h:panelGrid columns="1" >
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU200_fecha}</ui:define>
+					 <rich:calendar  datePattern="dd/MM/yyyy"  disabled="true"
+                            inputSize="10" enableManualInput="true" 
+                            value="#{admReclamoSugConcursoFormController.reclamoSugerencia.fechaReclamoRespuesta}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_asunto}</ui:define>
+							<h:inputText size="60" disabled="true"
+							value="#{admReclamoSugConcursoFormController.reclamoSugerencia.asuntoRespuesta}" />
+					</s:decorate>
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU200_descripicon}</ui:define>
+                <h:inputTextarea 
+                              disabled="true" 
+                              value="#{admReclamoSugConcursoFormController.reclamoSugerencia.descripcionRespuesta}" style="width : 602px; height : 186px;"/>
+            	</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<s:decorate id="usuAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.CU200_usu_rpta}</ui:define>
+                <h:outputText id="usuAlta" value="#{admReclamoSugConcursoFormController.reclamoSugerencia.usuRespuesta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.CU200_fec_rtpa}</ui:define>
+                <h:outputText id="fechaAlta" value="#{admReclamoSugConcursoFormController.reclamoSugerencia.fechaRespuesta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+				</h:panelGrid>
+				</rich:panel>
+				<br />
+				<rich:panel ><f:facet name="header">#{messages.CU200_respuesta_admin}</f:facet>
+					<h:panelGrid columns="1" >
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU200_fecha}</ui:define>
+					 <rich:calendar  datePattern="dd/MM/yyyy"  disabled="true"
+                            inputSize="10" enableManualInput="true" 
+                            value="#{admReclamoSugConcursoFormController.reclamoSugerencia.fechaRptaSfp}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU200_asunto}</ui:define>
+							<h:inputText size="60"
+							value="#{admReclamoSugConcursoFormController.reclamoSugerencia.asuntoSfp}" />
+					</s:decorate>
+					<s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU200_descripicon}</ui:define>
+                <h:inputTextarea 
+                               value="#{admReclamoSugConcursoFormController.reclamoSugerencia.descripcionSfp}" style="width : 602px; height : 186px;"/>
+            	</s:decorate>
+            		 <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU200_enviar_mail}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{admReclamoSugConcursoFormController.reclamoSugerencia.enviarCorreoPostulante}"/>
+                <h:outputText value="#{messages.CU200_postulante}"/>
+            </s:decorate>
+				</h:panelGrid>
+				
+				</rich:panel>
+				
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!reclamoSugerenciaHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{reclamoSugerenciaHome.managed}" styleClass="labelClass" />
+				</div>
+				
+				<div class="actionButtons">
+			<h:commandButton id="save"
+				value="#{messages.CU200_enviar}" action="#{admReclamoSugConcursoFormController.enviar()}"
+				    onclick="return confirm('#{messages.msg_confirm_save}');"    
+				 /> 
+				
+			
+				<s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml" />
+			</div>
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

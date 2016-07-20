@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages login-view-id="/Portal.xhtml"
+ no-conversation-view-id="/home.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <page view-id="*">
+  <navigation>
+   <rule if-outcome="home">
+    <redirect view-id="/home.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <exception class="org.jboss.seam.framework.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.seam_persistence_entity_not_found_exception}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.seam_persistence_entity_not_found_exception}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityExistsException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.seam_entity_exists_exception}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.OptimisticLockException">
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.seam_error_inesperado}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.AuthorizationException">
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages.seam_authorization_exception}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.NotLoggedInException">
+  <redirect view-id="/Portal.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.NotLoggedIn']}</message>
+  </redirect>
+ </exception>
+ 
+  <exception class="javax.faces.application.ViewExpiredException">
+  <redirect view-id="/Portal.xhtml">
+  <message severity="warn">#{messages.seam_view_expired_exception}</message>
+  </redirect>
+ </exception>
+ 
+ <exception class="org.jboss.seam.ConcurrentRequestTimeoutException" log-level="trace">
+  <end-conversation/>
+  <redirect view-id="/503.xhtml">
+   <message severity="warn">Error 503</message>
+  </redirect>
+ </exception>
+ <exception class="java.lang.Exception">
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <message severity="error">ERROR_GENERICO</message>
+  </redirect>
+ </exception>
+ <exception>
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <param name="mostrarError" value="#{true}"/>
+  </redirect>
+ </exception>
+</pages>

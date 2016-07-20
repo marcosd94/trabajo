@@ -1,0 +1,184 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.SinEntidad_titEd}</h1>
+
+    <h:form id="sinEntidad" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{sinEntidadHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.SinEntidad_titEd}</f:facet>
+
+	            <s:decorate id="aniAniopreField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.GradoSalarial_anio}</ui:define>
+	                <h:inputText id="aniAniopre"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{sinEntidadHome.instance.aniAniopre}">
+	                 
+	                </h:inputText>
+	            </s:decorate>
+	             <s:decorate id="entCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_cod}</ui:define>
+	                <h:inputText id="entCodigo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{sinEntidadHome.instance.entCodigo}">
+	                   
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="entNombreField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Dependencia_nombre}</ui:define>
+	                <h:inputText id="entNombre"
+	                		required ="true" size="60"
+	                       disabled="false"
+	                          value="#{sinEntidadHome.instance.entNombre}">
+	                  
+	                </h:inputText>
+	            </s:decorate>
+	             <s:decorate id="entNomabreField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinEntidad_abre}</ui:define>
+	                <h:inputText id="entNomabre"
+	                		required ="true"
+	                       disabled="false" maxlength="20"
+	                          value="#{sinEntidadHome.instance.entNomabre}">
+	                  
+	                </h:inputText>
+	            </s:decorate>
+	             <s:decorate id="entSiglaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinEntidad_siglas}</ui:define>
+	                <h:inputText id="entSigla"
+	                		required ="false"
+	                       disabled="false"
+	                          value="#{sinEntidadHome.instance.entSigla}">
+	                  
+	                </h:inputText>
+	            </s:decorate>
+	            
+	            
+	           
+				 <s:decorate id="nivelEntidadField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinEntidad_Nivel}</ui:define>
+	                <h:selectOneMenu id="nivelEntidad" style=" width : 200px;"
+	                	   disabled="false" required="true"
+	                          value="#{sinEntidadHome.idSinNivelEntidad}">
+	                    <f:selectItems value="#{sinNivelEntidadsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="entRucField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinEntidad_Ruc}</ui:define>
+	                <h:inputText id="entRuc"
+	                		required ="false" maxlength="11"
+	                       disabled="false"
+	                          value="#{sinEntidadHome.instance.entRuc}">
+	              
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="cofCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.SinEntidad_cofCodigo}</ui:define>
+	                <h:inputText id="cofCodigo"
+	                		required ="false"
+	                       disabled="false" maxlength="2"
+	                          value="#{sinEntidadHome.instance.cofCodigo}">
+	                 
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        
+         <div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_actualizar}" styleClass="labelClass"
+				rendered="#{sinEntidadHome.managed}" /></div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass"
+				rendered="#{!sinEntidadHome.managed}" /></div>
+			<br />
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{sinEntidadHome.persist}"
+                              onclick="return confirm('#{messages.msg_confirm_save}');"     
+                       disabled="#{!sinEntidadHome.wired}"                      
+                       rendered="#{!sinEntidadHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{sinEntidadHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{sinEntidadHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{sinEntidadHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="false"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/sinEntidad/SinEntidadList.xhtml"
+                rendered="#{sinEntidadHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty sinEntidadFrom ? 'planificacion/sinEntidad/SinEntidadList' : sinEntidadFrom}.xhtml"
+                rendered="#{!sinEntidadHome.managed}"/>
+
+        </div>
+            <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"    rendered="#{sinEntidadHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{sinEntidadHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{sinEntidadHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{sinEntidadHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{sinEntidadHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{sinEntidadHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"  rendered="#{sinEntidadHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{sinEntidadHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

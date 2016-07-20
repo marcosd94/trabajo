@@ -1,0 +1,375 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="sinAnxSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="SinAnx Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Ctg codigo</ui:define>
+                <h:inputText id="ctgCodigo" value="#{sinAnxList.sinAnx.ctgCodigo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Mdf codigo</ui:define>
+                <h:inputText id="mdfCodigo" value="#{sinAnxList.sinAnx.mdfCodigo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Anx tiporeg</ui:define>
+                <h:inputText id="anxTiporeg" value="#{sinAnxList.sinAnx.anxTiporeg}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Anx descrip</ui:define>
+                <h:inputText id="anxDescrip" value="#{sinAnxList.sinAnx.anxDescrip}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{sinAnxList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/SinAnxList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">SinAnx Search Results (#{empty sinAnxList.resultList ? 0 : (sinAnxList.paginated ? sinAnxList.resultCount : sinAnxList.resultList.size)})</f:facet>
+    <div class="results" id="sinAnxList">
+
+    <h:outputText value="The sinAnx search returned no results."
+               rendered="#{empty sinAnxList.resultList}"/>
+
+    <rich:dataTable id="sinAnxList"
+                var="_sinAnx"
+              value="#{sinAnxList.resultList}"
+           rendered="#{not empty sinAnxList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Id anx"/>
+                    <ui:param name="propertyPath" value="sinAnx.idAnx"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.idAnx}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Ani aniopre"/>
+                    <ui:param name="propertyPath" value="sinAnx.aniAniopre"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.aniAniopre}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Nen codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.nenCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.nenCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Ent codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.entCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.entCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Tip codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.tipCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.tipCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Pro codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.proCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.proCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Sub codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.subCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.subCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Pry codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.pryCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.pryCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Obj codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.objCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.objCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Fue codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.fueCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.fueCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Fin codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.finCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.finCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Vrs codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.vrsCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.vrsCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx linea"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxLinea"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxLinea}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Cat grupo"/>
+                    <ui:param name="propertyPath" value="sinAnx.catGrupo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.catGrupo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Ctg codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.ctgCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.ctgCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Mdf codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.mdfCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.mdfCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx tiporeg"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxTiporeg"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxTiporeg}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx mesaplic"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxMesaplic"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxMesaplic}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx durac"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxDurac"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxDurac}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx vlran"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxVlran"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxVlran}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx cargos"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxCargos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxCargos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Anx descrip"/>
+                    <ui:param name="propertyPath" value="sinAnx.anxDescrip"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.anxDescrip}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Pai codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.paiCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.paiCodigo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{sinAnxList}"/>
+                    <ui:param name="propertyLabel" value="Dpt codigo"/>
+                    <ui:param name="propertyPath" value="sinAnx.dptCodigo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_sinAnx.dptCodigo}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'SinAnx' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="sinAnxViewId">
+                <f:param name="sinAnxIdAnx"
+                        value="#{_sinAnx.idAnx}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/SinAnxEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="sinAnxEdit"
+                rendered="#{empty from}">
+                <f:param name="sinAnxIdAnx"
+                        value="#{_sinAnx.idAnx}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/SinAnxList.xhtml"
+            rendered="#{sinAnxList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/SinAnxList.xhtml"
+            rendered="#{sinAnxList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{sinAnxList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/SinAnxList.xhtml"
+            rendered="#{sinAnxList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{sinAnxList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/SinAnxList.xhtml"
+            rendered="#{sinAnxList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{sinAnxList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/SinAnxEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create sinAnx">
+            <f:param name="sinAnxIdAnx"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

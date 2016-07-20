@@ -1,0 +1,268 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.LCP_titulo}</h1>
+		<rich:modalPanel id="DescargarDocumentosModal" width="250" height="150"
+			autosized="false" resizeable="false" moveable="false">			
+			<h:form>
+				<h:outputText value="Será generado un Zip con las planillas de los Grupos Listados."
+					style="font-weight:bold" />
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center">
+					<h:commandButton
+						id="aceptar" value="Aceptar" ajaxSingle="true"
+						action="#{visualizarDatosConcursoFormController.generarZip()}"						
+						onclick="Richfaces.hideModalPanel('DescargarDocumentosModal')" /> 
+					<h:commandButton 
+						id="cancelar" value="Cancelar" ajaxSingle="true"
+							onclick="Richfaces.hideModalPanel('DescargarDocumentosModal')" />
+				</div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="configuracionUoDetSearch" styleClass="edit">
+
+
+			<rich:panel id="panelPrincipal">
+				<f:facet name="header">#{messages.LCP_titulo}</f:facet>
+
+				<h:panelGrid columns="1">
+
+					<a:region>
+						
+						<s:decorate id="fechaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.LCP_fecha_desde}<span></span>
+							</ui:define>
+							<rich:calendar id="fechaDesde" 
+								value="#{visualizarDatosConcursoFormController.fecha_desde}"
+								size="10" 
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+								
+						</s:decorate>
+						
+						<s:decorate id="fechahasta" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.LCP_fecha_hasta}<span></span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{visualizarDatosConcursoFormController.fecha_hasta}"
+								size="10" 
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+								
+						</s:decorate>
+						
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelPrincipal" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/visualizarDatosConcurso/GruposPublicados')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="panelPrincipal" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/visualizarDatosConcurso/GruposPublicados')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/visualizarDatosConcurso/GruposPublicados')}" />
+						</s:decorate>
+					</a:region>
+
+
+
+
+
+
+
+
+
+
+
+
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.MatrizDocumentalEnc_tipoConcurso}</ui:define>
+						<h:selectOneMenu id="tipoConcurso"
+							value="#{visualizarDatosConcursoFormController.idtipoConcurso}"
+							style="width:200px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoConcursoSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				reRender="controlPaginamiento,panelConcurso,panelGrupo,puesto"
+				value="#{messages.msg_list_search_button}" eventsQueue="default"
+				action="#{visualizarDatosConcursoFormController.searchGruposPublicados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{visualizarDatosConcursoFormController.searchAllGruposPublicados()}"
+				reRender="panelConcurso,panelGrupo,puesto,panelPrincipal,controlPaginamiento">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			
+			<a:commandButton
+					id="print" value="Generar ZIP" ajaxSingle="true"
+					oncomplete="#{rich:component('DescargarDocumentosModal')}.show()">
+				</a:commandButton>
+			
+			</div>
+
+			
+
+			
+			
+		</h:form>
+		<h:form>
+
+			<rich:panel id="panelGrupo">
+				<f:facet name="header"> #{messages.CU366_grupos} ( #{visualizarDatosConcursoFormController.concursoPuestoAgrs.size()} )</f:facet>
+				<div class="results" id="tblgrupoList" style="overflow: auto;">
+
+				<rich:dataTable id="grupoList" var="_grupo"
+					value="#{visualizarDatosConcursoFormController.concursoPuestoAgrs}"
+					rendered="#{not empty visualizarDatosConcursoFormController.concursoPuestoAgrs}"
+					rowKeyVar="rowNr">
+					<h:column>
+						<f:facet name="header">
+						#{messages.gral_oee}
+					</f:facet>
+						<h:outputText value=" #{_grupo.concurso.configuracionUoCab.descripcionCorta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.gral_concurso}
+					</f:facet>
+						<h:outputText value=" #{_grupo.concurso.nombre}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+						#{messages.public_fecha_publicacion_desde}
+					</f:facet>
+						<h:outputText value=" #{visualizarDatosConcursoFormController.obtenerFechaPublicacion(_grupo.idConcursoPuestoAgr)}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+						#{messages.LCP_denominacion}
+					</f:facet>
+						<h:outputText value="#{_grupo.descripcionGrupo}" />
+					</h:column>
+
+					
+					<h:column>
+						<h:commandLink id="datosGrupos"
+							value="#{messages.LCP_enlace_descarga}" target="_blank"
+							eventsQueue="default"
+							action="#{visualizarDatosConcursoFormController.imprimirPerfilMatrizExcel(_grupo.idConcursoPuestoAgr)}" />
+
+					</h:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			
+			<a:outputPanel id="controlPaginamiento" ajaxRendered="true"> 
+			<div class="tableControl"><s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoPuestoAgrs.previousExists}" propagation="join"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoPuestoAgrs.previousExists}" propagation="join"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{concursoPuestoAgrs.previousFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoPuestoAgrs.nextExists}" propagation="join"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{concursoPuestoAgrs.nextFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoPuestoAgrs.nextExists}" propagation="join"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{concursoPuestoAgrs.lastFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link></div>
+			
+			</a:outputPanel>
+					</h:form>
+
+	</ui:define>
+
+</ui:composition>

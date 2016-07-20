@@ -1,0 +1,301 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<rich:modalPanel id="adjuntarModal" width="550" height="200"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">Adjunción de Documentos</f:facet>
+			<h:form id="panelAdjuntos"  prependId="false"  enctype="multipart/form-data"  styleClass="edit">
+				<rich:panel id="tab1">
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Documento <span class="required">*</span></ui:define>
+							<s:fileUpload size="30"  id="archivo" 
+						contentType="#{cargarEvaluacionPostulante.contentType}"
+						data="#{cargarEvaluacionPostulante.uploadedFile}"
+						fileName="#{cargarEvaluacionPostulante.fileName}"
+						style=" width : 282px;" >
+							</s:fileUpload>
+						</s:decorate>
+						<s:decorate id="documentoField" template="/layout/edit.xhtml">
+						
+							<h:outputText id="nomFinal"
+								value="#{cargarEvaluacionPostulante.nombreDoc}" />
+						</s:decorate>
+						<div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+					</h:panelGrid>
+
+
+
+				</rich:panel>
+
+				<div class="actionButtons" align="center">
+				<h:commandButton id="aceptar"
+							reRender="pantenCapa" eventsQueue="default"
+							rendered="true"
+							action="#{cargarEvaluacionPostulante.documento()}"
+							oncomplete="#{rich:component('adjuntarModal')}.hide()"
+							value="Adjuntar" />
+				
+				 <a:commandButton
+					id="cancel_tap03" value="Cancelar" ajaxSingle="true" reRender="pantenCapa"
+					oncomplete="Richfaces.hideModalPanel('adjuntarModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<!-- MODAL CAPACITACIONES -->
+		<rich:modalPanel id="modalCapacitacion" width="630" height="315" 
+				resizeable="true" moveable="true">
+				<h:form>
+				<div class="results" id="tbldetList" style=" overflow: scroll;  width:600 ;HEIGHT: 250px"  >
+					<rich:panel id="idPanel" >
+						<f:facet name="header">Capacitaciones</f:facet>
+						<rich:dataTable id="puestoList" var="_record" rowKeyVar="row"
+							value="#{cargarEvaluacionPostulante.capacitacionesEvalPostulantes}"
+							rendered="#{not empty cargarEvaluacionPostulante.capacitacionesEvalPostulantes}">
+							<h:column>
+								<f:facet name="header">
+						#{messages.CU486_capacitacion}
+						</f:facet>
+								<h:outputText
+									value="#{_record.nombre}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+						#{messages.CU486_tipocapa}
+						</f:facet>
+								<h:outputText
+									value="#{_record.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+						#{messages.CU486_modalidad}
+						</f:facet>
+								<h:outputText
+									value="#{_record.modalidad}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+						#{messages.CU486_fec_ini_fin}
+						</f:facet>
+								<h:outputText
+									value="#{_record.fecha}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+						#{messages.CU486_finalizo}
+						</f:facet>
+								<h:outputText
+									value="#{_record.estado}" />
+							</h:column>
+							
+							<h:column>
+								<f:facet name="header">Carga Horaria</f:facet>
+								<h:outputText value="#{_record.cargaHoraria}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Créditos</f:facet>
+								<h:outputText value="#{_record.creditos}" />
+						</h:column>
+						</rich:dataTable>
+					</rich:panel></div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton id="cancel"
+						value="Cancelar" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('modalCapacitacion')" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<!-- FIN  -->
+
+<h1>#{messages.CU486_cargar_titulo}</h1>
+
+    <h:form id="capacitacionesSearch" styleClass="edit" >
+    	<!-- ****Modal para adjuntar archivos**** -->
+		
+    
+    	<rich:panel  id="pantenCapa">  <f:facet name="header">#{messages.CU479_capa_beca}</f:facet>
+    	<h:panelGrid columns="1">
+    	<s:decorate id="idDatosEspecificosTipoCapField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{cargarEvaluacionPostulante.titulo}">
+                </h:inputText>
+            </s:decorate>
+         
+
+
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+                 <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{cargarEvaluacionPostulante.tipoCapacitacion}">
+                </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+    	</rich:panel>
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU479_postulant}</f:facet>
+			  <h:panelGrid >
+			  <s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU480_nombres}
+									</ui:define>
+									
+					                <h:inputText id="nivelDescripcion"
+												value="#{cargarEvaluacionPostulante.persona.nombreCompleto}" size="100"
+												disabled="true" />
+					  		</s:decorate>
+			 </h:panelGrid>
+			  
+			<h:panelGrid columns="2" id="idPanelCampos">
+			<s:decorate id="cedulaFied" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU484_cedula}
+									</ui:define>
+									<h:inputText id="cedula"
+													value="#{cargarEvaluacionPostulante.persona.documentoIdentidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+							<s:decorate id="paisExpField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU484_pais_exp}</ui:define>
+									<h:inputText id="paisExp" size="50"
+										disabled="true"
+										value="#{cargarEvaluacionPostulante.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+							</s:decorate>
+							<s:decorate id="coPostField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU486_cod_postulante}
+									</ui:define>
+									<h:inputText id="coPost" size="50" disabled="true"
+										value="#{cargarEvaluacionPostulante.postulacionCap.usuFicha}" />
+						 			
+	               			</s:decorate>
+				</h:panelGrid>
+				
+				
+        </rich:panel>
+        <rich:panel id="panelGrillaResulPostulantes">
+				<f:facet name="header">#{messages.CU486_doc_adjuntos} ( #{cargarEvaluacionPostulante.capAdjLista.size()} )</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:310 ;HEIGHT: 130px"  >
+				<rich:dataTable id="revision" var="_var" rows="5"
+					value="#{cargarEvaluacionPostulante.capAdjLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU486_doc}
+						</f:facet>
+						<h:outputText value="#{_var.documento.nombreFisicoDoc}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU41_tipo_doc}
+						</f:facet>
+						<h:outputText value="#{_var.documento.datosEspecificos.descripcion}" />
+					</h:column>
+					<rich:column >
+					<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+					<h:commandLink value="Descargar" target="_blank"
+							action="#{cargarEvaluacionPostulante.abrirDocumento(_var.idPostulacionAdj)}" />
+							#{' '}
+						<a:commandLink id="showAdjuntarLink" value="Adjuntar Doc."
+								reRender="adjuntarModal"
+								action="#{cargarEvaluacionPostulante.seleccionadoParaAdjuntar(row)}"
+								oncomplete="#{rich:component('adjuntarModal')}.show()" />
+					</rich:column>
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+			<h:panelGrid columns="2">
+			<s:button value="#{messages.CU486_ver_ficha_inscripcion}" propagation="join"
+			view="/capacitacion/fichaPostulacion/VerFichaInscripcion.xhtml">
+					<f:param name="cu" value="CU486" />
+						<f:param name="id" value="#{cargarEvaluacionPostulante.postulacionCap.personaPostulante.idPersonaPostulante}" />
+						<f:param  name="from"
+						value="/capacitacion/registrarEvalPostulante/porConcurso/EvaluacionPostulanteEdit" />
+		</s:button>
+			
+			<a:commandButton id="showAdjuntarLink" value="#{messages.CU486_ver_cursos}"
+								reRender="adjuntarModal"
+								onclick="#{rich:component('modalCapacitacion')}.show()" />
+			</h:panelGrid>
+		
+		
+		<rich:panel  id="panelBusqueda">
+				<f:facet name="header">#{messages['CU486_resultado_eval']}</f:facet>
+				
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/edit.xhtml" id="tipoSeleField">
+    	   			<ui:define name="label">#{messages.CU486_resulado} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="resultado" value="#{cargarEvaluacionPostulante.resultado}" >
+						<f:selectItem id="item1" itemLabel="Seleccionado" itemValue="S" />
+						<f:selectItem id="item2" itemLabel="No Seleccionado"
+									itemValue="N" />
+						<f:selectItem id="item3" itemLabel="Lista de Espera"
+									itemValue="L" />
+					</h:selectOneRadio>
+					</s:decorate>
+					<s:decorate id="obsField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU476_obs_revision}<span class="required">*</span> </ui:define>
+						<h:inputTextarea cols="80" id="comentario"
+							value="#{cargarEvaluacionPostulante.comentario}" style=" height : 70px;">
+							 <f:validateLength maximum="5000" />
+						</h:inputTextarea>
+					</s:decorate>
+					
+				</h:panelGrid>
+				
+		<h:panelGrid >
+		
+		
+		</h:panelGrid>
+		
+		</rich:panel>
+		
+		
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           
+            
+ <h:commandButton id="enviarAprobacion"
+                          value="#{messages.msg_save}"
+                         action="#{cargarEvaluacionPostulante.guardar()}"
+                           onclick="return confirm('#{messages.msg_confirm_save}');"
+                      />
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join"
+             action="#{cargarEvaluacionPostulante.back()}"
+                />
+
+        </div>
+        <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+	<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass"/>
+        </div>
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

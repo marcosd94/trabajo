@@ -1,0 +1,652 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU474_titulo_edit}</h1>
+<script type="text/javascript">
+	function format(input)
+	{
+	var num = input.value.replace(/\./g,"");
+	if(!isNaN(num)){
+		num = num.toString().split("").reverse().join("").replace(/(?=\d*\.?)(\d{3})/g,'$1.');
+		num = num.split("").reverse().join("").replace(/^[\.]/,"");
+		input.value = num;
+	 }
+	else{ alert("Solo se permiten numeros");
+		input.value = input.value.replace(/[^\d\.]*/g,"");
+	}
+	}
+</script>
+    <h:form id="capacitacionesSearch" styleClass="edit"  enctype="multipart/form-data" >
+
+        <rich:simpleTogglePanel label="#{messages.CU474_capacitacion}" switchType="ajax" id="panelParametro">
+			
+			
+			<h:panelGrid columns="1">
+			<s:decorate id="idDatosEspecificosTipoCapField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{cargarDatosCapacitacionFc.capacitaciones.nombre}">
+                </h:inputText>
+            </s:decorate>
+         
+
+
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+                 <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{cargarDatosCapacitacionFc.capacitaciones.datosEspecificosTipoCap.descripcion}">
+                </h:inputText>
+            </s:decorate>
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml" id="orgCodigo2field">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" disabled="true"
+										value="#{cargarDatosCapacitacionFc.capacitaciones.configuracionUoCab.orden}">
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{cargarDatosCapacitacionFc.capacitaciones.configuracionUoCab.denominacionUnidad}" />
+						 			
+	               			</s:decorate>
+				</a:outputPanel>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:simpleTogglePanel>
+
+   
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages.CU474_identificacion}</f:facet>
+    	<h:panelGrid columns="1">
+    	 <s:decorate template="/layout/edit.xhtml" id="tipoSeleField">
+    	   <ui:define name="label">#{messages.CU474_tipo_selec} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="tipoSele" value="#{cargarDatosCapacitacionFc.tipoSeleccion}" >
+						<s:selectItems var="val" value="#{enumAppHelper.tipoSeleccions}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+					</s:decorate>
+			<s:decorate template="/layout/edit.xhtml" id="modalidadCapacitacionField">
+    	   <ui:define name="label">#{messages.CU474_modalidad} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="modalidadCapacitacion" value="#{cargarDatosCapacitacionFc.modalidadCapacitacion}">
+						<s:selectItems var="modalidad" value="#{enumAppHelper.modalidadCapacitacions}"
+							label="#{modalidad.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="requiereRecepcionField">
+    	   <ui:define name="label">#{messages.CU474_requiere_recepcion} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="requiereRecepcion" value="#{cargarDatosCapacitacionFc.requiereRecepcion}" >
+						<s:selectItems var="recep" value="#{enumAppHelper.sinos}"
+							label="#{recep.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="sedeField">
+					<ui:define name="label">#{messages.CU474_sede}<span class="required">*</span></ui:define>
+					<h:inputText id="sede" size="100" maxlength="500" 
+						value="#{cargarDatosCapacitacionFc.capacitaciones.sede}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml" id="direccionField">
+					<ui:define name="label">#{messages.CU474_direccion}</ui:define>
+					<h:inputText id="direccion" size="100" maxlength="500"
+						value="#{cargarDatosCapacitacionFc.capacitaciones.direccion}" />
+				</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<a:region >
+				 <s:decorate template="/layout/edit.xhtml" id="paisNacField">
+						<ui:define name="label">País<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="paisNac" style="width : 250px;" 
+							value="#{cargarDatosCapacitacionFc.idPais}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac,dptOutPanel,cioudadOutPanel" eventsQueue="default" limitToList="true" 
+								action="#{cargarDatosCapacitacionFc.updateDepartamentoChange()}"/>
+						</h:selectOneMenu>
+					</s:decorate>
+					</a:region>
+					<a:region >
+					<a:outputPanel ajaxRendered="true" id="dptOutPanel">
+					<s:decorate id="dptoNacField" template="/layout/edit.xhtml" >
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;" 
+							value="#{cargarDatosCapacitacionFc.idDepartamento}">
+							<f:selectItems
+								value="#{cargarDatosCapacitacionFc.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{cargarDatosCapacitacionFc.updateCiudad()}"
+								reRender="ciudadNac,cioudadOutPanel" />
+						</h:selectOneMenu>
+					</s:decorate></a:outputPanel>
+					</a:region>
+					<a:region ><a:outputPanel ajaxRendered="true" id="cioudadOutPanel">
+					<s:decorate id="ciudadNacField" template="/layout/edit.xhtml" >
+							<ui:define name="label">#{messages.Persona_idCiudadDirecc}<span class="required">*</span></ui:define>
+							<h:selectOneMenu id="ciudadNac" style="width : 250px;" 
+								value="#{cargarDatosCapacitacionFc.idCiudad}">
+								<f:selectItems
+									value="#{cargarDatosCapacitacionFc.ciudadSelecItem}" />
+									
+							</h:selectOneMenu>
+					</s:decorate>
+					</a:outputPanel>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<s:decorate id="fechaIniDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_fecIni}<span class="required">*</span> </ui:define>
+						<rich:calendar id="fechaIni" 
+							value="#{cargarDatosCapacitacionFc.capacitaciones.fechaInicio}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="fechaFinDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_fecFin}<span class="required">*</span></ui:define>
+						<rich:calendar id="fechaFin" 
+							value="#{cargarDatosCapacitacionFc.capacitaciones.fechaFin}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+
+			
+				<s:decorate template="/layout/edit.xhtml" id="creditoField">
+					<ui:define name="label">#{messages.CU474_creditos}</ui:define>
+					<h:inputText id="credito" size="50"  styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosCapacitacionFc.capacitaciones.credito}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/edit.xhtml" id="costoField">
+					<ui:define name="label">#{messages.CU474_costo}</ui:define>
+					 
+					<h:inputText id="costo" size="50" onkeyup="format(this)" styleClass="numeric"   onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosCapacitacionFc.costo}">
+						    
+						</h:inputText>
+					
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="cupoMinimoField">
+					<ui:define name="label">Cupo Mínimo<span class="required">*</span></ui:define>
+					<h:inputText id="cupoMinimo" size="20" styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosCapacitacionFc.capacitaciones.cupoMinimo}" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="cupoMaximoField">
+					<ui:define name="label">Cupo Máximo<span class="required">*</span></ui:define>
+					<h:inputText id="cupoMaximo" size="20" styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosCapacitacionFc.capacitaciones.cupoMaximo}" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="cHorariaField">
+					<ui:define name="label">#{messages.CU474_carga_horaria}<span class="required">*</span></ui:define>
+					<h:inputText id="cHoraria" size="20"  styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosCapacitacionFc.capacitaciones.cargaHoraria}" />
+						<h:outputText value="Hs."/>
+				</s:decorate>
+				</h:panelGrid>
+					
+		</rich:panel>
+		<rich:panel id="fuenteInstFinancieraPanel">
+		 <f:facet name="header">#{messages.CU474_fuente_inst_financiera}<span
+								class="required">*</span></f:facet>
+		 <h:panelGrid columns="1" >
+		 <s:decorate template="/layout/display.xhtml" id="fuenteFinaciacionField">
+					<ui:define name="label">#{messages.CU474_fuente_finaciaciona}<span
+								class="required">*</span></ui:define>
+					<h:inputText id="fuenteFinaciacion" size="100"  maxlength="500"
+						value="#{cargarDatosCapacitacionFc.fuenteFinanciacion}" />
+						
+				</s:decorate>
+		 </h:panelGrid>
+		 <h:panelGrid columns="2">
+		<s:decorate template="/layout/edit.xhtml" id="instituFinanciadoraField">
+    	   <ui:define name="label">#{messages.CU474_int_financiadora}<span class="required">*</span></ui:define>
+					<h:selectOneRadio id="instituFinanciadora" value="#{cargarDatosCapacitacionFc.institucionFinaciadora}" >
+						<s:selectItems var="institu" value="#{enumAppHelper.institucionFinaciadoras}" 
+							label="#{institu.descripcion}" />
+							
+						<s:convertEnum/>
+						<a:support event="onchange"
+							action="#{cargarDatosCapacitacionFc.selecOee()}"
+							reRender="fuenteInstFinancieraPanel,oeeOutPanel"/>
+					</h:selectOneRadio>
+			</s:decorate>
+			<s:decorate id="otrosDatosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU474_otras_institucion}
+						</ui:define>
+						<h:selectOneMenu id="otrosDatos" disabled="#{cargarDatosCapacitacionFc.habOee}"
+							value="#{cargarDatosCapacitacionFc.idOtrasInstituciones}"
+							style=" width : 250px;">
+							<f:selectItems
+								value="#{cargarDatosCapacitacionFc.otrasInstitucionesSelecItems()}" />
+						</h:selectOneMenu>
+				</s:decorate>
+		</h:panelGrid>	
+		<a:outputPanel id="oeeOutPanel" ajaxRendered="true" rendered="#{cargarDatosCapacitacionFc.habOee}">
+		<fieldset id="fielsset1">
+		<legend>Oee</legend>
+		<h:panelGrid columns="1">
+		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.getUrlToPageNivel('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.getUrlToPageEntidad('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilFinanciacion.getUrlToPageOee('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+				
+		</h:panelGrid>
+		</fieldset>	 
+		</a:outputPanel>
+		
+		<a:outputPanel id="panelBotonesInst" ajaxRendered="true">
+		<h:panelGrid columns="4">
+		<h:commandButton id="add"  eventsQueue="default" rendered="#{!cargarDatosCapacitacionFc.esEditFinaciacion}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" 
+						reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						action="#{cargarDatosCapacitacionFc.addInstitucion()}"/>
+       <a:commandButton id="limpiar"  eventsQueue="default" rendered="#{!cargarDatosCapacitacionFc.esEditFinaciacion}"
+						value="Limpiar" reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						action="#{cargarDatosCapacitacionFc.limpiarInsti()}"/>
+		  <h:commandButton id="update"  eventsQueue="default" rendered="#{cargarDatosCapacitacionFc.esEditFinaciacion}"
+						 value="#{messages.msg_update}" reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{cargarDatosCapacitacionFc.upInstitucion()}"/>
+       
+       
+            <a:commandButton id="cancelEdit" rendered="#{cargarDatosCapacitacionFc.esEditFinaciacion}" 
+            reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+                   value="#{messages.msg_cancel}" action="#{cargarDatosCapacitacionFc.limpiarInsti()}" />
+              
+       </h:panelGrid>
+       </a:outputPanel>
+		
+		
+		        <rich:panel id="institucionFuentePaneles" style=" width : 672px;"><f:facet name="header">#{messages.CU474_fuente_inst_financiera}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList" var="_items"   first="0"
+												value="#{cargarDatosCapacitacionFc.capacitacionFinanciacionList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU474_fuente_finaciaciona}
+													</f:facet>
+													<h:outputText value="#{_items.fuenteFinanciacion}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU474_oee_institucion}
+													</f:facet>
+													<h:outputText value="#{_items.configuracionUo.denominacionUnidad}" />
+														<h:outputText value="#{_items.datosEspecificosInst.descripcion}" />
+											</rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet" value="#{messages.msg_edit}" 
+								                    reRender="panelBotonesInst,fuenteInstFinancieraPanel,oeeOutPanel,outeliminar"  eventsQueue="default" 
+								                    action="#{cargarDatosCapacitacionFc.editarFinanciacion(rowNr)}" />
+											  #{' '}
+											  	<a:outputPanel ajaxRendered="true" id="outeliminar" >
+										         <a:commandLink id="removeRow" 
+										         rendered="#{cargarDatosCapacitacionFc.habEliminarInst(rowNr)}"
+													action="#{cargarDatosCapacitacionFc.eliminarInst(rowNr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="institucionFuentePaneles"/>
+												</a:outputPanel>
+												</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+				
+			</rich:panel>
+				<rich:panel id="panelInstitucionParticipadoras" >
+				<f:facet name="header">#{messages.CU474_inst_participadoras}</f:facet><span
+								class="required">*</span>
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/edit.xhtml">
+    	  		<h:selectOneRadio id="instituFinanciadora" value="#{cargarDatosCapacitacionFc.destinadoA}">
+						<s:selectItems var="institu" value="#{enumAppHelper.destinadoAs}"
+							label="#{institu.descripcion}" />
+						<s:convertEnum/>
+						<a:support event="onchange"
+							action="#{cargarDatosCapacitacionFc.selecCerrado()}"
+							reRender="cerradoOutPanel,panelInstitucionParticipadoras"/>
+					</h:selectOneRadio>
+			</s:decorate>
+			</h:panelGrid>
+						
+					<a:outputPanel id="cerradoOutPanel" ajaxRendered="true" rendered="#{cargarDatosCapacitacionFc.cerrado()}">
+			
+				<fieldset id="fieldSet2">
+		<legend>#{messages.CU474_cerrado}</legend>
+		<h:panelGrid columns="1">
+		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigo2Field">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+								class="required">*</span></ui:define>
+							<h:inputText id="nivelCod" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivel2Descripcion" focus="entidadCodigo2"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivel2Descripcion"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi2" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.getUrlToPageNivel('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+				
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigo2fi">
+							<ui:define name="label">#{messages.Usuario_entidad}<span
+								class="required">*</span>
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default" focus="unidadOrgCodigo2"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.findEntidad()}" 
+									reRender="entidadDescripcion2" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.getUrlToPageEntidad('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+					
+				
+				
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigo2Fiels">
+							<ui:define name="label">#{messages.gral_oee}<span
+								class="required">*</span></ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default" focus="orgCo2"
+									action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.findUnidadOrganizativa()}"
+									reRender="unidadOrgDenominaciones" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominaciones" size="50"
+								disabled="true"
+								value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.getUrlToPageOee('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+						</s:decorate>
+					</a:region>
+					<a:region >
+			<s:decorate template="/layout/display.xhtml" id="orgCodigoFiels2">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCo2" size="10" 
+										value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default" focus="cupo"
+											action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCo2,orgDenominacion2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"  
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{cargarDatosCapacitacionFc.nivelEntidadOeeUtilCerrado.getUrlToPageUnidadOrgDep('capacitacion/datosCapacitacion/CargarDatosCapacitacion')}" />
+							</s:decorate>
+				</a:region>
+				<a:region >
+					
+					<s:decorate id="cupoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU474_cupo}</ui:define>
+				<h:inputText id="cupo" onkeypress="return soloNumeros(event);"
+					value="#{cargarDatosCapacitacionFc.cupo}">
+					<a:support event="onchange" eventsQueue="default"
+									reRender="cupoField" />
+				</h:inputText>
+				</s:decorate>
+				</a:region>
+				
+		</h:panelGrid>
+		
+		<a:outputPanel ajaxRendered="true" id="panelBotonesCerrado">
+		<h:panelGrid columns="4">
+		<h:commandButton id="add2"  eventsQueue="default" rendered="#{!cargarDatosCapacitacionFc.esEditCerrado}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						action="#{cargarDatosCapacitacionFc.addCerrado()}"/>
+       <a:commandButton id="limpiar2"  eventsQueue="default"  rendered="#{!cargarDatosCapacitacionFc.esEditCerrado}"
+						value="Limpiar" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						action="#{cargarDatosCapacitacionFc.limpiarCerrado()}"/>
+						  <h:commandButton id="update2"  eventsQueue="default" rendered="#{cargarDatosCapacitacionFc.esEditCerrado}"
+						 value="#{messages.msg_update}" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{cargarDatosCapacitacionFc.upCerrado()}"/>
+         <a:commandButton id="cancelEdit2" rendered="#{cargarDatosCapacitacionFc.esEditCerrado}"
+            reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+                   value="#{messages.msg_cancel}" action="#{cargarDatosCapacitacionFc.limpiarCerrado()}" />
+						
+		</h:panelGrid>
+		</a:outputPanel>
+		<h:panelGrid columns="1">
+		 <rich:panel id="oeePanel" style=" width : 672px;"><f:facet name="header">#{messages.gral_oee}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="items2List" var="_itemsCerrado"   first="0"
+												value="#{cargarDatosCapacitacionFc.capacitacionCerradasList}"
+											 rowKeyVar="rowNrCerr">
+												<rich:column  >
+													<f:facet name="header">
+														OEE
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.configuracionUo.denominacionUnidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														Unidad Organizativa
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.configuracionUoDet.denominacionUnidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														Cupo
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.cupo}" />
+											</rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet2" value="#{messages.msg_edit}" 
+								                    reRender="cerradoOutPanel,panelInstitucionParticipadoras,panelBotonesCerrado,outEliminarCerrado"  eventsQueue="default" 
+								                    action="#{cargarDatosCapacitacionFc.editarCerrado(rowNrCerr)}" />
+											  #{' '}
+											  
+											  <a:outputPanel ajaxRendered="true" id="outEliminarCerrado">
+								               <a:commandLink id="removeRow2" rendered="#{cargarDatosCapacitacionFc.habEliminarCerrado(rowNrCerr)}"
+													action="#{cargarDatosCapacitacionFc.eliminarCerrado(rowNrCerr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="panelInstitucionParticipadoras,oeePanel"/>
+													</a:outputPanel>
+												</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+				
+		</h:panelGrid>
+		</fieldset>
+				</a:outputPanel>
+			
+				</rich:panel>
+		
+		<rich:panel >
+			<f:facet name="header">#{messages.CU474_info_capacticación}</f:facet><span
+								class="required">*</span>
+			<div style="clear:both">
+            <h:outputText value="#{messages.CU474_seleccione_doc}" id="see" styleClass="labelClass"/>
+        	</div>
+			<h:panelGrid columns="1">
+				
+			<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="datosGral"
+							value="#{cargarDatosCapacitacionFc.idTipoDocumento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocCapaSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto<span
+								class="required">*</span></ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{cargarDatosCapacitacionFc.contentType}"
+						data="#{cargarDatosCapacitacionFc.uploadedFile}"
+						fileName="#{cargarDatosCapacitacionFc.fileName}">
+						<s:conversationPropagation type="join"/>
+					</s:fileUpload>
+						
+						
+				</s:decorate>
+				
+				
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+		<a:outputPanel >
+		<s:decorate id="archivoDescargaField" template="/layout/edit.xhtml">
+		<h:commandButton id="descargar" value="Descargar" target="_blank" rendered="#{cargarDatosCapacitacionFc.documentos.idDocumento!=null}"
+							action="#{cargarDatosCapacitacionFc.abrirDocumento()}" >
+			<rich:toolTip for="descargar"> <span> #{messages.CU495_descargar_doc}</span> </rich:toolTip>
+		</h:commandButton>
+		<h:inputText disabled="true" value="#{cargarDatosCapacitacionFc.nombreDoc}" id="nombreDoc" style=" width : 389px;"/>
+			</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+			</rich:panel>		
+		
+		
+		
+		
+     <div class="actionButtons">
+
+            
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{cargarDatosCapacitacionFc.guardar()}"
+                           onclick="return confirm('#{messages.msg_confirm_save}');"
+                      />
+
+          
+					 <s:button id="volvers"
+                   value="Volver"
+             propagation="join"
+                    action="#{cargarDatosCapacitacionFc.back()}">
+                </s:button>
+
+        </div>
+        <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass" />
+          </div>
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

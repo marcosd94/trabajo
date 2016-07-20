@@ -1,0 +1,251 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU552_titulo_baja}</h1>
+    <h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel  label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+
+			<h:panelGrid columns="">
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{gruposEvaluacionListFC.evaluacion}"/>
+            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2" id="idPanelCampos">
+			
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+			<h:panelGrid columns="1">
+				<ui:remove>
+					<a:outputPanel >
+								<s:decorate template="/layout/display.xhtml">
+														<ui:define name="label">#{messages.CU398_unidadOrganiza}
+														</ui:define>
+														<h:inputText id="orgCodigo2" size="10" disabled="true"
+															value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+														</h:inputText>
+														#{' '}
+														<h:inputText id="orgDenominacion2" size="70" disabled="true"
+															value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+														
+												</s:decorate>
+									</a:outputPanel>
+				</ui:remove>
+			 
+           
+
+          
+			</h:panelGrid>
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_grupo_eval}</ui:define>
+                <h:inputText id="grupo" size="70" 
+                value="#{gruposEvaluacionListFC.grupo}"/>
+            </s:decorate>
+
+          
+
+        </rich:simpleTogglePanel>
+
+       <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{gruposEvaluacionListFC.search2()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{gruposEvaluacionListFC.searchAll2()}" 
+				 reRender="panelParametro,links,panelResultado" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+				 
+        </div>
+
+
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty gruposEvaluacionListFC.gruposEvaluacionLista ? 0 : (gruposEvaluacionList.paginated ? gruposEvaluacionList.resultCount : gruposEvaluacionListFC.gruposEvaluacionLista.size)})</f:facet>
+    <div class="results" id="gruposEvaluacionList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty gruposEvaluacionListFC.gruposEvaluacionLista}"/>
+
+    <rich:dataTable id="gruposEvaluacionList"
+                var="_gruposEvaluacion" rowKeyVar="index"
+              value="#{gruposEvaluacionListFC.gruposEvaluacionLista}"
+           rendered="#{not empty gruposEvaluacionListFC.gruposEvaluacionLista}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{gruposEvaluacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU552_grupo_eval}"/>
+                    <ui:param name="propertyPath" value="gruposEvaluacion.grupo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_gruposEvaluacion.grupo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{gruposEvaluacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU552_motivo_baja}"/>
+                    <ui:param name="propertyPath" value="gruposEvaluacion.comisionEval.nombre"/>
+                </ui:include>
+            </f:facet>
+            <h:inputText disabled="#{!_gruposEvaluacion.activo}" value="#{_gruposEvaluacion.motivoCancelacion}" style=" width : 443px;"/>
+        </h:column>
+      
+       
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacion.xhtml"
+                   value="Ver"
+             propagation="none"
+                      id="gruposEvaluacionViewId">
+                       <f:param name="gruposEvaluacionFrom"
+                        value="evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionBaja"/>
+                  <f:param name="gruposEvaluacionIdGruposEvaluacion"
+                        value="#{_gruposEvaluacion.idGruposEvaluacion}"/>
+                  <f:param name="evaluacionDesempenoIdEvaluacionDesempeno" 
+                  value="#{gruposEvaluacionListFC.idEvaluacionDesempeno}"/>
+            </s:link>
+            #{' '}
+			
+				<s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionEdit.xhtml"
+								   value="#{messages.msg_edit}" disabled="#{!_gruposEvaluacion.activo}"
+							 propagation="none" rendered="#{empty ver}"
+									  id="gruposEvaluacionEdit"
+							  >
+								<f:param name="gruposEvaluacionIdGruposEvaluacion"
+										value="#{_gruposEvaluacion.idGruposEvaluacion}"/>
+								  <f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								  value="#{gruposEvaluacionListFC.idEvaluacionDesempeno}"/>
+								 <f:param name="gruposEvaluacionFrom" value="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionBaja.xhtml"/>
+							</s:link>
+							 #{' '}
+			
+            <h:commandLink  id="del"
+            reRender="panelResultado,links" rendered="#{empty ver}"
+                          value="#{messages.CU552_dar_baja}" disabled="#{!_gruposEvaluacion.activo}"
+                        action="#{gruposEvaluacionListFC.darBaja(index)}"
+                          onclick="return confirm('#{messages.CU552_msj_baja}');"
+                      />
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+    </h:form>
+
+	<a:outputPanel id="links">
+    <div class="tableControl">
+
+        <s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionList.xhtml"
+            rendered="#{gruposEvaluacionList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionList.xhtml"
+            rendered="#{gruposEvaluacionList.previousExists}"
+               value="#{messages.left}  #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{gruposEvaluacionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionList.xhtml"
+            rendered="#{gruposEvaluacionList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{gruposEvaluacionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionList.xhtml"
+            rendered="#{gruposEvaluacionList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{gruposEvaluacionList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+    </a:outputPanel>
+		 <s:div styleClass="actionButtons" >
+		<s:button id="volver"
+                   value="Volver"
+             propagation="join"
+              view="#{from}"  >
+               <f:param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{gruposEvaluacionListFC.idEvaluacionDesempeno}"/>
+                  </s:button>
+		</s:div>
+     <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass"/>
+            </div>
+
+</ui:define>
+
+</ui:composition>

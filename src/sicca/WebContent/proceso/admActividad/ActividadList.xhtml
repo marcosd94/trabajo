@@ -1,0 +1,164 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="actividadSearch" styleClass="edit">
+		<h1>#{messages.CU390_tittle_list}</h1>
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.gral_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{actividadList.actividad.descripcion}" size="60"/>
+            </s:decorate>
+            
+            <s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.msg_estado}</ui:define>
+				<h:selectOneRadio id="estado" value="#{actividadList.estado}">
+					<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+				</h:selectOneRadio>
+				
+				
+			</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+			<a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{actividadList.buscarResultados()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{actividadList.limpiarResultados()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+		</div>
+
+    </h:form>
+
+    <rich:panel id="panelResultados">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty actividadList.resultList ? 0 : (actividadList.paginated ? actividadList.resultCount : actividadList.resultList.size)})</f:facet>
+    <div class="results" id="actividadList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty actividadList.resultList}"/>
+
+    <rich:dataTable id="actividadList"
+                var="_actividad"
+              value="#{actividadList.resultList}"
+           rendered="#{not empty actividadList.resultList}">
+           
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{actividadList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU390_nro_actividad}"/>
+                    <ui:param name="propertyPath" value="actividad.nroActividad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_actividad.nroActividad}"/>
+        </h:column>
+           
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{actividadList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.gral_descripcion}"/>
+                    <ui:param name="propertyPath" value="actividad.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_actividad.descripcion}"/>
+        </h:column>
+        
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{actividadList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU390_historial}"/>
+                    <ui:param name="propertyPath" value="actividad.descripcionHistorial"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_actividad.descripcionHistorial}"/>
+        </h:column>
+        
+        <rich:column style="text-align:center" width="10%">
+			<f:facet name="header">#{messages.gral_activo}</f:facet>
+			<h:selectBooleanCheckbox value="#{_actividad.activo}" disabled="true"/>
+		</rich:column>
+		
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+             <s:link view="/proceso/admActividad/Actividad.xhtml"
+                    value="#{messages.msg_list_view}"
+             		propagation="none"
+                    id="actividadVer"
+                	rendered="#{empty from}">
+                <f:param name="actividadIdActividad" value="#{_actividad.idActividad}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/proceso/admActividad/ActividadEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="actividadEdit"
+                rendered="#{empty from}">
+                <f:param name="actividadIdActividad" value="#{_actividad.idActividad}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+	<a:outputPanel ajaxRendered="true">
+	    <div class="tableControl">
+	
+	        <s:link view="/proceso/admActividad/ActividadList.xhtml"
+	            rendered="#{actividadList.previousExists}"
+	               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+	                  id="firstPage">
+	          <f:param name="firstResult" value="0"/>
+	        </s:link>
+	
+	        <s:link view="/proceso/admActividad/ActividadList.xhtml"
+	            rendered="#{actividadList.previousExists}"
+	               value="#{messages.left} #{messages.msg_list_previous_page}"
+	                  id="previousPage">
+	            <f:param name="firstResult"
+	                    value="#{actividadList.previousFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/proceso/admActividad/ActividadList.xhtml"
+	            rendered="#{actividadList.nextExists}"
+	               value="#{messages.msg_list_next_page} #{messages.right}"
+	                  id="nextPage">
+	            <f:param name="firstResult"
+	                    value="#{actividadList.nextFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/proceso/admActividad/ActividadList.xhtml"
+	            rendered="#{actividadList.nextExists}"
+	               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+	                  id="lastPage">
+	            <f:param name="firstResult"
+	                    value="#{actividadList.lastFirstResult}"/>
+	        </s:link>
+	    </div>
+	</a:outputPanel>
+
+</ui:define>
+
+</ui:composition>

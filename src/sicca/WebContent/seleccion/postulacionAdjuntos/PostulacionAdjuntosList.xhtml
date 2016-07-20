@@ -1,0 +1,209 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="postulacionAdjuntosSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="PostulacionAdjuntos Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{postulacionAdjuntosList.postulacionAdjuntos.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{postulacionAdjuntosList.postulacionAdjuntos.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{postulacionAdjuntosList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/PostulacionAdjuntosList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">PostulacionAdjuntos Search Results (#{empty postulacionAdjuntosList.resultList ? 0 : (postulacionAdjuntosList.paginated ? postulacionAdjuntosList.resultCount : postulacionAdjuntosList.resultList.size)})</f:facet>
+    <div class="results" id="postulacionAdjuntosList">
+
+    <h:outputText value="The postulacionAdjuntos search returned no results."
+               rendered="#{empty postulacionAdjuntosList.resultList}"/>
+
+    <rich:dataTable id="postulacionAdjuntosList"
+                var="_postulacionAdjuntos"
+              value="#{postulacionAdjuntosList.resultList}"
+           rendered="#{not empty postulacionAdjuntosList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Id postulacion adjuntos"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.idPostulacionAdjuntos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.idPostulacionAdjuntos}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Postulacion id postulacion"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.postulacion.idPostulacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.postulacion.idPostulacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Id documento"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.idDocumento"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.idDocumento}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{postulacionAdjuntosList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="postulacionAdjuntos.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_postulacionAdjuntos.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'PostulacionAdjuntos' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="postulacionAdjuntosViewId">
+                <f:param name="postulacionAdjuntosIdPostulacionAdjuntos"
+                        value="#{_postulacionAdjuntos.idPostulacionAdjuntos}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/PostulacionAdjuntosEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="postulacionAdjuntosEdit"
+                rendered="#{empty from}">
+                <f:param name="postulacionAdjuntosIdPostulacionAdjuntos"
+                        value="#{_postulacionAdjuntos.idPostulacionAdjuntos}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/PostulacionAdjuntosList.xhtml"
+            rendered="#{postulacionAdjuntosList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/PostulacionAdjuntosList.xhtml"
+            rendered="#{postulacionAdjuntosList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{postulacionAdjuntosList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/PostulacionAdjuntosList.xhtml"
+            rendered="#{postulacionAdjuntosList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{postulacionAdjuntosList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/PostulacionAdjuntosList.xhtml"
+            rendered="#{postulacionAdjuntosList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{postulacionAdjuntosList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/PostulacionAdjuntosEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create postulacionAdjuntos">
+            <f:param name="postulacionAdjuntosIdPostulacionAdjuntos"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

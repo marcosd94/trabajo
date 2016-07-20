@@ -1,0 +1,281 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Persona_}</h1>
+
+    <h:form id="persona" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">#{personaHome.managed ? messages.msg_edit  : 'Nueva'} #{messages.Persona_}</f:facet>
+			
+			<h:panelGrid columns="1">
+			<a:region >
+			<s:decorate id="paisExpField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_pais_expedi} <span class="required">*</span></ui:define>
+						<h:selectOneMenu id="paisExp" value="#{admPersonaEditFormController.idPaisExpe}" style="width:250px"
+						disabled="#{personaHome.managed}">
+							<f:selectItems value="#{paissSelectItems}"/>
+							<a:support event="onchange" reRender="panelPrincipal" action="#{admPersonaEditFormController.cambioPais()}" 
+							 eventsQueue="default" focus="documentoIdentidadField" />
+						</h:selectOneMenu>
+			</s:decorate>
+			</a:region>
+		
+			<a:region >
+			<a:status id="idSatatusPersonSearch"
+									onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+			<s:decorate id="documentoIdentidadField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_documentoIdentidad}<span class="required">*</span></ui:define>
+	                <h:inputText id="documentoIdentidad" 
+	                		disabled="#{personaHome.managed}"
+	                          value="#{admPersonaEditFormController.documentoCi}" style=" width : 253px;">
+	                          <a:support event="onblur" reRender="panelPrincipal" eventsQueue="default" focus="nombresField"
+	                          action="#{admPersonaEditFormController.buscarPersona()}"
+							/>
+	                </h:inputText>
+	            </s:decorate>
+			</a:region>
+			
+				</h:panelGrid>
+			<h:panelGrid >
+	            <s:decorate id="nombresField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_nombres}</ui:define>
+	                <h:inputText id="nombres"  maxlength="100"
+	                		required ="true" style=" width : 253px;"
+	                       disabled="#{!admPersonaEditFormController.habCamposPersona}"
+	                          value="#{admPersonaEditFormController.persona.nombres}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="apellidosField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+	                <h:inputText id="apellidos"
+	                		required ="true"  style=" width : 253px;"
+	                        maxlength="80"
+	                          value="#{admPersonaEditFormController.persona.apellidos}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_sexo}</ui:define>
+					<h:selectOneMenu id="sexo" style="width : 250px;" required="true"
+						value="#{admPersonaEditFormController.idSexo}">
+						<f:selectItems value="#{referenciasBySexoSelectItems}" />	
+					</h:selectOneMenu>
+				</s:decorate>
+			
+	            <s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_estadoCivil}</ui:define>
+					<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+						value="#{admPersonaEditFormController.idEstadoCivil}">
+						<f:selectItems value="#{referenciasByEstadoCivilSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="fechaNacField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_fecha_nac}</ui:define>
+					<rich:calendar id="fechaNac" required="true"
+					 oninputkeyup="ponerBarra(event);" disabled="#{!admPersonaEditFormController.habCamposPersona}"
+			         locale="#{siccaAppHelper.localeCode}"
+						value="#{admPersonaEditFormController.persona.fechaNacimiento}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+				</s:decorate>
+					<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_nacionalidad}</ui:define>
+						<h:selectOneMenu id="nacionalidad" value="#{admPersonaEditFormController.idNacionalidad}" required="true" style="width:250px">
+							<f:selectItems value="#{admPersonaEditFormController.getNacionalidadSelectItems()}"/>
+						</h:selectOneMenu>
+						</s:decorate>
+				<a:region >
+	           <s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_nac}</ui:define>
+						<h:selectOneMenu id="paisNac" style="width : 250px;"
+							value="#{admPersonaEditFormController.idPaisNac}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateDepartamento()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region >
+				<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_nac}</ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;"
+							value="#{admPersonaEditFormController.idDptoNac}">
+							<f:selectItems
+								value="#{admPersonaEditFormController.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateCiudad()}"
+								reRender="ciudadNac" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_ciudad_nac}</ui:define>
+					<h:selectOneMenu id="ciudadNac" style="width : 250px;"
+						value="#{admPersonaEditFormController.idCiudadNac}">
+						<f:selectItems
+							value="#{admPersonaEditFormController.ciudadSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				<a:region >
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_pais_dir}</ui:define>
+						<h:selectOneMenu id="paisDir" style="width : 250px;"
+							value="#{admPersonaEditFormController.idPaisDir}">
+							<f:selectItems value="#{paissSelectItems}" /> 
+							<a:support event="onchange" reRender="dptoDir,ciudadDir" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateDepartamentoDir()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region >
+					<s:decorate id="dptoDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_dpto_dir}</ui:define>
+						<h:selectOneMenu id="dptoDir" style="width : 250px;"
+							value="#{admPersonaEditFormController.idDptoDir}">
+							<f:selectItems
+								value="#{admPersonaEditFormController.departamentosDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateCiudadDir()}"
+								reRender="ciudadDir" />
+						</h:selectOneMenu>
+					</s:decorate>
+			</a:region>
+			<a:region >
+					<s:decorate id="ciudadDirField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_ciudad_dir}</ui:define>
+						<h:selectOneMenu id="ciudadDir" style="width : 250px;"
+							value="#{admPersonaEditFormController.idCiudadDir}">
+							<f:selectItems
+								value="#{admPersonaEditFormController.ciudadDirSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{admPersonaEditFormController.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<s:decorate id="barrioField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+					<h:selectOneMenu id="barrio" style="width :250px;"
+						value="#{admPersonaEditFormController.idLocalidadDir}">
+						<f:selectItems
+							value="#{admPersonaEditFormController.localidadDirSelecItem}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				 
+	            <s:decorate id="dirParticularField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CU239_dir_particular}</ui:define>
+	                <h:inputText id="dirParticular"
+	                		required ="false"
+	                       disabled="false" maxlength="100" style=" width : 509px;"
+	                          value="#{admPersonaEditFormController.persona.otrasDirecciones}">
+	                 </h:inputText>
+	            </s:decorate>
+	          <s:decorate id="direccionLaboralField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_direccionLaboral}</ui:define>
+	                <h:inputText id="direccionLaboral"
+	                		required ="false"
+	                       disabled="false" maxlength="100" style=" width : 509px;"
+	                          value="#{admPersonaEditFormController.persona.direccionLaboral}">
+	               </h:inputText>
+	            </s:decorate>
+	          
+	            <s:decorate id="telefonosPartField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_telefonos}</ui:define>
+	                <h:inputText id="telefonoPart"
+	                		required ="false"
+	                       disabled="false" maxlength="50"
+	                          value="#{admPersonaEditFormController.persona.telefonoPart}">
+	               </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="telefonosField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Persona_celular}</ui:define>
+	                <h:inputText id="telefonos"
+	                       disabled="false" maxlength="20"
+	                       value="#{admPersonaEditFormController.persona.telefonos}">
+	               </h:inputText>
+	            </s:decorate>
+	          <s:decorate id="correoElectField" template="/layout/edit.xhtml">
+					<ui:define name="label">Correo Personal</ui:define>
+					<h:inputText id="correoElectronico" size="30" 
+						maxlength="50" style=" width : 509px;"
+						value="#{admPersonaEditFormController.persona.EMail}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="correoElectFuncionarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">Correo Funcionario</ui:define>
+					<h:inputText id="correoElectronico2" size="30" 
+						maxlength="50" style=" width : 509px;"
+						value="#{admPersonaEditFormController.persona.EMailFuncionario}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="activoField" template="/layout/edit.xhtml"  rendered="false" >
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{admPersonaEditFormController.persona.activo}"/>
+            </s:decorate>
+           
+	          </h:panelGrid>
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+			<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!personaHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{personaHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{admPersonaEditFormController.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!personaHome.managed}">
+                <f:param name="texto" value="GShow644" />
+				<f:param name="accion" value="EDITAR" />
+				<f:param name="personaIdPersona" value="#{admPersonaEditFormController.idPersonaFamiliar}" />
+			</h:commandButton>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{admPersonaEditFormController.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{personaHome.managed}"/>
+
+     
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_done}"
+             propagation="end"
+                    view="/seleccion/persona/PersonaList.xhtml"
+                rendered="#{personaHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             propagation="end"
+                    view="#{admPersonaEditFormController.volverFrom()}"
+                rendered="#{!personaHome.managed}">
+                <f:param name="texto" value="GShow644" />
+				<f:param name="accion" value="EDITAR" />
+			</s:button>
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

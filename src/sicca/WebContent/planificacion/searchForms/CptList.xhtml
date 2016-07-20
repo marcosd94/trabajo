@@ -1,0 +1,196 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CategoriaCpt_search}</h1>
+
+		<h:form id="cptSearch" styleClass="edit">
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Cpt_nivel}</ui:define>
+					<h:inputText id="nivel" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						value="#{cptSearchListFormController.cpt.nivel}" />
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Cpt_numero}</ui:define>
+					<h:inputText id="numero" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						value="#{cptSearchListFormController.cpt.numero}" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml" rendered="#{cptSearchListFormController.tipo != 'general'}">
+					<ui:define name="label">#{messages.Cpt_idTipoCpt}</ui:define>
+					<h:selectOneMenu id="tipoCpt" disabled="#{cptSearchListFormController.from!=null}" style="width:250px;" 
+						value="#{cptSearchListFormController.codTipoCpt}">
+						<f:selectItems value="#{tipoCptsSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml" rendered="#{cptSearchListFormController.tipo != 'general'}">
+					<ui:define name="label">#{messages.Cpt_numero_especif}</ui:define>
+					<h:inputText id="numeroEspecif" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						value="#{cptSearchListFormController.cpt.nroEspecifico}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Cpt_denominacion}</ui:define>
+					<h:inputText id="denominacion" size="60"
+						value="#{cptSearchListFormController.cpt.denominacion}" />
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages['msg_list_search_button']}"
+					action="#{cptSearchListFormController.search()}" reRender="panelResultados">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{cptSearchListFormController.searchAll()}"
+					reRender="panelResultados, panelBusqueda">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<s:button id="back"
+					   value="#{messages.msg_done}"
+						view="/#{from}.xhtml" 
+					rendered="#{not empty from}"/>
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty cptList.resultList ? 0 : (cptList.paginated ? cptList.resultCount : cptList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty cptList.obtenerListaCpts()}" /> <rich:dataTable
+				id="cptList" var="_cpt" value="#{cptList.resultList}"
+				rowKeyVar="_index"
+				rendered="#{not empty cptList.resultList}">
+				<rich:column styleClass="numeric" width="50px">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_nivel}" />
+							<ui:param name="propertyPath" value="cpt.nivel" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.nivel}" />
+				</rich:column>
+				<rich:column styleClass="numeric" width="50px">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_numero}" />
+							<ui:param name="propertyPath" value="cpt.numero" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.numero}" />
+				</rich:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_idTipoCpt}" />
+							<ui:param name="propertyPath" value="cpt.tipoCpt.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.tipoCpt.descripcion}" />
+				</h:column>
+				<rich:column styleClass="numeric" width="50px" rendered="#{cptSearchListFormController.tipo != 'general'}">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Cpt_numero_especif}" />
+							<ui:param name="propertyPath" value="cpt.nroEspecifico" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.nroEspecifico}" />
+				</rich:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Cpt_denominacion}" />
+							<ui:param name="propertyPath" value="cpt.denominacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.denominacion}" />
+				</h:column>
+				
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<!-- <a:commandLink
+						value="#{messages.msg_list_view}" id="verDatos"
+						onclick="#{administrarCptFormController.verDetalles(_cpt.idCpt,_index)});"
+						rendered="#{not empty from and cptSearchListFormController.tipo == 'general'}">
+					</a:commandLink> -->
+					<!--  	<f:param name="idCptPopUp" value="#{_cpt.idCpt}"/>-->
+					#{'    '}
+					<s:link view="/#{empty from ? 'planificacion/cpt/Cpt' : from}.xhtml"
+						value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+						propagation="#{empty from ? 'none' : 'default'}" id="cptViewId"
+						rendered="#{not empty from and cptSearchListFormController.tipo != 'general'}">
+						<f:param name="cptIdCpt" value="#{_cpt.idCpt}" />
+					</s:link>
+					#{' '}
+					<s:link view="/#{empty from ? 'planificacion/cpt/Cpt' : from}.xhtml"
+						value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+						propagation="#{empty from ? 'none' : 'default'}" id="cptViewIdPadre"
+						rendered="#{not empty from and cptSearchListFormController.tipo == 'general'}">
+						<f:param name="cptIdCptPadre" value="#{_cpt.idCpt}" />
+					</s:link>
+					
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<!-- VER POPUP -->
+		<rich:modalPanel id="pnl1" autosized="true" resizeable="false">
+	      <f:facet name="header"> <h:outputText value="Ver Detalles CPT" /> </f:facet>
+   		   <f:facet name="controls">
+  	       	  <h:graphicImage value="/img/close.png" height="15px" width="15px" style="cursor:pointer" onclick="Richfaces.hideModalPanel('pnl1')" />
+      		</f:facet>
+      		 <a:include id="includeVerDetalles"
+				viewId="/planificacion/cpt/VerDetalles.xhtml" />      		      			
+    	 </rich:modalPanel>
+    	 
+    	 
+		<a:outputPanel ajaxRendered="true">
+			<div class="tableControl"><s:link view="/planificacion/searchForms/CptList.xhtml"
+				rendered="#{cptList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/searchForms/CptList.xhtml"
+				rendered="#{cptList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult" value="#{cptList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/CptList.xhtml"
+				rendered="#{cptList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{cptList.nextFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/CptList.xhtml"
+				rendered="#{cptList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{cptList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

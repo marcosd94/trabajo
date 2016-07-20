@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+<begin-conversation flush-mode="MANUAL" join="true"/>
+
+  <action execute="#{reportUtilFormController.init()}" on-postback="false"/>
+   <action execute="#{enviarHomologacionPerfilFromController.init()}" on-postback="false"/>
+   <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{enviarHomologacionPerfilFromController.idConcursoPuestoAgr}"/>
+	<param name="actividad" value="#{enviarHomologacionPerfilFromController.codActividad}" />
+  
+
+   <param name="from"/>
+   
+   <navigation from-action="#{enviarHomologacionPerfilFromController.nextTask()}">
+      <rule if-outcome="next">
+         <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+  
+
+ <restrict>#{identity.hasRole('enviarHomologacionPerfil_edit')}</restrict>
+</page>

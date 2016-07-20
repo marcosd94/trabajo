@@ -1,0 +1,311 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU455_tittle_view}</h1>
+
+    <h:form id="form" styleClass="edit">
+    
+    	<rich:panel id="panelSumario">
+            <f:facet name="header">#{messages.CU455_datos_sumario}</f:facet>
+            <h:panelGrid columns="2">
+		        <s:decorate id="nroDecorate" template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.CU455_nro_exp_interno}:</ui:define>
+		             <h:inputText id="nro" value="#{admSumariosFC.sumarioCab.nroExp}" disabled="true"/>
+		        </s:decorate>
+		        
+		        <s:decorate id="anhoDecorate" template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.gral_anho}:</ui:define>
+		             <h:inputText id="anho" value="#{admSumariosFC.sumarioCab.anioExp}" disabled="true"/>
+		        </s:decorate>
+		        
+		        <s:decorate template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.gral_estado}:</ui:define>
+		             <h:outputLabel value="#{admSumariosFC.estadoSumario.descripcion}"/>
+		        </s:decorate>
+		    </h:panelGrid>
+        </rich:panel>
+        
+		<br />
+        <rich:panel id="panelFuncionario">
+            <f:facet name="header">#{messages.CU455_funcionario}</f:facet>
+			<h:panelGrid columns="2" >
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+			</h:panelGrid>
+			
+			<h:panelGrid >
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+			                #{' '}
+			                <h:inputText id="configUoCab" size="40"
+									disabled="true"
+									value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+				</s:decorate>
+				
+				<s:decorate id="docDecorate" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.gral_cin}</ui:define>
+	                <h:inputText id="doc" size="30" value="#{admSumariosFC.cedula}" disabled="true"/>
+	            </s:decorate>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" >
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+			        <h:inputText size="40" disabled="true"
+								value="#{admSumariosFC.empleadoPuesto.persona.nombres}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+			        <h:inputText size="40" disabled="true"
+								value="#{admSumariosFC.empleadoPuesto.persona.apellidos}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU455_unid_organizativa}</ui:define>
+			        <h:inputText size="40" disabled="true"
+								value="#{admSumariosFC.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU455_fecha_ingreso}</ui:define>
+			        <h:inputText size="40" disabled="true"
+								value="#{admSumariosFC.empleadoPuesto.fechaInicio}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU455_puesto}</ui:define>
+			        <h:inputText size="60" disabled="true"
+								value="#{admSumariosFC.empleadoPuesto.plantaCargoDet.descripcion}" />
+				</s:decorate>
+			</h:panelGrid>
+        </rich:panel>
+        
+       
+		
+        <br></br>
+        <rich:panel id="panelFaltas">
+        	<f:facet name="header">#{messages.CU455_faltas}</f:facet>
+			<div class="results" id="tblFaltas">
+			  	<rich:dataTable id="faltasList" 
+			  		var="_datosEspecificos" rowKeyVar="fila"
+					value="#{admSumariosFC.listaFaltas}">
+					
+					<rich:column style="text-align: center;" width="5%">
+						<f:facet name="header">
+							<h:selectBooleanCheckbox value="#{admSumariosFC.seleccionarTodos}" disabled="true"/>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_datosEspecificos.seleccionado}" disabled="true"/>
+					</rich:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU455_faltas_cometidas}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_datosEspecificos.descripcion}" />
+					</h:column>
+				</rich:dataTable>
+			</div>
+		</rich:panel>
+        
+
+		
+		<br />
+        <rich:panel id="panelJuezSumariante" rendered="#{admSumariosFC.mostrarPanelJuezSumarianteView() or admSumariosFC.mostrarPanelDecisionMaiView()}">
+            <f:facet name="header">#{messages.CU455_juez_sumariante}</f:facet>
+				<h:panelGrid>
+				<s:decorate id="estadoJuezField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU455_recomendacion_juez_sumariante}
+						<span class="required">*</span>
+					</ui:define>
+					<h:selectOneRadio id="estadoJuez" value="#{admSumariosFC.estadoJuez}" disabled="true">
+						<s:selectItems var="val" value="#{admSumariosFC.estadoSumarioJuezPanel}" label="#{val.descripcion}" />
+						<s:convertEnum />
+						<a:support event="onchange" reRender="panelJuezSumariante" action="#{admSumariosFC.updateInhabilitaFuncionarioJuez()}"/>
+					</h:selectOneRadio>
+				</s:decorate>
+        	</h:panelGrid>
+        	
+        	<rich:panel id="panelDatosSancionJuez" style="border:none;"
+						rendered="#{admSumariosFC.mostrarDatosSancionJuez()}">
+				<fieldset><legend>#{messages.CU455_datos_sancion_dictado}</legend>
+					<h:panelGrid>
+						<s:decorate id="especificarJuez" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_especificar}</ui:define>
+							<h:selectOneMenu id="idEspecificarJuez" value="#{admSumariosFC.idSancionJuez}" disabled="true">
+								<f:selectItems value="#{admSumariosFC.sancionesSelectItem}"/>
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" id="inhabilitaJuez">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_inhabilita_funcionario}</ui:define>
+							<h:selectBooleanCheckbox value="#{admSumariosFC.inhabilitaFuncionarioJuez}" disabled="true"/>
+						</s:decorate>
+						
+						<s:decorate id="tiempoJuezDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_tiempo_inhabilitacion}</ui:define>
+							
+							<h:inputText id="tiempoJuez" size="6" value="#{admSumariosFC.sumarioCab.tiempoJ}" 
+								disabled="true"/>
+							#{' '}
+							<h:selectOneMenu value="#{admSumariosFC.sumarioCab.expresadoJ}" disabled="true">
+								<f:selectItems value="#{admSumariosFC.tiempoSelectItem}"/>
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="fechaInicioField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_fecIni}<span class="required">*</span></ui:define>
+						<rich:calendar id="fecha"  disabled="true"
+                     locale="#{siccaAppHelper.localeCode}"
+						value="#{admSumariosFC.sumarioCab.fechaDesde}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+					</s:decorate>
+					</h:panelGrid>
+				</fieldset>
+			</rich:panel>
+			
+			<h:panelGrid>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU455_observacion_juez}</ui:define>
+					<h:inputTextarea rows="3" cols="60" disabled="true"
+								value="#{admSumariosFC.sumarioCab.obsJ}" />
+				</s:decorate>
+        	</h:panelGrid>
+        </rich:panel>
+        
+        
+        
+        
+        
+        <br />
+        <rich:panel id="panelDecisionMai" rendered="#{admSumariosFC.mostrarPanelDecisionMaiView()}">
+            <f:facet name="header">#{messages.CU455_decision_mai}</f:facet>
+			<h:panelGrid>
+				<s:decorate id="estadoMaiField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU455_decision_mai}</ui:define>
+					<h:selectOneRadio id="estadoMai" value="#{admSumariosFC.estadoMai}" disabled="true">
+						<s:selectItems var="val" value="#{admSumariosFC.estadoSumarioPanel}" label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+        	</h:panelGrid>
+        	
+        	<rich:panel id="panelDatosSancionMai" style="border:none;"
+						rendered="#{admSumariosFC.mostrarDatosSancionMai()}">
+				<fieldset><legend>#{messages.CU455_datos_sancion_dictado_mai}</legend>
+					<h:panelGrid>
+						<s:decorate id="especificarMaiDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_especificar}</ui:define>
+							<h:selectOneMenu id="especificarMai" value="#{admSumariosFC.idSancionMai}" disabled="true">
+								<f:selectItems value="#{admSumariosFC.sancionesSelectItem}"/>
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" id="inhabilitaMai">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_inhabilita_funcionario}</ui:define>
+							<h:selectBooleanCheckbox value="#{admSumariosFC.inhabilitaFuncionarioMai}" disabled="true"/>
+						</s:decorate>
+						
+						<s:decorate id="tiempoMaiDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU455_tiempo_inhabilitacion}</ui:define>
+							<h:inputText id="tiempoMai" size="6" value="#{admSumariosFC.sumarioCab.tiempoM}" 
+								disabled="true"/>
+							#{' '}
+							<h:selectOneMenu value="#{admSumariosFC.sumarioCab.expresadoM}" disabled="true">
+								<f:selectItems value="#{admSumariosFC.tiempoSelectItem}"/>
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+				</fieldset>
+			</rich:panel>
+			
+			<h:panelGrid>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU455_observacion_mai}</ui:define>
+					<h:inputTextarea rows="3" cols="60" value="#{admSumariosFC.sumarioCab.obsM}" disabled="true"/>
+				</s:decorate>
+        	</h:panelGrid>
+        </rich:panel>
+        
+
+        <div class="actionButtons">                  
+            <s:button
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="#{messages.gral_anexos}">
+				<f:param name="direccionFisica" value="#{admSumariosFC.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="sumariosEdit" />
+				<f:param name="idCU" value="#{admSumariosFC.idSumarioCab}" />
+				<f:param name="nombreTabla" value="sumario_cab" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="juridicos/sumarios/Sumario" />
+			</s:button>	
+
+            <s:button id="cancelEdit"
+                    value="#{messages.msg_done}"
+             		propagation="end"
+                    view="/juridicos/sumarios/SumariosList.xhtml"
+                    action="#{admSumariosFC.clearEdit()}"/>
+        </div>
+        
+        <h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{sumarioCabHome.managed}">
+	               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+	               <h:outputText id="usuAlta" value="#{sumarioCabHome.instance.usuAlta}"/>
+	           </s:decorate>
+	           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{sumarioCabHome.managed}">
+	               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+	               <h:outputText id="fechaAlta" value="#{sumarioCabHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+	           </s:decorate>
+	           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{sumarioCabHome.managed}">
+	               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+	               <h:outputText id="usuMod" value="#{sumarioCabHome.instance.usuMod}"/>
+	           </s:decorate>
+	           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{sumarioCabHome.managed}">
+	               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+	               <h:outputText id="fechaMod" value="#{sumarioCabHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+	        </s:decorate>
+		</h:panelGrid>
+    </h:form>
+        
+</ui:define>
+
+</ui:composition>

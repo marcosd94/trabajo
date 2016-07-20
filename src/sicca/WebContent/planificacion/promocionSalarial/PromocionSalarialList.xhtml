@@ -1,0 +1,304 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.promocion_listado}</h1>
+		<!-- Modales  -->
+		<rich:modalPanel id="modalEstados" width="450" height="250"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Cambio de Estado</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalEstados')}.hide()" />
+			</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" rendered="#{administrarVacanciasListFormController.checkSeleccionadosPromocionSalarial()}">
+					<a:region>
+						<s:decorate id="estadoField" template="/layout/display.xhtml">
+							<ui:define name="label">Estado</ui:define>
+							<h:selectOneMenu id="estado"
+								value="#{administrarVacanciasListFormController.idEstadoSeleccionado}"
+								style="width:250px">
+								<f:selectItems
+									value="#{administrarVacanciasListFormController.estadosTransicionSelecItem}" />
+								<a:support event="onchange" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate id="ObsField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_observacion}</ui:define>
+							<h:inputTextarea
+								value="#{administrarVacanciasListFormController.observacion}"
+								cols="35">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputTextarea>
+						</s:decorate>
+					</a:region>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="save" value="Guardar"
+						action="#{administrarVacanciasListFormController.savePromocionSalarial()}"
+						ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('modalEstados')"
+						reRender="panelResultados" /> <a:commandButton id="cancel"
+						value="Volver" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('modalEstados')" /></div>
+				</rich:panel>
+				<rich:panel style="border:none;" rendered="#{!administrarVacanciasListFormController.checkSeleccionadosPromocionSalarial()}">
+				 <span class="required"><h:outputText value="Las Categorias seleccionadas deben tener el mismo estado"/></span>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" style="text-align:right"
+							disabled="#{administrarVacanciasListFormController.tieneUsuario}"
+							value="#{administrarVacanciasListFormController.nivelEntidad.nenCodigo}"
+							size="5">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="nivelDescripcion"
+								action="#{administrarVacanciasListFormController.findNivelEntidad()}" />
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{administrarVacanciasListFormController.nivelEntidad.nenNombre}"
+							size="45" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="#{administrarVacanciasListFormController.tieneUsuario}"
+							value="#{administrarVacanciasListFormController.sinEntidad.entCodigo}"
+							size="5">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{administrarVacanciasListFormController.findEntidad()}"
+								reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{administrarVacanciasListFormController.sinEntidad.entNombre}"
+							size="45" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">OEE</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="#{administrarVacanciasListFormController.tieneUsuario}"
+							value="#{administrarVacanciasListFormController.ordenUnidOrg}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{administrarVacanciasListFormController.findUnidadOrganizativa()}"
+								reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true"
+							value="#{administrarVacanciasListFormController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					
+					
+					
+				
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tipo CPT</ui:define>
+						<h:selectOneMenu id="idTipoCpt" style="width : 330px;"
+							value="#{administrarVacanciasListFormController.idTipoCpt}">
+							<f:selectItems value="#{tipoCptsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+							
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Estado</ui:define>
+						<h:selectOneMenu id="idEstado" style="width : 330px;"
+							value="#{administrarVacanciasListFormController.idEstado}">
+							<f:selectItems value="#{estadosCabsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="activo"
+							value="#{administrarVacanciasListFormController.activo}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+		<h:panelGroup id="panelBtns" layout="block">
+			<div class="actionButtons" ><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{administrarVacanciasListFormController.searchPromocionSalarial()}"
+				reRender="panelResultados,panelBtns">
+			
+			</a:commandButton>
+			<ui:remove>
+			 <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{administrarVacanciasListFormController.searchAllPromocionSalarial()}"
+				reRender="panelResultados,panelBusqueda">
+
+			</a:commandButton> 
+			</ui:remove>
+			
+			<a:commandButton id="cambiarEstado" value="Cambiar Estado"
+				eventsQueue="default"
+				action="#{administrarVacanciasListFormController.checkSeleccionadosPromocionSalarial()}"
+				oncomplete="#{rich:component('modalEstados')}.show()"
+				reRender="modalEstados" >
+
+			</a:commandButton>
+	
+
+			
+				<a:commandButton id="inactivarSeleccionados" value="Inactivar Seleccionados"
+				eventsQueue="default"
+				rendered="#{administrarVacanciasListFormController.esVacante and administrarVacanciasListFormController.activo.valor}"
+				action="#{administrarVacanciasListFormController.inactivarSeleccionados(false)}"
+				reRender="inactivarSeleccionados,panelResultados">
+			</a:commandButton>
+			
+			<a:commandButton id="activarSeleccionados" value="Activar Seleccionados"
+				rendered="#{administrarVacanciasListFormController.esVacante and !administrarVacanciasListFormController.activo.valor}"
+				eventsQueue="default"
+				action="#{administrarVacanciasListFormController.inactivarSeleccionados(true)}"
+				reRender="activarSeleccionados,panelResultados">
+			</a:commandButton>
+			
+			
+			</div>
+			</h:panelGroup>
+		
+
+
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty administrarVacanciasListFormController.listadoPromicionSalarial ? 0 : administrarVacanciasListFormController.listadoPromicionSalarial.size})</f:facet>
+				<div class="results" id="tblActividadList"
+					style="overflow: scroll; width: 1000; HEIGHT: 600px"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty administrarVacanciasListFormController.listadoPromicionSalarial}" />
+				<rich:dataTable id="promocioList" var="_promocion"
+					rowKeyVar="_row"
+					value="#{administrarVacanciasListFormController.listadoPromicionSalarial}"
+					rendered="#{not empty administrarVacanciasListFormController.listadoPromicionSalarial}">
+									
+					
+					<h:column>
+						<f:facet name="header">OEE</f:facet>
+
+						<h:outputText
+							value="#{_promocion.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{messages.CU253_denominacion}</f:facet>
+
+						<h:outputText value="#{_promocion.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU253_estado}</f:facet>
+
+						<h:outputText value="#{_promocion.estadoCab.descripcion}" />
+					</h:column>
+					
+				
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:selectBooleanCheckbox
+								value="#{administrarVacanciasListFormController.seleccionarTodo}">
+								<a:support event="onchange"
+									action="#{administrarVacanciasListFormController.seleccionarTodos()}"
+									eventsQueue="default" reRender="panelResultados" />
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_promocion.seleccionado}" />
+
+					</rich:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/#{empty from ? 'planificacion/PromocionSalarial/PromocionSalarialList' : from}.xhtml"
+							value="#{empty from ? '' : ''}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="plantaCargoDetViewId">
+							<f:param name="idPromocionSalarial"
+								value="#{_promocion.idPromocionSalarial}" />
+						</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/promocionSalarial/PromocionSalarialEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="plantaCargoDetEditId">
+						<f:param name="plantaCargoDetIdPlantaCargoDet"
+							value="#{_promocion.idPromocionSalarial}" />
+							<f:param name="plantaCargoDetFrom" value="editar" />
+					</s:link>
+						#{' '}
+            		
+					
+					
+					<h:commandLink id="inactivar"
+							value="#{administrarVacanciasListFormController.obtenerAccionPromocion(_promocion)}"
+							action="#{administrarVacanciasListFormController.inactivarPromocionSalarial(_row)}" />
+							
+						
+            		
+					#{' '}
+					<ui:remove>
+					 <h:commandLink id="eliminar" value="Eliminar"
+							action="#{administrarVacanciasListFormController.eliminar(_row)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');" />
+					</ui:remove>
+					</rich:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+			
+			
+
+
+		</h:form>
+
+
+		<s:div styleClass="actionButtons" >
+			<s:button
+				view="/planificacion/promocionSalarial/PromocionSalarialEdit.xhtml"
+				id="create" propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="plantaCargoDetIdPlantaCargoDet" />
+				<f:param name="plantaCargoDetFrom" value="nuevo" />
+				<f:param name="from" value="#{administrarVacanciasListFormController.from}" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

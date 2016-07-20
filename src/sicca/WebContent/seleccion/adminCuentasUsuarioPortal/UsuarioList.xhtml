@@ -1,0 +1,199 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU326_title}</h1>
+
+
+		<h:form id="usuarioSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_doc_ci}</ui:define>
+						<h:inputText id="docIdentidad"
+							value="#{admCuentasUsuarioFormController.docCi}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_pais_doc_ci}</ui:define>
+						<h:selectOneMenu id="paisDoc" style="width : 250px;"
+							value="#{admCuentasUsuarioFormController.idPaisDoc}">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_nombre}</ui:define>
+						<h:inputText id="nombre"
+							value="#{admCuentasUsuarioFormController.nombres}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_apellido}</ui:define>
+						<h:inputText id="apellido"
+							value="#{admCuentasUsuarioFormController.apellidos}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado"
+							value="#{admCuentasUsuarioFormController.estado}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{admCuentasUsuarioFormController.search()}"
+				reRender="panelResultados">
+
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admCuentasUsuarioFormController.searchAll()}"
+				reRender="panelResultados, panelBusqueda">
+
+			</a:commandButton></div>
+
+
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty usuarioList.resultList ? 0 : (usuarioList.paginated ? usuarioList.resultCount : usuarioList.resultList.size)})</f:facet>
+				<div class="results" id="tblActividadList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty usuarioList.resultList}" /> <rich:dataTable
+					id="usuarioList" var="_usuario" value="#{usuarioList.resultList}"
+					rendered="#{not empty usuarioList.resultList}" rowKeyVar="row">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{usuarioList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU326_doc_ci}" />
+								<ui:param name="propertyPath"
+									value="usuario.persona.documentoIdentidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_usuario.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{usuarioList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU326_pais_doc_ci}" />
+								<ui:param name="propertyPath"
+									value="usuario.persona.paisByIdPaisExpedicionDoc.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_usuario.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{usuarioList}" />
+								<ui:param name="propertyLabel" value="Nombre y Apellido" />
+								<ui:param name="propertyPath" value="usuario.persona.nombres" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_usuario.persona.nombres} #{_usuario.persona.apellidos}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{usuarioList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU156_obs}" />
+								<ui:param name="propertyPath"
+									value="usuario.persona.observacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_usuario.persona.observacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{usuarioList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.Usuario_activo}" />
+								<ui:param name="propertyPath" value="usuario.activo" />
+							</ui:include>
+						</f:facet>
+						<h:selectBooleanCheckbox id="activo" disabled="true"
+							value="#{_usuario.activo}" />
+					</h:column>
+					<rich:column styleClass="action">
+					</rich:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/#{empty from ? 'planificacion/usuario/Usuario' : from}.xhtml"
+							value="#{empty from ? '' : ''}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="usuarioViewId">
+							<f:param name="usuarioIdUsuario" value="#{_usuario.idUsuario}" />
+						</s:link>
+            		
+					#{' '}
+				
+					<a:commandLink id="incativar" value="#{_usuario.activo ? 'Inactivar' : 'Activar'}"
+							reRender="panelResultados,panelBusqueda"
+							
+							action="#{admCuentasUsuarioFormController.inactivar(row)}" />
+                #{' '}
+               
+            	<a:commandLink id="restablecer"
+							value="#{messages.CU326_restablecer}"
+							reRender="panelBusqueda,panelResultados"
+							action="#{admCuentasUsuarioFormController.reestablecerContrasenha(row)}" />
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</h:form>
+		<div class="tableControl"><s:link
+			view="/seleccion/adminCuentasUsuarioPortal/UsuarioList.xhtml"
+			rendered="#{usuarioList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/adminCuentasUsuarioPortal/UsuarioList.xhtml"
+			rendered="#{usuarioList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{usuarioList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/adminCuentasUsuarioPortal/UsuarioList.xhtml"
+			rendered="#{usuarioList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{usuarioList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/adminCuentasUsuarioPortal/UsuarioList.xhtml"
+			rendered="#{usuarioList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{usuarioList.lastFirstResult}" />
+		</s:link></div>
+
+
+
+	</ui:define>
+
+</ui:composition>

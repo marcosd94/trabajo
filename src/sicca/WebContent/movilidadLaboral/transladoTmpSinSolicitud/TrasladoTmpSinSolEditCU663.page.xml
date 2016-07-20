@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<param name="personaIdPersona" value="#{trasladoTmpSinSolEditCU663FC.idPersona}" />
+	<param name="idSolicitud"
+		value="#{trasladoTmpSinSolEditCU663FC.idSolicitudTransladoCab}" />
+	<param name="empleadoPuestoIdEmpleadoPuesto" value="#{trasladoTmpSinSolEditCU663FC.idFuncionario}" />
+	<param name="from" />
+	<action execute="#{seguridadUtilFormController.init()}"
+		on-postback="false" />
+
+	<action execute="#{trasladoTmpSinSolEditCU663FC.init()}"
+		on-postback="false" />
+
+
+	<param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}" />
+	<param name="configuracionUoDetIdConfiguracionUoDet" value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+
+
+	<navigation from-action="#{trasladoTmpSinSolEditCU663FC.save()}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect
+				view-id="/movilidadLaboral/transladoTmpSinSolicitud/TrasladoTmpSinSolCU663.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('trasladoTmpSinSolic663_edit')}</restrict>
+
+</page>

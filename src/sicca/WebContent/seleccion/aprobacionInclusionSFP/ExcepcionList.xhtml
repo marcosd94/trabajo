@@ -1,0 +1,243 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU305_titulo}</h1>
+		<h2>#{messages.CU305_titulo2}</h2>
+
+
+
+
+		<h:form id="excepcionSearch" styleClass="edit">
+			<rich:panel id="panel1">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.nivelEntidad.nenCodigo}"
+							size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{aprobacionInclusionSFPFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{aprobacionInclusionSFPFormController.sinEntidad.entCodigo}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{aprobacionInclusionSFPFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{aprobacionInclusionSFPFormController.uoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true"
+							value="#{aprobacionInclusionSFPFormController.uoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_concurso}</ui:define>
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.concurso.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_comision}</ui:define>
+						<h:inputText id="comision" size="80" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.comisionSeleccionCab.descripcion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<br />
+			<rich:panel>
+				<f:facet name="header">#{messages.CU305_panel_nuevo_integrante_titulo}</f:facet>
+				<rich:dataTable id="listaNuevosIntegrantes" cellpadding="0"
+					cellspacing="0" width="500" border="0" var="nuevo" rows="10"
+					value="#{aprobacionInclusionSFPFormController.listaNuevosIntegrantesComision}">
+
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_nuevo_ci}
+							</f:facet>
+						<h:outputText value="#{nuevo.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_nuevo_nombres}
+							</f:facet>
+						<h:outputText
+							value="#{nuevo.persona.nombres} #{nuevo.persona.apellidos}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_oee}
+							</f:facet>
+						<h:outputText value="#{nuevo.configuracionUo.denominacionUnidad}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_nuevo_rol}
+							</f:facet>
+						<h:outputText value="#{nuevo.rol.descripcion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_nuevo_titular}
+							</f:facet>
+						<h:outputText
+							value="#{nuevo.titularSuplente == 'T' ? 'TITULAR' : 'SUPLENTE'}" />
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="listaNuevosIntegrantes"
+					id="sc2" reRender="sc1"
+					rendered="#{aprobacionInclusionSFPFormController.listaNuevosIntegrantesComision.size() > 10}" />
+			</rich:panel>
+			<br />
+			<rich:panel>
+				<f:facet name="header">#{messages.CU305_panel_inclusion_titulo}</f:facet>
+
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_panel_inclusion_motivo}</ui:define>
+						<h:inputTextarea id="motivo" cols="50" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.excepcion.observacion}">
+						</h:inputTextarea>
+					</s:decorate>
+					<s:decorate id="fechaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU305_panel_inclusion_fecha}</ui:define>
+						<rich:calendar id="fecha" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.excepcion.fechaSolicitud}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU305_panel_inclusion_estado}</ui:define>
+						<h:inputText id="estado" size="30" disabled="true"
+							value="#{aprobacionInclusionSFPFormController.excepcion.estado}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<br />
+			<rich:panel id="panelAprobacionSfp">
+				<f:facet name="header">#{messages.CU305_panel_aprobacion_sfp_titulo}</f:facet>
+				<rich:dataTable id="listaAprobadosSfp" cellpadding="0"
+					cellspacing="0" width="500" border="0" var="aprob" rows="10"
+					rowKeyVar="row"
+					value="#{aprobacionInclusionSFPFormController.listaAprobacionSfp}">
+
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_nro}
+							</f:facet>
+						<h:outputText value="#{aprob.idExcepcionDet}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_obs}
+							</f:facet>
+						<h:outputText value="#{aprob.observacion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_fecha_obs}
+							</f:facet>
+						<h:outputText value="#{aprob.fechaObs}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_rpta}
+							</f:facet>
+						<h:outputText value="#{aprob.respuesta}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_fecha_rpta}
+							</f:facet>
+						<h:outputText value="#{aprob.fechaRpta}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU305_panel_aprobacion_sfp_accion}
+							</f:facet>
+						<s:link
+							view="/seleccion/aprobacionInclusionSFP/ExcepcionDetEdit.xhtml"
+							value="Editar" propagation="none" rendered="#{!aprob.enviadoSfp}">
+							<f:param name="excepcionDetIdExcepcionDet"
+								value="#{aprob.idExcepcionDet}" />
+							<f:param name="excepcionIdExcepcion"
+								value="#{aprob.excepcion.idExcepcion}" />
+						</s:link>
+
+	#{' '}
+	<s:link
+							view="/seleccion/aprobacionInclusionSFP/ExcepcionDet.xhtml"
+							value="Ver" propagation="none" >
+							<f:param name="excepcionDetIdExcepcionDet"
+								value="#{aprob.idExcepcionDet}" />
+							<f:param name="excepcionIdExcepcion"
+								value="#{aprob.excepcion.idExcepcion}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="listaAprobadosSfp" id="s2"
+					reRender="s1"
+					rendered="#{aprobacionInclusionSFPFormController.listaAprobacionSfp.size() > 10}" />
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="aprobar"
+				value="#{messages.CU305_btn_aprobar}"
+				action="#{aprobacionInclusionSFPFormController.aprobar()}"
+				onclick="return confirm('#{messages.CU305_msg_aprobar}');" /> <h:commandButton
+				id="rechazar" value="#{messages.CU305_btn_rechazar}"
+				action="#{aprobacionInclusionSFPFormController.rechazar()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');" /> <s:button
+				view="/seleccion/aprobacionInclusionSFP/ExcepcionDetEdit.xhtml"
+				id="create" propagation="none" value="#{messages.CU305_btn_nva_obs}">
+				<f:param name="excepcionDetIdExcepcionDet" />
+				<f:param name="excepcionIdExcepcion"
+					value="#{aprobacionInclusionSFPFormController.excepcion.idExcepcion}" />
+			</s:button>
+			<s:button id="anexo" value="Anexo"  propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica" value="#{aprobacionInclusionSFPFormController.direccionFisica}" />
+					<f:param name="nombrePantalla" value="aprobacion_inclusion_miembro_sfp" />
+					<f:param name="idCU" value="#{aprobacionInclusionSFPFormController.excepcion.comisionSeleccionCab.idComisionSel}" />
+					<f:param name="nombreTabla" value="ComisionSeleccionCab" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from" value="seleccion/aprobacionInclusionSFP/ExcepcionList" />
+				</s:button>
+				<s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/proceso/BandejaExcepcionList.xhtml" />
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

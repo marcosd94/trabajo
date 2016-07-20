@@ -1,0 +1,121 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{usuarioFormController.persona.nombres} 
+			#{usuarioFormController.persona.apellidos}</h1>
+		<h:form id="usuario" styleClass="edit" prependId="false"
+			enctype="multipart/form-data">
+			<rich:panel id="panel">
+				<f:facet name="header"> #{messages.CU289_titulo}</f:facet>
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<a:region>
+							<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU289_tipo_doc}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="datosGral"
+									value="#{usuarioFormController.idTipoDocumento}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByTipoDocAltaUsuarioSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="archivoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_documento} </ui:define>
+								<s:fileUpload size="60"
+									contentType="#{usuarioFormController.contentType}"
+									data="#{usuarioFormController.uploadedFile}"
+									fileName="#{usuarioFormController.fileName}"
+									style=" width : 260px;">
+									<s:conversationPropagation type="join" />
+								</s:fileUpload>
+							</s:decorate>
+						</a:region>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:commandButton id="search"
+					value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+					action="#{usuarioFormController.btnAgregarDocumento()}">
+					<f:param name="firstResult" value="0" />
+				</h:commandButton>
+				<br />
+				<br />
+				<div class="results" id="documentosListId">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty usuarioFormController.usuarioDocList}" />
+					<rich:dataTable id="documentoList" var="_documento"
+						rowKeyVar="_index"
+						value="#{usuarioFormController.usuarioDocList}">
+						<h:column>
+							<f:facet name="header">#{messages.CU1556_tipo_doc}	</f:facet>
+							<h:outputFormat
+								value="#{_documento.datosEspecificos.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU156_documento}	</f:facet>
+							<h:outputFormat value="#{_documento.nombreFisicoDoc}" />
+						</h:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+			          #{' '}
+			         <h:commandLink id="eliminar" value="Eliminar" rendered="#{!usuarioFormController.isOriginal(_documento.idDocumento)}"
+								action="#{usuarioFormController.eliminarDocumento(_documento.idDocumento)}"
+								onclick="return confirm('#{messages.msg_confirm_delete}');" />
+					#{' '}
+		         	<h:commandLink id="verAdjunto" value="Ver Adjunto"
+								action="#{usuarioFormController.imprimirDocumento(_documento.idDocumento)}" />
+						</rich:column>
+					</rich:dataTable>
+				</div>
+				<div class="tableControl">
+					<s:link view="/seguridad/usuario/AccionAgregarDocumento.xhtml"
+						rendered="#{documentosList.previousExists}"
+						value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+						id="firstPage">
+						<f:param name="firstResult" value="0" />
+					</s:link>
+					<s:link view="/seguridad/usuario/AccionAgregarDocumento.xhtml"
+						rendered="#{documentosList.previousExists}"
+						value="#{messages.left} #{messages.msg_list_previous_page}"
+						id="previousPage">
+						<f:param name="firstResult"
+							value="#{documentosList.previousFirstResult}" />
+					</s:link>
+					<s:link view="/seguridad/usuario/AccionAgregarDocumento.xhtml"
+						rendered="#{documentosList.nextExists}"
+						value="#{messages.msg_list_next_page} #{messages.right}"
+						id="nextPage">
+						<f:param name="firstResult"
+							value="#{documentosList.nextFirstResult}" />
+					</s:link>
+					<s:link view="/seguridad/usuario/AccionAgregarDocumento.xhtml"
+						rendered="#{documentosList.nextExists}"
+						value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+						id="lastPage">
+						<f:param name="firstResult"
+							value="#{documentosList.lastFirstResult}" />
+					</s:link>
+				</div>
+				<s:div styleClass="actionButtons">
+					<s:button view="/seguridad/usuario/UsuarioEdit.xhtml" id="volver"
+						propagation="none" value="Volver">
+						<f:param name="usuarioIdUsuario"
+                        value="#{usuarioFormController.idUsuario}"/>
+                        <f:param name="personaIdPersona"
+                        value="#{usuarioFormController.idPersona}"/>
+					</s:button>
+				</s:div>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

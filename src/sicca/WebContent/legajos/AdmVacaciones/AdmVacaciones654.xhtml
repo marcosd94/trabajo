@@ -1,0 +1,173 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j">
+
+	<h1>#{messages.CU654_titulo}</h1>
+
+	<rich:simpleTogglePanel label="Registro de Vacaciones" id="idPanel1"  style=" width : 900px;">
+		<h:panelGrid columns="2">
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU654_fechaDesde}<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar value="#{admVacaciones654FC.fechaDesde}"
+					enableManualInput="true" oninputkeyup="ponerBarra(event);"
+					inputSize="10" datePattern="dd/MM/yyyy"
+					locale="#{siccaAppHelper.localeCode}">
+				</rich:calendar>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU654_fechaHasta}<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar value="#{admVacaciones654FC.fechaHasta}"
+					enableManualInput="true" oninputkeyup="ponerBarra(event);"
+					inputSize="10" datePattern="dd/MM/yyyy"
+					locale="#{siccaAppHelper.localeCode}">
+				</rich:calendar>
+			</s:decorate>
+			
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU654_observacion}</ui:define>
+				<h:inputTextarea value="#{admVacaciones654FC.observacion}"
+					style=" width : 350px; height : 100px;" />
+			</s:decorate>
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU654_actoAdministrativo} 
+							<span class="required">*</span>
+					</ui:define>
+					<h:inputText onkeypress="return soloNumeros(event);"
+						value="#{admVacaciones654FC.nroActo}" style=" width : 100px;" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU654_fecha}<span
+							class="required">*</span>
+					</ui:define>
+					<rich:calendar value="#{admVacaciones654FC.fechaActo}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event);"
+						inputSize="10" datePattern="dd/MM/yyyy"
+						locale="#{siccaAppHelper.localeCode}">
+					</rich:calendar>
+
+				</s:decorate>
+			</h:panelGrid>
+
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Tipo Documento<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="idTipoDocumento"
+					value="#{admVacaciones654FC.idTipoDoc}" style="width:200px">
+					<f:selectItems value="#{admVacaciones654FC.traerTipoDocumentoSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Documento<span class="required">*</span>
+				</ui:define>
+				<s:fileUpload size="30" contentType="#{admVacaciones654FC.cType1}"
+					data="#{admVacaciones654FC.uFile1}"
+					fileName="#{admVacaciones654FC.fName1}">
+					<s:conversationPropagation type="join" />
+				</s:fileUpload>
+			</s:decorate>
+			<s:decorate id="nombreDocField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomFinal"
+						value="#{admVacaciones654FC.nombreDoc}" />
+			</s:decorate>
+		</h:panelGrid>
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+
+		<s:div styleClass="actionButtons">
+			<h:commandButton value="Agregar"
+				rendered="#{admVacaciones654FC.idElemUpdate == null}"
+				action="#{admVacaciones654FC.agregar()}" />
+			<h:commandButton value="Actualizar"
+				rendered="#{admVacaciones654FC.idElemUpdate!=null}"
+				action="#{admVacaciones654FC.actualizar()}" />
+			<a:commandButton value="Cancelar" reRender="idPanel1,idPanel2"
+				action="#{admVacaciones654FC.limpiar()}" />
+		</s:div>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel
+		label="#{messages.CU654_panel2_title} (#{empty admVacaciones654FC.lGrilla1?0:admVacaciones654FC.lGrilla1.size()})"
+		id="idPanel2" style=" width : 900px;">
+		<div class="results" id="tbldetList" style="overflow: scroll;"
+				width="310">
+		<rich:dataTable
+			noDataLabel="#{messages.msg_list_search_no_results}"
+			width="500" id="itemsList" rows="5"
+			rowKeyVar="rowIndexGrilla1" var="_record"
+			value="#{admVacaciones654FC.lGrilla1}">
+			<rich:column>
+				<f:facet name="header">
+						#{messages.gral_observacion}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.obsVacaciones}" />
+
+			</rich:column>
+
+
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU654_nroActo}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.nroActo}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaInicio}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.fechaInicio}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaFin}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.fechaFin}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU654_documento}
+						</f:facet>
+				<h:commandLink value="Descargar"
+					action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record.documentos.idDocumento)}"
+					rendered="#{_record.documentos!=null}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+				<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+					action="#{admVacaciones654FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+					onclick="return confirm('#{messages.msg_confirm_delete}');"
+					action="#{admVacaciones654FC.eliminar(rowIndexGrilla1)}" />
+			</rich:column>
+		</rich:dataTable><rich:datascroller for="itemsList" id="scrollVac"
+			renderIfSinglePage="false" /></div>
+
+	</rich:simpleTogglePanel>
+
+</ui:composition>

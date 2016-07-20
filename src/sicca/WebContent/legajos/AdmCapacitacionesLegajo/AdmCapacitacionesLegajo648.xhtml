@@ -1,0 +1,135 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j">
+
+
+	<h1>#{messages.CU648_titulo}</h1>
+
+	<rich:simpleTogglePanel label="#{messages.CU648_panel1_title}">
+		<div class="results" id="barrioList"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty admCapacitacionesLegajos648FC.lGrilla1}" /> <rich:dataTable
+			value="#{admCapacitacionesLegajos648FC.lGrilla1}" var="_grilla1"
+			rendered="#{!empty admCapacitacionesLegajos648FC.lGrilla1}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_oee}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{_grilla1.postulacionCap.capacitacion.configuracionUoCab.denominacionUnidad}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_capacitacionBeca}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_grilla1.postulacionCap.capacitacion.nombre}" />
+			</h:column>
+
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_tipo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_grilla1.postulacionCap.capacitacion.datosEspecificosTipoCap.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_fechaDesdeHasta}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{registrarEvalPostulanteFC.fechaInicioFin(_grilla1.postulacionCap.capacitacion.fechaInicio, _record.postulacionCap.capacitacion.fechaFin)}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_cargaHoraria}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_grilla1.postulacionCap.capacitacion.cargaHoraria}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_calificacion}
+				</f:facet>
+				<h:outputText
+					value="#{admCapacitacionesLegajos648FC.calcCalificacion(_grilla1.postulacionCap.idPostulacion)}" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_adjuntos}
+						</f:facet>
+				<h:commandLink value="Descargar" propagation="join"
+					rendered="#{_grilla1.documento!=null}"
+					action="#{admCapacitacionesLegajos648FC.descargarDocumento(_grilla1.documento.idDocumento)}" />
+			</h:column>
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel label="#{messages.CU648_grilla3_title}">
+		<div class="results" id="tbldetList"
+			style="overflow: scroll; width: 100%; HEIGHT: 250px"><rich:dataTable
+			var="_record3" value="#{admCapacitacionesLegajos648FC.lGrilla2}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_motivoDesvinculaCurso}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{_record3.datosEspecificosDesv.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_fecha}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{gestionarPartCapa528.formatearFecha(_record3.fechaDesvinculacion)}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_capacitacionBeca}
+						</f:facet>
+				<h:outputText
+					style="white-space:normal;word-wrap: break-word; width : 100%"
+					value="#{admCapacitacionesLegajos648FC.calcEstado(_record3.motivoHabilit)}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_fechaDesbloqueo}
+						</f:facet>
+				<h:outputText
+					style="white-space:normal;word-wrap: break-word; width : 100%"
+					value="#{gestionarPartCapa528.formatearFecha(_record3.fechaHabilit)}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_motivoDesbloqueo}
+						</f:facet>
+				<h:outputText
+					style="white-space:normal;word-wrap: break-word; width : 100%"
+					value="#{_record3.motivoHabilit}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU648_adjuntos}
+						</f:facet>
+				<h:commandLink value="Descargar" propagation="join"
+					rendered="#{_record3.documento!=null}"
+					action="#{admCapacitacionesLegajos648FC.descargarDocumento(_record3.documento.idDocumento)}" />
+			</h:column>
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+
+
+
+
+
+
+
+</ui:composition>

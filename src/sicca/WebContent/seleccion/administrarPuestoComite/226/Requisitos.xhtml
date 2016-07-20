@@ -1,0 +1,65 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<rich:panel style=" width : 810px;">
+		<f:facet name="header">
+			<h:outputText value="#{messages.CU226_title}"></h:outputText>
+		</f:facet>
+		<a:repeat value="#{admPuestoComiFormController.lCU226}" var="item">
+			#{item.det.requisitoMinimoCpt.descripcion} - Punt.: #{item.det.puntajeReqMin}
+<rich:separator>
+
+			</rich:separator>
+			<table border="1">
+				<tr valign="top">
+					<td><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty item.det.detMinimosRequeridoses}" />
+					<rich:dataTable var="_dto" rowKeyVar="row"
+						value="#{item.det.detMinimosRequeridoses}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU226_minRequerido}
+						</f:facet>
+							<h:outputText value="#{_dto.minimosRequeridos}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.GENERICO_SELECC}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_dto.selected}"   disabled="#{admPuestoComiFormController.modoLectura}"/>
+						</h:column>
+					</rich:dataTable></td>
+					<td>
+					<h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty item.det.detOpcionesConvenienteses}" /><rich:dataTable var="_dto2" rowKeyVar="row"
+						value="#{item.det.detOpcionesConvenienteses}">
+						<div class="results" id="barrioList"></div>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU226_optPertinente}
+						</f:facet>
+							<h:outputText value="#{_dto2.opcConvenientes}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.GENERICO_SELECC}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_dto2.selected}"   disabled="#{admPuestoComiFormController.modoLectura}"/>
+						</h:column>
+					</rich:dataTable></td>
+
+				</tr>
+
+			</table>
+			<br />
+		</a:repeat>
+	</rich:panel>
+</ui:composition>

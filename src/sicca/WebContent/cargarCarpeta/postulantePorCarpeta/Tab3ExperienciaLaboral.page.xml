@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/ExperienciaLaboralList.xhtml" login-required="true">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+
+	<action execute="#{experienciaLaboralHome.wire}" />
+	<action execute="#{tab3ExpLaboralPorCarpeta.initTab()}"
+		on-postback="false" />
+
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr"
+		value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+
+	<param name="personaIdPersona" value="#{personaHome.personaIdPersona}" />
+
+	<param name="experienciaLaboralFrom" />
+	<param name="experienciaLaboralIdExperienciaLab"
+		value="#{experienciaLaboralHome.experienciaLaboralIdExperienciaLab}" />
+	<param name="personaFrom" />
+
+	<param name="paisFrom" />
+	<param name="paisIdPais" value="#{paisHome.paisIdPais}" />
+
+	<param name="ciudadFrom" />
+	<param name="ciudadIdCiudad" value="#{ciudadHome.ciudadIdCiudad}" />
+	<param name="departamentoFrom" />
+	<param name="departamentoIdDepartamento" value="#{departamentoHome.departamentoIdDepartamento}" />
+
+
+	<param name="barrioFrom" />
+	<param name="barrioIdBarrio" value="#{barrioHome.barrioIdBarrio}" />
+
+	<param name="datosEspecificosFrom" />
+	<param name="datosEspecificosIdDatosEspecificos"
+		value="#{datosEspecificosHome.datosEspecificosIdDatosEspecificos}" />
+	<param name="datosGeneralesFrom" />
+	<param name="datosGeneralesIdDatosGenerales"
+		value="#{datosGeneralesHome.datosGeneralesIdDatosGenerales}" />
+
+
+	<navigation from-action="#{experienciaLaboralHome.persist}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/ExperienciaLaboral.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{experienciaLaboralHome.update}">
+		<rule if-outcome="updated">
+			<end-conversation />
+			<redirect view-id="/ExperienciaLaboral.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{experienciaLaboralHome.remove}">
+		<rule if-outcome="removed">
+			<end-conversation />
+			<redirect view-id="/ExperienciaLaboralList.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('experienciaLaboralCarpeta_edit')}</restrict>
+
+</page>

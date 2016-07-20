@@ -1,0 +1,193 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU739_titulo_rpt}</h1>
+		<h:form id="planCapacitacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['CU433_filtros']}"
+				switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="1" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="idPanelCampos,panelCombos" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+													#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('legajos/reportes/RptPersonalNivelAcademicoOee739')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="idPanelCampos,panelCombos" focus="unidadOrgCodigo" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+														#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+							rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('legajos/reportes/RptPersonalNivelAcademicoOee739')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+									
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);"
+								disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="idPanelCampos,panelCombos" focus="orgCodigo2" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+								#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								rendered="#{seguridadUtilFormController.esAdministradorSFP}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('legajos/reportes/RptPersonalNivelAcademicoOee739')}" />
+						</s:decorate>
+					</a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default" 
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="idPanelCampos,panelCombos" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('legajos/reportes/RptPersonalNivelAcademicoOee739')}" />
+					</s:decorate>
+					
+
+
+				
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" id="panelCombos">
+				<s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU737_tipo_persona}</ui:define>
+									<h:selectOneMenu id="tipoPersaona" immediate="true"
+						style="width:150px"
+						value="#{rptPersonalNivelAcademicoOee739FC.permanenteContratado}">
+						<s:selectItems var="recep" value="#{enumAppHelper.permanenteContratadoEnums}"
+							label="#{recep.descripcion}" />
+					<s:convertEnum />
+					</h:selectOneMenu>
+					</s:decorate>
+				
+					<s:decorate template="/layout/edit.xhtml" id="decJuradaField">
+    	   <ui:define name="label">#{messages.CU737_sexo}  </ui:define>
+					<h:selectOneMenu id="decJurada" immediate="true"
+						style="width:150px"
+						value="#{rptPersonalNivelAcademicoOee739FC.sexo}">
+						<s:selectItems var="recep" value="#{enumAppHelper.sexoEnums}"
+							label="#{recep.descripcion}" />
+					<s:convertEnum />
+					</h:selectOneMenu>
+				</s:decorate>
+					<s:decorate id="discapacidadField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU737_dscapacidad}</ui:define>
+									<h:selectOneMenu id="decJurada" immediate="true"
+						style="width:150px"
+						value="#{rptPersonalNivelAcademicoOee739FC.siNoTodosEnums}">
+						<s:selectItems var="recep" value="#{enumAppHelper.siNoTodosEnums}"
+							label="#{recep.descripcion}" />
+					<s:convertEnum />
+					</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="nivelEsudioField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU739_nivel_academico}</ui:define>
+					<h:selectOneMenu id="nivelEsudio" value="#{rptPersonalNivelAcademicoOee739FC.idNivelEstudio}" style="width:250px">
+							<f:selectItems value="#{nivelEstudioTodosSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{rptPersonalNivelAcademicoOee739FC.upTituloAcademico()}" 
+							 reRender="titudoCb"/>
+						</h:selectOneMenu>
+			</s:decorate>
+			<a:outputPanel ajaxRendered="true" id="titudoCb">
+			<s:decorate id="tituloField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU739_titulo}</ui:define>
+						<h:selectOneMenu id="titulo" value="#{rptPersonalNivelAcademicoOee739FC.idTituloAcademico}" style="width:250px">
+							<f:selectItems value="#{rptPersonalNivelAcademicoOee739FC.tituloSelecItem}"/>
+						</h:selectOneMenu>
+					</s:decorate></a:outputPanel>
+						 <s:decorate id="profesiOfiField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU739_profesion}</ui:define>
+				<h:selectOneMenu id="profesiOfi"  value="#{rptPersonalNivelAcademicoOee739FC.idProfesion}" style="width:250px">
+							<f:selectItems value="#{especialidadesTodosSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+					
+				</h:panelGrid>
+
+
+			</rich:simpleTogglePanel>
+			<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+		
+
+			<div class="actionButtons" id="botones"><h:commandButton
+				value="#{messages.CU737_imp1}" action="#{rptPersonalNivelAcademicoOee739FC.imprimir('PDF')}">
+			</h:commandButton>
+			<h:commandButton
+				value="#{messages.CU737_imp2}" action="#{rptPersonalNivelAcademicoOee739FC.imprimir('EXCEL')}">
+			</h:commandButton> <s:button id="reset" propagation="none" includePageParams="false"
+						value="#{messages.msg_list_search_clear_button}"/>
+			</div>
+			
+		</h:form>
+	</ui:define>
+
+</ui:composition>

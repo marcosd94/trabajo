@@ -1,0 +1,533 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="translado" styleClass="edit" enctype="multipart/form-data">
+			<h1>#{messages.CU661_titulo}</h1>
+			<rich:panel id="panelSolicitud">
+				<f:facet name="header">#{messages.CU661_panel_solicitud}</f:facet>
+				<rich:panel id="panelDocumentos" style="border:none;">
+					<fieldset id="fieldSetIdDocumentos"><legend>#{messages.CU661_documentos}</legend>
+					<h:panelGrid columns="3">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigoField">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigoField">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigoField">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+									onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+					</h:panelGrid> <h:panelGrid columns="3">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Nro. Doc.<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nroDoc" onkeypress="return soloNumeros(event);"
+								value="#{buscadorDocsFC.nroDoc}" style=" width : 45px;" />
+						</s:decorate>
+						<s:decorate id="fechaDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fecha" value="#{buscadorDocsFC.fechaDoc}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+								<a:support event="onchanged" eventsQueue="default"
+									action="#{rptDesvinculacionesCapacitacionFC.cargarSelectItem()}"
+									/>
+							</rich:calendar>
+						</s:decorate>
+
+						<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+							<ui:define name="label">Tipo Doc.<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="datosGral"
+								value="#{buscadorDocsFC.idTipoDoc}" style="width:200px">
+								<f:selectItems
+									value="#{solicitarTransladoCU661FC.updateTipoDocSelectItems()}" />
+								<a:support event="onchange" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</h:panelGrid> <s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre del Archivo</ui:define>
+						<h:inputText value="#{buscadorDocsFC.fNameMostrar}"
+							disabled="true" style=" width : 250px;" />
+					</s:decorate> <a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						<h:panelGrid columns="2"
+							style="border-style: dotted;border-color: gray;">
+							<s:fileUpload size="30" contentType="#{buscadorDocsFC.cType}"
+								data="#{buscadorDocsFC.uFile}"
+								fileName="#{buscadorDocsFC.fName}" style=" width : 299px;">
+								<s:conversationPropagation type="join" />
+
+							</s:fileUpload>
+
+							<h:commandButton value="#{messages.CU661_btn_adjuntar}"
+								action="#{buscadorDocsFC.adjuntarDoc()}" />
+						</h:panelGrid>
+					</a:outputPanel></fieldset>
+				</rich:panel>
+
+				<rich:panel id="panelEntidad" style="border:none;">
+					<fieldset id="fieldSetIdEntidad"><legend>#{messages.CU661_entidad}<span
+						class="required">*</span></legend> <h:panelGrid columns="3">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigo2Field">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo2" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{solicitarTransladoCU661FC.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+									value="#{solicitarTransladoCU661FC.nombreNivelEntidad}"
+									size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigo2Field">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo2" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{solicitarTransladoCU661FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.entidad.entCodigo}"
+									size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+									value="#{solicitarTransladoCU661FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.entidad.descripcion}"
+									size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigo2Field">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+									value="#{solicitarTransladoCU661FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.idConfiguracionUo}"
+									disabled="true" onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+									disabled="true"
+									value="#{solicitarTransladoCU661FC.funcionario.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+					</h:panelGrid> <h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+							<h:inputText id="nroCedula" disabled="true"
+								value="#{solicitarTransladoCU661FC.funcionario.persona.documentoIdentidad}"
+								size="20" maxlength="30">
+							</h:inputText>
+
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+							<h:inputText id="nombres" disabled="true"
+								value="#{solicitarTransladoCU661FC.funcionario.persona.nombres}"
+								size="60" maxlength="100">
+							</h:inputText>
+						#{' '}
+                <a:commandButton id="search" eventsQueue="default"
+								value="#{messages.CU440_btn_buscar_func}"
+								action="#{solicitarTransladoCU661FC.getUrlToPageSearchFuncionario()}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+							<h:inputText id="paisExpDoc" disabled="true"
+								value="#{solicitarTransladoCU661FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"
+								size="60" maxlength="80">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+							<h:inputText id="apellidos" disabled="true"
+								value="#{solicitarTransladoCU661FC.funcionario.persona.apellidos}"
+								size="60" maxlength="80">
+							</h:inputText>
+							#{' '}
+									
+									<a:commandButton id="searchper" eventsQueue="default"
+							value="#{messages.CU541_ver_datos_persona}"
+							rendered="#{solicitarTransladoCU661FC.persona.idPersona != null}"
+							action="#{solicitarTransladoCU661FC.toFindPersonaToView()}" />
+						</s:decorate>
+
+
+					</h:panelGrid></fieldset>
+					<h:panelGrid columns="1">
+						<s:decorate id="tipoSolicitudField" template="/layout/edit.xhtml">
+							<ui:define name="label">Tipo de Solicitud<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipoSol"
+								value="#{solicitarTransladoCU661FC.idTipoSolicitud}" style="width:200px">
+								<f:selectItems
+									value="#{solicitarTransladoCU661FC.tipoSolicitudSelectItems}" />
+								<a:support event="onchange" eventsQueue="default"
+												reRender="panelPuestoCat"
+												action="#{solicitarTransladoCU661FC.setRenderCategoriasRemuneraciones()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:panel>
+			
+			<rich:panel id="panelPuestoCat">
+				<f:facet name="header">#{messages.CU541_puesto_categoria_remu}</f:facet>
+				<table>
+					<tr style="height: 300px;">
+						<td valign="top"><a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigoField2">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region> <a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigoField2">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region> <a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigoField2">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+									onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region> <h:panelGrid columns="1">
+							<rich:panel id="unidadesOrganizacionalesPaneles"
+								style=" width : 372px;">
+								<f:facet name="header">#{messages.CU541_unidades_orga}</f:facet>
+
+								<div class="results" id="tbldetList"
+									style="overflow: scroll; HEIGHT: 230px"><rich:dataTable
+									id="itemsList" var="_items" first="0"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									value="#{solicitarTransladoCU661FC.configuracionUoDetList}"
+									rowKeyVar="_index">
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowClass(_index)}">
+										<f:facet name="header">
+														#{messages.CU541_codigo}
+													</f:facet>
+										<h:outputText value="#{_items.orden}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowClass(_index)}">
+										<f:facet name="header">
+														#{messages.CU541_denominacion}
+													</f:facet>
+										<h:outputText value="#{_items.denominacionUnidad}" />
+									</rich:column>
+
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowClass(_index)}">
+										<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+										<h:commandLink id="obtPuesto"
+											value="#{messages.CU541_puesto_disponibles}"
+											reRender="puestosPaneles" eventsQueue="default"
+											action="#{solicitarTransladoCU661FC.obtenerPuestos(_index)}" />
+									</rich:column>
+
+								</rich:dataTable></div>
+							</rich:panel>
+							<rich:panel id="puestosPaneles" style=" width : 372px;">
+								<f:facet name="header">#{messages.CU541_puesto_disponibles}</f:facet>
+
+								<div class="results" id="tbldetList3"
+									style="overflow: scroll; HEIGHT: 230px"><rich:dataTable
+									id="itemsList3" var="_planta" first="0"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									value="#{solicitarTransladoCU661FC.plantaCargoDetList}"
+									rowKeyVar="rowNr3">
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowPuestoClass(rowNr3)}">
+										<f:facet name="header">
+														#{messages.CU541_codigo}
+													</f:facet>
+										<h:outputText
+											value="#{seleccionUtilFormController.obtenerCodigoPuesto(_planta)}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowPuestoClass(rowNr3)}">
+										<f:facet name="header">
+														#{messages.gral_descripcion}
+													</f:facet>
+										<h:outputText value="#{_planta.descripcion}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowPuestoClass(rowNr3)}">
+										<f:facet name="header">
+														#{messages.CU541_estado}
+													</f:facet>
+										<h:outputText value="#{_planta.estadoCab.descripcion}" />
+									</rich:column>
+
+									<rich:column
+										styleClass="#{solicitarTransladoCU661FC.getRowPuestoClass(rowNr3)}">
+										<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+										<h:commandLink id="seleccionar"
+											value="#{messages.CU541_seleccionar}"
+											reRender="panelGridCodigoPuesto" eventsQueue="default"
+											action="#{solicitarTransladoCU661FC.seleccionarPuesto(_planta.idPlantaCargoDet,rowNr3)}" />
+									</rich:column>
+
+								</rich:dataTable></div>
+							</rich:panel>
+						</h:panelGrid></td>
+						<td valign="top">
+						<s:decorate template="/layout/display.xhtml" rendered="#{solicitarTransladoCU661FC.mostrarCategoriaRemuneracion}">
+						<h:panelGrid columns="1">
+							<h:panelGrid id="panelGridCodigoPuesto" >
+								<rich:panel
+									style="overflow: scroll;  width:310 ;HEIGHT: 150px; height : 150px;">
+									<f:facet name="header">Categorias/Remuneraciones en OEE Destino </f:facet>
+									<s:decorate template="/layout/display.xhtml" rendered="#{solicitarTransladoCU661FC.mostrarCategoriaRemuneracion}">
+										<ui:define name="label">#{messages.CU120_link3_codigo}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="codigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{seleccionUtilFormController.codigoObj}" size="10">
+											<a:support event="onblur" eventsQueue="default"
+												reRender="objDescripcion"
+												action="#{seleccionUtilFormController.findObj()}" />
+										</h:inputText>
+				#{' '}
+		                <h:inputText id="objDescripcion"
+											value="#{seleccionUtilFormController.valorObj}" size="50"
+											disabled="true" />
+									</s:decorate>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU120_link3_categoria}
+						</ui:define>
+										<h:inputText id="categoria"
+											value="#{seleccionUtilFormController.codigoCategoria}"
+											size="10">
+											<a:support event="onblur" eventsQueue="default"
+												reRender="categoriaDescripcion,outPanelMonto"
+												action="#{seleccionUtilFormController.findCategoria()}" />
+										</h:inputText>
+				#{' '}
+		                <h:inputText id="categoriaDescripcion"
+											value="#{seleccionUtilFormController.categoria}" size="50"
+											disabled="true" />
+
+
+									</s:decorate>
+
+									<a:outputPanel ajaxRendered="true" id="outPanelMonto">
+										<s:decorate template="/layout/edit.xhtml">
+											<ui:define name="label">Monto<span
+													class="required">*</span>
+											</ui:define>
+											<h:inputText id="monto1" styleClass="numeric"
+												onkeypress="return soloNumeros(event);"
+												value="#{seleccionUtilFormController.monto}" size="10">
+											</h:inputText>
+#{' '}<a:commandButton value="Agregar"
+												onclick="if(!confirm('#{messages.CU541_msg_agregar}')){return false;}"
+												action="#{solicitarTransladoCU661FC.agregar()}"
+												reRender="idPanelRemuDestino,panelGridCodigoPuesto" />
+
+										</s:decorate>
+									</a:outputPanel>
+								</rich:panel>
+								<s:decorate template="/layout/display.xhtml">
+
+								</s:decorate>
+
+							</h:panelGrid>
+							
+
+							<rich:panel id="idPanelRemuDestino">
+								<f:facet name="header">#{messages['CU711_cat_remuneracion_detino']} </f:facet>
+								<div class="results" id="tbldet2List"
+									style="overflow: scroll; width: 310; HEIGHT: 230px"><rich:dataTable
+									id="itemsList2" var="_pagos" first="0"
+									value="#{solicitarTransladoCU661FC.conceptoPagosActual}"
+									rowKeyVar="rowNr2">
+
+									<rich:column>
+										<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+										<h:outputText value="#{_pagos.objCodigo}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+										<h:outputText value="#{_pagos.categoria}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+										<h:outputText value="#{_pagos.monto}" />
+									</rich:column>
+
+
+									<rich:column>
+										<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+										<a:commandLink id="deledt" value="#{messages.msg_list_remove}"
+											reRender="idPanelRemuDestino,panelGridCodigoPuesto"
+											eventsQueue="default"
+											action="#{solicitarTransladoCU661FC.eliminar(rowNr2)}" />
+									</rich:column>
+
+								</rich:dataTable></div>
+							</rich:panel>
+							</h:panelGrid>
+							</s:decorate>
+							</td>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+					
+					</table>
+					
+					</rich:panel>
+			
+			<rich:panel id="panelSituacion">
+				<f:facet name="header">#{messages.CU661_situacion}</f:facet>
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea id="obs"
+							value="#{solicitarTransladoCU661FC.observacion}" cols="80">
+							<f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" disabled="#{!solicitarTransladoCU661FC.mostrarBoton}"
+				action="#{solicitarTransladoCU661FC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none" view="/#" /></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

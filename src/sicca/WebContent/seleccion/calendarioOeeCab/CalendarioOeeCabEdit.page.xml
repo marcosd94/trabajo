@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CalendarioOeeCabList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{calendarioOeeCabHome.wire}"/>
+    <action execute="#{calendarioOeeFormController.init()}" on-postback="false"/>
+
+   <param name="calendarioOeeCabFrom"/>
+   <param name="calendarioOeeCabIdCalendarioOeeCab" value="#{calendarioOeeCabHome.calendarioOeeCabIdCalendarioOeeCab}"/>
+
+
+   <navigation from-action="#{calendarioOeeFormController.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/seleccion/calendarioOeeCab/CalendarioOeeCabList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{calendarioOeeFormController.update()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/seleccion/calendarioOeeCab/CalendarioOeeCabList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{calendarioOeeCabHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/CalendarioOeeCabList.xhtml"/>
+      </rule>
+   </navigation>
+   
+   <restrict>#{identity.hasRole('calendario_oee_edit')}</restrict>
+
+</page>

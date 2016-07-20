@@ -1,0 +1,127 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1> #{messages.CU607_titulo_ver}</h1>
+    <h:form id="gruposEvaluacionEdit" styleClass="edit" enctype="multipart/form-data">
+    
+    	
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			 
+			  <h:panelGrid >
+			  <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{configurarPlantillaEvalRecEditFC.evaluacion}"/>
+            </s:decorate>
+            <s:decorate id="grupoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU552_grupo}<span class="required">*</span></ui:define>
+						<h:inputText id="grupo" size="50"  disabled="true"
+							value="#{configurarPlantillaEvalRecEditFC.grupo}">
+						</h:inputText>
+					</s:decorate>
+			  </h:panelGrid>
+		
+        </rich:panel>
+        <rich:panel>
+        	<f:facet name="header">#{messages.CU607_datos_variable}</f:facet>
+				<h:panelGrid >
+				  <s:decorate id="criterioField" template="/layout/edit.xhtml">
+				  <ui:define name="label">#{messages.CU607_criteio}<span class="required">*</span></ui:define>
+				  <h:inputText disabled="true" value="#{configurarPlantillaEvalRecEditFC.criterio}" style=" width : 461px;" maxlength="1000"/>
+				  </s:decorate>
+				 
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				 <s:decorate id="tipoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU607_tipo}<span class="required">*</span></ui:define>
+					<h:selectOneMenu disabled="true" id="tipo" value="#{configurarPlantillaEvalRecEditFC.idtipo}" style="width:250px">
+						<f:selectItems value="#{configurarPlantillaEvalRecEditFC.updateTipoSelectItems()}">
+						</f:selectItems>
+					</h:selectOneMenu>
+				</s:decorate>
+				 <s:decorate id="ordenField" template="/layout/display.xhtml">
+				 <ui:define name="label">#{messages.CU607_orden}<span class="required">*</span></ui:define>
+				 <h:inputText value="#{configurarPlantillaEvalRecEditFC.orden}" disabled="true"  styleClass="numeric" onkeypress="return soloNumeros(event);"/>
+				 </s:decorate>
+				 
+				 <ui:remove>
+					 <s:decorate template="/layout/edit.xhtml">
+											 <ui:define name="label">#{messages.CU607_descripcion}
+											 </ui:define>
+											 <h:inputTextarea disabled="true" value="#{configurarPlantillaEvalRecEditFC.descripcion}"   style=" width : 468px;">
+												 <f:validateLength maximum="5000" />
+											 </h:inputTextarea>
+										 </s:decorate>
+				 </ui:remove>
+				<s:decorate id="pesoField" template="/layout/edit.xhtml">
+				 		<ui:define name="label">PESO: <span class="required">*</span></ui:define>
+				 		<h:inputText value="#{configurarPlantillaEvalRecEditFC.pesoPercepcion}" disabled="true" styleClass="numeric" onkeypress="return soloNumeros(event);"/>
+				 	</s:decorate>
+				</h:panelGrid>
+        </rich:panel>
+       
+        
+			
+			<rich:panel id="escalaPanel">
+				<f:facet name="header">#{messages.CU607_items}</f:facet>
+ 			<div class="results" id="tblagrupadosList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="agrupados" var="_escala"  rowKeyVar="index"
+					value="#{configurarPlantillaEvalRecEditFC.evalEscalas}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU607_escala_puntaje}
+						</f:facet>
+						<h:outputText value="#{_escala.escalaEval.descripcion} #{_escala.escalaEval.desde} #{_escala.escalaEval.hasta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Nivel de Evaluación
+						</f:facet>
+						<h:outputText value="#{_escala.escalaEval.nivelEvaluacion}" />
+					</h:column>
+					
+					
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+		
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           
+            
+ 			
+                      
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join" 
+                   action="#{configurarPlantillaEvalRecEditFC.volver()}">
+                   </s:button>
+
+        </div>
+       
+       
+        
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

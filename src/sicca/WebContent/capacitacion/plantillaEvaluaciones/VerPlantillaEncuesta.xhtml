@@ -1,0 +1,105 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Ver #{messages.CU491_tit_nva}</h1>
+
+		<h:form id="plantillaEncuesta" styleClass="edit">
+
+			<rich:panel id="panelOee">
+				<f:facet name="header">#{messages.CU491_panel_oee}</f:facet>
+				<h:panelGrid columns="1">
+
+					<s:decorate id="nivel" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate id="entidad" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate id="oee" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelPlantilla">
+				<f:facet name="header">Ver #{messages.CU491_tit_nva}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU491_nombre_plantilla}</ui:define>
+						<h:inputText id="nombre" size="100" disabled="true"
+							value="#{plantillaEncuestaHome.instance.nombre}">
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate id="activoField" template="/layout/edit.xhtml"
+						rendered="#{plantillaEncuestaHome.managed}">
+						<ui:define name="label">#{messages.CU491_activo}</ui:define>
+						<h:selectBooleanCheckbox id="activo" disabled="true"
+							value="#{plantillaEncuestaHome.instance.activo}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+
+
+
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/capacitacion/plantillaEvaluaciones/PlantillaEncuestaList.xhtml" />
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

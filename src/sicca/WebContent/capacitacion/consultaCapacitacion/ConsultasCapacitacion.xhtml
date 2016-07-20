@@ -1,0 +1,300 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Consultas capacitacion Details</f:facet>
+
+        <s:decorate id="idConsultas" template="layout/display.xhtml">
+            <ui:define name="label">Id consultas</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.idConsultas}"/>
+        </s:decorate>
+
+        <s:decorate id="lugar" template="layout/display.xhtml">
+            <ui:define name="label">Lugar</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.lugar}"/>
+        </s:decorate>
+
+        <s:decorate id="direccion" template="layout/display.xhtml">
+            <ui:define name="label">Direccion</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.direccion}"/>
+        </s:decorate>
+
+        <s:decorate id="telefono" template="layout/display.xhtml">
+            <ui:define name="label">Telefono</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.telefono}"/>
+        </s:decorate>
+
+        <s:decorate id="email" template="layout/display.xhtml">
+            <ui:define name="label">Email</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.email}"/>
+        </s:decorate>
+
+        <s:decorate id="horaDesde" template="layout/display.xhtml">
+            <ui:define name="label">Hora desde</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.horaDesde}">
+                <s:convertDateTime type="time"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="horaHasta" template="layout/display.xhtml">
+            <ui:define name="label">Hora hasta</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.horaHasta}">
+                <s:convertDateTime type="time"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{consultasCapacitacionHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ConsultasCapacitacionEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty consultasCapacitacionFrom ? 'ConsultasCapacitacionList' : consultasCapacitacionFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Capacitaciones</h:panelGroup>
+        </f:facet>
+    <div class="association" id="capacitacionesParent">
+
+        <h:outputText value="There is no capacitaciones associated with this consultasCapacitacion."
+                   rendered="#{consultasCapacitacionHome.instance.capacitaciones == null}"/>
+
+        <rich:dataTable var="_capacitaciones"
+                   value="#{consultasCapacitacionHome.instance.capacitaciones}"
+                rendered="#{consultasCapacitacionHome.instance.capacitaciones != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="capacitacionesTable">
+            <h:column>
+                <f:facet name="header">Id capacitacion</f:facet>
+                <h:outputText value="#{_capacitaciones.idCapacitacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_capacitaciones.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_capacitaciones.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo det</f:facet>
+                <h:outputText value="#{_capacitaciones.idConfiguracionUoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                <h:outputText value="#{_capacitaciones.nombre}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id datos especificos tipo cap</f:facet>
+                <h:outputText value="#{_capacitaciones.idDatosEspecificosTipoCap}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_capacitaciones.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo seleccion</f:facet>
+                <h:outputText value="#{_capacitaciones.tipoSeleccion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Modalidad</f:facet>
+                <h:outputText value="#{_capacitaciones.modalidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Recepcion postulacion</f:facet>
+                <h:outputText value="#{_capacitaciones.recepcionPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Requiere comision</f:facet>
+                <h:outputText value="#{_capacitaciones.requiereComision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sede</f:facet>
+                <h:outputText value="#{_capacitaciones.sede}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id ciudad</f:facet>
+                <h:outputText value="#{_capacitaciones.idCiudad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Direccion</f:facet>
+                <h:outputText value="#{_capacitaciones.direccion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha inicio</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaInicio}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha fin</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaFin}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Costo</f:facet>
+                <h:outputText value="#{_capacitaciones.costo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Credito</f:facet>
+                <h:outputText value="#{_capacitaciones.credito}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cupo tope</f:facet>
+                <h:outputText value="#{_capacitaciones.cupoTope}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Carga horaria</f:facet>
+                <h:outputText value="#{_capacitaciones.cargaHoraria}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fuente financiacion</f:facet>
+                <h:outputText value="#{_capacitaciones.fuenteFinanciacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Destinado a</f:facet>
+                <h:outputText value="#{_capacitaciones.destinadoA}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_capacitaciones.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_capacitaciones.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_capacitaciones.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_capacitaciones.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Motivo cancelacion</f:facet>
+                <h:outputText value="#{_capacitaciones.motivoCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu cancelacion</f:facet>
+                <h:outputText value="#{_capacitaciones.usuCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha cancelacion</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_capacitaciones.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id documento</f:facet>
+                <h:outputText value="#{_capacitaciones.idDocumento}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha pub desde</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaPubDesde}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha pub hasta</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaPubHasta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha recep desde</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaRecepDesde}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha recep hasta</f:facet>
+                <h:outputText value="#{_capacitaciones.fechaRecepHasta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado public</f:facet>
+                <h:outputText value="#{_capacitaciones.estadoPublic}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewcapacitaciones"
+                     value="View"
+                      view="/Capacitaciones.xhtml">
+                    <f:param name="capacitacionesIdCapacitacion"
+                           value="#{_capacitaciones.idCapacitacion}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{elaborarPublicacionSeleccionadosExcFC.init()}"
+		on-postback="false" />
+	<param name="firstResult" value="#{listaList.firstResult}" />
+	<param name="sort" value="#{listaList.orderColumn}" />
+	<param name="dir" value="#{listaList.orderDirection}" />
+	<param name="logic" value="#{listaList.restrictionLogicOperator}" />
+
+	<param name="from" />
+	<param name="usuPublicacion" value="#{listaList.lista.usuPublicacion}" />
+	<param name="lugar" value="#{listaList.lista.lugar}" />
+	<param name="direccion" value="#{listaList.lista.direccion}" />
+	<param name="observacion" value="#{listaList.lista.observacion}" />
+	<param name="usuMod" value="#{listaList.lista.usuMod}" />
+	<param name="idGrupo"
+		value="#{elaborarPublicacionSeleccionadosExcFC.idConcursoPuestoAgr}" />
+		<param name="codActividad" value="#{elaborarPublicacionSeleccionadosExcFC.codActividad}" />
+		<param name="idExcepcion" value="#{elaborarPublicacionSeleccionadosExcFC.idExcepcion}"/>
+		<param name="texto" value="#{elaborarPublicacionSeleccionadosExcFC.text}"/>
+	
+	<navigation from-action="#{elaborarPublicacionSeleccionadosExcFC.publicar()}">
+		<rule if-outcome="next">
+			<end-conversation />
+			<redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('publicacion_seleccionados_exc')}</restrict>
+</page>

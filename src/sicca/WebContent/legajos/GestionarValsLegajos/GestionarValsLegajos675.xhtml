@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU675_title}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ClasificadorUo_nivel} 
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" disabled="true"
+						onkeypress="return soloNumeros(event);"
+						value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="10">
+						<a:support event="onblur" reRender="idPanelCampos"
+							ajaxSingle="true"
+							action="#{moverPuestosFC.findNivelEntidadOrigen()}">
+							<f:param value="sinNivelEntidadIdSinNivelEntidad"
+								name="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+						</a:support>
+					</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+						value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+						disabled="true" />
+							 #{' '}
+               
+				  
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_entidad} 
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric"
+						disabled="true" onkeypress="return soloNumeros(event);"
+						value="#{nivelEntidadOeeUtil.codSinEntidad}" size="10">
+						<a:support event="onblur" eventsQueue="default"
+							action="#{moverPuestosFC.findEntidadOrigen()}"
+							reRender="idPanelCampos">
+							<f:param value="sinNivelEntidadIdSinNivelEntidad"
+								name="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+						</a:support>
+					</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+						value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+						disabled="true" />
+							#{' '}
+                
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_oee}
+					</ui:define>
+					<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+						onkeypress="return soloNumeros(event);">
+						<a:support event="onblur" eventsQueue="default"
+							action="#{moverPuestosFC.findUnidadOrganizativaOrigen()}"
+							reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+					</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+						disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							#{' '}
+                
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_paisExped}</ui:define>
+					<h:selectOneMenu id="idPais" style="width : 300px;"
+						value="#{gestionarValsLegajos675FC.idPais}">
+						<f:selectItems value="#{paissSelectItems}" />
+
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_cedula}</ui:define>
+					<h:inputText id="cedula" size="50"
+						value="#{gestionarValsLegajos675FC.cedula}"
+						style=" width : 300px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_nombres}</ui:define>
+					<h:inputText id="nombres" size="50"
+						value="#{gestionarValsLegajos675FC.nombres}"
+						style=" width : 300px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_apellido}</ui:define>
+					<h:inputText id="apellidos" size="50"
+						value="#{gestionarValsLegajos675FC.apellidos}"
+						style=" width : 300px;" />
+				</s:decorate>
+
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU675_fechaModifDesde}  
+						</ui:define>
+					<rich:calendar id="fechaDesde"
+						value="#{gestionarValsLegajos675FC.fechaDesde}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event);"
+						inputSize="10" datePattern="dd/MM/yyyy"
+						locale="#{siccaAppHelper.localeCode}">
+					</rich:calendar>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU675_fechaModifHasta}  
+						</ui:define>
+					<rich:calendar id="fechaHasta"
+						value="#{gestionarValsLegajos675FC.fechaHasta}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event);"
+						inputSize="10" datePattern="dd/MM/yyyy"
+						locale="#{siccaAppHelper.localeCode}">
+					</rich:calendar>
+				</s:decorate>
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				reRender="links,botons,outPanelResul"
+				action="#{gestionarValsLegajos675FC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" propagation="join" value="Limpiar"
+				action="#{gestionarValsLegajos675FC.limpiar()}">
+				<f:param name="firstResult" value="0" />
+			</s:button></div>
+		</h:form>
+		<h:form>
+			<a:outputPanel ajaxRendered="true" id="outPanelResul">
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty gestionarValsLegajos675ListCustom.resultList ? 0 : (gestionarValsLegajos675ListCustom.paginated ? gestionarValsLegajos675ListCustom.resultCount : gestionarValsLegajos675ListCustom.resultList.size())})</f:facet>
+					<div class="results" id="excepcionesList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty gestionarValsLegajos675ListCustom.resultList}" />
+					<rich:dataTable var="_record"
+						value="#{gestionarValsLegajos675ListCustom.resultList}"
+						rendered="#{not empty gestionarValsLegajos675ListCustom.resultList}">
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarValsLegajos675ListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU579_paisExped}" />
+									<ui:param name="propertyPath"
+										value="Persona.paisByIdPaisExpedicionDoc.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_record.paisByIdPaisExpedicionDoc.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarValsLegajos675ListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU579_cedula}" />
+									<ui:param name="propertyPath"
+										value="Persona.documentoIdentidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.documentoIdentidad}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarValsLegajos675ListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU579_nombreApellido}" />
+									<ui:param name="propertyPath" value="Persona.apellidos" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.nombres} #{_record.apellidos}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								#{messages.CU675_estado}
+							</f:facet>
+							<h:outputText value="NO VERIFICADO" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								#{messages.CU675_fechaModif}
+							</f:facet>
+							<h:outputText
+								value="#{gestionarValsLegajos675FC.calcFechaModif(_record.idPersona)}" />
+						</h:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<s:link
+								view="/legajos/validarCambiosDatosPersonales/ValidacionDatosPersonalesLegajo.xhtml"
+								value="#{messages.CU675_validarCambios}" propagation="join"
+								id="validarDatosPersonales">
+								<f:param name="idPersona" value="#{_record.idPersona}" />
+								<f:param name="from" value="legajos/GestionarValsLegajos/GestionarValsLegajos675" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+			</a:outputPanel>
+		</h:form>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/legajos/GestionarValsLegajos/GestionarValsLegajos675.xhtml"
+				rendered="#{gestionarValsLegajos675ListCustom.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/legajos/GestionarValsLegajos/GestionarValsLegajos675.xhtml"
+				rendered="#{gestionarValsLegajos675ListCustom.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{gestionarValsLegajos675ListCustom.previousFirstResult}" />
+			</s:link> <s:link
+				view="/legajos/GestionarValsLegajos/GestionarValsLegajos675.xhtml"
+				rendered="#{gestionarValsLegajos675ListCustom.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{gestionarValsLegajos675ListCustom.nextFirstResult}" />
+			</s:link> <s:link
+				view="/legajos/GestionarValsLegajos/GestionarValsLegajos675.xhtml"
+				rendered="#{gestionarValsLegajos675ListCustom.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{gestionarValsLegajos675ListCustom.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+
+
+
+	</ui:define>
+
+</ui:composition>

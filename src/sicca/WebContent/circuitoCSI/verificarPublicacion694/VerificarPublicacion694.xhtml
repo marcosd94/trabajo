@@ -1,0 +1,481 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<script type="text/javascript">
+			function validar_modal(){ 
+				valor = document.getElementById("modalForm:rptaField:respuesta").value;
+
+				if( valor == null || valor.length == 0) {
+					alert('Respuesta es un campo requerido. Verifique.');
+				  	return false;
+				}
+				return true;
+			}
+		</script>
+
+		<!-- MODAL PANEL PARA CARGA DE OBSERVACIONES -->
+		<rich:modalPanel id="modalSelect" height="430" width="600">
+			<f:facet name="header">#{messages.CU424_cargar_editar_resp}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form id="modalForm">
+				<fieldset><legend>#{messages.gral_observacion}</legend> <h:panelGrid
+					columns="2">
+					<s:decorate template="/layout/edit.xhtml" rendered="false">
+						<ui:define name="label">#{messages.CU424_nro}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.idPublicacionConcRevDet}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.fechaObs}" />
+					</s:decorate>
+				</h:panelGrid> <h:panelGrid>
+					<s:decorate id="obsField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.observacion}" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<fieldset><legend>#{messages.CU424_rpta}</legend> <h:panelGrid>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.fechaRpta}" />
+					</s:decorate>
+
+					<s:decorate id="rptaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU424_rpta}:
+					    			<span class="required">*</span>
+						</ui:define>
+						<h:inputTextarea
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.respuesta}"
+							id="respuesta" rows="4" cols="60">
+							<f:validateLength maximum="1000" />
+							<s:validate />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<br></br>
+				<h:panelGrid columns="2">
+					<a:commandButton id="confirm" value="#{messages.msg_save}"
+						action="#{verificarPublicacion694FC.guardarDetalle()}"
+						reRender="panelDetalle"
+						onclick="if (validar_modal()){#{rich:component('modalSelect')}.hide()}">
+					</a:commandButton>
+
+					<a:commandButton id="clear" value="#{messages.msg_done}"
+						onclick="#{rich:component('modalSelect')}.hide()" />
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<div style="clear: both"><h:outputText
+						value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<!-- MODAL PANEL PARA VISUALIZACION DE OBSERVACIONES -->
+		<rich:modalPanel id="modalView" height="430" width="600">
+			<f:facet name="header">#{messages.CU424_ver_resp}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalView')}.hide()" />
+			</f:facet>
+			<h:form id="modalViewForm">
+				<fieldset><legend>#{messages.gral_observacion}</legend> <h:panelGrid
+					columns="2">
+					<s:decorate template="/layout/edit.xhtml" rendered="false">
+						<ui:define name="label">#{messages.CU424_nro}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.idPublicacionConcRevDet}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.fechaObs}" />
+					</s:decorate>
+				</h:panelGrid> <h:panelGrid>
+					<s:decorate id="obsField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.observacion}" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<fieldset><legend>#{messages.CU424_rpta}</legend> <h:panelGrid>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.fechaRpta}" />
+					</s:decorate>
+
+					<s:decorate id="rptaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU424_rpta}:</ui:define>
+						<h:outputText
+							value="#{verificarPublicacion694FC.publicacionConcursoRevDet.respuesta}" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<br></br>
+				<h:panelGrid>
+					<a:commandButton id="clear" value="#{messages.msg_done}"
+						onclick="#{rich:component('modalView')}.hide()" />
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<h1>#{messages.CU694_titulo}</h1>
+
+		<h:form id="verificarPublicacionSearch" styleClass="edit">
+
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+							
+			                #{' '}
+			                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+							
+			                #{' '}
+			                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+			                #{' '}
+			                <h:inputText id="configUoCab" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 514px;" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate id="nroExpedienteField"
+						template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU424_nro_expediente}</ui:define>
+
+						<h:inputText id="nroExpediente" size="40" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nroExpediente}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU424_fecha_expediente}</ui:define>
+
+						<h:inputText size="40" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.fechaExpediente}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<br></br>
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['CU424_grupo_puestos_ajustar']} (#{empty verificarPublicacion694FC.listaGruposPorAjustar ? 0 : verificarPublicacion694FC.listaGruposPorAjustar.size()})</f:facet>
+				<div class="results" id="grupoPuestoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty verificarPublicacion694FC.listaGruposPorAjustar}" />
+
+				<rich:dataTable id="grupoPuestoList" var="_grupo"
+					value="#{verificarPublicacion694FC.listaGruposPorAjustar}"
+					rendered="#{not empty verificarPublicacion694FC.listaGruposPorAjustar}">
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.CU424_denominacion_grupo_puestos}" />
+						</f:facet>
+						<h:outputText value="#{_grupo.descripcionGrupo}" />
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_cancel}?</f:facet>
+
+						<h:selectBooleanCheckbox value="#{_grupo.seleccionado}" />
+					</rich:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<s:link value="#{messages.CU424_perfil_matriz}"
+							action="#{verificarPublicacion694FC.imprimirPerfilMatriz()}">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_grupo.idConcursoPuestoAgr}" />
+						</s:link>
+					            
+					            #{' '}
+					            <s:link
+							view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml"
+							value="#{messages.CU424_fechas}">
+							<f:param name="puesto_agr" value="#{_grupo.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/verificarPublicacion/VerificarPublicacion" />
+							<f:param name="modoConcurso" value="#{false}" />
+						</s:link>
+					            
+					            #{' '}
+					            <s:link
+							view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+							value="#{messages.CU424_cronograma}">
+							<f:param name="puesto_agr" value="#{_grupo.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/verificarPublicacion/VerificarPublicacion" />
+							<f:param name="modoConcurso" value="#{false}" />
+						</s:link>
+					            
+					            #{' '}
+					            <s:link
+							view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+							value="#{messages.CU424_present_aclaracion}">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_grupo.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/verificarPublicacion/VerificarPublicacion" />
+						</s:link>
+					            
+					            #{' '}
+					            <s:link
+							view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+							value="#{messages.CU424_bases_condiciones_edit}">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_grupo.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/verificarPublicacion/VerificarPublicacion" />
+								<f:param name="CU"
+								value="424" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+
+			<br></br>
+			<fieldset style="width: 650px"><legend>#{messages.CU424_editar_datos_concurso}</legend>
+
+			<s:div styleClass="actionButtons">
+				<s:button
+					view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+					id="cronB" value="#{messages.CU424_cronograma}">
+					<f:param name="puesto_agr" value="#{_grupo.idConcursoPuestoAgr}" />
+					<f:param name="from"
+						value="circuitoCSI/verificarPublicacion694/VerificarPublicacion694" />
+					<f:param name="modoConcurso" value="#{true}" />
+				</s:button>
+
+				<s:button
+					view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml"
+					id="fechasB" value="#{messages.CU424_fechas}">
+					<f:param name="puesto_agr" value="#{_grupo.idConcursoPuestoAgr}" />
+					<f:param name="from"
+						value="circuitoCSI/verificarPublicacion694/VerificarPublicacion694" />
+					<f:param name="modoConcurso" value="#{true}" />
+				</s:button>
+
+				<s:button
+					view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+					id="presentB" value="#{messages.CU424_present_aclaracion}">
+					<f:param name="concursoIdConcurso"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.idConcurso}" />
+					<f:param name="from"
+						value="circuitoCSI/verificarPublicacion694/VerificarPublicacion694" />
+				</s:button>
+			</s:div></fieldset>
+
+
+			<br></br>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU424_obs_tarea}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea id="obs"
+							value="#{verificarPublicacion694FC.observacionString}"
+							cols="60" rows="5">
+							<f:validateLength maximum="250" />
+							<s:validate />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+			<br></br>
+			<rich:panel id="panelDetalle">
+				<f:facet name="header">#{messages['CU424_solicitud_ajustes']} (#{empty verificarPublicacion694FC.listaPublicacionConcursoRevDet ? 0 : verificarPublicacion694FC.listaPublicacionConcursoRevDet.size()})</f:facet>
+				<div class="results" id="publicarConcursoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty verificarPublicacion694FC.listaPublicacionConcursoRevDet}" />
+
+				<rich:dataTable id="publicarConcursoList" var="_var"
+					rowKeyVar="_index"
+					value="#{verificarPublicacion694FC.listaPublicacionConcursoRevDet}"
+					rendered="#{not empty verificarPublicacion694FC.listaPublicacionConcursoRevDet}">
+
+					<rich:column rendered="false"
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU424_nro}" />
+						</f:facet>
+						<h:outputText value="#{_var.idPublicacionConcRevDet}" />
+					</rich:column>
+
+					<rich:column
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.gral_observacion}" />
+						</f:facet>
+						<h:outputText value="#{_var.observacion}" />
+					</rich:column>
+
+					<rich:column
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU424_fecha_obs}" />
+						</f:facet>
+						<h:outputText value="#{_var.fechaObs}" />
+					</rich:column>
+
+					<rich:column
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU424_rpta}" />
+						</f:facet>
+						<h:outputText value="#{_var.respuesta}" />
+					</rich:column>
+
+					<rich:column
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU424_fecha_rpta}" />
+						</f:facet>
+						<h:outputText value="#{_var.fechaRpta}" />
+					</rich:column>
+
+					<rich:column
+						styleClass="#{verificarPublicacion694FC.getRowClass(_index)}">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<a:commandLink id="ver"
+							onclick="#{rich:component('modalView')}.show();"
+							value="#{messages.msg_list_view}" reRender="modalViewForm"
+							action="#{verificarPublicacion694FC.editDetalle()}">
+							<f:param name="idPublicacionConcRevDet"
+								value="#{_var.idPublicacionConcRevDet}" />
+						</a:commandLink>
+								
+								#{' | '}
+					            
+					            <a:commandLink id="edit"
+							onclick="#{rich:component('modalSelect')}.show();"
+							value="#{messages.msg_edit}" reRender="modalForm"
+							rendered="#{!empty _var.respuesta and !_var.ajustadoOee}"
+							action="#{verificarPublicacion694FC.editDetalle()}">
+							<f:param name="idPublicacionConcRevDet"
+								value="#{_var.idPublicacionConcRevDet}" />
+						</a:commandLink>
+
+						<a:commandLink id="respond"
+							onclick="#{rich:component('modalSelect')}.show();"
+							value="#{messages.CU424_responder}" reRender="modalForm"
+							rendered="#{empty _var.respuesta}"
+							action="#{verificarPublicacion694FC.editDetalle()}">
+							<f:param name="idPublicacionConcRevDet"
+								value="#{_var.idPublicacionConcRevDet}" />
+						</a:commandLink>
+
+					</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<s:div styleClass="actionButtons">
+				<s:button view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					id="anexos" value="#{messages.gral_anexos}">
+					<f:param name="direccionFisica"
+						value="#{verificarPublicacion694FC.ubicacionFisica}" />
+					<f:param name="nombrePantalla"
+						value="#{verificarPublicacion694FC.nombrePantalla}" />
+					<f:param name="idCU"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.idConcurso}" />
+					<f:param name="nombreTabla"
+						value="#{verificarPublicacion694FC.entity}" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="circuitoCSI/verificarPublicacion694/VerificarPublicacion694" />
+				</s:button>
+
+				<h:commandButton id="cancelarGrupos"
+					value="#{messages.CU424_cancelar_grupos}"
+					action="#{verificarPublicacion694FC.cancelarGrupos()}"
+					onclick="return confirm('#{messages.CU424_cancelar_grupos_confirm}');" />
+
+				<h:commandButton id="enviarGrupos"
+					value="#{messages.CU424_enviar_ajustes}"
+					rendered="#{verificarPublicacion694FC.hayGrupos()}"
+					action="#{verificarPublicacion694FC.enviarAjustes()}"
+					onclick="return confirm('#{messages.CU424_confirmar_enviar}');" />
+
+				<s:button view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"
+					id="volver" propagation="none" value="#{messages.msg_done}">
+				</s:button>
+			</s:div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

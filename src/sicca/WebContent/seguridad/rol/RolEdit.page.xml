@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/RolList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{rolHome.wire}"/>
+    <action execute="#{administrarRolesFormController.init()}" on-postback="false"/>
+
+   <param name="rolFrom"/>
+   <param name="rolIdRol" value="#{rolHome.rolIdRol}"/>
+
+
+   <navigation from-action="#{administrarRolesFormController.guardar()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/seguridad/rol/RolList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{administrarRolesFormController.actualizar()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/seguridad/rol/RolList.xhtml"/>
+      </rule>
+   </navigation>
+
+<restrict>#{identity.hasRole('rol_edit')}</restrict>
+</page>

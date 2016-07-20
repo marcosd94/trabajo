@@ -1,0 +1,129 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="matrizReferencial" styleClass="edit">
+		<h1>#{messages.MatrizReferencial_}</h1>
+        <rich:panel>
+            <f:facet name="header">#{matrizReferencialHome.managed ? messages.msg_edit : messages.msg_save} #{messages.MatrizReferencial_encabezadoPlantilla}</f:facet>
+
+			<s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_tipoConcurso}</ui:define>
+                <h:selectOneMenu id="tipoConcurso" 
+                			  value="#{matrizReferencialHome.idDatosEspecificos}"
+                		   required="true"
+                			  style="width:250px"
+                		   disabled="#{matrizReferencialHome.managed}">
+					<f:selectItems value="#{datosEspecificossByTipoConcursoSelectItems}"/>
+                </h:selectOneMenu>
+            </s:decorate>
+
+	        <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{matrizReferencialHome.instance.descripcion}"
+                       disabled="#{matrizReferencialHome.managed}">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="puntajeMaximoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_puntajeMaximo}</ui:define>
+                <h:inputText id="puntajeMaximo"
+                       required="true"
+                     styleClass="numeric"
+                     onkeypress="return soloNumeros(event);"
+                          value="#{matrizReferencialHome.instance.puntajeMaximo}"
+                           size="5">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.MatrizReferencial_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{matrizReferencialHome.instance.activo}" />
+	            </s:decorate>
+
+			<br />
+            <div style="clear:both">
+	                <span class="required">*</span>
+	                #{messages.msg_required_fields}
+	        </div>
+	        <br />
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" styleClass="labelClass" rendered="#{!matrizReferencialHome.managed}"/>
+	            <h:outputText value="#{messages.msg_obs_update}" styleClass="labelClass" rendered="#{matrizReferencialHome.managed}"/>
+	        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{matrizReferencialHome.persist}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!matrizReferencialHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{matrizReferencialHome.update}"
+                        onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{matrizReferencialHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/seleccion/matrizReferencial/MatrizReferencialList.xhtml"
+                rendered="#{matrizReferencialHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty matrizReferencialFrom ? 'seleccion/matrizReferencial/MatrizReferencialList' : matrizReferencialFrom}.xhtml"
+                rendered="#{!matrizReferencialHome.managed}"/>
+
+        </div>
+    </h:form>
+    
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{matrizReferencialHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{matrizReferencialHome.instance.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{matrizReferencialHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{matrizReferencialHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{matrizReferencialHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{matrizReferencialHome.instance.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{matrizReferencialHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{matrizReferencialHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

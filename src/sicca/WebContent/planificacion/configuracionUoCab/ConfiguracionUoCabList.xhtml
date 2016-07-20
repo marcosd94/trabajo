@@ -1,0 +1,297 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.gral_oee}</h1>
+		
+
+		<h:form id="configuracionUoCabSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" id="panelParamentro"
+				switchType="client">
+				<h:panelGrid  columns="1">
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/configuracionUoCab/ConfiguracionUoCabList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/configuracionUoCab/ConfiguracionUoCabList')}" />
+						</s:decorate>
+					</a:region>
+				
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_orden}</ui:define>
+					<h:inputText id="orden"
+						value="#{administrarUoCabListFormController.orden}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_denominacion}</ui:define>
+					<h:inputText id="denominacion" size="80"
+						value="#{administrarUoCabListFormController.denominacion}" />
+				</s:decorate>
+				
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaDesde}</ui:define>
+					 <rich:calendar id="fechaDesde" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"   oninputkeyup="ponerBarra(event);"
+                            value="#{administrarUoCabListFormController.fechaDesde}" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.msg_hasta}</ui:define>
+					 <rich:calendar id="fechaHasta" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"   oninputkeyup="ponerBarra(event);"
+                            value="#{administrarUoCabListFormController.fechaHasta}" />
+				</s:decorate>
+				
+				
+				</h:panelGrid>
+				<h:panelGrid >
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{administrarUoCabListFormController.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				</h:panelGrid>
+				
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search" eventsQueue="default"
+				value="#{messages.msg_list_search_button}" reRender="panelParamentro,panelResultado,links"
+				action="#{administrarUoCabListFormController.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+				<a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{administrarUoCabListFormController.searchAll()}" 
+				reRender="panelParamentro,panelResultado,links" >
+				<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<h:commandButton id="print"   rendered="#{not empty entidadOeeList.resultList}"
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{administrarUoCabListFormController.pdf()}" /></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty configuracionUoCabList.resultList ? 0 : (configuracionUoCabList.paginated ? configuracionUoCabList.resultCount : configuracionUoCabList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty configuracionUoCabList.resultList}" /> <rich:dataTable
+				id="configuracionUoCabList" var="_configuracionUoCab"
+				value="#{configuracionUoCabList.resultList}"
+				rendered="#{not empty configuracionUoCabList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ClasificadorUo_nivel}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.entidad.sinEntidad.nenCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_configuracionUoCab.entidad.sinEntidad.nenCodigo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="Nivel Descripcion" />
+							<ui:param name="propertyPath" value="configuracionUoCab.entidad.sinEntidad.nenCodigo" />
+						</ui:include>
+					</f:facet>
+				<h:outputText value="#{nivelEntidadOeeUtil.nombreNivel(_configuracionUoCab.entidad.sinEntidad.idSinEntidad)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Usuario_entidad}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.entidad.sinEntidad.entCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ConfiguracionUoDet_entid_descip}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.entidad.sinEntidad.entNombre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_configuracionUoCab.entidad.sinEntidad.entNombre}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ConfiguracionUoDet_cod}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.orden" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{administrarUoCabListFormController.codigos(_configuracionUoCab.idConfiguracionUo)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ConfiguracionUoDet_denominacion}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.denominacionUnidad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_configuracionUoCab.denominacionUnidad}" />
+				</h:column>
+					<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ConfiguracionUoCab_activo}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_configuracionUoCab.activo}" disabled="true"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{configuracionUoCabList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ConfiguracionUoCab_vigenciaDesde}" />
+							<ui:param name="propertyPath" value="configuracionUoCab.vigenciaDesde" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_configuracionUoCab.vigenciaDesde}" />
+				</h:column>
+				
+				
+			
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/configuracionUoCab/ConfiguracionUoCab' : from}.xhtml"
+						value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="configuracionUoCabViewId">
+						<f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{_configuracionUoCab.idConfiguracionUo}" />
+								<f:param name="sinNivelEntidadIdSinNivelEntidad" />
+							<f:param name="sinEntidadIdSinEntidad" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/configuracionUoCab/ConfiguracionUoCabEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="configuracionUoCabEdit" rendered="#{empty from}">
+						<f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{_configuracionUoCab.idConfiguracionUo}" />
+								<f:param name="sinNivelEntidadIdSinNivelEntidad" />
+				<f:param name="sinEntidadIdSinEntidad" />
+					</s:link>
+					#{' '}
+					<s:link
+						view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+						value="#{messages.ConfiguracionUoDet_cargar_unidadOrg}" propagation="none"
+						id="configuracionUoCab" rendered="#{empty from}">
+						<f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{_configuracionUoCab.idConfiguracionUo}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links" >
+		<div class="tableControl"><s:link view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"
+			rendered="#{configuracionUoCabList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"
+			rendered="#{configuracionUoCabList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{configuracionUoCabList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"
+			rendered="#{configuracionUoCabList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{configuracionUoCabList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/configuracionUoCab/ConfiguracionUoCabList.xhtml"
+			rendered="#{configuracionUoCabList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{configuracionUoCabList.lastFirstResult}" />
+		</s:link></div>
+</a:outputPanel>
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/configuracionUoCab/ConfiguracionUoCabEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="configuracionUoCabIdConfiguracionUo" />
+				<f:param name="sinNivelEntidadIdSinNivelEntidad" />
+				<f:param name="sinEntidadIdSinEntidad" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

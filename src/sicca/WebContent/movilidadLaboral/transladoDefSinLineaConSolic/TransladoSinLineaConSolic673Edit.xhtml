@@ -1,0 +1,276 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>SOLICITUDES: Registro de traslado definitivo sin linea de
+			cargo</h1>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU711_adjuntos_registro}</f:facet>
+				<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{transladoLinea673EditFC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+						
+						
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{respuestaSolicitudTranslado732FC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+				<BR>
+				</BR>
+								<fieldset id="panelDestino"><legend>#{messages.CU711_doc_registro}</legend>
+				<h:panelGrid columns="4">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_nr_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText
+							value="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.nroDoc}"
+							id="idNroDoc2" styleClass="numeric"
+							onkeypress="return soloNumeros(event);" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU541_fecha}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaDo2c" enableManualInput="true"
+							value="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.fechaDoc}"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="tipo2Field" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="tipo2" value="#{buscadorDocsFC.idTipoDoc}"
+							style=" width : 275px;">
+							<f:selectItems
+								value="#{transladoLineaSinSolic711EditFC.updateTipoDocSelectItems()}" />
+							<a:support event="onchange" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="fechaIngresoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU706_fec_ini}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIngreso"
+							value="#{transladoLineaSinSolic711EditFC.fechaInicio}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+							<a:support event="onchanged" reRender="fechaIngreso" />
+						</rich:calendar>
+					</s:decorate>
+
+				</h:panelGrid> <h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre del Archivo</ui:define>
+						<h:inputText
+							value="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.fNameMostrar}"
+							disabled="true" style=" width : 250px;" />
+					</s:decorate>
+					<s:button value="Descargar"
+						disabled="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.fNameMostrar==null}"
+						action="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.descargarDoc()}" />
+				</h:panelGrid> <h:panelGrid columns="2"
+					style="border-style: dotted;border-color: gray;">
+					<s:fileUpload size="30"
+						contentType="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.cType}"
+						data="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.uFile}"
+						fileName="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.fName}"
+						style=" width : 299px;">
+						<s:conversationPropagation type="join" />
+
+					</s:fileUpload>
+
+					<h:commandButton value="#{messages.CU711_adjuntar_resp}"
+						action="#{transladoLineaSinSolic711EditFC.buscadorDocsDesctino.adjuntarDocSinValidar()}" />
+				</h:panelGrid></fieldset>
+			</rich:panel>
+
+			<rich:panel id="panelPersona">
+				<f:facet name="header">#{messages.CU541_persona}</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="nivelCodigoField2">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodig2o" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.codNivelEntidad}"
+								size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField2">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField2">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+								disabled="true"
+								value="#{transladoLineaSinSolic711EditFC.entidadOeeUtilAnterior.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGroup>
+						<h:panelGrid>
+							<h:panelGrid columns="2">
+								<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px" disabled="true"
+										value="#{transladoLineaSinSolic711EditFC.funcionario.persona.documentoIdentidad}">
+
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="nomField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+									<h:inputText id="nombres" size="50" disabled="true"
+										maxlength="50"
+										value="#{transladoLineaSinSolic711EditFC.funcionario.persona.nombres}" />
+								</s:decorate>
+								<s:decorate id="paisExpField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU541_pais}</ui:define>
+									<h:inputText disabled="true"
+										value="#{transladoLineaSinSolic711EditFC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+								</s:decorate>
+								<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+									<h:inputText id="apellido" size="50" disabled="true"
+										maxlength="50"
+										value="#{transladoLineaSinSolic711EditFC.funcionario.persona.apellidos}">
+									</h:inputText>
+								</s:decorate>
+
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								<s:decorate id="puestoActualField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU706_puesto_actual}</ui:define>
+									<h:inputText id="puestoActual" size="50" disabled="true"
+										value="#{transladoLineaSinSolic711EditFC.funcionario.plantaCargoDet.descripcion}"
+										style=" width : 560px;">
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:panelGrid columns="1">
+
+							<a:commandButton id="search" eventsQueue="default"
+								style=" width : 187px;"
+								value="#{messages.CU706_buscar_funcionario}"
+								action="/busquedas/funcionarios/EmpleadoPuestoList.xhtml?from=movilidadLaboral/transladoDefSinLineaConSolic/TransladoSinLineaConSolic673Edit" />
+
+						</h:panelGrid>
+					</h:panelGroup>
+				</h:panelGrid>
+			</rich:panel>
+			
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{transladoLinea673EditFC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/movilidadLaboral/transladoDefSinLineaSinSolic/TransladoSinLineaSinSolic710List.xhtml" />
+
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

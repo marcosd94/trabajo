@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/FechasGrupoPuestoList.xhtml" login-required="true">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<action execute="#{fechasGrupoPuestoHome.wire}" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+	<action execute="#{fechaGrupoPuestoFormController.initEdit()}"
+		on-postback="false" />
+
+	<param name="puesto_agr" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+
+	<param name="idConcurso" value="#{grupoPuestosController.idConcurso}" />
+
+	<param name="from" />
+
+	<param name="fechasGrupoPuestoFrom" />
+	<param name="idFechasGrupoPuesto" />
+	<param name="fechasGrupoPuestoIdFechas" value="#{fechasGrupoPuestoHome.fechasGrupoPuestoIdFechas}" />
+	<param name="concursoPuestoAgrFrom" />
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr"
+		value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+	<param name="concursoFrom" />
+	<param name="concursoIdConcurso" value="#{concursoHome.concursoIdConcurso}" />
+	<param name="datosEspecificosFrom" />
+	<param name="datosEspecificosIdDatosEspecificos"
+		value="#{datosEspecificosHome.datosEspecificosIdDatosEspecificos}" />
+	<param name="datosGeneralesFrom" />
+	<param name="datosGeneralesIdDatosGenerales"
+		value="#{datosGeneralesHome.datosGeneralesIdDatosGenerales}" />
+
+
+	<param name="configuracionUoCabFrom" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{configuracionUoCabHome.configuracionUoCabIdConfiguracionUo}" />
+	<param name="entidadFrom" />
+	<param name="entidadIdEntidad" value="#{entidadHome.entidadIdEntidad}" />
+	<param name="sinEntidadFrom" />
+	<param name="sinEntidadIdSinEntidad" value="#{sinEntidadHome.sinEntidadIdSinEntidad}" />
+
+	<param name="oficinaFrom" />
+	<param name="oficinaIdOficina" value="#{oficinaHome.oficinaIdOficina}" />
+	<param name="barrioFrom" />
+	<param name="barrioIdBarrio" value="#{barrioHome.barrioIdBarrio}" />
+	<param name="ciudadFrom" />
+	<param name="ciudadIdCiudad" value="#{ciudadHome.ciudadIdCiudad}" />
+	<param name="departamentoFrom" />
+	<param name="departamentoIdDepartamento" value="#{departamentoHome.departamentoIdDepartamento}" />
+	<param name="paisFrom" />
+	<param name="paisIdPais" value="#{paisHome.paisIdPais}" />
+	<param name="modoConcurso" value="#{fechaGrupoPuestoFormController.modoConcurso}" />
+
+
+	<navigation from-action="#{fechaGrupoPuestoFormController.save()}">
+		<rule if-outcome="persisted">
+			<redirect view-id="/#{from}.xhtml" include-page-params="true">
+				<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{concursoPuestoAgrIdConcursoPuestoAgr}" />
+
+			</redirect>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{fechaGrupoPuestoFormController.update()}">
+		<rule if-outcome="persisted">
+			<redirect view-id="/#{from}.xhtml" include-page-params="true">
+				<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{concursoPuestoAgrIdConcursoPuestoAgr}" />
+
+			</redirect>
+		</rule>
+	</navigation>
+
+<restrict>
+	#{identity.hasRole('verFechasGrupoPuesto')}</restrict>
+
+</page>

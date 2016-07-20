@@ -1,0 +1,120 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<a:form id="factItemsForm">
+
+		<rich:simpleTogglePanel label="#{messages.CU85_factItems}"
+			id="factItemsPanel" switchType="ajax">
+			<table>
+				<tr>
+					<td><a:commandLink id="activo"
+						value="#{messages.GENERICO_ACTIVOS}">
+						<a:support event="onclick"
+							action="#{confMatrizEvalFormController.mostrarActivos()}"
+							reRender="factItemsPanel" />
+					</a:commandLink></td>
+
+
+					<td><a:commandLink id="inactivos"
+						value="#{messages.GENERICO_INACTIVOS}">
+						<a:support event="onclick"
+							action="#{confMatrizEvalFormController.mostrarInactivos()}"
+							reRender="factItemsPanel" />
+					</a:commandLink></td>
+
+					<td><a:commandLink id="todos"
+						value="#{messages.GENERICO_TODOS}">
+						<a:support event="onclick"
+							action="#{confMatrizEvalFormController.mostrarTodos()}"
+							reRender="factItemsPanel" />
+					</a:commandLink></td>
+				</tr>
+			</table>
+			<rich:dataTable var="_dto" rowKeyVar="fila"
+				value="#{confMatrizEvalFormController.listaEditarMatrizRefConfDTO}"
+				rendered="#{confMatrizEvalFormController.listaEditarMatrizRefConfDTO!= null}"
+				rowClasses="rvgRowOne,rvgRowTwo" id="factItemsTable">
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_tipoEval}
+						</f:facet>
+					<h:outputText rendered="#{!_dto.mostrarAcciones}"
+						value="#{_dto.matrizRefConfDet.matrizRefConfEnc.datosEspecificos.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_nroOrden}
+						</f:facet>
+					<h:outputText
+						value="#{_dto.matrizRefConfDet.matrizRefConfEnc.nroOrden}"
+						rendered="#{!_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_factor}
+						</f:facet>
+					<h:outputText
+						value="#{_dto.matrizRefConfDet.matrizRefConfEnc.descripcion}"
+						rendered="#{!_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_obligatorio}
+						</f:facet>
+					<h:outputText
+						value="#{confMatrizEvalFormController.formatObligatorio(_dto.matrizRefConfDet.matrizRefConfEnc.obligatorioSN)}"
+						rendered="#{!_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_graduacion}
+						</f:facet>
+					<h:outputText
+						value="#{_dto.matrizRefConfDet.matrizRefConfEnc.puntajeMaximo}"
+						rendered="#{!_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_items}
+						</f:facet>
+					<h:outputText value="#{_dto.matrizRefConfDet.descripcion}"
+						rendered="#{_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_minimo}
+						</f:facet>
+					<h:outputText value="#{_dto.matrizRefConfDet.puntajeMinimo}"
+						rendered="#{_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.CU85_maximo}
+						</f:facet>
+					<h:outputText value="#{_dto.matrizRefConfDet.puntajeMaximo}"
+						rendered="#{_dto.mostrarAcciones}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.GENERICO_ACTIVAR}                  
+						</f:facet>
+					<h:selectBooleanCheckbox rendered="#{_dto.mostrarAcciones}" disabled="true"
+						value="#{_dto.matrizRefConfDet.activo}">
+						<a:support event="onclick"  
+							action="#{confMatrizEvalFormController.eliminarFactorItem2(fila)}"
+							reRender="factItemsPanel" />
+					</h:selectBooleanCheckbox>
+				</h:column>
+
+			</rich:dataTable>
+		</rich:simpleTogglePanel>
+	</a:form>
+</ui:composition>

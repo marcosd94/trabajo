@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/planificacion/nacionalidad/NacionalidadList.xhtml"
+      login-required="true">
+      
+
+
+   <begin-conversation flush-mode="MANUAL" join="true"/>
+
+   <action execute="#{nacionalidadHome.wire}"/>
+
+   <param name="nacionalidadFrom"/>
+   <param name="nacionalidadIdNacionalidad" value="#{nacionalidadHome.nacionalidadIdNacionalidad}"/>
+
+
+   <navigation from-action="#{nacionalidadHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/planificacion/nacionalidad/NacionalidadList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{nacionalidadHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/planificacion/nacionalidad/NacionalidadList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{nacionalidadHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/planificacion/nacionalidad/NacionalidadList.xhtml"/>
+      </rule>
+   </navigation>
+
+</page>

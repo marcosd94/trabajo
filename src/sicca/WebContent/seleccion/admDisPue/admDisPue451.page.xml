@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+	<restrict>#{identity.hasRole('admDisPue451')}</restrict>
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+
+	<action execute="#{admDisPue451FC.init()}" on-postback="false" />
+
+	<param name="firstResult" value="#{concursoPuestoDetListCustom.firstResult}" />
+	<param name="sort" value="#{concursoPuestoDetListCustom.orderColumn}" />
+	<param name="dir" value="#{concursoPuestoDetListCustom.orderDirection}" />
+	<param name="logic"
+		value="#{concursoPuestoDetListCustom.restrictionLogicOperator}" />
+
+	<param name="from" value="#{admDisPue451FC.from}" />
+
+	<param name="nombre" value="#{concursoListFormController.concurso.nombre}" />
+	<param name="observacion" value="#{concursoListFormController.concurso.observacion}" />
+	<param name="usuAlta" value="#{concursoListFormController.concurso.usuAlta}" />
+	<param name="usuMod" value="#{concursoListFormController.concurso.usuMod}" />
+	<param name="observacionReserva"
+		value="#{concursoListFormController.concurso.observacionReserva}" />
+	<param name="idConcursoPuestoAgr" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<param name="cantPostulantes" value="#{admDisPue451FC.cantPostulantes}" />
+	<param name="cantVacancias" value="#{admDisPue451FC.cantVacancia}" />
+	 <param name="codActividad" value="#{admDisPue451FC.codActividad}"/>
+
+	<param name="idDpto" value="#{admDisPue451FC.paisDptoCiudadBarrio.idDpto}" />
+
+	<navigation from-action="#{admDisPue451FC.save()}">
+		<begin-conversation join="true" />
+		<rule if-outcome="OK">
+			<redirect view-id="/#{admDisPue451FC.from}.xhtml" />
+		</rule>
+	</navigation>
+
+</page>

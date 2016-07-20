@@ -1,0 +1,49 @@
+<rich:toolBar xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	style="background-color:#198752; background-image:none; margin-left:5px; margin-right:5px; margin-top:5px; border:0; white-space: pre;">
+	
+	<rich:toolBarGroup>
+		<s:link id="menuLoginId" view="#{seguridadUtilFormController.getHomeUrl()}" propagation="none">
+			<h:graphicImage value="/img/portal/boton-home.png" title="#{messages.msg_pagina_inicio}" alt="Inicio" width="35" height="35"/>
+	    </s:link>
+	</rich:toolBarGroup>
+	
+	<rich:toolBarGroup style="white-space: pre; vertical-align: middle; padding-left:10px;">
+	    <s:link id="cuentaId" view="/cuentaUsuarioPortal.xhtml" propagation="none" value="Mi Cuenta" rendered="#{identity.loggedIn and seguridadUtilFormController.esUsuarioPortal()}" />
+	</rich:toolBarGroup>
+	
+	<rich:toolBarGroup location="right" style="white-space: pre; vertical-align: middle;">
+		<h:inputHidden id="from" rendered="#{seguridadUtilFormController.usuarioLogueado != null}"/>
+		
+		<h:outputText id="menuWelcomeId" value="#{messages.msg_usuario}: #{seguridadUtilFormController.nombreUsuarioLogueado}"
+			rendered="#{identity.loggedIn}" />
+	</rich:toolBarGroup>
+	
+	<rich:toolBarGroup location="right" style="white-space: pre; vertical-align: middle; padding-left:10px;">
+		<s:link id="menuLogoutId" view="/Portal.xhtml"
+			action="#{portalFormController.logout()}" value="#{messages.logout_link_label}"
+			rendered="#{identity.loggedIn}" propagation="none" />
+	</rich:toolBarGroup>
+	
+	<rich:toolBarGroup rendered="false" location="right" style="padding-left:10px;">
+		<s:link id="mapa" propagation="none">
+			<h:graphicImage value="/img/portal/boton-mapa.png" title="#{messages.msg_mapa_sitio}" alt="Mapa del Sitio" width="35" height="35"/>
+	    </s:link>
+	</rich:toolBarGroup>
+	
+	<rich:toolBarGroup location="right">
+		
+		<a href="/sicca/docs/guia2.pdf" target="_blank">
+			<img src="/sicca/img/portal/help.png" alt="Ayuda" width="35"	height="35"/>
+		</a>
+		
+	</rich:toolBarGroup>
+		
+	<rich:toolBarGroup location="right" style="margin-right:15px; background-color: #FFFFFF; padding:5px;">
+		<h:outputText value=" " />
+	</rich:toolBarGroup>
+</rich:toolBar>

@@ -1,0 +1,226 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Calendario oee det Details</f:facet>
+
+        <s:decorate id="idCalendarioOeeDet" template="layout/display.xhtml">
+            <ui:define name="label">Id calendario oee det</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.idCalendarioOeeDet}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaFestiva" template="layout/display.xhtml">
+            <ui:define name="label">Fecha festiva</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.fechaFestiva}">
+                <s:convertDateTime type="date" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{calendarioOeeDetHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/CalendarioOeeDetEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty calendarioOeeDetFrom ? 'CalendarioOeeDetList' : calendarioOeeDetFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Calendario oee cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="calendarioOeeCabParent">
+
+        <h:outputText value="There is no calendarioOeeCab associated with this calendarioOeeDet."
+                   rendered="#{calendarioOeeDetHome.instance.calendarioOeeCab == null}"/>
+
+        <rich:dataTable var="_calendarioOeeCab"
+                   value="#{calendarioOeeDetHome.instance.calendarioOeeCab}"
+                rendered="#{calendarioOeeDetHome.instance.calendarioOeeCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="calendarioOeeCabTable">
+            <h:column>
+                <f:facet name="header">Id calendario oee cab</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.idCalendarioOeeCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Anho</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.anho}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lun hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.lunHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lun hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.lunHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mar hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.marHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mar hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.marHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mie hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.mieHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mie hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.mieHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Jue hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.jueHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Jue hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.jueHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vie hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.vieHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vie hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.vieHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sab hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.sabHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sab hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.sabHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dom hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.domHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dom hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.domHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewcalendarioOeeCab"
+                     value="View"
+                      view="/CalendarioOeeCab.xhtml">
+                    <f:param name="calendarioOeeCabIdCalendarioOeeCab"
+                           value="#{_calendarioOeeCab.idCalendarioOeeCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

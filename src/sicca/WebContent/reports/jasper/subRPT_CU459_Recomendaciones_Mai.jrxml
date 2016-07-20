@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subRPT_CU459_Recomendaciones_Mai" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="idPersona" class="java.lang.Long"/>
+	<parameter name="whereRecom" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+        CASE
+            WHEN SU.ESTADO = 'SA' THEN 'SANCION'
+            WHEN SU.ESTADO = 'SO' THEN 'SOBRESEIMIENTO'
+            WHEN SU.ESTADO = 'AR' THEN 'ARCHIVO'
+        END as detalle,
+        COUNT (*) as total
+    FROM
+        JURIDICOS.SUMARIO_CAB SU
+    JOIN
+        GENERAL.EMPLEADO_PUESTO EMP
+            ON EMP.ID_EMPLEADO_PUESTO = SU.ID_EMPLEADO_PUESTO
+    JOIN
+        PLANIFICACION.PLANTA_CARGO_DET PUESTO
+            ON PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+    JOIN
+        PLANIFICACION.CONFIGURACION_UO_DET UO
+            ON UO.ID_CONFIGURACION_UO_DET = PUESTO.ID_CONFIGURACION_UO_DET
+    JOIN
+        PLANIFICACION.CONFIGURACION_UO_CAB OEE
+            ON UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+    WHERE
+        SU.ESTADO IN (
+            'AR', 'SO', 'SA'
+        )
+
+      $P!{whereRecom}]]>
+	</queryString>
+	<field name="detalle" class="java.lang.String"/>
+	<field name="total" class="java.lang.Long"/>
+	<variable name="sumtotal" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="0" width="461" height="38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Recomendaciones de MAI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="10" y="0" width="340" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{detalle}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="111" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement key="staticText-2" x="10" y="0" width="154" height="23"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($V{sumtotal}!=null?"Total":"")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="111" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$V{sumtotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

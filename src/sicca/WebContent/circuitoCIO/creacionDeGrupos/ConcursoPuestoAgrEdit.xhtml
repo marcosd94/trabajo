@@ -1,0 +1,186 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<a:outputPanel ajaxRendered="true" id="idPanel">
+			<rich:modalPanel
+				rendered="#{admGrupoPuestoFormController.mostrarModal}" id="modal"
+				width="300" height="130" styleClass="centerbox" resizeable="false"
+				moveable="true">
+
+				<h:form>
+					<a:region>
+						<s:decorate id="ObsField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.GENERICO_ATENCION}</ui:define>
+							<h:outputText escape="false"
+								value="#{messages.CU11_warnIncioTask}" />
+						</s:decorate>
+					</a:region>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button id="save"
+						propagation="join" value="Aceptar"
+						onclick="#{rich:component('modal')}.hide()"
+						action="#{admGrupoCU615FC.startTask()}">
+
+					</s:button></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			Richfaces.showModalPanel('modal');	
+			</script>
+
+		</a:outputPanel>
+		<h1>#{messages.CU11_title}</h1>
+		<h:form id="concursoPuestoAgr" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{concursoPuestoAgrHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU615_titulo}</f:facet>
+				<h:panelGrid columns="1">
+
+					<s:decorate id="codConcursoPuestoAgrField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU11_codigo}</ui:define>
+						<h:inputText id="codConcursoPuestoAgr" required="true" size="20" maxlength="20"
+							value="#{admGrupoCU615FC.codigo}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="nroOrdenField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU11_orden}</ui:define>
+						<h:inputText id="nroOrden" required="true"
+							value="#{admGrupoCU615FC.orden}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate id="descripcionGrupoField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU11_denominacion}</ui:define>
+						<h:inputText id="descripcionGrupo" required="true" size="100"
+							maxlength="100"
+							value="#{admGrupoCU615FC.denominacion}">
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU11_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="3"
+							onkeypress="return imposeMaxLength(event, this, 250);"
+							value="#{admGrupoCU615FC.observacion}">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+					
+					<rich:listShuttle
+						sourceValue="#{admGrupoCU615FC.puestosSinAsignar}"
+						id="filtro"
+						targetValue="#{admGrupoCU615FC.puestosAsignados}"
+						var="valor" listsHeight="300" sourceListWidth="300"
+						targetListWidth="300" sourceCaptionLabel="Puestos Sin Grupo"
+						targetCaptionLabel="Puestos Agrupados"
+						converter="org.jboss.seam.ui.EntityConverter">
+
+						<rich:column>
+							<h:outputText
+								value="#{valor.plantaCargoDet.cpt.denominacion} - #{valor.plantaCargoDet.idPlantaCargoDet} - #{admCargaGrupoFormController.obtenerCodigo(valor.plantaCargoDet)} - #{valor.plantaCargoDet.descripcion}" />
+						</rich:column>
+
+					</rich:listShuttle>
+				</h:panelGrid>
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_actualizar}"
+					rendered="#{concursoPuestoAgrHome.managed}" /></div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}"
+					rendered="#{!concursoPuestoAgrHome.managed}" /></div>
+				<br />
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{admGrupoCU615FC.guardar()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!concursoPuestoAgrHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{admGrupoCU615FC.actualizar()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{admGrupoCU615FC.operacion == 'updated'}" />
+			<h:commandButton id="eliminar" value="Eliminar"
+				action="#{admGrupoCU615FC.eliminar()}"
+				onclick="return confirm('#{messages.msg_confirm_delete}');"
+				rendered="#{admGrupoCU615FC.operacion == 'updated'}" />
+			<s:button rendered="#{concursoPuestoAgrHome.managed}" id="anexo"
+				value="Anexo" propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{admGrupoCU615FC.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="gruposCIO_edit" />
+				<f:param name="idCU"
+					value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+				<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="circuitoCIO/creacionDeGrupos/ConcursoPuestoAgrEdit" />
+
+			</s:button> <s:button id="cancelAdd" value="Volver" propagation="none"
+				view="/circuitoCIO/reservaDePuestos/ConcursoPuestoDetList.xhtml">
+				<f:param name="nroActividad"
+					value="#{admGrupoCU615FC.nroActividad}" />
+				<f:param name="nivel"
+					value="#{admGrupoCU615FC.idNivelEntidad}" />
+				<f:param name="entidad"
+					value="#{admGrupoCU615FC.idSinEntidad}" />
+				<f:param name="oee"
+					value="#{admGrupoCU615FC.idConfiguracionUoCab}" />
+				<f:param name="fromConcurso"
+					value="#{admGrupoCU615FC.fromConcurso}" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{admGrupoCU615FC.idAgr}" />
+			</s:button></div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{concursoPuestoAgrHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{concursoPuestoAgrHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{concursoPuestoAgrHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{concursoPuestoAgrHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

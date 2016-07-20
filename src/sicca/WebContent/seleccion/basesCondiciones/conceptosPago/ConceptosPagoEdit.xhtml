@@ -1,0 +1,187 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Remuneraciones y Conceptos de Pago</h1>
+		<h:form>
+			<h:panelGrid columns="1">
+				<rich:panel style="border:none;">
+					<table align="right">
+						<tr>
+							<td><s:decorate id="nivelField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_nivel}</ui:define>
+								<h:inputText
+									value="#{conceptoPagoFormController.nivelEntidad.nenNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="entidadField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_entidad}</ui:define>
+								<h:inputText
+									value="#{conceptoPagoFormController.sinEntidad.entNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="concursoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_concurso}</ui:define>
+								<h:inputText
+									value="#{conceptoPagoFormController.concurso.nombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+							<td><s:decorate id="tipoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_tipo}</ui:define>
+								<h:inputText
+									value="#{conceptoPagoFormController.concurso.datosEspecificosTipoConc.descripcion}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="puestoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_puesto}</ui:define>
+								<h:inputText
+									value="#{conceptoPagoFormController.concursoPuestoAgr.descripcionGrupo}"
+									disabled="true" size="60" />
+							</s:decorate></td>
+						</tr>
+					</table>
+				</rich:panel>
+			</h:panelGrid>
+			<rich:panel style="width : 900px;" id="panelTabla">
+				<h:panelGrid columns="1" id="panelGrid">
+					<span
+								class="required">#{messages.CU220_msg}</span>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU120_link3_codigo}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="codigo" styleClass="numeric"
+						onkeypress="return soloNumeros(event);"
+							value="#{conceptoPagoFormController.codigoObj}" size="10">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="panelTabla"
+								action="#{conceptoPagoFormController.findObj()}" />
+						</h:inputText>
+				#{' '}
+		                <h:inputText id="objDescripcion"
+							value="#{conceptoPagoFormController.valorObj}" size="80"
+							disabled="true" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" rendered="#{conceptoPagoFormController.habilitarCategoria}">
+						<ui:define name="label">#{messages.CU120_link3_categoria}
+						</ui:define>
+						<h:inputText id="categoria"
+							value="#{conceptoPagoFormController.codigoCategoria}" size="10">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="categoriaDescripcion,monto"
+								action="#{conceptoPagoFormController.findCategoria()}" />
+						</h:inputText>
+				#{' '}
+		                <h:inputText id="categoriaDescripcion"
+							value="#{conceptoPagoFormController.categoria}" size="80"
+							disabled="true" />
+				 #{' '}
+               <a:commandButton id="searchCategoria"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{conceptoPagoFormController.getUrlToPageCategoria()}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Monto<span class="required">*</span>
+						</ui:define>
+						<h:inputText id="monto" styleClass="numeric"
+						onkeypress="return soloNumeros(event);"
+							value="#{conceptoPagoFormController.monto}" size="10"
+							disabled="#{conceptoPagoFormController.habilitarCategoria and conceptoPagoFormController.monto != null}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<a:commandButton value="Agregar"
+							action="#{conceptoPagoFormController.agregarLista()}"
+							rendered="#{conceptoPagoFormController.habilitar}"
+							reRender="tabla,panelGrid" />
+					</s:decorate>
+
+					<rich:dataTable cellpadding="0" cellspacing="0" width="400px"
+						border="0" var="record" rowKeyVar="row" id="tabla"
+						value="#{conceptoPagoFormController.listaGrupoPago}" rows="10"
+						rendered="#{conceptoPagoFormController.listaGrupoPago.size() > 0}">
+
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column width="250px">
+									<h:outputText value="Objeto de Gasto" />
+								</rich:column>
+								<rich:column width="250px">
+									<h:outputText value="Categoria" />
+								</rich:column>
+								<rich:column width="100px">
+									<h:outputText value="Monto" />
+								</rich:column>
+								<rich:column width="100px">
+
+								</rich:column>
+
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column width="250px">
+							<h:outputText value="#{record.objCodigo}" />
+						</rich:column>
+
+						<rich:column width="250px">
+							<h:outputText value="#{record.categoria}" />
+						</rich:column>
+
+						<rich:column width="100px">
+							<h:outputText value="#{record.monto}" />
+						</rich:column>
+						<rich:column width="100px">
+							<a:commandButton value="-"
+								action="#{conceptoPagoFormController.eliminarLista(row)}"
+								disabled="#{record.categoria != null or record.objCodigo == 111}"
+								rendered="#{conceptoPagoFormController.habilitar}"
+								reRender="panelTabla" />
+						</rich:column>
+					</rich:dataTable>
+					<rich:datascroller align="center" for="tabla" id="sc2"
+						reRender="sc1" rendered="#{conceptoPagoFormController.listaGrupoPago.size() > 10}"/>
+				</h:panelGrid>
+			</rich:panel>
+
+			<h:panelGrid columns="3">
+				<h:commandButton id="save" value="#{messages.msg_save}"
+					action="#{conceptoPagoFormController.guardar()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					rendered="#{conceptoPagoFormController.listaGrupoPagoAux.size() == 0 and conceptoPagoFormController.habilitar}" />
+
+				<h:commandButton id="updated" value="#{messages.msg_update}"
+					action="#{conceptoPagoFormController.updated()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+					rendered="#{conceptoPagoFormController.listaGrupoPagoAux.size() > 0 and conceptoPagoFormController.habilitar}" />
+				<s:button id="cancelEdit" value="Volver" propagation="join"
+					view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+			</h:panelGrid>
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

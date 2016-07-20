@@ -1,0 +1,153 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+    <h:form id="adjuntarDoc" styleClass="edit" prependId="false"  enctype="multipart/form-data"   >
+
+       <rich:panel  label="#{messages['CU289_adjuntar_doc']}" switchType="ajax" id="panelParametroTd" style=" width : 872px;">
+	
+   <h:panelGrid columns="5">
+				<s:decorate id="datosGralTdField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="datosTdGral" value="#{tab4AdjuntarDocumentosFormController.idTipoDoc}" style="width:250px">
+						<f:selectItems value="#{datosEspecificossByTipoDocumentoFPOSSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				   </h:panelGrid>
+				   <h:panelGrid columns="3">
+				#{'  '}
+				
+				<s:decorate id="nomFinalTdField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU22_Documento}<span class="required">*</span></ui:define>
+				<s:fileUpload size="30"  id="archivo" 
+						contentType="#{tab4AdjuntarDocumentosFormController.contentType}"
+						data="#{tab4AdjuntarDocumentosFormController.uploadedFile}"
+						fileName="#{tab4AdjuntarDocumentosFormController.fileName}"
+						style=" width : 382px;" >
+					</s:fileUpload>
+			</s:decorate>
+				</h:panelGrid>
+
+       
+		  <div style="clear:both">
+		                <span class="required">*</span>
+		               #{messages.msg_required_fields}
+		            </div>
+				<div style="clear:both">
+		            <h:outputText value="#{messages.CU289_obs_add}"  styleClass="labelClass"/>
+		        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+           <h:commandButton id="addTd"
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"  reRender="panelResultadoTd,panelParametroTd"
+				action="#{tab4AdjuntarDocumentosFormController.adddocumentos()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton> 
+        </div>
+
+    </h:form>
+
+   
+    
+   
+
+ 
+
+   
+   <h:form ><a:outputPanel ajaxRendered="true" id="listado">
+    <rich:panel id="panelResultadoTd" style=" width : 872px;">
+       
+    <div class="results" id="docuList" style=" overflow: scroll;"  width="310">
+	 <rich:dataTable id="documentosList" rowKeyVar="_index"
+                var="_documentos" rows="10"
+              value="#{tab4AdjuntarDocumentosFormController.documentoDTOList}"
+           rendered="#{not empty tab4AdjuntarDocumentosFormController.documentoDTOList}">
+           <h:column>
+          <f:facet name="header">#{messages.CU289_tipo_doc}	</f:facet>
+            <h:outputText value="#{_documentos.datosEspecificos.descripcion}"/>
+        </h:column>
+         <h:column>
+          <f:facet name="header">#{messages.CU156_documento}	</f:facet>
+            <h:outputText value="#{_documentos.nombreFisicoDoc}"/>
+        </h:column>
+         <h:column>
+          <f:facet name="header">Fecha	</f:facet>
+            <h:outputText value="#{_documentos.fechaAlta}"/>
+        </h:column>
+				
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+          
+         
+           <a:commandLink id="delDet" value="Eliminar" 
+           		rendered="#{tab4AdjuntarDocumentosFormController.verificar(_documentos.datosEspecificos.idDatosEspecificos)}"
+           		reRender="panelResultado,docuList,documentosList,listado"  eventsQueue="default"
+				onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+				action="#{tab4AdjuntarDocumentosFormController.eliminar(_index)}" />
+				<!-- rendered="#{tab4AdjuntarDocumentosFormController.verificar(_documentos.datosEspecificos.idDatosEspecificos)}" -->
+            #{' '}
+       <h:commandLink value="Descargar"   target="_blank" 
+		action="#{tab4AdjuntarDocumentosFormController.abrirDoc(_index)}" />
+		
+            
+        </rich:column>
+    </rich:dataTable><rich:datascroller for="documentosList" renderIfSinglePage="false"
+							id="scroll">
+							</rich:datascroller>
+
+    </div>
+    </rich:panel>
+    </a:outputPanel>
+
+    <div class="tableControl">
+
+        <s:link view="/seleccion/adminFichaPostulacion/tabs/Tab4AdjuntarDocumentos.xhtml"
+            rendered="#{documentosList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/adminFichaPostulacion/tabs/Tab4AdjuntarDocumentos.xhtml"
+            rendered="#{documentosList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{documentosList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/adminFichaPostulacion/tabs/Tab4AdjuntarDocumentos.xhtml"
+            rendered="#{documentosList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{documentosList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/adminFichaPostulacion/tabs/Tab4AdjuntarDocumentos.xhtml"
+            rendered="#{documentosList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{documentosList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+    
+    
+     <s:button
+			id="cancelar" value="#{messages.msg_done}" propagation="none"
+			view="/cuentaUsuarioPortal.xhtml" />
+   </h:form>
+   
+
+
+</ui:composition>

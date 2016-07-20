@@ -1,0 +1,177 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Reclamos y Sugerencias</h1>
+		<h:form id="reclamoSugerenciaComiteEdit" styleClass="edit">
+
+			<rich:panel id="panelCargaRespuesta">
+				<f:facet name="header">Ver Reclamos y Sugerencias</f:facet>
+				<h:panelGrid columns="3" rowClasses="rowTop">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU201_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.sinNivelEntidad.nenCodigo}" />
+									#{' '}
+									<h:inputText id="nivelNombre" size="50" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU201_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+									#{' '}
+									<h:inputText id="entidadNombre" size="50" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.configuracionUoCab.entidad.sinEntidad.entNombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU201_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.configuracionUoCab.orden}" />
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<br />
+
+				<fieldset style="width: 1100px;"><legend>#{messages.CU107_datos_concurso}</legend>
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_concurso}</ui:define>
+						<h:inputText
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.nombre}"
+							size="70" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Estado</ui:define>
+						<h:inputText
+							value="#{reclamoSugerenciaComiteFormController.obtenerEstadoActualConcurso()}"
+							size="20" disabled="true" />
+					</s:decorate>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_puesto}</ui:define>
+						<h:inputText
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.postulacion.concursoPuestoAgr.descripcionGrupo}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+				</h:panelGrid></fieldset>
+				<br />
+				<fieldset style="width: 1100px;"><legend>#{messages.CU107_datos_reclamo}</legend>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo}</ui:define>
+						<h:inputText value="RECLAMO"
+							rendered="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.reclamoSugerencia == 'R'}"
+							size="30" disabled="true" />
+						<h:inputText value="SUGERENCIA"
+							rendered="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.reclamoSugerencia == 'S'}"
+							size="30" disabled="true" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Estado</ui:define>
+						<h:inputText value="PENDIENTE"
+							rendered="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.estado == 'P'}"
+							size="30" disabled="true" />
+						<h:inputText value="RESPONDIDO"
+							rendered="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.estado == 'R'}"
+							size="30" disabled="true" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_nro}</ui:define>
+						<h:inputText id="nroReclamo" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.nroReclamo}"
+							size="10" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_fecha}</ui:define>
+						<rich:calendar id="fechaReclamo" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.fechaReclamoSugerencia}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid> <h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_asunto}</ui:define>
+						<h:inputText id="asunto" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.asunto}"
+							size="90" maxlength="150" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_descripcion}</ui:define>
+						<h:inputTextarea id="texto" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.reclamoSugerencia.descripcion}"
+							cols="80" />
+					</s:decorate>
+
+				</h:panelGrid></fieldset>
+
+				<br />
+				<fieldset style="width: 1000px;"><legend>Responder
+				a Reclamos/Sugerencias</legend> <h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_asunto}
+						</ui:define>
+						<h:inputText id="asuntoRpta" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.asuntoRpta}"
+							size="90" maxlength="150" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_descripcion}
+						</ui:define>
+						<h:inputTextarea id="textoRpta" disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.textoRpta}"
+							cols="80" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:outputText value="#{messages.CU107_enviar_correo}" />
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{reclamoSugerenciaComiteFormController.enviarEmail}" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				
+			</rich:panel>
+			<div class="actionButtons">
+			
+			<s:button id="anexo" value="Anexo"
+			propagation="join" rendered="#{reclamoSugerenciaHome.managed}"
+			view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+			<f:param name="direccionFisica"
+				value="#{reclamoSugerenciaComiteFormController.direccionFisica}" />
+			<f:param name="nombrePantalla"
+				value="reclamo_sugerencia_comite_edit" />
+			<f:param name="idCU"
+				value="#{reclamoSugerenciaConcursoFormController.reclamoSugerencia.idReclamoSugerencia}" />
+			<f:param name="nombreTabla" value="ReclamoSugerencia" />
+			<f:param name="mostrarDoc" value="true" />
+			<f:param name="isEdit" value="false" />
+			<f:param name="from"
+				value="seleccion/reclamoSugerenciaPorComite/ReclamoSugerencia" />
+		</s:button> <s:button id="cancelEdit" value="Volver" propagation="none"
+			view="/seleccion/reclamoSugerenciaPorComite/ReclamoSugerenciaList.xhtml" />
+		</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/AjustesPuestoPostConcu.xhtml" login-required="true">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+
+	<action execute="#{ajustesPuestoPostConcuFC.init()}"
+		on-postback="false" />
+
+	<param name="idGrupo" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<param name="codActividad" value="#{ajustesPuestoPostConcuFC.codActividad}" />
+	<param name="codCU" value="#{ajustesPuestoPostConcuFC.codCU}" />
+	<param name="idExcepcion" value="#{ajustesPuestoPostConcuFC.idExcepcion}" />
+	<param name="from" value="#{ajustesPuestoPostConcuFC.from}" />
+	<param name="indice" value="#{ajustesPuestoPostConcuFC.indexObs}" />
+	<param name="texto" value="#{ajustesPuestoPostConcuFC.texto}" />
+	<param name="bloquearNoAprobados" value="#{ajustesPuestoPostConcuFC.bloquearNoAprobados}" />
+	<param name="primeraVez" value="#{ajustesPuestoPostConcuFC.primeraVez}" />
+
+	<navigation from-action="#{ajustesPuestoPostConcuFC.save()}">
+		<rule if-outcome="OK">
+			<end-conversation/>
+				<redirect view-id="/#{ajustesPuestoPostConcuFC.from}.xhtml"
+					include-page-params="true">
+					<param name="idExcepcion" value="#{ajustesPuestoPostConcuFC.idExcepcion}" />
+					<param name="bloquearNoAprobados" value="#{ajustesPuestoPostConcuFC.bloquearNoAprobados}" />
+				</redirect>
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('ajustarPuestoPostuConcu')}</restrict>
+
+
+</page>

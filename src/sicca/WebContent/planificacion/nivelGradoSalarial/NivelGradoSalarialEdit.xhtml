@@ -1,0 +1,143 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.NivelGradoSalarial_}</h1>
+
+    <h:form id="nivelGradoSalarial" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{agrupamientoCceHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.NivelGradoSalarial_}</f:facet>
+				<s:decorate id="tipoCceField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.NivelGradoSalarial_tipoCce}</ui:define>
+					<h:selectOneMenu id="tipoCce" 
+								  value="#{agrupamientoCceHome.codTipoCce}"
+							   required="true">
+						<f:selectItems value="#{tipoCcesSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+	            <s:decorate id="numeroField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.NivelGradoSalarial_numero}</ui:define>
+	                <h:inputText id="numero"
+	                		required ="true"
+	                       disabled="false"
+	                       styleClass="numeric"
+	                       size="10" onkeypress="return soloNumeros(event);"
+	                          value="#{agrupamientoCceHome.instance.numero}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.NivelGradoSalarial_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true" maxlength="200"
+	                       disabled="false"
+	                          value="#{agrupamientoCceHome.instance.descripcion}"
+	                          size="60">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.NivelGradoSalarial_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{agrupamientoCceHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+        <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!agrupamientoCceHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{agrupamientoCceHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{agrupamientoCceHome.persist}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       disabled="#{!agrupamientoCceHome.wired}"                      
+                       rendered="#{!agrupamientoCceHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{agrupamientoCceHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{agrupamientoCceHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{agrupamientoCceHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="false"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/nivelGradoSalarial/NivelGradoSalarialList.xhtml"
+                rendered="#{agrupamientoCceHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty nivelGradoSalarialFrom ? 'planificacion/nivelGradoSalarial/NivelGradoSalarialList' : nivelGradoSalarialFrom}.xhtml"
+                rendered="#{!agrupamientoCceHome.managed}"/>
+
+        </div>
+        
+         <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"     rendered="#{agrupamientoCceHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{agrupamientoCceHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{agrupamientoCceHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{agrupamientoCceHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{agrupamientoCceHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{agrupamientoCceHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"   rendered="#{agrupamientoCceHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{agrupamientoCceHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+        
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

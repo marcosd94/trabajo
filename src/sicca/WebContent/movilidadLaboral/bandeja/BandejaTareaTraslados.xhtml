@@ -1,0 +1,351 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU712_titulo}</h1>
+		<h:form id="bandejaCapacitacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="3" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tarea</ui:define>
+						<h:inputText id="tareaField" size="40"
+							value="#{bandejaTareaTrasladosFC.tarea}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_rol}</ui:define>
+						<h:selectOneMenu id="idRol"
+							value="#{bandejaTareaTrasladosFC.idRol}" style="width:240px">
+							<f:selectItems
+								value="#{seguridadUtilFormController.obtenerRolesUsuarioSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU712_tipo_sol}</ui:define>
+						<h:selectOneMenu id="idTipoSol"
+							value="#{bandejaTareaTrasladosFC.idTipoSol}" style="width:240px">
+							<f:selectItems value="#{bandejaTareaTrasladosFC.tipoSolicitud}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.CU712_oee_origen}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{bandejaTareaTrasladosFC.nivelEntidadOeeOrigen.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{bandejaTareaTrasladosFC.nivelEntidadOeeOrigen.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{bandejaTareaTrasladosFC.nivelEntidadOeeOrigen.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{bandejaTareaTrasladosFC.nivelEntidadOeeOrigen.getUrlToPageOee('movilidadLaboral/bandeja/BandejaTareaTraslados')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigo2Field">
+							<ui:define name="label">#{messages.CU712_oee_destino}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrg2Codigo" styleClass="numeric" size="5"
+								value="#{bandejaTareaTrasladosFC.nivelEntidadOeeDestino.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{bandejaTareaTrasladosFC.nivelEntidadOeeDestino.findUnidadOrganizativa()}"
+									reRender="unidadOrg2Codigo,unidadOrg2Denominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrg2Denominacion" size="50"
+								disabled="true"
+								value="#{bandejaTareaTrasladosFC.nivelEntidadOeeDestino.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="search2Entidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{bandejaTareaTrasladosFC.nivelEntidadOeeDestino.getUrlToPageOee('movilidadLaboral/bandeja/BandejaTareaTraslados')}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParamentro,lista"
+				action="#{bandejaTareaTrasladosFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{bandejaTareaTrasladosFC.searchAll()}"
+				reRender="panelParametro,lista" /></div>
+
+		</h:form>
+
+
+		<a:outputPanel id="lista">
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty bandejaTrasladoList.resultList ? 0 : (bandejaTrasladoList.paginated ? bandejaTrasladoList.resultCount : bandejaTrasladoList.resultList.size)})</f:facet>
+				<div class="results" id="bandejaTrasladoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty bandejaTrasladoList.resultList}" /> <rich:dataTable
+					id="bandejaTrasladoList" var="_bandejaTraslado"
+					value="#{bandejaTrasladoList.resultList}"
+					rendered="#{not empty bandejaTrasladoList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU712_tipo_traslado}" />
+								<ui:param name="propertyPath"
+									value="bandejaTraslado.tipoTraslado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.tipoTraslado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU712_oee_origen}" />
+								<ui:param name="propertyPath" value="bandejaTraslado.oeeOrigen" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.oeeOrigen}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU712_oee_destino}" />
+								<ui:param name="propertyPath" value="bandejaTraslado.oeeDestino" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.oeeDestino}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel" value="Nombres" />
+								<ui:param name="propertyPath" value="bandejaTraslado.getNombres()" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.getNombres()}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel" value="Apellidos" />
+								<ui:param name="propertyPath" value="bandejaTraslado.getApellidos()" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.getApellidos()}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU472_tarea}" />
+								<ui:param name="propertyPath" value="bandejaTraslado.actividad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.actividad}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_fecha_recepcion}" />
+								<ui:param name="propertyPath"
+									value="bandejaTraslado.fechaRecepcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.fechaRecepcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel" value="Fecha Inicio" />
+								<ui:param name="propertyPath"
+									value="bandejaTraslado.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.fechaInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_rec}" />
+								<ui:param name="propertyPath"
+									value="bandejaTraslado.diasCreacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.diasCreacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_ini}" />
+								<ui:param name="propertyPath" value="bandejaTraslado.diasInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaTraslado.diasInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaTrasladoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_atraso}" />
+								<ui:param name="propertyPath" value="bandejaCapacitacion.atraso" />
+							</ui:include>
+						</f:facet>
+						<span class="required"> <h:outputText
+							value="#{_bandejaTraslado.atraso}"
+							rendered="#{_bandejaTraslado.atraso &gt; 0}" /> </span>
+						<h:outputText value="#{_bandejaTraslado.atraso}"
+							rendered="#{_bandejaTraslado.atraso &lt;= 0}" />
+
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link id="gestionar" eventsQueue="default"
+							value="#{messages.proceso_gestionar}"
+							action="#{bandejaTareaTrasladosFC.redirect()}"
+							onclick="return confirm('#{messages.CU472_question}');"
+							rendered="#{bandejaTareaTrasladosFC.gestionar(_bandejaTraslado.actividad, _bandejaTraslado.idSolicitudTrasladoCab)}">
+							<f:param name="actividad"
+								value="#{_bandejaTraslado.codActividad}" />
+							<f:param name="idSolicitud"
+								value="#{_bandejaTraslado.idSolicitudTrasladoCab}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+		</a:outputPanel>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/movilidadLaboral/bandeja/BandejaTareaTraslados.xhtml"
+				rendered="#{bandejaTrasladoList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/movilidadLaboral/bandeja/BandejaTareaTraslados.xhtml"
+				rendered="#{bandejaTrasladoList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{bandejaTrasladoList.previousFirstResult}" />
+			</s:link> <s:link view="/movilidadLaboral/bandeja/BandejaTareaTraslados.xhtml"
+				rendered="#{bandejaTrasladoList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{bandejaTrasladoList.nextFirstResult}" />
+			</s:link> <s:link view="/movilidadLaboral/bandeja/BandejaTareaTraslados.xhtml"
+				rendered="#{bandejaTrasladoList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{bandejaTrasladoList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

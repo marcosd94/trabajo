@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+	no-conversation-view-id="/sicca/WebContent/seleccion/homologacion/AdmBancoPerfilesEdit.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<restrict>#{identity.hasRole('adm_banco_perfiles_edit')}</restrict>
+	<begin-conversation flush-mode="MANUAL" join="true" />
+
+	<action execute="#{funcionarioUtilFormController.cargarCpt()}"
+		on-postback="false" />
+	<action execute="#{admBancoPerfilesFormController.edit()}"
+		on-postback="false" />
+	<action execute="#{homologacionPerfilMatrizHome.wire}" />
+ 
+	<action execute="#{admBancoPerfilesFormController.initTabF2()}"
+		on-postback="false" />
+
+
+     <param name="modoEditado" value="#{admBancoPerfilesFormController.modoEditado}" />
+     <param name="modoVer" value="#{admBancoPerfilesFormController.modoVer}" />
+     <param name="tipoOperacion" value="#{admBancoPerfilesFormController.tipoOperacion}" />
+     
+	<param name="from" value="#{funcionarioUtilFormController.from}" />
+	<param name="idConcursoPuestoAgr"
+		value="#{admBancoPerfilesFormController.idConcursoPuestoAgr}" />
+	<param name="idHomologacion" value="#{admBancoPerfilesFormController.idHomologacion}" />
+	<param name="vista" value="#{admBancoPerfilesFormController.vista}" />
+	<param name="cptIdCpt" value="#{funcionarioUtilFormController.idCpt}" />
+
+
+	<navigation from-action="#{funcionarioUtilFormController.toFindOee()}">
+		<rule if-outcome="find">
+			<redirect view-id="/planificacion/searchForms/FindDependencias.xhtml">
+				<param name="sinEntidadIdSinEntidad"
+					value="#{funcionarioUtilFormController.sinEntidad.idSinEntidad}" />
+				<param name="sinNivelEntidadIdSinNivelEntidad"
+					value="#{funcionarioUtilFormController.sinNivelEntidad.idSinNivelEntidad}" />
+				<param name="from" value="seleccion/homologacion/ElegirPerfilHomologado" />
+			</redirect>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{admBancoPerfilesFormController.save()}">
+		<rule if-outcome="ok">
+			<redirect view-id="/seleccion/homologacion/AdmBancoPerfilesList.xhtml" include-page-params="false" />
+		</rule>
+	</navigation>
+
+	<param name="funcionarioOeeFrom" />
+	<param name="fromLink" />
+</page>

@@ -1,0 +1,170 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU421_title}</h1>
+		<rich:simpleTogglePanel label=" " switchType="client">
+			<a:form>
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									<a:support event="onblur" eventsQueue="default"
+										reRender="idPanelCampos"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/EvaluaRefere/EvaluaRefere')}" />
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+									<a:support event="onblur" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="codigo" />
+								</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/EvaluaRefere/EvaluaRefere')}" />
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onblur" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+								</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/EvaluaRefere/EvaluaRefere')}" />
+							</s:decorate>
+						</a:region>
+					</a:outputPanel>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU421_anhoConcurso}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="anhoConcursoCodigo" styleClass="numeric"
+								size="5" value="#{evaluaRefereFC.anhoConcurso}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onblur" reRender="concursoSI"
+									ajaxSingle="true" action="#{evaluaRefereFC.updateConcurso()}" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate id="tblPuestoCategoriaField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU421_concurso}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="concursoSI" style="width :250px;"
+								value="#{evaluaRefereFC.idConcurso}">
+								<f:selectItems value="#{evaluaRefereFC.concursoSelecItem}" />
+								<a:support event="onchange" reRender="grupoDePuesto"
+									ajaxSingle="true"
+									action="#{evaluaRefereFC.updateGrupoPuesto()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate id="grupoDePuestoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU421_grupoDePuesto}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="grupoDePuesto" style="width :250px;"
+							value="#{evaluaRefereFC.idConcursoPuestoAgr}">
+							<f:selectItems value="#{evaluaRefereFC.grupoPuestoSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="tipoEvaluField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU421_tipoEval}</ui:define>
+						<h:selectOneMenu id="tipoEvalu" style="width :250px;"
+							value="#{evaluaRefereFC.idTipoEval}">
+							<f:selectItems value="#{evaluaRefereFC.tipoEvalSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado" layout="lineDirection"
+							value="#{evaluaRefereFC.evalsRefsRadio}">
+							<span class="required">*</span>
+							<s:selectItems var="val"
+								value="#{enumAppHelper.evalsReferenciales}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+
+				</h:panelGrid>
+				<h:commandButton id="print" value="#{messages.GENERICO_IMPRIMIR}"
+					action="#{evaluaRefereFC.imprimir()}" />
+				<a:commandButton id="reset"
+					value="#{messages.GENERICO_LIMPIAR}"
+					action="#{evaluaRefereFC.limpiar()}" reRender="idPanelCampos">
+				</a:commandButton>
+				<s:button value="#{messages.CU412_volver}" propagation="nest"
+					view="/#{empty from? 'home':from}.xhtml">
+				</s:button>
+			</a:form>
+
+		</rich:simpleTogglePanel>
+		<h:form>
+
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

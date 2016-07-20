@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/planificacion/cpt/CptList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+<param name="from"/>
+
+<param name="idConcursoPuestoAgr" value="#{lugarPresentacionAclaracionFormController.idConcursoPuestoAgr}" />
+<param name="concursoIdConcurso" value="#{lugarPresentacionAclaracionFormController.idConcurso}" />
+<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{lugarPresentacionAclaracionFormController.idFromCU}"/>
+
+ <action execute="#{lugarPresentacionAclaracionFormController.init()}" on-postback="false"/>
+	<navigation from-action="#{lugarPresentacionAclaracionFormController.save()}">
+      <rule if-outcome="persisted">
+         <redirect view-id="/#{from}.xhtml">
+         <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{lugarPresentacionAclaracionFormController.idFromCU}"/>
+        </redirect>
+      </rule>
+   </navigation>
+	
+	
+   <restrict>#{identity.hasRole('lugarPreseAclaracion_edit')}</restrict>
+	
+
+</page>

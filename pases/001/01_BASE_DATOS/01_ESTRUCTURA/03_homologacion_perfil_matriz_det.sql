@@ -1,0 +1,1 @@
+ALTER TABLE seleccion.homologacion_perfil_matriz_det ADD COLUMN firma_resolucion boolean default false;

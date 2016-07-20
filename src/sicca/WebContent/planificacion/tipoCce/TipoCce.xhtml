@@ -1,0 +1,150 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Tipo cce Details</f:facet>
+
+        <s:decorate id="idTipoCce" template="layout/display.xhtml">
+            <ui:define name="label">Id tipo cce</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.idTipoCce}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{tipoCceHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/TipoCceEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty tipoCceFrom ? 'TipoCceList' : tipoCceFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Nivel grado salarials</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="nivelGradoSalarialsChildren">
+
+        <h:outputText value="There are no nivelGradoSalarials associated with this tipoCce."
+                   rendered="#{empty tipoCceHome.nivelGradoSalarials}"/>
+
+        <rich:dataTable value="#{tipoCceHome.nivelGradoSalarials}"
+                       var="_nivelGradoSalarial"
+                  rendered="#{not empty tipoCceHome.nivelGradoSalarials}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="nivelGradoSalarialsTable">
+            <rich:column sortBy="#{_nivelGradoSalarial.idNivelGradoSalarial}">
+                <f:facet name="header">Id nivel grado salarial</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.idNivelGradoSalarial}"/>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.numero}">
+                <f:facet name="header">Numero</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.numero}"/>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.descripcion}">
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.descripcion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_nivelGradoSalarial.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_nivelGradoSalarial.activo}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectnivelGradoSalarial"
+                     value="Select"
+                      view="/NivelGradoSalarial.xhtml">
+                    <f:param name="nivelGradoSalarialIdNivelGradoSalarial"
+                            value="#{_nivelGradoSalarial.idNivelGradoSalarial}"/>
+                    <f:param name="nivelGradoSalarialFrom" value="TipoCce"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add nivelGradoSalarial"
+                view="/NivelGradoSalarialEdit.xhtml">
+            <f:param name="tipoCceIdTipoCce"
+                    value="#{tipoCceHome.instance.idTipoCce}"/>
+            <f:param name="nivelGradoSalarialFrom" value="TipoCce"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

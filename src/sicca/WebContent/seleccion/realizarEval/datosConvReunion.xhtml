@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU88_datosTitle}</h1>
+		<rich:simpleTogglePanel   label=" " switchType="client">
+			<h:panelGrid columns="3">
+
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Concurso</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Grupo de Puestos</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+
+		<rich:simpleTogglePanel label="#{messages.CU88_datosConvocatoria}"
+			id="panelBusqueda" switchType="client">
+			<a:form>
+				<a:outputPanel ajaxRendered="true" id="idPanelDatosConvo">
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_fecha} <span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDesde"
+								value="#{realizarEvalsFormController.fechaConvo}" inputSize="10"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<rich:panel>
+							<h:panelGrid columns="2">
+								<rich:panel>
+							#{messages.CU88_horaDesde} <span class="required">*</span>
+									<p:inputMask value="#{realizarEvalsFormController.horaDesde}"
+										mask="99:99">
+									</p:inputMask>
+
+								</rich:panel>
+								<rich:panel>
+						#{messages.CU88_horaHasta} <span ></span>
+									<p:inputMask value="#{realizarEvalsFormController.horaHasta}"
+										mask="99:99">
+									</p:inputMask>
+								</rich:panel>
+							</h:panelGrid>
+						</rich:panel>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_lugar} <span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="lugar"
+								value="#{realizarEvalsFormController.lugar}"
+								style=" width : 514px;" />
+						</s:decorate>
+						<s:decorate id="departamentoField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Departamento_}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="departamento" disabled="#{realizarEvalsFormController.cambioEstado}"
+								value="#{realizarEvalsFormController.idDpto}" style="width:250px">
+								<f:selectItems
+									value="#{realizarEvalsFormController.departamentosSelecItem}" />
+								<a:support event="onchange"
+									action="#{realizarEvalsFormController.updateCiudad()}"
+									reRender="ciudadField" />
+							</h:selectOneMenu>
+						</s:decorate>
+						
+						<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_ciudad} <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="ciudad"
+								value="#{realizarEvalsFormController.idCiudad}"
+								style=" width : 450px;">
+								<f:selectItems
+									value="#{realizarEvalsFormController.ciudadSelectItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_direccion} <span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="direccion"
+								value="#{realizarEvalsFormController.direccion}"
+								style=" width : 514px;" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_motivo} <span
+									class="required">*</span>
+							</ui:define>
+							<h:inputTextarea id="motivo"
+								value="#{realizarEvalsFormController.motivo}"
+								style=" width : 514px;" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU88_observacion} <span></span>
+							</ui:define>
+							<h:inputTextarea id="observacion"
+								value="#{realizarEvalsFormController.observacion3}"
+								style="width : 514px; height : 66px;" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid>
+
+					</h:panelGrid>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+
+					<a:commandButton id="agregarEval"
+						value="#{messages.GENERICO_AGREGAR}"
+						rendered="#{!realizarEvalsFormController.actualizar}"
+						reRender="idLosDetallesPanel,idPanelDatosConvo"
+						action="#{realizarEvalsFormController.agregarDetConvocatoria()}">
+					</a:commandButton>
+					<a:commandButton id="actualizarEval"
+						rendered="#{realizarEvalsFormController.actualizar}"
+						value="#{messages.GENERICO_ACTUALIZAR}"
+						reRender="idLosDetallesPanel,idPanelDatosConvo"
+						action="#{realizarEvalsFormController.updateDatosConvDet()}">
+					</a:commandButton>
+				</a:outputPanel>
+			</a:form>
+			<a:form>
+				<a:outputPanel id="idLosDetallesPanel">
+					<rich:dataTable id="covocatoriaList" var="_dto" rowKeyVar="row"
+						value="#{realizarEvalsFormController.lEvalRefConvo}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_fecha}
+						</f:facet>
+							<h:outputText value="#{_dto.fechaConvocatoria}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_horaDesde}
+						</f:facet>
+							<h:outputText
+								value="#{realizarEvalsFormController.formatearHora(_dto.horaDesde)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_horaHasta}
+						</f:facet>
+							<h:outputText
+								value="#{realizarEvalsFormController.formatearHora(_dto.horaHasta)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_lugar}
+						</f:facet>
+							<h:outputText value="#{_dto.lugar}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_ciudad}
+						</f:facet>
+							<h:outputText
+								value="#{realizarEvalsFormController.obtenerCiudad(_dto.idCiudad)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_direccion}
+						</f:facet>
+							<h:outputText value="#{_dto.direccion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_motivo}
+						</f:facet>
+							<h:outputText value="#{_dto.motivo}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_observacion}
+						</f:facet>
+							<h:outputText value="#{_dto.observacion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_fecha_publicacion}
+						</f:facet>
+							<h:outputText value="#{_dto.fechaPublicacion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<a:commandLink reRender="idLosDetallesPanel"
+								action="#{realizarEvalsFormController.editarDatosConvDet(row)}"
+								value="#{messages.GENERICO_EDITAR}" propagation="join"
+								id="editarId"
+								
+								rendered="#{realizarEvalsFormController.habilitarEnlaces(row)}">
+								
+							</a:commandLink>#{' '}
+						<a:commandLink reRender="idLosDetallesPanel"
+								action="#{realizarEvalsFormController.eliminarDatosConvDet(row)}"
+								value="#{messages.GENERICO_ELIMINAR}" propagation="join"
+								id="eliminarId"
+								
+								rendered="#{realizarEvalsFormController.habilitarEnlaces(row)}"
+								>
+							</a:commandLink>
+						</h:column>
+					</rich:dataTable>
+				</a:outputPanel>
+			</a:form>
+			<a:form id="idFormBtnFinales">
+				<s:div styleClass="actionButtons" rendered="#{empty from}">
+					<h:commandButton id="saveConvo" value="#{messages.CU88_publicar}"
+						action="#{realizarEvalsFormController.publicar()}" />
+					<s:button id="cancelEdit" value="#{messages.GENERICO_VOLVER}"
+						propagation="join"
+						view="/seleccion/realizarEval/realizarEvals.xhtml" />
+
+				</s:div>
+			</a:form>
+		</rich:simpleTogglePanel>
+	</ui:define>
+</ui:composition>

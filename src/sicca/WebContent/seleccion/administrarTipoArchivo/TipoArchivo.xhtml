@@ -1,0 +1,131 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.TipoArchivo_tipoArc}</h1>
+    <h:form id="tipoArchivo" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{tipoArchivoHome.managed ? messages.msg_edit : messages.msg_add_male} Tipo archivo</f:facet>
+
+			<h:panelGrid  columns="1">
+			
+            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_tipoArc}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true" disabled="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{tipoArchivoHome.instance.descripcion}">
+                </h:inputText>
+            </s:decorate>
+           <s:decorate id="extensionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_extens_arc}</ui:define>
+                <h:inputText id="extension"
+                       required="true"
+                           size="10" disabled="true"
+                      maxlength="10"
+                          value="#{tipoArchivoHome.instance.extension}">
+                </h:inputText>
+                #{messages.TipoArchivo_eje}
+            </s:decorate>
+			
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			<s:decorate id="tamanhoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_tam_max}</ui:define>
+                <h:inputText id="tamanho"
+                       required="true" disabled="true"
+                          value="#{tipoArchivoHome.instance.tamanho}">
+                 </h:inputText>
+            </s:decorate>
+            <s:decorate id="unidMedidaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_uni_med}</ui:define>
+                <h:selectOneMenu id="unidMedida" value="#{tipoArchivoHome.idReferencias}" 
+					 style="width:250px" disabled="true">
+						<f:selectItems value="#{referenciasUnidadMedidaSelectItems}"/>
+					</h:selectOneMenu>
+            </s:decorate>
+             <s:decorate id="mimetypeField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_mime}</ui:define>
+                <h:inputText id="mimetype"
+                       required="true"
+                           size="100" disabled="true"
+                      maxlength="100"
+                          value="#{tipoArchivoHome.instance.mimetype}">
+                </h:inputText>
+            </s:decorate>
+            
+			</h:panelGrid>   
+			<h:panelGrid columns="1">
+			
+			<s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.TipoArchivo_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" disabled="true"
+                                      value="#{tipoArchivoHome.instance.activo}"/>
+            </s:decorate>
+            </h:panelGrid>         
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+              #{messages.msg_required_fields}
+            </div>
+
+	
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/seleccion/administrarTipoArchivo/TipoArchivoList.xhtml"
+                rendered="#{tipoArchivoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty tipoArchivoFrom ? 'seleccion/administrarTipoArchivo/TipoArchivoList' : tipoArchivoFrom}.xhtml"
+                rendered="#{!tipoArchivoHome.managed}"/>
+
+        </div>
+    </h:form>
+    
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{tipoArchivoHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{tipoArchivoHome.instance.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{tipoArchivoHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{tipoArchivoHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{tipoArchivoHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{tipoArchivoHome.instance.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{tipoArchivoHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{tipoArchivoHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

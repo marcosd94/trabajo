@@ -1,0 +1,107 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU350_elegibles_title}</h1>
+
+		<h:form id="elegibles" styleClass="edit">
+
+			<rich:panel>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{listaElegiblesFormController.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+						<h:inputText id="codGrupo" size="10" disabled="true"
+							value="#{listaElegiblesFormController.concursoPuestoAgr.codGrupo}" />
+							#{' '}
+						<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{listaElegiblesFormController.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU350_elegibles_puestos}</ui:define>
+						<h:inputText id="cantPuestos" size="10" disabled="true"
+							value="#{listaElegiblesFormController.cantPuestosCubrir}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea id="obs" cols="80"
+							value="#{listaElegiblesFormController.observacion}" />
+					</s:decorate>
+				</h:panelGrid>
+				<br />
+				<div style="clear: both; overflow: auto; HEIGHT: 200px"
+					align="center"><rich:panel id="panelResultado"
+					style="width: 600px;">
+					<f:facet name="header">#{messages.CU350_elegibles_postulante}(#{listaElegiblesFormController.listaReferencialPostulantes.size()}) 
+					</f:facet>
+					<div class="results" id="evalList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty listaElegiblesFormController.listaReferencialPostulantes}" />
+					<rich:dataTable id="elegibles" var="_eval" rowKeyVar="row"
+						value="#{listaElegiblesFormController.listaReferencialPostulantes}"
+						rendered="#{not empty listaElegiblesFormController.listaReferencialPostulantes}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_cod_postulante}
+						</f:facet>
+							<h:outputText
+								value="#{_eval.postulacion.personaPostulante.usuAlta}" />
+						</h:column>
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU87_puntaje}
+						</f:facet>
+							<h:outputText value="#{_eval.puntajeRealizado}">
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable></div>
+
+				</rich:panel></div>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}" /></div>
+				<br />
+
+			</rich:panel>
+
+
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{listaElegiblesFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="end"
+				view="/seleccion/evaluacionDocumentalAdjudicados/EvaluarDocAdjudicado.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{evaluacionAdjudicadoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

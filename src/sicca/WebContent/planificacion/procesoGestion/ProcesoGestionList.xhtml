@@ -1,0 +1,193 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.ProcesoGestion_}</h1>
+		
+
+		<h:form id="procesoGestionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ProcesoGestion_descripcion}</ui:define>
+					<h:inputText id="descripcion"
+						value="#{procesoGestionList.procesoGestion.descripcion}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ProcesoGestion_usuAlta}</ui:define>
+					<h:inputText id="usuAlta"
+						value="#{procesoGestionList.procesoGestion.usuAlta}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ProcesoGestion_usuMod}</ui:define>
+					<h:inputText id="usuMod"
+						value="#{procesoGestionList.procesoGestion.usuMod}" />
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="/planificacion/procesoGestion/ProcesoGestionList.xhtml">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false" /> <s:button id="print"
+				value="#{messages.msg_list_search_print_button}"
+				view="/planificacion/procesoGestion/ProcesoGestionListPdf.xhtml" /></div>
+
+		</h:form>
+
+		<rich:panel>
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty procesoGestionList.resultList ? 0 : (procesoGestionList.paginated ? procesoGestionList.resultCount : procesoGestionList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty procesoGestionList.obtenerListaProcesoGestions()}" /> <rich:dataTable
+				id="procesoGestionList" var="_procesoGestion"
+				value="#{procesoGestionList.resultList}"
+				rendered="#{not empty procesoGestionList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_idConfiguracionUoDet}" />
+							<ui:param name="propertyPath" value="procesoGestion.configuracionUoDet.descripcionCorta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.configuracionUoDet.descripcionCorta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_descripcion}" />
+							<ui:param name="propertyPath" value="procesoGestion.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_activo}" />
+							<ui:param name="propertyPath" value="procesoGestion.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.activo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_usuAlta}" />
+							<ui:param name="propertyPath" value="procesoGestion.usuAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.usuAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_fechaAlta}" />
+							<ui:param name="propertyPath" value="procesoGestion.fechaAlta" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.fechaAlta}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_usuMod}" />
+							<ui:param name="propertyPath" value="procesoGestion.usuMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.usuMod}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{procesoGestionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ProcesoGestion_fechaMod}" />
+							<ui:param name="propertyPath" value="procesoGestion.fechaMod" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_procesoGestion.fechaMod}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/procesoGestion/ProcesoGestion' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="procesoGestionViewId">
+						<f:param name="procesoGestionIdProcesoGestion"
+							value="#{_procesoGestion.idProcesoGestion}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/procesoGestion/ProcesoGestionEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="procesoGestionEdit" rendered="#{empty from}">
+						<f:param name="procesoGestionIdProcesoGestion"
+							value="#{_procesoGestion.idProcesoGestion}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link view="/planificacion/procesoGestion/ProcesoGestionList.xhtml"
+			rendered="#{procesoGestionList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/procesoGestion/ProcesoGestionList.xhtml"
+			rendered="#{procesoGestionList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{procesoGestionList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/procesoGestion/ProcesoGestionList.xhtml"
+			rendered="#{procesoGestionList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{procesoGestionList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/procesoGestion/ProcesoGestionList.xhtml"
+			rendered="#{procesoGestionList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{procesoGestionList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/procesoGestion/ProcesoGestionEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="procesoGestionIdProcesoGestion" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

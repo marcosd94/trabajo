@@ -1,0 +1,505 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+
+	<rich:panel style="width:1000px">
+		<f:facet name="header"> #{messages.CUPrincipalLegajo_datos}</f:facet>
+		<h:panelGrid columns="2">
+			<rich:panel style="border:none; width:450px">
+				<h:panelGrid columns="1">
+					<s:decorate id="docIdField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CUPrincipalLegajo_doc_id}</ui:define>
+						<h:inputText required="true"
+							value="#{validacionDatosPersonalesLegajoFC.persona.documentoIdentidad}"
+							size="30" maxlength="30" />
+					</s:decorate>
+
+					<s:decorate id="nombresField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU643_nombre}</ui:define>
+						<h:inputText
+							value="#{validacionDatosPersonalesLegajoFC.persona.nombres}"
+							size="50" maxlength="100" required="true" />
+					</s:decorate>
+
+					<s:decorate id="apellidosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU643_apellido}</ui:define>
+						<h:inputText
+							value="#{validacionDatosPersonalesLegajoFC.persona.apellidos}"
+							size="50" maxlength="80" required="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_sexo}</ui:define>
+						<h:selectOneMenu id="sexo" style="width : 250px;" required="true"
+							value="#{validacionDatosPersonalesLegajoFC.idSexo}">
+							<f:selectItems value="#{referenciasBySexoSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_estadoCivil}</ui:define>
+						<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+							value="#{validacionDatosPersonalesLegajoFC.idEstadoCivil}">
+							<f:selectItems value="#{referenciasByEstadoCivilSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="correoElectField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU643_email}</ui:define>
+						<h:inputText id="correoElectronico" size="30" required="true"
+							maxlength="50" style=" width : 250px;"
+							value="#{validacionDatosPersonalesLegajoFC.persona.EMail}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<rich:panel style="border:none; width:400px" id="imagen">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="laImagenDeLasCosas">
+						<s:graphicImage id="funcionarioFoto" width="120" height="120"
+							value="#{validacionDatosPersonalesLegajoFC.uploadedFile}">
+						</s:graphicImage>
+						<h:panelGrid columns="1">
+							<s:decorate id="laImagen1" template="/layout/display.xhtml">
+
+							</s:decorate>
+						</h:panelGrid>
+					</a:outputPanel>
+					<s:decorate id="fotoField" template="/layout/edit.xhtml">
+						<ui:define name="label">Foto</ui:define>
+						<rich:fileUpload id="foto" listHeight="0"
+							clearAllControlLabel="#{messages.RICH_FILE_UPLOAD_CLEAR_LABEL}"
+							addControlLabel="Seleccionar Foto"
+							doneLabel="#{messages.RICH_FILE_UPLOAD_ENTRY_DONE_LABEL}"
+							maxFilesQuantity="1"
+							fileUploadListener="#{validacionDatosPersonalesLegajoFC.listenerImagenes}"
+							immediateUpload="true" acceptedTypes="jpg, gif,  png, jpeg">
+							<a:support event="onclear" reRender="imagen" />
+						</rich:fileUpload>
+						<br />
+
+						<a:commandButton id="btnVerRuc"
+							action="#{validacionDatosPersonalesLegajoFC.activarImagen('btnVerImg')}"
+							value="Ver foto" reRender="laImagenDeLasCosas">
+						</a:commandButton>
+						#{' '}
+					
+							<a:commandButton id="btnDelete"
+							action="#{validacionDatosPersonalesLegajoFC.eliminarImagen()}"
+							image="/img/false.png"
+							rendered="#{validacionDatosPersonalesLegajoFC.idDoc != null}"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="laImagenDeLasCosas,btnDelete" />
+					</s:decorate>
+					<h:outputText value="#{messages.CU643_msg_foto}" style="color:red" />
+				</h:panelGrid>
+			</rich:panel>
+		</h:panelGrid>
+	</rich:panel>
+	<rich:panel style="width:1000px">
+		<f:facet name="header"> #{messages.CU643_datos_nac}</f:facet>
+		<h:panelGrid columns="2">
+			<s:decorate id="fechaNacField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_fecha_nac}</ui:define>
+				<rich:calendar id="fechaNac" required="true"
+					oninputkeyup="ponerBarra(event);"
+					locale="#{siccaAppHelper.localeCode}"
+					value="#{validacionDatosPersonalesLegajoFC.persona.fechaNacimiento}"
+					datePattern="dd/MM/yyyy" enableManualInput="true" />
+			</s:decorate>
+
+			<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_nacionalidad}</ui:define>
+				<h:selectOneMenu id="nacionalidad"
+					value="#{validacionDatosPersonalesLegajoFC.idNacionalidad}"
+					required="true" style="width:250px">
+					<f:selectItems
+						value="#{validacionDatosPersonalesLegajoFC.getNacionalidadSelectItems()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<a:region>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU643_pais_nac}</ui:define>
+					<h:selectOneMenu id="paisNac" style="width : 250px;"
+						value="#{validacionDatosPersonalesLegajoFC.idPaisNac}">
+						<f:selectItems value="#{paissSelectItems}" />
+						<a:support event="onchange" reRender="dptoNac,ciudadNac"
+							eventsQueue="default"
+							action="#{validacionDatosPersonalesLegajoFC.updateDepartamento()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_etnia}</ui:define>
+				<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+					value="#{validacionDatosPersonalesLegajoFC.idEtnia}">
+					<f:selectItems value="#{datosEspecificossByEtniaSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<a:region>
+				<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU643_dpto}</ui:define>
+					<h:selectOneMenu id="dptoNac" style="width : 250px;"
+						value="#{validacionDatosPersonalesLegajoFC.idDptoNac}">
+						<f:selectItems
+							value="#{validacionDatosPersonalesLegajoFC.departamentosSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{validacionDatosPersonalesLegajoFC.updateCiudad()}"
+							reRender="ciudadNac" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU643_ciudad}</ui:define>
+				<h:selectOneMenu id="ciudadNac" style="width : 250px;"
+					value="#{validacionDatosPersonalesLegajoFC.idCiudadNac}">
+					<f:selectItems
+						value="#{validacionDatosPersonalesLegajoFC.ciudadSelecItem}" />
+					<a:support event="onchange" eventsQueue="default" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate id="msgNacimientoField" template="/layout/display.xhtml">
+				<span class="required"><h:outputText
+					value="#{messages.CU643_msg_nac}" /></span>
+			</s:decorate>
+		</h:panelGrid>
+	</rich:panel>
+	<rich:panel style="width:1000px">
+		<f:facet name="header"> #{messages.CU643_lugar_residencia}</f:facet>
+		<h:panelGrid columns="1">
+			<s:decorate id="callePrincipalField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_calle_principal}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.callePrincipal}"
+					size="100" maxlength="100" required="true" />
+			</s:decorate>
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="primeraField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_primera_lateral}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.primeraLateral}"
+					size="50" maxlength="50" />
+			</s:decorate>
+			<s:decorate id="segundaField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_segunda_lateral}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.segundaLateral}"
+					size="50" maxlength="50" />
+			</s:decorate>
+
+			<s:decorate id="dptoNroField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_dpto_nro}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.departamentoNro}"
+					size="50" maxlength="50" />
+			</s:decorate>
+
+			<s:decorate id="pisoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_piso}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.piso}" size="50"
+					maxlength="50" />
+			</s:decorate>
+
+			<a:region>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU643_pais_dir}</ui:define>
+					<h:selectOneMenu id="paisNacResi" style="width : 250px;"
+						value="#{validacionDatosPersonalesLegajoFC.idPaisResi}">
+						<f:selectItems value="#{paissSelectItems}" />
+						<a:support event="onchange" reRender="dptoNacResi,ciudadNacResi"
+							eventsQueue="default"
+							action="#{validacionDatosPersonalesLegajoFC.updateDepartamentoResidencia()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<a:region>
+				<s:decorate id="ciudadNacResiField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU643_ciudad_dir}</ui:define>
+					<h:selectOneMenu id="ciudadNacResi" style="width : 250px;"
+						value="#{validacionDatosPersonalesLegajoFC.idCiudadResi}">
+						<f:selectItems
+							value="#{validacionDatosPersonalesLegajoFC.ciudadSelecResidenciaItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{validacionDatosPersonalesLegajoFC.updateBarrio()}"
+							reRender="barrioResi" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<a:region>
+				<s:decorate id="dptoNacResiField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU643_dpto_dir}</ui:define>
+					<h:selectOneMenu id="dptoNacResi" style="width : 250px;"
+						value="#{validacionDatosPersonalesLegajoFC.idDptoResi}">
+						<f:selectItems
+							value="#{validacionDatosPersonalesLegajoFC.departamentosResidenciaSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{validacionDatosPersonalesLegajoFC.updateCiudadResidencia()}"
+							reRender="ciudadNacResi" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+
+
+			<s:decorate id="barrioResiField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU643_localidad}</ui:define>
+				<h:selectOneMenu id="barrioResi" style="width : 250px;"
+					value="#{validacionDatosPersonalesLegajoFC.idLocalidadDir}">
+					<f:selectItems
+						value="#{validacionDatosPersonalesLegajoFC.localidadDirSelecItem}" />
+					<a:support event="onchange" eventsQueue="default" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<s:decorate id="direccionLaboralField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_dir_laboral}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.direccionLaboral}"
+					size="100" maxlength="100" />
+			</s:decorate>
+
+			<s:decorate id="otraDireccionField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_otras_dir}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.otrasDirecciones}"
+					size="100" maxlength="100" />
+			</s:decorate>
+			<s:decorate id="telefonosField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU643_telefonos}</ui:define>
+				<h:inputText
+					value="#{validacionDatosPersonalesLegajoFC.persona.telefonos}"
+					size="50" maxlength="50" required="true" />
+			</s:decorate>
+		</h:panelGrid>
+	</rich:panel>
+
+	<rich:panel style="width:1000px">
+		<f:facet name="header"> #{messages.CU643_doc_adicional}</f:facet>
+		<table>
+			<tr>
+				<td style="width: 150px"><s:decorate id="documentoField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU643_doc}</ui:define>
+				</s:decorate></td>
+
+				<td style="width: 150px"><s:decorate id="nroField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU643_nro}</ui:define>
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="otroDatoField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU643_otro_dato}</ui:define>
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="valorField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU643_valor}</ui:define>
+				</s:decorate></td>
+
+			</tr>
+			<tr>
+				<td style="width: 150px"><s:decorate id="registro1Field"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_reg1}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="reg1Field"
+					template="/layout/edit.xhtml">
+					<h:inputText value="#{validacionDatosPersonalesLegajoFC.nroReg1}"
+						size="14" maxlength="14" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate
+					id="especialidadRegistro1Field" template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_especialidad}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="especialidadReg1Field"
+					template="/layout/edit.xhtml">
+					<h:inputText
+						value="#{validacionDatosPersonalesLegajoFC.especialidadReg1}"
+						size="30" maxlength="50" />
+				</s:decorate></td>
+			</tr>
+
+			<tr>
+				<td style="width: 150px"><s:decorate id="registro2Field"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_reg2}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="reg2Field"
+					template="/layout/edit.xhtml">
+					<h:inputText value="#{validacionDatosPersonalesLegajoFC.nroReg2}"
+						size="14" maxlength="14" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate
+					id="especialidadRegistro2Field" template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_especialidad}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="especialidadReg2Field"
+					template="/layout/edit.xhtml">
+					<h:inputText
+						value="#{validacionDatosPersonalesLegajoFC.especialidadReg2}"
+						size="30" maxlength="50" />
+				</s:decorate></td>
+			</tr>
+			<tr>
+				<td style="width: 150px"><s:decorate id="rucMsgField"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_ruc}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="rucField"
+					template="/layout/edit.xhtml">
+					<h:inputText value="#{validacionDatosPersonalesLegajoFC.ruc}"
+						size="14" maxlength="14" />
+				</s:decorate></td>
+			</tr>
+
+			<tr>
+				<td style="width: 150px"><s:decorate id="militarMsgField"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_doc_militar}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="militarField"
+					template="/layout/edit.xhtml">
+					<h:inputText
+						value="#{validacionDatosPersonalesLegajoFC.docMilitar}" size="14"
+						maxlength="14" />
+				</s:decorate></td>
+			</tr>
+
+			<tr>
+				<td style="width: 150px"><s:decorate id="regConducirMsgField"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_registro}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="regConducirField"
+					template="/layout/edit.xhtml">
+					<h:inputText
+						value="#{validacionDatosPersonalesLegajoFC.regConducir}" size="14"
+						maxlength="14" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="categoriaField"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_categoria}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="categField"
+					template="/layout/edit.xhtml">
+					<h:inputText value="#{validacionDatosPersonalesLegajoFC.categoria}"
+						size="30" maxlength="50" />
+				</s:decorate></td>
+			</tr>
+
+			<tr>
+				<td style="width: 150px"><s:decorate id="pasaporteMsgField"
+					template="/layout/edit.xhtml">
+					<h:outputLabel value="#{messages.CU643_pasaporte}" />
+				</s:decorate></td>
+				<td style="width: 150px"><s:decorate id="pasaporteField"
+					template="/layout/edit.xhtml">
+					<h:inputText value="#{validacionDatosPersonalesLegajoFC.pasaporte}"
+						size="14" maxlength="14" />
+				</s:decorate></td>
+
+			</tr>
+		</table>
+	</rich:panel>
+
+
+
+	<rich:panel style="width:1000px">
+		<div
+			style="background-color: #FC1501; color: white; padding: 5px 2px;">#{messages.CU643_obs_uo}
+		</div>
+		<h:panelGrid columns="1">
+			<s:decorate id="observacionField" template="/layout/edit.xhtml">
+
+				<h:inputTextarea id="observacion" cols="80" rows="3"
+					value="#{validacionDatosPersonalesLegajoFC.auditLegajoObs.observacion}">
+					<f:validateLength maximum="250" />
+				</h:inputTextarea>
+			</s:decorate>
+		</h:panelGrid>
+	</rich:panel>
+
+	<rich:panel style="width:1000px;">
+		<div
+			style="background-color: #FC1501; color: white; padding: 5px 2px;">#{messages.CU676_panel_modif}(#{validacionDatosPersonalesLegajoFC.listaAuditoria.size()})
+		</div>
+		<div class="results" id="tblAuditoriaList"
+			style="overflow: scroll; width: 310; HEIGHT: 230px"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty validacionDatosPersonalesLegajoFC.listaAuditoriaDTO}" />
+		<rich:dataTable id="auditoriaList" var="_auditoria"
+			rendered="#{not empty validacionDatosPersonalesLegajoFC.listaAuditoriaDTO}"
+			value="#{validacionDatosPersonalesLegajoFC.listaAuditoriaDTO}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_tabla}</f:facet>
+				<h:outputText value="#{_auditoria.auditLegajoDet.tabla}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_campo}</f:facet>
+				<h:outputText value="#{_auditoria.auditLegajoDet.campo}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.gral_accion}</f:facet>
+				<h:outputText value="#{messages.CU676_insert}"
+					rendered="#{_auditoria.auditLegajoDet.accion == 'I'}" />
+				<h:outputText value="#{messages.CU676_update}"
+					rendered="#{_auditoria.auditLegajoDet.accion == 'U'}" />
+				<h:outputText value="#{messages.CU676_delete}"
+					rendered="#{_auditoria.auditLegajoDet.accion == 'D'}" />
+
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_anterior}</f:facet>
+				<h:outputText value="#{_auditoria.auditLegajoDet.anterior}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_nuevo}</f:facet>
+				<h:outputText value="#{_auditoria.auditLegajoDet.nuevo}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_fecha}</f:facet>
+				<h:outputText value="#{_auditoria.auditLegajoDet.fechaAlta}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU676_estado}</f:facet>
+				<h:outputText value="NO VERIFICADO"
+					rendered="#{_auditoria.auditLegajoDet.estado == 2}" />
+				<h:outputText value="VERIFICADO"
+					rendered="#{_auditoria.auditLegajoDet.estado == 1}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header"></f:facet>
+				<h:selectBooleanCheckbox value="#{_auditoria.seleccionado}">
+					
+					
+				</h:selectBooleanCheckbox>
+			</rich:column>
+
+		</rich:dataTable></div>
+	</rich:panel>
+	<div style="clear: both"><span class="required">*
+	#{messages.msg_required_fields}</span></div>
+	<span class="required"> <h:outputText
+		value="#{messages.msg_obs_save}" styleClass="labelClass" /> </span>
+
+
+</ui:composition>

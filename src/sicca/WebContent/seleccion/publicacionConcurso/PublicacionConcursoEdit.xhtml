@@ -1,0 +1,317 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="publicacionConcurso" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{publicacionConcursoHome.managed ? 'Edit' : 'Add'} Publicacion concurso</f:facet>
+
+
+            <s:decorate id="idPublicacionConcursoField" template="layout/edit.xhtml">
+                <ui:define name="label">Id publicacion concurso</ui:define>
+                <h:inputText id="idPublicacionConcurso"
+                       required="true"
+                       disabled="#{publicacionConcursoHome.managed}"
+                          value="#{publicacionConcursoHome.instance.idPublicacionConcurso}">
+                    <a:support event="onblur" reRender="idPublicacionConcursoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="usuSolicitudField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu solicitud</ui:define>
+                <h:inputText id="usuSolicitud"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{publicacionConcursoHome.instance.usuSolicitud}">
+                    <a:support event="onblur" reRender="usuSolicitudField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaSolicitudField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha solicitud</ui:define>
+                <rich:calendar id="fechaSolicitud"
+                       required="true"
+                          value="#{publicacionConcursoHome.instance.fechaSolicitud}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAprobacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha aprobacion</ui:define>
+                <rich:calendar id="fechaAprobacion"
+                          value="#{publicacionConcursoHome.instance.fechaAprobacion}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAprobacionField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu aprobacion</ui:define>
+                <h:inputText id="usuAprobacion"
+                           size="50"
+                      maxlength="50"
+                          value="#{publicacionConcursoHome.instance.usuAprobacion}">
+                    <a:support event="onblur" reRender="usuAprobacionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="usuUltRevField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu ult rev</ui:define>
+                <h:inputText id="usuUltRev"
+                           size="50"
+                      maxlength="50"
+                          value="#{publicacionConcursoHome.instance.usuUltRev}">
+                    <a:support event="onblur" reRender="usuUltRevField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaUltRevField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha ult rev</ui:define>
+                <rich:calendar id="fechaUltRev"
+                          value="#{publicacionConcursoHome.instance.fechaUltRev}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{publicacionConcursoHome.persist}"
+                       disabled="#{!publicacionConcursoHome.wired}"
+                       rendered="#{!publicacionConcursoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{publicacionConcursoHome.update}"
+                       rendered="#{publicacionConcursoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{publicacionConcursoHome.remove}"
+                      immediate="true"
+                       rendered="#{publicacionConcursoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/PublicacionConcurso.xhtml"
+                rendered="#{publicacionConcursoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty publicacionConcursoFrom ? 'PublicacionConcursoList' : publicacionConcursoFrom}.xhtml"
+                rendered="#{!publicacionConcursoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Concurso *" labelClass="required">
+    <div class="association" id="concursoParent">
+
+        <h:outputText value="There is no concurso associated with this publicacionConcurso."
+                   rendered="#{publicacionConcursoHome.instance.concurso == null}"/>
+
+        <rich:dataTable var="_concurso"
+                   value="#{publicacionConcursoHome.instance.concurso}"
+                rendered="#{publicacionConcursoHome.instance.concurso != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoTable">
+            <h:column>
+                <f:facet name="header">Id concurso</f:facet>
+                <h:outputText value="#{_concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos especificos id datos especificos</f:facet>
+                <h:outputText value="#{_concurso.datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                <h:outputText value="#{_concurso.nombre}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ad referendum</f:facet>
+                <h:outputText value="#{_concurso.adReferendum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Desprecarizacion</f:facet>
+                <h:outputText value="#{_concurso.desprecarizacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concurso.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_concurso.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha creacion</f:facet>
+                <h:outputText value="#{_concurso.fechaCreacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_concurso.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concurso.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concurso.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concurso.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concurso.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concurso.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion reserva</f:facet>
+                <h:outputText value="#{_concurso.observacionReserva}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concurso.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Numero</f:facet>
+                <h:outputText value="#{_concurso.numero}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Anio</f:facet>
+                <h:outputText value="#{_concurso.anio}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha finalizacion</f:facet>
+                <h:outputText value="#{_concurso.fechaFinalizacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu finalizacion</f:facet>
+                <h:outputText value="#{_concurso.usuFinalizacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro expediente</f:facet>
+                <h:outputText value="#{_concurso.nroExpediente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha expediente</f:facet>
+                <h:outputText value="#{_concurso.fechaExpediente}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{publicacionConcursoHome.instance.concurso != null ? 'changeParent' : 'selectParent'}" value="#{publicacionConcursoHome.instance.concurso != null ? 'Change' : 'Select'} concurso"
+                       view="/ConcursoList.xhtml">
+                <f:param name="from" value="PublicacionConcursoEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Publicacion concurso cabs">
+        <h:form styleClass="association" id="publicacionConcursoCabsChildren">
+
+            <h:outputText value="There are no publicacionConcursoCabs associated with this publicacionConcurso."
+                       rendered="#{empty publicacionConcursoHome.publicacionConcursoCabs}"/>
+
+            <rich:dataTable value="#{publicacionConcursoHome.publicacionConcursoCabs}"
+                           var="_publicacionConcursoCab"
+                      rendered="#{not empty publicacionConcursoHome.publicacionConcursoCabs}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="publicacionConcursoCabsTable">
+                <rich:column sortBy="#{_publicacionConcursoCab.idPublicacionConc}">
+                    <f:facet name="header">Id publicacion conc</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.idPublicacionConc}"/>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.fechaSolicitud}">
+                    <f:facet name="header">Fecha solicitud</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.fechaSolicitud}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.usuSolicitud}">
+                    <f:facet name="header">Usu solicitud</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.usuSolicitud}"/>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.fechaAprobacion}">
+                    <f:facet name="header">Fecha aprobacion</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.fechaAprobacion}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.usuAprobacion}">
+                    <f:facet name="header">Usu aprobacion</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.usuAprobacion}"/>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.fechaPublicacion}">
+                    <f:facet name="header">Fecha publicacion</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.fechaPublicacion}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_publicacionConcursoCab.usuPublicacion}">
+                    <f:facet name="header">Usu publicacion</f:facet>
+                    <h:outputText value="#{_publicacionConcursoCab.usuPublicacion}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{publicacionConcursoHome.managed}" id="publicacionConcursoCabs">
+        <div class="actionButtons">
+            <s:button id="addpublicacionConcursoCab"
+                   value="Add publicacionConcursoCab"
+                    view="/PublicacionConcursoCabEdit.xhtml"
+             propagation="none">
+                 <f:param name="publicacionConcursoIdPublicacionConcurso"
+                         value="#{publicacionConcursoHome.instance.idPublicacionConcurso}"/>
+                 <f:param name="publicacionConcursoCabFrom" value="PublicacionConcurso"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,376 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU366_titulo}</h1>
+
+
+		<h:form id="configuracionUoDetSearch" styleClass="edit">
+
+
+			<rich:panel id="panelPrincipal">
+				<f:facet name="header">#{messages.CU366_titulo}</f:facet>
+
+				<h:panelGrid columns="1">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelPrincipal" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/visualizarDatosConcurso/VisualizarDatosConcurso')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="panelPrincipal" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/visualizarDatosConcurso/VisualizarDatosConcurso')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/visualizarDatosConcurso/VisualizarDatosConcurso')}" />
+						</s:decorate>
+					</a:region>
+
+
+
+
+
+
+
+
+
+
+
+
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.MatrizDocumentalEnc_tipoConcurso}</ui:define>
+						<h:selectOneMenu id="tipoConcurso"
+							value="#{visualizarDatosConcursoFormController.idtipoConcurso}"
+							style="width:200px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoConcursoSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				reRender="controlPaginamiento,panelConcurso,panelGrupo,puesto"
+				value="#{messages.msg_list_search_button}" eventsQueue="default"
+				action="#{visualizarDatosConcursoFormController.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{visualizarDatosConcursoFormController.searchAll()}"
+				reRender="panelConcurso,panelGrupo,puesto,panelPrincipal,controlPaginamiento">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+			<rich:panel id="panelConcurso">
+				<f:facet name="header">Concursos(#{empty concursoList.resultList ? 0 : (concursoList.paginated ? concursoList.resultCount : concursoList.resultList.size)})</f:facet>
+				<div class="results" id="concursoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty concursoList.resultList}" /> <rich:dataTable
+					id="concursoList" var="_concurso"
+					value="#{concursoList.resultList}"
+					rendered="#{not empty concursoList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.ClasificadorUo_nivel}" />
+								<ui:param name="propertyPath"
+									value="concurso.configuracionUoCab.entidad.sinEntidad.nenCodigo" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_concurso.configuracionUoCab.entidad.sinEntidad.nenCodigo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.Usuario_entidad}" />
+								<ui:param name="propertyPath"
+									value="concurso.configuracionUoCab.entidad.sinEntidad.entCodigo" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_concurso.configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+								<ui:param name="propertyPath"
+									value="concurso.configuracionUoCab.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_concurso.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU366_tipo_concurso}" />
+								<ui:param name="propertyPath"
+									value="concurso.datosEspecificosTipoConc.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_concurso.datosEspecificosTipoConc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel" value="Concurso" />
+								<ui:param name="propertyPath" value="concurso.nombre" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_concurso.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU366_codigo}" />
+								<ui:param name="propertyPath" value="concurso.numero" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_concurso.numero}" />
+					</h:column>
+					<h:column>
+						<a:commandLink id="vergrupos" value="#{messages.CU366_ver_grupos}"
+							eventsQueue="default" reRender="panelGrupo,puesto"
+							action="#{visualizarDatosConcursoFormController.verGrupos(_concurso.idConcurso)}" />
+						  #{' '}
+						</h:column>
+
+				</rich:dataTable></div>
+			</rich:panel>
+
+
+			<a:outputPanel id="controlPaginamiento" ajaxRendered="true"> 
+			<div class="tableControl"><s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoList.previousExists}" propagation="join"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoList.previousExists}" propagation="join"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{concursoList.previousFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoList.nextExists}" propagation="join"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{concursoList.nextFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link> <s:link
+				view="/seleccion/visualizarDatosConcurso/VisualizarDatosConcurso.xhtml"
+				rendered="#{concursoList.nextExists}" propagation="join"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{concursoList.lastFirstResult}" />
+				<f:param name="paginado" value="true" />
+			</s:link></div>
+			
+			</a:outputPanel>
+			
+		</h:form>
+		<h:form>
+
+			<rich:panel id="panelGrupo">
+				<f:facet name="header"> #{messages.CU366_grupos} ( #{visualizarDatosConcursoFormController.concursoPuestoAgrs.size()} )</f:facet>
+				<div class="results" id="tblgrupoList" style="overflow: auto;">
+
+				<rich:dataTable id="grupoList" var="_grupo"
+					value="#{visualizarDatosConcursoFormController.concursoPuestoAgrs}"
+					rendered="#{not empty visualizarDatosConcursoFormController.concursoPuestoAgrs}"
+					rowKeyVar="rowNr">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_cod_grupo}
+					</f:facet>
+						<h:outputText value=" #{_grupo.codGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_denominacion}
+					</f:facet>
+						<h:outputText value="#{_grupo.descripcionGrupo}" />
+					</h:column>
+
+					<h:column>
+						<a:commandLink id="verpuesot" value="#{messages.CU366_ver_puesto}"
+							eventsQueue="default" reRender="puesto"
+							action="#{visualizarDatosConcursoFormController.verPuestos(_grupo.idConcursoPuestoAgr)}" />
+						  #{' '}
+						</h:column>
+					<h:column>
+						<h:commandLink id="datosGrupos"
+							value="#{messages.CU366_datos_grupo}" target="_blank"
+							eventsQueue="default"
+							action="#{visualizarDatosConcursoFormController.imprimirPerfilMatriz(_grupo.idConcursoPuestoAgr)}" />
+
+					</h:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<rich:panel id="puesto">
+				<f:facet name="header"> #{messages.CU366_puestos} ( #{visualizarDatosConcursoFormController.puestoCargoDets.size()} )</f:facet>
+				<div class="results" id="tblpuestoList" style="overflow: auto;">
+
+				<rich:dataTable id="puestoList" var="_puesto"
+					value="#{visualizarDatosConcursoFormController.puestoCargoDets}"
+					rendered="#{not empty visualizarDatosConcursoFormController.puestoCargoDets}"
+					rowKeyVar="rowNr">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_dpto}
+					</f:facet>
+						<h:outputText
+							value="#{_puesto.oficina.ciudad.departamento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_cuidad}
+					</f:facet>
+						<h:outputText value="#{_puesto.oficina.ciudad.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Oficina_cmp_barrio}
+					</f:facet>
+						<h:outputText value="#{_puesto.oficina.barrio.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_uni_depe}
+					</f:facet>
+						<h:outputText
+							value="#{_puesto.configuracionUoDet.configuracionUoCab.orden}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_cod_puesto}
+					</f:facet>
+						<h:outputText
+							value="#{visualizarDatosConcursoFormController.obtenerCodigo(_puesto.idPlantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_denominacion}
+					</f:facet>
+						<h:outputText value="#{_puesto.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_modalidad}
+					</f:facet>
+						<h:outputText
+							value="#{_puesto.permanente== 'true'?'PERMANENTE':'CONTRATADO'}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU366_categoria}
+					</f:facet>
+						<h:outputText
+							value="#{visualizarDatosConcursoFormController.findCategoria(_puesto.idPlantaCargoDet)}" />
+					</h:column>
+					<h:column>
+
+						<s:link
+							view="/planificacion/puestosTrabajo/PlantaCargoDetEdit.xhtml"
+							value="#{messages.CU366_datos_pouesto}" propagation="none"
+							id="plantaCargoDetVerId" rendered="#{empty from}">
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_puesto.idPlantaCargoDet}" />
+							<f:param name="plantaCargoDetFrom" value="ver" />
+							<f:param name="paginado" value="true" />
+
+						</s:link>
+						  #{' '}
+				</h:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

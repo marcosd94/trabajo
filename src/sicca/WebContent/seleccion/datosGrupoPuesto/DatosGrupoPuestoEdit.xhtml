@@ -1,0 +1,181 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU235_title}</h1>
+
+		<h:form id="datosGrupoPuesto" styleClass="edit">
+
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:outputText value="#{datosGrupoPuestoFormController.concurso}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_grupo}</ui:define>
+						<h:outputText value="#{datosGrupoPuestoFormController.grupo}" />
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<br></br>
+			<rich:simpleTogglePanel
+				label="#{messages['CU235_formasDeEvaluacion']}" switchType="client"
+				id="panelDatos">
+
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU235_porc_minimo_aplicar}</ui:define>
+					<h:selectOneRadio id="min_aplic"
+						value="#{datosGrupoPuestoFormController.minimoAplicar}"
+						required="true">
+						<f:selectItems
+							value="#{datosGrupoPuestoFormController.minimoAplicarValueItems()}" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml"
+					rendered="#{!datosGrupoPuestoFormController.isCS}">
+					<ui:define name="label">#{messages.CU235_seleccion_adjudicados}</ui:define>
+					<h:selectOneRadio id="sel_adj"
+						value="#{datosGrupoPuestoFormController.seleccionAdjudicados}"
+						required="true">
+						<f:selectItems
+							value="#{datosGrupoPuestoFormController.seleccionAdjudicadosValueItems()}" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+
+				<s:decorate id="plazoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU235_porc_minimo_evaluaciones}</ui:define>
+					<h:inputText id="porc_eval" required="true" disabled="false"
+						styleClass="numeric" size="10"
+						value="#{datosGrupoPuestoFormController.minimoEvaluacion}">
+					</h:inputText>
+
+
+					<span class="required"> <h:outputLabel
+						value="#{datosGrupoPuestoFormController.errorMinimo}"
+						rendered="#{datosGrupoPuestoFormController.errorMinimo != null}" />
+					</span>
+				</s:decorate>
+				<br />
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel
+				rendered="#{datosGrupoPuestoFormController.isCIO and !datosGrupoPuestoFormController.isDESPRE}"
+				label="Funcionarios" switchType="client">
+				<h:panelGrid columns="2">
+					<h:selectOneRadio id="idPerCont"
+						value="#{datosGrupoPuestoFormController.permanente}">
+						<f:selectItems
+							value="#{datosGrupoPuestoFormController.permanenteContratadoValueItems()}" />
+					</h:selectOneRadio>
+
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel
+				rendered="#{datosGrupoPuestoFormController.mostrarPanelPrefePersonDisc}"
+				label="#{messages['CU235_preferenciaPersonaDisc']}"
+				switchType="client" id="idPanelPersonDis">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU235_conPreferenciaPersonaConDisc}</ui:define>
+					<h:selectOneRadio id="sel_adj"
+						value="#{datosGrupoPuestoFormController.seleccionPersonaConDisc}"
+						required="true">
+						<f:selectItems
+							value="#{datosGrupoPuestoFormController.seleccionPersonasConDiscValueItems()}" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages['CU235_aPublicar']}"
+				switchType="client" id="idPanelAPublicar">
+				<s:decorate id="tituloField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU235_titulo}</ui:define>
+					<h:inputText id="titulo" size="50" style="width :250px;"
+						maxlength="200" value="#{datosGrupoPuestoFormController.titulo}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU235_observacion}</ui:define>
+					<h:inputTextarea id="observacion"
+						value="#{datosGrupoPuestoFormController.observacion}" cols="80">
+					</h:inputTextarea>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+			<h:panelGrid columns="1">
+				<span class="required">*</span>
+				#{messages.msg_required_fields}
+				<h:outputText value="#{messages.msg_obs_save}"
+					rendered="#{!datosGrupoPuestoHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{datosGrupoPuestoHome.managed}" styleClass="labelClass" />
+
+			</h:panelGrid>
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{datosGrupoPuestoFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!datosGrupoPuestoHome.managed and datosGrupoPuestoFormController.habilitar}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{datosGrupoPuestoFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{datosGrupoPuestoHome.managed and datosGrupoPuestoFormController.habilitar}" /> <s:button
+				id="cancelEdit" value="#{messages.msg_done}" propagation="none"
+				view="/#{from}.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{datosGrupoPuestoFormController.idConcursoPuestoAgr}" />
+			</s:button></div>
+
+			<div><h:panelGrid columns="2">
+				<s:decorate id="usuarioAlta"
+					rendered="#{datosGrupoPuestoHome.managed}"
+					template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText value="#{datosGrupoPuestoHome.instance.usuAlta}" />
+				</s:decorate>
+				<s:decorate id="fechaAlta" template="/layout/display.xhtml"
+					rendered="#{datosGrupoPuestoHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText value="#{datosGrupoPuestoHome.instance.fechaAlta}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+				<s:decorate id="usuarioModi" template="/layout/display.xhtml"
+					rendered="#{datosGrupoPuestoHome.managed}">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText value="#{datosGrupoPuestoHome.instance.usuMod}" />
+				</s:decorate>
+				<s:decorate id="fechaModi" template="/layout/display.xhtml"
+					rendered="#{datosGrupoPuestoHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+					<h:outputText value="#{datosGrupoPuestoHome.instance.fechaMod}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid></div>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/ExcepcionadosList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{excepcionadosHome.wire}"/>
+   	
+   	<param name="excepcionadosIdExcepcionado" value="#{excepcionadosEditFC.idExcepcionado}"/>
+
+ <param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}"/>
+ <param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}"/>
+ <param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}"/>
+ 
+	<param name="personaIdPersona" value="#{excepcionadosEditFC.idPersona}" />
+	
+	<action execute="#{excepcionadosEditFC.init()}" on-postback="false"/>	
+	 <param name="excepcionadosFrom"/>
+  
+
+
+   <navigation from-action="#{excepcionadosHome.persist()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/juridicos/excepcionados/Excepcionados.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{excepcionadosEditFC.update()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/juridicos/excepcionados/ExcepcionadosList.xhtml"/>
+      </rule>
+   </navigation>
+
+ 
+   
+   
+     <restrict>#{identity.hasRole('excepcionados_edit')}</restrict>
+
+</page>

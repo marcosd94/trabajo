@@ -1,0 +1,108 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Niveles de Cargos</h1>
+		<h:form id="datosEspecificos" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{(nivelesDeCargosFormController.isEdit)?
+				 messages.msg_edit : (nivelesDeCargosFormController.isNew)? messages.msg_add_male : messages.msg_view }</f:facet>
+
+				
+				<a:outputPanel id="charArea" ajaxRendered="true">
+					
+				</a:outputPanel>
+				<!-- TIPO PARA EL GRADO DE PARENTESCO -->
+				 <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{nivelesDeCargosFormController.nivelesDeCargos.descripcion}" size="60"
+                 disabled="#{nivelesDeCargosFormController.isView}"/>
+            </s:decorate>
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.gral_tipo}</ui:define>
+                <h:inputText id="tipo" value="#{nivelesDeCargosFormController.nivelesDeCargos.tipo}" 
+                size="15" disabled="#{nivelesDeCargosFormController.isView}"/>
+            </s:decorate>
+
+
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+					<h:selectBooleanCheckbox id="activo" required="true"
+						value="#{nivelesDeCargosFormController.nivelesDeCargos.activo}" 
+						disabled="#{nivelesDeCargosFormController.isView}"/>
+				</s:decorate>
+
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{nivelesDeCargosFormController.isNew}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{!nivelesDeCargosFormController.isNew}" styleClass="labelClass" />
+				</div>
+			</rich:panel>
+
+			<div class="actionButtons">
+			<h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{nivelesDeCargosFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{nivelesDeCargosFormController.isNew}" /> 
+			<h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{nivelesDeCargosFormController.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{nivelesDeCargosFormController.isEdit}" /> 
+			<s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/adminNivelesDeCargos/NivelesDeCargosList.xhtml" 
+				action="#{nivelesDeCargosFormController.allFalse()}"/> 
+			</div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{nivelesDeCargosFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{nivelesDeCargosFormController.nivelesDeCargos.usuarioAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{nivelesDeCargosFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{nivelesDeCargosFormController.nivelesDeCargos.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{nivelesDeCargosFormController.isEdit and nivelesDeCargosFormController.nivelesDeCargos.usuMod != null}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{nivelesDeCargosFormController.nivelesDeCargos.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{nivelesDeCargosFormController.isEdit and nivelesDeCargosFormController.nivelesDeCargos.usuMod != null}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{nivelesDeCargosFormController.nivelesDeCargos.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

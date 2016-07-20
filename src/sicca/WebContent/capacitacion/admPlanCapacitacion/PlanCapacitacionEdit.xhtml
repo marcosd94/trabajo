@@ -1,0 +1,230 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{planCapacitacionEditFC.modoUpdate ? messages.msg_edit : 'Cargar'} #{messages.CU495_titulo_edit}</h1>
+    <h:form id="planCapacitacion" styleClass="edit" enctype="multipart/form-data">
+
+        <rich:panel>
+            
+           <rich:panel >  <f:facet name="header">#{messages.gral_oee}</f:facet>
+		<h:panelGrid columns="2">
+		<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10"  
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2" 
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/admPlanCapacitacion/PlanCapacitacionEdit')}" />
+							</s:decorate>
+				</a:outputPanel>
+		</h:panelGrid>
+		</rich:panel>
+		<rich:panel >
+		 <f:facet name="header">#{messages.CU495_plan_capacitacion}</f:facet>
+		 	<h:panelGrid >
+            <s:decorate id="nroField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU495_nro_mesa}<span class="required">*</span></ui:define>
+                <h:inputText id="nro"
+                        value="#{planCapacitacionEditFC.planCapacitacion.nro}" style=" width : 46px;">
+                </h:inputText>
+                <h:inputText id="anio"
+                      maxlength="4"
+                          value="#{planCapacitacionEditFC.planCapacitacion.anio}" style=" width : 65px;">
+                </h:inputText>
+            </s:decorate>
+ 			<s:decorate id="montoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU495_monto_presupuestado}<span class="required">*</span></ui:define>
+                <h:inputText id="monto" styleClass="numeric" onkeypress="return soloNumeros(event);" onkeyup="format(this);"
+                        value="#{planCapacitacionEditFC.monto}">
+                </h:inputText>
+            </s:decorate>
+            
+           
+			</h:panelGrid>
+			<h:panelGrid columns="4">
+			 <s:decorate id="idDocumentoField" template="/layout/edit.xhtml">
+               <ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span>
+						</ui:define>
+                <h:selectOneMenu id="datosGral"
+							value="#{planCapacitacionEditFC.idTipoDocumento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocPlanCapacCSelectItems}" />
+				</h:selectOneMenu>
+			 </s:decorate>
+            	
+					<s:fileUpload size="15" 
+						contentType="#{planCapacitacionEditFC.contentType}"
+						data="#{planCapacitacionEditFC.uploadedFile}"
+						fileName="#{planCapacitacionEditFC.fileName}">
+						<s:conversationPropagation type="join"/>
+					</s:fileUpload>
+					<h:outputText value="#{planCapacitacionEditFC.nombreDoc}"/>
+					  <h:commandButton id="descargar" value="Descargar"  rendered="#{planCapacitacionEditFC.modoUpdate}"
+							action="#{planCapacitacionEditFC.descargar()}" >
+							<rich:toolTip for="descargar"> <span>#{messages.CU495_descargar_doc}</span> </rich:toolTip>
+					</h:commandButton>
+						
+			
+				
+            	
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+			 <s:decorate id="obsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU412_obs}</ui:define>
+                <h:inputTextarea id="obs"
+                               cols="80"
+                               rows="6"
+                         value="#{planCapacitacionEditFC.planCapacitacion.observacion}">
+                  <f:validateLength maximum="500" />
+        </h:inputTextarea>
+            </s:decorate>
+			<s:decorate id="activoField" template="/layout/edit.xhtml" rendered="#{planCapacitacionEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                    value="#{planCapacitacionEditFC.planCapacitacion.activo}"/>
+            </s:decorate>
+			</h:panelGrid>
+          
+		 
+		</rich:panel>
+
+     
+
+             <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!planCapacitacionEditFC.modoUpdate}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{planCapacitacionEditFC.modoUpdate}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+     
+                 <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{planCapacitacionEditFC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!planCapacitacionEditFC.modoUpdate}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{planCapacitacionEditFC.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{planCapacitacionEditFC.modoUpdate}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/capacitacion/admPlanCapacitacion/PlanCapacitacionList.xhtml"
+                rendered="#{planCapacitacionEditFC.modoUpdate}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty planCapacitacionFrom ? 'capacitacion/admPlanCapacitacion/PlanCapacitacionList' : planCapacitacionFrom}.xhtml"
+                rendered="#{!planCapacitacionEditFC.modoUpdate}"/>
+
+        </div>
+    </h:form>
+	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{planCapacitacionEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{planCapacitacionEditFC.planCapacitacion.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{planCapacitacionEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{planCapacitacionEditFC.planCapacitacion.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{planCapacitacionEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{planCapacitacionEditFC.planCapacitacion.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{planCapacitacionEditFC.modoUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{planCapacitacionEditFC.planCapacitacion.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

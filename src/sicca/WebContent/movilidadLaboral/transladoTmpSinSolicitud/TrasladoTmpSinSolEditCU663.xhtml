@@ -1,0 +1,550 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redtransladoConsol" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>#{messages.CU663_titulo_edit}</h1>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU582_dato_acto_admin}</f:facet>
+				<rich:panel id="panelAdjuntar">
+					<fieldset><legend>#{messages.CU663_ent_origen}</legend>
+
+					<h:panelGrid columns="3">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_nr_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText value="#{trasladoTmpSinSolEditCU663FC.nroDoc}"
+								id="idNroDoc" styleClass="numeric" style=" width : 45px;"
+								onkeypress="return soloNumeros(event);" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDoc" enableManualInput="true" 
+								value="#{trasladoTmpSinSolEditCU663FC.fechaDoc}" inputSize="10"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="tipoField" template="/layout/display.xhtml">
+							<ui:define name="label">Tipo Doc.<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipo"
+								value="#{trasladoTmpSinSolEditCU663FC.idTipoDoc}"
+								style=" width : 200px;">
+								<f:selectItems
+									value="#{trasladoTmpSinSolEditCU663FC.updateTipoDocSelectItems()}" />
+								<a:support event="onchange" reRender="tipo"
+									eventsQueue="default" />
+							</h:selectOneMenu>
+								#{' '}
+							<a:commandButton value="Buscar A.O"
+									reRender="panelAdjuntar"
+									action="#{trasladoTmpSinSolEditCU663FC.buscarDocOrigen()}" />
+						</s:decorate>
+					</h:panelGrid> <h:panelGrid columns="3">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Nombre del Archivo</ui:define>
+							<h:inputText value="#{trasladoTmpSinSolEditCU663FC.fNameMostrar}"
+								disabled="true" style=" width : 250px;" />
+						</s:decorate>
+						<s:button value="#{messages.CU663_btn_descargar_ao}"
+							disabled="#{trasladoTmpSinSolEditCU663FC.fNameMostrar==null}"
+							action="#{trasladoTmpSinSolEditCU663FC.descargarDoc()}" />
+							
+							<s:decorate template="/layout/display.xhtml"
+								id="comisionamientoField">
+								<h:selectBooleanCheckbox
+									value="#{trasladoTmpSinSolEditCU663FC.comisionamiento}"
+									/>
+								#{' '}
+								<h:outputText value="#{messages.CU747_comisionamiento}" />
+							</s:decorate>
+					</h:panelGrid> 
+					<rich:panel style="border:none;" id="panelAdjuntarOrigen" rendered="#{trasladoTmpSinSolEditCU663FC.adjuntarOrigen}">
+					<h:panelGrid columns="2"
+						style="border-style: dotted;border-color: gray;">
+						<s:fileUpload size="30"
+							contentType="#{trasladoTmpSinSolEditCU663FC.typeOrigen}"
+							data="#{trasladoTmpSinSolEditCU663FC.fileOrigenByte}"
+							fileName="#{trasladoTmpSinSolEditCU663FC.fNameOrigen}"
+							style=" width : 299px;">
+							<s:conversationPropagation type="join" />
+
+						</s:fileUpload>
+
+						<h:commandButton value="#{messages.CU663_btn_ao}" rendered="#{trasladoTmpSinSolEditCU663FC.adjuntarOrigen}"
+							action="#{trasladoTmpSinSolEditCU663FC.adjuntarDocOrigen()}" />
+					</h:panelGrid>
+					</rich:panel>
+					</fieldset>
+
+					<fieldset id="panelDestino"><legend>#{messages.CU663_ent_destino}</legend>
+					<h:panelGrid columns="4">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_nr_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText
+								value="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.nroDoc}"
+								id="idNroDoc2" styleClass="numeric" style=" width : 40px;"
+								onkeypress="return soloNumeros(event);" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDo2c" enableManualInput="true" inputSize="10"
+								value="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.fechaDoc}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="tipo2Field" template="/layout/display.xhtml">
+							<ui:define name="label">Tipo Doc.<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipo2" value="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.idTipoDoc}"
+								style=" width : 200px;">
+								<f:selectItems
+									value="#{trasladoTmpSinSolEditCU663FC.updateTipoDocSelectItems()}" />
+								<a:support event="onchange" />
+							</h:selectOneMenu>
+							#{' '}
+							<a:commandButton value="Buscar A.D"
+									reRender="panelAdjuntar"
+									action="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.buscarDoc()}" />
+						</s:decorate>
+						<s:decorate id="fechaIngresoDecorate"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU706_fec_ini}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaIngreso"
+								value="#{trasladoTmpSinSolEditCU663FC.fechaInicio}"
+								inputSize="10" datePattern="dd/MM/yyyy"
+								enableManualInput="false" oninputkeyup="ponerBarra(event)">
+								<a:support event="onchanged" reRender="fechaIngreso" />
+							</rich:calendar>
+						</s:decorate>
+
+					</h:panelGrid> <h:panelGrid columns="3">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Nombre del Archivo</ui:define>
+							<h:inputText
+								value="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.fNameMostrar}"
+								disabled="true" style=" width : 250px;" />
+						</s:decorate>
+						<s:button value="#{messages.CU663_btn_descargar_ad}"
+							disabled="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.fNameMostrar==null}"
+							action="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.descargarDoc()}" />
+						<s:decorate id="fechaFinDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha Fin<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaFin"
+								value="#{trasladoTmpSinSolEditCU663FC.fechaFin}" inputSize="10"
+								datePattern="dd/MM/yyyy" enableManualInput="false"
+								oninputkeyup="ponerBarra(event)">
+								<a:support event="onchanged" reRender="fechaFin" />
+							</rich:calendar>
+						</s:decorate>
+					</h:panelGrid> 
+					<rich:panel style="border:none;" rendered="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.habAdjuntar}">
+					<h:panelGrid columns="2"
+						style="border-style: dotted;border-color: gray;">
+						<s:fileUpload size="30"
+							contentType="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.cType}"
+							data="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.uFile}"
+							fileName="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.fName}"
+							style=" width : 299px;">
+							<s:conversationPropagation type="join" />
+
+						</s:fileUpload>
+
+						<h:commandButton value="Adjuntar Aceptación Destino"
+							action="#{trasladoTmpSinSolEditCU663FC.buscadorDocsDestino.adjuntarDocSinValidar()}" />
+					</h:panelGrid>
+					</rich:panel>
+					</fieldset>
+				</rich:panel>
+			</rich:panel>
+
+			<rich:panel id="panelPersona">
+				<f:facet name="header">#{messages.CU706_funcionario}<span
+						class="required">*</span>
+				</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="nivelCodigoField2">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.codNivelEntidad}"
+								size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField2">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField2">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+								disabled="true"
+								value="#{trasladoTmpSinSolEditCU663FC.entidadOeeUtilAnterior.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+
+				<h:panelGroup>
+					<h:panelGrid>
+						<h:panelGrid columns="2">
+							<s:decorate id="ciField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU165_ci}
+									</ui:define>
+								<h:inputText id="ci" size="50" maxlength="50"
+									style="width:150px" disabled="true"
+									value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.documentoIdentidad}">
+
+								</h:inputText>
+							</s:decorate>
+							<s:decorate id="nomField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+								<h:inputText id="nombres" size="50" disabled="true"
+									maxlength="50"
+									value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.nombres}" />
+							</s:decorate>
+							<s:decorate id="paisExpField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU541_pais}</ui:define>
+								<h:inputText disabled="true"
+									value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+							</s:decorate>
+							<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+								<h:inputText id="apellido" size="50" disabled="true"
+									maxlength="50"
+									value="#{trasladoTmpSinSolEditCU663FC.funcionario.persona.apellidos}">
+								</h:inputText>
+								#{' '}
+                <a:commandButton id="search" eventsQueue="default"
+									value="#{messages.CU440_btn_buscar_func}"
+									action="#{trasladoTmpSinSolEditCU663FC.getUrlToPageSearchFuncionario()}" />
+							</s:decorate>
+
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<s:decorate id="puestoActualField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU706_puesto_actual}</ui:define>
+								<h:inputText id="puestoActual" size="50" disabled="true"
+									value="#{trasladoTmpSinSolEditCU663FC.funcionario.plantaCargoDet.descripcion}"
+									style=" width : 560px;">
+								</h:inputText>
+							</s:decorate>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGroup>
+			</rich:panel>
+
+			<rich:panel id="panelPuestoCat">
+				<f:facet name="header">Nuevo Puesto en Entidad Destino</f:facet>
+
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigoField1">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigoField">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigoField">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+									onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+						<rich:panel id="unidadesOrganizacionalesPaneles"
+							style=" width : 450px;">
+							<f:facet name="header">#{messages.CU541_unidades_orga}</f:facet>
+
+							<div class="results" id="tbldetList"
+								style="overflow: scroll; width: 310; HEIGHT: 230px"><rich:dataTable
+								id="itemsList" var="_items" first="0"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								value="#{trasladoTmpSinSolEditCU663FC.configuracionUoDetList}"
+								rowKeyVar="_index">
+								<rich:column
+									styleClass="#{trasladoTmpSinSolEditCU663FC.getRowClass(_index)}">
+									<f:facet name="header">
+														#{messages.CU541_codigo}
+													</f:facet>
+									<h:outputText value="#{_items.orden}" />
+								</rich:column>
+								<rich:column
+									styleClass="#{trasladoTmpSinSolEditCU663FC.getRowClass(_index)}">
+									<f:facet name="header">
+														#{messages.CU541_denominacion}
+													</f:facet>
+									<h:outputText value="#{_items.denominacionUnidad}" />
+								</rich:column>
+
+								<rich:column
+									styleClass="#{trasladoTmpSinSolEditCU663FC.getRowClass(_index)}">
+									<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+									<h:commandLink id="obtPuesto"
+										value="#{messages.CU541_puesto_disponibles}"
+										eventsQueue="default"
+										action="#{trasladoTmpSinSolEditCU663FC.obtenerPuestos(_index)}" style="FONT-SIZE: x-small;"/>
+								</rich:column>
+
+							</rich:dataTable></div>
+						</rich:panel>
+					</h:panelGrid>
+					<h:panelGrid id="panelGridCodigoPuesto">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU120_link3_codigo}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="codigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{seleccionUtilFormController.codigoObj}" size="10">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="objDescripcion"
+									action="#{seleccionUtilFormController.findObj()}" />
+							</h:inputText>
+				#{' '}
+		                <h:inputText id="objDescripcion"
+								value="#{seleccionUtilFormController.valorObj}" size="50"
+								disabled="true" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU120_link3_categoria}
+						</ui:define>
+							<h:inputText id="categoria"
+								value="#{seleccionUtilFormController.codigoCategoria}" size="10">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="categoriaDescripcion,outPanelMonto"
+									action="#{seleccionUtilFormController.findCategoria()}" />
+							</h:inputText>
+				#{' '}
+		                <h:inputText id="categoriaDescripcion"
+								value="#{seleccionUtilFormController.categoria}" size="50"
+								disabled="true" />
+				 #{' '}
+               
+					</s:decorate>
+						<a:outputPanel ajaxRendered="true" id="outPanelMonto">
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">Monto<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="monto1" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{seleccionUtilFormController.monto}" size="10">
+								</h:inputText>
+
+							</s:decorate>
+						</a:outputPanel>
+						<s:decorate template="/layout/display.xhtml">
+							<a:commandButton value="Agregar"
+								onclick="if(!confirm('#{messages.CU541_msg_agregar}')){return false;}"
+								action="#{trasladoTmpSinSolEditCU663FC.agregar()}"
+								reRender="panelGridCodigoPuesto" />
+						</s:decorate>
+						<rich:panel>
+							<div class="results" id="tbldet2List"
+								style="overflow: scroll; width: 310; HEIGHT: 210px"><rich:dataTable
+								id="itemsList2" var="_pagos" first="0"
+								value="#{trasladoTmpSinSolEditCU663FC.conceptoPagosActual}"
+								rowKeyVar="rowNr2">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+									<h:outputText value="#{_pagos.objCodigo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+									<h:outputText value="#{_pagos.categoria}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+									<h:outputText value="#{_pagos.monto}" />
+								</rich:column>
+
+
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+									<a:commandLink id="deledt" value="#{messages.msg_list_remove}"
+										reRender="panelGridCodigoPuesto" eventsQueue="default"
+										action="#{trasladoTmpSinSolEditCU663FC.eliminar(rowNr2)}" />
+								</rich:column>
+
+							</rich:dataTable></div>
+						</rich:panel>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<rich:panel id="puestosPaneles" style=" width : 450px;">
+						<f:facet name="header">#{messages.CU541_puesto_disponibles}</f:facet>
+
+						<div class="results" id="tbldetList3"
+							style="overflow: scroll; width: 310; HEIGHT: 230px"><rich:dataTable
+							id="itemsList3" var="_planta" first="0"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							value="#{trasladoTmpSinSolEditCU663FC.plantaCargoDetList}"
+							rowKeyVar="rowNr3">
+							<rich:column
+								styleClass="#{trasladoTmpSinSolEditCU663FC.getRowPuestoClass(rowNr3)}">
+								<f:facet name="header">
+														#{messages.CU541_codigo}
+													</f:facet>
+								<h:outputText
+									value="#{seleccionUtilFormController.obtenerCodigoPuesto(_planta)}" />
+							</rich:column>
+							<rich:column
+								styleClass="#{trasladoTmpSinSolEditCU663FC.getRowPuestoClass(rowNr3)}">
+								<f:facet name="header">
+														#{messages.gral_descripcion}
+													</f:facet>
+								<h:outputText value="#{_planta.descripcion}" />
+							</rich:column>
+
+
+							<rich:column
+								styleClass="#{trasladoTmpSinSolEditCU663FC.getRowPuestoClass(rowNr3)}">
+								<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+								<h:commandLink id="seleccionar"
+									value="#{messages.CU541_seleccionar}"
+									reRender="panelGridCodigoPuesto" eventsQueue="default"
+									action="#{trasladoTmpSinSolEditCU663FC.seleccionarPuesto(_planta.idPlantaCargoDet,rowNr3)}" />
+							</rich:column>
+
+						</rich:dataTable></div>
+					</rich:panel>
+					
+				</h:panelGrid>
+
+				
+				
+					
+				
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{trasladoTmpSinSolEditCU663FC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/movilidadLaboral/transladoTmpSinSolicitud/TrasladoTmpSinSolCU663.xhtml" />
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

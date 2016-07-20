@@ -1,0 +1,373 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h:form id="discapasidadForm"  prependId="false"  enctype="multipart/form-data"  styleClass="edit">
+		<rich:panel style="border:none;">
+			<h:panelGrid>
+				<a:outputPanel  id="panelParanDiscapacidad"
+					eventsQueue="default">
+					<rich:panel id="discap" style=" width : 872px;">
+						<f:facet name="header">#{messages.CU156_datos_disc}</f:facet>
+						<h:panelGrid columns="1">
+							<h:outputLabel value="#{messages.CU156_msg}"
+								style="font-weight:bold" />
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<s:decorate id="discapacidadField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_discapacidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="discapacidad"
+									value="#{administrarPersonaDiscapacidad.idDiscapacidad}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByDiscapacidadSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="causaField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_causa}</ui:define>
+								<h:selectOneMenu id="causa"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.causa}">
+									<f:selectItem id="Congénito" itemLabel="Congénito" itemValue="Congénito" />
+									<f:selectItem id="Adquirido" itemLabel="Adquirido" itemValue="Adquirido" />
+								</h:selectOneMenu>		
+							</s:decorate>
+							<s:decorate id="grield" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_grado}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="gr"  onkeypress="return soloNumeros(event);"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.grado}">
+								</h:inputText><span><b>%</b></span>
+							</s:decorate>
+							<s:decorate id="gradoAuField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_grado_auto}
+								</ui:define>
+								<h:selectOneMenu id="gradoAu"
+									value="#{administrarPersonaDiscapacidad.idGradoAutonom}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByGradoAutonomiaSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate id="gradoAutField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_nro_certif}</ui:define>
+								<h:inputText id="gradoAut"  onkeypress="return soloNumeros(event);"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.nroCertificado}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_fec_emision}</ui:define>
+								<rich:calendar id="fechaEmision" datePattern="dd/MM/yyyy"
+									inputSize="10" enableManualInput="true"
+									oninputkeyup="ponerBarra(event)"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.fechaEmision}" />
+							</s:decorate>
+
+
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<s:decorate id="tipoDocField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU1556_tipo_doc}</ui:define>
+								<h:selectOneMenu id="tipoDo"
+									value="#{administrarPersonaDiscapacidad.idTipoDoc}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByTipoConcursoFPDISCSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							</h:panelGrid>
+							
+							<h:panelGrid columns="2">
+							
+							<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">Adjunto</ui:define>
+								<s:fileUpload size="30"  id="archivo" 
+						contentType="#{administrarPersonaDiscapacidad.contentType}"
+						data="#{administrarPersonaDiscapacidad.uploadedFile}"
+						fileName="#{administrarPersonaDiscapacidad.fileName}"
+						style=" width : 382px;" >
+						<a:support event="onchange" eventsQueue="default"
+						action="#{administrarPersonaDiscapacidad.changeNameDoc()}"	 reRender="panelNombreDoc"/>
+					</s:fileUpload>
+							</s:decorate>
+							</a:region>
+							<a:region><a:outputPanel ajaxRendered="true" id="panelNombreDoc">
+							<s:decorate id="documentoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_doc}</ui:define>
+								<h:inputText id="documento" disabled="true" size="30"
+									value="#{administrarPersonaDiscapacidad.nombreDoc}">
+								</h:inputText>
+							</s:decorate>
+							</a:outputPanel></a:region>
+						</h:panelGrid>
+						<h:panelGrid>
+
+							<!--<s:decorate id="tienedifField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_tiene_dificultad}</ui:define>
+								<h:inputTextarea id="tienedif"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.dificultadActividad}"
+									style=" width : 446px;">
+									   <f:validateLength maximum="250" />
+								</h:inputTextarea>
+							</s:decorate>
+							<s:decorate id="actividadRealizaField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU156_act_a_realizar}</ui:define>
+								<h:inputTextarea id="actividadRealiza"
+									value="#{administrarPersonaDiscapacidad.personaDiscapacidad.actividadRealizar}"
+									style=" width : 446px;">
+									   <f:validateLength maximum="250" />
+								</h:inputTextarea>
+							</s:decorate>-->
+
+
+						</h:panelGrid>
+
+						<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+						<div style="clear: both"><h:outputText
+							value="#{messages.CU289_obs_add}/Actualizar"
+							styleClass="labelClass" /></div>
+
+					</rich:panel>
+				</a:outputPanel>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+
+				<a:outputPanel id="panelBotones" ajaxRendered="true">
+
+					<h:commandButton id="add" eventsQueue="default"
+						rendered="#{!administrarPersonaDiscapacidad.esEdit}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+						reRender="itemsList,discapacidadPanel,panelParanDiscapacidad,resulDiscapacidad"
+						action="#{administrarPersonaDiscapacidad.addDiscapacidad()}" />
+
+					<a:commandButton id="limpiar" eventsQueue="default"
+						rendered="#{!administrarPersonaDiscapacidad.esEdit}"
+						value="Limpiar"
+						reRender="itemsList,discapacidadPanel,panelParanDiscapacidad,resulDiscapacidad"
+						action="#{administrarPersonaDiscapacidad.limpiar()}" />
+					<h:commandButton id="update"
+						rendered="#{administrarPersonaDiscapacidad.esEdit}"
+						value="#{messages.msg_update}"
+						reRender="itemsList,discapacidadPanel,panelParanDiscapacidad,resulDiscapacidad,panelBotones"
+						action="#{administrarPersonaDiscapacidad.update()}" />
+					<a:commandButton id="cancelEdit"
+						rendered="#{administrarPersonaDiscapacidad.esEdit}"
+						value="#{messages.msg_cancel}" reRender="itemsList,discapacidadPanel,panelParanDiscapacidad,resulDiscapacidad,panelBotones"
+						action="#{administrarPersonaDiscapacidad.cancelar()}" />
+
+				</a:outputPanel>
+			</h:panelGrid>
+			<h:panelGrid>
+				<a:outputPanel ajaxRendered="true" id="resulDiscapacidad"
+					eventsQueue="default">
+					<rich:panel id="discapacidadPanel" style=" width : 872px;">
+						<f:facet name="header">#{messages.CU287_item}</f:facet>
+						
+							<div class="results" id="tbldetList" style=" overflow: scroll;"  width="310">
+							<rich:dataTable id="itemsList" var="_items"
+								value="#{administrarPersonaDiscapacidad.discapacidadsList}"
+								rowKeyVar="rowNr">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_discapacidad}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosDiscapac.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_grado}
+													</f:facet>
+									<h:outputText value="#{_items.grado}" />
+
+								</rich:column>
+								<rich:column>
+
+									<f:facet name="header">
+													#{messages.CU156_causa}
+													</f:facet>
+									<h:outputText value="#{_items.causa}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_grado_auto}
+													</f:facet>
+									<h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosGradoAutonom.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_nro_certif}
+													</f:facet>
+									<h:outputText value="#{_items.nroCertificado}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_fech_emi}
+													</f:facet>
+									<h:outputText value="#{_items.fechaEmision}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU1556_tipo_doc}
+													</f:facet>
+									<h:outputText
+										value="#{_items.documentos.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_doc}
+													</f:facet>
+									<h:outputText value="#{_items.documentos.nombreFisicoDoc}" />
+								</rich:column>
+								<!--  <rich:column>
+									<f:facet name="header">
+														#{messages.CU156_dif_en}
+													</f:facet>
+									<h:outputText value="#{_items.dificultadActividad}" />
+								</rich:column>-->
+								<!--<rich:column>
+									<f:facet name="header">
+														#{messages.CU156_act_a_realizar}
+													</f:facet>
+									<h:outputText value="#{_items.actividadRealizar}" />
+								</rich:column>-->
+								<rich:column>
+									<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+									<a:commandLink id="editDet" value="#{messages.msg_edit}"
+										reRender="itemsList,discapacidadPanel,discap,update,cancelEdit,panelBotones"
+										eventsQueue="default"
+										rendered="#{_items.idPersonaDiscapacidad!=null}"
+										action="#{administrarPersonaDiscapacidad.editar(rowNr)}" />
+											   #{'  '}
+											   
+											   <a:commandLink id="removeRow"
+										action="#{administrarPersonaDiscapacidad.delItems(rowNr)}"
+										value="#{messages.msg_list_remove}"
+										onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+										reRender="itemsList,discapacidadPanel,discap,tbldetList" />
+										#{' '}
+								
+								<h:commandLink value="Descargar" target="_blank"
+								rendered="#{_items.documentos.idDocumento!=null}"
+								action="#{administrarPersonaDiscapacidad.abrirDoc(rowNr)}" />
+
+
+								</rich:column>
+							</rich:dataTable></div>
+
+						
+					</rich:panel>
+				</a:outputPanel>
+				<rich:panel id="panelRepresentante" style=" width : 872px;">
+					<f:facet name="header">#{messages.CU156_datos_repre}</f:facet>
+					<h:panelGrid columns="1">
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_pais_expedi}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="pais" disabled="#{!administrarPersonaDiscapacidad.habPaisExp}"
+								value="#{administrarPersonaDiscapacidad.idPais}"
+								style="width:250px">
+								<f:selectItems value="#{paissSelectItems}" />
+								<a:support event="onchange" reRender="panelRepresentante" action="#{administrarPersonaDiscapacidad.cambioPais()}" 
+							 eventsQueue="default" focus="docIdensField" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="docIdensField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_doc_iden}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="docIdens"
+								value="#{administrarPersonaDiscapacidad.docRep}">
+								 <a:support event="onblur" reRender="panelRepresentante" eventsQueue="default"
+	                          action="#{administrarPersonaDiscapacidad.seleccionoExDoc()}"/>
+							</h:inputText>
+						</s:decorate>
+						
+						<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU13_nacionalidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="nacionalidad"
+								value="#{administrarPersonaDiscapacidad.idNacionalidad}"
+								style="width:250px">
+								<f:selectItems
+									value="#{administrarPersonaDiscapacidad.getNacionalidadSelectItems()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="nombreField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_nom}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nombre" size="50"  disabled="#{administrarPersonaDiscapacidad.personaRepre.idPersona!=null}"
+								value="#{administrarPersonaDiscapacidad.nomRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_apellido}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="apellido" size="50"
+								value="#{administrarPersonaDiscapacidad.apeRep}">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="correoElectField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_mail}</ui:define>
+							<h:inputText id="correoElectronico"  size="30"
+								value="#{administrarPersonaDiscapacidad.mail}">
+							</h:inputText>
+						</s:decorate>
+						
+						<s:decorate id="obsField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_obs}</ui:define>
+							<h:inputTextarea id="obs" cols="40"
+								value="#{administrarPersonaDiscapacidad.reprPersonaDiscapacidad.observacion}">
+							</h:inputTextarea>
+						</s:decorate>
+						
+					</h:panelGrid>
+					<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+					<div style="clear: both"><h:outputText
+						value="Obs.: #{messages.CU156_msg_save}"
+						styleClass="labelClass" /></div>
+					
+					<a:commandButton id="sav" 
+							action="#{administrarPersonaDiscapacidad.save()}"
+							value="#{messages.msg_save}"
+							onclick="if(!confirm('#{messages.msg_confirm_save}')){return false;}"
+							reRender="panelRepresentante"/>
+					<a:commandButton id="delete"  rendered="#{administrarPersonaDiscapacidad.reprPersonaDiscapacidad.idReprPersonaDiscapacidad!=null}"
+							action="#{administrarPersonaDiscapacidad.eliminar()}"
+							value="Eliminar Representante"
+							onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+							reRender="panelRepresentante"/>
+				</rich:panel>
+			</h:panelGrid>
+
+
+		</rich:panel>
+
+
+		<div class="actionButtons"><s:button id="cancelar"
+			value="#{messages.msg_done}" propagation="none"
+			view="/cuentaUsuarioPortal.xhtml" /></div>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,88 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.Rol_}</h1>
+		<rich:panel>
+			<f:facet name="header">Ver #{messages.Rol_}</f:facet>
+
+			<s:decorate id="descripcion" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.Rol_descripcion}</ui:define>
+				<h:outputText
+					value="#{administrarRolesFormController.rol.descripcion}" />
+			</s:decorate>
+
+			<s:decorate id="activo" template="/layout/display.xhtml">
+				<ui:define name="label">Activo</ui:define>
+				<h:selectBooleanCheckbox id="activo" disabled="true"
+					value="#{administrarRolesFormController.rol.activo}" />
+			</s:decorate>
+
+			<div style="clear: both" />
+			<rich:panel style="border:none; width : 700px;" id="tab03">
+				<div class="results" id="rolfuncionList"
+					style="overflow: auto; HEIGHT: 300px;"><rich:dataTable
+					id="rolFuncionList" var="_rolFuncion" cellpadding="0"
+					cellspacing="0" width="600" border="0"
+					value="#{administrarRolesFormController.rolFuncionListVer}"
+					rendered="#{not empty administrarRolesFormController.rolFuncionListVer}"
+					rowKeyVar="rowNr">
+					<rich:column width="300px">
+						<f:facet name="header">
+						#{messages.Rol_funcion}
+					</f:facet>
+						<h:outputText value="#{_rolFuncion.funcion.descripcion}" />
+					</rich:column>
+					<rich:column width="300px">
+						<f:facet name="header">
+						#{messages.Rol_modulo}
+					</f:facet>
+						<h:outputText value="#{_rolFuncion.funcion.modulo}" />
+					</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel>
+		</rich:panel>
+
+		<div class="actionButtons"><s:button
+			view="/seguridad/rol/#{empty rolFrom ? 'RolList' : rolFrom}.xhtml"
+			id="done" value="Volver" /></div>
+		<br />
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{rolHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta" value="#{rolHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{rolHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta" value="#{rolHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{rolHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod" value="#{rolHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{rolHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod" value="#{rolHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+
+	</ui:define>
+
+</ui:composition>

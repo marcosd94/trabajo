@@ -1,0 +1,1 @@
+ALTER TABLE remuneracion.remuneraciones ALTER id_empleado_puesto DROP NOT NULL;

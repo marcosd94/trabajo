@@ -1,0 +1,217 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU590_title}</h1>
+
+
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/consultaIngCon/consultaIngCon590')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/consultaIngCon/consultaIngCon590')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{consultaIngCon590FC.findUnidadOrganizativa()}"
+										reRender="motivoField,unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/consultaIngCon/consultaIngCon590')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+					</a:outputPanel>
+
+					<s:decorate id="motivoField" template="/layout/display.xhtml">
+						<ui:define name="label">Concurso<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu style="width : 250px;"
+							value="#{consultaIngCon590FC.idConcurso}">
+							<f:selectItems value="#{consultaIngCon590FC.concursosSI}" />
+							<a:support event="onchange"
+								action="#{consultaIngCon590FC.searchConcurso()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<a:outputPanel id="idPanelGrupo" ajaxRendered="true">
+						<rich:extendedDataTable
+							noDataLabel="#{messages.msg_list_search_no_results}"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							cellpadding="0" cellspacing="0" border="0" var="_record"
+							height="100px" value="#{consultaIngCon590FC.lGrupos}">
+							<rich:column width="8%">
+								<f:facet name="header">
+						#{messages.CU590_codigo}
+						</f:facet>
+								<h:outputText style="white-space:normal;word-wrap: break-word"
+									value="#{_record.idConcursoPuestoAgr}" />
+							</rich:column>
+							<rich:column width="80%">
+								<f:facet name="header">
+						#{messages.CU590_descGrupo}
+						</f:facet>
+								<h:outputText style="white-space:normal"
+									value="#{_record.descripcionGrupo}" />
+							</rich:column>
+
+							<rich:column width="10%">
+								<f:facet name="header">
+
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{_record.seleccionado}">
+
+								</h:selectBooleanCheckbox>
+							</rich:column>
+
+						</rich:extendedDataTable>
+					</a:outputPanel>
+
+					<h:panelGrid columns="4">
+						<a:commandButton value="Buscar" reRender="panelResultados"
+							eventsQueue="default" action="#{consultaIngCon590FC.search()}" />
+						<a:commandButton value="Seleccionar Todos"
+							reRender="plantaCargoDetSearch:idPanelGrupo"
+							eventsQueue="default"
+							action="#{consultaIngCon590FC.markAll(true)}" />
+						<a:commandButton value="#{messages.CU590_quitarSeleccion}"
+							reRender="plantaCargoDetSearch:idPanelGrupo"
+							eventsQueue="default"
+							action="#{consultaIngCon590FC.markAll(false)}" />
+						<a:commandButton value="Limpiar"
+							reRender="plantaCargoDetSearch:panelBusqueda,panelResultados"
+							eventsQueue="default" action="#{consultaIngCon590FC.limpiar()}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty consultaIngCon590FC.lEmpleadoPuesto ? 0 : consultaIngCon590FC.lEmpleadoPuesto.size()})</f:facet>
+				<div class="results" id="empleadoPuestoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty consultaIngCon590FC.lEmpleadoPuesto}" /> <rich:dataTable
+					id="empleadoPuestoList" var="_empleadoPuesto"
+					value="#{consultaIngCon590FC.lEmpleadoPuesto}" rowKeyVar="row">
+					<h:column>
+						<f:facet name="header">#{messages.CU590_descGrupo}
+							 
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU159_ci}
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Nombres y Apellidos
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.persona.nombres} #{_empleadoPuesto.persona.apellidos}" />
+					</h:column>
+
+
+					<h:column>
+						<f:facet name="header">
+							Fecha de Ingreso
+						</f:facet>
+						<h:outputText value="#{_empleadoPuesto.fechaInicio}" />
+					</h:column>
+
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/seleccion/consultaIngCon/consultaIngCon590Ver.xhtml"
+							value="Ver" propagation="join">
+							<f:param name="idEmpleadoPuesto"
+								value="#{_empleadoPuesto.idEmpleadoPuesto}" />
+							<f:param name="idPersona"
+								value="#{_empleadoPuesto.persona.idPersona}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<div class="actionButtons"><s:button id="reset"
+				view="/home.xhtml" propagation="none" value="Volver" /></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

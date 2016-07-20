@@ -1,0 +1,206 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+		<a:form>
+			<rich:simpleTogglePanel label="#{messages.CU252_titulo}"
+				  switchType="client">
+				<rich:panel id="panelParametro">
+					<f:facet name="header">Grupo de Puestos</f:facet>
+					<h:panelGrid columns="3">
+						<s:decorate id="nivelField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_nivel}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+						</s:decorate>
+						<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+						</s:decorate>
+						<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Concurso</ui:define>
+							<h:inputText id="concurso" disabled="true"
+								value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+								style=" width : 514px;" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{!AdmCronogramaConcursoFromController.modoConcurso}">
+							<ui:define name="label">Grupo de Puestos</ui:define>
+							<h:inputText id="usuMod" disabled="true"
+								rendered="#{grupoPuestosController.concursoPuestoAgr!=null}"
+								value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+								style=" width : 514px;" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel label="#{messages.CU252_cronoActividades}"
+				id="idPanelCab" switchType="client">
+				<h:panelGrid columns="3" border="0">
+					<s:decorate id="nroCronogramaField2" template="/layout/edit.xhtml">
+						<ui:define name="label">Nro. cronograma<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText
+							disabled="#{AdmCronogramaConcursoFromController.cronogramaConcCab.idCronogramaConcCab!=null}"
+							id="nroCronograma" style="width :250px;"
+							value="#{AdmCronogramaConcursoFromController.cronogramaConcCab.nroCronograma}">
+
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="descripcionField2" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU252_descripcion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText
+							disabled="#{AdmCronogramaConcursoFromController.cronogramaConcCab.idCronogramaConcCab!=null}"
+							id="descripcion" style="width :250px;" maxlength="150"
+							value="#{AdmCronogramaConcursoFromController.cronogramaConcCab.descripcion}">
+						</h:inputText>
+					</s:decorate>
+					<a:commandButton id="agregarDet" value="#{messages.msg_save}"
+						reRender="divBtn,idPanelCab"
+						rendered="#{AdmCronogramaConcursoFromController.cronogramaConcCab.idCronogramaConcCab==null}"
+						action="#{AdmCronogramaConcursoFromController.saveCabecera()}">
+					</a:commandButton>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+
+			<rich:panel id="idPanelActividades">
+				<f:facet name="header">#{messages.CU252_cronogramaActivo}</f:facet>
+				<div class="results" id="cronogramaConcCabList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty AdmCronogramaConcursoFromController.lActividades}" />
+
+				<rich:dataTable id="concursoList" var="_dto" rowKeyVar="row"
+					value="#{AdmCronogramaConcursoFromController.lActividades}"
+					rendered="#{not empty AdmCronogramaConcursoFromController.lActividades}">
+
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU252_actividad}
+						</f:facet>
+						<h:outputText value="#{_dto.actividad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU252_fecha}
+						</f:facet>
+						<h:outputText value="#{_dto.fecha}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU252_fechaHasta}
+						</f:facet>
+						<h:outputText value="#{_dto.fechaHasta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU252_lugar}
+						</f:facet>
+						<h:outputText value="#{_dto.lugar}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+
+						<s:link
+							view="/seleccion/administrarCronogramaConcurso/CronogramaConcCab.xhtml"
+							value="Ver" propagation="join" id="cronogramaConcCab">
+							<f:param name="idCronogramaConcDet"
+								value="#{_dto.idCronogramaConcDet}" />
+							<f:param name="idCronogramaConcCab"
+								value="#{_dto.cronogramaConcCab.idCronogramaConcCab}" />
+							<f:param name="modoEditado" value="#{true}" />
+							<f:param name="fromConcurso" value="#{from}" />
+
+						</s:link>
+					#{' '}
+					<s:link
+							view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="join"
+							id="cronogramaConcCabEdit">
+							<f:param name="idCronogramaConcDet"
+								value="#{_dto.idCronogramaConcDet}" />
+							<f:param name="idCronogramaConcCab"
+								value="#{_dto.cronogramaConcCab.idCronogramaConcCab}" />
+							<f:param name="modoEditado" value="#{true}" />
+							<f:param name="fromConcurso" value="#{from}" />
+
+						</s:link>
+					#{' '}					
+							<a:commandLink id="eliminarLnk"
+							value="#{messages.GENERICO_ELIMINAR}"
+							reRender="idPanelActividades"
+							action="#{AdmCronogramaConcursoFromController.eliminarActividad(row)}">
+						</a:commandLink>
+					</h:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</a:form>
+		<s:div styleClass="actionButtons" id="divBtn">
+			<s:button
+				rendered="#{AdmCronogramaConcursoFromController.cronogramaConcCab.idCronogramaConcCab!=null}"
+				view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabEdit.xhtml"
+				id="createBTN" propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="cronogramaConcCabIdCronogramaConcCab" value="#{null}" />
+				<f:param name="fromConcurso" value="#{from}" />
+				<f:param name="modoConcurso"
+					value="#{AdmCronogramaConcursoFromController.modoConcurso}" />
+				<f:param name="idGrupo"
+					value="#{grupoPuestosController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+
+			</s:button>
+			<s:button id="volverAdd" value="Volver" view="/#{from}.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{empty agr ? grupoPuestosController.idConcursoPuestoAgr : AdmCronogramaConcursoFromController.idFechasGrupoPuesto}" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

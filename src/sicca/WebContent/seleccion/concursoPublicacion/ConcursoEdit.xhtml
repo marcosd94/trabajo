@@ -1,0 +1,230 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.public_titulo_edit}</h1>
+		<h:form id="concurso" styleClass="edit">
+
+			<rich:panel id="panel">
+				<f:facet name="header">#{concursoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.public_titulo_edit}</f:facet>
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+					<a:region>
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.ClasificadorUo_nivel}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+											>
+											<a:support event="onchange" eventsQueue="default"
+												reRender="idPanelCampos" focus="entidadCodigo"
+												action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+										</h:inputText>	
+						                #{' '}
+						                <h:inputText id="nivelDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+													disabled="true" />
+									 	#{' '}
+		               
+						  				<a:commandButton id="searchNi" eventsQueue="default"
+											image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/concursoPublicacion/ConcursoEdit')}" 
+											/>
+								</s:decorate>
+							
+							
+							
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.Usuario_entidad}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+											>
+											<a:support event="onchange" eventsQueue="default"
+												action="#{nivelEntidadOeeUtil.findEntidad()}"
+												reRender="idPanelCampos" focus="unidadOrgCodigo" />
+										</h:inputText>
+						                #{' '}
+						                <h:inputText id="entidadDescripcion"
+														value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+														disabled="true" />
+										#{' '}
+		                				<a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/concursoPublicacion/ConcursoEdit')}" 
+											/>
+								</s:decorate>
+							
+							
+							
+								<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.gral_oee}
+											<span class="required">*</span>
+										</ui:define>
+										<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+											value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+											onkeypress="return soloNumeros(event);"
+											>
+											<a:support event="onchange" eventsQueue="default"
+												action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+												reRender="unidadOrgCodigo,unidadOrgDenominacion" 
+												focus="orgCodigo2"/>
+										</h:inputText>
+											#{' '}
+											<h:inputText id="unidadOrgDenominacion" size="50"
+											disabled="true"
+											value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+										#{' '}
+		                				<a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/concursoPublicacion/ConcursoEdit')}" 
+											/>
+								</s:decorate>
+							
+						</a:region>
+				</a:outputPanel>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="2">
+						<a:region>
+							<s:decorate id="nombreField1" template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre</ui:define>
+								<h:inputText id="nombre" required="true" size="100"
+									maxlength="100"
+									value="#{administrarConcursoFormController.concurso.nombre}">
+									<a:support event="onblur" eventsQueue="default"></a:support>
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+					</h:panelGrid>
+					<a:region>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU40_tipo_concurso}
+						</ui:define>
+							<h:selectOneMenu id="idTipoConcurso" required="true"
+								value="#{administrarConcursoFormController.idTipoConcurso}"
+								style="width:250px">
+								<f:selectItems
+									value="#{datosEspecificossByTipoConcursoSelectItems}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{administrarConcursoFormController.esMeritoOinterInstitucional()}"
+									reRender="panel" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<s:decorate id="adReferendumField" template="/layout/edit.xhtml"
+						rendered="#{administrarConcursoFormController.mostrarAdReferendum}">
+						<ui:define name="label">#{messages.CU40_referendum} Si
+						</ui:define>
+						<h:selectOneRadio id="adReferendum" required="true"
+							value="#{administrarConcursoFormController.radioButton}">
+							<f:selectItem id="item1" itemLabel="Si" itemValue="SI" />
+							<f:selectItem id="item2" itemLabel="No" itemValue="NO" />
+						</h:selectOneRadio>
+					</s:decorate>
+					<s:decorate id="pcdField" template="/layout/edit.xhtml">
+						<ui:define name="label">PcD Si
+						</ui:define>
+						<h:selectOneRadio id="pcd" required="true"
+							value="#{administrarConcursoFormController.radioPcd}">
+							<f:selectItem id="item1" itemLabel="Si" itemValue="SI" />
+							<f:selectItem id="item2" itemLabel="No" itemValue="NO" />
+						</h:selectOneRadio>
+					</s:decorate>
+
+					<s:decorate id="desprecarizadoField" template="/layout/edit.xhtml"
+						rendered="#{administrarConcursoFormController.mostrarDesprecarizado}">
+						<ui:define name="label">Desprecarización
+						</ui:define>
+						<h:selectOneRadio id="desprecarizado" required="true"
+							value="#{administrarConcursoFormController.radioDesprecarizado}">
+							<f:selectItem id="itemDesprecarizado1" itemLabel="Si"
+								itemValue="SI" />
+							<f:selectItem id="itemDesprecarizado2" itemLabel="No"
+								itemValue="NO" />
+						</h:selectOneRadio>
+					</s:decorate>
+
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="3"
+							onkeypress="return imposeMaxLength(event, this, 250);"
+							value="#{administrarConcursoFormController.concurso.observacion}">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_actualizar}"
+					rendered="#{concursoHome.managed}" /></div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}"
+					rendered="#{!concursoHome.managed}" /></div>
+				<br />
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{administrarConcursoFormController.savePublicacion()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{administrarConcursoFormController.idConcurso == null}" />
+			<h:commandButton id="update" value="#{messages.msg_update}"
+				action="#{administrarConcursoFormController.updatePublicacion()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{administrarConcursoFormController.operacion == 'updated'}" />
+			 <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/concursoPublicacion/ConcursoList.xhtml" /></div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta" value="#{concursoHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{concursoHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{concursoHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod" value="#{concursoHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{concursoHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{concursoHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

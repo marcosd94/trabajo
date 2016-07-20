@@ -1,0 +1,207 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU552_titulo_ver}</h1>
+    <h:form id="gruposEvaluacionEdit" styleClass="edit" enctype="multipart/form-data">
+    
+    	
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			  <h:panelGrid >
+			  <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{gruposEvaluacionEditFC.evaluacion}"/>
+            </s:decorate>
+			  </h:panelGrid>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				
+						<ui:remove>
+							<a:outputPanel >
+										<s:decorate template="/layout/display.xhtml">
+																<ui:define name="label">#{messages.CU398_unidadOrganiza}
+																</ui:define>
+																<h:inputText id="orgCodigo2" size="10" disabled="true"
+																	value="#{gruposEvaluacionEditFC.codigoUnidOrgDep}">
+																</h:inputText>
+																#{' '}
+																<h:inputText id="orgDenominacion2" size="50" disabled="true"
+																	value="#{gruposEvaluacionEditFC.denominacion}" />
+																
+														</s:decorate>
+											</a:outputPanel>
+						</ui:remove>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:panel>
+		<rich:panel id="panelDescargas">
+				<f:facet name="header">#{messages.CU552_definir_grupo}</f:facet>
+				<h:panelGrid columns="2">
+				<a:region >
+					<s:decorate id="docInfoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU552_grupo}<span class="required">*</span></ui:define>
+						<h:inputText id="docInfo" size="50"  disabled="true"
+							value="#{gruposEvaluacionEditFC.grupo}">
+							<a:support event="onchange" reRender="docInfo" eventsQueue="default"/>
+						</h:inputText>
+					</s:decorate></a:region>
+					<a:region >
+						<s:decorate id="comtEvaluacionField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU552_comite_evaluacion}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="idcomtEvaluacion" value="#{gruposEvaluacionEditFC.idComisionEval}" disabled="true" style="width:250px">
+						<f:selectItems value="#{gruposEvaluacionEditFC.comisionEvalSelectItems}">
+							<a:support event="onchange" reRender="idcomtEvaluacion"  eventsQueue="default"/>
+						</f:selectItems>
+					</h:selectOneMenu>
+				</s:decorate></a:region>
+					
+				</h:panelGrid>
+				
+				
+				
+			
+			</rich:panel>
+			<h:panelGrid columns="1">
+			<div class="actionButtons">
+						
+			</div>
+			<rich:panel id="funcionariosAgrupados">
+				<f:facet name="header">#{messages.CU552_funcionario_agrupado}</f:facet>
+ 			<div class="results" id="tblagrupadosList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="agrupados" var="_agrupados"  rowKeyVar="index"
+					value="#{gruposEvaluacionEditFC.gruposSujetoLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_unidad_org}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_funcionario}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU165_ci}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_puesto}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_fec_ingreso}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.fechaInicio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_antiguedad}
+						</f:facet>
+						<h:outputText value="#{gruposEvaluacionEditFC.antiguedad(_agrupados.sujetos.idSujetos)}" />
+					</h:column>
+					
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+			</h:panelGrid>
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           
+            
+ 			
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join"
+              view="/#{empty gruposEvaluacionFrom ? 'evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionList' : gruposEvaluacionFrom}.xhtml"
+                   >
+                    <f:param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{gruposEvaluacionEditFC.idEvaluacionDesempeno}"/>
+                   </s:button>
+
+        </div>
+       
+      
+        
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

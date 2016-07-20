@@ -1,0 +1,151 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+<!--  -->
+		<h:form id="usuarioPortal" styleClass="edit">
+			<h1>#{messages.CU13_titulo}</h1>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU13_titulo}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate id="paisField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Barrio_pais}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="pais"
+								value="#{usuarioPortalFormController.idPais}"
+								style="width:250px" tabindex="0" >
+								<f:selectItems value="#{paissSelectItems}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate id="mailField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU13_correo}</ui:define>
+							<h:inputText id="mail" required="true" size="50" maxlength="50"
+								value="#{usuarioPortalFormController.email}" tabindex="6">
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					<s:decorate id="nacionalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_nacionalidad}</ui:define>
+						<h:selectOneMenu id="nacionalidad" required="true"
+							value="#{usuarioPortalFormController.idNacionalidad}"
+							style="width:250px" tabindex="1">
+							<f:selectItems
+								value="#{usuarioPortalFormController.getNacionalidadSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<a:region>
+						<s:decorate id="mailConfirmField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU13_confirmar_correo}</ui:define>
+							<div oncopy="return false;" onpaste="return false;">
+							<h:inputText id="mailconfirmation" required="true" size="50"
+								maxlength="50"
+								value="#{usuarioPortalFormController.confirmarEmail}" tabindex="7">
+							</h:inputText>
+							</div>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate id="ciField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_doc_iden}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="ci" size="50" maxlength="50"
+								value="#{usuarioPortalFormController.documentoIdentidad}" tabindex="2">
+
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<a:outputPanel ajaxRendered="true" id="nombrePanel">
+						<s:decorate id="nombreField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU196_nombres}</ui:define>
+							<h:inputText id="nombre" required="true" size="50" maxlength="80"
+								value="#{usuarioPortalFormController.nombre}" tabindex="3">
+							</h:inputText>
+						</s:decorate>
+					</a:outputPanel>
+					<h:graphicImage id="imageCaptcha" value="#{captcha.urlCaptcha}" />
+					<a:commandButton id="reload" eventsQueue="default"
+						image="/img/reload.jpg" reRender="imageCaptcha" immediate="true"
+						action="#{captcha.reload()}" tabindex="8" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<a:outputPanel ajaxRendered="true" id="apellidoPanel">
+						<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU13_apellido}</ui:define>
+							<h:inputText id="apellido" size="50" maxlength="80"
+								required="true" value="#{usuarioPortalFormController.apellido}" tabindex="4">
+							</h:inputText>
+						</s:decorate>
+					</a:outputPanel>
+					<h:outputText id="out"
+						value="Escribe los cuatro caracteres que ves en la imagen." />
+
+
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_fecNac}</ui:define>
+						<rich:calendar id="fechaDesde" datePattern="dd/MM/yyyy"
+							locale="#{localeSelector.localeString}" inputSize="10"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							required="true" value="#{usuarioPortalFormController.fechaNac}"  tabindex="5"/>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU12_ingrese_cod}</ui:define>
+						<h:inputText id="verifyCaptcha" value="#{captcha.response}"
+							required="true" tabindex="9">
+							<s:validate />
+
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+
+
+
+
+				<div style="clear: both">
+					<h:outputText value="#{messages.CU13_msg}" styleClass="labelClass" />
+				</div>
+
+
+
+
+				<div style="clear: both">
+					<span class="required">*</span> #{messages.msg_required_fields}
+				</div>
+				<div style="clear: both">
+					<h:outputText value="#{messages.msg_obs_save}"
+						styleClass="labelClass" />
+				</div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" tabindex="10"
+				action="#{usuarioPortalFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" />
+			<s:button id="cancelEdit" value="#{messages.msg_done}"
+				propagation="end" view="/Portal.xhtml"  tabindex="11"/></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

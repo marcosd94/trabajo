@@ -1,0 +1,356 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="usuario" styleClass="edit" enctype="multipart/form-data">
+			<h1>#{messages.Usuario_plural}</h1>
+			<rich:panel id="panelPrincipal">
+				<f:facet name="header">#{usuarioHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.Usuario_}</f:facet>
+
+				<h:panelGrid>
+					<a:region>
+						<s:decorate id="codigoUsuarioField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Usuario_}</ui:define>
+							<h:inputText id="codigoUsuario" required="true" size="69" disabled="TRUE" 
+								value="#{usuarioFormController.codigoUsuario}" rendered="#{usuarioHome.managed}">
+
+								<a:support event="onchange"
+									action="#{usuarioFormController.getCodigoUsuario()}" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										 
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5" disabled="#{!usuarioFormController.esRolHomologar()}">
+							<a:support event="onchange" eventsQueue="default"
+								reRender="nivelDescripcion" focus="entidadCodigo"
+								action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+							image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seguridad/usuario/UsuarioEdit')}" rendered="#{usuarioFormController.esRolHomologar()}"/>
+					</s:decorate>
+				</a:region>
+
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+										 
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5" disabled="#{!usuarioFormController.esRolHomologar()}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.findEntidad()}"
+								reRender="entidadDescripcion" focus="unidadOrgCodigo" />
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seguridad/usuario/UsuarioEdit')}" rendered="#{usuarioFormController.esRolHomologar()}"/>
+					</s:decorate>
+				</a:region>
+
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+						</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="#{!usuarioFormController.esRolHomologar()}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+								reRender="unidadOrgCodigo,unidadOrgDenominacion,codigoUsuarioField"
+								focus="orgCodigo2" />
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageOee('seguridad/usuario/UsuarioEdit')}" rendered="#{usuarioFormController.esRolHomologar()}" />
+					</s:decorate>
+				</a:region>
+				<a:region>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('seguridad/usuario/UsuarioEdit')}" />
+					</s:decorate>
+				</a:region>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+				
+					<a:region>
+							<h:panelGrid columns="2">
+								<s:decorate id="paisExpField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU40_paises_expedicion}<s:div
+									style="float:right">
+									<span class="required">*</span>
+								</s:div>
+							</ui:define>
+							<h:selectOneMenu id="idPaisExped"  disabled="#{usuarioHome.managed}"
+								value="#{usuarioFormController.idPaisExp}"
+								style="width: 
+							250px">
+								<a:support event="onchange" reRender="nombreUsuarioField,apellidoUsuarioField,personaAdd,docCI" focus="docCI"
+									action="#{usuarioFormController.limpiarDatosPersona()}"></a:support>
+								<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+								<a:status id="idSatatusPersonSearch"
+									onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+								<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU528_docIdentidad}<span class="required">*</span><s:div style="float:right">
+								</s:div>
+							</ui:define>
+							<h:inputText id="docCI" size="30" disabled="#{usuarioHome.managed}"
+								value="#{usuarioFormController.docIdentidad}"
+								style=" width : 154px;">
+								<a:support event="onblur" reRender="nombreUsuarioField,apellidoUsuarioField,personaAdd,codigoUsuarioField,mailField,mailConfirmField"
+									action="#{usuarioFormController.buscarPersona()}"></a:support>
+							</h:inputText>#{' '}
+							<s:link propagation="join" rendered="#{!usuarioHome.managed}"
+							view="/seleccion/persona/PersonaList.xhtml">
+								<f:param name="from"
+									value="/seguridad/usuario/UsuarioEdit" />
+								<s:graphicImage value="/img/Buscar.png" />
+							</s:link>						
+										#{' '}<s:button value="Agregar Persona" propagation="join" id="personaAdd"
+								view="/seleccion/persona/PersonaEdit.xhtml" rendered="#{!usuarioHome.managed}"
+								disabled="#{!usuarioFormController.habBtnAddPersons}">
+								<f:param name="personaFrom" value="/seguridad/usuario/UsuarioEdit" />
+							</s:button>#{' '}
+						</s:decorate>	
+								
+
+							</h:panelGrid>
+						</a:region>
+				</h:panelGrid>
+
+				<s:decorate id="nombreUsuarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Usuario_nombre}</ui:define>
+					<h:inputText id="nombreUsuario" disabled="true" size="69"
+						value="#{usuarioFormController.persona.nombres}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="apellidoUsuarioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Usuario_apellido}</ui:define>
+					<h:inputText id="apellidoUsuario" disabled="true" size="69"
+						value="#{usuarioFormController.persona.apellidos}">
+					</h:inputText>
+				</s:decorate>
+				
+				<a:region>
+					<s:decorate id="mailField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_correo}</ui:define>
+							<h:inputText id="mail" required="true" size="50" maxlength="50"
+								value="#{usuarioFormController.email}" tabindex="6">
+							</h:inputText>
+					</s:decorate>
+				</a:region>
+				
+				<a:region>
+					<s:decorate id="mailConfirmField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU13_confirmar_correo}</ui:define>
+						<div oncopy="return false;" onpaste="return false;">
+							<h:inputText id="mailconfirmation" required="true" size="50"
+								maxlength="50"
+								value="#{usuarioFormController.confirmarEmail}" tabindex="7">
+							</h:inputText>
+						</div>
+					</s:decorate>
+				</a:region>
+
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Usuario_activo}</ui:define>
+					<h:selectBooleanCheckbox id="activo" required="true"
+						disabled="false" value="#{usuarioFormController.usuario.activo}" />
+				</s:decorate>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" rendered="#{!usuarioHome.managed}"
+					styleClass="labelClass" /> <h:outputText
+					value="#{messages.msg_obs_update}"
+					rendered="#{usuarioHome.managed}" styleClass="labelClass" /></div>
+
+			</rich:panel>
+			<br />
+			
+			<rich:panel >
+			<f:facet name="header">#{messages.SO_info_alta_usuario}</f:facet><span
+								class="required">*</span>
+			<div style="clear:both">
+            <h:outputText value="#{messages.SO_seleccione_doc_alta_usuario}" id="see" styleClass="labelClass"/>
+        	</div>
+			<h:panelGrid columns="1">
+				
+			<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="datosGral"
+							value="#{usuarioFormController.idTipoDocumento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocAltaUsuarioSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto<span
+								class="required">*</span></ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{usuarioFormController.contentType}"
+						data="#{usuarioFormController.uploadedFile}"
+						fileName="#{usuarioFormController.fileName}">
+						<s:conversationPropagation type="join"/>
+					</s:fileUpload>
+						
+						
+				</s:decorate>	
+				
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+		<a:outputPanel >
+		<s:decorate id="archivoDescargaField" template="/layout/edit.xhtml">
+		<h:commandButton id="descargar" value="Descargar" target="_blank" rendered="#{usuarioFormController.documentos.idDocumento!=null}"
+							action="#{usuarioFormController.abrirDocumento()}" >
+			<rich:toolTip for="descargar"> <span> #{messages.CU495_descargar_doc}</span> </rich:toolTip>
+		</h:commandButton>
+		<h:inputText disabled="true" value="#{usuarioFormController.nombreDoc}" id="nombreDoc" style=" width : 389px;"/>
+		<s:link view="/seguridad/usuario/AccionAgregarDocumento.xhtml"
+				value="Otros Adjuntos" propagation="none" id="agregarDocumento"
+				rendered="#{usuarioFormController.documentos.idDocumento!=null}">
+							<f:param name="idPersona" value="#{usuarioFormController.persona.idPersona}" />
+							<f:param name="idUsuario" value="#{usuarioFormController.usuario.idUsuario}" />
+		</s:link>
+
+			</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+			</rich:panel>
+			<h:panelGrid columnClasses="2">
+		     	<a:region>
+			     	<s:decorate id="rolSinAsignarField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.Rol_sin_asignar}</ui:define>
+		                <h:inputText id="rolSinAsignar" value="#{usuarioFormController.rolDesc}" size="60">
+		                	<a:support event="onkeyup" ajaxSingle="true" action="#{usuarioFormController.actualizarRolSinAsignar()}"
+										reRender="listRoles" />
+						</h:inputText>
+		            </s:decorate>
+	            </a:region>
+		     </h:panelGrid>
+			<br />
+			<fieldset style="width: 47%"><a:region>
+				<rich:listShuttle
+					sourceValue="#{usuarioFormController.rolesSinAsignar}"
+					id="listRoles"
+					targetValue="#{usuarioFormController.rolesAsignados}" var="rolUser"
+					listsHeight="150" sourceListWidth="400" targetListWidth="400"
+					sourceCaptionLabel="#{messages.Usuario_roles_sin_asignar}"
+					targetCaptionLabel="#{messages.Usuario_roles_asignados}"
+					converter="org.jboss.seam.ui.EntityConverter">
+					<rich:column width="18">
+						<h:outputText value="#{rolUser.descripcion}" />
+					</rich:column>
+					 <a:support event="onlistchanged" action="#{usuarioFormController.storeItemInList(rolUser)}"/>
+				</rich:listShuttle>
+			</a:region></fieldset>
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{usuarioFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');this.hide;"
+				rendered="#{!usuarioHome.managed and usuarioFormController.new}" />
+
+			<h:commandButton id="update" value="#{messages.msg_update}"
+				action="#{usuarioFormController.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{usuarioHome.managed}" /> <h:commandButton id="restore"
+				value="#{messages.msg_restore}"
+				action="#{usuarioFormController.restaurarPass()}"
+				onclick="return confirm('#{messages.msg_confirm_restore}');"
+				rendered="#{usuarioHome.managed}" /> <s:button id="cancelEdit"
+				value="#{messages.msg_done}" propagation="none" includePageParams="false"
+				view="/seguridad/usuario/UsuarioList.xhtml"
+				rendered="#{usuarioHome.managed}" /> <s:button id="cancelAdd"
+				value="#{messages.msg_done}" propagation="none" includePageParams="false"
+				view="/#{empty usuarioFrom ? 'seguridad/usuario/UsuarioList' : usuarioFrom}.xhtml"
+				rendered="#{!usuarioHome.managed}" /></div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{usuarioHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta" value="#{usuarioHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{usuarioHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{usuarioHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{usuarioHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod" value="#{usuarioHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{usuarioHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod" value="#{usuarioHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+
+	</ui:define>
+
+</ui:composition>

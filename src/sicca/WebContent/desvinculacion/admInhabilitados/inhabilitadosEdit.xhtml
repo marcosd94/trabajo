@@ -1,0 +1,252 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+
+		<h1>#{admInhabilitadosFC.titulo}</h1>
+
+		<h:form>
+			<rich:simpleTogglePanel label="#{messages['CU441_funcionario']}"
+				switchType="client" id="panelParamentro">
+
+				<h:panelGrid columns="2">
+					<s:decorate id="docField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_documentoIdentidad}</ui:define>
+						<h:inputText id="doc" size="30" disabled="true"
+							value="#{admInhabilitadosFC.inhabilitados.persona.documentoIdentidad}" />
+					</s:decorate>
+					<s:decorate id="paisField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU456_pais_expe}</ui:define>
+						<h:inputText id="pais" size="30" disabled="true"
+							value="#{admInhabilitadosFC.inhabilitados.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombre" size="53" disabled="true"
+							value="#{admInhabilitadosFC.inhabilitados.persona.nombres}" />
+					</s:decorate>
+
+					<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+						<h:inputText id="apellido" size="53" disabled="true"
+							value="#{admInhabilitadosFC.inhabilitados.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="1">
+					<s:decorate id="inhabilitadoPorField" template="/layout/display.xhtml">
+						<h:outputText style="font-weight:bold;font-size:14px;" value="Inhabilitado por:" />
+					</s:decorate>
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                	#{' '}
+		                	<h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                	#{' '}
+		                	<h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}</ui:define>
+						<h:inputText id="orden" size="10" disabled="true" styleClass="numeric" 
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                	#{' '}
+		                	<h:inputText id="configUoCab" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+			</rich:simpleTogglePanel>
+
+
+			<br />
+			<rich:simpleTogglePanel
+				label="#{messages['CU441_datos_desvinculacion']}"
+				switchType="client">
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}</ui:define>
+						<rich:calendar value="#{admInhabilitadosFC.fechaDesvinculacion}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU441_motivo_desvinculacion}</ui:define>
+						<h:inputTextarea disabled="true" cols="80" rows="3"
+							value="#{admInhabilitadosFC.motivoDesvinculacion}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+
+			<br />
+			<rich:simpleTogglePanel
+				label="#{messages['CU441_datos_inhabilitacion']}"
+				switchType="client">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_fecha} #{' '} #{messages.msg_desde}</ui:define>
+						<rich:calendar
+							value="#{admInhabilitadosFC.inhabilitados.fechaDesde}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_fecha} #{' '} #{messages.msg_hasta}</ui:define>
+						<rich:calendar
+							value="#{admInhabilitadosFC.inhabilitados.fechaHasta}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+					<s:decorate id="inhabiField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU441_inhabilitado_}</ui:define>
+						<h:outputText
+							value="#{admInhabilitadosFC.inhabilitados.inhabilitado? 'Si' : 'No'}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<s:decorate id="tipoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU441_inhabilitado_tipo}</ui:define>
+						<h:outputText
+							value="#{admInhabilitadosFC.inhabilitados.tipo == 'J'? 'POR PROCESOS JURIDICOS' : (admInhabilitadosFC.inhabilitados.tipo == 'D'? 'POR DESVINCULACION' : '')}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel
+				label="#{messages['CU441_datos_habilitacion']}" switchType="client">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU441_usuario_habilitacion}</ui:define>
+						<h:inputText disabled="true"
+							value="#{admInhabilitadosFC.inhabilitados.usuHabilit}"
+							style=" width : 352px;" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU441_fecha_habilitacion}</ui:define>
+						<rich:calendar
+							value="#{admInhabilitadosFC.inhabilitados.fechaHasta}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<s:decorate id="motivoHabField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU441_motivo_habilitacion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea value="#{admInhabilitadosFC.motivoHabilit}"
+							cols="3" style=" width : 436px;" />
+
+					</s:decorate>
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<div style="clear: both">
+					#{messages.CU441_info_foot_habilitacion}</div>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<s:div styleClass="actionButtons">
+				<h:commandButton id="habilitar"
+					value="#{messages.CU441_habilitar_funcionario}"
+					action="#{admInhabilitadosFC.habilitarFuncionario()}"
+					rendered="#{!admInhabilitadosFC.modoVista and admInhabilitadosFC.inhabilitados.fechaHabilit == null}" />
+
+				<s:button view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					id="anexos" value="#{messages.gral_anexos}">
+					<f:param name="direccionFisica"
+						value="#{admInhabilitadosFC.ubicacionFisica}" />
+					<f:param name="nombrePantalla" value="admInhabilitadosSFP" />
+					<f:param name="idCU"
+						value="#{admInhabilitadosFC.inhabilitados.idInhabilitado}" />
+					<f:param name="nombreTabla" value="inhabilitados" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="#{!admInhabilitadosFC.modoVista}" />
+					<f:param name="from"
+						value="desvinculacion/admInhabilitados/inhabilitadosEdit.seam?idInhabilitado=#{admInhabilitadosFC.inhabilitados.idInhabilitado}&amp;modoVista=#{admInhabilitadosFC.modoVista}" />
+				</s:button>
+
+				<s:button
+					view="/desvinculacion/admInhabilitados/inhabilitadosList.xhtml"
+					id="volver" propagation="none" value="#{messages.msg_done}">
+				</s:button>
+			</s:div>
+
+
+			<div><h:panelGrid columns="2">
+				<s:decorate id="usuarioAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText value="#{admInhabilitadosFC.inhabilitados.usuAlta}" />
+				</s:decorate>
+
+				<s:decorate id="fechaAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText value="#{admInhabilitadosFC.inhabilitados.fechaAlta}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText value="#{admInhabilitadosFC.inhabilitados.usuMod}" />
+				</s:decorate>
+
+				<s:decorate id="fechaModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+					<h:outputText value="#{admInhabilitadosFC.inhabilitados.fechaMod}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioHab" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU441_habilitado_por}</ui:define>
+					<h:outputText
+						value="#{admInhabilitadosFC.inhabilitados.usuHabilit}" />
+				</s:decorate>
+
+				<s:decorate id="fechaHab" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU441_fecha_habilitacion}</ui:define>
+					<h:outputText
+						value="#{admInhabilitadosFC.inhabilitados.fechaHabilit}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid></div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

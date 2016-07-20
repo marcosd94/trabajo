@@ -1,0 +1,217 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU162_title}</h1>
+
+
+		<h:form id="basesCondiciones" styleClass="edit">
+			<h:panelGrid columns="1">
+				<rich:panel style="border:none;">
+					<table align="right">
+						<!--<tr>
+							<td> <span class="required">La carga de Antecedentes es Opcional en esta Actividad...</span></td>
+						</tr> -->
+						<tr>
+							<td><s:decorate id="nivelField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_nivel}</ui:define>
+								<h:inputText
+									value="#{basesCondicionesFormController.nivelEntidad.nenNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="entidadField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_entidad}</ui:define>
+								<h:inputText
+									value="#{basesCondicionesFormController.sinEntidad.entNombre}"
+									disabled="true" size="50" style="FONT-SIZE: xx-small;" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="concursoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_concurso}</ui:define>
+								<h:inputText
+									value="#{basesCondicionesFormController.concurso.nombre}"
+									disabled="true" size="60" />
+							</s:decorate></td>
+							<td><s:decorate id="tipoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_tipo}</ui:define>
+								<h:inputText
+									value="#{basesCondicionesFormController.concurso.datosEspecificosTipoConc.descripcion}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="puestoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_puesto}</ui:define>
+								<h:inputText
+									value="#{basesCondicionesFormController.concursoPuestoAgr.descripcionGrupo}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+					</table>
+				</rich:panel>
+
+				<rich:panel style="border:none;">
+
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+
+
+							<!--<rich:menuItem>
+								<s:link value="#{messages.CU162_link_antecedentes}"
+									view="/seleccion/basesCondiciones/antecedentesComite/AntecedenteGrupoEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								</s:link>
+							</rich:menuItem>-->
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_cpt_especifico}"
+									view="/seleccion/basesCondiciones/cptEspecifico/CPTEspecifico.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+								</s:link>
+							</rich:menuItem>
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_funciones}"
+									view="/seleccion/basesCondiciones/funciones/FuncionesEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+								</s:link>
+							</rich:menuItem>
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_requisitos}"
+									view="/seleccion/basesCondiciones/requisitosMinimos/RequisitosMinimosEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem
+								rendered="#{basesCondicionesFormController.cu.equalsIgnoreCase('404') or basesCondicionesFormController.cu.equalsIgnoreCase('414')}">
+								<s:link value="#{basesCondicionesFormController.permanente ? messages.CU162_link_remuneracion_ver : messages.CU162_link_remuneracion_cargar }"
+									view="/seleccion/basesCondiciones/conceptosPago/ConceptosPagoEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+								</s:link>
+							</rich:menuItem>
+							<rich:menuItem
+								rendered="#{!basesCondicionesFormController.cu.equalsIgnoreCase('404') and !basesCondicionesFormController.cu.equalsIgnoreCase('414')}">
+								<s:link value="#{messages.CU162_link_remuneracion}"
+									view="/seleccion/basesCondiciones/conceptosPago/ConceptosPagoGrupoEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_trab_grales}"
+									style="color:blue;"
+									view="/seleccion/condicionTrabajoGral/CondicionTrabajo.xhtml">
+									<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_trab_espec}"
+									style="color:blue;"
+									view="/seleccion/condicionTrabajoEspecif/CondicionTrabajo.xhtml">
+									<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_seguridad}"
+									view="/seleccion/basesCondiciones/condicionSeguridad/CondicionSeguridadEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="CU" value="#{basesCondicionesFormController.cu}" />
+
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_matriz_ref}"
+									propagation="join"
+									view="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml"
+									style="color:blue;">
+									<f:param name="puesto_agr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="#{messages.CU162_link_matriz_doc}"
+									view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+									style="color:blue;">
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+								</s:link>
+							</rich:menuItem>
+
+							<rich:menuItem>
+								<s:link value="Otros Datos"
+									view="/seleccion/basesCondiciones/otrosDatos/OtrosDatosEdit.xhtml"
+									style="color:blue;">
+									<f:param name="fromPantalla" value="#{nomPantalla}" />
+									<f:param name="idConcursoPuestoAgr"
+										value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								</s:link>
+							</rich:menuItem>
+						</h:panelGrid>
+					</h:panelGrid>
+
+				</rich:panel>
+
+			</h:panelGrid>
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/#{basesCondicionesFormController.elFrom}.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="idGrupo"
+					value="#{basesCondicionesFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

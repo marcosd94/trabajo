@@ -1,0 +1,190 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="matrizDocumentalEncSearch" styleClass="edit">
+		<h1>#{messages.MatrizDocumentalEnc_title}</h1>
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+        
+        	<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.MatrizDocumentalEnc_tipoConcurso}</ui:define>
+                <h:selectOneMenu id="tipoConcurso" 
+                			  value="#{matrizDocumentalEncListFormController.idDatosEspecificos}"
+                			  style="width:300px">
+					<f:selectItems value="#{matrizDocumentalEncListFormController.tipoConcursoSelectItem}"/>
+                </h:selectOneMenu>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.MatrizDocumentalEnc_descripcion}</ui:define>
+                <h:inputText id="descripcion" 
+                		  value="#{matrizDocumentalEncListFormController.matrizDocumentalEnc.descripcion}"
+                		   size="60"/>
+            </s:decorate>
+            
+            <s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.msg_estado}</ui:define>
+				<h:selectOneRadio id="activo" value="#{matrizDocumentalEncListFormController.matrizDocumentalEnc.activo}">
+					<f:selectItems value="#{enumAppHelper.enumsValueItems('Estado', 'getValor', false)}"/>
+				</h:selectOneRadio>
+			</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+			<a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{matrizDocumentalEncListFormController.search()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{matrizDocumentalEncListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			
+		<h:commandButton id="print" 
+				value="#{messages['msg_list_search_print_button']}"
+				action="#{matrizDocumentalEncListFormController.pdf()}"/>
+		</div>
+
+    </h:form>
+
+    <rich:panel id="panelResultados">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty matrizDocumentalEncList.resultList ? 0 : (matrizDocumentalEncList.paginated ? matrizDocumentalEncList.resultCount : matrizDocumentalEncList.resultList.size)})</f:facet>
+    <div class="results" id="matrizDocumentalEncList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty matrizDocumentalEncList.resultList}"/>
+
+    <rich:dataTable id="matrizDocumentalEncList"
+                var="_matrizDocumentalEnc"
+              value="#{matrizDocumentalEncList.resultList}"
+           rendered="#{not empty matrizDocumentalEncList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocumentalEncList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.MatrizDocumentalEnc_tipoConcurso}"/>
+                    <ui:param name="propertyPath" value="matrizDocumentalEnc.datosEspecificos.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_matrizDocumentalEnc.datosEspecificos.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocumentalEncList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.MatrizDocumentalEnc_descripcion}"/>
+                    <ui:param name="propertyPath" value="matrizDocumentalEnc.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_matrizDocumentalEnc.descripcion}"/>
+        </h:column>
+        <rich:column style="text-align:center" width="10%">
+			<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+			<h:selectBooleanCheckbox value="#{_matrizDocumentalEnc.activo}" disabled="true"/>
+		</rich:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seleccion/matrizDocumentalEnc/MatrizDocumentalEnc' : from}.xhtml"
+                   value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="matrizDocumentalEncViewId"
+                rendered="#{not empty from}">
+                <f:param name="matrizDocumentalEncIdMatrizDocumentalEnc"
+                        value="#{_matrizDocumentalEnc.idMatrizDocumentalEnc}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="matrizDocumentalEncEdit"
+                rendered="#{empty from}">
+                <f:param name="matrizDocumentalEncIdMatrizDocumentalEnc"
+                        value="#{_matrizDocumentalEnc.idMatrizDocumentalEnc}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/matrizDocumentalDet/MatrizDocumentalDetEdit.xhtml"
+                   value="#{messages.MatrizDocumentalEnc_administrarDetalle}"
+             propagation="none"
+                      id="matrizDocumentalAdmDetalle"
+                rendered="#{_matrizDocumentalEnc.activo}">
+                <f:param name="matrizDocumentalEncIdMatrizDocumentalEnc"
+                        value="#{_matrizDocumentalEnc.idMatrizDocumentalEnc}"/>
+            </s:link>
+             #{' '}
+            <s:link view="/seleccion/matrizDocumentalDet/MatrizDocumentalDet.xhtml"
+                   value="Ver Detalle"
+             propagation="none"
+                      id="matrizDocumentalAdmDetalleVer"
+                rendered="#{!_matrizDocumentalEnc.activo}">
+                <f:param name="matrizDocumentalEncIdMatrizDocumentalEnc"
+                        value="#{_matrizDocumentalEnc.idMatrizDocumentalEnc}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+	<a:outputPanel ajaxRendered="true">
+	    <div class="tableControl">
+	
+	        <s:link view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"
+	            rendered="#{matrizDocumentalEncList.previousExists}"
+	               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+	                  id="firstPage">
+	          <f:param name="firstResult" value="0"/>
+	        </s:link>
+	
+	        <s:link view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"
+	            rendered="#{matrizDocumentalEncList.previousExists}"
+	               value="#{messages.left} #{messages.msg_list_previous_page}"
+	                  id="previousPage">
+	            <f:param name="firstResult"
+	                    value="#{matrizDocumentalEncList.previousFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"
+	            rendered="#{matrizDocumentalEncList.nextExists}"
+	               value="#{messages.msg_list_next_page} #{messages.right}"
+	                  id="nextPage">
+	            <f:param name="firstResult"
+	                    value="#{matrizDocumentalEncList.nextFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"
+	            rendered="#{matrizDocumentalEncList.nextExists}"
+	               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+	                  id="lastPage">
+	            <f:param name="firstResult"
+	                    value="#{matrizDocumentalEncList.lastFirstResult}"/>
+	        </s:link>
+	
+	    </div>
+	</a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="matrizDocumentalEncIdMatrizDocumentalEnc"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

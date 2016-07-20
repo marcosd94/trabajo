@@ -1,0 +1,142 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU152_tittle}</h1>
+		<a:form>
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}"
+										focus="entidadCodigo" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/reportes/discapacitadosEntidad/RptDiscapacitadosEntidad')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/reportes/discapacitadosEntidad/RptDiscapacitadosEntidad')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('planificacion/reportes/discapacitadosEntidad/RptDiscapacitadosEntidad')}" />
+							</s:decorate>
+						</a:region>
+
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+									reRender="orgCodigo2,orgDenominacion2,orden2" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('planificacion/reportes/discapacitadosEntidad/RptDiscapacitadosEntidad')}" />
+						</s:decorate>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:panel>
+
+			<br></br>
+			<rich:panel id="panelParametroPersona">
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_nombre}</ui:define>
+						<h:inputText id="nombre" size="50"
+							value="#{rptDiscapacitadosEntidadFC.nombre}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_apellido}</ui:define>
+						<h:inputText id="nombre" size="50"
+							value="#{rptDiscapacitadosEntidadFC.apellido}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_cin}</ui:define>
+						<h:inputText id="nombre" size="50"
+							value="#{rptDiscapacitadosEntidadFC.documento}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+			<h:commandButton id="print" value="#{messages.GENERICO_IMPRIMIR}"
+				action="#{rptDiscapacitadosEntidadFC.imprimir()}" />
+			<s:button id="reset" propagation="none"
+				value="#{messages.GENERICO_LIMPIAR}">
+			</s:button>
+		</a:form>
+
+
+	</ui:define>
+</ui:composition>

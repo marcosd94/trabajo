@@ -1,0 +1,7 @@
+﻿
+INSERT INTO seleccion.referencias (id_referencias, dominio, desc_abrev, desc_larga, valor_alf, valor_num, activo, usu_alta, fecha_alta, usu_mod, fecha_mod)
+ VALUES ((SELECT MAX(ID_REFERENCIAS) FROM SELECCION.REFERENCIAS)+1, 'ESTADOS_GRUPO', 'PUBLICACION_LISTA_ADJUDICADOS', 'LISTA ADJUDICADOS', '', 1006, true, 'rveron', localtimestamp, NULL, NULL); 
+
+UPDATE SELECCION.REFERENCIAS SET DESC_ABREV = 'PUBLICACION_LISTA_TERNA_FINAL' WHERE VALOR_NUM = 1005;
+
+UPDATE SELECCION.REFERENCIAS SET DESC_LARGA = 'LISTA TERNA FINAL' WHERE VALOR_NUM = 1005;

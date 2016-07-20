@@ -1,0 +1,72 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="publicacionConcursoCab" styleClass="edit">
+			<h1>#{messages.CU74_medios}</h1>
+		
+			
+		
+			<rich:panel
+				id="panelResultado">
+				<f:facet name="header">#{messages.CU74_medios}(#{publicacionConcursoPortalCU624FC.listaDetalle.size()})</f:facet>
+				<div class="results" id="puestList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty publicacionConcursoPortalCU624FC.listaDetalle}" />
+				<rich:dataTable id="grupoList" var="_dto" rowKeyVar="row"
+				rows="10"
+					value="#{publicacionConcursoPortalCU624FC.listaDetalle}"
+					rendered="#{not empty publicacionConcursoPortalCU624FC.listaDetalle}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_medios}
+						</f:facet>
+						<h:outputText value="#{_dto.datosEspecificos.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_desde}
+						</f:facet>
+						<h:outputText value="#{_dto.fechaDesde}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_hasta}
+						</f:facet>
+						<h:outputText value="#{_dto.fechaHasta}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+
+				
+				</rich:dataTable>
+				<rich:datascroller align="center" for="puestList" id="sc2"
+					reRender="sc1" rendered="#{publicacionConcursoPortalCU624FC.listaDetalle.size() > 10}"/>
+				</div>
+
+
+			</rich:panel>
+
+
+			
+
+
+
+			<div class="actionButtons"> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/#{publicacionConcursoCabFrom}.xhtml" /> </div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

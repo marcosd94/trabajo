@@ -1,0 +1,347 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<style>
+.rich-table-subheadercell {
+	white-space: normal;
+}
+</style>
+
+	<h:form id="concursoSearch" styleClass="edit"
+		onkeypress="if (event.keyCode == 13) { document.getElementById('concursoSearch:search').click(); return false; }">
+
+		<a:region>
+			<h:panelGrid columns="1" style="width : 800px;">
+				<h:outputLabel value="#{messages.CU70_entidad}" for="acSimple" />
+				<p:autoComplete id="acSimple"
+					value="#{concursoListFormController.sugestion}"
+					completeMethod="#{concursoListFormController.autocompletar}" />
+			</h:panelGrid>
+		</a:region>
+
+		<a:region>
+			<h:panelGrid columns="1" style="width : 800px;">
+				<h:outputLabel value="#{messages.CU70_grupo}" for="acSimple2" />
+				<h:inputText id="acSimple2"
+					value="#{concursoListFormController.sugestionGrupo}"
+					style="width : 350px;" />
+			</h:panelGrid>
+		</a:region>
+
+
+		<div class="actionButtons">
+			<h:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{concursoListFormController.search()}">
+				<f:param name="sugestion"
+					value="#{concursoListFormController.sugestion}" />
+				<f:param name="sugestionGrupo"
+					value="#{concursoListFormController.sugestionGrupo}" />
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+
+			<s:button propagation="none" id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false" />
+		</div>
+
+	</h:form>
+
+	<rich:panel id="idPanelResultados"
+		style=" width : 800px; white-space:normal;">
+		<f:facet name="header">#{messages['msg_list_search_results']} (#{empty concursoListFormController.lista ? 0 : (concursoListFormController.paginated ? concursoListFormController.resultCount : concursoListFormController.lista.size)}) - #{messages['msg_current_page']} #{concursoListFormController.currentPage} de #{concursoListFormController.pageCount} </f:facet>
+		<h:form>
+
+			<div class="results" id="concursoListFormController">
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty concursoListFormController.lista}" />
+				<rich:dataTable id="concursoListFormController" var="_elVar"
+					value="#{concursoListFormController.lista}"
+					rendered="#{not empty concursoListFormController.lista}"
+					style=" width : 800px;">
+
+					<h:column rendered="#{!identity.loggedIn}">
+						<f:facet name="header"> Nuevo
+					</f:facet>
+						<h:outputText style="background-color:yellow;"
+							rendered="#{concursoListFormController.isColumnaNuevo(_elVar)}"
+							value="#{messages.CU70_nuevo}" />
+						<h:outputText style="background-color:yellow;"
+							rendered="#{_elVar.concursoPuestoAgr.concurso.pcd}"
+							value="#{ concursoListFormController.esPcd(_elVar.concursoPuestoAgr.concurso.pcd, 'NUEVO')}" />
+						<h:outputText style="background-color:yellow;"
+							rendered="#{_elVar.concursoPuestoAgr.concurso.adReferendum}"
+							value="#{ concursoListFormController.esAdReferendum(_elVar.concursoPuestoAgr.concurso.adReferendum, 'NUEVO')}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU70_donde_postularse}
+					</f:facet>
+
+						<h:outputText
+							value="#{_elVar.concursoPuestoAgr.dondePostularse()}" />
+					</h:column>
+					<!-- 				Se eliminó la columna, cuando el usuario está logeado; Werner. -->
+					<!-- 					<rich:column styleClass="action"  rendered="#{identity.loggedIn}"> -->
+					<!-- 						<f:facet name="header"/> -->
+
+					<!-- 						<s:link -->
+					<!-- 							rendered="#{registrarPostulacionFormController.verificarPostulacion(_elVar.concursoPuestoAgr.idConcursoPuestoAgr)}" -->
+					<!-- 							action="#{registrarPostulacionFormController.controlesPcd(null)}" -->
+					<!-- 							value="#{messages.CU70_postularse}" id="postularseViewId" -->
+					<!-- 							reRender="idPanel"> -->
+					<!-- 							<f:param name="idGrupoAcctionListener" -->
+					<!-- 								value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" /> -->
+					<!-- 							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" -->
+					<!-- 								value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" /> -->
+					<!-- 							<s:conversationPropagation type="none" /> -->
+					<!-- 						</s:link> -->
+					<!-- 						<h:outputText -->
+					<!-- 							value="#{_elVar.concursoPuestoAgr.dondePostularse()}" -->
+					<!-- 							rendered="#{_elVar.concursoPuestoAgr.paraPublicacion()}"  /> -->
+					<!-- 					<a:include id="concProcPost2" viewId="/seleccion/buscarConcurso/postulacion/ConcursoList.xhtml">	</a:include> -->
+					<!-- 					</rich:column> -->
+
+					<h:column>
+						<f:facet name="header">
+							<a:commandLink
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.CU70_oee} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+						</f:facet>
+						<h:outputText
+							value="#{_elVar.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<a:commandLink reRender="idPanelResultados"
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.CU70_tipo_concurso} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+
+						</f:facet>
+						<h:outputText
+							value="#{concursoListFormController.concatenarTipoConcursoYPcdYAdReferendum(_elVar.concursoPuestoAgr.concurso, 'TIPO_CONCURSO')}" />
+					</h:column>
+
+					<!-- RVeron, 20140626
+				<h:column>
+					<f:facet name="header">
+						<a:commandLink reRender="idPanelResultados"
+							action="#{concursoListFormController.ordenarConcurso()}"
+							value="#{messages.CU70_concurso} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.nombre' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+							<a:actionparam name="sort"
+								assignTo="#{concursoListFormController.orderColumn}"
+								value="fechasGrupoPuesto.concursoPuestoAgr.concurso.nombre" />
+							<a:actionparam name="dir"
+								assignTo="#{concursoListFormController.orderDirection}"
+								value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.nombre' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+						</a:commandLink>
+					</f:facet>
+					<h:outputText value="#{_elVar.concursoPuestoAgr.concurso.nombre}" />
+				</h:column>
+				
+				 -->
+					<!--
+				<h:column>
+					<f:facet name="header">
+
+						<a:commandLink reRender="idPanelResultados"
+							action="#{concursoListFormController.ordenarConcurso()}"
+							value="#{messages.CU70_codigo} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.numero' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+							<a:actionparam name="sort"
+								assignTo="#{concursoListFormController.orderColumn}"
+								value="fechasGrupoPuesto.concursoPuestoAgr.concurso.numero" />
+							<a:actionparam name="dir"
+								assignTo="#{concursoListFormController.orderDirection}"
+								value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.concurso.numero' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+						</a:commandLink>
+					</f:facet>
+					<h:outputText
+						value="#{concursoListFormController.genCodigoConcurso(_elVar.concursoPuestoAgr.concurso)}" />
+				</h:column>
+				 -->
+					<h:column>
+						<f:facet name="header">
+							<a:commandLink reRender="idPanelResultados"
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.CU70_puesto} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+						</f:facet>
+						<h:outputText value="#{_elVar.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<a:commandLink reRender="idPanelResultados"
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.public_vacancias}  #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+						</f:facet>
+						<h:outputText value="#{_elVar.concursoPuestoAgr.cantidadPuestos}" />
+					</h:column>
+					<rich:column styleClass="action" style="width:50px;">
+						<f:facet name="header">#{messages.CU70_verBasesCond}</f:facet>
+						<span>•</span>
+						<s:link
+							action="#{concursoListFormController.imprimirPerfilMatriz()}"
+							value="#{messages.CU70_verPerfilMatriz}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="concursoViewId2">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+						<br></br><br></br>
+						<span>•</span>
+						<s:link  propagation="#{empty from ? 'none' : 'default'}"
+							id="publicacionPortalId2"
+							view="/seleccion/verPostulacion/verPostulacionPortal.xhtml" 
+							value="#{messages.CU70_verInformacion}">
+							
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="idConcurso"
+								value="#{_elVar.concursoPuestoAgr.concurso.idConcurso}" />
+							<f:param name="from" value="Portal" />
+							<f:param name="sugestion"
+								value="#{concursoListFormController.sugestion}" />
+							<f:param name="sugestionGrupo"
+								value="#{concursoListFormController.sugestionGrupo}" />
+							<f:param name="firstResult"
+								value="#{concursoListFormController.firstResult}" />
+						</s:link>
+					</rich:column>
+					<h:column>
+						<f:facet name="header">
+
+							<a:commandLink reRender="idPanelResultados"
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.CU70_inicio_postulacion} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.fechaRecepcionDesde' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.fechaRecepcionDesde" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.fechaRecepcionDesde' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+
+						</f:facet>
+						<h:outputText
+							value="#{concursoListFormController.calcInicioPostulacion(_elVar)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+
+							<a:commandLink reRender="idPanelResultados"
+								action="#{concursoListFormController.ordenarConcurso()}"
+								value="#{messages.CU70_fin_postulacion} #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.fechaRecepcionHasta' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+								<a:actionparam name="sort"
+									assignTo="#{concursoListFormController.orderColumn}"
+									value="fechasGrupoPuesto.fechaRecepcionHasta" />
+								<a:actionparam name="dir"
+									assignTo="#{concursoListFormController.orderDirection}"
+									value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.fechaRecepcionHasta' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+							</a:commandLink>
+						</f:facet>
+						<h:outputText
+							value="#{concursoListFormController.calcFinPostulacion(_elVar)}" />
+					</h:column>
+					<!--  
+				<rich:column styleClass="action" style="width:50px;">
+					<f:facet name="header">Perfil</f:facet>
+					<s:link propagation="#{empty from ? 'none' : 'default'}"
+						id="concursoViewId"
+						action="#{concursoListFormController.imprimirPerfilMatriz()}">
+						<h:graphicImage value="/img/application_form_magnify.png"
+							title="Ver Perfil" alt="Ver Perfil" />
+						<f:param name="idConcursoPuestoAgr"
+							value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					</s:link>
+				</rich:column>
+				-->
+<!-- 					<rich:column styleClass="action" style="width:50px;"> -->
+<!-- 						<f:facet name="header">#{messages.CU496_publicacion}</f:facet> -->
+<!-- 						<s:link  propagation="#{empty from ? 'none' : 'default'}" -->
+<!-- 							id="publicacionPortalId" -->
+<!-- 							view="/seleccion/verPostulacion/verPostulacionPortal.xhtml" value="Ver Información"> -->
+							
+<!-- 							<f:param name="idConcursoPuestoAgr" -->
+<!-- 								value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" /> -->
+<!-- 							<f:param name="idConcurso" -->
+<!-- 								value="#{_elVar.concursoPuestoAgr.concurso.idConcurso}" /> -->
+<!-- 							<f:param name="from" value="Portal" /> -->
+<!-- 							<f:param name="sugestion" -->
+<!-- 								value="#{concursoListFormController.sugestion}" /> -->
+<!-- 							<f:param name="sugestionGrupo" -->
+<!-- 								value="#{concursoListFormController.sugestionGrupo}" /> -->
+<!-- 							<f:param name="firstResult" -->
+<!-- 								value="#{concursoListFormController.firstResult}" /> -->
+<!-- 						</s:link> -->
+<!-- 					</rich:column> -->
+				</rich:dataTable>
+			</div>
+			<div class="tableControl">
+				<s:link rendered="#{concursoListFormController.previousExists}"
+					value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link>
+				<s:link rendered="#{concursoListFormController.previousExists}"
+					value="#{messages.left}  #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{concursoListFormController.previousFirstResult}" />
+				</s:link>
+				<h:outputText
+					value="  #{messages['msg_current_page']} #{concursoListFormController.currentPage} / #{concursoListFormController.pageCount}" />
+				<s:link rendered="#{concursoListFormController.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{concursoListFormController.nextFirstResult}" />
+				</s:link>
+				<s:link rendered="#{concursoListFormController.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{concursoListFormController.lastFirstResult}" />
+				</s:link>
+			</div>
+		</h:form>
+	</rich:panel>
+
+</ui:composition>

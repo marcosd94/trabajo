@@ -1,0 +1,224 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j"  >
+
+		<h1>#{messages.CU655_titulo}</h1>
+		
+			<rich:simpleTogglePanel label="Registros de Permisos"
+				id="idPanel1" style=" width : 900px;">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU654_fechaDesde}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar value="#{admPermisos655FC.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU654_fechaHasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar value="#{admPermisos655FC.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event);"
+							inputSize="10" datePattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}">
+						</rich:calendar>
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU655_horaPubDesde} 
+						</ui:define>
+						<p:inputMask value="#{admPermisos655FC.horaDesde}" mask="99:99">
+						</p:inputMask>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU655_horaHasta} 
+						</ui:define>
+						<p:inputMask value="#{admPermisos655FC.horaHasta}" mask="99:99">
+						</p:inputMask>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU655_motivo}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu value="#{admPermisos655FC.idMotivo}"
+							style=" width : 400px;">
+							<f:selectItems value="#{admPermisos655FC.traerMotivoSI()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				
+				<legend>#{messages.CU651_acto_admin}</legend>
+				<rich:panel>
+				
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tipo Documento<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="idTipoDocumento"
+							value="#{admPermisos655FC.idTipoDoc}" style="width:200px">
+							<f:selectItems value="#{admPermisos655FC.traerTipoDocumentoSI()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Documento<span
+								class="required">*</span>
+						</ui:define>
+						<s:fileUpload size="30" contentType="#{admPermisos655FC.cType1}"
+							data="#{admPermisos655FC.uFile1}"
+							fileName="#{admPermisos655FC.fName1}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU654_nroActo}<span
+								class="required">*</span> 
+						</ui:define>
+							<h:inputText onkeypress="return soloNumeros(event);"
+								value="#{admPermisos655FC.nroActo}" style=" width : 100px;" />
+					</s:decorate>
+					<s:decorate id="documentoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_doc}</ui:define>
+						<h:inputText disabled="true" id="nomFinal"
+							value="#{admPermisos655FC.nombreDoc}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU654_fecha}<span
+								class="required">*</span> 
+							</ui:define>
+							<rich:calendar value="#{admPermisos655FC.fechaActo}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event);"
+								inputSize="10" datePattern="dd/MM/yyyy"
+								locale="#{siccaAppHelper.localeCode}">
+							</rich:calendar>
+						</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.encabezadoActoAdministrativo}</ui:define>
+						<h:inputTextarea value="#{admPermisos655FC.observacion}"
+							style=" width : 350px; height : 100px;" />
+					</s:decorate>
+				</h:panelGrid>
+				<!-- 
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU655_estado}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu value="#{admPermisos655FC.idEstado}"
+							style="width:400px">
+							<f:selectItems value="#{admPermisos655FC.traerEstadoSI()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				 -->
+				
+				</rich:panel>
+				
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+				<s:div styleClass="actionButtons">
+					<h:commandButton value="Agregar"
+						rendered="#{admPermisos655FC.idElemUpdate == null}"
+						action="#{admPermisos655FC.agregar()}" />
+					<h:commandButton value="Actualizar"
+						rendered="#{admPermisos655FC.idElemUpdate!=null}"
+						action="#{admPermisos655FC.actualizar()}" />
+					<a:commandButton value="Cancelar" reRender="idPanel1,idPanel2"
+						action="#{admPermisos655FC.limpiar()}" />
+				</s:div>
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel
+				label="#{messages.CU655_panel2_title} (#{empty admPermisos655FC.lGrilla1?0:admPermisos655FC.lGrilla1.size()})"
+				id="idPanel2" style=" width : 900px;">
+			<div class="results" id="tbldetList" style="overflow: scroll;"
+				width="310">
+				<rich:dataTable
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					width="500" id="itemsList" rows="5"
+					rowKeyVar="rowIndexGrilla1" var="_record"
+					value="#{admPermisos655FC.lGrilla1}">
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU655_motivo}
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{admPermisos655FC.updateMotivo(_record).datosEspMotivoPermiso.descripcion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU655_observacion}
+						</f:facet>
+						<h:outputText
+							value="#{_record.obsPermiso}" />
+					</rich:column>
+
+
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU655_actoAdmin}
+						</f:facet>
+						<h:outputText
+							value="#{_record.nroActo}" />
+					</rich:column>
+
+
+
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU654_fechaInicio}
+						</f:facet>
+						<h:outputText
+							value="#{_record.fechaInicio}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU654_fechaFin}
+						</f:facet>
+						<h:outputText
+							value="#{_record.fechaFin}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU654_documento}
+						</f:facet>
+						<h:commandLink value="Descargar"
+							action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record.documentos.idDocumento)}"
+							rendered="#{_record.documentos!=null}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+						<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+							action="#{admPermisos655FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+							onclick="return confirm('#{messages.msg_confirm_delete}');"
+							action="#{admPermisos655FC.eliminar(rowIndexGrilla1)}" />
+					</rich:column>
+				</rich:dataTable><rich:datascroller for="itemsList" id="scrollPer"
+			renderIfSinglePage="false" /></div>
+			</rich:simpleTogglePanel>
+		
+</ui:composition>

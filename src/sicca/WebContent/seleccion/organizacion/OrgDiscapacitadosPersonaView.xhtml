@@ -1,0 +1,111 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU271_title_view}</h1>
+
+    <h:form id="form" styleClass="edit">
+    
+    	<rich:panel>
+            <f:facet name="header">#{messages.CU271_datos_organizacion}</f:facet>
+            <h:panelGrid columns="2">
+		        <s:decorate template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.CU271_organizacion}:</ui:define>
+		             <h:outputLabel value="#{orgDiscapacitadosPersonaFC.organizacionDiscapacitados.nombre}"/>
+		        </s:decorate>
+		        
+		        <s:decorate template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.CU271_departamento}:</ui:define>
+		             <h:outputLabel value="#{orgDiscapacitadosPersonaFC.organizacionDiscapacitados.ciudad.departamento.descripcion}"/>
+		        </s:decorate>
+		        
+		        <s:decorate template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.CU271_pais}:</ui:define>
+		             <h:outputLabel value="#{orgDiscapacitadosPersonaFC.organizacionDiscapacitados.ciudad.departamento.pais.descripcion}"/>
+		        </s:decorate>
+		        
+		        <s:decorate template="/layout/edit.xhtml">
+		             <ui:define name="label">#{messages.CU271_ciudad}:</ui:define>
+		             <h:outputLabel value="#{orgDiscapacitadosPersonaFC.organizacionDiscapacitados.ciudad.descripcion}"/>
+		        </s:decorate>
+		    </h:panelGrid>
+        </rich:panel>
+
+        <br></br>
+        <rich:panel id="panelResultados">
+        	<f:facet name="header">#{messages.CU271_funcionarios}s</f:facet>
+			<div class="results" id="tblorgDiscapacitadosPersonaList">
+			  	<rich:dataTable id="orgDiscapacitadosPersonaList" 
+			  		var="_orgDiscapacitadosPersona" rowKeyVar="fila"
+					value="#{orgDiscapacitadosPersonaFC.orgDiscapacitadosPersonaList}">
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU271_funcionarios}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.persona.nombreCompleto}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.Persona_documentoIdentidad}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.persona.documentoIdentidad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.Persona_eMail}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.persona.EMail}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.Persona_sexo}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.persona.sexo == 'M' ? 'MASCULINO' : (_orgDiscapacitadosPersona.persona.sexo == 'F' ? 'FEMENINO' : 'INDEFINIDO')}"/>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.Persona_telefonos}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.persona.telefonos}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU271_cargo}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_orgDiscapacitadosPersona.cargo}" />
+					</h:column>
+					
+					<rich:column style="text-align:center;" width="10%">
+						<f:facet name="header">#{messages.gral_activo}</f:facet>
+						<h:selectBooleanCheckbox value="#{_orgDiscapacitadosPersona.activo}" disabled="true"/>
+					</rich:column>
+
+				</rich:dataTable>
+			</div>
+		</rich:panel>
+		
+        <div class="actionButtons">
+            <s:button id="cancelEdit"
+                    value="#{messages.msg_done}"
+             		propagation="end"
+                    view="/seleccion/admOrgDis270/OrganizacionDiscapacitadosList.xhtml"/>
+        </div>
+    </h:form>
+        
+</ui:define>
+
+</ui:composition>

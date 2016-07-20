@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('elaborar_resolucion_exc')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{elaborarResolucionAdjuExcFC.idConcurso}"/>
+ 
+ <param name="idGrupo" value="#{elaborarResolucionAdjuExcFC.idConcursoPuestoAgr}"/>
+  <param name="idExcepcion" value="#{elaborarResolucionAdjuExcFC.idExcepcion}"/>
+ <action execute="#{elaborarResolucionAdjuExcFC.init()}" on-postback="false"/>
+ 
+
+
+ <navigation from-action="#{elaborarResolucionAdjuExcFC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{elaborarResolucionAdjuExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{elaborarResolucionAdjuExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{elaborarResolucionAdjuExcFC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/elaborarResolucionAdjuExc/ElaborarResolucionAdjuExc"/>
+     <param name="fromCU" value="none"/>
+     <param name="texto" value="ADJUDICACION"/>
+      <param name="idExcepcion" value="#{elaborarResolucionAdjuExcFC.idExcepcion}"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{elaborarResolucionAdjuExcFC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/VerResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{elaborarResolucionAdjuExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{elaborarResolucionAdjuExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{elaborarResolucionAdjuExcFC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/elaborarResolucionAdjuExc/ElaborarResolucionAdjuExc"/>
+     <param name="fromCU" value="none"/>
+     <param name="texto" value="ADJUDICACION"/>
+      <param name="idExcepcion" value="#{elaborarResolucionAdjuExcFC.idExcepcion}"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{elaborarResolucionAdjuExcFC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

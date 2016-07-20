@@ -1,0 +1,233 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionarioOee" styleClass="edit">
+			<h1>#{messages.CU255_title}</h1>
+
+			<rich:panel id="panelBusqueda">
+				<f:facet name="header">#{messages.msg_list_search_filter}</f:facet>
+
+				<h:panelGrid>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_tipo_cpt}</ui:define>
+						<h:selectOneMenu id="cpt" style="width : 330px;"
+							value="#{funcionarioUtilFormController.idTipoCpt}">
+							<f:selectItems value="#{tipoCptsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU159_generalEspecifico}<span
+								class="required">* </span>
+						</ui:define>
+						<h:selectOneMenu id="modalidad" style="width :250px;"
+							value="#{funcionarioUtilFormController.tipoEspGeneral}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.tipoGeneralEspecifico}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_cpt}</ui:define>
+						<h:inputText id="cpt"
+							value="#{funcionarioUtilFormController.codigoCpt}" size="20">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="denominacionCPT"
+								action="#{funcionarioUtilFormController.findCpt()}" />
+						</h:inputText>	
+			                #{' '}
+			                <h:inputText id="denominacionCPT"
+							value="#{funcionarioUtilFormController.cpt.denominacion}"
+							size="50" disabled="true" />
+							
+							#{' '}
+							<a:commandButton id="searchCpt" eventsQueue="default"
+							image="/img/Buscar.png"
+							action="#{admBancoPerfilesFormController.getUrlToCPT()}">
+
+							<f:param name="from"
+								value="seleccion/homologacion/AdmBancoPerfilesList" />
+						</a:commandButton>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU255_denominacion}</ui:define>
+						<h:inputText id="denominacion"
+							value="#{admBancoPerfilesFormController.denominacion}" size="50" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado"
+							value="#{funcionarioUtilFormController.activo}">
+							<s:selectItems var="val" value="#{enumAppHelper.estados}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{admBancoPerfilesFormController.search()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admBancoPerfilesFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+			<br />
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty homologacionPerfilMatrizList.resultList ? 0 : (homologacionPerfilMatrizList.paginated ? homologacionPerfilMatrizList.resultCount : homologacionPerfilMatrizList.resultList.size)})</f:facet>
+				<div class="results" id="homologacionPerfilMatrizList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty homologacionPerfilMatrizList.resultList}" /> <rich:dataTable
+					id="homologacionPerfilMatrizList" var="_homologacionPerfilMatriz"
+					value="#{homologacionPerfilMatrizList.resultList}"
+					rendered="#{not empty homologacionPerfilMatrizList.resultList}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU255_denominacion}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.denominacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_homologacionPerfilMatriz.denominacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_tipo_cpt}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.cpt.tipoCpt.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_homologacionPerfilMatriz.cpt.tipoCpt.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_cpt}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.cpt.denominacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_homologacionPerfilMatriz.cpt.denominacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList"
+									value="#{homologacionPerfilMatrizList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU253_activo}" />
+								<ui:param name="propertyPath"
+									value="homologacionPerfilMatriz.activo" />
+							</ui:include>
+						</f:facet>
+						<h:selectBooleanCheckbox
+							value="#{_homologacionPerfilMatriz.activo}" disabled="true" />
+					</h:column>
+
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<s:link view="/seleccion/homologacion/AdmBancoPerfilesEdit.xhtml"
+							value="#{messages.msg_list_view}" id="homologacionViewId">
+							<f:param name="idHomologacion"
+								value="#{_homologacionPerfilMatriz.idHomologacion}" />
+							<f:param name="modoEditado" value="#{true}" />
+							<f:param name="modoVer" value="#{true}" />
+							<f:param name="tipoOperacion" value="HOMOLOGACION" />
+							<f:param name="vista" value="true" />
+						</s:link>						
+						#{' '}						
+						<s:link view="/seleccion/homologacion/AdmBancoPerfilesEdit.xhtml"
+							rendered="#{!admBancoPerfilesFormController.verificarPerfilUsado(_homologacionPerfilMatriz.idHomologacion)}"
+							value="#{messages.msg_edit}">
+							<f:param name="idHomologacion"
+								value="#{_homologacionPerfilMatriz.idHomologacion}" />
+							<f:param name="modoEditado" value="#{true}" />
+							<f:param name="modoVer" value="#{false}" />
+							<f:param name="tipoOperacion" value="HOMOLOGACION" />
+							<f:param name="vista" value="false" />
+						</s:link>
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			
+		</h:form>
+			<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+				rendered="#{homologacionPerfilMatrizList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+				rendered="#{homologacionPerfilMatrizList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult" value="#{homologacionPerfilMatrizList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+				rendered="#{homologacionPerfilMatrizList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{homologacionPerfilMatrizList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+				rendered="#{homologacionPerfilMatrizList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{homologacionPerfilMatrizList.lastFirstResult}" />
+			</s:link></div>
+
+			
+		</a:outputPanel>
+		
+		<div class="actionButtons"><s:button
+				view="/seleccion/homologacion/AdmBancoPerfilesEdit.xhtml"
+				id="volver" value="#{messages.msg_add_male}" propagation="none">
+				<f:param name="idHomologacion" />
+				<f:param name="cptIdCpt" />
+				<f:param name="modoEditado" value="#{false}" />
+				<f:param name="modoVer" value="#{false}" />
+				<f:param name="vista" value="#{false}" />
+				<f:param name="tipoOperacion" value="HOMOLOGACION" />
+			</s:button></div>
+		
+	</ui:define>
+
+</ui:composition>

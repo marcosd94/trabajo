@@ -1,0 +1,262 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<!--******************** MODAL ******************-->
+		<!-- ****Modal Resolucion**** -->
+		<a:region>
+
+			<rich:modalPanel id="modalResolucion" width="400" height="280"
+				styleClass="centerbox">
+				<f:facet name="header">Resolución</f:facet>
+				<f:facet name="controls">
+					<h:graphicImage value="/img/dialog-close.png" width="18"
+						height="18" style="cursor:pointer"
+						onclick="#{rich:component('modalResolucion')}.hide()" />
+				</f:facet>
+				<h:form>
+					<rich:panel>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU57_fec_resoluc}</ui:define>
+								<rich:calendar id="fechaIni" datePattern="dd/MM/yyyy"
+									inputSize="10" enableManualInput="true"
+									oninputkeypress="ponerBarra(event);"
+									value="#{firmarResolucionHomologacionFormController.fecha}">
+									<a:support event="onchanged" eventsQueue="default" />
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="lugarField" template="/layout/edit.xhtml">
+								<ui:define name="label">Lugar</ui:define>
+								<h:inputText id="lugar" size="20" maxlength="150"
+									value="#{firmarResolucionHomologacionFormController.lugar}">
+									<a:support event="onblur" eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU57_nro_resolu}</ui:define>
+								<h:inputText id="descripcion" size="20"
+									value="#{firmarResolucionHomologacionFormController.nroResolucion}">
+									<a:support event="onblur" eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+
+						</h:panelGrid>
+						<rich:spacer height="20px" />
+						<div class="actionButtons" align="center">
+							<a:commandButton id="save" value="Guardar"
+								action="#{firmarResolucionHomologacionFormController.actualizarResolucion()}"
+								ajaxSingle="true"
+								oncomplete="Richfaces.hideModalPanel('modalResolucion')" />
+							<a:commandButton id="cancel" value="Cancelar" ajaxSingle="true"
+								oncomplete="Richfaces.hideModalPanel('modalResolucion')" />
+						</div>
+					</rich:panel>
+				</h:form>
+
+
+
+
+			</rich:modalPanel>
+
+
+			<!-- ****Fin Modal**** -->
+		</a:region>
+	<h:form id="concursoPuestoAgrSearch" styleClass="edit" >
+		
+				<h:panelGrid columns="1">
+					
+					<rich:panel>
+						<h1>
+							<h:outputText value="#{messages.CU412_titulo}"
+								rendered="#{firmarResolucionHomologacionFormController.fromActividad==7}" />
+							<h:outputText value="#{messages.CU412_titulo2}"
+								rendered="#{firmarResolucionHomologacionFormController.fromActividad==21}" />
+							<h:outputText value="#{messages.CU412_titulo3}"
+								rendered="#{firmarResolucionHomologacionFormController.fromActividad==26}" />
+						</h1>
+						<h:panelGrid columns="1">
+							<rich:panel id="panelParametro" style=" width : 820px;">
+
+								<h:panelGrid columns="3">
+
+									<s:decorate id="nivelField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_nivel}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric" size="5"
+											disabled="true"
+											value="#{firmarResolucionHomologacionFormController.sinNivelEntidad.nenCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+											value="#{firmarResolucionHomologacionFormController.sinNivelEntidad.nenNombre}" />
+									</s:decorate>
+									<s:decorate id="entidadbField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_entidad}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric" size="5"
+											disabled="true"
+											value="#{firmarResolucionHomologacionFormController.sinEntidad.entCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+											disabled="true"
+											value="#{firmarResolucionHomologacionFormController.sinEntidad.entNombre}" />
+									</s:decorate>
+									<s:decorate id="oeeField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="orden" size="5" disabled="true"
+											value="#{firmarResolucionHomologacionFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+											disabled="true"
+											value="#{firmarResolucionHomologacionFormController.configuracionUoCab.denominacionUnidad}" />
+
+									</s:decorate>
+								</h:panelGrid>
+								<h:panelGrid>
+
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU243_concurso}</ui:define>
+										<h:inputText id="concurso" disabled="true"
+											value="#{firmarResolucionHomologacionFormController.concurso.nombre}"
+											style=" width : 514px;" />
+									</s:decorate>
+
+
+								</h:panelGrid>
+							</rich:panel>
+
+
+						<br/><br/>
+
+							<rich:panel style=" width : 820px;">
+								<f:facet name="header">Grupos - #{messages['msg_list_search_results']} (#{empty firmarResolucionHomologacionFormController.listaGruposParaFirmar ? 0 :  firmarResolucionHomologacionFormController.listaGruposParaFirmar.size})</f:facet>
+								<div class="results" id="concursoPuestoAgrList3">
+									<h:outputText value="#{messages.msg_list_search_no_results}"
+										rendered="#{empty firmarResolucionHomologacionFormController.listaGruposParaFirmar}" />
+									<rich:dataTable id="concursoPuestoAgrList2"
+										var="gruposParaFirmar" rowKeyVar="_indice"
+										value="#{firmarResolucionHomologacionFormController.listaGruposParaFirmar}"
+										rendered="#{not empty firmarResolucionHomologacionFormController.listaGruposParaFirmar }"
+										style=" width : 800px;">
+				
+										<rich:column>
+											<f:facet name="header">Nombre</f:facet>
+											<h:outputText value="#{gruposParaFirmar.descripcionGrupo}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">Tiene Resolucion</f:facet>
+											<h:outputText value="SI"
+										rendered="#{not empty gruposParaFirmar.resolucionHomologacion}" />
+											<h:outputText value="No"
+										rendered="#{empty gruposParaFirmar.resolucionHomologacion}" />
+										</rich:column>
+										<rich:column styleClass="action">
+											<f:facet name="header">Acción</f:facet>
+											<h:commandLink id="print"
+												value="#{messages['CU53_imprimir']}"
+												action="#{homologPerfilMatrizDetListFormController.imprimirPerfilMatrizDelGrupo(gruposParaFirmar.idConcursoPuestoAgr)}" />
+												#{' '}
+												<s:link value="Ver Observaciones" 
+												view="/seleccion/firmarResolucionHomologacion/ObservacionesRespuestasFirmaRes.xhtml"> 
+												<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{gruposParaFirmar.idConcursoPuestoAgr}"/>
+												<f:param name="fromAct"  value="#{firmarResolucionHomologacionFormController.fromActividad}"/>
+												</s:link>
+												
+											
+										</rich:column>
+										
+									
+									</rich:dataTable>
+								</div>
+								
+							</rich:panel>
+							
+							
+							<br/><br/>
+								
+							<rich:panel style=" width : 820px;">
+							<f:facet name="header">Otros Grupos - #{messages['msg_list_search_results']} (#{empty firmarResolucionHomologacionFormController.listaGruposAtrasados ? 0 :  firmarResolucionHomologacionFormController.listaGruposAtrasados.size})</f:facet>
+							<div class="results" id="concursoPuestoAgrOtrosList">
+									<h:outputText value="#{messages.msg_list_search_no_results}"
+										rendered="#{empty firmarResolucionHomologacionFormController.listaGruposAtrasados}" />
+									<rich:dataTable id="concursoPuestoAgrList"
+										var="gruposAtrasados" rowKeyVar="_index"
+										value="#{firmarResolucionHomologacionFormController.listaGruposAtrasados}"
+										rendered="#{not empty firmarResolucionHomologacionFormController.listaGruposAtrasados}"
+										style=" width : 800px;">
+										<h:column><f:facet name="header">Nombre</f:facet>
+											<h:outputText value="#{gruposAtrasados.descripcionGrupo}" />
+										</h:column>
+									
+										<rich:column styleClass="action"><f:facet name="header">Actividad</f:facet>
+											<h:outputText value="#{firmarResolucionHomologacionFormController.mostrarEstado(gruposAtrasados.estado)}" />
+										</rich:column>
+									</rich:dataTable>
+									</div>
+							</rich:panel>
+
+
+
+						</h:panelGrid>
+						<br/>
+						<s:decorate id="buttonsField" template="/layout/display.xhtml">
+						<h:commandButton id="tareaModificar"
+							disabled="#{firmarResolucionHomologacionFormController.ok()}"
+							value="#{messages.proceso_sgte_tarea}"
+							action="#{firmarResolucionHomologacionFormController.nextTask()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"
+							rendered="#{!firmarResolucionHomologacionFormController.hayObs}" />
+							
+						<h:commandButton id="tareasSFP"
+							value="#{messages.proceso_sgte_tarea}"
+							action="#{firmarResolucionHomologacionFormController.nextTask2()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"
+							rendered="#{firmarResolucionHomologacionFormController.hayObs}" />
+						
+						
+							<a:commandButton id="showResolucionButton" eventsQueue="default"
+								value="Cargar Datos Resolución" reRender="modalResolucion"
+								action="#{firmarResolucionHomologacionFormController.prepararModal()}"
+								oncomplete="#{rich:component('modalResolucion')}.show()" />
+						<!-- disabled="#{!firmarResolucionHomologacionFormController.existeResolucion}" -->
+						<a:commandButton id="uploadResolucionButton" eventsQueue="default"
+								value="Anexar Resolución" reRender="modalResolucion"
+								action="#{firmarResolucionHomologacionFormController.anexar(firmarResolucionHomologacionFormController.idConcursoPuestoAgr)}">
+								<f:param name="idConcurso" value="#{firmarResolucionHomologacionFormController.idConcurso}"/>
+						</a:commandButton>
+						<!-- disabled="#{firmarResolucionHomologacionFormController.existeResolucion}" -->
+						
+						 
+						<s:button
+							view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"
+							id="volver" propagation="none" value="#{messages.CU412_volver}">
+						</s:button>
+						
+							
+						</s:decorate>
+					</rich:panel>
+				</h:panelGrid>
+			
+		
+
+
+
+</h:form>
+
+	</ui:define>
+
+</ui:composition>

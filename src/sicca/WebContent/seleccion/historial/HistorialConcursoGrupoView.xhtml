@@ -1,0 +1,363 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU463_tittle_view}</h1>
+		
+		<rich:modalPanel id="modalSelect" width="450" autosized="true"
+			styleClass="centerbox">
+			<f:facet name="header">#{messages.CU463_reportes}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form id="formContacto">
+				<rich:panel>
+					<h:panelGrid>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU463_reporte}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="idReporte" style="width :250px;"
+								value="#{historialConcursoGrupoFC.reporte}">
+								<f:selectItems value="#{historialConcursoGrupoFC.reporteSelectItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+					</h:panelGrid>
+				</rich:panel>
+				<a:outputPanel id="idPanelBotones" ajaxRendered="true">
+					<div class="actionButtons">
+						<h:commandButton id="print" value="#{messages.GENERICO_IMPRIMIR}"
+							action="#{historialConcursoGrupoFC.imprimirGrupo()}" />
+
+						<a:commandButton id="clear" value="#{messages.GENERICO_VOLVER}"
+							onclick="#{rich:component('modalSelect')}.hide();return false;" />
+					</div>
+				</a:outputPanel>
+			</h:form>
+		</rich:modalPanel>
+		 
+		<h:form id="exclusionPostulanteSearch" styleClass="edit">
+		
+			<rich:panel>
+			    <f:facet name="header">#{messages.CU463_datos_concurso}</f:facet> 
+			    <h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+									value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+							
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}</ui:define>
+						<h:inputText value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.numero}/#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.anhio}" disabled="true" size="10"/>
+						#{' '}
+			            <h:inputText size="120" disabled="true" value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.nombre}" />
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU366_tipo_concurso}</ui:define>
+			            <h:inputText size="133" disabled="true" value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha_alta}</ui:define>
+						<rich:calendar id="fecha" value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.fechaAlta}"
+							           disabled="true" inputSize="10" datePattern="dd/MM/yyyy"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.ValorNivelOrg_usuAlta}</ui:define>
+			            <h:inputText size="40" disabled="true" value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.usuAlta}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+			            <h:inputTextarea disabled="true" cols="90" rows="3"
+			            	value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.observacion}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<s:button
+						view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+						id="anexos" value="#{messages.CU200_ver_anexos}">
+						<f:param name="nombrePantalla" value="concurso_edit" />
+						<f:param name="idCU" value="#{historialConcursoGrupoFC.concursoPuestoAgr.concurso.idConcurso}" />
+						<f:param name="nombreTabla" value="concurso" />
+						<f:param name="mostrarDoc" value="false" /> 
+						<f:param name="isEdit" value="false" />
+						<f:param name="from" value="seleccion/historial/HistorialConcursoGrupoView" />
+					</s:button>
+					
+					<h:commandButton id="print" value="#{messages.GENERICO_IMPRIMIR}"
+							action="#{historialConcursoGrupoFC.imprimir()}" />
+				</h:panelGrid>
+			</rich:panel>
+				
+			<br></br>	
+			<rich:panel>
+			    <f:facet name="header">#{messages.CU463_datos_grupo_puesto}</f:facet> 
+			    <h:panelGrid columns="3">
+			    	<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_grupo_puestos}</ui:define>
+						<h:inputText value="#{historialConcursoGrupoFC.concursoPuestoAgr.codGrupo}" disabled="true" size="10"/>
+						#{' '}
+			            <h:inputText size="100" disabled="true" value="#{historialConcursoGrupoFC.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU463_estado_actual}</ui:define>
+			            <h:inputText size="50" disabled="true" value="#{historialConcursoGrupoFC.estadoGrupo}" />
+			            
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<h:commandButton id="verAdjunto" value="Ver Resolución/Acta Desierto"
+							rendered="#{!historialConcursoGrupoFC.tieneDocAdjunto(historialConcursoGrupoFC.concursoPuestoAgr.idConcursoPuestoAgr)}"
+							action="#{historialConcursoGrupoFC.imprimirDocumento(historialConcursoGrupoFC.concursoPuestoAgr.idConcursoPuestoAgr)}" >
+						<f:param name="idConcursoPuestoAgr" value="" />	
+						</h:commandButton>
+					</s:decorate>
+			    </h:panelGrid>
+			    
+			    <h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha_alta}</ui:define>
+						<rich:calendar id="fecha" value="#{historialConcursoGrupoFC.concursoPuestoAgr.fechaAlta}"
+							           disabled="true" inputSize="10" datePattern="dd/MM/yyyy"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.ValorNivelOrg_usuAlta}</ui:define>
+			            <h:inputText size="40" disabled="true" value="#{historialConcursoGrupoFC.concursoPuestoAgr.usuAlta}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<br></br>
+
+			<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['gral_actividades']}(#{empty historialActividadesGrupoList.resultList ? 0 : (historialActividadesGrupoList.paginated ? historialActividadesGrupoList.resultCount : historialActividadesGrupoList.resultList.size)})</f:facet>
+					<div class="results" id="historialActividadesGrupoList">
+						<h:outputText value="#{messages.msg_list_search_no_results}" rendered="#{empty historialActividadesGrupoList.resultList}" /> 
+						<rich:dataTable rowKeyVar="_index"
+							id="historialActividadesGrupoListt" var="_historialActividadesGrupo"
+							value="#{historialConcursoGrupoFC.listaHistorialGrupos}"
+							rendered="#{not empty historialActividadesGrupoList.resultList}">
+						
+							<h:column>
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.gral_actividad}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.descripcion" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.descripcion}" />
+							</h:column>
+							
+							<h:column>
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.CU463_fecha_creacion}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.fechaCreacion" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.fechaCreacion}" />
+							</h:column>
+							
+							<h:column> 
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.CU463_fecha_inicio}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.fechaInicio" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.fechaInicio}" />
+							</h:column>
+							
+							<h:column> 
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.CU463_usuario_inicio}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.usuarioInicio" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.usuarioInicio}" />
+							</h:column>
+							
+							<h:column> 
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.CU463_fecha_fin}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.fechaFin" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.fechaFin}" />
+							</h:column>
+							
+							<h:column> 
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.CU463_usuario_fin}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.usuarioFin" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.usuarioFin}" />
+							</h:column>
+							
+							<h:column> 
+								<f:facet name="header">
+									<ui:include src="/layout/sort.xhtml">
+										<ui:param name="entityList" value="#{historialActividadesGrupoList}" />
+										<ui:param name="propertyLabel" value="#{messages.gral_observacion}" />
+										<ui:param name="propertyPath" value="historialActividadesGrupo.observacion" />
+									</ui:include>
+								</f:facet>
+								<h:outputText value="#{_historialActividadesGrupo.observacion}" />
+							</h:column>
+							
+							<rich:column styleClass="action">
+								<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+								
+								<s:link id="gestionar1" eventsQueue="default"
+										value="#{messages.CU200_ver_anexos}"
+										rendered="#{historialConcursoGrupoFC.mostrarAnexo(_historialActividadesGrupo.id)}"
+										action="#{historialConcursoGrupoFC.verAnexo(_historialActividadesGrupo.id)}">
+										<f:param name="actividad" value="#{_historialActividadesGrupo.codActividad}" /> 
+										<f:param name="idConcursoPuestoAgr" value="#{_historialActividadesGrupo.concursoPuestoAgr.idConcursoPuestoAgr}" />
+										<f:param name="idHistorial" value="#{_historialActividadesGrupo.id}" />
+								</s:link>
+								
+								<a:commandLink id="imprimirGrupo"
+									value="#{messages.msg_list_search_print_button}"
+									rendered="#{historialConcursoGrupoFC.mostrarImprimirGrupo(_historialActividadesGrupo.id)}"
+									actionListener="#{historialConcursoGrupoFC.cargarReporteGrupo(_historialActividadesGrupo.id)}"
+									reRender="formContacto"
+									oncomplete="#{rich:component('modalSelect')}.show();return false;"/>
+									
+							</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+
+			<a:outputPanel>
+				<div class="tableControl">
+					<s:link
+						view="/seleccion/historial/HistorialConcursoGrupoView.xhtml"
+						rendered="#{historialActividadesGrupoList.previousExists}"
+						value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+						id="firstPage">
+						<f:param name="firstResult" value="0" />
+					</s:link> 
+					<s:link view="/seleccion/historial/HistorialConcursoGrupoView.xhtml"
+						rendered="#{historialActividadesGrupoList.previousExists}"
+						value="#{messages.left} #{messages.msg_list_previous_page}"
+						id="previousPage">
+						<f:param name="firstResult"
+							value="#{historialActividadesGrupoList.previousFirstResult}" />
+					</s:link> 
+					<s:link view="/seleccion/historial/HistorialConcursoGrupoView.xhtml"
+						rendered="#{historialActividadesGrupoList.nextExists}"
+						value="#{messages.msg_list_next_page} #{messages.right}"
+						id="nextPage">
+						<f:param name="firstResult" value="#{historialActividadesGrupoList.nextFirstResult}" />
+					</s:link> 
+					<s:link view="/seleccion/historial/HistorialConcursoGrupoView.xhtml"
+						rendered="#{historialActividadesGrupoList.nextExists}"
+						value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+						id="lastPage">
+						<f:param name="firstResult" value="#{historialActividadesGrupoList.lastFirstResult}" />
+					</s:link>
+				</div>
+			</a:outputPanel>
+			
+			<s:button view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+					  value="#{messages.GENERICO_VOLVER}"
+					  propagation="none"
+					  id="volver">
+					  	<f:param name="sinNivelEntidadIdSinNivelEntidad" 
+									value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+						<f:param name="sinEntidadIdSinEntidad"
+							value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+						<f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{nivelEntidadOeeUtil.idConfigCab}" />
+						<f:param name="configuracionUoDetIdConfiguracionUoDet"
+							value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />								
+						<f:param name="concurso"
+							value="#{historialConcursoGrupoFC.concurso}"/>
+						<f:param name="grupo" 
+							value="#{historialConcursoGrupoFC.grupo}"/>
+						<f:param name="idConcursoPuestoAgr"
+							value="#{historialConcursoGrupoFC.idConcursoPuestoAgr}"/>
+						<f:param name="anhoExpediente" 
+							value="#{historialConcursoGrupoFC.anhoExpediente}"/>
+						<f:param name="nroExpediente" 
+							value="#{historialConcursoGrupoFC.nroExpediente}"/>
+						<f:param name="tipo" 
+							value="#{historialConcursoGrupoFC.idTipoConcurso}"/>
+						<f:param name="from"
+							value="seleccion/historial/HistorialConcursoGrupo" />
+					  
+			</s:button>
+	</h:form>
+</ui:define>
+
+</ui:composition>

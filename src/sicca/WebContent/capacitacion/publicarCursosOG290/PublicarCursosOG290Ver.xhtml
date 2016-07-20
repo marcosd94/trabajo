@@ -1,0 +1,355 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU497_titulo_ver}</h1>
+
+		<h:form id="publicarCursosOG" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU497_panel_capac}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_titulo}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{publicarCursoOG290FC.capacitaciones.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_tipo_cap}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{publicarCursoOG290FC.capacitaciones.datosEspecificosTipoCap.descripcion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU485_panel_org}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU497_panel_public}</f:facet>
+				<h:panelGrid columns="1">
+					<rich:panel style="border:none">
+						<fieldset><legend>#{messages.CU497_panel_fec_public}</legend>
+						<h:panelGrid columns="2">
+							<s:decorate id="fechaDesdeDecorate" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU497_fec_desde}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fecha"
+									value="#{publicarCursoOG290FC.fechaDesde}" inputSize="10"
+									datePattern="dd/MM/yyyy" enableManualInput="true"
+									disabled="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="fechaHastaDecorate" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU497_fec_hasta}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fechaHasta"
+									value="#{publicarCursoOG290FC.fechaHasta}" inputSize="10"
+									datePattern="dd/MM/yyyy" enableManualInput="true"
+									disabled="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+
+						</h:panelGrid></fieldset>
+					</rich:panel>
+				</h:panelGrid>
+				<rich:panel style="border:none">
+					<h:panelGrid columns="1">
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_sede}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="sede" size="100" maxlength="500" disabled="true"
+								value="#{publicarCursoOG290FC.capacitaciones.sede}" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_direccion}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="direccion" size="100" maxlength="500"
+								disabled="true"
+								value="#{publicarCursoOG290FC.capacitaciones.direccion}" />
+						</s:decorate>
+					</h:panelGrid>
+
+					<h:panelGrid columns="3">
+						<a:region>
+							<s:decorate id="paisField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_pais}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="pais" disabled="true"
+									value="#{publicarCursoOG290FC.idPais}" style="width:200px">
+									<f:selectItems value="#{paissSelectItems}" />
+									<a:support event="onchange" eventsQueue="default"
+										action="#{publicarCursoOG290FC.updateDepartamento()}"
+										reRender="departamentoField" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate id="departamentoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU478_dpto}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="dpto" disabled="true"
+									value="#{publicarCursoOG290FC.codDepartamento}"
+									style="width:180px">
+									<f:selectItems
+										value="#{publicarCursoOG290FC.departamentosSelecItem}" />
+									<a:support event="onchange" eventsQueue="default"
+										action="#{publicarCursoOG290FC.updateCiudad()}"
+										reRender="ciudadField" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+						<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Barrio_ciudad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="ciudad" disabled="true"
+								value="#{publicarCursoOG290FC.idCiudad}" style="width:180px">
+								<f:selectItems value="#{publicarCursoOG290FC.ciudadSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaIniDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_fec_inicio}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaInicio" disabled="true"
+								value="#{publicarCursoOG290FC.capacitaciones.fechaInicio}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate id="fechFinDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_fec_fin}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaFin" disabled="true"
+								value="#{publicarCursoOG290FC.capacitaciones.fechaFin}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+							</rich:calendar>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:panel>
+			<rich:panel id="panelInstitucionParticipadoras">
+				<f:facet name="header">#{messages.CU497_panel_inst}<span
+						class="required">*</span>
+				</f:facet>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<h:selectOneRadio id="instituFinanciadora" disabled="true"
+							value="#{publicarCursoOG290FC.destinadoA}">
+							<s:selectItems var="institu" value="#{enumAppHelper.destinadoAs}"
+								label="#{institu.descripcion}" />
+							<s:convertEnum />
+
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				<a:outputPanel id="cerradoOutPanel" ajaxRendered="true"
+					rendered="#{publicarCursoOG290FC.destinadoA.id.equals('C')}">
+
+					<fieldset id="fieldSet2"><legend>#{messages.CU485_panel_cerrado}</legend>
+					<h:panelGrid columns="1">
+						<rich:panel id="oeePanel" style=" width : 672px;">
+							<f:facet name="header">#{messages.gral_oee}(#{publicarCursoOG290FC.listaCapacitacionCerradas.size()})</f:facet>
+
+							<div class="results" id="tbldetList"><rich:dataTable
+								id="items2List" var="_itemsCerrado" rows="5" first="0"
+								value="#{publicarCursoOG290FC.listaCapacitacionCerradas}"
+								rowKeyVar="rowNrCerr">
+								<rich:column>
+									<f:facet name="header">
+														OEE
+													</f:facet>
+									<h:outputText
+										value="#{_itemsCerrado.configuracionUo.denominacionUnidad}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Unidad Organizativa
+													</f:facet>
+									<h:outputText
+										value="#{_itemsCerrado.configuracionUoDet.denominacionUnidad}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Cupo
+													</f:facet>
+									<h:outputText value="#{_itemsCerrado.cupo}" />
+								</rich:column>
+
+							</rich:dataTable> <rich:datascroller align="center" for="items2List" id="s2"
+								reRender="s1"
+								rendered="#{publicarCursoOG290FC.listaCapacitacionCerradas.size() > 5}" />
+							</div>
+						</rich:panel>
+
+					</h:panelGrid></fieldset>
+				</a:outputPanel>
+
+			</rich:panel>
+			<rich:panel id="panelLugar">
+				<f:facet name="header">#{messages.CU485_panel_lugar}
+				</f:facet>
+
+				<rich:dataTable id="consultas" var="_c" rows="5" rowKeyVar="rowNr"
+					value="#{publicarCursoOG290FC.listaConsultaCapacitacion}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_lugar}
+						</f:facet>
+						<h:outputText value="#{_c.lugar}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_direccion}
+						</f:facet>
+						<h:outputText value="#{_c.direccion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_telef}
+						</f:facet>
+						<h:outputText value="#{_c.telefono}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_emai}
+						</f:facet>
+						<h:outputText value="#{_c.email}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Horario Desde
+						</f:facet>
+						<h:outputText
+							value="#{publicarCursoOG290FC.buscarHora(_c.horaDesde)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Horario Hasta
+						</f:facet>
+						<h:outputText
+							value="#{publicarCursoOG290FC.buscarHora(_c.horaHasta)}" />
+					</h:column>
+
+				</rich:dataTable>
+				<rich:datascroller align="center" for="consultas" id="sc2"
+					reRender="sc1"
+					rendered="#{publicarCursoOG290FC.listaConsultaCapacitacion.size() > 5}" />
+			</rich:panel>
+
+			<rich:panel style="border:none">
+				<fieldset><legend><span class="required">#{messages.CU497_panel_motivo}</span></legend>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU497_motivo}
+						</ui:define>
+						<h:inputTextarea id="motivoCancelacion" cols="100" rows="7"
+							disabled="true"
+							value="#{publicarCursoOG290FC.capacitaciones.motivoCancelacion}">
+
+							<f:validateLength maximum="1000" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+			</rich:panel>
+
+
+			<div class="actionButtons"><s:button id="cancelAdd"
+				value="Volver" propagation="none" includePageParams="false"
+				view="/capacitacion/registrarCursosOg290/CursosOg290List.xhtml" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

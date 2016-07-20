@@ -1,0 +1,271 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU453_titulo_edit}</h1>
+		<h:form id="accionInconstCab" styleClass="edit">
+
+			<rich:panel id="panelGral">
+				<f:facet name="header">#{accionInconstCabHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU453_titulo_edit}</f:facet>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU453_estado}<span
+								class="required">*</span>
+						</ui:define>
+
+						<h:selectOneRadio id="estado" disabled="#{registrarAccionesInconstitucionalesFC.isSave}"
+							value="#{registrarAccionesInconstitucionalesFC.estado}">
+							<f:selectItem id="item1"
+								itemLabel="PENDIENTE CON MEDIDA CAUTELAR" itemValue="P" />
+							<f:selectItem id="item2" itemLabel="ACUERDO Y SENTENCIA"
+								itemValue="A" />
+							<a:support event="onclick" eventsQueue="default"
+								reRender="panelGral" />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel id="panelFuncionario">
+					<f:facet name="header">#{messages.CU440_funcionario}<span
+							class="required">*</span>
+					</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU453_pais}
+									
+							</ui:define>
+							<h:inputText id="pais" disabled="true"
+								value="#{registrarAccionesInconstitucionalesFC.empleadoPuesto.persona.paisByIdPaisExpedicionDoc.descripcion}"
+								size="40">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_ci_func}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="nroCedula" disabled="true"
+								value="#{registrarAccionesInconstitucionalesFC.empleadoPuesto.persona.documentoIdentidad}"
+								size="20">
+							</h:inputText>
+							#{' '}
+                <a:commandButton id="search" eventsQueue="default"
+								rendered="#{!registrarAccionesInconstitucionalesFC.isEdit}"
+								value="#{messages.CU440_btn_buscar_func}"
+								action="#{registrarAccionesInconstitucionalesFC.getUrlToPageSearchFuncionario()}" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+							<h:inputText id="nombres" disabled="true"
+								value="#{registrarAccionesInconstitucionalesFC.empleadoPuesto.persona.nombres}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+							<h:inputText id="apellidos" disabled="true"
+								value="#{registrarAccionesInconstitucionalesFC.empleadoPuesto.persona.apellidos}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+						
+					</h:panelGrid>
+					
+
+				</rich:panel>
+				<rich:panel id="panelDatos">
+					<f:facet name="header">#{messages.CU453_panel_inconstitucionalidad}
+					</f:facet>
+					<h:panelGrid columns="2">
+						<s:decorate id="leyField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU453_ley}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="leySelect" style="width : 220px;"
+								disabled="#{registrarAccionesInconstitucionalesFC.isEdit or registrarAccionesInconstitucionalesFC.isSave}"
+								value="#{registrarAccionesInconstitucionalesFC.idLeyes}">
+								<f:selectItems
+									value="#{registrarAccionesInconstitucionalesFC.leyesSelecItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{registrarAccionesInconstitucionalesFC.esParaMostrarOtra()}"
+									reRender="otraField" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate id="otraField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU453_otra}
+							</ui:define>
+							<h:inputText id="otraDescripcion"
+								disabled="#{!registrarAccionesInconstitucionalesFC.mostrarOtra}"
+								value="#{registrarAccionesInconstitucionalesFC.otro}" size="30" />
+						</s:decorate>
+
+
+						<s:decorate id="articulosField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU453_articulos}<span
+									class="required">*</span>
+							</ui:define>
+
+							<h:selectOneRadio id="articulo"
+								disabled="#{registrarAccionesInconstitucionalesFC.isEdit or registrarAccionesInconstitucionalesFC.isSave}"
+								value="#{registrarAccionesInconstitucionalesFC.articulo}">
+								<f:selectItem id="it1" itemLabel="Todos" itemValue="T" />
+								<f:selectItem id="it2" itemLabel="Espec. Articulo" itemValue="E" />
+								<a:support event="onclick" eventsQueue="default"
+									action="#{registrarAccionesInconstitucionalesFC.esParaMostrarEspecificacionArt()}"
+									reRender="especificacionField" />
+							</h:selectOneRadio>
+						</s:decorate>
+						<s:decorate id="especificacionField"
+							template="/layout/display.xhtml">
+							<h:inputText id="especificacionArt"
+								disabled="#{!registrarAccionesInconstitucionalesFC.mostrarEspArt}"
+								value="#{registrarAccionesInconstitucionalesFC.especificacionArticulo}"
+								size="60" />
+						</s:decorate>
+					</h:panelGrid>
+					<a:commandButton id="agregar" value="Agregar"
+						disabled="#{registrarAccionesInconstitucionalesFC.isSave}"
+						rendered="#{!registrarAccionesInconstitucionalesFC.isEdit}"
+						action="#{registrarAccionesInconstitucionalesFC.agregarLista()}"
+						reRender="panelDatos" />
+					<br />
+					<br />
+					<rich:dataTable id="tablaDetalles" cellpadding="0" cellspacing="0"
+						width="600" border="0" var="record" style="width: 900px;" rows="5"
+						rendered="#{registrarAccionesInconstitucionalesFC.listaDetalles.size() > 0}"
+						value="#{registrarAccionesInconstitucionalesFC.listaDetalles}"
+						rowKeyVar="row">
+
+						<rich:column>
+							<f:facet name="header">
+							Ley
+							</f:facet>
+							<h:outputText value="#{record.datosEspecifLey.descripcion}"
+								rendered="#{record.datosEspecifLey != null}" />
+							<h:outputText value="#{record.otraLey}"
+								rendered="#{record.datosEspecifLey == null}" />
+
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+							#{messages.CU453_articulos}
+							</f:facet>
+							<h:outputText value="Todos" rendered="#{record.artTodos}" />
+							<h:outputText value="#{record.artEspecif}"
+								rendered="#{!record.artTodos}" />
+						</rich:column>
+
+						<rich:column
+							rendered="#{!registrarAccionesInconstitucionalesFC.isEdit}">
+							<f:facet name="header">
+							#{messages.msg_list_action_column}
+							</f:facet>
+							<a:commandLink value="Eliminar" disabled="#{registrarAccionesInconstitucionalesFC.isSave}"
+								action="#{registrarAccionesInconstitucionalesFC.eliminarLista(row)}"
+								reRender="panelDatos" />
+						</rich:column>
+					</rich:dataTable>
+					<rich:datascroller align="center" for="tablaDetalles" id="sc2"
+						rendered="#{registrarAccionesInconstitucionalesFC.listaDetalles.size() > 5}"
+						reRender="sc1" />
+				</rich:panel>
+				<h:panelGrid columns="1">
+					<s:decorate id="obsField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU453_obs}
+							</ui:define>
+						<h:inputTextarea cols="80"
+							disabled="#{registrarAccionesInconstitucionalesFC.isEdit}"
+							value="#{registrarAccionesInconstitucionalesFC.accionInconstCab.observacion}">
+							<f:validateLength maximum="500" />
+							</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel id="panelAcuerdo"
+					rendered="#{registrarAccionesInconstitucionalesFC.estado == 'A'}">
+					<f:facet name="header">Acuerdo y Sentencia
+					</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate id="resultadoField" template="/layout/edit.xhtml">
+							<ui:define name="label">Resultado<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputTextarea cols="80"
+								value="#{registrarAccionesInconstitucionalesFC.accionInconstCab.resultado}">
+								<f:validateLength maximum="500" />
+								</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_actualizar}"
+					rendered="#{accionInconstCabHome.managed}" /></div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}"
+					rendered="#{!accionInconstCabHome.managed}" /></div>
+				<br />
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{registrarAccionesInconstitucionalesFC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!accionInconstCabHome.managed and !registrarAccionesInconstitucionalesFC.cargarAnexos}" />
+			<h:commandButton id="update" value="Actualizar"
+				action="#{registrarAccionesInconstitucionalesFC.updated()}"
+				rendered="#{registrarAccionesInconstitucionalesFC.operacion == 'updated'}" />
+			<s:button
+				rendered="#{registrarAccionesInconstitucionalesFC.cargarAnexos}"
+				id="anexo" value="Anexo" propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{registrarAccionesInconstitucionalesFC.ubicacionFisica}" />
+				<f:param name="nombrePantalla"
+					value="registrar_acciones_inconstitucionales_edit" />
+				<f:param name="idCU"
+					value="#{accionInconstCabHome.accionInconstCabIdAccionCab}" />
+				<f:param name="nombreTabla" value="AccionInconstCab" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="juridicos/registrarInconstitucionalidades/AccionInconstCabEdit" />
+			</s:button> <s:button id="cancelEdit" value="Volver" propagation="end"
+				view="/juridicos/registrarInconstitucionalidades/AccionInconstCabList.xhtml" />
+			</div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{accionInconstCabHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{accionInconstCabHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{accionInconstCabHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{accionInconstCabHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			
+			
+
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

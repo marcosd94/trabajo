@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/UsuarioRolList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{usuarioRolHome.wire}"/>
+
+   <param name="usuarioRolFrom"/>
+   <param name="usuarioRolIdUsuarioRol" value="#{usuarioRolHome.usuarioRolIdUsuarioRol}"/>
+   <param name="rolFrom"/>
+   <param name="rolIdRol" value="#{rolHome.rolIdRol}"/>
+
+   <param name="usuarioFrom"/>
+   <param name="usuarioIdUsuario" value="#{usuarioHome.usuarioIdUsuario}"/>
+
+
+
+   <navigation from-action="#{usuarioRolHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/UsuarioRol.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{usuarioRolHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/UsuarioRol.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{usuarioRolHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/UsuarioRolList.xhtml"/>
+      </rule>
+   </navigation>
+
+</page>

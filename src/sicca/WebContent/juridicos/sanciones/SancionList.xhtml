@@ -1,0 +1,143 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU454_tittle_list}</h1>
+		
+
+		<h:form id="sancionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" id="panelParametro"
+				switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_descripcion}</ui:define>
+					<h:inputText id="descripcion" size="100"
+						value="#{sancionList.sancion.descripcion}" />
+				</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{sancionList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages.msg_list_search_button}" reRender="panelParametro,panelResultado"
+					action="#{sancionList.listaResultados()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<a:commandButton id="reset"
+					value="#{messages['gral_mostrar_todos']}"
+					action="#{sancionList.limpiar()}" 
+					reRender="panelParametro,panelResultado" >
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+			 </div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty sancionList.resultList ? 0 : (sancionList.paginated ? sancionList.resultCount : sancionList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList">
+				<h:outputText value="#{messages.msg_list_search_no_results}" rendered="#{empty sancionList.resultList}" /> 
+				
+				<rich:dataTable id="sancionList" var="_sancion"
+					value="#{sancionList.resultList}"
+					rendered="#{not empty sancionList.resultList}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sancionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.Pais_descripcion}" />
+								<ui:param name="propertyPath" value="sancion.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_sancion.descripcion}" />
+					</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sancionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Pais_activo}" />
+							<ui:param name="propertyPath" value="sancion.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_sancion.activo}" disabled="true"/>
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/juridicos/sanciones/SancionView.xhtml"
+						value="#{messages.msg_list_view}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="sancionViewId">
+						<f:param name="idSancion" value="#{_sancion.idSancion}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/juridicos/sanciones/SancionEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="sancionEdit" rendered="#{empty from}">
+						<f:param name="idSancion" value="#{_sancion.idSancion}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl">
+			<s:link view="/juridicos/sanciones/SancionList.xhtml"
+				rendered="#{sancionList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> 
+			<s:link view="/juridicos/sanciones/Sancion.xhtml"
+				rendered="#{sancionList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{sancionList.previousFirstResult}" />
+			</s:link> 
+			<s:link view="/juridicos/sanciones/Sancion.xhtml"
+				rendered="#{sancionList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{sancionList.nextFirstResult}" />
+			</s:link> 
+			<s:link view="/juridicos/sanciones/Sancion.xhtml"
+				rendered="#{sancionList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{sancionList.lastFirstResult}" />
+			</s:link>
+		</div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/juridicos/sanciones/SancionEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="idSancion" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

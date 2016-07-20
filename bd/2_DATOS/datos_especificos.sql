@@ -1,0 +1,1 @@
+INSERT INTO seleccion.datos_especificos VALUES (1561, 'MULTIDISCAPACIDAD', NULL, NULL, 30, true, 'ADMIN', '2011-10-03 00:00:00', NULL, NULL);

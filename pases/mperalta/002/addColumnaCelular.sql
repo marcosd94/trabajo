@@ -1,0 +1,1 @@
+﻿ALTER TABLE general.persona ADD COLUMN celular character varying(20);

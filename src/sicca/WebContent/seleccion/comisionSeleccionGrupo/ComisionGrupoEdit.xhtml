@@ -1,0 +1,269 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="comisionGrupo" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{comisionGrupoHome.managed ? 'Edit' : 'Add'} Comision grupo</f:facet>
+
+
+            <s:decorate id="idComisionGrupoField" template="layout/edit.xhtml">
+                <ui:define name="label">Id comision grupo</ui:define>
+                <h:inputText id="idComisionGrupo"
+                       required="true"
+                       disabled="#{comisionGrupoHome.managed}"
+                          value="#{comisionGrupoHome.instance.idComisionGrupo}">
+                    <a:support event="onblur" reRender="idComisionGrupoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{comisionGrupoHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{comisionGrupoHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{comisionGrupoHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{comisionGrupoHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{comisionGrupoHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{comisionGrupoHome.persist}"
+                       disabled="#{!comisionGrupoHome.wired}"
+                       rendered="#{!comisionGrupoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{comisionGrupoHome.update}"
+                       rendered="#{comisionGrupoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{comisionGrupoHome.remove}"
+                      immediate="true"
+                       rendered="#{comisionGrupoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/ComisionGrupo.xhtml"
+                rendered="#{comisionGrupoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty comisionGrupoFrom ? 'ComisionGrupoList' : comisionGrupoFrom}.xhtml"
+                rendered="#{!comisionGrupoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Concurso puesto agr *" labelClass="required">
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this comisionGrupo."
+                   rendered="#{comisionGrupoHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{comisionGrupoHome.instance.concursoPuestoAgr}"
+                rendered="#{comisionGrupoHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion homologacion id resolucion homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionHomologacion.idResolucionHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nota homologacion id nota homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.notaHomologacion.idNotaHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Memo homologacion id memo homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.memoHomologacion.idMemoHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.estado}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{comisionGrupoHome.instance.concursoPuestoAgr != null ? 'changeParent' : 'selectParent'}" value="#{comisionGrupoHome.instance.concursoPuestoAgr != null ? 'Change' : 'Select'} concursoPuestoAgr"
+                       view="/ConcursoPuestoAgrList.xhtml">
+                <f:param name="from" value="ComisionGrupoEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Comision seleccion cab *" labelClass="required">
+    <div class="association" id="comisionSeleccionCabParent">
+
+        <h:outputText value="There is no comisionSeleccionCab associated with this comisionGrupo."
+                   rendered="#{comisionGrupoHome.instance.comisionSeleccionCab == null}"/>
+
+        <rich:dataTable var="_comisionSeleccionCab"
+                   value="#{comisionGrupoHome.instance.comisionSeleccionCab}"
+                rendered="#{comisionGrupoHome.instance.comisionSeleccionCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="comisionSeleccionCabTable">
+            <h:column>
+                <f:facet name="header">Id comision sel</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{comisionGrupoHome.instance.comisionSeleccionCab != null ? 'changeParent' : 'selectParent'}" value="#{comisionGrupoHome.instance.comisionSeleccionCab != null ? 'Change' : 'Select'} comisionSeleccionCab"
+                       view="/ComisionSeleccionCabList.xhtml">
+                <f:param name="from" value="ComisionGrupoEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

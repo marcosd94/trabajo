@@ -1,0 +1,243 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU660_title}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" disabled="true"
+						onkeypress="return soloNumeros(event);"
+						value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="10">
+						<a:support event="onblur" reRender="idPanelCampos"
+							ajaxSingle="true"
+							action="#{moverPuestosFC.findNivelEntidadOrigen()}">
+							<f:param value="sinNivelEntidadIdSinNivelEntidad"
+								name="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+						</a:support>
+					</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+						value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+						disabled="true" />
+							 #{' '}
+               
+				  
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Usuario_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric"
+						disabled="true" onkeypress="return soloNumeros(event);"
+						value="#{nivelEntidadOeeUtil.codSinEntidad}" size="10">
+						<a:support event="onblur" eventsQueue="default"
+							action="#{moverPuestosFC.findEntidadOrigen()}"
+							reRender="idPanelCampos">
+							<f:param value="sinNivelEntidadIdSinNivelEntidad"
+								name="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+						</a:support>
+					</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+						value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+						disabled="true" />
+							#{' '}
+                
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+						onkeypress="return soloNumeros(event);">
+						<a:support event="onblur" eventsQueue="default"
+							action="#{moverPuestosFC.findUnidadOrganizativaOrigen()}"
+							reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+					</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+						disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							#{' '}
+                
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_paisExped}</ui:define>
+					<h:selectOneMenu id="idPais" style="width : 300px;"
+						value="#{gestionLegajos660FC.idPais}">
+						<f:selectItems value="#{paissSelectItems}" />
+
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_cedula}</ui:define>
+					<h:inputText id="cedula" size="50"
+						value="#{gestionLegajos660FC.cedula}" style=" width : 300px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_nombres}</ui:define>
+					<h:inputText id="nombres" size="50"
+						value="#{gestionLegajos660FC.nombres}" style=" width : 300px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU579_apellido}</ui:define>
+					<h:inputText id="apellidos" size="50"
+						value="#{gestionLegajos660FC.apellidos}" style=" width : 300px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Estado</ui:define>
+					<h:selectOneRadio id="idEstado"
+						value="#{gestionLegajos660FC.estado}" styleClass="radio">
+						<f:selectItem itemLabel="Activo" itemValue="ACTIVO" />
+						<f:selectItem itemLabel="Inactivo" itemValue="INACTIVO" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				reRender="links,botons,outPanelResul"
+				action="#{gestionLegajos660FC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="reset" propagation="join" value="Limpiar"
+				action="#{gestionLegajos660FC.limpiar()}">
+				<f:param name="firstResult" value="0" />
+			</s:button> <h:commandButton view="/home.xhtml" value="Imprimir"
+				action="#{gestionLegajos660FC.imprimir()}" /></div>
+		</h:form>
+		<h:form>
+			<a:outputPanel ajaxRendered="true" id="outPanelResul">
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty gestionarLegajo660ListCustom.resultList ? 0 : (gestionarLegajo660ListCustom.paginated ? gestionarLegajo660ListCustom.resultCount : gestionarLegajo660ListCustom.resultList.size())})</f:facet>
+					<div class="results" id="excepcionesList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty gestionarLegajo660ListCustom.resultList}" /> <rich:dataTable
+						var="_record" value="#{gestionarLegajo660ListCustom.resultList}"
+						rendered="#{not empty gestionarLegajo660ListCustom.resultList}">
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarLegajo660ListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU579_paisExped}" />
+									<ui:param name="propertyPath"
+										value="Persona.paisByIdPaisExpedicionDoc.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_record.paisByIdPaisExpedicionDoc.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarLegajo660ListCustom}" />
+									<ui:param name="propertyLabel" value="#{messages.CU579_cedula}" />
+									<ui:param name="propertyPath"
+										value="Persona.documentoIdentidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_record.documentoIdentidad}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarLegajo660ListCustom}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU579_nombreApellido}" />
+									<ui:param name="propertyPath" value="Persona.apellidos" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_record.nombres} #{_record.apellidos}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList"
+										value="#{gestionarLegajo660ListCustom}" />
+									<ui:param name="propertyLabel" value="Estado" />
+									<ui:param name="propertyPath" value="Persona.activo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_record.activo?'Activo':'Inactivo'}" />
+						</h:column>
+
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<s:link view="/legajos/MenuDatosPersonales.xhtml" value="Editar">
+								<f:param name="from" value="legajos/GestionarLegajo/GestionarLegajo660" />
+								<f:param name="texto" value="G" />
+								<f:param name="accion" value="EDITAR" />
+								<f:param name="idPersona" value="#{_record.idPersona}" />
+							</s:link>
+							#{''}
+							
+							<s:link view="/legajos/MenuDatosPersonales.xhtml" value="Ver">
+								<f:param name="texto" value="G" />
+								<f:param name="accion" value="VER" />
+								<f:param name="from" value="legajos/GestionarLegajo/GestionarLegajo660" />
+								<f:param name="idPersona" value="#{_record.idPersona}" />
+							</s:link>
+
+
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+			</a:outputPanel>
+		</h:form>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/legajos/GestionarLegajo/GestionarLegajo660.xhtml"
+				rendered="#{gestionarLegajo660ListCustom.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/legajos/GestionarLegajo/GestionarLegajo660.xhtml"
+				rendered="#{gestionarLegajo660ListCustom.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{gestionarLegajo660ListCustom.previousFirstResult}" />
+			</s:link> <s:link view="/legajos/GestionarLegajo/GestionarLegajo660.xhtml"
+				rendered="#{gestionarLegajo660ListCustom.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{gestionarLegajo660ListCustom.nextFirstResult}" />
+			</s:link> <s:link view="/legajos/GestionarLegajo/GestionarLegajo660.xhtml"
+				rendered="#{gestionarLegajo660ListCustom.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{gestionarLegajo660ListCustom.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+
+
+
+	</ui:define>
+
+</ui:composition>

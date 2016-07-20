@@ -1,0 +1,260 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU251_title}</h1>
+		<h:form id="categoria" styleClass="edit">
+
+			<rich:panel>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" disabled="true"
+							value="#{asignarCategoriaFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{asignarCategoriaFormController.nivelEntidad.nenNombre}"
+							size="45" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{asignarCategoriaFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{asignarCategoriaFormController.sinEntidad.entNombre}"
+							size="45" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml" rendered="#{asignarCategoriaFormController.plantaCargoDetIdList == null}">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{asignarCategoriaFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true"
+							value="#{asignarCategoriaFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+			<h:panelGroup layout="block"  rendered="#{asignarCategoriaFormController.plantaCargoDetIdList == null}">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_unid_org}</ui:define>
+						<h:inputText id="unidadOrgDetCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{asignarCategoriaFormController.configuracionUoDet.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDetDenominacion" size="45"
+							disabled="true"
+							value="#{asignarCategoriaFormController.configuracionUoDet.denominacionUnidad}" />
+					</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml" 
+					 rendered="#{asignarCategoriaFormController.plantaCargoDetIdList == null}" >
+						<ui:define name="label">Puesto</ui:define>
+
+						<h:inputText id="puesto" size="30" disabled="true"
+							value="#{asignarCategoriaFormController.codigoPuesto}" />
+					</s:decorate>
+					</h:panelGroup>
+					
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2" rendered="#{asignarCategoriaFormController.plantaCargoDetIdList == null}" >
+				
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_pais}</ui:define>
+						<h:inputText id="pais" size="30" disabled="true"
+							value="#{asignarCategoriaFormController.plantaCargoDet.oficina.ciudad.departamento.pais.descripcion}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_modalidad}</ui:define>
+						<h:inputText id="modalidad1" size="30" disabled="true"
+							value="CONTRATADO"
+							rendered="#{asignarCategoriaFormController.plantaCargoDet.contratado}" />
+						<h:inputText id="modalidad2" size="30" disabled="true"
+							value="PERMANENTE"
+							rendered="#{asignarCategoriaFormController.plantaCargoDet.permanente}" />
+					</s:decorate>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_dpto}</ui:define>
+						<h:inputText id="dpto" size="30" disabled="true"
+							value="#{asignarCategoriaFormController.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</s:decorate>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_estado}</ui:define>
+						<h:inputText id="estado" size="30" disabled="true"
+							value="#{asignarCategoriaFormController.plantaCargoDet.estadoCab.descripcion}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU251_barrio}</ui:define>
+						<h:inputText id="barrio" size="30" disabled="true"
+							value="#{asignarCategoriaFormController.plantaCargoDet.oficina.barrio.descripcion}" />
+					</s:decorate>
+				
+				</h:panelGrid>
+				<rich:panel id="panel" style="width:700px">
+					<f:facet name="header">Categorias</f:facet>
+
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU251_categoria}</ui:define>
+							<h:inputText id="searchCategoria" size="20"
+								value="#{asignarCategoriaFormController.codigoSearch}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU251_descripcion}</ui:define>
+							<h:inputText id="searchDescripcion" size="30"
+								value="#{asignarCategoriaFormController.categoriaSearch}" />
+						</s:decorate>
+
+
+					</h:panelGrid>
+					<div><a:commandButton id="search"
+						value="#{messages['msg_list_search_button']}"
+						action="#{asignarCategoriaFormController.search()}"
+						reRender="panel">
+					</a:commandButton> <a:commandButton id="searchAll"
+						value="#{messages['msg_list_search_reset_button']}"
+						action="#{asignarCategoriaFormController.searchAll()}"
+						reRender="panel">
+					</a:commandButton></div>
+					<br />
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty asignarCategoriaFormController.listaCategorias}" />
+					<rich:dataTable style="width:650px" id="categoriasList" var="_cat"
+						rowKeyVar="row"
+						value="#{asignarCategoriaFormController.listaCategorias}"
+						rendered="#{not empty asignarCategoriaFormController.listaCategorias}">
+						<rich:column style="text-align: left; vertical-align:left"
+							width="50px">
+							<f:facet name="header">
+						#{messages.CU251_categoria}
+						</f:facet>
+							<h:outputText value="#{_cat.ctgCodigo}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="300px">
+							<f:facet name="header">
+						#{messages.CU251_descripcion}
+						</f:facet>
+							<h:outputText value="#{_cat.anxDescrip}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="50px">
+							<f:facet name="header">
+						#{messages.CU251_cant_disponible}
+						</f:facet>
+							<h:outputText value="#{_cat.cantDisponible}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="200px">
+							<h:outputText value="#{_cat.estado}" />
+						</rich:column>
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							#{' '}
+            		<s:link view="/#{plantaCargoDetFrom}.xhtml"
+								value="Seleccionar" id="categoria"
+								rendered="#{asignarCategoriaFormController.concurso.adReferendum or (!asignarCategoriaFormController.concurso.adReferendum and _cat.cantDisponible > 0)}">
+
+								<f:param name="concursoIdConcurso"
+									value="#{asignarCategoriaFormController.concurso.idConcurso}" />
+
+								<f:param name="idAnx" value="#{_cat.idAnx}" />
+								<f:param name="idPlantaCargoDet"
+									value="#{asignarCategoriaFormController.idPlantaCargo}" />
+								<f:param name="fromConcurso"
+									value="#{asignarCategoriaFormController.fromConcurso}" />
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+									value="#{asignarCategoriaFormController.idAgr}" />
+								<f:param name="nroActividad"
+									value="#{asignarCategoriaFormController.nroActividad}" />
+							  <f:param name="plantaCargoDetIdList" 
+									value="#{asignarCategoriaFormController.plantaCargoDetIdList}" />
+									
+									
+							</s:link>
+
+						</h:column>
+					</rich:dataTable></div>
+				</rich:panel>
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelAdd1"
+				rendered="#{not empty plantaCargoDetFrom}" value="Volver"
+				propagation="none" view="/#{plantaCargoDetFrom}.xhtml">
+				<f:param name="fromConcurso"
+					value="#{asignarCategoriaFormController.fromConcurso}" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{asignarCategoriaFormController.idAgr}" />
+				<f:param name="nroActividad"
+					value="#{asignarCategoriaFormController.nroActividad}" />
+			</s:button> <s:button id="cancelAdd3" rendered="#{empty plantaCargoDetFrom}"
+				value="Volver" propagation="none"
+				view="/ConcursoPuestoAgrList.xhtml">
+
+			</s:button></div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{concursoPuestoAgrHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{concursoPuestoAgrHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{concursoPuestoAgrHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{concursoPuestoAgrHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{concursoPuestoAgrHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

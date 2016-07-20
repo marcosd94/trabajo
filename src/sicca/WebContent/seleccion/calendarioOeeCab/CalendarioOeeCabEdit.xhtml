@@ -1,0 +1,301 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU294_title}</h1>
+		<h:form id="calendarioOeeCab" styleClass="edit">
+
+			<rich:panel style="width : 1000px;" id="panelGral">
+				<f:facet name="header">#{calendarioOeeCabHome.managed ? messages.msg_edit  : messages.msg_add_male} Calendario por OEE</f:facet>
+				<table align="right" id="tabla">
+					<tr>
+						<td><h:outputLabel value="#{messages.CU400_msg1}"
+							style="font-weight:bold" /></td>
+						<td><s:decorate id="anhoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU400_anho}</ui:define>
+							<h:inputText id="anho" required="true"
+								disabled="#{calendarioOeeCabHome.managed}"
+								value="#{calendarioOeeFormController.calendarioOeeCab.anho}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate></td>
+					</tr>
+
+					<tr>
+
+						<td><s:decorate id="oeeField" template="/layout/edit.xhtml">
+							<ui:define name="label">OEE</ui:define>
+							<h:inputText id="oee" disabled="true"
+								value="#{calendarioOeeFormController.configuracionUoCab.denominacionUnidad}"
+								size="50">
+							</h:inputText>
+						</s:decorate></td>
+					</tr>
+				</table>
+				<rich:panel style="border:none;">
+					<fieldset style="width: 900px;"><legend>#{messages.CU120_link4_dias_horario}
+					Laborales</legend> <h:panelGrid columns="4">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_lunes}</ui:define>
+							<h:selectBooleanCheckbox id="lunes"
+								value="#{calendarioOeeFormController.lunes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_martes}</ui:define>
+							<h:selectBooleanCheckbox id="martes"
+								value="#{calendarioOeeFormController.martes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_miercoles}</ui:define>
+							<h:selectBooleanCheckbox id="miercoles"
+								value="#{calendarioOeeFormController.miercoles}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_jueves}</ui:define>
+							<h:selectBooleanCheckbox id="jueves"
+								value="#{calendarioOeeFormController.jueves}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdLu" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeLunes}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdMart" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeMartes}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdMierc" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeMiercoles}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdJueves" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeJueves}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaLu" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaLunes}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaMar" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaMartes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaMier" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaMiercoles}" />
+						</s:decorate>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaJue" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaJueves}" />
+						</s:decorate>
+
+					</h:panelGrid> <h:panelGrid columns="3">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_viernes}</ui:define>
+							<h:selectBooleanCheckbox id="viernes"
+								value="#{calendarioOeeFormController.viernes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_sabado}</ui:define>
+							<h:selectBooleanCheckbox id="sabado"
+								value="#{calendarioOeeFormController.sabado}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_dia_domingo}</ui:define>
+							<h:selectBooleanCheckbox id="domingo"
+								value="#{calendarioOeeFormController.domingo}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdViernes" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeViernes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdSabado" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeSabado}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_desde}</ui:define>
+							<h:inputText id="horaDesdDomingo" size="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaDesdeDomingo}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaViernes" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaViernes}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaSabado" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaSabado}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU400_hora_hasta}</ui:define>
+							<h:inputText id="horaHastaDomingo" size="5" maxlength="5"
+								onkeyup="ponerDosPuntos(event);"
+								value="#{calendarioOeeFormController.horaHastaDomingo}" />
+						</s:decorate>
+					</h:panelGrid></fieldset>
+				</rich:panel>
+
+				<rich:panel style="border:none;" id="panel">
+					<fieldset style="width: 900px;"><legend>#{messages.CU294_dia_festivo}
+					</legend> <h:panelGrid columns="2">
+						<s:decorate id="fechaField" template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha</ui:define>
+							<rich:calendar id="fecha"
+								value="#{calendarioOeeFormController.fechaFestiva}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+							<h:inputText id="descripcion" size="50"
+								value="#{calendarioOeeFormController.descripcionFestiva}" />
+						</s:decorate>
+						<a:commandButton id="agregar" value="Agregar"
+							action="#{calendarioOeeFormController.agregarLista()}"
+							reRender="panel">
+
+						</a:commandButton>
+					</h:panelGrid></fieldset>
+					
+					<rich:panel style="border:none;" rendered="#{calendarioOeeFormController.listaDetOee.size() > 0}">
+					
+					
+						<rich:dataTable id="tablaTab2" cellpadding="0" cellspacing="0"
+							width="600" border="0" var="record" style="width: 900px;"
+							rows="5"
+							rendered="#{calendarioOeeFormController.listaDetOee.size() > 0}"
+							value="#{calendarioOeeFormController.listaDetOee}"
+							rowKeyVar="row">
+
+							<rich:column>
+								<f:facet name="header">
+							#{messages.CU294_fecha_festiva}
+							</f:facet>
+								<h:outputText value="#{record.fechaFestiva}">
+									<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+								</h:outputText>
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+							#{messages.Ciudad_descripcion}
+							</f:facet>
+								<h:outputText value="#{record.descripcion}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+							#{messages.msg_list_action_column}
+							</f:facet>
+								<a:commandLink value="Eliminar"
+									action="#{calendarioOeeFormController.eliminarLista(row)}"
+									reRender="panel" />
+							</rich:column>
+						</rich:dataTable>
+						<rich:datascroller align="center" for="tablaTab2" id="sc2"
+						rendered="#{calendarioOeeFormController.listaDetOee.size() > 5}"
+						reRender="sc1" />
+					</rich:panel>
+				</rich:panel>
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!calendarioOeeCabHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{calendarioOeeCabHome.managed}" styleClass="labelClass" />
+				</div>
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{calendarioOeeFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				disabled="#{!calendarioOeeCabHome.wired}"
+				rendered="#{!calendarioOeeCabHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{calendarioOeeFormController.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{calendarioOeeCabHome.managed}" /> <s:button
+				id="cancelEdit" value="Volver" propagation="end"
+				view="/seleccion/calendarioOeeCab/CalendarioOeeCabList.xhtml" /></div>
+
+
+			<h:panelGrid columns="2">
+				<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+					rendered="#{calendarioOeeCabHome.managed}">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText id="usuAlta"
+						value="#{calendarioOeeCabHome.instance.usuAlta}" />
+				</s:decorate>
+				<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+					rendered="#{calendarioOeeCabHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText id="fechaAlta"
+						value="#{calendarioOeeCabHome.instance.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+				<s:decorate id="usuModField" template="/layout/edit.xhtml"
+					rendered="#{calendarioOeeCabHome.managed}">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText id="usuMod"
+						value="#{calendarioOeeCabHome.instance.usuMod}" />
+				</s:decorate>
+				<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+					rendered="#{calendarioOeeCabHome.managed}">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+					<h:outputText id="fechaMod"
+						value="#{calendarioOeeCabHome.instance.fechaMod}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

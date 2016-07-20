@@ -1,0 +1,207 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="adjuntoDocPuestoAgr" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{adjuntoDocPuestoAgrHome.managed ? 'Edit' : 'Add'} Adjunto doc puesto agr</f:facet>
+
+
+            <s:decorate id="idAdjuntoDocPuestoAgrField" template="layout/edit.xhtml">
+                <ui:define name="label">Id adjunto doc puesto agr</ui:define>
+                <h:inputText id="idAdjuntoDocPuestoAgr"
+                       required="true"
+                       disabled="#{adjuntoDocPuestoAgrHome.managed}"
+                          value="#{adjuntoDocPuestoAgrHome.instance.idAdjuntoDocPuestoAgr}">
+                    <a:support event="onblur" reRender="idAdjuntoDocPuestoAgrField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="idDocumentoField" template="layout/edit.xhtml">
+                <ui:define name="label">Id documento</ui:define>
+                <h:inputText id="idDocumento"
+                       required="true"
+                          value="#{adjuntoDocPuestoAgrHome.instance.idDocumento}">
+                    <a:support event="onblur" reRender="idDocumentoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{adjuntoDocPuestoAgrHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{adjuntoDocPuestoAgrHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{adjuntoDocPuestoAgrHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{adjuntoDocPuestoAgrHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{adjuntoDocPuestoAgrHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{adjuntoDocPuestoAgrHome.persist}"
+                       disabled="#{!adjuntoDocPuestoAgrHome.wired}"
+                       rendered="#{!adjuntoDocPuestoAgrHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{adjuntoDocPuestoAgrHome.update}"
+                       rendered="#{adjuntoDocPuestoAgrHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{adjuntoDocPuestoAgrHome.remove}"
+                      immediate="true"
+                       rendered="#{adjuntoDocPuestoAgrHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/AdjuntoDocPuestoAgr.xhtml"
+                rendered="#{adjuntoDocPuestoAgrHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty adjuntoDocPuestoAgrFrom ? 'AdjuntoDocPuestoAgrList' : adjuntoDocPuestoAgrFrom}.xhtml"
+                rendered="#{!adjuntoDocPuestoAgrHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Concurso puesto agr *" labelClass="required">
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this adjuntoDocPuestoAgr."
+                   rendered="#{adjuntoDocPuestoAgrHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{adjuntoDocPuestoAgrHome.instance.concursoPuestoAgr}"
+                rendered="#{adjuntoDocPuestoAgrHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{adjuntoDocPuestoAgrHome.instance.concursoPuestoAgr != null ? 'changeParent' : 'selectParent'}" value="#{adjuntoDocPuestoAgrHome.instance.concursoPuestoAgr != null ? 'Change' : 'Select'} concursoPuestoAgr"
+                       view="/ConcursoPuestoAgrList.xhtml">
+                <f:param name="from" value="AdjuntoDocPuestoAgrEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

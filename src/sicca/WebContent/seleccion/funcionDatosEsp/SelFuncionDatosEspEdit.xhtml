@@ -1,0 +1,193 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU3401_title}</h1>
+		<h:form id="selFuncionDatosEsp" styleClass="edit">
+
+			<rich:panel id="panel">
+				<f:facet name="header">#{selFuncionDatosEspHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU3401_title_edit}</f:facet>
+
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Rol_modulo}</ui:define>
+					<h:selectOneMenu id="idModulo" value="#{funcionHome.idModulo}"
+						style="width:250px;">
+						<f:selectItems value="#{funcionesByModuloPorPaginasSelectItems}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{funcionHome.updateSelectItems()}" reRender="idPagina" />
+
+					</h:selectOneMenu>
+				</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU3401_pagina}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="idPagina"
+							value="#{paginasPorTipoDocumentoFormController.idPagina}"
+							style="width:250px;">
+							<f:selectItems value="#{funcionHome.funcionesPorModuloSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU3401_tipo_doc}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="idTipoDoc"
+							value="#{paginasPorTipoDocumentoFormController.idTipoDocumento}"
+							style="width:250px;">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocumentosSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+
+					<s:decorate id="cantidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU3401_cantidad}<span class="required">*</span></ui:define>
+						<h:inputText id="cantidad"
+							value="#{paginasPorTipoDocumentoFormController.cantidad}"
+							size="10">
+
+						</h:inputText>
+					</s:decorate>
+
+
+					<s:decorate id="obligatorioSNField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU3401_obligatorio}</ui:define>
+						<h:selectBooleanCheckbox id="obligatorioSN"
+							value="#{paginasPorTipoDocumentoFormController.obligatorio}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<a:commandButton value="Agregar"
+							action="#{paginasPorTipoDocumentoFormController.agregarLista()}"
+							reRender="panel" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+				<s:decorate id="msgField" template="/layout/edit.xhtml">
+					<h:outputText id="msg03"
+						value="#{paginasPorTipoDocumentoFormController.mensaje}"
+						style="color:red;" />
+				</s:decorate>
+				</h:panelGrid>
+				<rich:dataTable cellpadding="0" cellspacing="0" width="400px"
+					border="0" var="record" rowKeyVar="row" id="tabla"
+					value="#{paginasPorTipoDocumentoFormController.listaPaginasPorTipoDoc}"
+					rendered="#{paginasPorTipoDocumentoFormController.listaPaginasPorTipoDoc.size() > 0}">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column width="250px">
+								<h:outputText value="#{messages.CU3401_pagina}" />
+							</rich:column>
+							<rich:column width="250px">
+								<h:outputText value="#{messages.CU3401_tipo_doc}" />
+							</rich:column>
+							<rich:column width="100px">
+								<h:outputText value="#{messages.CU3401_cantidad}" />
+							</rich:column>
+							<rich:column width="100px">
+								<h:outputText value="Obligatorio" />
+							</rich:column>
+							<rich:column width="100px">
+								<h:outputText value="Activo" />
+							</rich:column>
+							<rich:column width="100px">
+
+							</rich:column>
+
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column width="250px">
+						<h:outputText value="#{record.funcion.descripcion}" />
+					</rich:column>
+
+					<rich:column width="250px">
+						<h:outputText value="#{record.datosEspecificos.descripcion}" />
+					</rich:column>
+
+					<rich:column width="100px">
+						<h:inputText value="#{record.cantidad}" size="15">
+						<a:support event="onblur" reRender="tabla" action="#{paginasPorTipoDocumentoFormController.actualizarLista(row)}"/>
+						</h:inputText>
+					</rich:column>
+					<rich:column width="100px">
+						<h:selectBooleanCheckbox id="obligatorio" disabled="true"
+							value="#{record.obligatorioSN}" />
+					</rich:column>
+					<rich:column width="100px">
+						<h:selectBooleanCheckbox id="activo" value="#{record.activo}">
+						  <a:support event="onclick" reRender="tabla" action="#{paginasPorTipoDocumentoFormController.actualizarLista(row)}"/>
+						</h:selectBooleanCheckbox>
+					</rich:column>
+					<rich:column width="100px">
+						<a:commandButton value="-"
+							disabled="#{record.idFuncionDatosEsp != null}"
+							action="#{paginasPorTipoDocumentoFormController.eliminarLista(row)}"
+							reRender="panel" />
+					</rich:column>
+				</rich:dataTable>
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_actualizar}"
+					rendered="#{selFuncionDatosEspHome.managed}" /></div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}"
+					rendered="#{!selFuncionDatosEspHome.managed}" /></div>
+				<br />
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{paginasPorTipoDocumentoFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/funcionDatosEsp/SelFuncionDatosEspList.xhtml"
+				rendered="#{selFuncionDatosEspHome.managed}" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				view="/seleccion/funcionDatosEsp/#{empty selFuncionDatosEspFrom ? 'SelFuncionDatosEspList' : selFuncionDatosEspFrom}.xhtml"
+				rendered="#{!selFuncionDatosEspHome.managed}" /></div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{selFuncionDatosEspHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{selFuncionDatosEspHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{selFuncionDatosEspHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{selFuncionDatosEspHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{selFuncionDatosEspHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{selFuncionDatosEspHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{selFuncionDatosEspHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{selFuncionDatosEspHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

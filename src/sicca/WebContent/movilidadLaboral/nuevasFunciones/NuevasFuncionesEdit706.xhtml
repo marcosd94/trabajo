@@ -1,0 +1,389 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="otrasCarreras" styleClass="edit" enctype="multipart/form-data">
+<h1>#{messages.CU706_titulo}</h1>
+
+		<rich:panel id="panelAdjuntar">
+		 <f:facet name="header">#{messages.CU541_acto_administrativo}</f:facet>
+		  <h:panelGrid columns="2">
+		 <h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU289_nr_doc}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText value="#{buscadorDocsFC.nroDoc}" id="idNroDoc" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"/>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDoc" enableManualInput="true"
+								value="#{buscadorDocsFC.fechaDoc}" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<h:panelGrid columns="2">
+
+
+
+							<s:decorate id="tipoField" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU289_tipo_doc}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipo"
+									value="#{buscadorDocsFC.idTipoDoc}" style=" width : 275px;">
+									<f:selectItems
+										value="#{nuevasFuncionesEdit706FC.updateTipoDocSelectItems()}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<h:panelGrid columns="3">
+								<a:commandButton value="#{messages.CU541_busca_acto}" reRender="panelAdjuntar,idPanelAdjuntar" 
+									action="#{buscadorDocsFC.buscarDoc()}" />
+								<s:button value="Descargar" disabled="#{buscadorDocsFC.fNameMostrar==null}"
+									action="#{buscadorDocsFC.descargarDoc()}" />
+								<s:button value="#{messages.CU541_cambiar_acto}"
+									action="#{buscadorDocsFC.cambiarActo()}" />
+							</h:panelGrid>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre del Archivo</ui:define>
+								<h:inputText value="#{buscadorDocsFC.fNameMostrar}"
+									disabled="true" style=" width : 250px;" />
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+						<a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						<h:panelGrid columns="2" rendered="#{buscadorDocsFC.mostrarPanelAdjunto}" 
+						
+								style="border-style: dotted;border-color: gray;">
+								<s:fileUpload size="30" contentType="#{buscadorDocsFC.cType}"
+						data="#{buscadorDocsFC.uFile}"
+						fileName="#{buscadorDocsFC.fName}" style=" width : 299px;">
+									<s:conversationPropagation type="join" />
+
+								</s:fileUpload>
+
+								<h:commandButton value="Adjuntar Documento"
+									action="#{buscadorDocsFC.adjuntarDoc()}" />
+							</h:panelGrid>
+						</a:outputPanel>
+					</h:panelGrid>
+					<s:decorate id="fechaIngresoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU706_fec_ini}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIngreso"  
+							value="#{nuevasFuncionesEdit706FC.fechaInicio}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+							<a:support event="onchanged" reRender="fechaIngreso"/>
+						</rich:calendar>
+					</s:decorate>
+					</h:panelGrid>
+		 <!--  -->
+		 
+		<h:panelGrid columns="1">
+		<s:decorate id="obsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU706_obs}</ui:define>
+                <h:inputTextarea id="obs"
+                               cols="80"
+                               rows="6"
+                         value="#{nuevasFuncionesEdit706FC.observacion}">
+                         <a:support event="onchanged" reRender="obsField"/>
+              <f:validateLength maximum="500" />
+        </h:inputTextarea>
+            </s:decorate>
+		</h:panelGrid>
+		</rich:panel>
+
+        <rich:panel id="panelPersona">
+            <f:facet name="header">#{messages.CU706_funcionario}<span
+											class="required">*</span></f:facet>
+		
+		<h:panelGrid columns="2">
+		<h:panelGroup >
+		<h:panelGrid >
+		<h:panelGrid columns="2">
+		<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px"  disabled="true"
+										value="#{nuevasFuncionesEdit706FC.funcionario.persona.documentoIdentidad}">
+										
+									</h:inputText>
+								</s:decorate>
+						<s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombres" size="50" disabled="true" maxlength="50"
+							value="#{nuevasFuncionesEdit706FC.funcionario.persona.nombres}" />
+					</s:decorate>	
+					 <s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU541_pais}</ui:define>
+									<h:inputText disabled="true" value="#{nuevasFuncionesEdit706FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"/>
+								</s:decorate>	
+							 <s:decorate id="apellidoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+                <h:inputText id="apellido"
+                       size="50" disabled="true"
+                      maxlength="50"
+                          value="#{nuevasFuncionesEdit706FC.funcionario.persona.apellidos}">
+                </h:inputText>
+            </s:decorate>
+								
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+		 <s:decorate id="puestoActualField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU706_puesto_actual}</ui:define>
+                <h:inputText id="puestoActual"
+                       size="50" disabled="true"
+                      
+                          value="#{nuevasFuncionesEdit706FC.funcionario.plantaCargoDet.descripcion}" style=" width : 560px;">
+                </h:inputText>
+            </s:decorate>
+		</h:panelGrid>
+		</h:panelGrid>
+		</h:panelGroup>
+		<h:panelGroup >
+		<h:panelGrid columns="1">
+		
+		  <a:commandButton id="search" eventsQueue="default" style=" width : 187px;"
+                			value="#{messages.CU706_buscar_funcionario}"
+							action="/busquedas/funcionarios/EmpleadoPuestoList.xhtml?from=movilidadLaboral/nuevasFunciones/NuevasFuncionesEdit706" />
+						<a:commandButton id="searchper" eventsQueue="default"
+						value="#{messages.CU706_ver_datos}" 
+						action="#{nuevasFuncionesEdit706FC.toFindPersonaView()}" style=" width : 187px;"/>
+		</h:panelGrid>
+		</h:panelGroup>
+		</h:panelGrid>	
+		
+
+	
+	
+            </rich:panel>
+            <rich:panel id="panelPuestoCat">
+            <f:facet name="header">#{messages.CU706_datos_uo_persona}</f:facet>
+            
+            
+            <h:panelGrid columns="2">
+            <h:panelGrid columns="1" >
+            <a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							disabled="true"	onkeypress="return soloNumeros(event);">
+													</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					<rich:panel style=" width : 500px;">
+					<f:facet name="header">#{messages.CU706_unidad_gestion}</f:facet>
+					<h:panelGrid columns="1">
+					<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU706_unodad_org}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" 
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nuevasFuncionesEdit706FC.findUO()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2" 
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('movilidadLaboral/nuevasFunciones/NuevasFuncionesEdit706')}" />
+							</s:decorate>
+				</a:outputPanel></h:panelGrid></rich:panel>
+				
+					 <rich:panel id="unidadesOrganizacionalesPaneles" style=" width : 500px;"><f:facet name="header">#{messages.CU541_unidades_orga}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:310 ;HEIGHT: 230px"  >
+								<rich:dataTable id="itemsList3" var="_planta"  first="0"
+								   		onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												value="#{nuevasFuncionesEdit706FC.plantaCargoDetList}"
+											 rowKeyVar="rowNr3">
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_codigo}
+													</f:facet>
+													<h:outputText value="#{seleccionUtilFormController.obtenerCodigoPuesto(_planta)}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.gral_descripcion}
+													</f:facet>
+													<h:outputText value="#{_planta.descripcion}" />
+											</rich:column>	
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_estado}
+													</f:facet>
+													<h:outputText value="#{_planta.estadoCab.descripcion}" />
+											</rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 	<h:selectBooleanCheckbox value="#{_planta.selected}">
+								<a:support event="onchange" reRender="unidadesOrganizacionalesPaneles"
+									action="#{nuevasFuncionesEdit706FC.selecRow(rowNr3)}"></a:support>
+							</h:selectBooleanCheckbox>
+											 </rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+				
+					
+					
+					
+            </h:panelGrid>
+            
+            <h:panelGrid id="panelGridCodigoObjeto" >
+           
+					 <rich:panel >
+		         <div class="results" id="tbldet2List" style=" overflow: scroll;  width:310 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList2" var="_pagos"  first="0"
+												value="#{nuevasFuncionesEdit706FC.empleadoConceptoPagos}"
+											 rowKeyVar="rowNr2">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+													<h:outputText value="#{_pagos.objCodigo}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+													<h:outputText value="#{_pagos.categoria}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+													<h:outputText value="#{_pagos.monto}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														Llevar?
+													</f:facet>
+													<h:selectBooleanCheckbox value="#{_pagos.seleccionar}" disabled="#{_pagos.objCodigo=='111'}"/>
+											</rich:column>
+											
+																					
+											
+												
+						</rich:dataTable>
+					</div>
+					</rich:panel>
+				
+            </h:panelGrid>
+            
+            
+            
+            </h:panelGrid>
+            <h:panelGrid >
+            
+            </h:panelGrid>
+            
+            
+            
+            
+		
+
+
+         
+
+           
+
+        </rich:panel>
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" styleClass="labelClass"/>
+        </div>
+
+        <div class="actionButtons">
+
+             <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{nuevasFuncionesEdit706FC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"/>
+
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/movilidadLaboral/nuevasFunciones/NuevasFuncionesList706.xhtml"
+                />
+
+          
+                
+
+        </div>
+    </h:form>
+    
+
+</ui:define>
+
+</ui:composition>

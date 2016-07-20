@@ -1,0 +1,77 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+            <f:facet name="header">#{messages.msg_list_view} #{messages.MatrizReferencial_encabezadoPlantilla}</f:facet>
+
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_tipoConcurso}</ui:define>
+                <h:selectOneMenu id="tipoConcurso" 
+                			  value="#{matrizReferencialHome.idDatosEspecificos}"
+                			  required="true"
+                			  style="width:250px"
+                			  disabled="true">
+					<f:selectItems value="#{datosEspecificossByTipoConcursoSelectItems}"/>
+                </h:selectOneMenu>
+            </s:decorate>
+
+	        <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{matrizReferencialHome.instance.descripcion}"
+                          disabled="true">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="puntajeMaximoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.MatrizReferencial_puntajeMaximo}</ui:define>
+                <h:inputText id="puntajeMaximo"
+                       required="true"
+                     styleClass="numeric"
+                     onkeypress="return soloNumeros(event);"
+                          value="#{matrizReferencialHome.instance.puntajeMaximo}"
+                           size="5"
+                           disabled="true">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.MatrizReferencial_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{matrizReferencialHome.instance.activo}" />
+	            </s:decorate>
+
+			<br />
+            <div style="clear:both">
+	                <span class="required">*</span>
+	                #{messages.msg_required_fields}
+	        </div>
+        </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/#{empty matrizReferencialFrom ? 'seleccion/matrizReferencial/MatrizReferencialList' : matrizReferencialFrom}.xhtml"
+                    id="done"
+                 value="#{messages.msg_done}"/>
+
+    </div>
+
+</ui:define>
+
+</ui:composition>

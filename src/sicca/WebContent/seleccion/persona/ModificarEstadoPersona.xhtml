@@ -1,0 +1,96 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Persona_}</h1>
+
+    <h:form id="persona" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">Modificar Estado</f:facet>
+			
+			<h:panelGrid columns="1">
+			
+			<s:decorate id="activoField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{admPersonaEditFormController.estado}"/>
+            </s:decorate>
+			
+			 <s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_motivo}</ui:define>
+						<h:selectOneMenu id="motivo" style="width : 250px;" required="true"
+							value="#{admPersonaEditFormController.idMotivo}">
+							<f:selectItems value="#{datosEspecificossByMotivoInacSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea value="#{admPersonaEditFormController.persona.obsMotivo}"  required="true" style="width : 366px; height : 58px;">
+						 <f:validateLength maximum="1000" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+			<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass"/>
+          
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{admPersonaEditFormController.saveMotivo()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                      />
+
+            
+
+     
+
+            
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             propagation="end"
+                    view="/seleccion/persona/PersonaList.xhtml"
+                />
+
+        </div>
+    </h:form>
+    
+    <h:panelGrid columns="2">
+     <s:decorate id="usuModField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{admPersonaEditFormController.persona.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{admPersonaEditFormController.persona.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+    </h:panelGrid>
+
+
+        
+</ui:define>
+
+</ui:composition>

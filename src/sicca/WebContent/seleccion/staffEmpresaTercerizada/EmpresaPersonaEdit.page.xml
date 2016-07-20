@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" no-conversation-view-id="/EmpresaPersonaList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{empresaPersonaHome.wire}" />
+	<action execute="#{staffEmpresaFormController.init()}"
+		on-postback="false" />
+	<param name="empresaPersonaFrom" />
+	<param name="empresaPersonaIdSelEmpresaPersona"
+		value="#{empresaPersonaHome.empresaPersonaIdSelEmpresaPersona}" />
+	<param name="emprTercerizadaFrom" />
+	<param name="emprTercerizadaIdEmpresaTercerizada"
+		value="#{emprTercerizadaHome.emprTercerizadaIdEmpresaTercerizada}" />
+	<param name="ciudadFrom" />
+	<param name="ciudadIdCiudad" value="#{ciudadHome.ciudadIdCiudad}" />
+	<param name="departamentoFrom" />
+	<param name="departamentoIdDepartamento" value="#{departamentoHome.departamentoIdDepartamento}" />
+	<param name="paisFrom" />
+	<param name="paisIdPais" value="#{paisHome.paisIdPais}" />
+	
+	<navigation from-action="#{staffEmpresaFormController.save()}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/seleccion/empresasTercerizadas/EmprTercerizadaList.xhtml" />
+		</rule>
+		<rule if-outcome="updated">
+			<end-conversation />
+			<redirect view-id="/seleccion/empresasTercerizadas/EmprTercerizadaList.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{empresaPersonaHome.persist}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/EmpresaPersona.xhtml" />
+		</rule>
+	</navigation>
+	<navigation from-action="#{empresaPersonaHome.update}">
+		<rule if-outcome="updated">
+			<end-conversation />
+			<redirect view-id="/EmpresaPersona.xhtml" />
+		</rule>
+	</navigation>
+	<navigation from-action="#{empresaPersonaHome.remove}">
+		<rule if-outcome="removed">
+			<end-conversation />
+			<redirect view-id="/EmpresaPersonaList.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('add_staff_empresa_tercerizada_edit')}</restrict>
+</page>

@@ -1,0 +1,196 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Sel funcion datos esp Details</f:facet>
+
+        <s:decorate id="idFuncionDatosEsp" template="layout/display.xhtml">
+            <ui:define name="label">Id funcion datos esp</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.idFuncionDatosEsp}"/>
+        </s:decorate>
+
+        <s:decorate id="cantidad" template="layout/display.xhtml">
+            <ui:define name="label">Cantidad</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.cantidad}"/>
+        </s:decorate>
+
+        <s:decorate id="obligatorioSN" template="layout/display.xhtml">
+            <ui:define name="label">Obligatorio s n</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.obligatorioSN}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{selFuncionDatosEspHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/SelFuncionDatosEspEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty selFuncionDatosEspFrom ? 'SelFuncionDatosEspList' : selFuncionDatosEspFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Sel funcion</h:panelGroup>
+        </f:facet>
+    <div class="association" id="selFuncionParent">
+
+        <h:outputText value="There is no selFuncion associated with this selFuncionDatosEsp."
+                   rendered="#{selFuncionDatosEspHome.instance.selFuncion == null}"/>
+
+        <rich:dataTable var="_selFuncion"
+                   value="#{selFuncionDatosEspHome.instance.selFuncion}"
+                rendered="#{selFuncionDatosEspHome.instance.selFuncion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="selFuncionTable">
+            <h:column>
+                <f:facet name="header">Id funcion</f:facet>
+                <h:outputText value="#{_selFuncion.idFuncion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_selFuncion.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Modulo</f:facet>
+                <h:outputText value="#{_selFuncion.modulo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Url</f:facet>
+                <h:outputText value="#{_selFuncion.url}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewselFuncion"
+                     value="View"
+                      view="/SelFuncion.xhtml">
+                    <f:param name="selFuncionIdFuncion"
+                           value="#{_selFuncion.idFuncion}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Datos especificos</h:panelGroup>
+        </f:facet>
+    <div class="association" id="datosEspecificosParent">
+
+        <h:outputText value="There is no datosEspecificos associated with this selFuncionDatosEsp."
+                   rendered="#{selFuncionDatosEspHome.instance.datosEspecificos == null}"/>
+
+        <rich:dataTable var="_datosEspecificos"
+                   value="#{selFuncionDatosEspHome.instance.datosEspecificos}"
+                rendered="#{selFuncionDatosEspHome.instance.datosEspecificos != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="datosEspecificosTable">
+            <h:column>
+                <f:facet name="header">Id datos especificos</f:facet>
+                <h:outputText value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos generales id datos generales</f:facet>
+                <h:outputText value="#{_datosEspecificos.datosGenerales.idDatosGenerales}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_datosEspecificos.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor alf</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor num</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorNum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_datosEspecificos.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewdatosEspecificos"
+                     value="View"
+                      view="/DatosEspecificos.xhtml">
+                    <f:param name="datosEspecificosIdDatosEspecificos"
+                           value="#{_datosEspecificos.idDatosEspecificos}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

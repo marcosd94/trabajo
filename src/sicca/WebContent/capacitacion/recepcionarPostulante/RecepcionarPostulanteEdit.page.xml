@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/home.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{recepcionarPostulanteFC.init()}" on-postback="false" />
+    <param name="capacitacionesIdCapacitacion" value="#{recepcionarPostulanteFC.idCapacitacion}"/>
+
+   <param name="revisionCapacitacionFrom"/>
+
+   <param name="capacitacionesFrom"/>
+
+<param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{nivelEntidadOeeUtil.idConfigCab}" />
+
+
+  <navigation from-action="#{recepcionarPostulanteFC.reprogramarCancelar()}">
+      <rule if-outcome="ok">
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml">
+           <param name="mensaje" value="ok"/>
+           </redirect>
+      </rule>
+   </navigation>
+   
+   <navigation from-action="#{recepcionarPostulanteFC.guardar()}">
+      <rule if-outcome="persisted">
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml">
+           <param name="mensaje" value="ok"/>
+           </redirect>
+      </rule>
+   </navigation>
+  
+ <restrict>#{identity.hasRole('recepcionarPostulante_edit')}</restrict>
+
+</page>

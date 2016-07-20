@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>Ver #{messages.CU475_titulo_edit}</h1>
+    <h:form id="capacitacionesSearch" styleClass="edit" enctype="multipart/form-data">
+    
+    	<rich:panel >  <f:facet name="header">#{messages.CU475_titulo_edit}</f:facet>
+    	<h:panelGrid columns="1">
+    	<s:decorate id="idDatosEspecificosTipoCapField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{instructoresFC.capacitaciones.nombre}">
+                </h:inputText>
+            </s:decorate>
+         
+
+
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+                 <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{instructoresFC.tipoCapac}">
+                </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+    	</rich:panel>
+
+        <rich:panel   switchType="ajax" id="panelParametro">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+			<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" disabled="true"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			
+	               			</s:decorate>
+				</a:outputPanel>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:panel>
+
+   
+
+    <rich:panel id="panelCarga" rendered="false">
+        <f:facet name="header">#{messages.CU475_cargar_int}</f:facet>
+    	<h:panelGrid columns="2">
+    		<a:region>
+							<h:panelGrid columns="2">
+								<s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU40_paises_expedicion}</ui:define>
+									<h:selectOneMenu id="idPaisExped" 
+										value="#{instructoresFC.idPaisExp}"
+										style="width:150px">
+										<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+									</h:selectOneMenu>
+								</s:decorate>
+								<a:status id="idSatatusPersonSearch"
+									onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+									
+								<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px" 
+										value="#{instructoresFC.docIdentidad}">
+										<a:support event="onblur"
+											action="#{instructoresFC.findPersona()}"
+											reRender="nomApeField"
+											focus="cvField" />
+									</h:inputText>
+								</s:decorate>
+
+							</h:panelGrid>
+						</a:region>
+						<a:commandButton id="searchper" eventsQueue="default"
+						image="/img/Buscar.png"
+						action="#{instructoresFC.toFindPersonaList()}" />
+					
+					
+					
+    	
+    	</h:panelGrid>
+    	
+    	
+    	<h:panelGrid columns="1">
+    	<s:decorate id="nomApeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU475_nom_ape}</ui:define>
+						<h:inputText id="nomApe" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{instructoresFC.persona.nombreCompleto}" style=" width : 600px;"/>
+					</s:decorate>
+    	<s:decorate id="cvField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU475_descripcion_cv}<span
+											class="required">*</span></ui:define>
+						<h:inputTextarea disabled="true" style=" width : 603px;" value="#{instructoresFC.descripcionCV}">
+						 <f:validateLength maximum="5000" />
+						</h:inputTextarea>
+					</s:decorate>
+    	<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}
+						</ui:define>
+						<h:selectOneMenu id="datosGral" disabled="true"
+							value="#{instructoresFC.idTipoDocumento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocIstructorSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+			
+    	</h:panelGrid>
+    	<h:panelGrid columns="1">
+    		<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{instructoresFC.contentType}"
+						data="#{instructoresFC.uploadedFile}"
+						fileName="#{instructoresFC.fileName}"
+						style=" width : 382px;" />
+						
+					
+				</s:decorate>
+				<h:outputText value="#{instructoresFC.nombreDoc}"/>
+    	</h:panelGrid>
+    </rich:panel>
+    
+       <rich:panel id="intructoresPaneles" style=" width : 672px;"><f:facet name="header">#{messages.CU475_titulo_edit}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList" var="_items"   first="0"
+												value="#{instructoresFC.instructoresList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU475_ci}
+													</f:facet>
+													<h:outputText value="#{_items.persona.documentoIdentidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU475_pais_exp}
+													</f:facet>
+													<h:outputText value="#{_items.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU475_instructor}
+													</f:facet>
+													<h:outputText value="#{_items.persona.nombreCompleto}" />
+														
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU475_descripcion_cv}
+													</f:facet>
+													<h:outputText value="#{_items.descripcionCv}" />
+												
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU475_curriculum}
+													</f:facet>
+													<h:outputText value="#{_items.documento.nombreFisicoDoc}" />
+											</rich:column>
+											
+											
+											
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													
+										        
+												<h:commandLink value="Descargar" target="_blank" rendered="#{_items.documento.idDocumento!=null}"
+													action="#{instructoresFC.abrirDocumento(rowNr)}" />
+													
+												</rich:column>
+												
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+       
+     <div class="actionButtons">
+
+           
+            
+
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join"
+                   view="#{instructoresFrom}"
+                />
+
+        </div>
+        
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,146 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU316_title}</h1>
+		<rich:panel id="panelParametro">
+			<h:panelGrid columns="3">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages.CU316_datosDelPuesto}"
+				switchType="client" id="panelConcurso">
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_concurso}</ui:define>
+						<h:inputText id="concurso1" size="30" disabled="true"
+							value="#{admDesVacPlaFC.excepcionGrPuestoFind.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 400px;">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_grupoPuesto}</ui:define>
+						<h:inputText id="concurso2" size="30" disabled="true"
+							value="#{admDesVacPlaFC.excepcionGrPuestoFind.concursoPuestoAgr.descripcionGrupo}"
+							style=" width : 300px;">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_puesto}</ui:define>
+						<h:inputText id="concurso3" size="30" disabled="true"
+							value="#{admDesVacPlaFC.excepcionGrPuestoFind.plantaCargoDet.descripcion}"
+							style=" width : 300px;">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<s:decorate id="fechaField1" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_fechaBloqueo} </ui:define>
+						<rich:calendar id="fecha1" disabled="true"
+							value="#{admDesVacPlaFC.excepcionGrPuestoFind.excepcion.fechaAlta}"
+							datePattern="MM/dd/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaField2" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_fechaLimite}</ui:define>
+						<rich:calendar id="fecha2" disabled="true"
+							value="#{admDesVacPlaFC.excepcionGrPuestoFind.excepcion.fechaLimite}"
+							datePattern="MM/dd/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages.CU316_datosDesbloqueo}"
+				switchType="client" id="panelDesbloqueo">
+				<h:panelGrid columns="1">
+					<s:decorate id="fechaField3" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU316_fecha}</ui:define>
+						<rich:calendar id="fecha3" disabled="true"
+							value="#{admDesVacPlaFC.fechaSistema}" datePattern="MM/dd/yyyy" />
+					</s:decorate>
+					<s:decorate id="motivoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU316_motivo}</ui:define>
+						<h:inputTextarea id="motivo" required="true"
+							onkeypress="return imposeMaxLength(event, this, 200);" rows="4"
+							cols="60" value="#{admDesVacPlaFC.motivo}">
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}<br />
+			<h:outputText value="#{messages.msg_obs_guardar}" /></div>
+			<a:outputPanel id="idPanelBotones" ajaxRendered="true">
+				<div class="actionButtons" id="idButonsGroup"><a:commandButton
+					id="save" value="#{messages.msg_save}"
+					action="#{admDesVacPlaFC.save()}" reRender="idPanelBotones" /> <s:button
+					id="anexo" value="#{messages.GENERICO_ANEXOS}" propagation="join"
+					disabled="#{admDesVacPlaFC.excepcionGrPuestoFind.excepcionByIdExcepcionDesbloq.idExcepcion ==null}"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{admDesVacPlaFC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="adm_des_vac_pla" />
+					<f:param name="idCU"
+						value="#{admDesVacPlaFC.excepcionGrPuestoFind.excepcionByIdExcepcionDesbloq.idExcepcion}" />
+					<f:param name="nombreTabla" value="Excepcion" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="planificacion/admDesVacPla/AdmDesVacPlaEdit" />
+				</s:button> <s:button value="#{messages.GENERICO_VOLVER}" propagation="nest"
+					view="/#{empty from? 'home':from}.xhtml">
+				</s:button></div>
+			</a:outputPanel>
+		</a:form>
+
+	</ui:define>
+</ui:composition>

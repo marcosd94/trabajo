@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocumentalDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{matrizDocumentalDetHome.wire}"/>
+  <action execute="#{admDetMatrizDocumentalFormController.init()}" on-postback="false"/>
+ <param name="matrizDocumentalDetFrom"/>
+ <param name="matrizDocumentalDetIdMatrizDocumentalDet" value="#{matrizDocumentalDetHome.matrizDocumentalDetIdMatrizDocumentalDet}"/>
+ <param name="matrizDocumentalEncFrom"/>
+ <param name="matrizDocumentalEncIdMatrizDocumentalEnc" value="#{matrizDocumentalEncHome.matrizDocumentalEncIdMatrizDocumentalEnc}"/>
+ <param name="datosEspecificosFrom"/>
+ <param name="datosEspecificosIdDatosEspecificos" value="#{datosEspecificosHome.datosEspecificosIdDatosEspecificos}"/>
+ <param name="datosGeneralesFrom"/>
+ <param name="datosGeneralesIdDatosGenerales" value="#{datosGeneralesHome.datosGeneralesIdDatosGenerales}"/>
+ <navigation from-action="#{admDetMatrizDocumentalFormController.save()}">
+  <rule if-outcome="ok">
+   <end-conversation/>
+   <redirect view-id="/seleccion/matrizDocumentalEnc/MatrizDocumentalEncList.xhtml"/>
+  </rule>
+ </navigation>
+ <navigation from-action="#{matrizDocumentalDetHome.update}">
+  <rule if-outcome="updated">
+   <end-conversation/>
+   <redirect view-id="/MatrizDocumentalDet.xhtml"/>
+  </rule>
+ </navigation>
+ <navigation from-action="#{matrizDocumentalDetHome.remove}">
+  <rule if-outcome="removed">
+   <end-conversation/>
+   <redirect view-id="/MatrizDocumentalDetList.xhtml"/>
+  </rule>
+ </navigation>
+ 
+ <restrict>#{identity.hasRole('matrizDocumentalDet_edit')}</restrict>
+</page>

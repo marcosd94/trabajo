@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Rol funcion Details</f:facet>
+
+        <s:decorate id="idRolFuncion" template="layout/display.xhtml">
+            <ui:define name="label">Id rol funcion</ui:define>
+            <h:outputText value="#{rolFuncionHome.instance.idRolFuncion}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/RolFuncionEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty rolFuncionFrom ? 'RolFuncionList' : rolFuncionFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Funcion</h:panelGroup>
+        </f:facet>
+    <div class="association" id="funcionParent">
+
+        <h:outputText value="There is no funcion associated with this rolFuncion."
+                   rendered="#{rolFuncionHome.instance.funcion == null}"/>
+
+        <rich:dataTable var="_funcion"
+                   value="#{rolFuncionHome.instance.funcion}"
+                rendered="#{rolFuncionHome.instance.funcion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="funcionTable">
+            <h:column>
+                <f:facet name="header">Id funcion</f:facet>
+                <h:outputText value="#{_funcion.idFuncion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_funcion.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Url</f:facet>
+                <h:outputText value="#{_funcion.url}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewfuncion"
+                     value="View"
+                      view="/Funcion.xhtml">
+                    <f:param name="funcionIdFuncion"
+                           value="#{_funcion.idFuncion}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Rol</h:panelGroup>
+        </f:facet>
+    <div class="association" id="rolParent">
+
+        <h:outputText value="There is no rol associated with this rolFuncion."
+                   rendered="#{rolFuncionHome.instance.rol == null}"/>
+
+        <rich:dataTable var="_rol"
+                   value="#{rolFuncionHome.instance.rol}"
+                rendered="#{rolFuncionHome.instance.rol != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="rolTable">
+            <h:column>
+                <f:facet name="header">Id rol</f:facet>
+                <h:outputText value="#{_rol.idRol}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_rol.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_rol.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_rol.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_rol.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_rol.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_rol.usuAlta}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewrol"
+                     value="View"
+                      view="/Rol.xhtml">
+                    <f:param name="rolIdRol"
+                           value="#{_rol.idRol}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

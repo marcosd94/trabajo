@@ -1,0 +1,222 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU021_titulo}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" style="text-align:right"
+								value="#{listadoPersonasPorPuestoReportController.nivelEntidad.nenCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{listadoPersonasPorPuestoReportController.findNivelEntidad()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{listadoPersonasPorPuestoReportController.nivelEntidad.nenNombre}"
+								size="50" disabled="true" />
+							 #{' '}
+                <s:button id="searchNivel"
+								image="#{request.contextPath}/img/Buscar.png"
+								view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml"
+								propagation="'default'">
+								<f:param name="from" value="reports/reportes/PlantaCargoDetList" />
+							</s:button>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								value="#{listadoPersonasPorPuestoReportController.sinEntidad.entCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{listadoPersonasPorPuestoReportController.findEntidad()}"
+									reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{listadoPersonasPorPuestoReportController.sinEntidad.entNombre}"
+								size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{listadoPersonasPorPuestoReportController.getUrlToPageEntidad()}" />
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{listadoPersonasPorPuestoReportController.configuracionUoCab.orden}">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{listadoPersonasPorPuestoReportController.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{listadoPersonasPorPuestoReportController.configuracionUoCab.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{listadoPersonasPorPuestoReportController.getUrlToPageOee()}" />
+						</s:decorate>
+					</a:region>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU021_unidad_org}</ui:define>
+						<h:inputText id="orgCodigo" size="10"
+							value="#{listadoPersonasPorPuestoReportController.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{listadoPersonasPorPuestoReportController.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo,orgDenominacion" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="40" disabled="true"
+							value="#{listadoPersonasPorPuestoReportController.configuracionUoDet.denominacionUnidad}" />
+								#{' '}
+                <a:commandButton id="searchDependencia"
+							eventsQueue="default" image="/img/Buscar.png"
+							action="#{listadoPersonasPorPuestoReportController.getUrlToPageDependencia()}" />
+					</s:decorate>
+					
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_nombre}</ui:define>
+							<h:inputText id="nombre" size="30"
+								value="#{listadoPersonasPorPuestoReportController.persona.nombres}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_apellido}</ui:define>
+							<h:inputText id="apellido" size="30"
+								value="#{listadoPersonasPorPuestoReportController.persona.apellidos}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU021_ci}</ui:define>
+							<h:inputText id="nroCi" size="20"
+								value="#{listadoPersonasPorPuestoReportController.persona.documentoIdentidad}">
+								<a:support event="onblur" eventsQueue="default" />
+							</h:inputText>
+						</s:decorate>
+					</a:region>
+
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{listadoPersonasPorPuestoReportController.search()}"
+				reRender="panelResultados">
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{listadoPersonasPorPuestoReportController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+			</a:commandButton>
+			<h:commandButton id="print" 
+					value="#{messages['msg_list_search_print_button']}"
+					action="#{listadoPersonasPorPuestoReportController.print()}"/>
+			</div>
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{listadoPersonasPorPuestoReportController.listaPersonasPorPuesto.size()})</f:facet>
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty listadoPersonasPorPuestoReportController.listaPersonasPorPuesto}" />
+				<rich:dataTable id="puestosList" var="_puesto" rowKeyVar="row"
+					value="#{listadoPersonasPorPuestoReportController.listaPersonasPorPuesto}"
+					rows="10"
+					rendered="#{not empty listadoPersonasPorPuestoReportController.listaPersonasPorPuesto}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU021_unidad_org}
+						</f:facet>
+						<h:outputText
+							value="#{_puesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU021_cod_puesto}
+						</f:facet>
+						<h:outputText
+							value="#{listadoPersonasPorPuestoReportController.obtenerCodigoPuesto(_puesto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU021_desc_puesto}
+						</f:facet>
+						<h:outputText value="#{_puesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU021_documento}
+						</f:facet>
+						<h:outputText value="#{_puesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU021_nombres}
+						</f:facet>
+						<h:outputText value="#{_puesto.persona.nombres}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU021_apellidos}
+					</f:facet>
+						<h:outputText value="#{_puesto.persona.apellidos}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.CU021_estado}
+					</f:facet>
+						<h:outputText
+							value="#{_puesto.plantaCargoDet.estadoCab.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.CU021_acciones}
+					</f:facet>
+					<h:commandLink value="Contenido Funcional" action="#{listadoPersonasPorPuestoReportController.printLink(row)}"/>
+					
+						  #{' '}
+						  
+						  	<h:commandLink value="Valor Económico"
+							action="#{listadoPersonasPorPuestoReportController.printLinkValorEconomico(row)}"/>
+					</h:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="puestosList" id="sc2"
+					reRender="sc1"
+					rendered="#{listadoPersonasPorPuestoReportController.listaPersonasPorPuesto.size() > 10}" />
+			</rich:panel>
+
+		</h:form>
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{concursoPuestoDetHome.wire}" />
+	<action execute="#{admCargaGrupoFormController.init()}"
+		on-postback="false" />
+	<param name="from" />
+
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admCargaGrupoFormController.idConcursoPuestoAgr}" />
+	<param name="isEdit" value="#{admCargaGrupoFormController.edit}" />
+
+	<navigation from-action="#{admCargaGrupoFormController.nextTask()}">
+		<rule if-outcome="nextTask">
+			<end-conversation />
+			<redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+	
+
+
+	<navigation from-action="#{admCargaGrupoFormController.usarBancoHomologados()}">
+		<rule if-outcome="ir">
+			<redirect view-id="/seleccion/homologacion/ElegirPerfilHomologado.xhtml">
+			<param name="idConcursoPuestoAgr"
+				value="#{admCargaGrupoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				 <param name="fromx" value="seleccion/admCargaGrupo/ConcursoPuestoDetList"/>
+			</redirect>
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('adm_carga_grupo_list')}</restrict>
+</page>

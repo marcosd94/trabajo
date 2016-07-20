@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      login-required="true">
+	
+	<begin-conversation flush-mode="MANUAL" join="true"/>
+		<param name="personaIdPersona" value="#{transladoConSolic662EditFC.idPersona}"/>
+		<param name="idSolicitud" value="#{transladoConSolic662EditFC.idSolicitudTransladoCab}"/>
+		<param name="from" value="#{transladoConSolic662EditFC.from}" />
+	<action execute="#{transladoConSolic662EditFC.init()}" on-postback="false" />
+	
+   
+   <param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.idConfigCab}" />
+   	<param name="configuracionUoDetIdConfiguracionUoDet" value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.idUnidadOrganizativa}" />
+   
+   
+     <navigation from-action="#{transladoConSolic662EditFC.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/movilidadLaboral/bandeja/BandejaTareaTraslados.xhtml"/>
+      </rule>
+   </navigation>
+    <restrict>#{identity.hasRole('transladoConSolic662_edit')}</restrict>
+
+</page>

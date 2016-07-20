@@ -1,0 +1,140 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.DatosEspecificos_list}</h1>
+		<h:form id="datosEspecificos" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{datosEspecificosHome.managed ? messages.msg_edit : messages.msg_add_male } #{messages.DatosEspecificos_list}</f:facet>
+
+				<a:region>
+					<s:decorate id="datoGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.DatosEspecificos_dato_gral}</ui:define>
+						<h:selectOneMenu id="datoGral"
+							value="#{datosEspecificosformController.idDatosGenerales}"
+							disabled="#{datosEspecificosHome.managed}" required="true"
+							style="width:250px">
+							<f:selectItems value="#{datosGeneralesSelectItems}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{datosEspecificosformController.upTipo()}"
+								reRender="charArea,charArea2" />
+								
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</a:region>
+				<a:outputPanel id="charArea" ajaxRendered="true">
+					<s:decorate id="tipoField" template="/layout/edit.xhtml"
+						rendered="#{datosEspecificosformController.habTipo() and !datosEspecificosformController.isGradoParentesco}">
+						<ui:define name="label">#{messages.DatosEspecificos_tipo}</ui:define>
+						<h:selectOneMenu id="tipo"
+							value="#{datosEspecificosformController.idReferencias}"
+							disabled="#{datosEspecificosHome.managed}" style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificosformController.tipoSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:outputPanel>
+				<!-- TIPO PARA EL GRADO DE PARENTESCO -->
+				<a:outputPanel id="charArea2" >
+					<s:decorate id="tipoField2" template="/layout/edit.xhtml" rendered="#{datosEspecificosformController.isGradoParentesco}">
+					<ui:define name="label">#{messages.DatosEspecificos_tipo}</ui:define>
+					<h:selectOneMenu
+							value="#{datosEspecificosformController.tipoParentesco}"
+							disabled="#{datosEspecificosHome.managed}">
+						   <f:selectItem itemValue="A" itemLabel="A - Afinidad" />
+						   <f:selectItem itemValue="C" itemLabel="C - Consanguinidad" />	   							
+				</h:selectOneMenu>
+				</s:decorate>
+				</a:outputPanel>
+
+
+				<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.msg_descripcion}</ui:define>
+					<h:inputTextarea id="descripcion" required="true" cols="100"
+						disabled="#{datosEspecificosHome.managed}"
+						value="#{datosEspecificosformController.datosEspecificos.descripcion}">
+
+						<f:validateLength maximum="500" />
+					</h:inputTextarea>
+
+				</s:decorate>
+				<s:decorate id="activoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+					<h:selectBooleanCheckbox id="activo" required="true"
+						value="#{datosEspecificosformController.datosEspecificos.activo}" />
+				</s:decorate>
+
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!datosEspecificosHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{datosEspecificosHome.managed}" styleClass="labelClass" />
+				</div>
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{datosEspecificosformController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!datosEspecificosHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{datosEspecificosformController.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{datosEspecificosHome.managed}" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/administrarDatosEspecificos/DatosEspecificosList.xhtml"
+				rendered="#{datosEspecificosHome.managed}" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				view="/#{empty datosEspecificosFrom ? 'seleccion/administrarDatosEspecificos/DatosEspecificosList' : datosEspecificosFrom}.xhtml"
+				rendered="#{!datosEspecificosHome.managed}" /></div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{datosEspecificosHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{datosEspecificosformController.datosEspecificos.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{datosEspecificosHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{datosEspecificosformController.datosEspecificos.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{datosEspecificosHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{datosEspecificosformController.datosEspecificos.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{datosEspecificosHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{datosEspecificosformController.datosEspecificos.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

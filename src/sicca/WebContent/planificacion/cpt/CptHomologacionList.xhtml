@@ -1,0 +1,242 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+
+
+
+			
+	<ui:define name="body">
+
+<h:panelGrid ><h1>#{messages.Homologacion_Cpt_Especifico}</h1></h:panelGrid>
+		
+
+		<h:form id="cptSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="2">
+					
+					<s:decorate template="/layout/display.xhtml"
+						rendered="#{cptListFormController.habilitarComboOEE()}">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:selectOneMenu id="tipoCpt" disabled="false"
+							style="width:500px;" value="#{cptListFormController.idConfiguracionUoCab}">
+							<f:selectItems value="#{configuracionUoCabsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+				
+				
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Cpt_denominacion}</ui:define>
+						<h:inputText id="denominacion" size="100"
+							value="#{cptListFormController.denominacion}" />
+					</s:decorate>
+					
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					
+					<s:decorate template="/layout/display.xhtml"
+						rendered="#{tipo != 'general'}">
+						<ui:define name="label">#{messages.Cpt_idTipoCpt}</ui:define>
+						<h:selectOneMenu id="tipoCpt" disabled="false"
+							style="width:250px;" value="#{cptListFormController.idTipoCpt}">
+							<f:selectItems value="#{tipoCptsSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{cptListFormController.searchParaHomologacion()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{cptListFormController.searchAllParaHomologacion()}"
+				reRender="panelResultados, panelBusqueda,panelLinks">
+				<f:param name="firstResult" value="0" />
+			
+			</a:commandButton> 
+		
+		</div>
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty cptListFormController.listaCpt ? 0 : (cptList.paginated ? cptList.resultCount : cptListFormController.listaCpt.size())})</f:facet>
+			<div class="results" id="tblActividadList">
+				<h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty cptList.resultList}" /> <rich:dataTable
+				id="cptList" var="_cpt" value="#{cptList.resultList}"
+				rendered="#{not empty cptList.resultList}">
+				
+				<h:column rendered="#{cptListFormController.tipo != 'general'}">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU40_oee}" />
+							<ui:param name="propertyPath" value="cpt.tipoCpt.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.configuracionUoCab.denominacionUnidad}" />
+				</h:column>
+				<h:column rendered="#{cptListFormController.tipo != 'general'}">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_idTipoCpt}" />
+							<ui:param name="propertyPath" value="cpt.tipoCpt.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.tipoCpt.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_nivel}" />
+							<ui:param name="propertyPath" value="cpt.nivel" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.nivel}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Cpt_denominacion}" />
+							<ui:param name="propertyPath" value="cpt.denominacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.denominacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Cpt_jefatura}" />
+							<ui:param name="propertyPath" value="cpt.jefatura" />
+						</ui:include>
+					</f:facet>
+
+					<h:selectBooleanCheckbox id="jefatura" disabled="true"
+						value="#{_cpt.jefatura}" />
+				</h:column>
+
+				<h:column rendered="#{cptListFormController.tipo != 'general'}">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="#{messages.Homologacion_estado}" />
+							
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.estadoHomologacion}" />
+				</h:column>
+				
+				<h:column rendered="#{cptListFormController.tipo != 'general'}">
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{cptList}" />
+							<ui:param name="propertyLabel" value="Fecha de Solcitud" />
+							
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_cpt.fechaSolicitudHomologacion}" />
+				</h:column>
+			
+			
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					#{' '}
+            		<s:link view="/planificacion/cpt/CptGestionarHomologacion.xhtml"
+						value="#{messages.Homologacion_gestionar}" propagation="none" id="cptHomologacion"
+						rendered="#{empty from}"
+						disabled="#{cptListFormController.deshabilitarGestionarHomologacion(_cpt.estadoHomologacion)}">
+						<f:param name="cptIdCpt" value="#{_cpt.idCpt}" />
+						<f:param name="tipo" value="#{tipo}" />
+					</s:link>
+					
+					#{' '}
+            		<s:link view="/planificacion/cpt/CptEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none" id="cptEdit"
+						rendered="#{!cptListFormController.esHomologador }"
+						disabled="#{cptListFormController.isEstadoParaHomologacion(_cpt.estadoHomologacion)}">
+						<f:param name="cptIdCpt" value="#{_cpt.idCpt}" />
+						<f:param name="tipo" value="#{tipo}" />
+					</s:link>
+					#{' '}		
+					
+					<h:commandLink id="solicitud" value="#{messages.Homologacion_solicitar}"
+							rendered="#{!cptListFormController.esHomologador }"
+							action="#{cptListFormController.enviarParaHomologacion(_cpt.idCpt)}"
+							onclick="return confirm('#{messages.msg_confirm_homologar_cpt}');" 
+							disabled="#{cptListFormController.isEstadoParaHomologacion(_cpt.estadoHomologacion)}"/>
+				</rich:column>
+							
+				
+			</rich:dataTable>
+		</div>
+		</rich:panel>
+
+		<a:outputPanel id="panelLinks" ajaxRendered="true">
+			<div class="tableControl"><s:link propagation="join"
+				view="/planificacion/cpt/CptHomologacionList.xhtml"
+				rendered="#{cptList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/cpt/CptHomologacionList.xhtml"
+				rendered="#{cptList.previousExists}" propagation="join"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult" value="#{cptList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/cpt/CptHomologacionList.xhtml"
+				rendered="#{cptList.nextExists}" propagation="join"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{cptList.nextFirstResult}" />
+				<f:param name="tipo" value="#{cptListFormController.tipo}" />
+				<f:param name="nivel" value="#{cptList.nivel}" />
+				<f:param name="numero" value="#{cptList.nro}" />
+				<f:param name="denominacion" value="#{cptList.cpt.denominacion}" />
+				<f:param name="tipoCpt" value="#{cptList.idTipoCpt}" />
+				<f:param name="numeroEspecif" value="#{cptList.cpt.nroEspecifico}" />
+				<f:param name="estado" value="#{cptList.estado}" />
+			</s:link> <s:link view="/planificacion/cpt/CptHomologacionList.xhtml"
+				rendered="#{cptList.nextExists}" propagation="join"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{cptList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	
+		<s:div styleClass="actionButtons" rendered="#{!cptListFormController.esHomologador }">
+			<s:button view="/planificacion/cpt/CptEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="cptIdCpt" />
+				<f:param name="tipo" value="#{tipo}" />
+			</s:button>
+		</s:div>
+		
+	</h:form>
+	</ui:define>
+
+</ui:composition>

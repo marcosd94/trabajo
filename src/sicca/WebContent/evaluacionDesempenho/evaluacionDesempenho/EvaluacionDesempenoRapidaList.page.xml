@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      login-required="true">
+
+<begin-conversation flush-mode="MANUAL" join="true"/>
+<action execute="#{nivelEntidadOeeUtil.init()}" on-postback="false" />
+ <action execute="#{grupoPuestosController.initCabecera()}" on-postback="false" />
+<action execute="#{admEvalDesempListFC.initEvalRapida()}" on-postback="false"/>
+   <param name="firstResult" value="#{evaluacionDesempenoRapidaList.firstResult}"/>
+   <param name="sort" value="#{evaluacionDesempenoRapidaList.orderColumn}"/>
+   <param name="dir" value="#{evaluacionDesempenoRapidaList.orderDirection}"/>
+   <param name="logic" value="#{evaluacionDesempenoRapidaList.restrictionLogicOperator}"/>
+   <param name="configuracionUoDetIdConfiguracionUoDet" value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+
+   <param name="from"/>
+   <param name="titulo" value="#{evaluacionDesempenoRapidaList.evaluacionDesempeno.titulo}"/>
+   <param name="observacion" value="#{evaluacionDesempenoRapidaList.evaluacionDesempeno.observacion}"/>
+   <param name="usuAlta" value="#{evaluacionDesempenoRapidaList.evaluacionDesempeno.usuAlta}"/>
+   <param name="usuMod" value="#{evaluacionDesempenoRapidaList.evaluacionDesempeno.usuMod}"/>
+   
+    <navigation from-action="#{admEvalDesempListFC.iniciarProceso(eval)}">
+      <rule if-outcome="ok">
+         <end-conversation/>
+         <redirect view-id="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"/>
+      </rule>
+   </navigation>
+<restrict>#{identity.hasRole('evaluacion_desempenho_list')}</restrict>
+</page>

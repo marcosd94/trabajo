@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+
+	<ui:define name="body">
+		<h:form id="insercionPostulantesForm" enctype="multipart/form-data">
+			<h1>#{insercionMasivaPostulanteFormController.concurso.nombre} </h1>
+			<h2>#{insercionMasivaPostulanteFormController.concursoPuestoAgrNuevo.descripcionGrupo} </h2>
+			
+			<rich:simpleTogglePanel>
+				<f:facet name="header">
+        #{messages.insercion_postulantes}
+        </f:facet>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Archivo CSV a procesar</ui:define>
+					<s:fileUpload size="30"
+						contentType="#{insercionMasivaPostulanteFormController.cType}"
+						data="#{insercionMasivaPostulanteFormController.uFile}"
+						fileName="#{insercionMasivaPostulanteFormController.fName}"
+						>
+						<s:conversationPropagation type="join" />
+					</s:fileUpload>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+			<div class="actionButtons">
+				<h:commandButton id="search"
+					value="#{messages.CU547_btnInsetMassive}"
+					action="#{insercionMasivaPostulanteFormController.insercionMasiva()}">
+				</h:commandButton>
+				<ui:remove>
+					<s:button id="reset" value="Limpiar"
+						action="#{cargaMasivaFuncioFC.limpiar()}">
+					</s:button>
+				</ui:remove>
+				<h:commandButton id="volver"
+				
+				value="Volver"
+
+				action="#{insercionMasivaPostulanteFormController.volverListaGrupos()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			<h:commandButton
+				id="printPostulantes" value="Imprimir Postulantes"
+				action="#{insercionMasivaPostulanteFormController.printPostulantes()}" />
+			<h:commandButton
+				id="printAdmitidos" value="Imprimir Lista Larga de Admitidos"
+				action="#{insercionMasivaPostulanteFormController.printAdmitidos()}" />
+			<h:commandButton
+				id="printNoAdmitidos" value="Imprimir Lista Larga de NO Admitidos"
+				action="#{insercionMasivaPostulanteFormController.printNoAdmitidos()}" />
+			<h:commandButton id="terminarInsercionPostulantes"	
+				value="#{messages.public_terminar_insercion_postulantes}"
+				onclick="return confirm('#{messages.msg_confirm_terminar_insercion_postulantes}');" 
+				action="#{insercionMasivaPostulanteFormController.terminarInsercionPostulantes()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			</div>
+			<br></br>
+			<br></br>
+			<div>
+			<h:commandButton id="eliminarInsercionPostulantes"	
+				value="#{messages.public_eliminar_insercion_postulantes}"
+				onclick="return confirm('#{messages.msg_confirm_eliminar_insercion_postulantes}');" 
+				action="#{insercionMasivaPostulanteFormController.eliminarInsercionPostulantes()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			</div>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

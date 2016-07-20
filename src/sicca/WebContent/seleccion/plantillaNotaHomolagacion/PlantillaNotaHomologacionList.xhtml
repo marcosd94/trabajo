@@ -1,0 +1,153 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+     xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU249_titulo_lis}</h1>
+    <h:form id="plantillaNotaHomologacionSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel  label="#{messages['msg_list_search_filter']}" id="panelParametro" switchType="ajax">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.msg_carga_req_descripcion}</ui:define>
+                <h:inputText id="descripcion" value="#{plantillaNotaHomologacionList.plantillaNotaHomologacion.descripcion}" size="70"/>
+            </s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{plantillaNotaHomologacionList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+          
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+                <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{plantillaNotaHomologacionList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{plantillaNotaHomologacionList.limpiar()}" 
+				 reRender="panelParametro,panelResultado,links" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+    </h:form>
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}  (#{empty plantillaNotaHomologacionList.resultList ? 0 : (plantillaNotaHomologacionList.paginated ? plantillaNotaHomologacionList.resultCount : plantillaNotaHomologacionList.resultList.size)})</f:facet>
+    <div class="results" id="plantillaNotaHomologacionList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty plantillaNotaHomologacionList.resultList}"/>
+
+    <rich:dataTable id="plantillaNotaHomologacionList"
+                var="_plantillaNotaHomologacion"
+              value="#{plantillaNotaHomologacionList.resultList}"
+           rendered="#{not empty plantillaNotaHomologacionList.resultList}">
+      
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{plantillaNotaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.msg_carga_req_descripcion}"/>
+                    <ui:param name="propertyPath" value="plantillaNotaHomologacion.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_plantillaNotaHomologacion.descripcion}"/>
+        </h:column>
+        
+         <h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{plantillaNotaHomologacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.DatosEspecificos_activo}" />
+							<ui:param name="propertyPath" value="plantillaNotaHomologacion.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_plantillaNotaHomologacion.activo}" disabled="true"/>
+				</h:column>
+        <rich:column styleClass="action">
+           <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacion' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : 'Seleccionar'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="plantillaNotaHomologacionViewId">
+                <f:param name="plantillaNotaHomologacionIdPlantillaNotaHomologacion"
+                        value="#{_plantillaNotaHomologacion.idPlantillaNotaHomologacion}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionEdit.xhtml"
+                  value="#{messages.msg_edit}"
+             propagation="none"
+                      id="plantillaNotaHomologacionEdit"
+                rendered="#{empty from}">
+                <f:param name="plantillaNotaHomologacionIdPlantillaNotaHomologacion"
+                        value="#{_plantillaNotaHomologacion.idPlantillaNotaHomologacion}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+
+	<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+            rendered="#{plantillaNotaHomologacionList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+            rendered="#{plantillaNotaHomologacionList.previousExists}"
+               value="#{messages.left}  #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{plantillaNotaHomologacionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+            rendered="#{plantillaNotaHomologacionList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{plantillaNotaHomologacionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionList.xhtml"
+            rendered="#{plantillaNotaHomologacionList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{plantillaNotaHomologacionList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seleccion/plantillaNotaHomolagacion/PlantillaNotaHomologacionEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="plantillaNotaHomologacionIdPlantillaNotaHomologacion"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,162 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Rol_}</h1>
+    <h:form id="rol" styleClass="edit">
+
+        <rich:panel>
+        <f:facet name="header">#{rolHome.managed ? messages.msg_edit  : messages.msg_add_new} #{messages.Rol_}</f:facet>
+
+          
+			<h:panelGrid>
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Rol_descripcion}</ui:define>
+	                <h:inputTextarea id="descripcion"
+	                               cols="80"
+	                               rows="3"
+	                           required="true"
+	                              value="#{administrarRolesFormController.rol.descripcion}"/>
+	            </s:decorate>
+	
+				 <s:decorate id="moduloField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.Rol_modulo}</ui:define>
+		               <h:selectOneMenu id="moduloField" immediate="true"
+								style="width : 330px;"
+								value="#{administrarRolesFormController.modulo}">
+								<s:selectItems var="modulo" label="#{modulo.descripcion}"
+									value="#{enumAppHelper.modulos}" />
+								<s:convertEnum />
+								<a:support event="onchange" ajaxSingle="true" action="#{administrarRolesFormController.traerDatos()}"
+									reRender="filtro" />
+							</h:selectOneMenu>
+		            </s:decorate>
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columnClasses="2">
+		     	<a:region>
+			     	<s:decorate id="funcionSinAsignarField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.Rol_funcion_sin_asignar}</ui:define>
+		                <h:inputText id="funcionSinAsignar" value="#{administrarRolesFormController.funcionSinAsignar}" size="60">
+		                	<a:support event="onkeyup" ajaxSingle="true" action="#{administrarRolesFormController.actualizarFuncionSinAsignar()}"
+										reRender="filtro" />
+						</h:inputText>
+		            </s:decorate>
+	            </a:region>
+		     </h:panelGrid>
+		     
+	            <br />
+	             <br />
+	            
+				<fieldset style="width: 70%;" id="filtroFieldSet"><legend>Funciones Asignadas
+				</legend>
+				<rich:listShuttle sourceValue="#{administrarRolesFormController.funcionesSinAsignar}" id="filtro"
+		            targetValue="#{administrarRolesFormController.funcionesAsignados}" var="funcion" listsHeight="150"
+		            sourceListWidth="400" targetListWidth="400" sourceCaptionLabel="#{messages.Rol_funciones_sin_asignar}"
+		            targetCaptionLabel="#{messages.Rol_funciones_asignados}"  
+		            converter="org.jboss.seam.ui.EntityConverter"> 
+		            <rich:column width="18"> 
+		            	<h:outputText value="#{funcion.descripcion}" />
+		            </rich:column>
+		            
+		            <a:support event="onlistchanged" action="#{administrarRolesFormController.storeItemInList(funcion)}"/>
+
+		        </rich:listShuttle>
+				</fieldset>
+				
+	            
+	            <br />
+	             <br />
+	             
+	        <s:decorate id="homologarField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.Rol_agregar_oee}</ui:define>
+                <h:selectBooleanCheckbox id="homologar"
+                                      value="#{administrarRolesFormController.rol.homologador}"/>
+            </s:decorate>
+            
+            <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.msg_carga_req_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{administrarRolesFormController.activo}"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+            </div>
+             <br />
+         <div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_actualizar}"
+				rendered="#{rolHome.managed}" /></div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}"
+				rendered="#{!rolHome.managed}" /></div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{administrarRolesFormController.guardar()}"
+                          onclick="return confirm('#{messages.msg_confirm_save}');"
+                       disabled="#{!rolHome.wired}"
+                       rendered="#{!rolHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{administrarRolesFormController.actualizar()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{rolHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/seguridad/rol/RolList.xhtml"
+                rendered="#{rolHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/seguridad/rol/#{empty rolFrom ? 'RolList' : rolFrom}.xhtml"
+                rendered="#{!rolHome.managed}"/>
+
+        </div>
+    </h:form>
+<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{rolHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{rolHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{rolHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{rolHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{rolHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{rolHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{rolHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{rolHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+
+
+</ui:define>
+
+</ui:composition>

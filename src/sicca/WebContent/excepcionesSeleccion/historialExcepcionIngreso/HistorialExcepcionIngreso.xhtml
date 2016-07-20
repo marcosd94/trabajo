@@ -1,0 +1,239 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU603_titulo}</h1>
+    <h:form id="historialExcepcionSearch" styleClass="edit">
+
+		<rich:panel >
+		<h:panelGrid columns="3">
+		<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+						
+		</h:panelGrid>
+		<h:panelGrid >
+		  <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU603_concurso}</ui:define>
+                <h:inputText size="100" id="concurso" disabled="true" value="#{historialExcepcionIngresoFC.nombreConcurso}"/>
+            </s:decorate>
+              <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU603_grupo_puesto}</ui:define>
+                <h:inputText size="100" id="grupo" disabled="true" value="#{historialExcepcionIngresoFC.nombregrupo}"/>
+            </s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+		  
+              <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU603_id_excp}</ui:define>
+                <h:inputText size="20" id="idExc" disabled="true" value="#{historialExcepcionIngresoFC.excepcion.idExcepcion}"/>
+            </s:decorate>
+              <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.gral_descripcion}</ui:define>
+                <h:inputText size="70" id="descripcion" disabled="true" value="#{historialExcepcionIngresoFC.excepcion.observacion}"/>
+            </s:decorate>
+             <s:decorate template="/layout/edit.xhtml" id="fechaIniField" >
+					<ui:define name="label">#{messages.CU603_fecha_generacion}</ui:define>
+					 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" disabled="true" 
+                            inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{historialExcepcionIngresoFC.excepcion.fechaAlta}" >
+                           </rich:calendar>
+				</s:decorate>
+		</h:panelGrid>
+		</rich:panel>
+		<rich:panel id="panelGrillaComision">
+				<f:facet name="header">#{messages.CU603_elegible_incluido}</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="comision" var="_record"  rowKeyVar="rowNr"
+					value="#{historialExcepcionIngresoFC.excepcionElegibles}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU603_codigo}
+						</f:facet>
+						<h:outputText value="#{historialExcepcionIngresoFC.refresh(rowNr)}" />
+					
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.Persona_nombres}
+						</f:facet>
+						<h:outputText value="#{_record.postulacion.personaPostulante.persona.nombres}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.Persona_apellidos}
+						</f:facet>
+						<h:outputText value="#{_record.postulacion.personaPostulante.persona.apellidos}" />
+					</h:column>
+					</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+
+        
+
+       
+  
+    <rich:panel>
+        <f:facet name="header">#{messages.CU603_historial}</f:facet>
+    <div class="results" id="historialExcepcionList">
+
+    
+
+    <rich:dataTable id="historialExcepcionList"
+                var="_historialExcepcion"
+              value="#{historialExcepcionIngresoFC.historialExcepcionLista}"
+           rendered="#{not empty historialExcepcionIngresoFC.historialExcepcionLista}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{historialExcepcionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU603_estado}"/>
+                    <ui:param name="propertyPath" value="historialExcepcion.estado"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_historialExcepcion.estado}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{historialExcepcionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU603_obs}"/>
+                    <ui:param name="propertyPath" value="historialExcepcion.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_historialExcepcion.observacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{historialExcepcionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU603_usuario}"/>
+                    <ui:param name="propertyPath" value="historialExcepcion.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_historialExcepcion.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{historialExcepcionList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU603_fecha}"/>
+                    <ui:param name="propertyPath" value="historialExcepcion.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_historialExcepcion.fechaAlta}"/>
+        1 </h:column>
+       
+         <rich:column styleClass="action">
+          <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+         
+			  <a:commandLink   id="gestionar2" eventsQueue="default"
+				value="#{messages.CU200_ver_anexos}"
+				action="#{historialExcepcionIngresoFC.verAnexos(_historialExcepcion.idHistorialExcepcion)}">
+			</a:commandLink>
+			 
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+  </h:form>
+
+    <div class="tableControl">
+
+        <s:link view="/excepcionesSeleccion/historialExcepcionIngreso/HistorialExcepcionIngreso.xhtml"
+            rendered="#{historialExcepcionList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/excepcionesSeleccion/historialExcepcionIngreso/HistorialExcepcionIngreso.xhtml"
+            rendered="#{historialExcepcionList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{historialExcepcionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/excepcionesSeleccion/historialExcepcionIngreso/HistorialExcepcionIngreso.xhtml"
+            rendered="#{historialExcepcionList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{historialExcepcionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/excepcionesSeleccion/historialExcepcionIngreso/HistorialExcepcionIngreso.xhtml"
+            rendered="#{historialExcepcionList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{historialExcepcionList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+ <s:div styleClass="actionButtons">
+   <s:button view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+	</s:div>
+</ui:define>
+
+</ui:composition>

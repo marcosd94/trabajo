@@ -1,0 +1,158 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU576_titulo_ver}</h1>
+    <h:form id="alertasEval" styleClass="edit">
+
+        <rich:panel>
+        	<rich:panel >
+           <f:facet name="header">#{messages.CU576_datos_alerta}</f:facet>
+			
+				<h:panelGrid columns="1">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo" 
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+					
+					
+            <s:decorate id="periodoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU576_periodo}<span class="required">*</span></ui:define>
+                <h:inputText id="periodo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+                     value="#{alertasEvalEditFC.alertasEval.periodo}" style=" width : 60px;">
+                 </h:inputText>#{' '}<h:outputText value="#{messages.CU576_mes}" styleClass="labelClass"/>
+            </s:decorate>
+
+
+            <s:decorate id="activarAlertaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU576_alerta_activa}</ui:define>
+                <h:selectBooleanCheckbox id="activarAlerta" disabled="true"
+                                 value="#{alertasEvalEditFC.alertasEval.activarAlerta}"/>
+            </s:decorate>
+					
+			</h:panelGrid>
+				
+			</rich:panel>
+		
+          
+				
+				<rich:panel id="panelGrillaDestinatario">
+				<f:facet name="header">#{messages.CU576_destinarios}</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="comision" var="_record"  rowKeyVar="rowNr"
+					value="#{alertasEvalEditFC.alertasEvalDets}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.Empleado_idPersona}
+						</f:facet>
+						<h:outputText value="#{_record.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.gral_descripcion}
+						</f:facet>
+						<h:outputText value="#{_record.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU239_emal}
+						</f:facet>
+						<h:outputText value="#{_record.EMail}" />
+					</h:column>
+					
+											
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+        
+            <s:button id="cancelEdit2"
+                   value="Volver" includePageParams="false"
+             propagation="none"
+                    view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+               />
+
+           
+
+        </div>
+          
+
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

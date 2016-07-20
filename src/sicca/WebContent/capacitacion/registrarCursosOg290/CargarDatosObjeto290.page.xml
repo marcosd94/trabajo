@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CapacitacionesList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+<action execute="#{cargarDatosObjetoGasto290FC.initCargar()}" on-postback="false" />
+
+
+ <param name="configuracionUoDetIdConfiguracionUoDet" value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />
+  <param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{nivelEntidadOeeUtil.idConfigCab}" />
+   <param name="capacitacionesFrom"/>
+ 
+
+   <navigation from-action="#{cargarDatosObjetoGasto290FC.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/capacitacion/registrarCursosOg290/CursosOg290List.xhtml"/>
+      </rule>
+   </navigation>
+
+   
+
+ 
+  <restrict>#{identity.hasRole('cargarDatosObjeto290')}</restrict>
+</page>

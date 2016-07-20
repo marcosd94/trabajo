@@ -1,0 +1,168 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU321_title}</h1>
+		<rich:simpleTogglePanel label=" " switchType="client">
+			<h:panelGrid columns="3">
+
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Concurso</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+		<rich:panel id="elPanelCab">
+			<f:facet name="header">#{''}</f:facet>
+			<a:form>
+
+				<fieldset id="elFieldSetDetalle"><legend align="left">#{messages.CU321_asignarComiteporGrupo}</legend>
+				<h:panelGrid columns="3" styleClass="gridhello"
+					columnClasses="gridhellocolumn">
+
+					<h:panelGrid columns="2" border="0" id="elpanelGrid">
+
+						<rich:panel bodyClass="inpanelBody">
+							<f:facet name="header">
+                    #{messages.CU321_tile_grupos}#{' '}<font color="red">(*)</font>
+							</f:facet>
+
+							<ui:define name="label">#{messages.CU70_tipo_puesto}</ui:define>
+							<h:selectOneMenu id="tipoPuesto" style="width :250px;"
+								value="#{seleGrupoPuesto.idGrupoSel}">
+								<f:selectItems value="#{seleGrupoPuesto.grupoSelecItem}" />
+
+							</h:selectOneMenu>
+
+						</rich:panel>
+						<rich:panel bodyClass="inpanelBody">
+							<f:facet name="header">
+                   #{messages.CU321_tile_comisiones}#{' '}<font
+									color="red">(*)</font>
+							</f:facet>
+
+							<ui:define name="label">#{messages.CU70_tipo_puesto}</ui:define>
+							<h:selectOneMenu id="comision" style="width :250px;"
+								value="#{seleGrupoPuesto.idComiSel}">
+								<f:selectItems value="#{seleGrupoPuesto.comisionSelecItem}" />
+
+							</h:selectOneMenu>
+
+						</rich:panel>
+					</h:panelGrid>
+				</h:panelGrid>
+				<div id="divBotonesFormulario"><a:commandButton
+					rendered="#{!seleGrupoPuesto.deshabilitarAcciones}" id="agregarDet"
+					value="Agregar" reRender="elDetalleForm,idCol1"
+					action="#{seleGrupoPuesto.save()}">
+				</a:commandButton> <s:button view="/#{seleGrupoPuesto.fromSele}.xhtml" id="volver"
+					value="#{messages.GENERICO_VOLVER}">
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+						value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+				</s:button></div>
+				</fieldset>
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+			</a:form>
+			<rich:spacer height="7" />
+
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_agregar}" /></div>
+			<br />
+		</rich:panel>
+
+		<a:form id="elDetalleForm">
+			<a:outputPanel layout="block" ajaxRendered="true">
+				<h:outputText value="#{messages.CU321_title}"
+					rendered="#{!empty seleGrupoPuesto.lComiGrupo}" />
+				<rich:dataTable var="_elDetalle" rowKeyVar="fila"
+					value="#{seleGrupoPuesto.lComiGrupo}"
+					rendered="#{!empty seleGrupoPuesto.lComiGrupo}"
+					rowClasses="rvgRowOne,rvgRowTwo" id="cronogramaTable">
+					<h:column id="idCol1">
+						<f:facet name="header">#{messages.CU321_grupoDesc}</f:facet>
+						<h:outputText
+							value="#{_elDetalle.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU321_comisionesDesc}</f:facet>
+						<h:outputText
+							value="#{_elDetalle.comisionSeleccionCab.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<h:outputText
+							rendered="#{!seleGrupoPuesto.mostrarLinkEliminar(_elDetalle.concursoPuestoAgr.idConcursoPuestoAgr)}"
+							value="#{seleGrupoPuesto.mensaje}" />
+						<h:outputText rendered="#{seleGrupoPuesto.deshabilitarAcciones}}"
+							value="Finalizado" />
+						<a:commandLink id="editarLnk" value="Eliminar"
+							rendered="#{!seleGrupoPuesto.deshabilitarAcciones and seleGrupoPuesto.mostrarLinkEliminar(_elDetalle.concursoPuestoAgr.idConcursoPuestoAgr)}">
+							<a:support event="onclick"
+								action="#{seleGrupoPuesto.eliminar(fila)}"
+								reRender="cronogramaTable" />
+						</a:commandLink>
+					</h:column>
+
+				</rich:dataTable>
+
+			</a:outputPanel>
+			<div class="association" id="concursoPuestoAgrParent"></div>
+		</a:form>
+		<br />
+
+
+
+	</ui:define>
+
+</ui:composition>

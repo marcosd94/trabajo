@@ -1,0 +1,80 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="usuarioPortal" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU14_title} </f:facet>
+				
+				<p style="FONT-FAMILY: 'Arial'; FONT-SIZE: medium;">#{mensajeListFormController.getValorByCodigo('msg_olvido_password')}</p>
+				<h:panelGrid columns="1">
+
+					<s:decorate id="docIdentidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU12_doc_identidad}</ui:define>
+						<h:inputText id="docIdentidad" required="true" size="50"
+							maxlength="50" value="#{olvidoContrasenhaFormController.ci}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}
+						</ui:define>
+						<h:selectOneMenu id="pais"
+							value="#{olvidoContrasenhaFormController.idPais}"
+							style="width:250px" required="true">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<h:graphicImage id="imageCaptcha" value="#{captcha.urlCaptcha}" />
+					<a:commandButton id="reload" eventsQueue="default"
+						image="/img/reload.jpg" reRender="imageCaptcha"
+						action="#{captcha.reload()}" />
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<h:outputText id="out"
+						value="Escribe los cuatro caracteres que ves en la imagen" />
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Carateres</ui:define>
+						<h:inputText id="verifyCaptcha" value="#{captcha.response}" required="true">
+							<s:validate />
+						</h:inputText>
+					</s:decorate>
+
+
+				</h:panelGrid>
+				
+				<div class="actionButtons"><h:commandButton id="submsdit"
+					value="Enviar"
+					action="#{olvidoContrasenhaFormController.save()}">
+				</h:commandButton> <s:button id="cancelEdit" value="#{messages.msg_done}"
+					propagation="end"
+					view="/Portal.xhtml"/></div>
+		
+		
+		
+			</rich:panel>
+
+
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

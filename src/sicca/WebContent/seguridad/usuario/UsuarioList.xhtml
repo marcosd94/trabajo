@@ -1,0 +1,290 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="usuarioSearch" styleClass="edit">
+		<h1>#{messages.Usuario_plural}</h1>
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+			<h:panelGrid columns="2" rowClasses="rowTop">
+				<s:decorate template="/layout/display.xhtml">
+	                <ui:define name="label">#{messages.Usuario_cedula}</ui:define>
+	                <h:inputText id="documentoUsuario" 
+	                		  value="#{usuarioListFormController.persona.documentoIdentidad}"
+	                	 styleClass="numeric" 
+	                	 	   size="15"/>
+	                	 	   
+	            </s:decorate>
+	          <a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seguridad/usuario/UsuarioList')}" />
+					</s:decorate>
+					</a:region>
+				<s:decorate template="/layout/display.xhtml">
+	                <ui:define name="label">#{messages.Usuario_nombreUsuario}</ui:define>
+	                <h:inputText id="codigoUsuario" value="#{usuarioListFormController.usuario.codigoUsuario}" size="30"/>
+	            </s:decorate>
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+								<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seguridad/usuario/UsuarioList')}" />
+						</s:decorate>
+					</a:region>
+
+				<s:decorate template="/layout/display.xhtml">
+	                <ui:define name="label">#{messages.Usuario_nombre}</ui:define>
+	                <h:inputText id="nombreUsuario" value="#{usuarioListFormController.persona.nombres}" size="30"/>
+	            </s:decorate>
+	            	<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+									<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('seguridad/usuario/UsuarioList')}" />
+	                	</s:decorate>
+					</a:region>
+	            <s:decorate template="/layout/display.xhtml">
+	                <ui:define name="label">#{messages.Usuario_apellido}</ui:define>
+	                <h:inputText id="apellidoUsuario" value="#{usuarioListFormController.persona.apellidos}" size="30"/>
+	            </s:decorate>
+	            <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{usuarioListFormController.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_tipo}</ui:define>
+						<h:selectOneMenu id="tipoUsuario" style="width : 165px;"
+							value="#{usuarioListFormController.tipoUsuario}">
+							<f:selectItems value="#{usuarioFormController.tipoUsuarioSelectItem}" />
+						</h:selectOneMenu>
+				</s:decorate>
+	            
+	            
+			</h:panelGrid>
+        </rich:simpleTogglePanel>
+
+		<div class="actionButtons">
+			<a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{usuarioListFormController.search()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> 
+			<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{usuarioListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda"/> 
+		</div>
+
+    </h:form>
+
+    <rich:panel id="panelResultados">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty usuarioList.resultList ? 0 : (usuarioList.paginated ? usuarioList.resultCount : usuarioList.resultList.size)})</f:facet>
+    <div class="results" id="usuarioList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty usuarioList.resultList}"/>
+
+    <rich:dataTable id="usuarioList"
+                var="_usuario"
+              value="#{usuarioList.resultList}"
+           rendered="#{not empty usuarioList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_}"/>
+                    <ui:param name="propertyPath" value="usuario.codigoUsuario"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.codigoUsuario}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_nombre}"/>
+                    <ui:param name="propertyPath" value="usuario.persona.nombres"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.persona.nombres}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_apellido}"/>
+                    <ui:param name="propertyPath" value="usuario.persona.apellidos"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.persona.apellidos}"/>
+        </h:column>
+		<rich:column width="10%" styleClass="numeric">
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_cedula}"/>
+                    <ui:param name="propertyPath" value="usuario.persona.documentoIdentidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.persona.documentoIdentidad}">
+            	<f:convertNumber type="number" pattern="#,##0" locale="#{siccaAppHelper.localeCode}"/>
+            </h:outputText>
+        </rich:column>
+
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_unidad_org}"/>
+                    <ui:param name="propertyPath" value="usuario.configuracionUoCab.denominacionUnidad"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.configuracionUoCab.denominacionUnidad}"/>
+        </h:column>
+        
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.Usuario_tipo}"/>
+                    <ui:param name="propertyPath" value="usuario.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuario.usuAlta != 'PORTAL' ? 'SICCA' : 'PORTAL'}"/>
+        </h:column>
+        
+        <rich:column style="text-align:center">
+			<f:facet name="header">#{messages.Usuario_activo}</f:facet>
+			<h:selectBooleanCheckbox value="#{_usuario.activo}" disabled="true"/>
+		</rich:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seguridad/usuario/Usuario' : from}.xhtml"
+                   value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="usuarioViewId">
+                <f:param name="usuarioIdUsuario"
+                        value="#{_usuario.idUsuario}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seguridad/usuario/UsuarioEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="usuarioEdit"
+                rendered="#{empty from and _usuario.usuAlta != 'PORTAL'}">
+                <f:param name="usuarioIdUsuario"
+                        value="#{_usuario.idUsuario}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+	<a:outputPanel ajaxRendered="true">
+
+	    <div class="tableControl">
+	
+	        <s:link view="/seguridad/usuario/UsuarioList.xhtml"
+	            rendered="#{usuarioList.previousExists}"
+	               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+	                  id="firstPage">
+	          <f:param name="firstResult" value="0"/>
+	        </s:link>
+	
+	        <s:link view="/seguridad/usuario/UsuarioList.xhtml"
+	            rendered="#{usuarioList.previousExists}"
+	               value="#{messages.left} #{messages.msg_list_previous_page}"
+	                  id="previousPage">
+	            <f:param name="firstResult"
+	                    value="#{usuarioList.previousFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/seguridad/usuario/UsuarioList.xhtml"
+	            rendered="#{usuarioList.nextExists}"
+	               value="#{messages.msg_list_next_page} #{messages.right}"
+	                  id="nextPage">
+	            <f:param name="firstResult"
+	                    value="#{usuarioList.nextFirstResult}"/>
+	        </s:link>
+	
+	        <s:link view="/seguridad/usuario/UsuarioList.xhtml"
+	            rendered="#{usuarioList.nextExists}"
+	               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+	                  id="lastPage">
+	            <f:param name="firstResult"
+	                    value="#{usuarioList.lastFirstResult}"/>
+	        </s:link>
+	
+	    </div>
+	</a:outputPanel>
+	
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seguridad/usuario/UsuarioEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="usuarioIdUsuario"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

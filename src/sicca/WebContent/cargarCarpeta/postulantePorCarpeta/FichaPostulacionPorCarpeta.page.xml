@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" no-conversation-view-id="/planificacion/cpt/CptList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<restrict>#{identity.hasRole('admin_ficha_postulacion_por_carpeta')}</restrict>
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{personaHome.wire}" />
+	<action execute="#{tab1DatosPersonalesPorCarpetaFC.init()}"
+		on-postback="false" />
+	<action execute="#{tab2FormacionAcademicaPorCarpetaFC.init()}"
+		on-postback="false" />
+	<action execute="#{tab3ExpLaboralPorCarpeta.init()}"
+		on-postback="false" />
+	<action execute="#{tab5DiscapacidadFC.init()}" on-postback="false" />
+	<action execute="#{tab7VistaPrePostulacionActualFC.init()}"
+		on-postback="false" />
+		<action execute="#{tab6VistaPreliminarFormController.initCarpeta()}"
+		on-postback="false" />
+		<action execute="#{tab4AdjuntarDocumentosFormController.initCarpeta()}"
+		on-postback="false" />
+	<param name="personaIdPersona" />
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr" />
+	<param name="from" value="#{tab1DatosPersonalesPorCarpetaFC.from}" />
+	<param name="msjOk"  />
+	<param name="codActividad" value="#{tab1DatosPersonalesPorCarpetaFC.codActividad}" />
+	<navigation from-action="#{tab1DatosPersonalesPorCarpetaFC.guardar()}">
+		<rule if-outcome="OK">
+			<end-conversation before-redirect="true" />
+			<redirect include-page-params="true"
+				view-id="/cargarCarpeta/postulantePorCarpeta/FichaPostulacionPorCarpeta.xhtml">
+				<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{tab1DatosPersonalesPorCarpetaFC.idGrupo}" />
+				<param name="personaIdPersona" value="#{tab1DatosPersonalesPorCarpetaFC.idPersona}" />
+				<param name="msjOk" value="#{true}" />
+				<param name="from" value="#{tab1DatosPersonalesPorCarpetaFC.from}" />
+				<param name="codActividad" value="#{tab1DatosPersonalesPorCarpetaFC.codActividad}" />
+				<param name="idGrupo" value="#{tab1DatosPersonalesPorCarpetaFC.idGrupo}" />
+			</redirect>
+		</rule>
+	</navigation>
+</page>

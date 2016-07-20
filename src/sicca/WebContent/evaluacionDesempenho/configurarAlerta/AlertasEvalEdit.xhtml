@@ -1,0 +1,285 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{alertasEvalEditFC.modoUpdate ? messages.CU576_datos_alerta : messages.CU576_titulo_carga}</h1>
+    <h:form id="alertasEval" styleClass="edit">
+
+        <rich:panel>
+        	<rich:panel >
+           <f:facet name="header">#{messages.CU576_datos_alerta}</f:facet>
+			
+				<h:panelGrid columns="1">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="#{alertasEvalEditFC.modoUpdate}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo" 
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png" rendered="#{!alertasEvalEditFC.modoUpdate}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('/evaluacionDesempenho/configurarAlerta/AlertasEvalEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="#{alertasEvalEditFC.modoUpdate}"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" rendered="#{!alertasEvalEditFC.modoUpdate}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('/evaluacionDesempenho/configurarAlerta/AlertasEvalEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="#{alertasEvalEditFC.modoUpdate}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" rendered="#{!alertasEvalEditFC.modoUpdate}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('/evaluacionDesempenho/configurarAlerta/AlertasEvalEdit')}" />
+						</s:decorate>
+					</a:region>
+					
+					
+            <s:decorate id="periodoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU576_periodo}<span class="required">*</span></ui:define>
+                <h:inputText id="periodo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+                     value="#{alertasEvalEditFC.alertasEval.periodo}" style=" width : 60px;">
+                 </h:inputText>#{' '}<h:outputText value="#{messages.CU576_mes}" styleClass="labelClass"/>
+            </s:decorate>
+
+
+            <s:decorate id="activarAlertaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU576_alerta_activa}</ui:define>
+                <h:selectBooleanCheckbox id="activarAlerta"
+                                 value="#{alertasEvalEditFC.alertasEval.activarAlerta}"/>
+            </s:decorate>
+					
+			</h:panelGrid>
+				
+			</rich:panel>
+			<rich:panel id="panelParamentros">  <f:facet name="header">#{messages.CU576_datos_alerta}</f:facet>
+			<h:panelGrid >
+		<a:region >
+		<s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU484_pais_exp}</ui:define>
+									<h:selectOneMenu id="idPaisExped" 
+										value="#{alertasEvalEditFC.idPaisExp}"
+										style="width:150px">
+										<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+										<a:support event="onchange" eventsQueue="default"
+										 action="#{alertasEvalEditFC.limpiarDatosPersona()}"
+									reRender="outNombre,outAgregarPersona,paisExpField" />
+									</h:selectOneMenu>
+								</s:decorate>
+					<a:status id="idSatatusPersonSearch"
+						onstart="Richfaces.showModalPanel('espera')"
+						onstop="#{rich:component('espera')}.hide()" />
+		</a:region>
+		</h:panelGrid>
+		<h:panelGrid columns="3">
+		<a:region >
+		<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px" 
+										value="#{alertasEvalEditFC.docIdentidad}">
+										<a:support event="onblur"
+											action="#{alertasEvalEditFC.buscarPersona()}"
+											reRender="outNombre,outAgregarPersona,paisExpField,emailField"
+											/>
+									</h:inputText>
+			</s:decorate>
+		</a:region>
+			<a:commandButton id="searchper" eventsQueue="default"
+						image="/img/Buscar.png"
+						action="#{alertasEvalEditFC.toFindPersonaList()}" />
+					<a:outputPanel id="outAgregarPersona">	
+					<a:commandButton id="addPerson"
+						rendered="#{alertasEvalEditFC.habBtnAddPersons}"
+						eventsQueue="default" value="Agregar Persona"
+						action="#{alertasEvalEditFC.toFindPersona()}" />
+						</a:outputPanel>
+						
+		</h:panelGrid>
+		<h:panelGrid >
+		<a:outputPanel ajaxRendered="true" id="outNombre">
+					<s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU306_nombres}</ui:define>
+						<h:inputText id="usuMod" size="100" disabled="true" 
+							value="#{alertasEvalEditFC.persona.nombreCompleto}" />
+					</s:decorate></a:outputPanel>
+			  
+			 <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.gral_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                           size="100"
+                      maxlength="150"
+                          value="#{alertasEvalEditFC.descripcion}">
+                 </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+             <s:decorate id="emailField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU239_emal}<span class="required">*</span></ui:define>
+                <h:inputText id="email"
+                           size="100"
+                          value="#{alertasEvalEditFC.emails}">
+                </h:inputText>
+            </s:decorate>
+            <h:outputText value="#{messages.CU576_msg}" style="color:Red;"  styleClass="labelClass" />
+           
+		</h:panelGrid>
+			</rich:panel>
+            <a:outputPanel ajaxRendered="true" id="panelBotones">
+            <div class="actionButtons">
+			
+		<h:commandButton id="add"  eventsQueue="default" rendered="#{!alertasEvalEditFC.esEdit}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" 
+					action="#{alertasEvalEditFC.addRow()}"/>
+       <h:commandButton id="limpiar"  eventsQueue="default" rendered="#{!alertasEvalEditFC.esEdit}"
+						value="Limpiar" 
+						action="#{alertasEvalEditFC.limpiarDatos()}"/>
+		 <h:commandButton id="update"  eventsQueue="default" rendered="#{alertasEvalEditFC.esEdit}"
+						 value="#{messages.msg_update}" 
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{alertasEvalEditFC.addRow()}"/>
+          <h:commandButton id="cancelEdit" rendered="#{alertasEvalEditFC.esEdit}" 
+           value="#{messages.msg_cancel}" action="#{alertasEvalEditFC.limpiarDatos()}" />
+				</div></a:outputPanel>
+				
+				<rich:panel id="panelGrillaDestinatario">
+				<f:facet name="header">#{messages.CU576_destinarios}</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="comision" var="_record"  rowKeyVar="rowNr"
+					value="#{alertasEvalEditFC.alertasEvalDets}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.Empleado_idPersona}
+						</f:facet>
+						<h:outputText value="#{_record.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.gral_descripcion}
+						</f:facet>
+						<h:outputText value="#{_record.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU239_emal}
+						</f:facet>
+						<h:outputText value="#{_record.EMail}" />
+					</h:column>
+					<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet" value="#{messages.msg_edit}" 
+								                    reRender="panelBotones,panelGrillaDestinatario,panelParamentros"  eventsQueue="default" 
+								                    action="#{alertasEvalEditFC.editRow(rowNr)}" />
+											  #{' '}
+											  <a:outputPanel ajaxRendered="true" id="outEliminar">
+										         <a:commandLink id="removeRow"  rendered="#{alertasEvalEditFC.habEliminar(rowNr)}"
+													action="#{alertasEvalEditFC.delectRow(rowNr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="panelBotones,panelGrillaDestinatario,panelParamentros"/>
+												</a:outputPanel>
+												</rich:column>
+											
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                         value="#{messages.msg_save}"
+                           onclick="return confirm('#{messages.msg_confirm_save}');"
+                         action="#{alertasEvalEditFC.save()}"
+                        rendered="#{!alertasEvalEditFC.modoUpdate}"/>
+
+            <h:commandButton id="updates"
+                           value="#{messages.msg_update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                         action="#{alertasEvalEditFC.update()}"
+                       rendered="#{alertasEvalEditFC.modoUpdate}"/>
+
+           
+            <s:button id="cancelEdit2"
+                   value="Volver" includePageParams="false"
+             propagation="none"
+                    view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+               />
+
+           
+
+        </div>
+          <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!alertasEvalEditFC.modoUpdate}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{alertasEvalEditFC.modoUpdate}" styleClass="labelClass"/>
+        </div>
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

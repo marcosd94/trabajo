@@ -1,0 +1,102 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.ClasificadorUoRequisito_}</h1>
+
+    <h:form id="clasificadorUoRequisito" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{clasificadorUoRequisitoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.ClasificadorUoRequisito_}</f:facet>
+
+	            <s:decorate id="requisitoMinimoCuoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUoRequisito_idRequisitoMinimoCuo}</ui:define>
+	                <h:selectOneMenu id="requisitoMinimoCuo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoRequisitoHome.idRequisitoMinimoCuo}">
+	                    <f:selectItems value="#{requisitoMinimoCuosSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="clasificadorUoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUoRequisito_idClasificadorUo}</ui:define>
+	                <h:selectOneMenu id="clasificadorUo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoRequisitoHome.idClasificadorUo}">
+	                    <f:selectItems value="#{clasificadorUosSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUoRequisito_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoRequisitoHome.instance.descripcion}">
+	                    <a:support event="onblur" reRender="descripcionField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUoRequisito_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{clasificadorUoRequisitoHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{clasificadorUoRequisitoHome.persist}"
+                       disabled="#{!clasificadorUoRequisitoHome.wired}"                      
+                       rendered="#{!clasificadorUoRequisitoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{clasificadorUoRequisitoHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{clasificadorUoRequisitoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{clasificadorUoRequisitoHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{clasificadorUoRequisitoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/clasificadorUoRequisito/ClasificadorUoRequisitoList.xhtml"
+                rendered="#{clasificadorUoRequisitoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty clasificadorUoRequisitoFrom ? 'planificacion/clasificadorUoRequisito/ClasificadorUoRequisitoList' : clasificadorUoRequisitoFrom}.xhtml"
+                rendered="#{!clasificadorUoRequisitoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

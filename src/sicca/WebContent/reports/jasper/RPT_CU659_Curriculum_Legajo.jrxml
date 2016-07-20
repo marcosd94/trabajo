@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU659_Curriculum_Legajo" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="688"/>
+	<parameter name="nombre_completo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_persona" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[new Long(26)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grupo_sangre" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reh_instituto" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reh_hospital" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reh_particular" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="entrenamiento" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ninguno" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="otro" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="descripcion" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="antiguedad" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mostrarObs" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["NO"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="observaciones" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT LEGAJOS.ID_LEGAJO AS NRO_LEGAJO, PERSONA.NOMBRES AS NOMBRES,
+PERSONA.APELLIDOS AS APELLIDOS, PERSONA.DOCUMENTO_IDENTIDAD AS DOCUMENTO_IDENTIDAD,
+PERSONA.FECHA_NACIMIENTO AS FECHA_NACIMIENTO, CIUDAD_NAC.DESCRIPCION AS LUGAR_NACIMIENTO,
+PAIS_NAC.DESCRIPCION AS PAI_NAC, DATOS_ESPECIFICOS.DESCRIPCION AS NACIONALIDAD,
+REF_SEXO.DESC_LARGA AS SEXO, PAIS.DESCRIPCION AS PAIS_EXPEDICION_DOC,
+REF_EST.DESC_LARGA AS ESTADO_CIVIL, PERSONA.CALLE_PRINCIPAL AS CALLE_PRINCIPAL,
+PERSONA.PRIMERA_LATERAL AS PRIMERA_LATERAL, PERSONA.SEGUNDA_LATERAL AS SEGUNDA_LATERAL,
+PERSONA.DEPARTAMENTO_NRO AS NRO_DPTO,PAIS_DIR.DESCRIPCION AS PAIS_DIR, DEPARTAMENTO.DESCRIPCION AS DEPARTAMENTO_DIR,
+CIUDAD_DIR.DESCRIPCION AS CIUDAD_DIR, BARRIO.DESCRIPCION AS BARRIO, PERSONA.TELEFONOS AS TELEFONOS,
+PERSONA.E_MAIL AS E_MAIL, PERSONA.GRUPO_SANGUINEO_ABO, PERSONA.GRUPO_SANGUINEO_RH, PERSONA.ACTIVO AS  ESTADO
+FROM GENERAL.PERSONA PERSONA
+JOIN LEGAJO.LEGAJOS LEGAJOS ON LEGAJOS.ID_PERSONA = PERSONA.ID_PERSONA
+LEFT OUTER JOIN GENERAL.CIUDAD CIUDAD_NAC
+ON CIUDAD_NAC.ID_CIUDAD = PERSONA.ID_CIUDAD_NAC
+LEFT OUTER JOIN GENERAL.DEPARTAMENTO DPTO_NAC
+ON DPTO_NAC.ID_DEPARTAMENTO = CIUDAD_NAC.ID_DEPARTAMENTO
+LEFT OUTER JOIN GENERAL.PAIS PAIS_NAC
+ON PAIS_NAC.ID_PAIS = DPTO_NAC.ID_PAIS
+LEFT OUTER JOIN GENERAL.CIUDAD CIUDAD_DIR
+ON CIUDAD_DIR.ID_CIUDAD = PERSONA.ID_CIUDAD_DIRECC
+LEFT OUTER JOIN GENERAL.DEPARTAMENTO DEPARTAMENTO
+ON DEPARTAMENTO.ID_DEPARTAMENTO = CIUDAD_DIR.ID_DEPARTAMENTO
+LEFT OUTER JOIN GENERAL.PAIS PAIS_DIR
+ON PAIS_DIR.ID_PAIS = DEPARTAMENTO.ID_PAIS
+LEFT OUTER JOIN GENERAL.BARRIO BARRIO
+ON BARRIO.ID_BARRIO = PERSONA.ID_BARRIO
+JOIN GENERAL.PAIS PAIS
+ON PAIS.ID_PAIS = PERSONA.ID_PAIS_EXPEDICION_DOC
+JOIN SELECCION.DATOS_ESPECIFICOS DATOS_ESPECIFICOS
+ON DATOS_ESPECIFICOS.ID_DATOS_ESPECIFICOS = PERSONA.ID_DATOS_ESPECIFICOS_NACIONALID
+JOIN SELECCION.REFERENCIAS REF_SEXO
+ON REF_SEXO.DESC_ABREV = PERSONA.SEXO AND REF_SEXO.DOMINIO = 'SEXO'
+left outer JOIN SELECCION.REFERENCIAS REF_EST
+ON REF_EST.DESC_ABREV = PERSONA.ESTADO_CIVIL AND REF_EST.DOMINIO = 'ESTADO_CIVIL'
+WHERE PERSONA.ID_PERSONA = $P{id_persona}]]>
+	</queryString>
+	<field name="nro_legajo" class="java.lang.Long"/>
+	<field name="nombres" class="java.lang.String"/>
+	<field name="apellidos" class="java.lang.String"/>
+	<field name="documento_identidad" class="java.lang.String"/>
+	<field name="fecha_nacimiento" class="java.sql.Date"/>
+	<field name="lugar_nacimiento" class="java.lang.String"/>
+	<field name="pai_nac" class="java.lang.String"/>
+	<field name="nacionalidad" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="pais_expedicion_doc" class="java.lang.String"/>
+	<field name="estado_civil" class="java.lang.String"/>
+	<field name="calle_principal" class="java.lang.String"/>
+	<field name="primera_lateral" class="java.lang.String"/>
+	<field name="segunda_lateral" class="java.lang.String"/>
+	<field name="nro_dpto" class="java.lang.String"/>
+	<field name="pais_dir" class="java.lang.String"/>
+	<field name="departamento_dir" class="java.lang.String"/>
+	<field name="ciudad_dir" class="java.lang.String"/>
+	<field name="barrio" class="java.lang.String"/>
+	<field name="telefonos" class="java.lang.String"/>
+	<field name="e_mail" class="java.lang.String"/>
+	<field name="grupo_sanguineo_abo" class="java.lang.String"/>
+	<field name="grupo_sanguineo_rh" class="java.lang.String"/>
+	<field name="estado" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="0" width="555" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CURRICULUM  VITAE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-6" positionType="Float" mode="Opaque" x="0" y="44" width="555" height="47" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#006666"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="24"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nombre_completo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="27"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Datos_Personales.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="138">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="31"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Doc_Adicionales.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="33" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATOS DE SALUD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="50" width="87" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grupo Sanguíneo:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="87" y="50" width="468" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{grupo_sangre}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="69" width="555" height="21"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Enfermedades.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="91" width="555" height="18"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Lic_Medicas.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="110" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRT_CU659_Seguros.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="146">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DISCAPACIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Opaque" x="0" y="18" width="555" height="18" forecolor="#FFFFFF" backcolor="#006666"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Apoyo recibido relativo a la capacidad según fuente (si requiere)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="36" width="312" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[En instituto de rehabilitación (por ejemplo INPRO, otros):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="53" width="312" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[En centro de salud u hospital general:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="70" width="312" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[En forma particular para rehabilitación (fonoaudiología, otros):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="87" width="312" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[En forma particular para entrenamiento (braille, lenguaje de señas):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="362" y="36" width="135" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Otra clase de apoyo ¿Cuál?:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="362" y="87" width="135" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ninguno:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="312" y="36" width="50" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{reh_instituto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="497" y="36" width="58" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{otro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="497" y="87" width="58" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ninguno}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="312" y="53" width="50" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{reh_hospital}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="312" y="70" width="50" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{reh_particular}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="312" y="87" width="50" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{entrenamiento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="362" y="53" width="193" height="34"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{descripcion}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="106" width="555" height="20"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Discapacidad.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="128" width="555" height="18"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU569_Familiares.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="68">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[FORMACIÓN ACADÉMICA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="555" height="14"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Estudios.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="36" width="555" height="15"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Idiomas.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="53" width="555" height="15"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Capacitaciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="32">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DECLARACIÓN JURADA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="555" height="12"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Declaracion_Jurada.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RECORRIDO LABORAL EN EL SECTOR PRIVADO]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="18" width="555" height="15"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Exp_Laboral.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="86">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RECORRIDO LABORAL EN EL SECTOR PÚBLICO]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="64" width="555" height="22"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Evaluacion.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="18" width="62" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Antiguedad:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="62" y="18" width="468" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{antiguedad}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="38" width="555" height="21"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Recorrido_Laboral.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="54">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="12" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[EVALUACION DE DESEMPEÑO]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="30" width="555" height="20"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Evaluacion_desempenho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="91">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PROCESOS JURÍDICOS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="18" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Inconstitucionalidad.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="41" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Sumarios.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="64" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU569_Excepciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="91">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DESVINCULACIÓN]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="19" width="555" height="22"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Desvinculacion.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="44" width="555" height="18"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Inhabilitados.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="66" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Jubilados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="48">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[VACACIONES]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="555" height="19"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Vacaciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="36">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PERMISOS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="18" width="555" height="17"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Permisos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PREMIOS/RECONOCIMIENTOS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="19" width="555" height="17"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Premios.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="55">
+			<printWhenExpression><![CDATA[$P{mostrarObs}.equals( "SI" )]]></printWhenExpression>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SANCIONES ADMINISTRATIVAS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="18" width="555" height="18"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id_persona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/SUBRPT_CU659_Amonestaciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="59">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[OBSERVACIONES PENDIENTES POR VALIDAR]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="18" width="555" height="37"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{observaciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

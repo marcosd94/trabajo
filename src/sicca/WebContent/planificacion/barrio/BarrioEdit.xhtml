@@ -1,0 +1,134 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Barrio_}</h1>
+    <h:form id="barrio" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{barrioHome.managed ? messages.msg_edit : 'Nueva'} #{messages.Barrio_}</f:facet>
+
+				<a:region> 
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="pais" value="#{barrioFormController.codPais}" 
+						required="true" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{barrioFormController.updateDepartamentoChange()}" reRender="departamentoField,ciudadField"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region>
+				<s:decorate id="departamentoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Barrio_idDepartamento}</ui:define>
+					<h:selectOneMenu id="departamento" required="true" 
+					value="#{barrioFormController.codDepartamento}" style="width:250px">
+						<f:selectItems value="#{barrioFormController.departamentosSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							 action="#{barrioFormController.updateCiudad()}" reRender="ciudadField"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				</a:region>
+				<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Barrio_ciudad}</ui:define>
+					<h:selectOneMenu id="ciudad" value="#{barrioFormController.idCiudad}" 
+					required="true" style="width:250px">
+						<f:selectItems value="#{barrioFormController.ciudadSelecItem}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+
+
+            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{barrioFormController.barrio.descripcion}">
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CondicionSegur_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{barrioFormController.barrio.activo}"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+            </div>
+             <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!barrioHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{barrioHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{barrioFormController.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!barrioHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{barrioFormController.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{barrioHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/barrio/BarrioList.xhtml"
+                rendered="#{barrioHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty barrioFrom ? 'planificacion/barrio/BarrioList' : barrioFrom}.xhtml"
+                rendered="#{!barrioHome.managed}"/>
+
+        </div>
+    </h:form>
+		<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{barrioHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{barrioFormController.barrio.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{barrioHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{barrioFormController.barrio.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{barrioHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{barrioFormController.barrio.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{barrioHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{barrioFormController.barrio.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/ResolucionHomologacionList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('gen_resolucion_exc')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+ <action execute="#{resolucionHomologacionHome.wire}"/>
+ <param name="idConcursoPuestoAgr" value="#{generarResolucionExcFC.idConcursoPuestoAgrExc}"/>
+ <param name="idGrupo" value="#{generarResolucionExcFC.idConcurso411}"/>
+ <param name="idConcursoAgr" value="#{generarResolucionExcFC.idConcurso}"/>
+   <param name="idExcepcion" value="#{genExcIngConcurso589FC.idExcepcion}"/>
+    <param name="texto" />
+ <action execute="#{generarResolucionExcFC.init()}" on-postback="false"/>
+ <param name="fromCU" value="#{generarResolucionExcFC.fromCU}"/>
+ <param name="resolucionHomologacionFrom"/>
+ <param name="resolucionHomologacionIdResolucionHomologacion" value="#{generarResolucionExcFC.idResolucionHomologacion}"/>
+ <param name="plantillaResolucionHomologacionFrom"/>
+ 
+   <navigation from-action="#{generarResolucionExcFC.save()}">
+      <rule if-outcome="persisted">
+         <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+         </redirect>
+      </rule>
+   </navigation>
+
+	<navigation from-action="#{generarResolucionExcFC.update()}">
+      <rule if-outcome="updated">
+         <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+       </redirect>
+      </rule>
+   </navigation>
+	
+ 
+</page>

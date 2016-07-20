@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+  <begin-conversation join="true" flush-mode="MANUAL"/>
+   <action execute="#{firmaResolucionHomologacionExcFC.init()}" on-postback="false"/>
+   
+   <param name="idGrupo" value="#{firmaResolucionHomologacionExcFC.idConcursoPuestoAgr}"/>
+   <param name="idExcepcion" value="#{firmaResolucionHomologacionExcFC.idExcepcion}"/>
+  <param name="fromAct" value="#{firmaResolucionHomologacionExcFC.fromActividad}"/>
+  <param name="texto" value="#{firmaResolucionHomologacionExcFC.texto}"/>
+  
+   <param name="firstResult" value="#{concursoPuestoAgrList.firstResult}"/>
+   <param name="sort" value="#{concursoPuestoAgrList.orderColumn}"/>
+   <param name="dir" value="#{concursoPuestoAgrList.orderDirection}"/>
+   <param name="logic" value="#{concursoPuestoAgrList.restrictionLogicOperator}"/>
+   <param name="obs" value="#{firmaResolucionHomologacionExcFC.obs}"/>
+
+   <param name="from"/>
+   
+   <navigation from-action="#{firmaResolucionHomologacionExcFC.nextTask()}">
+      <rule if-outcome="next">
+         <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+      </rule>
+   </navigation>
+    <navigation from-action="#{firmarResolucionHomologacionFormController.back()}">
+      <rule if-outcome="back">
+         <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+      </rule>
+   </navigation>
+
+ <restrict>#{identity.hasRole('firmarResolucionHomologacion_exc')}</restrict>
+</page>

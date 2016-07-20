@@ -1,0 +1,94 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Funcion Details</f:facet>
+
+        <s:decorate id="idFuncion" template="layout/display.xhtml">
+            <ui:define name="label">Id funcion</ui:define>
+            <h:outputText value="#{funcionHome.instance.idFuncion}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{funcionHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="url" template="layout/display.xhtml">
+            <ui:define name="label">Url</ui:define>
+            <h:outputText value="#{funcionHome.instance.url}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/FuncionEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty funcionFrom ? 'FuncionList' : funcionFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Rol funcions</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="rolFuncionsChildren">
+
+        <h:outputText value="There are no rolFuncions associated with this funcion."
+                   rendered="#{empty funcionHome.rolFuncions}"/>
+
+        <rich:dataTable value="#{funcionHome.rolFuncions}"
+                       var="_rolFuncion"
+                  rendered="#{not empty funcionHome.rolFuncions}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="rolFuncionsTable">
+            <rich:column sortBy="#{_rolFuncion.idRolFuncion}">
+                <f:facet name="header">Id rol funcion</f:facet>
+                <h:outputText value="#{_rolFuncion.idRolFuncion}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectrolFuncion"
+                     value="Select"
+                      view="/RolFuncion.xhtml">
+                    <f:param name="rolFuncionIdRolFuncion"
+                            value="#{_rolFuncion.idRolFuncion}"/>
+                    <f:param name="rolFuncionFrom" value="Funcion"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add rolFuncion"
+                view="/RolFuncionEdit.xhtml">
+            <f:param name="funcionIdFuncion"
+                    value="#{funcionHome.instance.idFuncion}"/>
+            <f:param name="rolFuncionFrom" value="Funcion"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

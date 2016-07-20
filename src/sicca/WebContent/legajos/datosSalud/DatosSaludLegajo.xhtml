@@ -1,0 +1,346 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h1>Datos de Salud</h1>
+	<rich:panel style="width:900px">
+		<f:facet name="header"> #{messages.CU645_panel_grales}</f:facet>
+		<h:panelGrid columns="3">
+			<s:decorate template="/layout/edit.xhtml" id="grupoField">
+				<ui:define name="label">#{messages.CU645_grupo_sangre}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="grupo" style="width : 50px;"
+					value="#{datosSaludLegajoFC.grupoSanguineo}">
+					<f:selectItem id="item1" itemLabel="O" itemValue="O" />
+					<f:selectItem id="item2" itemLabel="A" itemValue="A" />
+					<f:selectItem id="item3" itemLabel="B" itemValue="B" />
+					<f:selectItem id="item4" itemLabel="AB" itemValue="AB" />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml" id="rhField">
+				<ui:define name="label">#{messages.CU645_rh}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="rh" style="width : 50px;"
+					value="#{datosSaludLegajoFC.rh}">
+					<f:selectItem id="it1" itemLabel="+" itemValue="+" />
+					<f:selectItem id="it2" itemLabel="-" itemValue="-" />
+					
+				</h:selectOneMenu>
+			</s:decorate>
+			<!-- 
+				<s:decorate template="/layout/edit.xhtml" id="enfermedadField">
+				<ui:define name="label">#{messages.CU645_enfermedad}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="enfermo" style="width : 50px;"
+					value="#{datosSaludLegajoFC.enfermo}">
+					<f:selectItem id="it2" itemLabel="No" itemValue="false" />
+					<f:selectItem id="it1" itemLabel="Si" itemValue="true" />
+				</h:selectOneMenu>
+			</s:decorate>
+			 -->
+			<s:decorate id="tipoDocSangreField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_tipo_doc}<span
+						class="required">*</span></ui:define>
+				<h:selectOneMenu id="tipoDocSangre"
+					value="#{datosSaludLegajoFC.idTipoDocSangre}"
+					style="width:200px"
+					onclick="#{datosSaludLegajoFC.esOtroTipo()}" onchange="submit()">
+					<f:selectItems
+						value="#{datosSaludLegajoFC.tipoDocSangreSelectItems}" />
+				</h:selectOneMenu>
+
+			</s:decorate>
+			<a:outputPanel id="descripcionSangre">
+					<s:decorate id="descDocSangreField" template="/layout/edit.xhtml" rendered="#{datosSaludLegajoFC.esOtro}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{datosSaludLegajoFC.descTipoDocSangre}"
+							size="30" maxlength="100" />
+					</s:decorate>
+				</a:outputPanel>
+			<s:decorate id="documentoSangreNombreField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomSangreDoc"
+						value="#{datosSaludLegajoFC.nombreDocSangre}" />
+						<h:commandButton value="Descargar"
+								rendered="#{datosSaludLegajoFC.idDocSangre != null}"
+								action="#{datosSaludLegajoFC.abrirDocSangre()}" />
+			</s:decorate>
+			<a:outputPanel id="panelDocSangre">
+				<s:decorate id="adjuntoDocSangre" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU645_btn_seleccionar_doc}<span
+						class="required">*</span></ui:define>
+					<s:fileUpload size="30" id="archivoSangre"
+						contentType="#{datosSaludLegajoFC.contentTypeSangre}"
+						data="#{datosSaludLegajoFC.uploadedFileSangre}"
+						fileName="#{datosSaludLegajoFC.fileNameSangre}"
+						style=" width : 300px;">
+
+					</s:fileUpload>
+				</s:decorate>
+			</a:outputPanel>
+			<s:decorate>
+			<h:commandButton id="updatePersona" eventsQueue="default"
+					value="Guardar"
+					action="#{datosSaludLegajoFC.updatePersona()}"
+					/>
+			<h:commandButton id="btnDelete" eventsQueue="default"
+					value="Eliminar"
+					action="#{datosSaludLegajoFC.eliminarIdDocSangre()}"
+					onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+					rendered="#{datosSaludLegajoFC.idDocSangre != null}"
+					/>
+			</s:decorate>
+		</h:panelGrid>
+	</rich:panel>
+	<br />
+	<rich:panel style="width:900px" id="panelEnfermedades">
+		<f:facet name="header"> #{messages.CU645_panel_reg_enfermedad}</f:facet>
+		<h:panelGrid columns="1">
+			<s:decorate id="observacionEnfermedadField"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_obs}
+				</ui:define>
+				<h:inputTextarea id="observacionEnfermedad" cols="80" rows="3"
+					value="#{datosSaludLegajoFC.obsEnfermedad}">
+					<f:validateLength maximum="250" />
+				</h:inputTextarea>
+			</s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<s:decorate id="tipoDocEnfermedadField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_tipo_doc}<span
+						class="required">*</span></ui:define>
+				<h:selectOneMenu id="tipoDocEnfermedade"
+					value="#{datosSaludLegajoFC.idTipoDocEnfermedad}"
+					style="width:200px"
+					onclick="#{datosSaludLegajoFC.esOtroTipoChequeo()}" onchange="submit()">
+					<f:selectItems
+						value="#{datosSaludLegajoFC.tipoDocEnfermedadesSelectItems}" />
+				</h:selectOneMenu>
+
+			</s:decorate>
+
+
+			<a:outputPanel id="panelDocEnfermedad">
+				<s:decorate id="adjuntoDocEnfermedad" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU645_btn_seleccionar_doc}<span
+						class="required">*</span></ui:define>
+					<s:fileUpload size="30" id="archivoEnfermedad"
+						contentType="#{datosSaludLegajoFC.contentTypeEnfermedad}"
+						data="#{datosSaludLegajoFC.uploadedFileEnfermedad}"
+						fileName="#{datosSaludLegajoFC.fileNameEnfermedad}"
+						style=" width : 300px;">
+
+					</s:fileUpload>
+					#{' '}
+				<h:outputText id="nombreDocEnfermedad"
+						rendered="#{datosSaludLegajoFC.idDocEnfermedad != null}"
+						value="#{datosSaludLegajoFC.nombreDocEnfermedad}" />
+				</s:decorate>
+				<a:outputPanel id="descripcion">
+					<s:decorate id="descDocField" template="/layout/edit.xhtml" rendered="#{datosSaludLegajoFC.esOtroChequeo}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{datosSaludLegajoFC.descTipoDoc}"
+							size="30" maxlength="100" />
+					</s:decorate>
+				</a:outputPanel>
+			</a:outputPanel>
+		</h:panelGrid>
+
+
+		<a:outputPanel id="panelBotonesEnfemedad" ajaxRendered="true">
+			<h:panelGrid columns="3">
+				<h:commandButton id="add" eventsQueue="default"
+					rendered="#{!datosSaludLegajoFC.editEnfermedad}"
+					value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+					action="#{datosSaludLegajoFC.addEnfermedad()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');" />
+
+
+				<h:commandButton id="update" eventsQueue="default"
+					rendered="#{datosSaludLegajoFC.editEnfermedad}"
+					value="#{messages.msg_update}"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{datosSaludLegajoFC.updatedDatosEnfermedad()}" />
+
+
+				<h:commandButton id="cancelEdit" value="#{messages.msg_cancel}"
+					action="#{datosSaludLegajoFC.cancelarEnfermedad()}" />
+			</h:panelGrid>
+		</a:outputPanel>
+
+	</rich:panel>
+
+	<rich:panel id="resultadoEnfermedadesPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU645_panel_enfermedades}(#{datosSaludLegajoFC.listaEnfermedades.size()})</f:facet>
+
+		<div class="results" id="tblEnfermedadesList"
+			style="overflow: scroll;" width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty datosSaludLegajoFC.listaEnfermedades}" /> <rich:dataTable
+			id="enfermedadesList" var="_enfermedad" rows="5" first="0"
+			rendered="#{not empty datosSaludLegajoFC.listaEnfermedades}"
+			value="#{datosSaludLegajoFC.listaEnfermedades}" rowKeyVar="rowNrEnf">
+			
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_obs}</f:facet>
+				<h:outputText value="#{datosSaludLegajoFC.obsCertificadoMedico(rowNrEnf)}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_desc}</f:facet>
+				<h:outputText value="#{datosSaludLegajoFC.descCertificadoMedico(rowNrEnf)}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_documento}</f:facet>
+				<h:commandLink value="Descargar" target="_blank"
+					rendered="#{_enfermedad.documento.idDocumento != null}"
+					action="#{datosSaludLegajoFC.abrirDocEnfermedad(rowNrEnf)}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+				<a:commandLink id="editDet" value="#{messages.msg_edit}"
+					reRender="panelEnfermedades" eventsQueue="default"
+					action="#{datosSaludLegajoFC.editarEnfermedad(rowNrEnf)}" />
+											  #{' '}
+											  
+											  
+								               <a:commandLink id="removeRow"
+					action="#{datosSaludLegajoFC.deleteEnfermedad(rowNrEnf)}"
+					value="#{messages.msg_list_remove}"
+					onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+					reRender="panelEnfermedades" />
+
+			</rich:column>
+		</rich:dataTable> <rich:datascroller for="enfermedadesList" id="scrollEnfermedades"
+			renderIfSinglePage="false" /></div>
+	</rich:panel>
+
+	<br />
+	
+	
+
+	<br />
+	<rich:panel style="width:900px" id="panelSeguros">
+		<f:facet name="header"> #{messages.CU645_panel_reg_seg_med}</f:facet>
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/edit.xhtml" id="seguroField">
+				<ui:define name="label">#{messages.CU645_nombre_seg}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="seguro" style="width : 250px;"
+					value="#{datosSaludLegajoFC.idSeguro}">
+					<f:selectItems
+						value="#{datosSaludLegajoFC.seguroMedicoSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate id="fechaIngresoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_fec_ingreso}<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar id="fechaIngreso" oninputkeyup="ponerBarra(event);"
+					locale="#{siccaAppHelper.localeCode}"
+					value="#{datosSaludLegajoFC.fechaIngreso}" datePattern="dd/MM/yyyy"
+					enableManualInput="true" />
+			</s:decorate>
+			<s:decorate id="planField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_plan}</ui:define>
+				<h:inputText id="plan" value="#{datosSaludLegajoFC.plan}" size="50"
+					maxlength="50" />
+			</s:decorate>
+
+			<s:decorate id="aseguradorField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_nombre_aseg}</ui:define>
+				<h:inputText id="asegurador"
+					value="#{datosSaludLegajoFC.asegurador}" size="50" maxlength="100" />
+			</s:decorate>
+			
+			<s:decorate id="telefonoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU645_telefono_seg}</ui:define>
+				<h:inputText id="telefono"
+					value="#{datosSaludLegajoFC.telefono}" size="50" maxlength="20" />
+			</s:decorate>
+		</h:panelGrid>
+
+		<a:outputPanel id="panelBotonesSeguro" ajaxRendered="true">
+			<h:panelGrid columns="3">
+				<h:commandButton id="addSeguro" eventsQueue="default"
+					rendered="#{!datosSaludLegajoFC.editSeguro}"
+					value="#{messages.CU645_btn_add_seg}"
+					action="#{datosSaludLegajoFC.addSeguro()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');" />
+
+
+				<h:commandButton id="updateSeguro" eventsQueue="default"
+					rendered="#{datosSaludLegajoFC.editSeguro}"
+					value="#{messages.CU645_btn_up_seg}"
+					onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+					action="#{datosSaludLegajoFC.updatedSeguro()}" />
+
+
+				<h:commandButton id="cancelEditSeguro"
+					value="#{messages.CU645_btn_cancel_seg}"
+					action="#{datosSaludLegajoFC.cancelarSeguro()}" />
+			</h:panelGrid>
+		</a:outputPanel>
+	</rich:panel>
+
+	<rich:panel id="resultadoSeguroPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU645_panel_seg_med}(#{datosSaludLegajoFC.listaSeguros.size()})</f:facet>
+
+		<div class="results" id="tblSeguroList" style="overflow: scroll;"
+			width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty datosSaludLegajoFC.listaSeguros}" /> <rich:dataTable
+			id="seguroList" var="_seg" rows="5" first="0"
+			rendered="#{not empty datosSaludLegajoFC.listaSeguros}"
+			value="#{datosSaludLegajoFC.listaSeguros}" rowKeyVar="rowNrSeg">
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_seg}</f:facet>
+				<h:outputText value="#{_seg.datosEspSeguroMedico.descripcion}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_plan}</f:facet>
+				<h:outputText value="#{_seg.planSeguroMedico}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Asegurador</f:facet>
+				<h:outputText value="#{_seg.nombreAsegurador}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Teléfono</f:facet>
+				<h:outputText value="#{_seg.telefonoSeguro}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_fec_ingreso}</f:facet>
+				<h:outputText value="#{_seg.fechaIngreso}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+				<a:commandLink id="editSeg" value="#{messages.msg_edit}"
+					reRender="panelLicencias" eventsQueue="default"
+					action="#{datosSaludLegajoFC.editarSeguro(rowNrSeg)}" />
+											  #{' '}
+											  
+											  
+								               <a:commandLink id="removeSeg"
+					action="#{datosSaludLegajoFC.deleteSeguro(rowNrSeg)}"
+					value="#{messages.msg_list_remove}"
+					onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+					reRender="panelSeguros" />
+
+			</rich:column>
+		</rich:dataTable> <rich:datascroller for="seguroList" id="scrollSeguro"
+			renderIfSinglePage="false" /></div>
+	</rich:panel>
+</ui:composition>

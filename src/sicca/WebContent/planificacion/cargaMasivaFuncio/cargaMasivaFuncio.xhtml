@@ -1,0 +1,174 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	
+
+	<ui:define name="body">
+<script type="text/javascript">  
+    function start() {  
+        startButton1.disable();  
+        window['progress'] = setInterval(function() {  
+            var oldValue = pbClient.getValue(),  
+            newValue = oldValue + 10;  
+  
+            pbClient.setValue(pbClient.getValue() + 10);  
+  
+            if(newValue == 100) {  
+                clearInterval(window['progress']);  
+            }    
+        }, 1000);  
+    }  
+ 
+    function cancel() {  
+        clearInterval(window['progress']);  
+        pbClient.setValue(0);  
+        startButton1.enable();  
+    }  
+
+   
+</script> 
+		<h1>#{messages.CU547_title}</h1>
+
+		<h:form id="empleadoPuestoSearch" enctype="multipart/form-data">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+										
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					            <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="80"
+									disabled="true" />
+								 #{' '}
+	               
+					  			<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('/planificacion/cargaMasivaFuncio/cargaMasivaFuncio')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="80"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('/planificacion/cargaMasivaFuncio/cargaMasivaFuncio')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="80"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('/planificacion/cargaMasivaFuncio/cargaMasivaFuncio')}" />
+							</s:decorate>
+						</a:region>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}<span class="required">*</span>
+								</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+									reRender="orgCodigo2,orgDenominacion2,orden2" />
+							</h:inputText>
+								#{' '}
+								<h:inputText id="orgDenominacion2" size="80" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+							 	#{' '}
+		               			<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('/planificacion/cargaMasivaFuncio/cargaMasivaFuncio')}" />
+						</s:decorate>
+					</a:outputPanel>
+				</h:panelGrid>
+				
+				<fieldset id="idFieldSetPt" style="width: 700px;"><legend>PT</legend>
+				<h:panelGrid columns="1" id="panelGridPt">
+					<s:decorate id="idDecoratePt" template="/layout/display.xhtml">
+						<ui:define name="label">Descripción 
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="pt" style="width : 250px;"
+							value="#{cargaMasivaFuncioFC.idPt}"
+							reRender="orgCodigo2,orgDenominacion2,orden2,pt">
+							<f:selectItems value="#{cargaMasivaFuncioFC.updatePt()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid></fieldset> 
+				
+			
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Archivo CSV a procesar</ui:define>
+					<s:fileUpload size="30" contentType="#{cargaMasivaFuncioFC.cType}"
+						data="#{cargaMasivaFuncioFC.uFile}"
+						fileName="#{cargaMasivaFuncioFC.fName}" style=" width : 651px;">
+						<s:conversationPropagation type="join" />
+					</s:fileUpload>
+				</s:decorate>
+				
+			</rich:simpleTogglePanel>
+			<div class="actionButtons"> <h:commandButton id="search"
+				value="#{messages.CU547_btnInsetMassive}"
+				action="#{cargaMasivaFuncioFC.insertarMassiveLessRestrictive()}">
+				<f:param name="id" value="#{cargaMasivaFuncioFC.idPt}" />
+				<f:param name="firstResult" value="0" />
+			</h:commandButton> <s:button id="reset" value="Limpiar"
+				action="#{cargaMasivaFuncioFC.limpiar()}">
+			</s:button> 
+			<s:button value="#{messages.CU412_volver}" propagation="nest"
+				view="/#{empty from ? 'home' : from}.xhtml" /></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

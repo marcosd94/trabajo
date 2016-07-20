@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBREPORT_CU753_Documentos" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT R.DESC_LARGA AS TIPO_DOCUMENTO, D.DOCUMENTO_NRO, D.OTRO_DATO AS ESPECIALIDAD
+  FROM LEGAJO.DOCUMENTOS_PERSONA D
+  JOIN SELECCION.REFERENCIAS R
+  ON R.VALOR_NUM = D.TIPO_DOCUMENTO
+  JOIN LEGAJO.MIGRACIONES M
+  ON M.ID_TABLA = D.id_documentos_persona
+  WHERE R.DOMINIO = 'LEGAJO_DOC'
+  AND M.tabla_sicca = 'legajo.documentos_persona'
+AND M.ID_PERSONA = $P{id}]]>
+	</queryString>
+	<field name="tipo_documento" class="java.lang.String"/>
+	<field name="documento_nro" class="java.lang.String"/>
+	<field name="especialidad" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Bloque de Documentos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="0" y="20" width="165" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo de Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="165" y="20" width="108" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nro.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="273" y="20" width="159" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Especialidad]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="165" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_documento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="165" y="0" width="108" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{documento_nro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="273" y="0" width="159" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{especialidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

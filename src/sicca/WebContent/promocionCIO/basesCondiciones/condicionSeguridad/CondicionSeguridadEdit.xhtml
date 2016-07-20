@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Condiciones de Seguridad</h1>
+
+		<rich:modalPanel id="valoracionMiniModal" width="650" height="350"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">#{messages.Tab06_Title_popup}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab06">
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px"><rich:dataTable
+						id="tablaPopupLink10" cellpadding="0" cellspacing="0" width="700"
+						border="0" var="valor"
+						value="#{condicionSeguridadFormController.listaValoracion}">
+
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column colspan="2" width="500px">
+									<h:outputText value="Condiciones" />
+								</rich:column>
+
+								<rich:column colspan="3" width="200px">
+									<h:outputText value="#{messages.Tab02_Escalas}" />
+								</rich:column>
+								<rich:column breakBefore="true">
+									<h:outputText value="Tipo" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Descripcion}" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Descripcion}" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Desde}" />
+								</rich:column>
+								<rich:column>
+									<h:outputText value="#{messages.Tab02_Hasta}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column colspan="1" style="background-color:lightgrey;"
+							width="100px">
+							<h:outputText value="#{valor.condicionSegur.orden}" />
+						</rich:column>
+						<rich:column colspan="4" style="background-color:lightgrey;"
+							width="100px">
+							<h:outputText value="#{valor.condicionSegur.descripcion}" />
+						</rich:column>
+						<rich:subTable var="esc" value="#{valor.listaEscalaCondSeg}"
+							rowKeyVar="subRow">
+							<rich:column colspan="2">
+							</rich:column>
+							
+							<rich:column width="100px;">
+								<h:outputText value="#{esc.descripcion}" size="50" />
+							</rich:column>
+							<rich:column width="100px;" style="text-align: center;">
+								<h:outputText value="#{esc.desde}" size="50" />
+							</rich:column>
+							<rich:column width="100px;" style="text-align: center;">
+								<h:outputText value="#{esc.hasta}" />
+							</rich:column>
+						</rich:subTable>
+					</rich:dataTable></div>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="cancel_tap03" value="Cancelar" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('valoracionMiniModal')" /></div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<h:form id="funciones" styleClass="edit">
+			<h:panelGrid columns="1">
+				<rich:panel style="border:none;">
+					<table align="right">
+						<tr>
+							<td><s:decorate id="nivelField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_nivel}</ui:define>
+								<h:inputText
+									value="#{condicionSeguridadFormController.nivelEntidad.nenNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="entidadField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_entidad}</ui:define>
+								<h:inputText
+									value="#{condicionSeguridadFormController.sinEntidad.entNombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="concursoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_concurso}</ui:define>
+								<h:inputText
+									value="#{condicionSeguridadFormController.concurso.nombre}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+							<td><s:decorate id="tipoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_tipo}</ui:define>
+								<h:inputText
+									value="#{condicionSeguridadFormController.concurso.datosEspecificosTipoConc.descripcion}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+						<tr>
+							<td><s:decorate id="puestoField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU162_puesto}</ui:define>
+								<h:inputText
+									value="#{condicionSeguridadFormController.concursoPuestoAgr.descripcionGrupo}"
+									disabled="true" size="50" />
+							</s:decorate></td>
+						</tr>
+					</table>
+				</rich:panel>
+
+
+
+
+
+				<rich:panel id="panelCondicion">
+					<f:facet name="header">Cargar Condiciones de Seguridad</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate id="btnField" template="/layout/edit.xhtml">
+							<a:commandButton id="showValoracionModalButton"
+								value="Ver Escala" reRender="valoracionMiniModal"
+								action="#{condicionSeguridadFormController.buscarValoracion()}"
+								oncomplete="#{rich:component('valoracionMiniModal')}.show()" />
+						</s:decorate>
+
+						<s:decorate id="msgField" template="/layout/edit.xhtml">
+							<h:outputText id="msg"
+								value="#{condicionSeguridadFormController.mensaje}"
+								style="color:red;" />
+						</s:decorate>
+
+					</h:panelGrid>
+					<div style="clear: both; overflow: auto; HEIGHT: 350px"><rich:dataTable
+						cellpadding="0" cellspacing="0" width="600px" border="0"
+						var="record" rowKeyVar="row"
+						value="#{condicionSeguridadFormController.listaDtoLink10}">
+
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column width="250px">
+									<h:outputText value="#{messages.CU120_link10}" />
+								</rich:column>
+								<rich:column width="50px">
+									<h:outputText value="#{messages.Tab02_Puntaje}" />
+								</rich:column>
+								<rich:column width="250px">
+									<h:outputText value="#{messages.Tab05_justificacion}" />
+								</rich:column>
+								<rich:column width="250px">
+									<h:outputText value="#{messages.Tab05_ajuste}" />
+								</rich:column>
+								<rich:column width="50px">
+									<h:outputText value="#{messages.Tab02_Activo}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column width="250px">
+
+							<h:outputText value="#{record.condicionSegur.descripcion}" />
+
+						</rich:column>
+						<rich:column width="50px;" style="text-align: center;">
+
+							<h:inputText 
+							value="#{record.puntaje}" 
+							size="10" 
+							styleClass="numeric"
+							onkeypress="return soloNumeros(event);"  
+							disabled="true">
+							<!--disabled="#{!condicionSeguridadFormController.habilitar}">-->
+							</h:inputText>
+						</rich:column>
+						<rich:column width="250px">
+
+							<h:inputText 
+							value="#{record.justificacion}" 
+							size="50" 
+							maxlength="400"
+							disabled="true"/>  
+							<!--disabled="#{!condicionSeguridadFormController.habilitar}"/>-->
+
+						</rich:column>
+
+						<rich:column width="250px">
+
+							<h:inputText 
+							value="#{record.ajustes}" 
+							size="50" 
+							maxlength="400"  
+							disabled="true"/>
+							<!--disabled="#{!condicionSeguridadFormController.habilitar}"/>-->
+
+						</rich:column>
+
+						<rich:column width="50px;" style="text-align: center;">
+
+							<h:selectBooleanCheckbox value="#{record.activo}" disabled="true"/>
+						</rich:column>
+
+					</rich:dataTable></div>
+
+
+				</rich:panel>
+			</h:panelGrid>
+
+			<h:panelGrid columns="3">
+				<h:commandButton id="save" value="#{messages.msg_save}"
+					action="#{condicionSeguridadFormController.guardar()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');"
+					rendered="#{condicionSeguridadFormController.habilitar and condicionSeguridadFormController.listaCondicionAux.size() == 0}" />
+
+				<h:commandButton id="updated" value="#{messages.msg_update}"
+					action="#{condicionSeguridadFormController.updated()}"
+					onclick="return confirm('#{messages.msg_confirm_update}');"
+					rendered="#{condicionSeguridadFormController.habilitar and condicionSeguridadFormController.listaCondicionAux.size() > 0}" />
+				<s:button id="cancelEdit" value="Volver" propagation="join"
+					view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml" />
+			</h:panelGrid>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

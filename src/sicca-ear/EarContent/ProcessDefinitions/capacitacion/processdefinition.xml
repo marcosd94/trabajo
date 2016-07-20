@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="capacitacion">
+
+
+	<start-state name="Inicio">
+		<transition to="CARGAR_CAPACITACION_ENVIAR_APROB" name="start_TO_carCapEnvApr"></transition>
+	</start-state>
+
+
+	<task-node name="CARGAR_CAPACITACION_ENVIAR_APROB">
+		<task name="CARGAR_CAPACITACION_ENVIAR_APROB">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_CAPACITACION" name="carCapEnvApr_TO_aprCap"></transition>
+	</task-node>
+
+	<task-node name="APROBAR_CAPACITACION">
+		<task name="APROBAR_CAPACITACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="PUBLICAR_CAPACITACION" name="aprCap_TO_pubCap"></transition>
+		<transition to="REVISAR_CAPACITACION" name="aprCap_TO_revCap"></transition>
+	</task-node>
+
+	<task-node name="REVISAR_CAPACITACION">
+		<task name="REVISAR_CAPACITACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_CAPACITACION" name="revCap_TO_aprCap"></transition>
+	</task-node>
+
+	<task-node name="PUBLICAR_CAPACITACION">
+		<task name="PUBLICAR_CAPACITACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="RECEPCIONAR_POST_INSC" name="pubCap_TO_recPosIns"></transition>
+		<transition to="Fin" name="pubCap_TO_end"></transition>
+	</task-node>
+
+	<task-node name="RECEPCIONAR_POST_INSC">
+		<task name="RECEPCIONAR_POST_INSC">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="REPROGRAMAR_CANCELAR_CAPAC" name="recPosIns_TO_repCanCap"></transition>
+		<transition to="REGISTRAR_COMISION" name="recPosIns_TO_regCom"></transition>
+		<transition to="INSCRIPCION_LISTA" name="recPosIns_TO_insLis"></transition>
+	</task-node>
+
+	<task-node name="REPROGRAMAR_CANCELAR_CAPAC">
+		<task name="REPROGRAMAR_CANCELAR_CAPAC">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="RECEPCIONAR_POST_INSC" name="repCanCap_TO_recPosIns"></transition>
+		<transition to="Fin" name="repCanCap_TO_end"></transition>
+	</task-node>
+
+	<task-node name="REGISTRAR_COMISION">
+		<task name="REGISTRAR_COMISION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="EVALUAR_POSTULANTES" name="regCom_TO_evaPos"></transition>
+	</task-node>
+
+	<task-node name="EVALUAR_POSTULANTES">
+		<task name="EVALUAR_POSTULANTES">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="PUBLICAR_SELECCIONADOS" name="evalPos_TO_pubSel"></transition>
+	</task-node>
+
+	<task-node name="INSCRIPCION_LISTA">
+		<task name="INSCRIPCION_LISTA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="PUBLICAR_SELECCIONADOS" name="insLis_TO_pubSel"></transition>
+	</task-node>
+
+	<task-node name="PUBLICAR_SELECCIONADOS">
+		<task name="PUBLICAR_SELECCIONADOS">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="Fin" name="pubSel_TO_end"></transition>
+	</task-node>
+
+
+	<end-state name="Fin"></end-state>
+
+
+</process-definition>

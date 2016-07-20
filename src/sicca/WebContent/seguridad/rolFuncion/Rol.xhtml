@@ -1,0 +1,161 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Rol Details</f:facet>
+
+        <s:decorate id="idRol" template="layout/display.xhtml">
+            <ui:define name="label">Id rol</ui:define>
+            <h:outputText value="#{rolHome.instance.idRol}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{rolHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{rolHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{rolHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{rolHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{rolHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{rolHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/RolEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty rolFrom ? 'RolList' : rolFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Rol funcions</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="rolFuncionsChildren">
+
+        <h:outputText value="There are no rolFuncions associated with this rol."
+                   rendered="#{empty rolHome.rolFuncions}"/>
+
+        <rich:dataTable value="#{rolHome.rolFuncions}"
+                       var="_rolFuncion"
+                  rendered="#{not empty rolHome.rolFuncions}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="rolFuncionsTable">
+            <rich:column sortBy="#{_rolFuncion.idRolFuncion}">
+                <f:facet name="header">Id rol funcion</f:facet>
+                <h:outputText value="#{_rolFuncion.idRolFuncion}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectrolFuncion"
+                     value="Select"
+                      view="/RolFuncion.xhtml">
+                    <f:param name="rolFuncionIdRolFuncion"
+                            value="#{_rolFuncion.idRolFuncion}"/>
+                    <f:param name="rolFuncionFrom" value="Rol"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add rolFuncion"
+                view="/RolFuncionEdit.xhtml">
+            <f:param name="rolIdRol"
+                    value="#{rolHome.instance.idRol}"/>
+            <f:param name="rolFuncionFrom" value="Rol"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Usuario rols</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="usuarioRolsChildren">
+
+        <h:outputText value="There are no usuarioRols associated with this rol."
+                   rendered="#{empty rolHome.usuarioRols}"/>
+
+        <rich:dataTable value="#{rolHome.usuarioRols}"
+                       var="_usuarioRol"
+                  rendered="#{not empty rolHome.usuarioRols}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="usuarioRolsTable">
+            <rich:column sortBy="#{_usuarioRol.idUsuarioRol}">
+                <f:facet name="header">Id usuario rol</f:facet>
+                <h:outputText value="#{_usuarioRol.idUsuarioRol}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectusuarioRol"
+                     value="Select"
+                      view="/UsuarioRol.xhtml">
+                    <f:param name="usuarioRolIdUsuarioRol"
+                            value="#{_usuarioRol.idUsuarioRol}"/>
+                    <f:param name="usuarioRolFrom" value="Rol"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add usuarioRol"
+                view="/UsuarioRolEdit.xhtml">
+            <f:param name="rolIdRol"
+                    value="#{rolHome.instance.idRol}"/>
+            <f:param name="usuarioRolFrom" value="Rol"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

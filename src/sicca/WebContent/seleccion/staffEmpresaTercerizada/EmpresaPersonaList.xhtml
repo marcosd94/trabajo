@@ -1,0 +1,224 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="empresaPersonaSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="EmpresaPersona Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Cargo</ui:define>
+                <h:inputText id="cargo" value="#{empresaPersonaList.empresaPersona.cargo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{empresaPersonaList.empresaPersona.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{empresaPersonaList.empresaPersona.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{empresaPersonaList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/EmpresaPersonaList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">EmpresaPersona Search Results (#{empty empresaPersonaList.resultList ? 0 : (empresaPersonaList.paginated ? empresaPersonaList.resultCount : empresaPersonaList.resultList.size)})</f:facet>
+    <div class="results" id="empresaPersonaList">
+
+    <h:outputText value="The empresaPersona search returned no results."
+               rendered="#{empty empresaPersonaList.resultList}"/>
+
+    <rich:dataTable id="empresaPersonaList"
+                var="_empresaPersona"
+              value="#{empresaPersonaList.resultList}"
+           rendered="#{not empty empresaPersonaList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Id sel empresa persona"/>
+                    <ui:param name="propertyPath" value="empresaPersona.idSelEmpresaPersona"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.idSelEmpresaPersona}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Empr tercerizada id empresa tercerizada"/>
+                    <ui:param name="propertyPath" value="empresaPersona.emprTercerizada.idEmpresaTercerizada"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.emprTercerizada.idEmpresaTercerizada}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Cargo"/>
+                    <ui:param name="propertyPath" value="empresaPersona.cargo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.cargo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Id persona"/>
+                    <ui:param name="propertyPath" value="empresaPersona.idPersona"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.idPersona}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="empresaPersona.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="empresaPersona.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="empresaPersona.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="empresaPersona.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{empresaPersonaList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="empresaPersona.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_empresaPersona.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'EmpresaPersona' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="empresaPersonaViewId">
+                <f:param name="empresaPersonaIdSelEmpresaPersona"
+                        value="#{_empresaPersona.idSelEmpresaPersona}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/EmpresaPersonaEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="empresaPersonaEdit"
+                rendered="#{empty from}">
+                <f:param name="empresaPersonaIdSelEmpresaPersona"
+                        value="#{_empresaPersona.idSelEmpresaPersona}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/EmpresaPersonaList.xhtml"
+            rendered="#{empresaPersonaList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/EmpresaPersonaList.xhtml"
+            rendered="#{empresaPersonaList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{empresaPersonaList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/EmpresaPersonaList.xhtml"
+            rendered="#{empresaPersonaList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{empresaPersonaList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/EmpresaPersonaList.xhtml"
+            rendered="#{empresaPersonaList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{empresaPersonaList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/EmpresaPersonaEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create empresaPersona">
+            <f:param name="empresaPersonaIdSelEmpresaPersona"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

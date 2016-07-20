@@ -1,0 +1,1 @@
+﻿ALTER TABLE general.persona DROP celular; 

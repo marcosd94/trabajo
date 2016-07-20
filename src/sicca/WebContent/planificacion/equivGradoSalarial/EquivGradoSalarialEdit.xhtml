@@ -1,0 +1,104 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.EquivGradoSalarial_}</h1>
+
+    <h:form id="equivGradoSalarial" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{equivGradoSalarialHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.EquivGradoSalarial_}</f:facet>
+
+	            <s:decorate id="gradoSalarialField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EquivGradoSalarial_idGradoSalarial}</ui:define>
+	                <h:selectOneMenu id="gradoSalarial"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{equivGradoSalarialHome.idGradoSalarial}">
+	                    <f:selectItems value="#{gradoSalarialsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="montoMinimoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EquivGradoSalarial_montoMinimo}</ui:define>
+	                <h:inputText id="montoMinimo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{equivGradoSalarialHome.instance.montoMinimo}">
+	                    <a:support event="onblur" reRender="montoMinimoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="montoMaximoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EquivGradoSalarial_montoMaximo}</ui:define>
+	                <h:inputText id="montoMaximo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{equivGradoSalarialHome.instance.montoMaximo}">
+	                    <a:support event="onblur" reRender="montoMaximoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="anhoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EquivGradoSalarial_anho}</ui:define>
+	                <h:inputText id="anho"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{equivGradoSalarialHome.instance.anho}">
+	                    <a:support event="onblur" reRender="anhoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{equivGradoSalarialHome.persist}"
+                       disabled="#{!equivGradoSalarialHome.wired}"                      
+                       rendered="#{!equivGradoSalarialHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{equivGradoSalarialHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{equivGradoSalarialHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{equivGradoSalarialHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{equivGradoSalarialHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/equivGradoSalarial/EquivGradoSalarialList.xhtml"
+                rendered="#{equivGradoSalarialHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty equivGradoSalarialFrom ? 'planificacion/equivGradoSalarial/EquivGradoSalarialList' : equivGradoSalarialFrom}.xhtml"
+                rendered="#{!equivGradoSalarialHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MemoHomologacionList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <restrict>#{identity.hasRole('memoHomologacion_edit')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{memoHomologacionHome.wire}"/>
+ <param name="idConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcursoPuestoAgr}"/>
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcurso411}"/>
+ <param name="idConcursoAgr" value="#{generarMemoHomologacion.idConcurso}"/>
+ 
+ 
+ <action execute="#{generarMemoHomologacion.init()}" on-postback="false"/>
+ <param name="memoHomologacionFrom"/>
+ <param name="memoHomologacionIdMemoHomologacion" value="#{generarMemoHomologacion.idMemoHomologacion}"/>
+ <param name="plantillaMemoHomologacionFrom"/>
+ <param name="plantillaMemoHomologacionIdPlantillaMemoHomologacion" value="#{plantillaMemoHomologacionHome.plantillaMemoHomologacionIdPlantillaMemoHomologacion}"/>
+
+
+ <navigation from-action="#{generarMemoHomologacion.save()}">
+      <rule if-outcome="persisted">
+         <redirect view-id="/seleccion/memoHomologacion/MemoHomologacionEdit.xhtml">
+		 <param name="idConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcursoPuestoAgr}"/>
+		 <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcurso411}"/>
+		 <param name="idConcursoAgr" value="#{generarMemoHomologacion.idConcurso}"/>
+         </redirect>
+      </rule>
+   </navigation>
+
+	<navigation from-action="#{generarMemoHomologacion.update()}">
+      <rule if-outcome="updated">
+         <redirect view-id="/seleccion/memoHomologacion/MemoHomologacionEdit.xhtml">
+     	   <param name="idConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcursoPuestoAgr}"/>
+		 <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{generarMemoHomologacion.idConcurso411}"/>
+		 <param name="idConcursoAgr" value="#{generarMemoHomologacion.idConcurso}"/>
+         </redirect>
+      </rule>
+   </navigation>
+
+</page>

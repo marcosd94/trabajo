@@ -1,0 +1,190 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.TituloAcademico_}</h1>
+    <h:form id="tituloAcademicoSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="ajax" id="panelParametro">
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.TituloAcademico_descripcion}</ui:define>
+                <h:inputText id="descripcion" size="100"
+                 value="#{tituloAcademicoList.tituloAcademico.descripcion}"/>
+            </s:decorate>
+
+           <s:decorate id="especialidadField" template="/layout/display.xhtml" rendered="false">
+					<ui:define name="label">#{messages.TituloAcademico_especialidad}</ui:define>
+					<h:selectOneMenu id="idEspecialidad" value="#{tituloAcademicoList.idEspecialidad}" style="width:250px">
+						<f:selectItems value="#{especialidadSelecSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+           <s:decorate id="idNivelEstudio" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.TituloAcademico_nivel_estudio}</ui:define>
+					<h:selectOneMenu id="nivelEst" value="#{tituloAcademicoList.idNivelEstudio}" style="width:250px">
+						<f:selectItems value="#{nivelEstudioSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+           
+            <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{tituloAcademicoList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+           
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{tituloAcademicoList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{tituloAcademicoList.limpiar()}" 
+				 reRender="panelParametro,panelResultado,links" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+				  <h:commandButton id="print"  
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{tituloAcademicoList.pdf()}" />
+        </div>
+
+    </h:form>
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty tituloAcademicoList.resultList ? 0 : (tituloAcademicoList.paginated ? tituloAcademicoList.resultCount : tituloAcademicoList.resultList.size)})</f:facet>
+    <div class="results" id="tituloAcademicoList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty tituloAcademicoList.resultList}"/>
+
+    <rich:dataTable id="tituloAcademicoList"
+                var="_tituloAcademico"
+              value="#{tituloAcademicoList.resultList}"
+           rendered="#{not empty tituloAcademicoList.resultList}">
+       
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{tituloAcademicoList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.TituloAcademico_descripcion}"/>
+                    <ui:param name="propertyPath" value="tituloAcademico.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_tituloAcademico.descripcion}"/>
+        </h:column>
+        <h:column rendered="false">
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{tituloAcademicoList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.TituloAcademico_especialidad}"/>
+                    <ui:param name="propertyPath" value="tituloAcademico.especialidad.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_tituloAcademico.especialidad.descripcion}"/>
+        </h:column>
+         <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{tituloAcademicoList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.TituloAcademico_nivel_estudio}"/>
+                    <ui:param name="propertyPath" value="tituloAcademico.nivelEstudio.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_tituloAcademico.nivelEstudio.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{tituloAcademicoList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.DatosEspecificos_activo}"/>
+                    <ui:param name="propertyPath" value="tituloAcademico.activo"/>
+                </ui:include>
+            </f:facet>
+           <h:selectBooleanCheckbox value="#{_tituloAcademico.activo}" disabled="true"/>
+        </h:column>
+        
+        <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seleccion/administrarTituloAcademicos/TituloAcademico' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : ''}" 
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="tituloAcademicoViewId">
+                <f:param name="tituloAcademicoIdTituloAcademico"
+                        value="#{_tituloAcademico.idTituloAcademico}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/administrarTituloAcademicos/TituloAcademicoEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="tituloAcademicoEdit"
+                rendered="#{empty from}">
+                <f:param name="tituloAcademicoIdTituloAcademico"
+                        value="#{_tituloAcademico.idTituloAcademico}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+	
+    <div class="tableControl">
+		<a:outputPanel ajaxRendered="true" id="links">
+        <s:link view="/seleccion/administrarTituloAcademicos/TituloAcademicoList.xhtml"
+            rendered="#{tituloAcademicoList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarTituloAcademicos/TituloAcademicoList.xhtml"
+            rendered="#{tituloAcademicoList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{tituloAcademicoList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarTituloAcademicos/TituloAcademicoList.xhtml"
+            rendered="#{tituloAcademicoList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{tituloAcademicoList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/administrarTituloAcademicos/TituloAcademicoList.xhtml"
+            rendered="#{tituloAcademicoList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{tituloAcademicoList.lastFirstResult}"/>
+        </s:link>
+	</a:outputPanel>
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/seleccion/administrarTituloAcademicos/TituloAcademicoEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="#{messages.msg_create_male}">
+            <f:param name="tituloAcademicoIdTituloAcademico"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

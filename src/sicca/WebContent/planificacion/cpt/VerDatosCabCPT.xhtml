@@ -1,0 +1,127 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<h:form xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib" style="width : 500px; height : 400px;">
+	<!--<f:facet name="header">
+	
+	  <h:outputText value="Detalles Cabecera CPT" /></f:facet>-->
+			
+			<rich:panel style="border:none;">
+						<a:region>
+							<s:decorate id="cptPadreField" template="/layout/edit.xhtml"
+								rendered="#{administrarCptFormController.tipo == 'especifico'}">
+								<ui:define name="label">CPT</ui:define>
+
+								<h:inputText id="cptPadre" disabled="true"
+									value="#{administrarCptFormController.codigoCpt}" size="20">
+								</h:inputText>	
+		                		#{' '}
+		                		<h:inputText id="denominacionCptPadre"
+									value="#{administrarCptFormController.cptPadre.denominacion}"
+									size="50" disabled="true" />
+                			
+                			</s:decorate>
+						</a:region>
+
+						
+					
+						<a:region >
+							<s:decorate id="nivelField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_nivel}</ui:define>
+								<h:inputText id="nivel" required="true"
+									disabled="true" styleClass="numeric"
+									value="#{administrarCptFormController.cpt.nivel}">
+									<a:support event="onchange" reRender="nivelField,jefaturaField"
+										action="#{administrarCptFormController.valNivel()}"
+										eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="TipoCceField" template="/layout/edit.xhtml">
+								<ui:define name="label" >Tipo CCE</ui:define>
+								<h:selectOneMenu  id="tipoCce" disabled="true" style="width:250px;" 
+									value="#{administrarCptFormController.idTipoCce}">
+										<f:selectItems  value="#{tipoCcesSelectItems}" />				
+								</h:selectOneMenu>
+								
+																
+					</s:decorate>
+							<s:decorate id="gradoSalarialMinField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMin}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoSalarialMin" style="width:250px;"
+									disabled="true"
+									value="#{administrarCptFormController.idGradoSalarialMin}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" focus="gradoSalarialMaxField" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="gradoSalarialMaxField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_idGradoSalarialMax}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="gradoSalarialMax" style="width:250px;"
+									disabled="true"
+									value="#{administrarCptFormController.idGradoSalarialMax}">
+									<f:selectItems
+										value="#{administrarCptFormController.gradoSalarialSelecItem}" />
+									<a:support event="onchange" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+  
+						<a:region>
+							<s:decorate id="numeroField" rendered="#{tipo == 'general'}" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Cpt_numero}</ui:define>
+								<h:inputText id="numero" disabled="true" required="true"
+									styleClass="numeric" onkeypress="return soloNumeros(event);"
+									value="#{administrarCptFormController.cpt.numero}">
+									<a:support event="onblur"
+										reRender="numeroField, numeroEspecifField"
+										focus="numeroEspecif"
+										action="#{administrarCptFormController.cargarNroEspecifico()}" />
+								</h:inputText>
+								#{' '}
+								
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate id="numeroEspecifField" template="/layout/edit.xhtml"
+								rendered="#{tipo != 'general'}">
+								<ui:define name="label">#{messages.Cpt_numero_especif}</ui:define>
+								<h:inputText id="numeroEspecif" required="true" disabled="true"
+									styleClass="numeric" onkeypress="return soloNumeros(event);"
+									value="#{administrarCptFormController.obtenerNumeroEspecifico()}"
+									rendered="#{!cptHome.managed}">
+									<a:support event="onchange" reRender="numeroEspecifField"
+										action="#{administrarCptFormController.cargarNroEspecifico()}" />
+								</h:inputText>
+								
+								<h:inputText id="numeroEspecif2" required="true" disabled="true"
+									styleClass="numeric" onkeypress="return soloNumeros(event);"
+									value="#{administrarCptFormController.cpt.nroEspecifico}"
+									rendered="#{cptHome.managed}">
+									<a:support event="onchange" reRender="numeroEspecifField"
+										action="#{administrarCptFormController.cargarNroEspecifico()}" />
+								</h:inputText>
+							</s:decorate>
+						</a:region>
+				</rich:panel>
+			
+			
+		
+		
+		
+</h:form>

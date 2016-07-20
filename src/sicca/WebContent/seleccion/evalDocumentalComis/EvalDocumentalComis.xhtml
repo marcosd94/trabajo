@@ -1,0 +1,324 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Eval documental comis Details</f:facet>
+
+        <s:decorate id="idEvalDocumentalComis" template="layout/display.xhtml">
+            <ui:define name="label">Id eval documental comis</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.idEvalDocumentalComis}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{evalDocumentalComisHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/EvalDocumentalComisEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty evalDocumentalComisFrom ? 'EvalDocumentalComisList' : evalDocumentalComisFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Comision seleccion det</h:panelGroup>
+        </f:facet>
+    <div class="association" id="comisionSeleccionDetParent">
+
+        <h:outputText value="There is no comisionSeleccionDet associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.comisionSeleccionDet == null}"/>
+
+        <rich:dataTable var="_comisionSeleccionDet"
+                   value="#{evalDocumentalComisHome.instance.comisionSeleccionDet}"
+                rendered="#{evalDocumentalComisHome.instance.comisionSeleccionDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="comisionSeleccionDetTable">
+            <h:column>
+                <f:facet name="header">Id comision sel det</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion cab id comision sel</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id rol</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idRol}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Titular suplente</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.titularSuplente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id documento</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idDocumento}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Puesto</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.puesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documentos</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.documentos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Equipo tecnico</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.equipoTecnico}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewcomisionSeleccionDet"
+                     value="View"
+                      view="/ComisionSeleccionDet.xhtml">
+                    <f:param name="comisionSeleccionDetIdComisionSelDet"
+                           value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Empresa persona</h:panelGroup>
+        </f:facet>
+    <div class="association" id="empresaPersonaParent">
+
+        <h:outputText value="There is no empresaPersona associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.empresaPersona == null}"/>
+
+        <rich:dataTable var="_empresaPersona"
+                   value="#{evalDocumentalComisHome.instance.empresaPersona}"
+                rendered="#{evalDocumentalComisHome.instance.empresaPersona != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="empresaPersonaTable">
+            <h:column>
+                <f:facet name="header">Id sel empresa persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empr tercerizada id empresa tercerizada</f:facet>
+                <h:outputText value="#{_empresaPersona.emprTercerizada.idEmpresaTercerizada}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cargo</f:facet>
+                <h:outputText value="#{_empresaPersona.cargo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_empresaPersona.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_empresaPersona.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_empresaPersona.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewempresaPersona"
+                     value="View"
+                      view="/EmpresaPersona.xhtml">
+                    <f:param name="empresaPersonaIdSelEmpresaPersona"
+                           value="#{_empresaPersona.idSelEmpresaPersona}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Eval documental cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="evalDocumentalCabParent">
+
+        <h:outputText value="There is no evalDocumentalCab associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.evalDocumentalCab == null}"/>
+
+        <rich:dataTable var="_evalDocumentalCab"
+                   value="#{evalDocumentalComisHome.instance.evalDocumentalCab}"
+                rendered="#{evalDocumentalComisHome.instance.evalDocumentalCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="evalDocumentalCabTable">
+            <h:column>
+                <f:facet name="header">Id eval documental cab</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion det id comision sel det</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empresa persona id sel empresa persona</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Postulacion id postulacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.postulacion.idPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Aprobado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.aprobado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Evaluado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.evaluado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha evaluacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewevalDocumentalCab"
+                     value="View"
+                      view="/EvalDocumentalCab.xhtml">
+                    <f:param name="evalDocumentalCabIdEvalDocumentalCab"
+                           value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

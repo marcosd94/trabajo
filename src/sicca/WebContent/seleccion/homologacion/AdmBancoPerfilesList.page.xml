@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/sicca/WebContent/seleccion/homologacion/AdmBancoPerfilesList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+ <restrict>#{identity.hasRole('adm_banco_perfiles_list')}</restrict>
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+ <action execute="#{funcionarioUtilFormController.cargarCpt()}" on-postback="false"/>
+ <action execute="#{admBancoPerfilesFormController.init()}" on-postback="false"/>
+ 
+ <param name="sinNivelEntidadIdSinNivelEntidad" value="#{funcionarioUtilFormController.sinNivelEntidad.idSinNivelEntidad}"/>
+ <param name="sinEntidadIdSinEntidad" value="#{funcionarioUtilFormController.sinEntidad.idSinEntidad}"/>
+ <param name="configuracionUoCabIdConfiguracionUo" value="#{funcionarioUtilFormController.configuracionUoCab.idConfiguracionUo}"/>
+ <param name="from" value="#{funcionarioUtilFormController.from}"/>
+ <param name="idConcursoPuestoAgr" value="#{admBancoPerfilesFormController.idConcursoPuestoAgr}"/>
+ <param name="idHomologacion" value="#{admBancoPerfilesFormController.idHomologacion}"/>
+ <param name="cptIdCpt" value="#{funcionarioUtilFormController.idCpt}"/>
+ <param name="activo" value="#{funcionarioUtilFormController.activo}"/>
+ <param name="firstResult" value="#{homologacionPerfilMatrizList.firstResult}"/>
+   <param name="sort" value="#{homologacionPerfilMatrizList.orderColumn}"/>
+   <param name="dir" value="#{homologacionPerfilMatrizList.orderDirection}"/>
+   <param name="logic" value="#{homologacionPerfilMatrizList.restrictionLogicOperator}"/>
+ 
+ 
+ <navigation from-action="#{funcionarioUtilFormController.toFindOee()}">
+  <rule if-outcome="find">
+   <redirect view-id="/planificacion/searchForms/FindDependencias.xhtml">
+    <param name="sinEntidadIdSinEntidad" value="#{funcionarioUtilFormController.sinEntidad.idSinEntidad}"/>
+    <param name="sinNivelEntidadIdSinNivelEntidad" value="#{funcionarioUtilFormController.sinNivelEntidad.idSinNivelEntidad}"/>
+    <param name="from" value="seleccion/homologacion/ElegirPerfilHomologado"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <param name="funcionarioOeeFrom"/>
+ <param name="fromLink"/>
+</page>

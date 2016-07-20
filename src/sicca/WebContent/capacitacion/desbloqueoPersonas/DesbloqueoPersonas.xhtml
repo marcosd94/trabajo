@@ -1,0 +1,241 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU545_titulo_edit}</h1>
+		<h1 align="center" style="color:#5882FA;">#{desbloqueoFC.accion.equals('edit') ? messages.CU545_edit :
+		messages.CU545_ver}</h1>
+		<h:form id="desbloqueo" styleClass="edit">
+			<rich:panel id="panelPersona">
+				<f:facet name="header">#{messages.CU545_panel_persona}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="ciField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_ci_nro}</ui:define>
+						<h:inputText id="ci"
+							value="#{desbloqueoFC.persona.documentoIdentidad}" size="20"
+							disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="nombresField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_nombres}</ui:define>
+						<h:inputText id="nombres" value="#{desbloqueoFC.persona.nombres}"
+							size="40" disabled="true" />
+					</s:decorate>
+					<s:decorate id="apellidosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_apellidos}</ui:define>
+						<h:inputText id="apellidos"
+							value="#{desbloqueoFC.persona.apellidos}" size="40"
+							disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelCapacitacion">
+				<f:facet name="header">#{messages.CU545_panel_capacitacion}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="capacitacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_capacitacion}</ui:define>
+						<h:inputText id="capacitacion"
+							value="#{desbloqueoFC.capacitaciones.nombre}" size="80"
+							disabled="true" />
+					</s:decorate>
+					<s:decorate id="tipoCapacitacionField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_tipo_capacitacion}</ui:define>
+						<h:inputText id="tipoCapacitacion"
+							value="#{desbloqueoFC.capacitaciones.datosEspecificosTipoCap.descripcion}"
+							size="80" disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel id="panelBloqueo">
+				<f:facet name="header">#{messages.CU545_panel_bloqueo}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="fechaBloqueoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_fecha_bloqueo}
+						</ui:define>
+						<rich:calendar id="fechaBloqueo"
+							value="#{desbloqueoFC.listaDet.fechaDesvinculacion}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="bloqueadoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_bloqueado}
+						</ui:define>
+						<h:selectOneRadio value="#{desbloqueoFC.bloqueado}"
+							disabled="true">
+							<f:selectItem itemValue="SI" itemLabel="Si" />
+							<f:selectItem itemValue="NO" itemLabel="No" />
+						</h:selectOneRadio>
+					</s:decorate>
+					<s:decorate id="motivoDesbField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_motivo_bloq}
+						</ui:define>
+						<h:inputText id="motivoDesb" disabled="true" size="50"
+							value="#{desbloqueoFC.listaDet.datosEspecificosDesv.descripcion}">
+						</h:inputText>
+						#{' '}
+						<h:commandButton value="Descargar"
+							rendered="#{desbloqueoFC.listaDet.documento != null}"
+							action="#{desbloqueoFC.abrirDoc(desbloqueoFC.listaDet.documento.idDocumento)}" />
+						#{' '}
+						<h:inputText id="doc" disabled="true" size="50"
+							rendered="#{desbloqueoFC.listaDet.documento != null}"
+							value="#{desbloqueoFC.listaDet.documento.nombreFisicoDoc}">
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_obs}
+						</ui:define>
+						<h:inputTextarea id="obs"
+							value="#{desbloqueoFC.listaDet.observacion}" cols="80"
+							disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="panelDesbloqueo">
+				<f:facet name="header">#{messages.CU545_panel_desbloqueo}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesbloqueoDecorate"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_fecha_desbloq}
+						</ui:define>
+						<rich:calendar id="fechaDesbloqueo"
+							value="#{desbloqueoFC.listaDet.fechaHabilit}" inputSize="10"
+							datePattern="dd/MM/yyyy" disabled="true" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+
+					<s:decorate id="usuarioDesbloqueoField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU545_usuario}</ui:define>
+						<h:inputText id="usuarioDesbloqueo"
+							value="#{desbloqueoFC.listaDet.usuHabilit}" size="60"
+							disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate id="justificacionField" template="/layout/edit.xhtml" rendered="#{desbloqueoFC.accion == 'edit'}">
+						<ui:define name="label">#{messages.CU545_justificacion}<span class="required">*</span>
+						</ui:define>
+						<h:inputTextarea id="justificacion"
+							value="#{desbloqueoFC.listaDet.motivoHabilit}" cols="80">
+							<f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate>
+					<s:decorate id="justificacionViewField" template="/layout/edit.xhtml" rendered="#{desbloqueoFC.accion == 'view'}">
+						<ui:define name="label">#{messages.CU545_justificacion}
+						</ui:define>
+						<h:inputTextarea id="justificacion" disabled="true"
+							value="#{desbloqueoFC.listaDet.motivoHabilit}" cols="80">
+							<f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<div class="actionButtons"><h:commandButton id="desbloquear"
+				value="#{messages.CU545_btn_desbloq}"
+				rendered="#{desbloqueoFC.accion == 'edit'}"
+				action="#{desbloqueoFC.desbloquear()}"
+				onclick="return confirm('#{messages.CU545_msg_boton}');" /> 
+			<s:button id="cancelAdd" value="Volver" propagation="none"
+				includePageParams="false"
+				view="/capacitacion/desbloqueoPersonas/DesbloqueoPersonasList.xhtml" />
+			</div>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.CU545_msg_desbloqueo}"
+				styleClass="labelClass" /></div>
+				
+			<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml">
+               <ui:define name="label">Bloqueado por:</ui:define>
+               <h:outputText id="usuAlta" value="#{desbloqueoFC.listaDet.usuDesv}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" >
+               <ui:define name="label">Fecha de Bloqueo:</ui:define>
+               <h:outputText id="fechaAlta" value="#{desbloqueoFC.listaDet.fechaDesvinculacion}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{desbloqueoFC.accion == 'view'}">
+               <ui:define name="label">Desbloqueado por:</ui:define>
+               <h:outputText id="usuMod" value="#{desbloqueoFC.listaDet.usuHabilit}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{desbloqueoFC.accion == 'view'}">
+               <ui:define name="label">Fecha Desbloqueo:</ui:define>
+               <h:outputText id="fechaMod" value="#{desbloqueoFC.listaDet.fechaHabilit}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+        
+				
+		</h:form>
+	</ui:define>
+</ui:composition>

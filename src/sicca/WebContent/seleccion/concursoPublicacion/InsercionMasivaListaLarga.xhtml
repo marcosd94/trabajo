@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+
+	<ui:define name="body">
+		<h:form id="insercionListaLargaForm" enctype="multipart/form-data">
+			<rich:simpleTogglePanel>
+				<f:facet name="header">
+        #{messages.insercion_lista_larga}
+        </f:facet>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Archivo CSV a procesar</ui:define>
+					<s:fileUpload size="30"
+						contentType="#{insercionMasivaListaLargaFormController.cType}"
+						data="#{insercionMasivaListaLargaFormController.uFile}"
+						fileName="#{insercionMasivaListaLargaFormController.fName}"
+						>
+						<s:conversationPropagation type="join" />
+					</s:fileUpload>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+			<div class="actionButtons">
+				<h:commandButton id="search"
+					value="#{messages.CU547_btnInsetMassive}"
+					action="#{insercionMasivaListaLargaFormController.insercionMasiva()}">
+				</h:commandButton>
+				<ui:remove>
+					<s:button id="reset" value="Limpiar"
+						action="#{cargaMasivaFuncioFC.limpiar()}">
+					</s:button>
+				</ui:remove>
+				<h:commandButton id="volver"
+				
+				value="Volver"
+
+				action="#{insercionMasivaListaLargaFormController.volverListaGrupos()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			<h:commandButton
+				id="print" value="Imprimir Lista Larga de Admitidos"
+				action="#{insercionMasivaListaLargaFormController.print()}" />
+				
+				<h:commandButton
+				id="printNO" value="Imprimir Lista Larga de NO Admitidos"
+				action="#{insercionMasivaListaLargaFormController.printNO()}" /> 
+				 
+			<h:commandButton id="terminarInsercionListaLarga"
+				
+				value="#{messages.public_publicar_lista_larga}"
+				onclick="return confirm('#{messages.msg_confirm_publicar_lista_larga}');" 
+				action="#{insercionMasivaListaLargaFormController.publicarListaLarga()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			</div>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

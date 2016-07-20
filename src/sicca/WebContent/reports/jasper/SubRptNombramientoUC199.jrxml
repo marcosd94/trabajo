@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubRptNombramientoUC199" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPlantaCargoDet" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT tp.descripcion AS tipo_planta,
+    tn.descripcion AS tipo_nombramiento
+FROM planificacion.tipo_nombramiento tn LEFT JOIN  planificacion.tipo_planta tp
+    ON tn.id_tipo_planta = tp.id_tipo_planta LEFT JOIN planificacion.det_tipo_nombramiento dtn
+    ON dtn.id_tipo_nombramiento = tn.id_tipo_nombramiento INNER JOIN planificacion.planta_cargo_det pcd
+    ON dtn.id_planta_cargo_det = pcd.id_planta_cargo_det
+WHERE pcd.id_planta_cargo_det = $P{idPlantaCargoDet}
+    AND tn.activo = true
+ORDER BY tipo_planta
+]]>
+	</queryString>
+	<field name="tipo_planta" class="java.lang.String"/>
+	<field name="tipo_nombramiento" class="java.lang.String"/>
+	<group name="tipo_planta_group">
+		<groupExpression><![CDATA[$F{tipo_planta}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="43" y="0" width="265" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_planta}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="3" y="7" width="165" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRAMIENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="43" y="27" width="265" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Planta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="308" y="27" width="195" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Nombramiento]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="43" y="47" width="460" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="308" y="0" width="195" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_nombramiento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

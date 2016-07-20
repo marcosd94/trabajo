@@ -1,0 +1,474 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<rich:modalPanel id="concursoMiniModal" width="600" height="370"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">#{messages.CU414_nivel_concurso}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab1">
+					<fieldset style="width: 500px;"><legend>#{messages.CU414_concurso}</legend>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU414_concurso}</ui:define>
+							<h:outputText
+								value="#{modificacionDatosConcursoFormController.concurso.nombre}" />
+						</s:decorate>
+					</h:panelGrid></fieldset>
+					<br />
+					<fieldset style="width: 500px;"><legend>#{messages.CU414_nivel_concurso}</legend>
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="2">
+							<s:link value="#{messages.CU414_popup_concurso_link1}"
+								rendered="false" propagation="join" id="cargarFechas"
+								view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml">
+								<f:param name="puesto_agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="modoConcurso" value="#{true}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							</s:link>
+
+							<s:link value="#{messages.CU414_popup_concurso_link2}"
+								view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+								propagation="join">
+								<f:param name="concursoIdConcurso"
+									value="#{modificacionDatosConcursoFormController.concurso.idConcurso}" />
+								<f:param name="idConcursoPuestoAgr" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							</s:link>
+							<s:link value="#{messages.CU414_popup_concurso_link3}"
+								propagation="join" id="cargarCronograma"
+								view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml">
+								<f:param name="puesto_agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="modoConcurso" value="#{true}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							</s:link>
+						</h:panelGrid>
+					</h:panelGrid></fieldset>
+					<br />
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:outputText value="#{messages.CU414_popup_concurso_msg}"
+							style="color:red;" />
+					</s:decorate>
+
+
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="cancel_tap03" value="Volver" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('concursoMiniModal')" /></div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="grupoMiniModal" width="600" height="370"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">#{messages.CU414_nivel_grupo}</f:facet>
+			<h:form>
+				<rich:panel style="border:none;" id="tab1">
+					<fieldset style="width: 500px;"><legend>#{messages.CU414_puestos}</legend>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU414_concurso}</ui:define>
+							<h:outputText
+								value="#{modificacionDatosConcursoFormController.grupoSeleccionado.concurso.nombre}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU414_puestos}</ui:define>
+							<h:outputText
+								value="#{modificacionDatosConcursoFormController.grupoSeleccionado.descripcionGrupo}" />
+						</s:decorate>
+					</h:panelGrid></fieldset>
+					<br />
+					<fieldset style="width: 500px;"><legend>#{messages.CU414_nivel_grupo}</legend>
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="2">
+							<s:link value="#{messages.CU414_popup_grupo_link1}"
+								propagation="none" id="cargarFechas"
+								view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml">
+								<f:param name="puesto_agr"
+									value="#{modificacionDatosConcursoFormController.grupoSeleccionado.idConcursoPuestoAgr}" />
+								<f:param name="modoConcurso" value="#{false}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+								<f:param name="agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							</s:link>
+
+							<s:link value="#{messages.CU414_popup_concurso_link2}"
+								view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+								propagation="join">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{modificacionDatosConcursoFormController.grupoSeleccionado.idConcursoPuestoAgr}" />
+								<f:param name="concursoIdConcurso" />
+								<f:param name="agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							</s:link>
+							<s:link value="#{messages.CU414_popup_grupo_link2}"
+								propagation="join" id="cargarCronograma"
+								view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml">
+								<f:param name="puesto_agr"
+									value="#{modificacionDatosConcursoFormController.grupoSeleccionado.idConcursoPuestoAgr}" />
+								<f:param name="modoConcurso" value="#{false}" />
+								<f:param name="agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+
+							</s:link>
+						</h:panelGrid>
+					</h:panelGrid></fieldset>
+					<br />
+					<s:decorate template="/layout/display.xhtml">
+						<h:outputText value="#{messages.CU414_popup_grupo_msg}"
+							style="color:red;" />
+					</s:decorate>
+
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><a:commandButton
+						id="cancel_tap03" value="Volver" ajaxSingle="true"
+						oncomplete="Richfaces.hideModalPanel('grupoMiniModal')" /></div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+
+		<h:form id="listaModDatosConcursoSearch" styleClass="edit">
+			<h1>#{messages.CU414_title}</h1>
+			<rich:simpleTogglePanel id="panel" switchType="ajax">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU414_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{modificacionDatosConcursoFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{modificacionDatosConcursoFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU414_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{modificacionDatosConcursoFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{modificacionDatosConcursoFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU414_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{modificacionDatosConcursoFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{modificacionDatosConcursoFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU414_concurso}</ui:define>
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{modificacionDatosConcursoFormController.concurso.nombre}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+
+			</rich:simpleTogglePanel>
+
+			<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU414_obs}</ui:define>
+					<h:inputTextarea cols="80"
+						value="#{modificacionDatosConcursoFormController.observacion}" />
+				</s:decorate>
+			</h:panelGrid>
+
+			<div class="actionButtons">
+			<!-- 
+			<s:button
+				view="/seleccion/concursoPuestoDet/ConcursoPuestoDetList.xhtml"
+				value="Reservar y Agrupar Puestos" propagation="join"
+				id="concursoAgrupar">
+				<f:param name="nroActividad" value="8" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="fromConcurso"
+					value="#{modificacionDatosConcursoFormController.fromConcurso}" />
+			</s:button>
+			 
+			<a:commandButton id="concursoMiniModal"
+				value="#{messages.CU414_nivel_concurso}"
+				reRender="concursoMiniModal"
+				oncomplete="#{rich:component('concursoMiniModal')}.show()" /> 
+			-->	
+			<ui:remove>
+<!-- 			<s:button value="#{messages.CU414_popup_concurso_link2}"
+				view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+				propagation="join">
+				<f:param name="concursoIdConcurso"
+					value="#{modificacionDatosConcursoFormController.concurso.idConcurso}" />
+				<f:param name="idConcursoPuestoAgr" />
+				<f:param name="from"
+					value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+			</s:button> -->
+			</ui:remove>
+				<s:button value="#{messages.CU414_popup_grupo_link1}"
+						propagation="none" id="cargarFechas"
+						view="/seleccion/administrarFechaGrupoPuesto/FechasGrupoPuestoEdit.xhtml">
+					<f:param name="modoConcurso" value="#{false}" />
+					<f:param name="from"
+						value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+					<f:param name="agr"
+						value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				</s:button>
+				<s:button
+				id="anexo" value="Anexo" propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{modificacionDatosConcursoFormController.direccionFisica}" />
+				<f:param name="nombrePantalla"
+					value="modificacion_datos_concurso_list" />
+				<f:param name="idConcurso"
+					value="#{modificacionDatosConcursoFormController.concurso.idConcurso}" />
+				<f:param name="nombreTabla" value="Concurso" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+			</s:button> <h:commandButton id="tarea" value="#{messages.proceso_sgte_tarea}"
+				action="#{modificacionDatosConcursoFormController.nextTask()}"
+				onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" />
+			<s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+
+			<div class="results" id="rolfuncionList"
+				style="overflow: auto; HEIGHT: 300px;"><rich:panel
+				id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty concursoPuestoAgrList.resultList ? 0 : (concursoPuestoAgrList.paginated ? concursoPuestoAgrList.resultCount : concursoPuestoAgrList.resultList.size)})</f:facet>
+				<div class="results" id="concursoPuestoAgrList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty concursoPuestoAgrList.resultList}" /> <rich:dataTable
+					id="concursoPuestoAgrList" var="_concursoPuestoAgr"
+					value="#{concursoPuestoAgrList.resultList}"
+					rendered="#{not empty concursoPuestoAgrList.resultList}">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column rowspan="1" width="100px">
+								<h:outputText value="#{messages.CU414_cod_grupo_concurso}" />
+							</rich:column>
+
+							<rich:column colspan="1" width="250px">
+								<h:outputText value="#{messages.CU414_denominacion}" />
+							</rich:column>
+							<rich:column colspan="1" width="350px">
+								<h:outputText value="Acciones" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column colspan="1" style="background-color:lightgrey;"
+						width="50px">
+						<h:outputText value="#{_concursoPuestoAgr.codGrupo}" />
+					</rich:column>
+					<rich:column colspan="1" style="background-color:lightgrey;"
+						width="70px">
+						<h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}" />
+					</rich:column>
+					<rich:column colspan="1" style="background-color:lightgrey;"
+						width="70px">
+						<!--
+						<s:link value="#{messages.CU414_usar_banco}" propagation="none"
+							view="/seleccion/homologacion/ElegirPerfilHomologado.xhtml"
+							id="perfHomologados"
+							rendered="#{_concursoPuestoAgr.estado == modificacionDatosConcursoFormController.estadoCreado}">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromx"
+								value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromConcurso"
+								value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+						</s:link>
+							#{'  '}	
+							    <s:link
+							view="/seleccion/selGrupoPuestos/seleGrupoPuesto.xhtml"
+							value="#{messages.CU40_link_asignar_comite}" propagation="none"
+							rendered="#{_concursoPuestoAgr.estado == modificacionDatosConcursoFormController.estadoCreado}">
+							<f:param name="idConcurso"
+								value="#{_concursoPuestoAgr.concurso.idConcurso}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="fromSele"
+								value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+						</s:link>
+
+					
+							#{'  '}	
+							<s:link value="#{messages.CU235_btn_cargar_datos}"
+							propagation="join" id="cargarDatosGrupo"
+							rendered="#{_concursoPuestoAgr.estado == modificacionDatosConcursoFormController.estadoCreado}"
+							view="/seleccion/datosGrupoPuesto/DatosGrupoPuestoEdit.xhtml">
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+
+						</s:link>
+							#{'  '}	
+								<a:commandLink value="#{messages.CU414_nivel_grupo}"
+							reRender="grupoMiniModal"
+							action="#{modificacionDatosConcursoFormController.actualizarGrupo(_concursoPuestoAgr)}"
+							oncomplete="#{rich:component('grupoMiniModal')}.show()">
+							<s:conversationPropagation type="join" />
+
+
+						</a:commandLink>
+						
+							#{'  '}		
+						
+							<s:link value="#{messages.CU414_bases}" propagation="none"
+							view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+							rendered="#{_concursoPuestoAgr.estado == modificacionDatosConcursoFormController.estadoCreado and _concursoPuestoAgr.homologacionPerfilMatriz != null}"
+							id="basesycondiciones">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="from"
+								value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							<f:param name="CU" value="414" />
+						</s:link>
+						-->
+							<s:link value="#{messages.CU414_popup_grupo_link2}"
+								propagation="join" id="cargarCronograma"
+								view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml">
+								<f:param name="puesto_agr"
+									value="#{modificacionDatosConcursoFormController.grupoSeleccionado.idConcursoPuestoAgr}" />
+								<f:param name="modoConcurso" value="#{false}" />
+								<f:param name="agr"
+									value="#{modificacionDatosConcursoFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+
+							</s:link>
+
+
+					</rich:column>
+
+					<rich:subTable var="_det"
+						rendered="#{_concursoPuestoAgr.estado == modificacionDatosConcursoFormController.estadoCreado}"
+						value="#{_concursoPuestoAgr.concursoPuestoDets}">
+
+						<rich:column width="50px">
+							<h:outputText
+								value="#{modificacionDatosConcursoFormController.obtenerCodigo(_det.plantaCargoDet)}" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="#{_det.plantaCargoDet.descripcion}"></h:outputText>
+
+						</rich:column>
+
+						<rich:column>
+							<s:link view="/planificacion/puestosTrabajo/PlantaCargoDet.xhtml"
+								value="#{messages.CU414_ver_puestos}" propagation="none"
+								id="plantaCargoDetVerId">
+								<f:param name="plantaCargoDetIdPlantaCargoDet"
+									value="#{_det.plantaCargoDet.idPlantaCargoDet}" />
+								<f:param name="plantaCargoDetFrom" value="ver" />
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+									value="#{_det.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="plantaFrom"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+
+							</s:link>
+							
+							#{'  '}	
+						<s:link
+								rendered="#{_concursoPuestoAgr.homologacionPerfilMatriz != null}"
+								view="/seleccion/administrarPuestoComite/adminPuestoComite.xhtml"
+								value="#{messages.CU414_planificacion}" propagation="none"
+								id="elegirDatosPlanVer">
+								<f:param name="puesto_agr"
+									value="#{_det.concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="id_puesto"
+									value="#{_det.plantaCargoDet.idPlantaCargoDet}" />
+								<f:param name="from"
+									value="seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList" />
+							</s:link>
+						</rich:column>
+					</rich:subTable>
+
+				</rich:dataTable></div>
+			</rich:panel></div>
+
+			<a:outputPanel ajaxRendered="true">
+				<div class="tableControl"><s:link
+					view="/seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList.xhtml"
+					rendered="#{matrizReferencialList.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link> <s:link
+					view="/seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList.xhtml"
+					rendered="#{matrizReferencialList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{matrizReferencialList.previousFirstResult}" />
+				</s:link> <s:link
+					view="/seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList.xhtml"
+					rendered="#{matrizReferencialList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{matrizReferencialList.nextFirstResult}" />
+				</s:link> <s:link
+					view="/seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList.xhtml"
+					rendered="#{matrizReferencialList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{matrizReferencialList.lastFirstResult}" />
+				</s:link></div>
+
+			</a:outputPanel>
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

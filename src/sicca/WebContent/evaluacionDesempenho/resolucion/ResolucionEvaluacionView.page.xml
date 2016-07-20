@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" no-conversation-view-id="/ResolucionHomologacionList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<restrict>#{identity.hasRole('resolucionEvaluacion_view')}</restrict>
+	<begin-conversation flush-mode="MANUAL" join="true" />
+
+	<action execute="#{resolucionEvalHome.wire}" />
+	<action execute="#{borradorResolucionEvaluacion.init()}"
+		on-postback="false" />
+	<param name="fromCU" value="#{borradorResolucionEvaluacion.fromCU}" />
+	<param name="resolucionHomologacionFrom" />
+	<param name="resolucionEvaluacionIdResolucionEvaluacion"
+		value="#{borradorResolucionEvaluacion.idResolucionEvaluacion}" />
+	<param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{borradorResolucionEvaluacion.idEvaluacionDesemp}" />
+
+	<param name="from" />
+
+	<navigation from-action="#{borradorResolucionEvaluacion.save()}">
+		<rule if-outcome="persisted">
+			<redirect
+				view-id="/evaluacionDesempenho/resolucion/ResolucionEvaluacionEdit.xhtml">
+			</redirect>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{borradorResolucionEvaluacion.update()}">
+		<rule if-outcome="updated">
+			<redirect
+				view-id="/evaluacionDesempenho/resolucion/ResolucionEvaluacionEdit.xhtml">
+			</redirect>
+		</rule>
+	</navigation>
+
+
+</page>

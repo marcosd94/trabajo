@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/TipoCceList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{tipoCceHome.wire}"/>
+
+   <param name="tipoCceFrom"/>
+   <param name="tipoCceIdTipoCce" value="#{tipoCceHome.tipoCceIdTipoCce}"/>
+
+
+   <navigation from-action="#{tipoCceHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoCce/TipoCceList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{tipoCceHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoCce/TipoCceList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{tipoCceHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/planificacion/tipoCce/TipoCceList.xhtml"/>
+      </rule>
+   </navigation>
+
+	<restrict>#{identity.hasRole('tipoCce_edit')}</restrict>
+</page>

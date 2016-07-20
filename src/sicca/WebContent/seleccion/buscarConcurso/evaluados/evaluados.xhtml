@@ -1,0 +1,504 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="portal">
+		<style type="text/css">
+.sb_test_column1 {
+	vertical-align: top;
+	text-align: left;
+	padding-right: 5px;
+}
+
+.sb_test_column2 {
+	vertical-align: middle;
+	text-align: center;
+	padding-left: 5px;
+}
+
+tr {
+	vertical-align: top;
+}
+</style>
+		<a:outputPanel id="panelModalSelect" ajaxRendered="true">
+			<rich:modalPanel id="modalSelect" height="230" width="310">
+				<f:facet name="header">#{messages.CU422_historialTitle}</f:facet>
+				<f:facet name="controls">
+					<h:graphicImage value="/img/dialog-close.png" width="18"
+						height="18" style="cursor:pointer"
+						onclick="#{rich:component('modalSelect')}.hide()" />
+				</f:facet>
+				<div class="results" id="tbldetList"
+					style="overflow: scroll; width: 300; HEIGHT: 220px">
+					<rich:dataTable id="historialPanel" var="_var"
+						value="#{concursoListFormController.imprimirHistorial('71')}">
+						<h:column>
+							<f:facet name="header">#{messages.CU422_fecha}						 
+					</f:facet>
+							<h:outputText value="#{_var.fecha}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU422_descripcion}						 
+					</f:facet>
+							<h:outputText value="#{_var.descripcion}" />
+						</h:column>
+					</rich:dataTable>
+				</div>
+			</rich:modalPanel>
+		</a:outputPanel>
+		<h:panelGrid columns="2" style="vertical-align:top;">
+			<h:panelGrid style="vertical-align:top;">
+				<!-- Lo siguiente debe eventualmente ser reemplazado con un include del sidebar -->
+					<rich:panel
+						style="background-color: #FFEEC2; width : 300px; vertical-align:top;">
+
+						<f:facet name="header">#{messages.CU12_usuariosRegitrados} </f:facet>
+
+						<h:panelGrid columns="1"
+							style="border-color: none; ; width : 360px; height : 673px;">
+							<h:form id="usuarioPortal" styleClass="edit"
+							style="vertical-align:top;"
+							onkeypress="if (event.keyCode == 13) { document.getElementById('usuarioPortal:submsdit').click(); return false; }">
+							<h:panelGrid columns="1" rendered="#{!identity.loggedIn}">
+								<s:link
+									view="/seleccion/administrarUsuarios/UsuarioPortalEdit.xhtml"
+									value="#{messages.CU12_sinoUsuario}" id="usuarioViewId">
+								</s:link>
+
+								<rich:panel style=" width : 285px;">
+									<h:panelGrid style="border-color: none; width : 285px;">
+										<s:decorate id="paisField" template="/layout/edit.xhtml">
+											<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+											<h:selectOneMenu id="pais" value="#{authenticator.idPais}"
+												required="true" style=" width : 125px;">
+												<f:selectItems value="#{paissSelectItems}" />
+											</h:selectOneMenu>
+										</s:decorate>
+
+
+										<s:decorate id="docIdentidadField"
+											template="/layout/edit.xhtml">
+											<ui:define name="label">#{messages.CU12_doc_identidad}</ui:define>
+											<h:inputText id="docIdentidad" required="true" size="13"
+												maxlength="50" value="#{authenticator.cedPortal}">
+											</h:inputText>
+										</s:decorate>
+
+										<s:decorate id="contrasenaField" template="/layout/edit.xhtml">
+											<ui:define name="label">#{messages.CU12_contrasena}</ui:define>
+											<h:inputSecret id="contrasena" autocomplete="false"
+												required="true" size="13"
+												value="#{authenticator.usuarioPortal.contrasenha}">
+											</h:inputSecret>
+										</s:decorate>
+									</h:panelGrid>
+
+									<h:panelGrid columns="2">
+										<h:graphicImage id="imageCaptcha"
+											value="#{captcha.urlCaptcha}" />
+
+										<a:commandButton id="reload" eventsQueue="default"
+											image="/img/reload.jpg" reRender="imageCaptcha"
+											immediate="true" action="#{captcha.reload()}" />
+									</h:panelGrid>
+
+									<h:panelGrid>
+										<h:outputText id="out"
+											value="Escribe los caracteres que ves en la imagen" />
+
+										<s:decorate template="/layout/edit.xhtml">
+											<ui:define name="label">Carateres  </ui:define>
+											<h:inputText id="verifyCaptcha" value="#{captcha.response}"
+												required="true" size="10">
+												<s:validate />
+											</h:inputText>
+										</s:decorate>
+
+										<div class="actionButtons">
+											<h:commandButton id="submsdit"
+												value="#{messages['login_panel_login_button']}"
+												action="#{authenticator.autenticacionPortal()}">
+												<f:param value="true" name="portal" />
+											</h:commandButton>
+										</div>
+									</h:panelGrid>
+								</rich:panel>
+
+								<h:panelGrid columns="1">
+									<s:link
+										view="/seleccion/gestionarOlvidoContrasenha/OlvidoContrasenha.xhtml"
+										value="#{messages.CU12_olvido_pass}" id="olvidoContraseId">
+									</s:link>
+								</h:panelGrid>
+							</h:panelGrid>
+
+
+							<h:panelGrid columns="1" rendered="#{identity.loggedIn}">
+								<rich:panel>
+									<h:panelGrid style=" width : 285px;">
+										<s:decorate id="usuarioLogField" template="/layout/edit.xhtml"
+											style="font-weight: bold;">
+											<h:outputLabel
+												value="#{messages.CU380_conectado_como}: #{seguridadUtilFormController.nombreUsuarioLogueado}" />
+										</s:decorate>
+									</h:panelGrid>
+								</rich:panel>
+
+								<h:panelGrid columns="1">
+									<s:link action="#{portalFormController.logout()}"
+										value="¿#{messages.CU380_no_eres} #{seguridadUtilFormController.nombreUsuarioLogueado}?"
+										id="noerId">
+									</s:link>
+								</h:panelGrid>
+							</h:panelGrid>
+
+
+
+							<h:panelGrid style="#{portalFormController.estiloMenuConcursos}">
+								<rich:panelMenu mode="ajax" iconExpandedGroup="disc"
+									iconCollapsedGroup="disc" iconExpandedTopGroup="chevronUp"
+									iconGroupTopPosition="right"
+									iconCollapsedTopGroup="chevronDown" style="width:285px;">
+								
+								<rich:panelMenuGroup label="Servicios" expanded="true" styleClass="tit_menu_exp">
+									
+									<rich:panelMenuItem label="#{messages.CU380_concurso_proc_post}"
+										immediate="true"
+										action="/seleccion/buscarConcurso/postulacion/publicados.seam?from=Portal.seam">
+									</rich:panelMenuItem>
+									
+									<rich:panelMenuItem label="#{messages.CU380_concurso_proc_eval}"
+										immediate="true"
+										action="/seleccion/buscarConcurso/evaluados/evaluados.xhtml?from=Portal.seam">
+									</rich:panelMenuItem>
+
+									<rich:panelMenuItem label="#{messages.CU380_concurso_finalizados}"
+										immediate="true"
+										action="/seleccion/buscarConcurso/adjudicados/adjudicados.xhtml?from=Portal.seam">
+									</rich:panelMenuItem>
+									<rich:panelMenuItem label="#{messages.CU380_capacitacion}"
+										immediate="true"
+										action="/capacitacion/portal/portalCapacitacion.seam">
+									</rich:panelMenuItem>
+								</rich:panelMenuGroup>
+								<rich:panelMenuGroup label="#{messages.CU380_informaciones}" expanded="true" styleClass="tit_menu_exp">
+
+									<rich:panelMenuItem label="#{messages.CU380_preguntas}"
+										immediate="true"
+										action="/seleccion/administrarPreguntasFrecuentesPortal/PreguntasFrecuentes.xhtml?preguntasFrecuentesFrom=Portal">
+									</rich:panelMenuItem>
+									<rich:panelMenuItem label="Normativas-Concursabilidad"
+									 immediate="true"
+									 action="/NormativasConcursabilidad.seam">
+									
+									</rich:panelMenuItem>
+									
+								</rich:panelMenuGroup>
+								<rich:panelMenuGroup label="#{messages.CU380_usu_oee}" expanded="true" styleClass="tit_menu_exp">
+									
+									<rich:panelMenuItem rendered="#{!identity.loggedIn}" label="#{messages.CU380_acceso_sistema}"
+										immediate="true" 
+										action="/login.xhtml">
+									</rich:panelMenuItem>
+									
+									<rich:panelMenuItem label="#{messages.CU380_acceso_igp}"
+										onclick="document.location.href='https://www.paraguayconcursa.gov.py/igp/pages/public/login.xhtml'">
+									</rich:panelMenuItem>
+								</rich:panelMenuGroup>
+								</rich:panelMenu>
+							</h:panelGrid>
+							</h:form>
+							<h:form>
+							<h:panelGrid columns="1">
+								<rich:dataTable
+									value="#{adjuntoDocPortalListFormController.documentosList}"
+									id="tablaData" var="p" rows="10" first="0"
+									headerClass="table-subheadercelltittle" style=" width : 285px;">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="#{messages.msg_articulos_interes}" />
+										</f:facet>
+									<h:commandLink value="#{p.nombreLogDoc}"
+									action="#{adjuntoDocPortalListFormController.abrirDoc(p.idDocumento)}" />
+									</rich:column>
+								</rich:dataTable>
+								<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+							</h:panelGrid>
+							</h:form>
+						</h:panelGrid>
+					</rich:panel>
+				</h:panelGrid>
+			<h:panelGrid style="vertical-align:top;">
+				<h:form id="concursoSearch" styleClass="edit"
+					onkeypress="if (event.keyCode == 13) { document.getElementById('concursoSearch:search').click(); return false; }">
+					<rich:simpleTogglePanel label="#{messages['CU71_title']}"
+						switchType="client">
+						<a:region>
+							<h:panelGrid columns="1" style="width : 800px;">
+								<h:outputLabel value="#{messages.CU70_entidad}" for="acSimple" />
+								<p:autoComplete id="acSimple"
+									value="#{concursoListFormController.sugestion}"
+									completeMethod="#{concursoListFormController.autocompletar}" />
+							</h:panelGrid>
+						</a:region>
+
+						<a:region>
+							<h:panelGrid columns="1" style="width : 800px;">
+								<h:outputLabel value="#{messages.CU70_grupo}" for="acSimple2" />
+								<h:inputText id="acSimple2"
+									value="#{concursoListFormController.sugestionGrupo}"
+									style="width : 350px;" />
+							</h:panelGrid>
+						</a:region>
+
+					</rich:simpleTogglePanel>
+
+					<div class="actionButtons">
+						<h:commandButton id="search"
+							value="#{messages.msg_list_search_button}"
+							action="#{concursoListFormController.searchEvaluados()}">
+							<f:param name="sugestion"
+								value="#{concursoListFormController.sugestion}" />
+							<f:param name="sugestionGrupo"
+								value="#{concursoListFormController.sugestionGrupo}" />
+							<f:param name="firstResult" value="0" />
+						</h:commandButton>
+
+
+						<s:button id="reset"
+							value="#{messages['msg_list_search_reset_button']}"
+							includePageParams="false">
+							<f:param name="from" value="#{from}" />
+						</s:button>
+					</div>
+
+				</h:form>
+
+				<rich:panel id="idPanelResultados"
+					style=" width : 820px; white-space:normal;">
+					<f:facet name="header">#{messages['msg_list_search_results']} (#{empty concursoListFormController.lista ? 0 : (concursoListFormController.paginated ? concursoListFormController.resultCount : concursoListFormController.lista.size)}) - #{messages['msg_current_page']} #{concursoListFormController.currentPage} de #{concursoListFormController.pageCount} </f:facet>
+					<h:form>
+						<div class="results" id="concursoListFormController">
+							<h:outputText value="#{messages.msg_list_search_no_results}"
+								rendered="#{empty concursoListFormController.lista}" />
+							<rich:dataTable id="concursoListFormController" var="_elVar"
+								value="#{concursoListFormController.lista}"
+								rendered="#{not empty concursoListFormController.lista}">
+
+								<h:column>
+									<f:facet name="header">
+										<ui:include src="/layout/sort.xhtml">
+											<ui:param name="entityList"
+												value="#{concursoListFormController}" />
+											<ui:param name="propertyLabel" value="#{messages.CU70_oee}" />
+											<ui:param name="propertyPath"
+												value="concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad" />
+										</ui:include>
+									</f:facet>
+									<h:outputText
+										value="#{_elVar.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<ui:include src="/layout/sort.xhtml">
+											<ui:param name="entityList"
+												value="#{concursoListFormController}" />
+											<ui:param name="propertyLabel"
+												value="#{messages.CU70_tipo_concurso}" />
+											<ui:param name="propertyPath"
+												value="concursoPuestoAgr.concurso.datosEspecificosTipoConc.descripcion" />
+										</ui:include>
+									</f:facet>
+									<h:outputText
+										value="#{concursoListFormController.concatenarTipoConcursoYPcdYAdReferendum(_elVar.concursoPuestoAgr.concurso, 'TIPO_CONCURSO')}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<ui:include src="/layout/sort.xhtml">
+											<ui:param name="entityList"
+												value="#{concursoListFormController}" />
+											<ui:param name="propertyLabel"
+												value="#{messages.CU70_puesto}" />
+											<ui:param name="propertyPath"
+												value="concursoPuestoAgr.descripcionGrupo" />
+										</ui:include>
+									</f:facet>
+									<h:outputText
+										value="#{_elVar.concursoPuestoAgr.descripcionGrupo}" />
+									<br />
+
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<a:commandLink reRender="idPanelResultados"
+											action="#{concursoListFormController.ordenarConcurso()}"
+											value="#{messages.public_vacancias}  #{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' ? (concursoListFormController.orderDirection == 'desc' ? messages.down : messages.up) : ''}">
+											<a:actionparam name="sort"
+												assignTo="#{concursoListFormController.orderColumn}"
+												value="fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo" />
+											<a:actionparam name="dir"
+												assignTo="#{concursoListFormController.orderDirection}"
+												value="#{concursoListFormController.orderColumn == 'fechasGrupoPuesto.concursoPuestoAgr.descripcionGrupo' and concursoListFormController.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+										</a:commandLink>
+									</f:facet>
+									<h:outputText
+										value="#{_elVar.concursoPuestoAgr.cantidadPuestos}" />
+								</h:column>
+								<rich:column styleClass="action" style="width:50px;">
+									<f:facet name="header">#{messages.CU70_verBasesCond}</f:facet>
+									<span>•</span>
+									<s:link
+										action="#{concursoListFormController.imprimirPerfilMatriz()}"
+										value="#{messages.CU70_verPerfilMatriz}"
+										propagation="#{empty from ? 'none' : 'default'}"
+										id="concursoViewId">
+										<f:param name="idConcursoPuestoAgr"
+											value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+									</s:link>
+									<br></br><br></br>
+									<span>•</span>
+									<s:link value="#{messages.CU70_verProceso}" propagation="#{empty from ? 'none' : 'default'}"
+										id="publicacionPortalId"
+										view="/seleccion/verPostulacion/verPostulacionPortal.xhtml">
+										
+										<f:param name="idConcursoPuestoAgr"
+											value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+										<f:param name="idConcurso"
+											value="#{_elVar.concursoPuestoAgr.concurso.idConcurso}" />
+										<f:param name="from"
+											value="seleccion/buscarConcurso/evaluados/evaluados" />
+										<f:param name="sugestion"
+											value="#{concursoListFormController.sugestion}" />
+										<f:param name="sugestionGrupo"
+											value="#{concursoListFormController.sugestionGrupo}" />
+										<f:param name="firstResult"
+											value="#{concursoListFormController.firstResult}" />
+									</s:link>
+								</rich:column>
+
+								<h:column>
+									<f:facet name="header">
+										<ui:include src="/layout/sort.xhtml">
+											<ui:param name="entityList"
+												value="#{concursoListFormController}" />
+											<ui:param name="propertyLabel"
+												value="#{messages.CU70_inicio_postulacion}" />
+											<ui:param name="propertyPath" value="concurso.observacion" />
+										</ui:include>
+									</f:facet>
+									<h:outputText
+										value="#{concursoListFormController.calcInicioPostulacion(_elVar)}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<ui:include src="/layout/sort.xhtml">
+											<ui:param name="entityList"
+												value="#{concursoListFormController}" />
+											<ui:param name="propertyLabel"
+												value="#{messages.CU70_fin_postulacion}" />
+											<ui:param name="propertyPath" value="concurso.observacion" />
+										</ui:include>
+									</f:facet>
+									<h:outputText
+										value="#{concursoListFormController.calcFinPostulacion(_elVar)}" />
+								</h:column>
+								<!-- 
+				<rich:column styleClass="action">
+					<f:facet name="header">Acciones</f:facet>
+					<s:link action="#{concursoListFormController.imprimirPerfilMatriz()}"
+						value="#{messages.CU70_verBasesCond}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="concursoViewId">
+						<f:param name="idConcursoPuestoAgr" value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					</s:link>
+				</rich:column>
+				-->
+
+<!-- 								<rich:column styleClass="action" style="width:50px;"> -->
+<!-- 									<f:facet name="header">#{messages.CU70_verPublicacion}</f:facet> -->
+<!-- 									<s:link value="Ver Información" propagation="#{empty from ? 'none' : 'default'}" -->
+<!-- 										id="publicacionPortalId" -->
+<!-- 										view="/seleccion/verPostulacion/verPostulacionPortal.xhtml"> -->
+								
+<!-- 										<f:param name="idConcursoPuestoAgr" -->
+<!-- 											value="#{_elVar.concursoPuestoAgr.idConcursoPuestoAgr}" /> -->
+<!-- 										<f:param name="idConcurso" -->
+<!-- 											value="#{_elVar.concursoPuestoAgr.concurso.idConcurso}" /> -->
+<!-- 										<f:param name="from" -->
+<!-- 											value="seleccion/buscarConcurso/evaluados/evaluados" /> -->
+<!-- 										<f:param name="sugestion" -->
+<!-- 											value="#{concursoListFormController.sugestion}" /> -->
+<!-- 										<f:param name="sugestionGrupo" -->
+<!-- 											value="#{concursoListFormController.sugestionGrupo}" /> -->
+<!-- 										<f:param name="firstResult" -->
+<!-- 											value="#{concursoListFormController.firstResult}" /> -->
+<!-- 									</s:link> -->
+<!-- 								</rich:column> -->
+							</rich:dataTable>
+						</div>
+						<div class="tableControl">
+							<s:link
+								view="/seleccion/buscarConcurso/evaluados/evaluados.xhtml"
+								rendered="#{concursoListFormController.previousExists}"
+								value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+								id="firstPage">
+								<f:param name="firstResult" value="0" />
+							</s:link>
+							<s:link
+								view="/seleccion/buscarConcurso/evaluados/evaluados.xhtml"
+								rendered="#{concursoListFormController.previousExists}"
+								value="#{messages.left}  #{messages.msg_list_previous_page}"
+								id="previousPage">
+								<f:param name="firstResult"
+									value="#{concursoListFormController.previousFirstResult}" />
+							</s:link>
+							<h:outputText
+								value="  #{messages['msg_current_page']} #{concursoListFormController.currentPage} / #{concursoListFormController.pageCount}" />
+							<s:link
+								view="/seleccion/buscarConcurso/evaluados/evaluados.xhtml"
+								rendered="#{concursoListFormController.nextExists}"
+								value="#{messages.msg_list_next_page} #{messages.right}"
+								id="nextPage">
+								<f:param name="firstResult"
+									value="#{concursoListFormController.nextFirstResult}" />
+							</s:link>
+							<s:link
+								view="/seleccion/buscarConcurso/evaluados/evaluados.xhtml"
+								rendered="#{concursoListFormController.nextExists}"
+								value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+								id="lastPage">
+								<f:param name="firstResult"
+									value="#{concursoListFormController.lastFirstResult}" />
+							</s:link>
+						</div>
+					</h:form>
+				</rich:panel>
+
+
+
+
+				<div class="actionButtons">
+					<s:button id="cancelEdit" value="#{messages.msg_done}"
+						propagation="none" view="/#{from}">
+						<f:param name="firstResult" value="0" />
+						<f:param name="paginaActual" value="evaluados" />
+
+					</s:button>
+
+				</div>
+			</h:panelGrid>
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

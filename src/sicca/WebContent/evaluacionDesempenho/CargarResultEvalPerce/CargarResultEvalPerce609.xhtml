@@ -1,0 +1,248 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<a:outputPanel ajaxRendered="true" id="idModalPanel">
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				rendered="#{cargarResultEvalMetodo571FC.mostrarModal}"
+				resizeable="false" moveable="true">
+				<h:form id="idPanelAdjuntos" enctype="multipart/form-data">
+					<rich:panel id="idPanel">
+						<f:facet name="header">Adjuntar Documento </f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Tipo Documento<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="idTipoDocumento"
+									value="#{cargarResultEvalMetodo571FC.idTipoDocumento}"
+									style="width:150px">
+									<f:selectItems
+										value="#{cargarResultEvalMetodo571FC.traerTipoDocumentoSI()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Documento<span
+										class="required">*</span>
+								</ui:define>
+								<s:fileUpload size="30"
+									contentType="#{cargarResultEvalMetodo571FC.cType1}"
+									data="#{cargarResultEvalMetodo571FC.uFile1}"
+									fileName="#{cargarResultEvalMetodo571FC.fName1}">
+									<s:conversationPropagation type="join" />
+								</s:fileUpload>
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+					<div style="clear: both" />
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><h:commandButton
+						id="idBtnAceptar" value="Adjuntar"
+						action="#{cargarResultEvalMetodo571FC.adjuntarDocumento()}" /> <s:button
+						id="idBtnCancelar" value="Volver"
+						action="#{cargarResultEvalMetodo571FC.habilitarModal(false)}" /></div>
+				</h:form>
+
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}				
+			</script>
+		</a:outputPanel>
+		<h1>Carga Resultado - Metodología Percepción</h1>
+		<ui:remove><h3 align="center"><span class="required">#{cargarResultEvalPerce608FC.mensajePuntajeMinMax()}</span></h3></ui:remove>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages.CU608_panel2_title}">
+				<div style="width: 100%; HEIGHT: 800px"
+					class="results"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty cargarResultEvalPerce608FC.lGrilla3}" /> <rich:dataTable
+					rendered="#{!empty cargarResultEvalPerce608FC.lGrilla3}"
+					rowKeyVar="rowIndexGrilla1" var="_record3"
+					value="#{cargarResultEvalPerce608FC.lGrilla4}">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{messages.CU571_funcionarios}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_cargo}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_numero}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_criterioEval}" />
+							</rich:column>
+						
+							<rich:column>
+								<h:outputText value="Ponderación Establecida" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_puntajeObtenido}" />
+							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="#{messages.CU608_justificacion}" />
+							</rich:column>
+
+							<rich:column>
+								<h:outputText value="#{messages.CU572_planMejora}" />
+							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="#{messages.CU572_adjunto}" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record3.sujetos.empleadoPuesto.persona.nombres} #{_record3.sujetos.empleadoPuesto.persona.apellidos} #{_record3.sujetos.empleadoPuesto.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record3.sujetos.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+
+					<rich:column style="background-color: palegoldenrod;">
+
+					</rich:column>
+					
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+						<s:link value="Adjuntar" propagation="join"
+							rendered="#{_record3.documentos == null}"
+							action="#{cargarResultEvalMetodo571FC.habilitarModal(true)}">
+							<f:param name="idGrupoSujeto" value="#{_record3.idGrupoSujeto}" />
+						</s:link>
+						
+				  #{' '}<h:commandLink value="Descargar" propagation="join"
+							rendered="#{_record3.documentos != null}"
+							action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record3.documentos.idDocumento)}" />
+							
+				  #{' '}<h:commandLink value="Eliminar" propagation="join"
+							rendered="#{_record3.documentos != null}"
+							action="#{cargarResultEvalMetodo571FC.eliminandoConstancia(_record3.idGrupoSujeto)}" />
+							
+					</rich:column>
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						var="_detalles2"
+						value="#{cargarResultEvalPerce608FC.traerDetalleGrilla5(_record3.sujetos.idSujetos)}">
+						<rich:column colspan="2"
+							style="border-right: 0px;border-left: 1px;">
+						</rich:column>
+						<rich:column>
+							<h:outputText
+								value="#{cargarResultEvalPerce608FC.refreshResultadoEval(_detalles2).plantillaEvalConfDet.orden}"></h:outputText>
+						</rich:column>
+						<rich:column>
+							<h:outputText
+								value="#{cargarResultEvalPerce608FC.refreshResultadoEval(_detalles2).plantillaEvalConfDet.resultadoEsperado}"></h:outputText>
+						</rich:column>
+						<rich:column>
+							<h:outputText
+								value="#{cargarResultEvalPerce608FC.refreshResultadoEval(_detalles2).plantillaEvalConfDet.pesoPercepcion}"></h:outputText>
+						</rich:column>
+						<rich:column>
+							<h:inputText styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{_detalles2.puntaje}">
+								<ui:remove><a:support eventsQueue="default" event="onblur" /></ui:remove>
+							</h:inputText>
+						</rich:column>
+						<rich:column>
+							<h:inputTextarea value="#{_detalles2.justificacion}">
+								<f:validateLength maximum="500" />
+								<ui:remove><a:support eventsQueue="default" event="onblur" /></ui:remove>
+							</h:inputTextarea>
+						</rich:column>
+						<rich:column>
+							<div style="overflow: scroll; HEIGHT: 100px; width: 100%;">
+							<table border="1">
+								<a:repeat value="#{_detalles2.lPM}" var="itemRepeat">
+									<tr>
+										<td><h:outputText
+											style="width: 50px ;white-space:normal;word-wrap: break-word"
+											value="#{itemRepeat.descripcion}" /></td>
+										<td><h:selectBooleanCheckbox
+											value="#{itemRepeat.selected}">
+											<ui:remove><a:support eventsQueue="default" event="onclick"></a:support></ui:remove>
+
+										</h:selectBooleanCheckbox></td>
+									</tr>
+								</a:repeat>
+							</table>
+							</div>
+						</rich:column>
+					</rich:subTable>
+						
+					
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						rowKeyVar="rowIndexGrilla2" var="_record4"
+						value="#{cargarResultEvalPerce608FC.traerDetalleGrilla4(_record3.idGrupoSujeto)}">
+						
+						<rich:column colspan="3"
+							style="border-right: 0px;border-left: 1px;">
+						</rich:column>
+						<rich:column >
+							<h:outputText value="Comentario Final" style="FONT-WEIGHT: bold;"></h:outputText>
+					
+						</rich:column>
+						
+						<rich:column colspan="5">
+							<h:inputTextarea cols="105" rows="2" value= "#{_record4.comentarioPercepcion}">
+								<ui:remove><a:support eventsQueue="default" event="onblur" /></ui:remove>
+							</h:inputTextarea>
+						</rich:column>
+						
+					</rich:subTable>
+				</rich:dataTable></div>
+			</rich:simpleTogglePanel>
+			
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass" /></div>
+			<s:div styleClass="actionButtons">
+				<h:commandButton value="Guardar"
+					action="#{cargarResultEvalPerce608FC.save()}" />
+				
+				
+
+				<s:button value="Volver" propagation="join"
+					view="/evaluacionDesempenho/CargarResultEvalPerce/CargarResultEvalPerce608.xhtml" />
+			</s:div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

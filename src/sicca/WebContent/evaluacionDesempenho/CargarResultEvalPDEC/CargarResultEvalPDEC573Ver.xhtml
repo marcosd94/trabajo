@@ -1,0 +1,205 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>Ver Carga Resultado - Metodología PDEC</h1>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages.CU571_panel1_title}"
+				id="idPanelDefAlcance">
+				<div style="width: 100%; HEIGHT: 450px"
+					class="results"><h:outputText
+					value="No hay Integrantes seleccionados..."
+					rendered="#{empty  cargarResultEvalPDEC572FC.lGrilla1}" /> <rich:dataTable
+					rowKeyVar="rowIndexGrilla1" var="_record"
+					value="#{cargarResultEvalPDEC572FC.lGrillaIndividual}">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{messages.CU571_funcionarios}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_puesto}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_tipo}" />
+							</rich:column>
+							
+							<rich:column>
+								<h:outputText escape="false"
+									value="Ponderación Establecida" />
+							</rich:column>
+							<rich:column>
+								<h:outputText escape="false"
+									value="#{messages.CU572_puntajeObt}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_justificacion}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_adjunto}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_planMejora}" />
+							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="Promedio PDEC" />
+							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="Promedio GLOBAL" />
+							</rich:column>
+						
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record.sujetos.empleadoPuesto.persona.nombres} #{_record.sujetos.empleadoPuesto.persona.apellidos} #{_record.sujetos.empleadoPuesto.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record.sujetos.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</rich:column>
+					
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					
+						<table>
+							
+							<ui:remove>
+								<tr>
+																								<td style="white-space: normal; word-wrap: break-word"><h:outputText
+																									style="white-space:normal;word-wrap: break-word"
+																									value="#{cargarResultEvalPDEC572FC.traerDocumento(_record).grupoSujeto.documentos.nombreFisicoDoc}"
+																									rendered="#{cargarResultEvalPDEC572FC.traerDocumento(_record).grupoSujeto.documentos!=null}" /></td>
+																							</tr>
+							</ui:remove>
+							
+							<tr>
+								<td><h:commandLink value="Descargar" propagation="join"
+									rendered="#{_record.grupoSujeto.documentos!=null}"
+									action="#{cargarResultEvalMetodo571FC.descargarDocumento(cargarResultEvalPDEC572FC.traerDocumento(_record).grupoSujeto.documentos.idDocumento)}" />
+								</td>
+							</tr>
+						</table>
+					</rich:column>
+				
+					<rich:column style="background-color: palegoldenrod;">
+
+
+					</rich:column>
+					
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText value="#{_record.grupoSujeto.puntajePdec}" />
+					</rich:column>
+					
+					<rich:column style="background-color: palegoldenrod; font: italic bold 12px/30px Georgia, serif;">
+						<h:outputText value="#{_record.grupoSujeto.puntajeFinal}" />
+					</rich:column>
+					
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						var="_detalles"
+						value="#{cargarResultEvalPDEC572FC.traerPlantillaEvalPdecCabs(_record.idPlantillaEvalPdec)}">
+						<rich:column colspan="2"
+							style="border-right: 0px;border-left: 1px;">
+						</rich:column>
+						<rich:column>
+							<h:outputText value="#{_detalles.descripcion}"></h:outputText>
+						</rich:column>
+						
+						<rich:column>
+							<h:inputText styleClass="numeric" disabled="true"
+								onkeypress="return soloNumeros(event);"
+								value="#{_detalles.pesoPdec}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputText>
+						</rich:column>
+						<rich:column>
+							<h:inputText styleClass="numeric" disabled="true"
+								onkeypress="return soloNumeros(event);"
+								value="#{_detalles.resultado}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputText>
+						</rich:column>
+						<rich:column>
+							<h:inputTextarea disabled="true"
+								value="#{_detalles.justificacion}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputTextarea>
+						</rich:column>
+						<rich:column>
+						</rich:column>
+						<rich:column>
+							<h:outputText style="white-space:normal"
+								value="#{cargarResultEvalPDEC572FC.genPlanMejora(_detalles.idPlantillaEvalPdecCab)}" />
+						</rich:column>
+
+					</rich:subTable>
+					
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						rowKeyVar="rowIndexGrilla4" var="_record4"
+						value="#{cargarResultEvalPDEC572FC.traerDetalleGrilla4(_record.sujetos.idSujetos)}">
+						
+						<rich:column colspan="3"
+							style="border-right: 0px;border-left: 1px;">
+						</rich:column>
+						<rich:column  >
+							<h:outputText value="Comentario Final" style="FONT-WEIGHT: bold;"></h:outputText>
+					
+						</rich:column>
+						
+						<rich:column colspan="4">
+							<h:inputTextarea cols="105" rows="2" value= "#{_record4.comentarioPdec}" disabled="true">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputTextarea>
+						</rich:column>
+					</rich:subTable>
+				</rich:dataTable></div>
+			</rich:simpleTogglePanel>
+			
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass" /></div>
+			<s:div styleClass="actionButtons">
+
+				
+				<h:commandButton id="print" 
+				value="#{messages.msg_list_search_print_button} Resultado"
+				action="#{cargarResultEvalPDEC572FC.pdf()}" disabled="false" />
+				
+				<h:commandButton id="printAnalisis" disabled="#{cargarResultEvalPDEC572FC.habilitarAnaMat}"
+				value="Imprimir Análisis Matriz"
+				action="#{cargarResultEvalPDEC572FC.imprimirAnalisisMatriz()}" />
+
+				<s:button value="Volver" propagation="join"
+					view="/evaluacionDesempenho/CargarResultEvalPDEC/CargarResultEvalPDEC572Ver.xhtml" />
+			</s:div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,396 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<!--******************** MODAL ******************-->
+		<!-- ****Modal tab02**** -->
+	<a:region >
+	
+	<rich:modalPanel id="modalContacto" width="400" height="185" styleClass="centerbox">
+		
+			<f:facet name="controls">
+				
+			</f:facet>
+			 <h:form>
+                 <rich:panel>
+               
+            		<rich:dataTable id="tablaContactos"
+						value="#{plantillaResolucionHomologacionHome.tagList}" var="tag" rows="5"
+						reRender="panelContacto">
+						
+						<rich:column >
+							<f:facet name="header"> Etiquetas</f:facet>
+							<h:outputText id="tag1" value="#{tag.tag}" />
+						</rich:column>
+						<rich:column >
+							<f:facet name="header"> Descripción</f:facet>
+							<h:outputText id="outputText1" value="#{tag.descripcion}" />
+						</rich:column>
+						
+					</rich:dataTable>
+					<rich:datascroller for="tablaContactos" renderIfSinglePage="false"
+						id="scrc" reRender="tdPr">
+					</rich:datascroller>
+               
+               
+                </rich:panel>
+                 <h:outputText value="Nota:puede seleccionar las etiquetas, luego copiarlas en el lugar que desee de la plantilla "/>
+              	<rich:spacer height="20px" />
+              	<div class="actionButtons" align="center">
+                <a:commandLink value="Cerrar" onclick="#{rich:component('modalContacto')}.hide()" />
+               </div>
+                </h:form>
+			
+			
+
+			<h:panelGrid>
+				<h:form>
+				
+				</h:form>
+			</h:panelGrid>
+		</rich:modalPanel>
+	
+		
+		<!-- ****Fin Modal**** -->
+		</a:region>
+		
+		<h1>#{messages.CU248_plantillas_resolucio}</h1>
+    <h:form id="resolucionHomologacion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{plantillaResolucionHomologacionHome.managed ? 'Editar' : 'Cargar'} #{messages.CU248_plantillas_de_borrador}</f:facet>
+				<rich:tabPanel switchType="server" id="tabGeneral">
+					<rich:tab label="Datos Resolución" id="tabCargaDatos">
+					<h:panelGrid columns="2">
+					
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">Descripción</ui:define>
+								<h:inputText id="descripcion" required="true" size="100"
+									maxlength="150" disabled="true"
+									value="#{plantillaResolucionHomologacionHome.instance.descripcion}">
+								</h:inputText>
+							</s:decorate>
+					 <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" disabled="true"
+                                      value="#{plantillaResolucionHomologacionHome.instance.activo}"/>
+            </s:decorate>
+            	
+					
+					</h:panelGrid>
+					
+					
+						<h:panelGrid columns="1">
+							
+							<div class="actionButtons" align="center">
+							<a:region >
+							<a:commandButton id="showValoracionModalButton"
+										value="Ver Etiquetas"
+										onclick="Richfaces.showModalPanel('modalContacto');" />
+						</a:region>
+						</div>
+							
+							</h:panelGrid>
+							  <fieldset><legend>Plantilla</legend>
+	            <h:panelGrid columns="1">
+	                
+							
+							 <s:decorate id="tituloField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_titulo}</ui:define>
+                <h:inputTextarea id="titulo"
+                               cols="80" disabled="true"
+                               rows="6"
+                           required="true"
+                              value="#{plantillaResolucionHomologacionHome.instance.titulo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="lugarField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_visto}</ui:define>
+                <h:inputTextarea id="lugar"
+                       required="true"
+                           cols="80"
+                               rows="6" disabled="true"
+                          value="#{plantillaResolucionHomologacionHome.instance.visto}">
+                 </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="considerandoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_considerado}</ui:define>
+                <h:inputTextarea id="considerando"  cols="80"
+                               rows="6" disabled="true"
+                          value="#{plantillaResolucionHomologacionHome.instance.considerando}">
+               </h:inputTextarea>
+            </s:decorate>
+			 <s:decorate id="porTantoField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.CU248_portanto}</ui:define>
+			                <h:inputTextarea id="porTanto"
+			                               cols="80"
+			                               rows="6" disabled="true"
+			                           required="true"
+			                              value="#{plantillaResolucionHomologacionHome.instance.porTanto}"/>
+			            </s:decorate>
+			
+			
+			            <s:decorate id="resuelveField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.CU248_resuelve}</ui:define>
+			                <h:inputTextarea id="resuelve"
+			                               cols="80"
+			                               rows="6" disabled="true"
+			                           required="true"
+			                              value="#{plantillaResolucionHomologacionHome.instance.resuelve}"/>
+			            </s:decorate>
+						 <s:decorate id="firmaField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_firma}</ui:define>
+						                <h:inputText id="firma" disabled="true"
+						                               cols="80"
+						                           required="true"
+						                              value="#{plantillaResolucionHomologacionHome.instance.firma}" style=" width : 571px;"/>
+						            </s:decorate>
+						
+						
+						            <s:decorate id="cargoField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_cargo_firma}</ui:define>
+						                 <h:inputText id="cargo"
+						                              style=" width : 571px;"
+						                           required="true" disabled="true"
+						                              value="#{plantillaResolucionHomologacionHome.instance.cargo}"/>
+						            </s:decorate>
+						
+						
+						            <s:decorate id="institucionField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_institucion}</ui:define>
+						              <h:inputText  id="institucion"
+						                              style=" width : 571px;"
+						                           required="true" disabled="true"
+						                              value="#{plantillaResolucionHomologacionHome.instance.institucion}"/>
+						            </s:decorate>
+						         
+
+
+           
+
+
+           				</h:panelGrid>
+							</fieldset>
+						
+					</rich:tab>
+					
+					<rich:tab label="#{messages.CU248_vista_preliminar}" id="tabVistaPreliminar"   >
+					    		<table> 
+					    		<tr> 
+					    		<td style="text-align:center;">
+					    		<h:graphicImage value="/img/cabecera.jpg" alt="Cabecera" />
+					    		
+					    		</td>
+					    		
+					    		
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:center;font-size:medium;font-weight:bold;width : 740px"> 
+					    		
+					    		<font style="text-transform: uppercase;"><h:outputText id="descripcionvp" required="true" size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.descripcion}" >
+								</h:outputText></font>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:center;">
+					    		<font style="text-transform: uppercase;"><h:outputText id="titulovp" required="true" size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.titulo}" style="text-align:center;font-size:medium;font-weight:bold;">
+								</h:outputText></font>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:right;">
+					    		<h:outputText id="fec" required="true" size="100"
+									maxlength="150"
+									value="Lugar,Fecha" style="text-align:right;">
+								</h:outputText>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td> 
+					    		<table>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold; width : 128px;"> 
+					    		<h:outputText size="10"
+									maxlength="150"
+									value="VISTO" >
+								</h:outputText>
+					    		</td>
+					    		<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150" 
+									value="#{plantillaResolucionHomologacionHome.instance.visto}" >
+									</h:outputText>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="CONSIDERANDO" >
+								</h:outputText>
+					    		</td>
+					    		<td     style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.considerando}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="POR TANTO" >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.porTanto}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td     style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="RESUELVE" >
+								</h:outputText>
+					    		</td>
+					    			<td  style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.resuelve}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="FIRMA" >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.firma}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="CARGO " >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.cargo}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold; width : 225px;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="INSTITUCIÓN " >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{plantillaResolucionHomologacionHome.instance.institucion}" />
+					    		</td>
+					    		</tr>
+					    		</table>
+					    		</td>
+					    		
+					    		</tr>
+					    		</table>
+					    		
+					    	
+							
+							
+							
+					</rich:tab>
+					
+			</rich:tabPanel>
+
+
+
+
+           
+
+
+           
+
+           
+
+
+           
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+<div style="clear:both">
+          </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+             
+
+            
+           
+            <s:button id="cancelEdit"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/seleccion/plantillaResolucionHomologacion/PlantillaResolucionHomologacionList.xhtml"
+                rendered="#{plantillaResolucionHomologacionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.GENERICO_VOLVER}"
+             propagation="end"
+                    view="/#{empty plantillaResolucionHomologacionFrom ? 'seleccion/plantillaResolucionHomologacion/PlantillaResolucionHomologacionList' : plantillaResolucionHomologacionFrom}.xhtml"
+                rendered="#{!plantillaResolucionHomologacionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

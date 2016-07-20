@@ -1,0 +1,54 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="solicitudAprobaciones" styleClass="edit">
+			<h1>#{messages.CU74_title_solicitar_aprob}</h1>
+			<rich:panel id="panel" style="width: 500px;">
+				<rich:dataTable id="grupoACancelarList" var="_can" rowKeyVar="row"
+					value="#{publicacionConcursoListFormController.listaAutorizacionSFP}"
+					rendered="#{not empty publicacionConcursoListFormController.listaAutorizacionSFP}"  width="500">
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU74_denominacion_puestos}
+						</f:facet>
+						<h:outputText value="#{_can.concursoPuestoAgr.descripcionGrupo}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+						#{messages.CU74_estado}
+						</f:facet>
+						<h:outputText value="#{_can.referencias.descAbrev}"/>
+							
+					</rich:column>
+					
+				
+				</rich:dataTable>
+				<br />
+				<h:outputText value="#{messages.CU74_msg_solicitar_aprob}" style="color:red"/>
+			</rich:panel>
+
+
+
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.CU74_solicitar_autorizacion}"
+				action="#{publicacionConcursoListFormController.autorizar()}"
+				onclick="return confirm('#{messages.CU74_btn_solicitar_aprob}');"/>
+			
+			<s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/publicacionConcursoCab/PublicacionConcursoCabList.xhtml" />
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

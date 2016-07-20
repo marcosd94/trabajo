@@ -1,0 +1,445 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+
+
+
+	<ui:define name="body">
+		
+		
+		
+		
+		<h1>Modificar Evaluación Documental Postulante</h1>
+		<!-- ****Modal para adjuntar archivos**** -->
+		<rich:modalPanel id="adjuntarModal" width="550" height="300"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">Adjunción de Documentos</f:facet>
+			<h:form id="panelAdjuntos" prependId="false"
+				enctype="multipart/form-data" styleClass="edit">
+				<rich:panel id="tab1">
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+
+							<s:fileUpload size="30" id="archivo"
+								contentType="#{evaluacionDocumentosFormController.contentType}"
+								data="#{evaluacionDocumentosFormController.uploadedFile}"
+								fileName="#{evaluacionDocumentosFormController.fileName}"
+								style=" width : 382px;">
+							</s:fileUpload>
+						</s:decorate>
+						<s:decorate id="documentoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU156_doc}</ui:define>
+							<h:outputText id="nomFinal"
+								value="#{evaluacionDocumentosFormController.nombreDoc}" />
+						</s:decorate>
+						<a:commandButton id="botonEliminarAdj"
+							action="#{evaluacionDocumentosFormController.clearUploadData}"
+							reRender="tab1" value="Eliminar Adjuntado"
+							rendered="#{evaluacionDocumentosFormController.item != null}" />
+					</h:panelGrid>
+
+
+
+				</rich:panel>
+
+				<div class="actionButtons" align="center"><h:commandButton
+					id="ok" value="Aceptar" ajaxSingle="true" reRender="panelResultado"
+					action="#{evaluacionDocumentosFormController.documento()}"
+					oncomplete="Richfaces.hideModalPanel('adjuntarModal')" /> <a:commandButton
+					id="cancel_tap03" value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('adjuntarModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="VerDocumentosModal" width="550" height="350"
+			autosized="false" resizeable="false" moveable="false">
+			<f:facet name="header">Ver Documentos Adjuntos</f:facet>
+			<h:form>
+
+				<div style="clear: both; overflow: auto; HEIGHT: 250px"><rich:dataTable
+					id="tablaDocAdj" cellpadding="0" cellspacing="0" width="400"
+					border="0" var="var" rowKeyVar="col"
+					value="#{evaluacionDocumentosFormController.listaDocAmostrar}">
+					<rich:column width="300">
+						<f:facet name="header">
+						Documentos
+						</f:facet>
+						<h:outputText value="#{var.nombreFisicoDoc}" />
+					</rich:column>
+					<rich:column width="100">
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+						<h:commandLink value="Descargar" target="_blank"
+							rendered="#{var.idDocumento!=null}"
+							action="#{evaluacionDocumentosFormController.abrirDocumento(col)}" />
+					</rich:column>
+				</rich:dataTable></div>
+
+
+				<div class="actionButtons" align="center"><a:commandButton
+					id="cancel_tap03" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('VerDocumentosModal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalVolver" width="250" height="150"
+			resizeable="false" moveable="true">
+			<h:form>
+				<span style="font-weight: bold"><h:outputText escape="false"
+					value="#{messages.CU41_msg}" /></span>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="ok" value="Aceptar" ajaxSingle="true"
+					action="#{evaluacionDocumentosFormController.aceptarEvaluacion()}"
+					oncomplete="Richfaces.hideModalPanel('modalVolver')" /> <h:commandButton
+					id="cancel" value="Cancelar" ajaxSingle="true"
+					action="#{evaluacionDocumentosFormController.cancelarEvaluacion()}"
+					oncomplete="Richfaces.hideModalPanel('modalVolver')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalGuardar" width="250" height="150"
+			resizeable="false" moveable="true">
+
+			<h:form>
+				<h:outputText value="Desea cerrar la evaluación del Postulante? "
+					style="font-weight:bold" />
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Aceptar"
+					action="#{evaluacionDocumentosFormController.aceptarEvaluacion()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalGuardar')"
+					reRender="panelResultados" /> <a:commandButton id="cancel"
+					action="#{evaluacionDocumentosFormController.cancelarEvaluacion()}"
+					value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalGuardar')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="modalX" width="250" height="150"
+			resizeable="false" moveable="true">
+
+			<h:form>
+				<h:outputText value="#{messages.msg_confirm_save} "
+					style="font-weight:bold" />
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Aceptar"
+					action="#{evaluacionDocumentosFormController.saveTRM()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalX'), Richfaces.showModalPanel('modalSave');"
+					reRender="modalSave" /> <a:commandButton id="cancel"
+					action="#{evaluacionDocumentosFormController.cancelar()}"
+					value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalX')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="modalSave" width="250" height="150"
+			resizeable="false" moveable="true">
+
+			<h:form>
+
+				<h:outputText value="#{messages.CU41_msg} "
+					rendered="#{evaluacionDocumentosFormController.msgSave == null}"
+					style="font-weight:bold" />
+				<span class="required"><h:outputText
+					value="#{evaluacionDocumentosFormController.msgSave} "
+					rendered="#{evaluacionDocumentosFormController.msgSave != null}"
+					style="font-weight:bold" /></span>
+
+
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="cancelSinMsg" value="Aceptar" ajaxSingle="true"
+					rendered="#{evaluacionDocumentosFormController.msgSave != null}"
+					oncomplete="Richfaces.hideModalPanel('modalSave')" /> <a:commandButton
+					id="save" value="Aceptar"
+					rendered="#{evaluacionDocumentosFormController.msgSave == null}"
+					action="#{evaluacionDocumentosFormController.aceptarEvaluacionTRMCIO()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalSave');"
+					reRender="panelResultados" /> <a:commandButton id="cancel"
+					action="#{evaluacionDocumentosFormController.cancelar()}"
+					rendered="#{evaluacionDocumentosFormController.msgSave == null}"
+					value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalSave')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+
+		<h:form id="evalDocumentalCab" styleClass="edit">
+
+			<rich:panel>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{evaluacionDocumentosFormController.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+
+						<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{evaluacionDocumentosFormController.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU41_cod_postulante}</ui:define>
+
+						<h:inputText id="codPostulante" size="30" disabled="true"
+							value="#{evaluacionDocumentosFormController.evalDocumentalCab.postulacion.personaPostulante.usuAlta}" />
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons" rendered="#{isEdit}"><a:commandButton id="marcar"
+					value="Seleccionar Todos"
+					action="#{evaluacionDocumentosFormController.marcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton> <a:commandButton id="desmarcar" value="#{messages.CU74_quitar}"
+					action="#{evaluacionDocumentosFormController.desmarcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton>
+				<h:commandButton
+				id="print" value="Generar ZIP"
+				action="#{evaluacionDocumentosFormController.generarZip()}" />
+				
+				</div>
+				<br />
+				<div style="clear: both; overflow: auto; HEIGHT: 350px"><rich:panel
+					id="panelResultado">
+					<span class="required">Para aprobar un documento se debe
+					contar con el mismo. Verifique</span>
+					<f:facet name="header">Documentos Presentados(#{evaluacionDocumentosFormController.listaEvalDocumentalDetDTO.size()}) <span
+							class="required">*</span>
+					</f:facet>
+					<div class="results" id="evalList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty evaluacionDocumentosFormController.listaEvalDocumentalDetDTO}" />
+					<rich:dataTable id="evaluacionList" var="_eval" rowKeyVar="row"
+						value="#{evaluacionDocumentosFormController.listaEvalDocumentalDetDTO}"
+						rendered="#{not empty evaluacionDocumentosFormController.listaEvalDocumentalDetDTO}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_nro}
+						</f:facet>
+							<h:outputText value="#{_eval.nro}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_tipo_doc}
+						</f:facet>
+							<h:outputText value="#{_eval.tipoDocumento.descripcion}">
+							</h:outputText>
+						</h:column>
+
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_obligatorio}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.obligatorio}"
+								disabled="true" />
+								<h:outputText value=" Grupo:  #{_eval.evalDocumentalDet.matrizDocConfigDet.matrizDocConfigGrupos.descripcion}" rendered="#{_eval.evalDocumentalDet.matrizDocConfigDet.agrupado}"/>
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_presento}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.presento}"
+								disabled="true" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+						#{messages.CU41_aprobado}
+						</f:facet>
+							<h:selectBooleanCheckbox value="#{_eval.aprobado}"
+							 />
+						</rich:column>
+
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU41_documento}
+						</f:facet>
+							<h:outputText value="#{_eval.documentos.nombreFisicoDoc}">
+							</h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+
+							<a:commandLink id="showDescargaLink" value="Ver"
+								reRender="VerDocumentosModal"
+								action="#{evaluacionDocumentosFormController.buscarDocumentosAlistar(row)}"
+								oncomplete="#{rich:component('VerDocumentosModal')}.show()" />
+							#{' '}
+							
+							<!-- <a:commandLink id="showAdjuntarLink" value="Adjuntar Doc."
+								reRender="adjuntarModal"
+								action="#{evaluacionDocumentosFormController.seleccionadoParaAdjuntar(row)}"
+								oncomplete="#{rich:component('adjuntarModal')}.show()" />-->
+						</h:column>
+					</rich:dataTable></div>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+							<h:inputTextarea id="obs" cols="40"
+								value="#{evaluacionDocumentosFormController.observacion}">
+								<f:validateLength maximum="250" />
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel></div>
+				<rich:panel id="panelEvaluadores">
+					<f:facet name="header">Evaluadores</f:facet>
+					<h:panelGrid columns="1" rendered="#{isEdit}">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">Seleccione el Tipo  <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneRadio id="tipo"
+								value="#{evaluacionDocumentosFormController.tipoEvaluacion}">
+								<s:selectItems var="val"
+									value="#{enumAppHelper.tiposEvauacions}"
+									label="#{val.descripcion}" />
+								<s:convertEnum />
+								<a:support event="onclick"
+									reRender="panelEvaluadores,panelResultado" />
+							</h:selectOneRadio>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2" rendered="#{isEdit}">
+						<s:decorate template="/layout/display.xhtml"
+							rendered="#{evaluacionDocumentosFormController.tipoEvaluacion.id.equals('comision')}">
+							<ui:define name="label">Comision</ui:define>
+							<h:inputText id="descComision" size="30" disabled="true"
+								rendered="#{evaluacionDocumentosFormController.tipoEvaluacion.id.equals('comision')}"
+								value="#{evaluacionDocumentosFormController.comision}" />
+						</s:decorate>
+						<s:decorate id="integrante1Field" template="/layout/display.xhtml"
+							rendered="#{evaluacionDocumentosFormController.tipoEvaluacion.id.equals('comision')}">
+							<ui:define name="label">Integrante  <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="integrante1"
+								value="#{evaluacionDocumentosFormController.idIntegranteComision}"
+								style="width:250px">
+								<f:selectItems
+									value="#{evaluacionDocumentosFormController.integrantesComisionSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate id="empresaField" template="/layout/display.xhtml"
+							rendered="#{evaluacionDocumentosFormController.tipoEvaluacion.id.equals('empresa')}">
+							<ui:define name="label">Empresa Tercerizada</ui:define>
+							<h:selectOneMenu id="empresa"
+								value="#{evaluacionDocumentosFormController.idEmpresaTercerizada}"
+								style="width:250px">
+								<f:selectItems
+									value="#{evaluacionDocumentosFormController.empresaTercerizadaSelecItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{evaluacionDocumentosFormController.cargarComboIntegrantesEmpresa()}"
+									reRender="integrante2Field" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate id="integrante2Field" template="/layout/display.xhtml"
+							rendered="#{evaluacionDocumentosFormController.tipoEvaluacion.id.equals('empresa')}">
+							<ui:define name="label">Integrante  <span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="integrante2"
+								value="#{evaluacionDocumentosFormController.idIntegranteEmpresa}"
+								style="width:250px">
+								<f:selectItems
+									value="#{evaluacionDocumentosFormController.integrantesEmpresaSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+
+					</h:panelGrid>
+
+					<a:commandButton id="agregar" value="Agregar"
+						rendered="#{isEdit}"
+						action="#{evaluacionDocumentosFormController.agregar()}"
+						reRender="panelEvaluadores" />
+					<br />
+					<rich:dataTable id="evaluadoresList" var="_evaluadores"
+						rowKeyVar="fil"
+						value="#{evaluacionDocumentosFormController.listaEvaluadoresDTO}"
+						rendered="#{not empty evaluacionDocumentosFormController.listaEvaluadoresDTO}">
+						<h:column>
+							<f:facet name="header">
+						Comision/Emp.Tercerizada
+						</f:facet>
+							<h:outputText value="#{_evaluadores.emprTercerizada.nombre}" />
+							<h:outputText value="#{_evaluadores.comision}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						Integrante Comisión/Funcionario Emp. Terc.
+						</f:facet>
+							<h:outputText
+								value="#{_evaluadores.personaComision.nombres} #{_evaluadores.personaComision.apellidos}" />
+							<h:outputText
+								value="#{_evaluadores.personaEmpresa.nombres} #{_evaluadores.personaEmpresa.apellidos}" />
+						</h:column>
+
+
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							<a:commandLink value="Eliminar" reRender="panelEvaluadores"
+								rendered="#{isEdit}"
+								action="#{evaluacionDocumentosFormController.eliminar(fil)}" />
+
+						</h:column>
+					</rich:dataTable>
+				</rich:panel>
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_guardar}" /></div>
+				<br />
+
+			</rich:panel>
+
+
+
+			<div class="actionButtons">
+				<a:commandButton id="save"
+					value="#{messages.msg_save}"
+					action="#{evaluacionDocumentosFormController.cancelar()}"
+					eventsQueue="default"
+					oncomplete="#{rich:component('modalX')}.show()" 
+					rendered="#{evaluacionDocumentosFormController.habilitarGuardar}" 
+				/> 
+				
+				 <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="#{evaluacionDocumentosFormController.volverTRMCIO()}"
+				 
+				
+				/></div>
+
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

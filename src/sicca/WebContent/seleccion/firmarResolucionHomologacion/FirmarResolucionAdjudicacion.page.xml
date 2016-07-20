@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+  <begin-conversation join="true" flush-mode="MANUAL"/>
+   <action execute="#{firmarResolucionAdjudicacionFormController.init()}" on-postback="false"/>
+     <action execute="#{reportUtilFormController.init()}" on-postback="false"/>
+   
+   <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{firmarResolucionAdjudicacionFormController.idConcursoPuestoAgr}"/>
+  <param name="fromAct" value="#{firmarResolucionAdjudicacionFormController.fromActividad}"/>
+  
+   <param name="firstResult" value="#{concursoPuestoAgrList.firstResult}"/>
+   <param name="sort" value="#{concursoPuestoAgrList.orderColumn}"/>
+   <param name="dir" value="#{concursoPuestoAgrList.orderDirection}"/>
+   <param name="logic" value="#{concursoPuestoAgrList.restrictionLogicOperator}"/>
+   <param name="obs" value="#{firmarResolucionAdjudicacionFormController.obs}"/>
+
+   <param name="from"/>
+   
+   <navigation from-action="#{firmarResolucionAdjudicacionFormController.nextTask()}">
+      <rule if-outcome="next">
+         <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+     <navigation from-action="#{firmarResolucionAdjudicacionFormController.nextTask2()}">
+      <rule if-outcome="persisted">
+         <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+    <navigation from-action="#{firmarResolucionAdjudicacionFormController.back()}">
+      <rule if-outcome="back">
+         <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+
+ <restrict>#{identity.hasRole('firmarResolucionHomologacion_edit')}</restrict>
+</page>

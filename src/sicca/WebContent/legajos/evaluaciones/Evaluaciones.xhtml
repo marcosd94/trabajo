@@ -1,0 +1,98 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<h1>#{messages.CU649_titulo}</h1>
+	<rich:simpleTogglePanel label="#{messages.CU571_panel1_title}"
+				id="discap">
+		<f:facet name="header">#{messages.CU649_titulo}(#{evaluacionesLegajoFC.listaEvalFuncionarios.size()})</f:facet>
+		<div class="results" id="tbldetList" >
+			<h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluacionesLegajoFC.listaEvalFuncionarios}" />
+			<rich:dataTable id="itemsList" 
+			rowKeyVar="rowNr" var="_items" value="#{evaluacionesLegajoFC.listaEvalFuncionarios}" 
+			rendered="#{not empty evaluacionesLegajoFC.listaEvalFuncionarios}">
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_oee}</f:facet>
+				<h:outputText value="#{_items.oee}" />
+			</rich:column>
+			
+			<ui:remove>
+				<rich:column>
+								<f:facet name="header">#{messages.CU649_uo}</f:facet>
+								<h:outputText value="#{_items.denominacionUnidad}" />
+							</rich:column>
+			</ui:remove>
+			
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_puesto}</f:facet>
+				<h:outputText value="#{_items.puesto}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_evaluacion}</f:facet>
+				<h:outputText value="#{_items.titulo}" />
+			</rich:column>
+
+			<ui:remove>
+				<rich:column>
+								<f:facet name="header">#{messages.CU649_plantilla}</f:facet>
+								<h:outputText value="#{_items.plantilla}" />
+							</rich:column>
+			</ui:remove>
+			
+			<rich:column>
+				<f:facet name="header">Fecha desde - hasta</f:facet>
+				<h:outputText
+					value="#{evaluacionesLegajoFC.formateandoFecha(_items.fechaEvalDesde)} - #{evaluacionesLegajoFC.formateandoFecha(_items.fechaEvalHasta)}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">Percepción</f:facet>
+				<h:outputText value="#{_items.puntajePercepcion}"/>
+			</rich:column>
+			
+			<rich:column>
+				<f:facet name="header">PDEC</f:facet>
+				<h:outputText value="#{_items.puntajePdec}"/>
+			</rich:column>
+			
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_promedio}</f:facet>
+				<h:outputText value="#{_items.puntaje}"/>
+			</rich:column>
+
+			<ui:remove>
+				<rich:column>
+								<f:facet name="header">#{messages.CU649_plan}</f:facet>
+								<h:outputText value="#{_items.planMejora}" />
+							</rich:column>
+			</ui:remove>
+			
+			<rich:column  style="text-align:center;" >
+				<f:facet name="header">Reportes/Documentos</f:facet>
+					
+				<h:commandLink value="PDEC" target="_blank"
+					action="#{evaluacionesLegajoFC.generandoPdec(_items.idSujetos, _items.idGruposEvaluacion)}"/>
+					#{'  '}
+				<h:commandLink value="Percepción" target="_blank"
+					action="#{evaluacionesLegajoFC.generandoPercepcion(_items.idSujetos, _items.idGruposEvaluacion)}"/>
+					#{'  '}
+				
+				<h:commandLink value="Constancia de Evaluación" target="_blank" 
+					rendered="#{_items.documento.idDocumento != null}"
+					action="#{evaluacionesLegajoFC.abrirDoc(_items.documento.idDocumento)}"/>
+			</rich:column>
+			
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+
+</ui:composition>

@@ -1,0 +1,243 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU243_titulo}</h1>
+    <h:form id="matrizDocConfigDetSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel  label=" " switchType="ajax">
+			<rich:panel id="panelParametro" >	<f:facet name="header">#{messages.CU243_grupo_puesto}</f:facet>
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{matrizDocConfigDetListFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{matrizDocConfigDetListFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{matrizDocConfigDetListFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{matrizDocConfigDetListFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{matrizDocConfigDetListFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{matrizDocConfigDetListFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{matrizDocConfigDetListFormController.concursoPuestoAgr.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_grupo_puesto}</ui:define>
+                <h:inputText id="usuMod" disabled="true" value="#{matrizDocConfigDetListFormController.concursoPuestoAgr.descripcionGrupo}" style=" width : 514px;"/>
+            </s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+			<rich:panel >	<f:facet name="header">#{messages['msg_list_search_filter']}</f:facet>
+			<h:panelGrid >
+           <s:decorate id="datosGralTdField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="datosTdGral" value="#{matrizDocConfigDetListFormController.idTipoDocumento}" style="width:250px">
+						<f:selectItems value="#{datosEspecificossByTipoDocumentoSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+        </rich:simpleTogglePanel>
+        <div class="actionButtons">
+            <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{matrizDocConfigDetListFormController.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{matrizDocConfigDetListFormController.searchAll()}" 
+				 reRender="panelParametro,panelResultado,datosGralTdField,links" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+				 <h:commandButton id="print"   rendered="#{not empty matrizDocConfigDetList.resultList}"
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{matrizDocConfigDetListFormController.print()}" />
+        </div>
+            <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']} (#{empty matrizDocConfigDetList.resultList ? 0 : (matrizDocConfigDetList.paginated ? matrizDocConfigDetList.resultCount : matrizDocConfigDetList.resultList.size)})</f:facet>
+    <div class="results" id="matrizDocConfigDetList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty matrizDocConfigDetList.resultList}"/>
+
+    <rich:dataTable id="matrizDocConfigDetList"
+                var="_matrizDocConfigDet"
+              value="#{matrizDocConfigDetList.resultList}"
+           rendered="#{not empty matrizDocConfigDetList.resultList}">
+       
+          <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocConfigDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU243_nro_orden}"/>
+                    <ui:param name="propertyPath" value="matrizDocConfigDet.nroOrden"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_matrizDocConfigDet.nroOrden}"/>
+        </h:column>
+          <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocConfigDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU243_tipo_doc}"/>
+                    <ui:param name="propertyPath" value="matrizDocConfigDet.datosEspecificos.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_matrizDocConfigDet.datosEspecificos.descripcion}"/>
+        </h:column>
+        
+           <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocConfigDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU243_etapa_pres}"/>
+                    <ui:param name="propertyPath" value="matrizDocConfigDet.evaluacionDoc"/>
+                </ui:include>
+            </f:facet>
+              <h:outputText value="En la Evaluación" rendered="#{_matrizDocConfigDet.evaluacionDoc}"/>
+              <h:outputText value="En la Adjudicación" rendered="#{_matrizDocConfigDet.adjudicacion}"/>
+              <h:outputText value="Según Grupo de Docs." rendered="#{_matrizDocConfigDet.agrupado}"/>
+       
+        </h:column>
+          <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{matrizDocConfigDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU243_obligatorio}"/>
+                    <ui:param name="propertyPath" value="matrizDocConfigDet.obligatorio"/>
+                </ui:include>
+            </f:facet>
+              <h:outputText value="SI" rendered="#{_matrizDocConfigDet.obligatorio}"/>
+                <h:outputText value="NO" rendered="#{!_matrizDocConfigDet.obligatorio and !_matrizDocConfigDet.agrupado}"/>
+                <h:outputText value="Según Grupo de Docs." rendered="#{_matrizDocConfigDet.agrupado}"/>
+       
+        </h:column>
+         <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDet.xhtml"
+                   value="Ver"
+                 propagation="join"
+                      id="matrizDocConfigDetViewId">
+              <f:param name="matrizDocConfigDetIdMatrizDocConfigDet"
+                        value="#{_matrizDocConfigDet.idMatrizDocConfigDet}"/>
+                 <f:param name="idConcursoPuestoAgr" value="#{matrizDocConfigDetListFormController.idConcursoPuestoAgr}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetEdit.xhtml"
+                   value="#{messages.msg_edit}"
+            propagation="join"
+            rendered="#{matrizDocConfigDetListFormController.habilitar}"
+                      id="matrizDocConfigDetEdit">
+                <f:param name="matrizDocConfigDetIdMatrizDocConfigDet"
+                        value="#{_matrizDocConfigDet.idMatrizDocConfigDet}"/>
+                 <f:param name="idConcursoPuestoAgr" value="#{matrizDocConfigDetListFormController.idConcursoPuestoAgr}"/>
+            </s:link>
+        </rich:column>
+      
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    </h:form>
+
+	<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+            rendered="#{matrizDocConfigDetList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+            rendered="#{matrizDocConfigDetList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{matrizDocConfigDetList.previousFirstResult}"/>
+        </s:link>
+                <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+            rendered="#{matrizDocConfigDetList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{matrizDocConfigDetList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+            rendered="#{matrizDocConfigDetList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{matrizDocConfigDetList.lastFirstResult}"/>
+        </s:link>
+        
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" >
+        <s:button view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetEdit.xhtml"
+                    id="create"  rendered="#{empty matrizDocConfigDetList.resultList and matrizDocConfigDetListFormController.habilitar}"
+           propagation="join"  
+                 value="#{messages.CU243_cofigurar}">
+            <f:param name="matrizDocConfigDetIdMatrizDocConfigDet"/>
+             <f:param name="idConcursoPuestoAgr" value="#{matrizDocConfigDetListFormController.idConcursoPuestoAgr}"/>
+        </s:button>
+           <s:button view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+                    id="cancel"
+           propagation="join"
+                 value="#{messages.msg_done}">
+        </s:button>
+        
+      <h:form>	
+	<div class="actionButtons">
+		<a:commandButton  id="eliminar" value="Eliminar"
+			action="#{matrizDocConfigDetListFormController.eliminarPlantilla()}"
+			rendered="#{not empty matrizDocConfigDetList.resultList}">
+			<f:param name="idConcursoPuestoAgr" value="#{matrizDocConfigDetListFormController.idConcursoPuestoAgr}"/>
+		</a:commandButton>
+	</div>
+	</h:form>
+    </s:div>
+
+  
+
+</ui:define>
+
+</ui:composition>

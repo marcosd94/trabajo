@@ -1,0 +1,111 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Montos_}</h1>
+
+    <h:form id="montos" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{montosHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Montos_}</f:facet>
+
+	            <s:decorate id="montoMinimoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Montos_montoMinimo}</ui:define>
+	                <h:inputText id="montoMinimo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{montosHome.instance.montoMinimo}">
+	                    <a:support event="onblur" reRender="montoMinimoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="montoMaximoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Montos_montoMaximo}</ui:define>
+	                <h:inputText id="montoMaximo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{montosHome.instance.montoMaximo}">
+	                    <a:support event="onblur" reRender="montoMaximoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="anhoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Montos_anho}</ui:define>
+	                <h:inputText id="anho"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{montosHome.instance.anho}">
+	                    <a:support event="onblur" reRender="anhoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Montos_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{montosHome.instance.activo}" />
+	            </s:decorate>
+	            <s:decorate id="gradoSalarialField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Montos_idGradoSalarial}</ui:define>
+	                <h:selectOneMenu id="gradoSalarial"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{montosHome.idGradoSalarial}">
+	                    <f:selectItems value="#{gradoSalarialsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{montosHome.persist}"
+                       disabled="#{!montosHome.wired}"                      
+                       rendered="#{!montosHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{montosHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{montosHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{montosHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{montosHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/montos/MontosList.xhtml"
+                rendered="#{montosHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty montosFrom ? 'planificacion/montos/MontosList' : montosFrom}.xhtml"
+                rendered="#{!montosHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

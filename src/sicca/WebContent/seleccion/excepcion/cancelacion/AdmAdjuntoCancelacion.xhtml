@@ -1,0 +1,146 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU428_titulo}</h1>
+    <h:form id="comisionSeleccionCab" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">#{messages.CU428_sub_titulo}</f:facet>
+				<h:panelGrid columns="1">
+			  <rich:panel id="concursoDatos">
+            <f:facet name="header"> Ver Documentos Adjuntos de Cancelación Automática</f:facet>
+
+          <h:panelGrid columns="1">
+			
+			<s:decorate  template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText styleClass="numeric" size="10" 
+						disabled="true"	value="#{admAdjuntoCancelacionFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText  size="40" disabled="true"
+							value="#{admAdjuntoCancelacionFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadFiesd" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText styleClass="numeric" size="10"
+							disabled="true"
+							value="#{admAdjuntoCancelacionFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText size="40"
+							disabled="true"
+							value="#{admAdjuntoCancelacionFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate  template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText size="10" disabled="true"
+							value="#{admAdjuntoCancelacionFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText  size="40" disabled="true"
+							value="#{admAdjuntoCancelacionFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+		            <s:decorate id="concursosField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU304_concuro}<span class="required">*</span></ui:define>
+					<h:inputText disabled="true" value="#{admAdjuntoCancelacionFormController.concurso.nombre}"/>
+			</s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+			
+			<div style="clear: both; overflow: auto; HEIGHT: 150px">
+			<rich:panel id="panelResultado" style=" width : 859px;">
+				<f:facet name="header"> #{messages.CU428_grupo_puesto}(#{admAdjuntoCancelacionFormController.excepcionGrPuestoList.size()})</f:facet>
+				<div class="results" id="puestList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty admAdjuntoCancelacionFormController.excepcionGrPuestoList}" />
+				<rich:dataTable
+					id="grupoList" var="_agr" rowKeyVar="row"
+					value="#{admAdjuntoCancelacionFormController.excepcionGrPuestoList}"
+					rendered="#{not empty admAdjuntoCancelacionFormController.excepcionGrPuestoList}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU411_cod_grupo}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.concursoPuestoAgr.codGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU428_grupo_puesto}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.concursoPuestoAgr.descripcionGrupo}">
+						</h:outputText>
+					</h:column>
+				</rich:dataTable></div>
+		
+			</rich:panel>
+			</div>	
+
+			<rich:panel>
+			<f:facet name="header"> #{messages.CU428_datos_cacenlacion}</f:facet>
+			<h:panelGrid columns="1" >
+			<s:decorate  template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU428_fecha}<span class="required">*</span></ui:define>
+			 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" 
+                disabled="true"     inputSize="10" enableManualInput="true"   
+              value="#{admAdjuntoCancelacionFormController.excepcion.fechaAlta}" />
+			</s:decorate>
+				 <s:decorate id="puestoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU428_motivo}</ui:define>
+                 <h:inputTextarea  id="ci" disabled="true"
+                      value="#{admAdjuntoCancelacionFormController.excepcion.observacion}" style="width : 321px; height : 51px;"/>
+               
+            </s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+		
+			<s:decorate id="obsField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU428_obs}</ui:define>
+                 <h:inputTextarea  id="obs" disabled="true"
+                      value="#{admAdjuntoCancelacionFormController.excepcion.obsCancelacion}" style="width : 321px; height : 51px;"/>
+               
+            </s:decorate>
+            </h:panelGrid>
+		        </rich:panel>
+
+        <div class="actionButtons">
+			<s:button propagation="join"
+			action="#{admAdjuntoCancelacionFormController.anexar()}"
+				id="anexos" value="#{messages.gral_anexos}"
+				style=" width : 76px;">
+			</s:button>
+            
+
+
+         
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             propagation="end"
+                    view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml" >
+                </s:button>
+
+        </div>
+      
+            
+    </h:form>
+    
+
+
+</ui:define>
+
+</ui:composition>

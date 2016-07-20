@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU491_tit_adm_preguntas}</h1>
+
+		<h:form id="preguntaRespuesta" styleClass="edit">
+
+			<rich:panel id="panelEncuesta">
+				<f:facet name="header">#{messages.CU491_panel_encuesta}</f:facet>
+				<h:panelGrid columns="1">
+
+					<s:decorate id="nivel" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate id="entidad" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate id="oee" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+					<s:decorate id="nombreField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU491_nombre_plantilla}
+									</ui:define>
+						<h:inputText id="nombre"
+							value="#{plantillaEvaluacionesFC.plantillaEncuesta.nombre}"
+							size="100" disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="panelPregunta">
+				<f:facet name="header">#{messages.CU491_panel_pregunta}</f:facet>
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate id="grupoPreguntaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU491_grupo_pregunta}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="grupoPregunta"
+								value="#{plantillaEvaluacionesFC.idGrupoPregunta}"
+								style="width:250px">
+								<f:selectItems
+									value="#{plantillaEvaluacionesFC.grupoPreguntaSelectItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{plantillaEvaluacionesFC.obtenerOrden()}"
+									reRender="orden" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<s:decorate id="ordenField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU491_orden}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="orden" value="#{plantillaEvaluacionesFC.orden}"
+							size="10" />
+					</s:decorate>
+					<s:decorate id="preguntaField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU491_pregunta}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="pregunta" maxlength="500"
+							value="#{plantillaEvaluacionesFC.pregunta}" size="100" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<a:region>
+						<s:decorate id="tipoPreguntaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU491_tipo_pregunta}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipoPregunta"
+								value="#{plantillaEvaluacionesFC.idTipoPregunta}"
+								style="width:250px">
+								<f:selectItems
+									value="#{plantillaEvaluacionesFC.tipoPreguntaSelectItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									action="#{plantillaEvaluacionesFC.chequearMultiplesOpciones()}"
+									reRender="outpanel" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<s:decorate id="obligatorioField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU491_obligatorio}</ui:define>
+						<h:selectBooleanCheckbox
+							value="#{plantillaEvaluacionesFC.esObligatorio}" />
+					</s:decorate>
+				</h:panelGrid>
+				<a:outputPanel id="outpanel">
+					<rich:panel style="border:none; width: 650px;" id="panelMultiples"
+						rendered="#{plantillaEvaluacionesFC.mostrarMultipleOpcion}">
+						<fieldset><legend><span class="required">#{messages.CU491_multiples}</span></legend>
+						<s:decorate id="opcResField" template="/layout/edit.xhtml">
+							<h:outputText value="#{messages.CU491_opcion_rpta}"
+								style="font-weight:bold" />
+
+						</s:decorate> <s:decorate id="msgResField" template="/layout/edit.xhtml">
+							<h:outputText value="#{messages.CU491_msg_opcion}" />
+						</s:decorate> <s:decorate id="inputField" template="/layout/edit.xhtml">
+							<h:inputTextarea value="#{plantillaEvaluacionesFC.multiplesOpc}"
+								cols="80" />
+						</s:decorate></fieldset>
+					</rich:panel>
+				</a:outputPanel>
+			</rich:panel>
+			<rich:panel id="panelBotones" style="border:none;">
+				<div class="actionButton"><a:commandButton id="agregar"
+					value="Agregar" rendered="#{!plantillaEvaluacionesFC.isEdit}"
+					action="#{plantillaEvaluacionesFC.agregarPregunta()}"
+					reRender="panelPregunta,panelBotones,panelResultadoPregunta" /> <a:commandButton
+					id="limpiar" value="Limpiar"
+					rendered="#{!plantillaEvaluacionesFC.isEdit}"
+					action="#{plantillaEvaluacionesFC.limpiarCamposPregunta()}"
+					reRender="panelPregunta,panelBotones" /> <a:commandButton
+					id="actualizar" value="Actualizar"
+					rendered="#{plantillaEvaluacionesFC.isEdit}"
+					action="#{plantillaEvaluacionesFC.actualizarPregunta()}"
+					reRender="panelPregunta,panelBotones,panelResultadoPregunta" /> <a:commandButton
+					id="cancel" value="Cancelar"
+					rendered="#{plantillaEvaluacionesFC.isEdit}"
+					action="#{plantillaEvaluacionesFC.cancelarEdit()}"
+					reRender="panelPregunta,panelBotones" /></div>
+
+			</rich:panel>
+			<rich:panel id="panelResultadoPregunta">
+				<f:facet name="header">Preguntas (#{plantillaEvaluacionesFC.listadoPreguntas.size()})</f:facet>
+				<div class="results" id="tbldetList"
+					style="FONT-SIZE: medium; overflow: scroll; width: 1000px; HEIGHT: 230px"><rich:dataTable
+					id="itemsList" var="_items" first="0"
+					value="#{plantillaEvaluacionesFC.listadoPreguntas}"
+					rowKeyVar="rowNr">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_grupo}
+						</f:facet>
+						<h:outputText value="#{_items.datosEspecificosGrupo.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_orden}
+						</f:facet>
+						<h:outputText value="#{_items.orden}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_pregunta}
+						</f:facet>
+						<h:outputText value="#{_items.pregunta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_tipo_pregunta}
+						</f:facet>
+						
+						<h:outputText value="Múltiple" rendered="#{_items.tipoPregunta == 'M'}" />
+						<h:outputText value="Texto" rendered="#{_items.tipoPregunta == 'T'}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_obligatorio}
+						</f:facet>
+						<h:outputText value="Si" rendered="#{_items.obligatorio}" />
+						<h:outputText value="No" rendered="#{!_items.obligatorio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU491_rpta}
+						</f:facet>
+						<h:outputText value="#{_items.respuestasMultiples}" />
+					</h:column>
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<a:commandLink value="Editar"
+							action="#{plantillaEvaluacionesFC.editar(rowNr)}"
+							reRender="panelPregunta,panelBotones" />
+						#{' '}
+						<a:commandLink value="Eliminar"
+							action="#{plantillaEvaluacionesFC.eliminar(rowNr)}"
+							reRender="panelResultadoPregunta" />
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}"
+				 styleClass="labelClass" />
+			
+			</div>
+
+
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{plantillaEvaluacionesFC.guardar()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" />
+			<s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/capacitacion/plantillaEvaluaciones/PlantillaEncuestaList.xhtml" />
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

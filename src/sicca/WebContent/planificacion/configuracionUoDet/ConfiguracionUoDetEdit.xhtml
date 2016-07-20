@@ -1,0 +1,348 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.title_configuracion_uo_det}</h1>
+	
+	<script type="text/javascript" language="javascript">
+		function confirmarProcesoGestion(){
+			var mensajeConfirmOperacion = '';
+			var idDetalle = document.getElementById('configuracionUoDet:hiddenIdDetalleConfUo').value
+
+			if(idDetalle != '')
+				mensajeConfirmOperacion = '#{messages.msg_confirm_update}';
+			else 
+				mensajeConfirmOperacion = '#{messages.msg_confirm_save}';
+			
+			if(confirm(mensajeConfirmOperacion)){
+				if(confirm('#{messages.ConfiguracionUoDet_msg_confirm_add_proceso_gestion}')){
+					document.getElementById('configuracionUoDet:hiddenAddProcess').value = true;
+					return true;
+				}
+				return true;
+			}
+			return false;
+		}	
+	</script>
+	
+    <h:form id="configuracionUoDet" styleClass="edit">
+    	<h:inputHidden id="hiddenIdDetalleConfUo" value="#{detalleConfUoFormController.configuracionUoDet.idConfiguracionUoDet}"/>
+		<h:inputHidden id="hiddenAddProcess" value="#{detalleConfUoFormController.irAProceso}"/>
+        <rich:panel>
+            <f:facet name="header">#{configuracionUoDetHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.ConfiguracionUoDet_}</f:facet>
+				<fieldset>
+					<rich:panel style="border:none;">
+						<h:panelGrid columns="2" rowClasses="rowTop">
+							<h:panelGrid columns="1">
+								<s:decorate id="nivelCodigoField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ConfiguracionUoDet_nivel}</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" size="10" disabled="true"
+										value="#{detalleConfUoFormController.sinNivelEntidad.nenCodigo}" />
+									#{' '}
+									<h:inputText id="nivelNombre" size="60" disabled="true"
+										value="#{detalleConfUoFormController.sinNivelEntidad.nenNombre}" />
+								</s:decorate>
+								<s:decorate id="entidadField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ConfiguracionUoDet_entidad}</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric" size="10" disabled="true"
+										value="#{detalleConfUoFormController.configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+									#{' '}
+									<h:inputText id="entidadNombre" size="60" disabled="true"
+										value="#{detalleConfUoFormController.configuracionUoCab.entidad.sinEntidad.entNombre}" />
+								</s:decorate>
+								<s:decorate id="unidadOrgField" template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ConfiguracionUoDet_unidadOrganizativa}</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10" disabled="true"
+										value="#{detalleConfUoFormController.codigoOrg}"/>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="60" disabled="true"
+										value="#{detalleConfUoFormController.configuracionUoCab.denominacionUnidad}"/>
+								</s:decorate>
+							</h:panelGrid>
+							<rich:panel style="border:none;">
+								<fieldset><legend>#{messages.ConfiguracionUoDet_vigencia}</legend>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.msg_desde}</ui:define>
+										<rich:calendar id="vigenciaDesde"
+													value="#{detalleConfUoFormController.configuracionUoCab.vigenciaDesde}"
+													datePattern="dd/MM/yyyy"
+													disabled="true"
+													locale="#{siccaAppHelper.localeCode}"
+													inputSize="10"/>
+									</s:decorate>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.msg_hasta}</ui:define>
+										<rich:calendar id="vigenciaHasta"
+													value="#{detalleConfUoFormController.configuracionUoCab.vigenciaHasta}"
+													datePattern="dd/MM/yyyy"
+													disabled="true"
+													locale="#{siccaAppHelper.localeCode}"
+													inputSize="10"/>
+									</s:decorate>
+								</fieldset>
+							</rich:panel>
+						</h:panelGrid>
+					</rich:panel>
+				</fieldset>
+				<rich:panel style="border:none" rendered="#{detalleConfUoFormController.idConfiguracionPadre != null}">
+					<fieldset>
+						<s:decorate id="entidadDependienteField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.ConfiguracionUoDet_entidadDelaQueDepende}</ui:define>
+			                <h:inputText id="entidadDependiente"
+			                       disabled="true"
+			                          value="#{detalleConfUoFormController.codigoUnidadOrgDependiente} - #{detalleConfUoFormController.unidadOrgDependiente}"
+			                       size="89">
+			                </h:inputText>
+			            </s:decorate>
+					</fieldset>
+				</rich:panel>
+				<fieldset>
+					<a:region>
+						<s:decorate id="ordenField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.ConfiguracionUoDet_orden}</ui:define>
+			                <h:inputText id="orden"
+			                		required ="true"
+			                       onkeypress="return soloNumeros(event);"
+				                       styleClass="numeric"
+			                          value="#{detalleConfUoFormController.configuracionUoDet.orden}"
+			                          size="10">
+			                    <a:support event="onchange" reRender="codigoField"/>
+			                </h:inputText>
+			            </s:decorate>
+			        </a:region>
+					<s:decorate id="codigoField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_codigo}<span class="required">*</span></ui:define>
+		                <h:inputText id="codigo"
+		                	    disabled="true"
+		                	    styleClass="numeric"
+		                          value="#{detalleConfUoFormController.generateCodeConf()}.#{detalleConfUoFormController.configuracionUoDet.orden}"
+		                          size="30">
+		                </h:inputText>
+		            </s:decorate>
+					<s:decorate id="denominacionUnidadField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_denominacionUnidad}</ui:define>
+		                <a:region>
+			                <h:inputText id="denominacionUnidad"
+			                		required ="true"
+			                       disabled="false"
+			                          value="#{detalleConfUoFormController.configuracionUoDet.denominacionUnidad}"
+			                          size="89"
+			                          maxlength="256">
+			                          <a:support event="onblur"/>
+			                </h:inputText>
+			            </a:region>
+		            </s:decorate>
+					<s:decorate id="descripcionCortaField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_descripcionCorta}</ui:define>
+		                <a:region>
+			                <h:inputText id="descripcionCorta"
+			                       disabled="false"
+			                          value="#{detalleConfUoFormController.configuracionUoDet.descripcionCorta}"
+			                          size="30">
+			                          <a:support event="onblur"/>
+			                </h:inputText>
+			           </a:region>
+		            </s:decorate>
+					<s:decorate id="condPoliticaField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_condPolitica}</ui:define>
+		                <a:region>
+		                	<h:inputText id="condPolitica"
+		                       disabled="false"
+		                       	   size="5"
+		                       	   onkeypress="return soloNumeros(event);"
+			                       styleClass="numeric"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.condPolitica}">
+		                          <a:support event="onblur"/>
+		                	</h:inputText>
+		               	</a:region>
+		            </s:decorate>
+					<s:decorate id="prodSociedadField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_prodSociedad}</ui:define>
+		                <a:region>
+		                	<h:inputText id="prodSociedad"
+		                       disabled="false"
+		                           size="5"
+		                           onkeypress="return soloNumeros(event);"
+			                       styleClass="numeric"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.prodSociedad}">
+		                          <a:support event="onblur"/>
+		                	</h:inputText>
+		                </a:region>
+		            </s:decorate>
+					<s:decorate id="prodAdmPublicaField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_prodAdmPublica}</ui:define>
+		                <a:region>
+		                	<h:inputText id="prodAdmPublica"
+		                       disabled="false"
+			                       size="5"
+			                       onkeypress="return soloNumeros(event);"
+			                       styleClass="numeric"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.prodAdmPublica}">
+		                          <a:support event="onblur"/>
+		                	</h:inputText>
+		                </a:region>
+		            </s:decorate>
+		            <s:decorate id="internoField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_interno}</ui:define>
+		                <a:region>
+		                	<h:inputText id="interno"
+		                       disabled="false"
+		                       	   size="5"
+		                       	   onkeypress="return soloNumeros(event);"
+			                       styleClass="numeric"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.interno}">
+		                          <a:support event="onblur"/>
+		                	</h:inputText>
+		                </a:region>
+		            </s:decorate>
+		            <s:decorate id="descripcionFinalidadField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_descripcionFinalidad}</ui:define>
+		                <a:region>
+		                	<h:inputTextarea id="descripcionFinalidad"
+		                       		rows="2"
+		                       		cols="64"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.descripcionFinalidad}">
+		                          <a:support event="onblur"/>
+		                	</h:inputTextarea>
+		                </a:region>
+		            </s:decorate>
+		            <s:decorate id="direccionField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_direccion}</ui:define>
+		                <a:region>
+			                <h:inputText id="direccion"
+			                       disabled="false"
+			                          value="#{detalleConfUoFormController.configuracionUoDet.direccion}"
+			                          size="89">
+			                          <a:support event="onblur"/>
+			                </h:inputText>
+			           </a:region>
+		            </s:decorate>
+		            <s:decorate id="telefonoField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_telefono}</ui:define>
+		                <a:region>
+		                	<h:inputText id="telefono"
+		                       disabled="false"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.telefono}"
+		                          size="20">
+		                          <a:support event="onblur"/>
+		                	</h:inputText>
+		                </a:region>
+		            </s:decorate>
+		            <a:region>
+			            <s:decorate id="clasificacionNormalizadaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.ConfiguracionUoDet_idClasificadorUo}</ui:define>
+							<h:inputText id="clasificacionNormalizadaNivel" styleClass="numeric" size="5"
+								onkeypress="return soloNumeros(event);"
+								value="#{detalleConfUoFormController.clasificadorUo.nivel}" />
+							#{' . '}
+							<h:inputText id="clasificacionNormalizadaSubNivel" styleClass="numeric" size="5"
+								onkeypress="return soloNumeros(event);"
+								value="#{detalleConfUoFormController.clasificadorUo.subnivel}" />
+							#{' . '}
+							<h:inputText id="clasificacionNormalizadaSubNro" styleClass="numeric" size="5"
+								onkeypress="return soloNumeros(event);"
+								value="#{detalleConfUoFormController.clasificadorUo.nro}">
+								<a:support event="onchange" 
+										  action="#{detalleConfUoFormController.searchClasificadorUo()}" 
+										reRender="clasificacionNormalizadaField"/>
+							</h:inputText>
+							#{' '}
+							<h:inputText id="clasificacionNormalizadaDesc" size="60" disabled="true"
+								value="#{detalleConfUoFormController.clasificadorUo.denominacionUnidad}" />
+								
+								
+							#{' '}
+			                <a:commandButton id="searchClasificacion"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{detalleConfUoFormController.getUrlToPageClasificador()}" />
+						</s:decorate>
+		            </a:region>
+		            <s:decorate id="activoField" template="/layout/edit.xhtml">
+		                <ui:define name="label">#{messages.ConfiguracionUoDet_activo}</ui:define>
+		                <h:selectBooleanCheckbox id="activo"
+		                		required ="true"
+		                       disabled="false"
+		                          value="#{detalleConfUoFormController.configuracionUoDet.activo}" />
+		            </s:decorate>
+				</fieldset>
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+		<br />
+		<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!configuracionUoDetHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{configuracionUoDetHome.managed}" styleClass="labelClass"/>
+        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{detalleConfUoFormController.save()}"
+                        onclick="return confirmarProcesoGestion();"
+                       disabled="#{!configuracionUoDetHome.wired}"                      
+                       rendered="#{!configuracionUoDetHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{detalleConfUoFormController.save()}"
+                          onclick="return confirmarProcesoGestion();"
+                       rendered="#{configuracionUoDetHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+                rendered="#{configuracionUoDetHome.managed}">
+                <f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{detalleConfUoFormController.codConfCab}" />
+            </s:button>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty configuracionUoDetFrom ? 'planificacion/configuracionUoDet/ConfiguracionUoDetList' : configuracionUoDetFrom}.xhtml"
+                rendered="#{!configuracionUoDetHome.managed}">
+                <f:param name="configuracionUoCabIdConfiguracionUo"
+							value="#{detalleConfUoFormController.codConfCab}" />
+            </s:button>
+
+        </div>
+    </h:form>
+
+	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{configuracionUoDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{configuracionUoDetHome.instance.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{configuracionUoDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{configuracionUoDetHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{configuracionUoDetHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{configuracionUoDetHome.instance.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{configuracionUoDetHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{configuracionUoDetHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+     
+</ui:define>
+
+</ui:composition>

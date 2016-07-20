@@ -1,0 +1,195 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="detOpcionesConvenientesSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="DetOpcionesConvenientes Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Tipo</ui:define>
+                <h:inputText id="tipo" value="#{detOpcionesConvenientesList.detOpcionesConvenientes.tipo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Opc convenientes</ui:define>
+                <h:inputText id="opcConvenientes" value="#{detOpcionesConvenientesList.detOpcionesConvenientes.opcConvenientes}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{detOpcionesConvenientesList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/DetOpcionesConvenientesList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">DetOpcionesConvenientes Search Results (#{empty detOpcionesConvenientesList.resultList ? 0 : (detOpcionesConvenientesList.paginated ? detOpcionesConvenientesList.resultCount : detOpcionesConvenientesList.resultList.size)})</f:facet>
+    <div class="results" id="detOpcionesConvenientesList">
+
+    <h:outputText value="The detOpcionesConvenientes search returned no results."
+               rendered="#{empty detOpcionesConvenientesList.resultList}"/>
+
+    <rich:dataTable id="detOpcionesConvenientesList"
+                var="_detOpcionesConvenientes"
+              value="#{detOpcionesConvenientesList.resultList}"
+           rendered="#{not empty detOpcionesConvenientesList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Id det opciones convenientes"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.idDetOpcionesConvenientes"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.idDetOpcionesConvenientes}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Planta cargo det id planta cargo det"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.plantaCargoDet.idPlantaCargoDet"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.plantaCargoDet.idPlantaCargoDet}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Cpt id cpt"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.cpt.idCpt"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.cpt.idCpt}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Requisito minimo cpt id requisito minimo cpt"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.requisitoMinimoCpt.idRequisitoMinimoCpt"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.requisitoMinimoCpt.idRequisitoMinimoCpt}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Tipo"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.tipo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.tipo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Opc convenientes"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.opcConvenientes"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.opcConvenientes}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detOpcionesConvenientesList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="detOpcionesConvenientes.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detOpcionesConvenientes.activo}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'DetOpcionesConvenientes' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="detOpcionesConvenientesViewId">
+                <f:param name="detOpcionesConvenientesIdDetOpcionesConvenientes"
+                        value="#{_detOpcionesConvenientes.idDetOpcionesConvenientes}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/DetOpcionesConvenientesEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="detOpcionesConvenientesEdit"
+                rendered="#{empty from}">
+                <f:param name="detOpcionesConvenientesIdDetOpcionesConvenientes"
+                        value="#{_detOpcionesConvenientes.idDetOpcionesConvenientes}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/DetOpcionesConvenientesList.xhtml"
+            rendered="#{detOpcionesConvenientesList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/DetOpcionesConvenientesList.xhtml"
+            rendered="#{detOpcionesConvenientesList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{detOpcionesConvenientesList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/DetOpcionesConvenientesList.xhtml"
+            rendered="#{detOpcionesConvenientesList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{detOpcionesConvenientesList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/DetOpcionesConvenientesList.xhtml"
+            rendered="#{detOpcionesConvenientesList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{detOpcionesConvenientesList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/DetOpcionesConvenientesEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create detOpcionesConvenientes">
+            <f:param name="detOpcionesConvenientesIdDetOpcionesConvenientes"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

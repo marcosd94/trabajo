@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sub_reporte_cu491" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+distinct capacitacion.fnc_resultado_opcion_multiple_reporte_491(PREG.id_pregunta) as respuesta
+  FROM CAPACITACION.PREGUNTAS PREG
+ LEFT JOIN CAPACITACION.RESPUESTA_MULTIPLE RPTA
+  ON RPTA.ID_PREGUNTA = PREG.ID_PREGUNTA
+
+WHERE
+PREG.ACTIVO = TRUE
+AND  PREG.ID_PREGUNTA = $P{id}]]>
+	</queryString>
+	<field name="respuesta" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="31"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{respuesta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

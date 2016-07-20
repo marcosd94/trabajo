@@ -1,0 +1,347 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+.className {
+	vertical-align: top;
+}
+</style>
+		<rich:contextMenu event="onclick" attachTo="idDivAdjuntos"
+			submitMode="none">
+			<rich:menuItem value="Zoom In" onclick="enlarge();" id="zin" />
+			<rich:menuItem value="Zoom Out" onclick="decrease();" id="zout" />
+		</rich:contextMenu>
+
+		<rich:modalPanel id="modal" autosized="true" width="500"
+			resizeable="false" moveable="true">
+			<h:form id="idPanelAdjuntos" enctype="multipart/form-data">
+				<rich:panel id="idPanel">
+					<f:facet name="header">Documentos Adjuntos </f:facet>
+					<h:panelGrid columns="1">
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType1}"
+							data="#{gestionCorreosCapaFC.uFile1}"
+							fileName="#{gestionCorreosCapaFC.fName1}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType2}"
+							data="#{gestionCorreosCapaFC.uFile2}"
+							fileName="#{gestionCorreosCapaFC.fName2}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType3}"
+							data="#{gestionCorreosCapaFC.uFile3}"
+							fileName="#{gestionCorreosCapaFC.fName3}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType4}"
+							data="#{gestionCorreosCapaFC.uFile4}"
+							fileName="#{gestionCorreosCapaFC.fName4}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+						<s:fileUpload size="30"
+							contentType="#{gestionCorreosCapaFC.cType5}"
+							data="#{gestionCorreosCapaFC.uFile5}"
+							fileName="#{gestionCorreosCapaFC.fName5}">
+							<s:conversationPropagation type="join" />
+						</s:fileUpload>
+					</h:panelGrid>
+				</rich:panel>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="idBtnAceptar" value="Aceptar"
+					action="#{gestionCorreosCapaFC.adjuntarArchivos()}" /> <s:button
+					id="idBtnCancelar" value="Cancelar"
+					oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h1>#{messages.CU536_title}</h1>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="2">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codNivelEntidad}">
+						</h:inputText>						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}">
+						</h:inputText>						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+							disabled="true" value="#{nivelEntidadOeeUtil.nombreSinEntidad}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							styleClass="numeric" value="#{nivelEntidadOeeUtil.ordenUnidOrg}" />								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+					<s:decorate id="idRegionUnOrg" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+						</ui:define>
+						<h:inputText id="orgCodigo" size="10"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onblur" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="panelBusqueda">
+								<s:conversationPropagation type="join" />
+							</a:support>
+
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep"
+							image="/img/Buscar.png"
+							action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/gestionOG290/gestionOG290')}" />
+
+					</s:decorate>
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU536_capaDesc} </ui:define>
+						<h:inputText id="orgCodigo" style="width:250px"
+							value="#{gestionOG290FC.capaDesc}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU536_tipoCapa}</ui:define>
+							<h:selectOneMenu id="idBecasCapa"
+								value="#{gestionOG290FC.idTipo}" style="width:250px">
+								<f:selectItems value="#{gestionOG290FC.comboTipoCapaSI}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU536_estadoCapa}</ui:define>
+							<h:selectOneMenu id="idEstadoSOM"
+								value="#{gestionOG290FC.idEstado}" style="width:250px">
+								<f:selectItems value="#{gestionOG290FC.comboEstadoCapaSI}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{gestionOG290FC.search()}"
+				reRender="idPanelResultados,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{gestionOG290FC.limpiar()}" id="reset"
+				value="Limpiar" includePageParams="false">
+				<f:param name="from" value="#{from}" />
+			</s:button></div>
+		</a:form>
+		<h:form>
+			<rich:panel id="idPanelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty capaciatcionesListCustom.resultList ? 0 : (capaciatcionesListCustom.paginated ? capaciatcionesListCustom.resultCount :capaciatcionesListCustom.resultList.size)})</f:facet>
+				<div class="results" id="capaList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty capaciatcionesListCustom.resultList}" /> <rich:dataTable
+					id="capacitacionesList" var="_capa"
+					value="#{capaciatcionesListCustom.resultList}"
+					rendered="#{not empty capaciatcionesListCustom.resultList}">
+
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capaciatcionesListCustom}" />
+								<ui:param name="propertyLabel" value="#{messages.CU536_oee}" />
+								<ui:param name="propertyPath"
+									value="capacitaciones.configuracionUoCab.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capa.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capaciatcionesListCustom}" />
+								<ui:param name="propertyLabel" value="#{messages.CU536_unidOrg}" />
+								<ui:param name="propertyPath"
+									value="capacitaciones.configuracionUoDet.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capa.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capaciatcionesListCustom}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU536_capacitaciones}" />
+								<ui:param name="propertyPath" value="capacitaciones.nombre" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_capa.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capaciatcionesListCustom}" />
+								<ui:param name="propertyLabel" value="#{messages.CU536_tipo}" />
+								<ui:param name="propertyPath"
+									value="capacitaciones.datosEspecificosTipoCap.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_capa.datosEspecificosTipoCap.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capaciatcionesListCustom}" />
+								<ui:param name="propertyLabel" value="#{messages.CU536_estado}" />
+								<ui:param name="propertyPath" value="estado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{gestionOG290FC.traerEstado(_capa.estado)}" />
+					</h:column>
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/capacitacion/registrarParticipantes/RegistrarParticipantes.xhtml"
+							value="#{messages.CU536_lnk_gestionParticipantes}"
+							propagation="none" rendered="#{gestionOG290FC.habLinks(_capa)}">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+						</s:link>
+						#{' '}
+						<s:link
+							view="/capacitacion/registrarParticipantes/VerParticipantes.xhtml"
+							value="#{messages.CU536_lnk_verParticipantes}" propagation="none"
+							rendered="#{gestionOG290FC.habLink2}">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+						</s:link>
+						#{' '}
+						<s:link
+							value="#{messages.CU536_lnk_evaluacionParticipantes}"
+							propagation="join" rendered="#{gestionOG290FC.habLink3}"
+							view="/capacitacion/evaluacionParticipantes/EvaluacionParticipantes.xhtml">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+							<f:param name="from"
+								value="capacitacion/gestionOG290/gestionOG290" />
+
+						</s:link>
+						#{' '}
+						<s:link
+							value="#{messages.CU536_lnk_ver_evaluacionParticipantes}"
+							propagation="join" rendered="#{gestionOG290FC.habLink4}"
+							view="/capacitacion/evaluacionParticipantes/VerEvaluacionParticipantes.xhtml">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+							<f:param name="from"
+								value="capacitacion/gestionOG290/gestionOG290" />
+
+						</s:link>
+						#{' '}
+						<s:link
+							value="#{messages.CU536_lnk_configPlantilla}" propagation="join"
+							rendered="#{gestionOG290FC.habLink5}"
+							view="/capacitacion/plantillaEvaluaciones/configurar/ConfigurarPlantillaEvaluaciones.xhtml">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+							<f:param name="cu" value="CU536" />
+							<f:param name="from"
+								value="capacitacion/gestionOG290/gestionOG290" />
+
+						</s:link>
+						#{' '}
+						<s:link
+							view="/capacitacion/registrarEvaluacionCapacitacion/CargarResultadoEncuesta290.xhtml"
+							value="#{messages.CU536_lnk_evalCapacitacion}" propagation="none"
+							rendered="#{gestionOG290FC.habLink6}">
+							<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+								<f:param name="from"
+								value="capacitacion/gestionOG290/gestionOG290" />
+						</s:link>
+						#{' '}
+						<s:link
+							view="/capacitacion/registrarEvaluacionCapacitacion/VerResultadoEncuesta290.xhtml"
+							value="#{messages.CU536_ver_lnk_evalCapacitacion}"
+							propagation="none" rendered="#{gestionOG290FC.habLink7}">
+										<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capa.idCapacitacion}" />
+						</s:link>
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<a:outputPanel ajaxRendered="true" id="links">
+				<div class="tableControl"><s:link
+					view="/capacitacion/gestionOG290/gestionOG290.xhtml"
+					rendered="#{capaciatcionesListCustom.previousExists}"
+					value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+					<f:param name="fromLink" value="link" />
+				</s:link> <s:link view="/capacitacion/gestionOG290/gestionOG290.xhtml"
+					rendered="#{capaciatcionesListCustom.previousExists}"
+					value="#{messages.left}  #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{capaciatcionesListCustom.previousFirstResult}" />
+					<f:param name="fromLink" value="link" />
+				</s:link> <s:link view="/capacitacion/gestionOG290/gestionOG290.xhtml"
+					rendered="#{capaciatcionesListCustom.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{capaciatcionesListCustom.nextFirstResult}" />
+					<f:param name="fromLink" value="link" />
+				</s:link> <s:link view="/capacitacion/gestionOG290/gestionOG290.xhtml"
+					rendered="#{capaciatcionesListCustom.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{capaciatcionesListCustom.lastFirstResult}" />
+					<f:param name="fromLink" value="link" />
+				</s:link></div>
+			</a:outputPanel>
+		</h:form>
+
+
+
+
+	</ui:define>
+</ui:composition>

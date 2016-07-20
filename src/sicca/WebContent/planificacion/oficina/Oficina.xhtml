@@ -1,0 +1,285 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Oficina_}</h1>
+
+    <h:form id="oficina" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{oficinaHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Oficina_}</f:facet>
+					
+					<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  			
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+					
+					
+					
+					
+				 <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+	                <h:inputText id="descripcion" 
+	                		required ="true" size="100"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.descripcion}">
+	                </h:inputText>
+	            </s:decorate>
+				
+				
+				
+				<a:region> 
+					<s:decorate id="paisField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="pais" required="true" disabled="true"
+						 value="#{oficinaEditFormController.codPais}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{oficinaEditFormController.updateDepartamento()}" reRender="departamentoField"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region> 
+					<s:decorate id="departamentoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dpto" required="true" disabled="true"
+						 value="#{oficinaEditFormController.codDepartamento}" style="width:250px">
+							<f:selectItems value="#{oficinaEditFormController.departamentosSelecItem}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{oficinaEditFormController.updateCiudad()}" reRender="ciudadField"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				<a:region> 
+					<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Barrio_ciudad}</ui:define>
+						<h:selectOneMenu id="ciudad" required="true" disabled="true"
+						value="#{oficinaEditFormController.idCiudad}" style="width:250px">
+							<f:selectItems value="#{oficinaEditFormController.ciudadSelecItem}"/>
+							<a:support event="onchange" eventsQueue="default"
+							 action="#{oficinaEditFormController.updateBarrio()}" reRender="barrioField"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+					<s:decorate id="barrioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Oficina_cmp_barrio}</ui:define>
+					<h:selectOneMenu id="ciudad" value="#{oficinaEditFormController.idBarrio}" disabled="true"
+					 style="width:250px">
+						<f:selectItems value="#{oficinaEditFormController.barrioSelecItem}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+	           <s:decorate id="direccionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_direc}</ui:define>
+	                <h:inputText id="direccion" 
+	                		 size="100" maxlength="150" 
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.direccion}">
+	                </h:inputText>
+	            </s:decorate>
+					
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					  <s:decorate id="numeroField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_num}</ui:define>
+	                <h:inputText id="numero"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.numero}">
+	                </h:inputText>
+	            </s:decorate>
+	                <s:decorate id="pisoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_piso}</ui:define>
+	                <h:inputText id="piso"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.piso}">
+	                </h:inputText>
+	            </s:decorate>
+					</h:panelGrid>
+					
+					<fieldset style="width: 650px">
+					<legend>#{messages.Oficina_cord}</legend>
+					<h:panelGrid  columns="2">
+					
+					 <s:decorate id="coordXField" template="/layout/edit.xhtml">
+	                <ui:define name="label">X</ui:define>
+	                <h:inputText id="coordX"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.coordX}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="coordYField" template="/layout/edit.xhtml">
+	                <ui:define name="label">Y</ui:define>
+	                <h:inputText id="coordY"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.coordY}">
+	                </h:inputText>
+	            </s:decorate>
+	           
+	         </h:panelGrid>
+					
+					
+					</fieldset> 
+					
+					<h:panelGrid >
+					 <s:decorate id="nroTelefonoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_tel}</ui:define>
+	                <h:inputText id="nroTelefono"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.nroTelefono}">
+	                </h:inputText>
+	            </s:decorate> 
+	               <s:decorate id="nroInternoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_tel_inte}</ui:define>
+	                <h:inputText id="nroInterno"
+	                		required ="false"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.nroInterno}">
+	                </h:inputText>
+	            </s:decorate>
+	            
+	            <s:decorate id="alquiladoField" template="/layout/edit.xhtml">
+	               <h:selectOneRadio id="estado" 
+	               value="#{oficinaEditFormController.alquiladoProp}"><span class="required">*</span>
+						<s:selectItems var="val" value="#{enumAppHelper.alquiladoProp}" 
+						disabled="true"	label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+	            </s:decorate>
+	            	  
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Oficina_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{oficinaEditFormController.oficina.activo}" />
+	            </s:decorate>
+					</h:panelGrid>
+					
+				
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+
+   	
+        </rich:panel>
+
+        <div class="actionButtons">
+
+          
+          
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/oficina/OficinaList.xhtml"
+                rendered="#{oficinaHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty oficinaFrom ? 'planificacion/oficina/OficinaList' : oficinaFrom}.xhtml"
+                rendered="#{!oficinaHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{oficinaHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{oficinaEditFormController.oficina.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{oficinaHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{oficinaEditFormController.oficina.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{oficinaHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{oficinaEditFormController.oficina.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{oficinaHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{oficinaEditFormController.oficina.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+        
+</ui:define>
+
+</ui:composition>

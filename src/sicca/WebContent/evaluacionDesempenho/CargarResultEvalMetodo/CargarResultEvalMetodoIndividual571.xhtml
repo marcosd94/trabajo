@@ -1,0 +1,403 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<a:outputPanel ajaxRendered="true" id="idModalPanel">
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				rendered="#{cargarResultEvalMetodo571FC.mostrarModal}"
+				resizeable="false" moveable="true">
+				<h:form id="idPanelAdjuntos" enctype="multipart/form-data">
+					<rich:panel id="idPanel">
+						<f:facet name="header">Adjuntar Documento </f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Tipo Documento<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="idTipoDocumento"
+									value="#{cargarResultEvalMetodo571FC.idTipoDocumento}"
+									style="width:150px">
+									<f:selectItems
+										value="#{cargarResultEvalMetodo571FC.traerTipoDocumentoSI()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Documento<span
+										class="required">*</span>
+								</ui:define>
+								<s:fileUpload size="30"
+									contentType="#{cargarResultEvalMetodo571FC.cType1}"
+									data="#{cargarResultEvalMetodo571FC.uFile1}"
+									fileName="#{cargarResultEvalMetodo571FC.fName1}">
+									<s:conversationPropagation type="join" />
+								</s:fileUpload>
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel>
+					<div style="clear: both" />
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields}</div>
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><h:commandButton
+						id="idBtnAceptar" value="Adjuntar"
+						action="#{cargarResultEvalMetodo571FC.adjuntarDocumento()}" /> <s:button
+						id="idBtnCancelar" value="Volver"
+						action="#{cargarResultEvalMetodo571FC.habilitarModal(false)}" /></div>
+				</h:form>
+
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}				
+			</script>
+		</a:outputPanel>
+
+		<h1>#{messages.CU571_titulo}</h1>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="Organizado Por" switchType="client"
+				id="panelParametro">
+
+				<h:panelGrid columns="">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+						<h:inputText size="100" id="evaluacion" disabled="true"
+							value="#{cargarResultEvalMetodo571FC.evalTitle}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2" id="idPanelCampos">
+
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="70"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+
+					<a:outputPanel>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+							<h:inputText id="orgCodigo2" size="10" disabled="true"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="70" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						</s:decorate>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel label=" " switchType="client">
+
+				<table>
+					<tr>
+						<td><s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU571_grupo}</ui:define>
+							<h:inputText size="100" disabled="true"
+								value="#{cargarResultEvalMetodo571FC.grupo}" />
+						</s:decorate></td>
+						<td><s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU571_palntilla}</ui:define>
+							<h:inputText size="100" disabled="true"
+								value="#{cargarResultEvalMetodo571FC.plantilla}" />
+						</s:decorate></td>
+					</tr>
+
+				</table>
+			</rich:simpleTogglePanel>
+			<h3 align="center"><span class="required">#{messages.CU571_puntajeObs}</span></h3>
+			<rich:simpleTogglePanel label="#{messages.CU571_panel1_title}"
+				id="idPanelDefAlcance">
+
+				<div style="overflow: scroll; width: 100%; HEIGHT: 300px"
+					class="results"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty cargarResultEvalMetodo571FC.lGrillaIndividual}" />
+				<rich:dataTable
+					rendered="#{!empty cargarResultEvalMetodo571FC.lGrillaIndividual}"
+					rowKeyVar="rowIndexGrilla1" var="_record3"
+					value="#{cargarResultEvalMetodo571FC.lGrillaIndividual}">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{messages.CU571_funcionarios}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_cargo}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_numero}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_criterioEval}" />
+							</rich:column>
+							<ui:remove>
+								<rich:column>
+																<h:outputText value="#{messages.CU572_presente}" />
+															</rich:column>
+							</ui:remove>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_puntajeObtenido}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU608_justificacion}" />
+							</rich:column>
+
+
+
+							<rich:column>
+								<h:outputText value="#{messages.CU572_planMejora}" />
+							</rich:column>
+
+
+							<rich:column>
+								<h:outputText value="#{messages.CU572_comentario}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU572_adjunto}" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record3.sujetos.empleadoPuesto.persona.documentoIdentidad} #{_record3.sujetos.empleadoPuesto.persona.nombres} #{_record3.sujetos.empleadoPuesto.persona.apellidos}" />
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+						<h:outputText
+							value="#{_record3.sujetos.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<ui:remove>
+						<rich:column style="background-color: palegoldenrod;">
+												<h:selectBooleanCheckbox value="#{_record3.presente}">
+													<a:support event="onclick" />
+												</h:selectBooleanCheckbox>
+											</rich:column>
+					</ui:remove>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+					</rich:column>
+					<rich:column style="background-color: palegoldenrod;">
+
+					</rich:column>
+
+					<rich:column style="background-color: palegoldenrod;">
+						<s:link value="Adjuntar" propagation="join" rendered="#{_record3.documentos.idDocumento==null}" 
+							action="#{cargarResultEvalMetodo571FC.habilitarModal(true)}">
+							<f:param name="idGrupoSujeto" value="#{_record3.idGrupoSujeto}" />
+						</s:link>#{' '}<h:commandLink value="Descargar" propagation="join"
+							rendered="#{_record3.documentos.idDocumento!=null}"
+							action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record3.documentos.idDocumento)}" />
+					</rich:column>
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						var="_detalles2"
+						value="#{cargarResultEvalMetodo571FC.traerDetalleGrilla3(_record3.idGrupoSujeto)}">
+						<rich:column colspan="2"
+							style="border-right: 0px;border-left: 1px;">
+						</rich:column>
+						<rich:column>
+							<h:outputText
+								value="#{cargarResultEvalPerce608FC.refreshResultadoEval(_detalles2).plantillaEvalConfDet.orden}"></h:outputText>
+						</rich:column>
+						<rich:column>
+							<h:outputText
+								value="#{_detalles2.plantillaEvalConfDet.resultadoEsperado}"></h:outputText>
+						</rich:column>
+						<ui:remove>
+							<rich:column>
+							
+													</rich:column>
+						</ui:remove>
+
+						<rich:column>
+							<h:inputText styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{_detalles2.puntaje}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputText>
+						</rich:column>
+						<rich:column>
+							<h:inputTextarea value="#{_detalles2.justificacion}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputTextarea>
+						</rich:column>
+
+						<rich:column>
+							<div style="overflow: scroll; HEIGHT: 100px; width: 100%;">
+							<table border="1">
+								<a:repeat value="#{_detalles2.lPM}" var="itemRepeat">
+									<tr>
+										<td><h:outputText
+											style="width: 50px ;white-space:normal;word-wrap: break-word"
+											value="#{itemRepeat.descripcion}" /></td>
+										<td><h:selectBooleanCheckbox
+											value="#{itemRepeat.selected}">
+											<a:support eventsQueue="default" event="onclick"></a:support>
+
+										</h:selectBooleanCheckbox></td>
+									</tr>
+								</a:repeat>
+							</table>
+							</div>
+						</rich:column>
+						<rich:column>
+							<h:inputTextarea width="100%" value="#{_detalles2.comentario}">
+								<a:support eventsQueue="default" event="onblur" />
+							</h:inputTextarea>
+						</rich:column>
+					</rich:subTable>
+				</rich:dataTable></div>
+
+
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel label="#{messages.CU571_grilla2_title}"
+				id="idPanel2">
+
+				<table>
+					<tr>
+						<td valign="top"><h:inputTextarea disabled="true"
+							value="#{cargarResultEvalMetodo571FC.comision}"
+							style="width : 452px; height : 36px;" /> <h:panelGrid
+							columns="2">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">Integrantes<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="idTipoNombramiento"
+									value="#{cargarResultEvalMetodo571FC.idComision}"
+									style="width:150px">
+									<f:selectItems
+										value="#{cargarResultEvalMetodo571FC.traerIntegrantesSI()}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<a:commandButton eventsQueue="default"
+								reRender="evaluacionDesempenoSearch:panelResultados"
+								action="#{cargarResultEvalMetodo571FC.addIntegrante()}"
+								value="#{messages.CU571_agregar}" />
+						</h:panelGrid></td>
+						<td width="100%"><rich:panel id="panelResultados">
+							<f:facet name="header">Integrantes Seleccionados (#{empty cargarResultEvalMetodo571FC.lGrilla2?0:cargarResultEvalMetodo571FC.lGrilla2.size()})</f:facet>
+							<div style="overflow: scroll; width: 100%; HEIGHT: 100px"
+								class="results"><h:outputText
+								value="No hay Integrantes seleccionados..."
+								rendered="#{empty cargarResultEvalMetodo571FC.lGrilla2}" /> <rich:dataTable
+								rendered="#{! empty cargarResultEvalMetodo571FC.lGrilla2}"
+								id="idGrillaComision" var="_record2" rowKeyVar="varIndex2"
+								value="#{cargarResultEvalMetodo571FC.lGrilla2}">
+								<h:column>
+									<f:facet name="header">
+						#{messages.CU571_integrante}
+						</f:facet>
+									<h:outputText style="white-space:normal;word-wrap: break-word"
+										value="#{_record2.comisionCapacEval.persona.nombres} #{_record2.comisionCapacEval.persona.apellidos}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+
+									</f:facet>
+									<a:commandLink value="Eliminar"
+										reRender="evaluacionDesempenoSearch:panelResultados"
+										action="#{cargarResultEvalMetodo571FC.eliminarIntegrante(varIndex2)}"></a:commandLink>
+								</h:column>
+							</rich:dataTable></div>
+						</rich:panel></td>
+					</tr>
+				</table>
+			</rich:simpleTogglePanel>
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass" /></div>
+			<s:div styleClass="actionButtons">
+				<h:commandButton value="Guardar"
+					action="#{cargarResultEvalMetodo571FC.saveIndividual()}" />
+				<s:button propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml" id="anesxos"
+					value="Anexos">
+					<f:param name="direccionFisica"
+						value="#{cargarResultEvalMetodo571FC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="#{cargarResultEvalMetodo571FC.nombrePantalla}" />
+					<f:param name="nombreTabla" value="GrupoMetodologia" />
+					<f:param name="idCU" value="#{cargaResultadosEvaluacionListFC.idEvaluacionDesempeno}"/>
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="/evaluacionDesempenho/CargarResultEvalMetodo/CargarResultEvalMetodoIndividual571.xhtml" />
+				</s:button>
+				<h:commandButton value="#{messages.CU571_finalizarEvalua}"
+					action="#{cargarResultEvalMetodo571FC.finalizarEvalua()}" />
+				<s:button value="Volver" propagation="join"
+					view="#{empty cargarResultEvalMetodo571FC.elFrom?'/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml':cargarResultEvalMetodo571FC.elFrom}" />
+			</s:div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

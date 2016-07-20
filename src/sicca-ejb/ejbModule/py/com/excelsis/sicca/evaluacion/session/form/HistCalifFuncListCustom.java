@@ -1,0 +1,39 @@
+package py.com.excelsis.sicca.evaluacion.session.form;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+
+import py.com.excelsis.sicca.entity.EmpleadoPuesto;
+import py.com.excelsis.sicca.entity.Excepcion;
+import py.com.excelsis.sicca.session.util.CustomEntityQuery;
+import py.com.excelsis.sicca.session.util.QueryValue;
+import py.com.excelsis.sicca.util.SICCASessionParameters;
+
+@Scope(ScopeType.PAGE)
+@Name("histCalifFuncListCustom")
+public class HistCalifFuncListCustom extends CustomEntityQuery<EmpleadoPuesto> {
+	private static final String EJBQL = "select EmpleadoPuesto from EmpleadoPuesto EmpleadoPuesto";
+
+	private static final String[] RESTRICTIONS = {};
+
+	public HistCalifFuncListCustom() {
+		setEjbql(EJBQL);
+		setRestrictionExpressionStrings(Arrays.asList(RESTRICTIONS));
+		setMaxResults(SICCASessionParameters.SEARCH_MAX_RESULT);
+	}
+
+	public List<EmpleadoPuesto> listaResultados(String ejbql, Map<String, QueryValue> parametros) {
+		setCustomEjbql(ejbql);	
+		if (parametros != null)
+			setParams(parametros);
+		setMaxResults(SICCASessionParameters.SEARCH_MAX_RESULT);
+		List<EmpleadoPuesto> lista = getResultList();
+		return lista;
+	}
+}
+

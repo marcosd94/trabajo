@@ -1,0 +1,406 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+
+		<h1>Evaluaciones de Puntaje del Postulante</h1>
+		<rich:simpleTogglePanel label="" switchType="client">
+
+			<h:panelGrid columns="2">
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_concurso}</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_grupo}</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_codPostulante}</ui:define>
+					<h:inputText id="codPostulante" disabled="true"
+						value="#{realizarEvalsFormController.codPostulante}"
+						style=" width : 514px;" />
+
+				</s:decorate>
+				<!--<h2>#{realizarEvalsFormController.conDiscaDesc}</h2>-->
+
+			</h:panelGrid>
+
+		</rich:simpleTogglePanel>
+		<rich:simpleTogglePanel label="#{messages.CU88_tipoEval}"
+			switchType="client">
+			<h:panelGrid columns="1">
+				<s:decorate id="tipoEvalField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_tipoEval} 
+					</ui:define>
+					<h:inputText id="tipoEval" size="10" disabled="true"
+						value="#{realizarEvalsFormController.tipoEvalDesc}"
+						style=" width : 381px;" />
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<s:decorate id="porcMinAppField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_porcMinApp} 
+					</ui:define>
+					<h:inputText id="porcMinApp" size="10" disabled="true"
+						value="#{realizarEvalsFormController.porcMinAplicar}"
+						style=" width : 277px;" />
+				</s:decorate>
+
+				<s:decorate id="minimoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_minimo} 
+					</ui:define>
+					<h:inputText id="minimo" size="10" disabled="true"
+						styleClass="numeric"
+						value="#{realizarEvalsFormController.minimoDesc}"
+						style=" width : 100px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+		<a:form id="idFormPuntajes">
+			<rich:simpleTogglePanel id="idPanelMatPuntajes"
+				label="#{messages.CU88_evalsAbiertas}" switchType="ajax">
+				<fieldset id="idFieldSetPuntaje" style="width: 551px;"><s:decorate
+					id="idDecoratePreseAuse" template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado"
+						rendered="#{realizarEvalsFormController.tipoEvalDesc != 'EVALUACION CURRICULAR (Obligatorio)'}"
+						disabled="#{realizarEvalsFormController.ver}"
+						value="#{realizarEvalsFormController.presente}">
+						<a:support event="onchange"></a:support>
+						<s:selectItems var="val" value="#{enumAppHelper.ausentePresente}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate></fieldset>
+
+
+				<rich:dataTable
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					id="matrizEval"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="700" border="0" var="record"
+					value="#{realizarEvalsFormController.lMatRefConfEnc}">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{messages.CU88_orden}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU88_obligatorio}" />
+							</rich:column>
+							<rich:column rowspan="2" colspan="2">
+								<h:outputText value="#{messages.CU88_fact_eval_item}" />
+							</rich:column>
+							
+							<rich:column colspan="2">
+								<h:outputText value="#{messages.CU88_grad_puntaje}" />
+							</rich:column>
+
+							<rich:column>
+								<h:outputText value="#{messages.CU88_puntajeMax}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{messages.CU88_puntaje}" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{record.nroOrden}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText
+							value="#{realizarEvalsFormController.formatObligatorio( record.obligatorioSN)}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{record.descripcion}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{messages.CU88_criterio_eval}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{messages.CU88_puntajeMinimo}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{messages.CU88_puntajeMaximo}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<h:outputText value="#{record.puntajeMaximo}" />
+					</rich:column>
+					<rich:column style="background-color:lightgrey;">
+						<rich:spacer />
+					</rich:column>
+
+					<rich:subTable
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						var="items" value="#{record.matrizRefConfDets}">
+						<rich:column rendered="#{items.activo}">
+							<rich:spacer />
+						</rich:column>
+						<rich:column rendered="#{items.activo}">
+							<rich:spacer />
+						</rich:column>
+						<rich:column style="padding-left:30px;" rendered="#{items.activo}">
+							<h:outputText value="#{items.descripcion}#{' '}"></h:outputText>
+						</rich:column>
+						<rich:column style="padding-left:30px;" rendered="#{items.activo}">
+							<h:outputText value="#{items.criteriosEvaluacion}#{' '}"></h:outputText>
+						</rich:column>
+						<rich:column rendered="#{items.activo}">
+							<h:outputText value="#{items.puntajeMinimo}">
+
+							</h:outputText>
+						</rich:column>
+						<rich:column rendered="#{items.activo}">
+							<h:outputText value="#{items.puntajeMaximo}">
+
+							</h:outputText>
+						</rich:column>
+						<rich:column rendered="#{items.activo}">
+							<rich:spacer />
+						</rich:column>
+						<rich:column rendered="#{items.activo}">
+							<a:region>
+								<rich:inplaceInput layout="block" value="#{items.puntaje}"
+									onkeypress="return soloNumeros(event);" maxlength="4"
+									defaultLabel="#{messages.CU88_click_para_editar}" id="inplace"
+									changedClass="inplace" selectOnEdit="true"
+									editEvent="ondblclick">
+									
+								</rich:inplaceInput>
+							</a:region>
+						</rich:column>
+					</rich:subTable>
+					<f:facet name="footer">
+						<rich:columnGroup>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+								<rich:spacer />
+							</rich:column>
+							<rich:column>
+
+								<h:panelGrid>
+									<h:outputText value="#{messages.CU88_puntaje_total}" />
+									<h:outputText value="#{messages.CU88_totalPuntos}" />
+									<h:outputText value="#{messages.CU88_alcanzado}" />
+								</h:panelGrid>
+								<a:commandButton id="modifDet33"
+									disabled="#{realizarEvalsFormController.ver}"
+									value="#{messages.CU88_sumarPuntos}"
+									action="#{realizarEvalsFormController.sumarPuntos(false)}"
+									rendered="#{!empty realizarEvalsFormController.lMatRefConfEnc}"
+									reRender="matrizEval">
+								</a:commandButton>
+							</rich:column>
+							<rich:column>
+								<h:panelGrid>
+									<h:outputText
+										value="#{realizarEvalsFormController.sumatoriaFactores}">
+									</h:outputText>
+									<h:outputText
+										value="#{realizarEvalsFormController.totalPuntosFormateado}">
+									</h:outputText>
+									<h:outputText
+										value="#{realizarEvalsFormController.totalAlcanzadoFormateado}%">
+									</h:outputText>
+								</h:panelGrid>
+								<rich:separator style=" height : 22px;">
+
+								</rich:separator>
+
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+				</rich:dataTable>
+				<!-- boton imprimir -->
+				<s:decorate template="/layout/display.xhtml">
+ 				<s:button
+					view="/seleccion/realizarEval/EvalDocumentalCabEdit.xhtml"
+					value="Ver Documentos" propagation="join"
+					id="evalDocumentalCabEdit">
+					<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+						value="#{realizarEvalsFormController.evaldocumentalcab.idEvalDocumentalCab}" />
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+						value="#{realizarEvalsFormController.idConcursoPuestoAgr}" />
+					<f:param name="from"
+						value="#{realizarEvalsFormController.evalDocumentalFrom}" />
+				</s:button>
+				<h:commandButton id="imprimirCV" value="Imprimir CV"
+						action="#{realizarEvalsFormController.imprimirCv()}" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_observacion}</ui:define>
+					<h:inputTextarea style=" width : 1002px;"
+						disabled="#{realizarEvalsFormController.ver}"
+						value="#{realizarEvalsFormController.observacion1}">
+						<a:support event="onchange"></a:support>
+					</h:inputTextarea>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+		</a:form>
+		<a:form id="formEvaluadores">
+			<rich:simpleTogglePanel label="#{messages.CU88_evaluadores}"
+				id="idPanelEvaluadores" switchType="ajax">
+
+				<h:panelGrid columns="1">
+				<a:region>
+					<s:decorate template="/layout/edit.xhtml"
+						rendered="#{!realizarEvalsFormController.ver}">
+						<ui:define name="label">#{messages.CU88_selec_tipo}</ui:define>
+						<h:selectOneRadio id="estado" required="true"
+							value="#{realizarEvalsFormController.tipoEvaluacion}">
+							<s:selectItems var="val" value="#{enumAppHelper.tiposEvauacions}"
+								label="#{val.descripcion}">
+							</s:selectItems>
+							<s:convertEnum />
+							<a:support event="onchange"
+								action="#{realizarEvalsFormController.cargarComisionSeleccion()}"
+								reRender="idComisionSeleccDesc,panelRend,inteField" />
+						</h:selectOneRadio>
+					</s:decorate>
+					</a:region>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml"
+						rendered="#{!realizarEvalsFormController.ver}"
+						id="idComisionSeleccDesc">
+						<ui:define name="label">#{messages.CU88_com_selec}</ui:define>
+						<h:inputText id="comiSel" size="40" disabled="true"
+							value="#{realizarEvalsFormController.comisionSeleccion}" />
+					</s:decorate>
+<a:outputPanel id="panelRend">
+					<s:decorate id="empTerceField" template="/layout/edit.xhtml"
+							rendered="#{!realizarEvalsFormController.apagarComboEmp}">
+							<ui:define name="label">#{messages.CU88_emp_terce}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="empTerce"
+								disabled="#{realizarEvalsFormController.apagarComboEmp}"
+								value="#{realizarEvalsFormController.idEmpTerce}"
+								style="width:250px">
+								<f:selectItems
+									value="#{realizarEvalsFormController.empTereceSelecItem}" />
+								<a:support event="onchange"
+									action="#{realizarEvalsFormController.updateIntegrantes()}"
+									reRender="inteField">
+									<a:actionparam name="idInte" value="#{null}">
+									</a:actionparam>
+								</a:support>
+							</h:selectOneMenu>
+						</s:decorate>
+						</a:outputPanel>
+
+					<s:decorate id="inteField" template="/layout/edit.xhtml"
+						rendered="#{!realizarEvalsFormController.ver}">
+						<ui:define name="label">#{messages.CU88_integrante}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="inte"
+							value="#{realizarEvalsFormController.idInte}" style="width:250px">
+							<f:selectItems
+								value="#{realizarEvalsFormController.integrantesSelectItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+				<a:commandButton id="agregarEval"
+					rendered="#{!realizarEvalsFormController.ver}"
+					value="#{messages.GENERICO_AGREGAR}"
+					reRender="integrantesListPanel"
+					action="#{realizarEvalsFormController.agregarEvaluadores()}">
+					<a:actionparam name="idEmpTerce"
+						value="#{rich:findComponent('formEvaluadores:empTerceField:empTerce').value}"></a:actionparam>
+
+				</a:commandButton>
+				<a:outputPanel id="integrantesListPanel" ajaxRendered="true">
+					<rich:dataTable id="integrantesList" var="_dto" rowKeyVar="row"
+						value="#{realizarEvalsFormController.lEvaluadores}"
+						rendered="#{not empty realizarEvalsFormController.lEvaluadores}">
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_col_comi_emp_terce}
+						</f:facet>
+							<h:outputText
+								value="#{realizarEvalsFormController.traerComiEmpTerce(_dto.comisionSeleccionDet,_dto.empresaPersona)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.CU88_col_int_comi_emp_terce}
+						</f:facet>
+							<h:outputText
+								value="#{realizarEvalsFormController.traerPersona(_dto.comisionSeleccionDet,_dto.empresaPersona)}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+						#{messages.GENERICO_ACCION}
+						</f:facet>
+							<a:commandLink id="editarLnk"
+								rendered="#{!realizarEvalsFormController.ver}"
+								value="#{messages.GENERICO_ELIMINAR}">
+								<a:support event="onclick"
+									action="#{realizarEvalsFormController.eliminarEvaluador(row)}"
+									reRender="integrantesListPanel" />
+							</a:commandLink>
+						</h:column>
+					</rich:dataTable>
+				</a:outputPanel>
+
+			</rich:simpleTogglePanel>
+		</a:form>
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+		<h:form>
+			<div class="actionButtons">
+			
+			<h:commandButton id="save"
+				rendered="#{realizarEvalsFormController.habilitarGuardar}"
+				value="#{messages.msg_save}"
+				action="#{realizarEvalsFormController.saveEvaluacion()}" 
+				disabled="#{realizarEvalsFormController.ver}"
+				/> 
+				<s:button
+				id="cancelEdit" value="Volver" propagation="join"
+				
+				view="/seleccion/realizarEval/realizarEvals.xhtml"
+				action="#{realizarEvalsFormController.habilitarRegistro()}"
+				>
+				<f:param name="tabActivo"
+					value="#{realizarEvalsFormController.tabActivo}" />
+			</s:button>
+			 
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

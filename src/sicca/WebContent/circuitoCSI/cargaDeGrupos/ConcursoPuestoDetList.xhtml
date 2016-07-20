@@ -1,0 +1,336 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU404_title}</h1>
+		<!-- Modales  -->
+		<rich:modalPanel id="modal" width="300" height="120"
+			resizeable="false" moveable="true">
+
+			<h:form>
+				<a:region>
+					<s:decorate id="ObsField" template="/layout/display.xhtml">
+						<ui:define name="label">Desea enviar a Homologación</ui:define>
+
+						<h:selectOneRadio id="radion"
+							value="#{cargaDeGruposCU683FC.valorRadioButton}">
+							<f:selectItem id="item1" itemLabel="SI" itemValue="si" />
+							<f:selectItem id="item2" itemLabel="NO" itemValue="no" />
+							<a:support event="onclick" eventsQueue="default" />
+						</h:selectOneRadio>
+					</s:decorate>
+				</a:region>
+
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Ok"
+					action="#{cargaDeGruposCU683FC.usarBancoHomologados()}"
+					ajaxSingle="true" oncomplete="Richfaces.hideModalPanel('modal')"
+					reRender="panelResultado" /> <a:commandButton id="cancel"
+					value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="concursoPuestoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+				<h:panelGrid columns="4">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{cargaDeGruposCU683FC.nivelEntidad.nenCodigo}" size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{cargaDeGruposCU683FC.nivelEntidad.nenNombre}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{cargaDeGruposCU683FC.sinEntidad.entCodigo}" size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{cargaDeGruposCU683FC.sinEntidad.entNombre}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{cargaDeGruposCU683FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{cargaDeGruposCU683FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="45" disabled="true"
+							value="#{cargaDeGruposCU683FC.concurso.nombre}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+						<h:inputText id="grupoCodigo" size="20" disabled="true"
+							value="#{cargaDeGruposCU683FC.concursoPuestoAgr.codGrupo}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{cargaDeGruposCU683FC.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="dptoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dpto" style="width : 250px;"
+							value="#{cargaDeGruposCU683FC.idDpto}">
+							<f:selectItems
+								value="#{cargaDeGruposCU683FC.departamentosSelecItem}" />
+							<a:support event="onchange"
+								action="#{cargaDeGruposCU683FC.updateCiudad()}"
+								reRender="ciudad" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="ciudadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+						<h:selectOneMenu id="ciudad" style="width : 250px;"
+							value="#{cargaDeGruposCU683FC.idCiudad}">
+							<f:selectItems value="#{cargaDeGruposCU683FC.ciudadSelecItem}" />
+							<a:support event="onchange"
+								action="#{cargaDeGruposCU683FC.updateBarrio()}"
+								reRender="barrioField" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="barrioField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU212_tab1_localidad_dir}</ui:define>
+						<h:selectOneMenu id="barrio" style="width :250px;"
+							value="#{cargaDeGruposCU683FC.idBarrio}">
+							<f:selectItems value="#{cargaDeGruposCU683FC.barrioSelecItem}" />
+							<a:support event="onchange" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU30_modalidad}</ui:define>
+						<h:selectOneMenu id="modalidad" style="width : 250px;"
+							value="#{cargaDeGruposCU683FC.modalidadOcupacion}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.modalidadOcupacions}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea cols="80"
+							value="#{cargaDeGruposCU683FC.observaciones}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<div class="actionButtons"><a:commandButton id="search"
+					value="#{messages['msg_list_search_button']}"
+					action="#{cargaDeGruposCU683FC.search()}" reRender="panelResultado">
+
+				</a:commandButton> <a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{cargaDeGruposCU683FC.searchAll()}"
+					reRender="panelResultado, panelParametro">
+				</a:commandButton> <s:button id="anexo" value="Anexo" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{cargaDeGruposCU683FC.ubicacionFisica}" />
+					<f:param name="nombrePantalla" value="adm_carga_grupo_list_CSI" />
+					<f:param name="idCU"
+						value="#{cargaDeGruposCU683FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+				</s:button></div>
+			</rich:simpleTogglePanel>
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">Puestos(#{cargaDeGruposCU683FC.listaConcursoPuestoDet.size()})</f:facet>
+				<div class="results" id="puestList"
+					style="height: 200px; overflow-x: auto; overflow-y: scroll"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty cargaDeGruposCU683FC.listaConcursoPuestoDet}" />
+				<rich:dataTable id="puestoList" var="_dto" rowKeyVar="row"
+					value="#{cargaDeGruposCU683FC.listaConcursoPuestoDet}"
+					rendered="#{not empty cargaDeGruposCU683FC.listaConcursoPuestoDet}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.Ciudad_idDepartamento}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.ciudad.departamento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.Persona_idCiudadDirecc}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.ciudad.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU212_tab1_localidad_dir}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.oficina.barrio.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.ConfiguracionUoDet_unidadOrganizativa}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU30_tipo_cpt}
+						</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.cpt.denominacion}" />
+					</h:column>
+
+
+					<h:column>
+						<f:facet name="header">#{messages.CU253_puesto}
+					</f:facet>
+						<h:outputText
+							value="#{cargaDeGruposCU683FC.obtenerCodigo(_dto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Cpt_denominacion}
+					</f:facet>
+						<h:outputText value="#{_dto.plantaCargoDet.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.CU30_mod}
+					</f:facet>
+						<h:outputText value="Contratado"
+							rendered="#{_dto.plantaCargoDet.contratado}" />
+						<h:outputText value="Permanente"
+							rendered="#{_dto.plantaCargoDet.permanente}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU30_categoria}
+					</f:facet>
+						<h:outputText
+							value="#{cargaDeGruposCU683FC.obtenerCategoria(_dto.plantaCargoDet)}" />
+
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+						<s:link view="/planificacion/puestosTrabajo/PlantaCargoDet.xhtml"
+							value="#{messages.CU404_ver_datos_puesto}" propagation="none"
+							id="plantaCargoDetVerId">
+							<f:param name="plantaCargoDetIdPlantaCargoDet"
+								value="#{_dto.plantaCargoDet.idPlantaCargoDet}" />
+							<f:param name="plantaCargoDetFrom" value="ver" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{cargaDeGruposCU683FC.idConcursoPuestoAgr}" />
+							<f:param name="plantaFrom"
+								value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+						</s:link>
+						 
+					#{''}					
+					<s:link
+							view="/seleccion/administrarPuestoComite/adminPuestoComite.xhtml"
+							value="#{messages.CU404_elegir_datos_plan}" propagation="none"
+							id="elegirDatosPlanVer">
+							<f:param name="puesto_agr"
+								value="#{_dto.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="id_puesto"
+								value="#{_dto.plantaCargoDet.idPlantaCargoDet}" />
+							<f:param name="from"
+								value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+						</s:link>
+
+					</h:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+
+
+			<s:button rendered="false"
+				view="/seleccion/admLugarPreseAclaracion/LugarPresentacionAclaracion.xhtml"
+				id="alcaracRecep" propagation="none"
+				value="Cargar Lugar de Aclarac. y Recep.">
+				<f:param name="idConcursoPuestoAgr"
+					value="#{cargaDeGruposCU683FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+			</s:button>
+
+			<s:button id="cargarDatosGrupo"
+				value="#{messages.CU235_btn_cargar_datos}" view="/seleccion/datosGrupoPuesto/CSI/DatosGrupoPuestoEdit.xhtml">
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{cargaDeGruposCU683FC.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+			</s:button>
+
+
+
+
+
+			<s:button view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+				id="basesycondiciones" propagation="none"
+				value="Ver y Editar Bases y Condiciones">
+				<f:param name="idConcursoPuestoAgr"
+					value="#{cargaDeGruposCU683FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="circuitoCSI/cargaDeGrupos/ConcursoPuestoDetList" />
+				<f:param name="CU" value="404" />
+			</s:button>
+
+
+			<a:commandButton value="Usar del Banco de Perfiles Homologados"
+				reRender="modal" oncomplete="#{rich:component('modal')}.show()"
+				rendered="#{cargaDeGruposCU683FC.muestraBtnHomologados}" />
+
+			<h:commandButton id="tarea" value="#{messages.proceso_sgte_tarea}"
+				action="#{cargaDeGruposCU683FC.nextTask()}"
+				onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" />
+
+			<s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

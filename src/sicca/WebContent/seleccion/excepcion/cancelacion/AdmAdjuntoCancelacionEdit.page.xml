@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/ComisionSeleccionCabList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+
+ <param name="idExcepcion" value="#{admAdjuntoCancelacionFormController.idExepcion}"/>
+
+ 
+ <action execute="#{admAdjuntoCancelacionFormController.init()}" on-postback="false"/>
+ <param name="comisionSeleccionCabFrom"/>
+ 
+ 
+ <navigation from-action="#{admAdjuntoCancelacionFormController.endTask()}">
+  <rule if-outcome="end">
+   <end-conversation/>
+   <redirect view-id="/proceso/BandejaExcepcionList.xhtml">
+    </redirect>
+  </rule>
+ </navigation>
+ 
+ 
+   <navigation from-action="#{admAdjuntoCancelacionFormController.anexar()}">
+	  <redirect view-id="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+	  	<param name="idCU" value="#{admAdjuntoCancelacionFormController.idExepcion}" />
+		<param name="nombreTabla" value="#{admAdjuntoCancelacionFormController.entity}" />
+		<param name="mostrarDoc" value="true" /> 
+		<param name="isEdit" value="true" />
+		<param name="from" value="seleccion/excepcion/cancelacion/AdmAdjuntoCancelacionEdit" />
+		 <param name="direccionFisica" value="#{admAdjuntoCancelacionFormController.direccionFisica}" />
+		<param name="nombrePantalla" value="#{admAdjuntoCancelacionFormController.nombrePantalla}" />
+	   </redirect>
+ </navigation>
+ 
+
+	
+	 <restrict>#{identity.hasRole('admAdjuntoCancelacion_edit')}</restrict>
+</page>

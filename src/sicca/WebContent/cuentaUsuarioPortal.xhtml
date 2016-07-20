@@ -1,0 +1,272 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	template="layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+	<h1 style="text-align:center; font-size: 12pt">#{messages.guarde_cod} #{seguridadUtilFormController.usuarioLogueado}</h1>
+		<!--  <h4>#{messages.msg_cod_postulante}
+		#{seguridadUtilFormController.usuarioLogueado}</h4>-->
+
+		<rich:panel style="border:none;text-align:center;">
+
+
+			<table align="center" style="width: 800px;">
+
+				<tr>
+					<td style="width: 250px;"><h:panelGroup id="picture">
+						<s:decorate id="tipoPreguntaField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU384_curriculum}
+					<h:graphicImage value="/img/cv.jpg" id="cv"
+									style="text-align:left;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="cv" submitMode="none">
+								<rich:menuItem
+									onclick="clickMenu('tipoPreguntaField:DatosPostulacionID')"
+									id="cargarCv">
+									<s:link onclick="clickMenu('')" rendered="#{portalFormController.habilitarCarga}"
+										view="/seleccion/adminFichaPostulacion/FichaPostulacionPostulante.xhtml"
+										value="#{messages.CU384_title1_cv}" id="DatosPostulacionID"
+										includePageParams="false" propagation="none" />
+								</rich:menuItem>
+								<rich:menuItem
+									onclick="clickMenu('tipoPreguntaField:modificarContrasenhlID')"
+									id="modificarCv">
+									<s:link onclick="clickMenu('')"
+										view="/seguridad/modificarContrasenha/ModificarContrasenha.xhtml"
+										value="#{messages.CU384_title2_cv}"
+										id="modificarContrasenhlID" includePageParams="true"
+										propagation="none">
+										<f:param name="from" value="/cuentaUsuarioPortal.xhtml" />
+										<f:param name="template" value="/layout/templatePortal.xhtml" />
+									</s:link>
+								</rich:menuItem>
+
+								<rich:menuItem
+									onclick="clickMenu('tipoPreguntaField:cambioEmailID')"
+									id="modificarCorreo">
+									<s:link onclick="clickMenu('')"
+										view="/seleccion/cambioEmail/CambioEmail.xhtml"
+										value="#{messages.CU384_title3_cv}" id="cambioEmailID"
+										includePageParams="false" propagation="none" />
+								</rich:menuItem>
+
+								<!--  
+								<rich:menuItem onclick="clickMenu('tipoPreguntaField:fichaID')"
+									id="cargarFicha">
+									<s:link onclick="clickMenu('')"
+										view="/capacitacion/fichaPostulacion/FichaInscripcion.xhtml"
+										value="#{messages.CU384_capacitaciones}" id="fichaID"
+										includePageParams="false" propagation="none" />
+								</rich:menuItem>
+								 -->
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td>
+					<td><h:panelGroup id="legajoPicture"
+						rendered="#{portalFormController.cuentaConLegajo() and portalFormController.habilitarCargaLegajo}">
+						<s:decorate id="legajoField" template="/layout/display.xhtml">
+							<ui:define name="label">Legajo
+					<h:graphicImage value="/img/legajo.jpg" id="legajo"
+									style="text-align:left;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="legajo" submitMode="none">
+								<rich:menuItem
+									onclick="clickMenu('legajoField:LegajoID')"
+									id="cargarLegajo">
+									<s:link onclick="clickMenu('')"
+										view="/legajos/MenuDatosPersonales.xhtml"
+										value="Legajo del Funcionario" id="legajoID"
+										includePageParams="false" propagation="none">
+											<f:param name="idPersona" value="#{portalFormController.idPersona}" />
+											<f:param name="texto" value="P" />
+											<f:param name="from" value="cuentaUsuarioPortal" />
+										</s:link>
+								</rich:menuItem>
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td>
+					<td align="center" style="width: 250px;"><h:form>
+
+						<rich:dataTable
+							value="#{adjuntoDocPortalListFormController.documentosList}"
+							id="tablaData" var="p" rows="5" first="0" width="264">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="#{messages.CU384_title_link_descarga}" />
+								</f:facet>
+								<h:commandLink value="#{p.nombreLogDoc}" target="_blank"
+									action="#{adjuntoDocPortalListFormController.abrirDoc(p.idDocumento)}" />
+
+							</rich:column>
+						</rich:dataTable>
+						<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+					</h:form></td>
+
+				</tr>
+				<tr>
+					<td style="width: 250px;"><h:panelGroup id="picture2">
+						<s:decorate id="postulacionField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU384_title1_search}
+					<h:graphicImage value="/img/lupa2.gif" id="post"
+									style="text-align:center;" />
+									
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="post"
+								submitMode="none">
+								<rich:menuItem
+									onclick="clickMenu('postulacionField:procPostulaID')"
+									id="postulacionConcurso">
+									<s:link onclick="clickMenu('')"
+										view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml"
+										value="Postular" id="procPostulaID" includePageParams="false"
+										propagation="none">
+										<f:param name="from" value="/cuentaUsuarioPortal.xhtml" />
+									</s:link>
+
+								</rich:menuItem>
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td>
+					
+					<td><!-- <h:panelGroup id="legajoPicture">
+                        <s:decorate id="legajoField" template="/layout/display.xhtml">
+                            <ui:define name="label">Seleccion de Jueces
+                    <h:graphicImage value="/img/legajo.jpg" id="legajo"
+                                    style="text-align:left;" />
+                            </ui:define>
+                            <rich:contextMenu event="onclick" attachTo="seleccionJueces" submitMode="none">
+                                <rich:menuItem
+                                    onclick="clickMenu('')"
+                                    id="seleccionJueces">
+                                    <h:outputLink value="#{seguridadUtilFormController.urlSeleccion}" >
+                                        <h:outputText value="Acceso a Módulo Juridico" />
+                                            <f:param name="u" value="#{seguridadUtilFormController.u}" />
+                                            <f:param name="p" value="#{seguridadUtilFormController.p}" />
+                                    </h:outputLink>
+                                </rich:menuItem>
+                            </rich:contextMenu>
+                        </s:decorate>
+                    </h:panelGroup> --></td>
+                    
+<!-- 					<td style="width: 250px;"><h:panelGroup id="picture3">
+						<s:decorate id="notificacioneField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">Mis Notificaciones
+						<h:graphicImage value="/img/evaluacion.gif" id="eval"
+									style="text-align:center;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="eval"
+								submitMode="none">
+
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td> -->
+
+				</tr>
+				<tr>
+					<td style="width: 250px;"><h:panelGroup id="picture5">
+						<s:decorate id="misPostulacionField"
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU384_mis_postulaciones}
+					<h:graphicImage value="/img/miPostulacion.png" id="mpost"
+									style="text-align:center;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="mpost"
+								submitMode="none">
+								<rich:menuItem
+									onclick="clickMenu('misPostulacionField:miconcursoID')"
+									id="verMisPost">
+									<s:link onclick="clickMenu('')"
+										view="/seleccion/adminCuentasUsuarioPortal/BuscarMisConcursos.xhtml"
+										value="Ver/Cancelar" id="miconcursoID"
+										includePageParams="false" propagation="none" />
+
+								</rich:menuItem>
+
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td>
+
+
+
+					<td style="width: 250px;"><h:panelGroup id="picture4">
+						<s:decorate id="reclamoField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU384_reclamos}
+					<h:graphicImage value="/img/lapiz.png" id="sug"
+									style="text-align:center;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="sug"
+								submitMode="none">
+
+								<rich:menuItem
+									onclick="clickMenu('reclamoField:reclamoPortalID')"
+									id="cargarReclamo">
+
+									<s:link onclick="clickMenu('')"
+										view="/seleccion/administrarReclamosConcurso/ReclamoSugerenciaList.xhtml"
+										value="Cargar/Ver" id="reclamoPortalID"
+										includePageParams="false" propagation="none" />
+								</rich:menuItem>
+							</rich:contextMenu>
+						</s:decorate>
+					</h:panelGroup></td>
+
+
+					<td style="width: 250px;"><h:panelGroup id="pictureX">
+						<s:decorate id="becaField" template="/layout/display.xhtml">
+							<ui:define name="label">Capacitaciones
+					<h:graphicImage value="/img/capacitacionINAPP.png" id="bec"
+									style="text-align:center;" />
+							</ui:define>
+							<rich:contextMenu event="onclick" attachTo="bec"
+								submitMode="none">
+
+								<rich:menuItem onclick="clickMenu('becaField:postularPortalID')"
+									id="cargarBeca">
+
+									<s:link onclick="clickMenu('')"
+										view="/capacitacion/buscarCapacitaciones/BuscarCapacitacionesProcPostulacion.xhtml"
+										value="Postular" id="postularPortalID" propagation="none">
+										<f:param name="fromCuenta" value="true" />
+										<f:param name="from" value="cuentaUsuarioPortal" />
+									</s:link>
+								</rich:menuItem>
+								<rich:menuItem
+									onclick="clickMenu('becaField:capacitacPortalID')"
+									id="cargarCapacitac">
+
+									<s:link onclick="clickMenu('')"
+										view="/capacitacion/adminCuentasUsuarioPortal/BuscarMisCapacitaciones.xhtml"
+										value="Mis Capacitaciones" id="capacitacPortalID"
+										includePageParams="false" propagation="none" />
+								</rich:menuItem>
+							</rich:contextMenu>
+
+						</s:decorate>
+					</h:panelGroup></td>
+
+				</tr>
+
+
+			</table>
+
+
+
+
+
+		</rich:panel>
+
+
+
+
+
+	</ui:define>
+</ui:composition>

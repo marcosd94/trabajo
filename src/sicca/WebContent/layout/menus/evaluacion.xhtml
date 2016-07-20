@@ -1,0 +1,114 @@
+<rich:dropDownMenu xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich" showDelay="250" hideDelay="0"
+	submitMode="none" rendered="#{identity.loggedIn}">
+	<f:facet name="label">#{messages.menu_evaluacion_desempeno}</f:facet>
+
+	<rich:menuItem rendered="#{identity.hasRole('evaluacion_desempenho_list')}" onclick="clickMenu('evaluacionDesempenhoId')">
+		<s:link onclick="clickMenu('')"
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoList.xhtml"
+			value="#{messages.CU550_titulo}" id="evaluacionDesempenhoId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	
+	<rich:menuItem onclick="clickMenu('evaluacionDesempenhoRapidaId')"
+		rendered="#{identity.hasRole('evaluacion_desempenho_list')}">
+		<s:link onclick="clickMenu('')"
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"
+			value="#{messages.CU550_titulo_rapido}" id="evaluacionDesempenhoRapidaId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+
+	<rich:menuItem onclick="clickMenu('gestionarBandejaEvaluacionId')"
+		rendered="#{identity.hasRole('gestionarBandejaEvaluacion')}">
+		<s:link onclick="clickMenu('')"
+			view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"
+			value="#{messages.CU556_menu_gestionar}"
+			id="gestionarBandejaEvaluacionId" includePageParams="false"
+			propagation="none" />
+	</rich:menuItem>
+
+	<ui:remove>
+		<rich:menuItem onclick="clickMenu('administrarBandejaEvaluacionId')"
+				rendered="#{identity.hasRole('administrarBandejaEvaluacion')}">
+				<s:link onclick="clickMenu('')"
+					view="/evaluacionDesempenho/bandeja/administrar/BandejaEvaluacionList.xhtml"
+					value="#{messages.CU556_menu_administrar}"
+					id="administrarBandejaEvaluacionId" includePageParams="false"
+					propagation="none" />
+			</rich:menuItem>
+	</ui:remove>
+
+	<rich:menuItem onclick="clickMenu('gestionEvaluacionId')"
+		rendered="#{identity.hasRole('admGestionEvaluacionList')}">
+		<s:link onclick="clickMenu('')"
+			view="/evaluacionDesempenho/admGestionEvaluacion/AdmGestionEvaluacionList.xhtml"
+			value="#{messages.CU569_menu}" id="gestionEvaluacionId"
+			includePageParams="false" propagation="none" />
+	</rich:menuItem>
+	<!--  MP MANTENIMIENTO	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupMantenimientoEval')}" value="Mantenimiento">
+		<rich:menuItem rendered="#{identity.hasRole('planMejora_list')}" onclick="clickMenu('planMejoraId')">
+			<s:link onclick="clickMenu('')"
+				view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraList.xhtml"
+				value="#{messages.CU575_menu}" id="planMejoraId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		<rich:menuItem rendered="#{identity.hasRole('alertasEval_list')}" onclick="clickMenu('configAlertaId')">
+			<s:link onclick="clickMenu('')"
+				view="/evaluacionDesempenho/configurarAlerta/AlertasEvalList.xhtml"
+				value="#{messages.CU576_menu}" id="configAlertaId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+
+		<ui:remove>
+			<rich:menuItem onclick="clickMenu('plantillaEvaluacionDesempenhoId')"
+						rendered="true">
+						<s:link onclick="clickMenu('')"
+							view="/evaluacionDesempenho/plantillaEvaluacion/PlantillaEvalList.xhtml"
+							value="#{messages.CU555_titulo}"
+							id="plantillaEvaluacionDesempenhoId" includePageParams="false"
+							propagation="none" />
+					</rich:menuItem>
+					<rich:menuItem onclick="clickMenu('plantillaResolucionId')"
+						rendered="true">
+						<s:link onclick="clickMenu('')"
+							view="/evaluacionDesempenho/plantillaResolucion/PlantillaResolucionList.xhtml"
+							value="#{messages.CU560_menu}" id="plantillaResolucionId"
+							includePageParams="false" propagation="none" />
+					</rich:menuItem>
+		</ui:remove>
+	</rich:menuGroup>
+
+
+
+	<!--  MP INFORMES	-->
+	<rich:menuGroup  rendered="#{identity.hasRole('groupInformeEval')}" value="#{messages.Menu_informes}">
+		<ui:remove>
+			<rich:menuItem rendered="#{identity.hasRole('rptResultadoEvaluaciones')}" onclick="clickMenu('resultadoEvaluacionId')">
+						<s:link onclick="clickMenu('')"
+							view="/evaluacionDesempenho/reportes/RPTResultadoEvaluaciones.xhtml"
+							value="#{messages.CU577_menu}" id="resultadoEvaluacionId"
+							includePageParams="false" propagation="none" />
+					</rich:menuItem>
+		</ui:remove>
+		<rich:menuItem rendered="#{identity.hasRole('histCalifFunc579FC')}" onclick="clickMenu('historicoCalifFuncId')">
+			<s:link onclick="clickMenu('')"
+				view="/evaluacionDesempenho/histCalifFunc/HistCalifFunc574.xhtml"
+				value="#{messages.CU579_menu}" id="historicoCalifFuncId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+		
+
+		<rich:menuItem rendered="#{identity.hasRole('rptPlanesDeMejoras')}" onclick="clickMenu('rptPlanesMejoraId')">
+			<s:link onclick="clickMenu('')"
+				view="/evaluacionDesempenho/reportes/RPTPlanesMejora.xhtml"
+				value="#{messages.CU578_menu}" id="rptPlanesMejoraId"
+				includePageParams="false" propagation="none" />
+		</rich:menuItem>
+	</rich:menuGroup>
+
+</rich:dropDownMenu>

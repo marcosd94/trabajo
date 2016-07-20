@@ -1,0 +1,248 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU488_titulo}</h1>
+    <h:form id="capacitacionesSearch" styleClass="edit" enctype="multipart/form-data">
+    
+    	<rich:panel  id="pantenCapa">  <f:facet name="header">#{messages.CU488_capacitacion}</f:facet>
+    	<h:panelGrid columns="1">
+    	<s:decorate id="idDatosEspecificosTipoCapField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{listaElegibleCapacitacion.capacitaciones.nombre}">
+                </h:inputText>
+            </s:decorate>
+         
+
+
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+                 <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" disabled="true"
+                          value="#{listaElegibleCapacitacion.tipoCapac}">
+                </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+    	</rich:panel>
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				</h:panelGrid>
+				
+				
+			<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" disabled="true"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			
+	               			</s:decorate>
+				</a:outputPanel>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:panel>
+		
+		
+		<rich:panel  id="panelBusqueda">
+				<f:facet name="header">#{messages['msg_list_search_filter']}</f:facet>
+				<h:panelGrid columns="2">
+				<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU479_pais_exp}</ui:define>
+						<h:selectOneMenu id="idPaisExp" value="#{listaElegibleCapacitacion.idPaisExp}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_nombre}</ui:define>
+						<h:inputText id="nombres"
+							value="#{listaElegibleCapacitacion.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_doc_ci}</ui:define>
+						<h:inputText id="documentoIdentidad"
+							value="#{listaElegibleCapacitacion.docIdentidad}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_apellido}</ui:define>
+						<h:inputText id="apellidos"
+							value="#{listaElegibleCapacitacion.apellido}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+		<h:panelGrid >
+		
+		
+		</h:panelGrid>
+		
+		</rich:panel>
+		<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages.msg_list_search_button}"
+					action="#{listaElegibleCapacitacion.search()}"
+					reRender="panelGrillaResul">
+				</a:commandButton> 
+				
+				 <a:commandButton id="reset" value="Todos" 
+				  reRender="panelGrillaResul,panelBusqueda"
+				 	 action="#{listaElegibleCapacitacion.searchAll()}">
+				 </a:commandButton>
+			</div>	
+   
+		<rich:panel id="panelGrillaResul">
+				<f:facet name="header">#{messages.CU488_titulo} ( #{listaElegibleCapacitacion.evaluacionInscPostLista.size()} )</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="revision" var="_post" 
+					value="#{listaElegibleCapacitacion.evaluacionInscPostLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU488_participante}
+						</f:facet>
+						<h:outputText value="#{_post.postulacionCap.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU326_doc_ci}
+						</f:facet>
+						<h:outputText value="#{_post.postulacionCap.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU479_pais_exp}
+						</f:facet>
+						<h:outputText value="#{_post.postulacionCap.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					
+					
+					
+					<h:column>
+						<f:facet name="header">
+							#{messages.gral_oee}
+						</f:facet>
+						<h:outputText value="#{_post.postulacionCap.empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU488_comentario}
+						</f:facet>
+						<h:outputText value="#{_post.observacion}" />
+					</h:column>
+					<rich:column >
+					<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+					 <s:link  id="verInstructores" value="#{messages.CU479_ver_ficha}"  
+					 view="/capacitacion/fichaPostulacion/VerFichaInscripcion.xhtml"
+					  propagation="join">
+				<f:param name="cu" value="CU488" />
+						<f:param name="id" value="#{_post.postulacionCap.personaPostulante.idPersonaPostulante}" />
+						<f:param  name="from"
+						value="capacitacion/listaElegible/ListaElegible" />
+					</s:link>
+					#{' '}
+						<s:link
+							view="/#{listaElegibleCapacitacion.from}.xhtml"
+							value="Seleccionar"
+							propagation="join"
+							id="postulanteViewId">
+							<f:param name="postulacionIdPostulacion"
+								value="#{_post.postulacionCap.idPostulacion}" />
+						</s:link>
+	            		
+					</rich:column>
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join"
+                   view="/#{listaElegibleCapacitacion.from}.xhtml"
+                />
+
+        </div>
+       
+       
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,67 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/templateLegajo.xhtml">
+
+
+	<ui:define name="body">
+		<h1>#{messages.CUPrincipalLegajo_titulo}</h1>
+
+
+		<h:form id="legajo" styleClass="edit" enctype="multipart/form-data">
+
+			<h:panelGrid columns="2">
+				<s:decorate id="paisField" template="/layout/edit.xhtml">
+					<h3>#{messages.CUPrincipalLegajo_pais_exp}:
+					#{validacionDatosPersonalesLegajoFC.persona.paisByIdPaisExpedicionDoc.descripcion}</h3>
+				</s:decorate>
+				<s:decorate id="ciField" template="/layout/edit.xhtml">
+					<h3>#{messages.CUPrincipalLegajo_doc_id}:
+					#{validacionDatosPersonalesLegajoFC.persona.documentoIdentidad}</h3>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<s:decorate id="nombresField" template="/layout/edit.xhtml">
+					<h3 align="center">#{messages.CUPrincipalLegajo_nombres}:
+					#{validacionDatosPersonalesLegajoFC.persona.nombreCompleto}</h3>
+				</s:decorate>
+
+				<s:decorate id="estadoField" template="/layout/edit.xhtml">
+					<h3 align="center">Estado de la Persona:
+					#{validacionDatosPersonalesLegajoFC.persona.activo ? 'ACTIVO' :
+					'INACTIVO'}</h3>
+				</s:decorate>
+			</h:panelGrid>
+
+			<rich:panel style="border:none;">
+				<rich:tabPanel switchType="client" id="tagGeneral"
+					selectedTab="#{validacionDatosPersonalesLegajoFC.selectedTab}"
+					style="width:980px">
+					<rich:tab label="Datos Personales" id="tabDatosPersonales">
+						<a:include id="includeTab01Edit"
+							viewId="/legajos/validarCambiosDatosPersonales/DatosPersonalesLegajo.xhtml" />
+						<div class="actionButtons"><h:commandButton id="save"
+							action="#{validacionDatosPersonalesLegajoFC.save()}"
+							value="#{messages.msg_save}"
+							onclick="return confirm('#{messages.msg_confirm_save}');" /></div>
+					</rich:tab>
+					<rich:tab label="Datos Familiares" id="tabDatosFamiliares">
+						<a:include id="includeTab02Edit"
+							viewId="/legajos/ValDatosFamiliares/ValDatosFamiliares677.xhtml" />
+					</rich:tab>
+				</rich:tabPanel>
+			</rich:panel>
+			<div class="actionButtons2"> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/#{from}.xhtml">
+			</s:button></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

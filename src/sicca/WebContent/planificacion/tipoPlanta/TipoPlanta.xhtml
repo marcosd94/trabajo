@@ -1,0 +1,71 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.TipoPlanta_}</h1>
+
+    <h:form id="tipoPlanta" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.TipoPlanta_}</f:facet>
+				<h:panelGrid columns="1">
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.TipoPlanta_descripcion}</ui:define>
+	                <h:outputText value="#{tipoPlantaHome.instance.descripcion}"/>
+	              
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.TipoPlanta_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                       disabled="true"
+	                          value="#{tipoPlantaHome.instance.activo}" />
+	            </s:decorate>
+			</h:panelGrid>
+    
+
+        </rich:panel>
+
+
+        <div class="actionButtons">
+
+          
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/tipoPlanta/TipoPlantaList.xhtml"/>
+        </div>
+    </h:form>
+	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{tipoPlantaHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{tipoPlantaHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{tipoPlantaHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{tipoPlantaHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{tipoPlantaHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{tipoPlantaHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{tipoPlantaHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{tipoPlantaHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+        
+</ui:define>
+
+</ui:composition>

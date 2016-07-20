@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{cargarResultEvalPerce608FC.init()}"
+		on-postback="false" />
+	<action execute="#{cargarResultEvalPerce608FC.cargarGrilla5()}"
+		on-postback="false" />
+	<param name="idGrupoMetodologia" value="#{cargarResultEvalPerce608FC.idGrupoMetodologia}" />
+	<param name="idGrupoSujeto" value="#{cargarResultEvalMetodo571FC.idGruposSujetos}" />
+	<param name="idSujetos" value="#{cargarResultEvalPerce608FC.idSujetos}" />
+	<param name="estado" value="#{cargarResultEvalMetodo571FC.estado}" />
+
+	<navigation from-action="#{cargarResultEvalMetodo571FC.finalizarEvalua()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect
+				view-id="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml">
+
+			</redirect>
+		</rule>
+	</navigation>
+	<restrict>#{identity.hasRole('cargarResultEvalPerce608FC')}</restrict>
+</page>

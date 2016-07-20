@@ -1,0 +1,241 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+      	xmlns:p="http://primefaces.prime.com.tr/ui"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU292_titulo}</h1>
+    <h:form id="matrizDocConfigDetSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages.CU292_edic}"  switchType="ajax">
+			<rich:panel id="panelParametro" style=" width : 873px;" >	<f:facet name="header">#{lugarPresentacionAclaracionFormController.idConcursoPuestoAgr!=null ? 'Grupo de Puesto' : 'Concurso'}</f:facet>
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{lugarPresentacionAclaracionFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{lugarPresentacionAclaracionFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{lugarPresentacionAclaracionFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{lugarPresentacionAclaracionFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{lugarPresentacionAclaracionFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{lugarPresentacionAclaracionFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText rendered="#{lugarPresentacionAclaracionFormController.idConcurso!=null}" disabled="true" value="#{lugarPresentacionAclaracionFormController.concurso.nombre}" style=" width : 514px;" />
+                 <h:inputText rendered="#{lugarPresentacionAclaracionFormController.idConcursoPuestoAgr!=null}" disabled="true" value="#{lugarPresentacionAclaracionFormController.concursoPuestoAgr.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+            <s:decorate template="/layout/display.xhtml" rendered="#{lugarPresentacionAclaracionFormController.idConcursoPuestoAgr!=null}">
+                <ui:define name="label">#{messages.CU243_grupo_puesto}</ui:define>
+                <h:inputText id="usuMod" disabled="true" value="#{lugarPresentacionAclaracionFormController.concursoPuestoAgr.descripcionGrupo}" style=" width : 514px;"/>
+            </s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+			<div style="clear:both">
+  			</div>	
+			<rich:panel id="panelAclaracion" style=" width : 873px;"> 	<f:facet name="header">#{messages.CU292_consulta_titulo}</f:facet>
+			<h:panelGrid columns="1" >
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU292_lugar}<span class="required">*</span></ui:define>
+                <h:inputText id="lugarAcla" maxlength="500" value="#{lugarPresentacionAclaracionFormController.aclaracion.lugar}" style=" width : 514px;"/>
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU292_descripcio}</ui:define>
+                <h:inputText id="descriAcla" maxlength="500" value="#{lugarPresentacionAclaracionFormController.aclaracion.descripcion}" style=" width : 514px;"/>
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml">
+                 <ui:define name="label">#{messages.ConfiguracionUoDet_direccion}<span class="required">*</span></ui:define>
+                <h:inputText id="dire"  maxlength="250" value="#{lugarPresentacionAclaracionFormController.aclaracion.direccion}" style=" width : 514px;"/>
+            </s:decorate>
+         
+			</h:panelGrid>
+			<h:panelGrid columns="2" >
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU292_tele}</ui:define>
+                <h:inputText id="telAca" maxlength="150" value="#{lugarPresentacionAclaracionFormController.aclaracion.telefono}" style=" width : 191px;"/>
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU292_emai}</ui:define>
+                <h:inputText id="mailAcla" maxlength="200"  value="#{lugarPresentacionAclaracionFormController.aclaracion.email}" style=" width : 191px;"/>
+            </s:decorate>
+          
+			</h:panelGrid>
+			<h:panelGrid columns="3" >
+			 <s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU292_horario}</ui:define>
+		</s:decorate>
+		 <s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU292_desde}<span class="required">*</span></ui:define>
+				
+		<p:inputMask value="#{lugarPresentacionAclaracionFormController.desdeAcla}"
+										mask="99:99">
+									</p:inputMask>
+				
+		</s:decorate>
+		 <s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.CU292_hasta}<span class="required">*</span></ui:define>
+			
+			<p:inputMask value="#{lugarPresentacionAclaracionFormController.hastaAcla}"
+										mask="99:99">
+									</p:inputMask>
+		</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="3" >
+				<a:commandButton id="addAcla"  eventsQueue="default"  rendered="#{!lugarPresentacionAclaracionFormController.esEditAclara}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="aclaracionList,panelAclaracion"
+						action="#{lugarPresentacionAclaracionFormController.addAclaracion()}"/>
+       <a:commandButton id="upAcla"  eventsQueue="default" rendered="#{lugarPresentacionAclaracionFormController.esEditAclara}"
+						value="Actualizar" reRender="aclaracionList,panelAclaracion"
+						action="#{lugarPresentacionAclaracionFormController.addAclaracion()}"/>
+       <a:commandButton id="cancelAcla"  eventsQueue="default"  rendered="#{lugarPresentacionAclaracionFormController.esEditAclara}"
+						value="Cancelar" reRender="aclaracionList,panelAclaracion"
+						action="#{lugarPresentacionAclaracionFormController.cancelarAcla()}"/>
+       
+			</h:panelGrid>
+		
+		        <h:panelGrid >
+		         <rich:panel style="border-style:none; width : 850px;" >
+		         <div class="results" id="aclaracionList"  style="clear: both;overflow: auto; width : 840px;">
+								   	<rich:dataTable id="aclaracionList" var="_itemsAcla"  rows="5"
+												value="#{lugarPresentacionAclaracionFormController.aclaracionDocs}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU292_lugar_pres}
+													</f:facet>
+													<h:outputText value="#{_itemsAcla.lugar}" />
+											</rich:column>
+												<rich:column >
+													<f:facet name="header">
+														#{messages.CU292_descripcio}
+													</f:facet>
+														<h:outputText 
+													value="#{_itemsAcla.descripcion}" />
+													
+													</rich:column>
+												<rich:column >
+												
+													<f:facet name="header">
+													Dirección
+													</f:facet>
+														<h:outputText 
+													value="#{_itemsAcla.direccion}" />
+											</rich:column>
+											<rich:column >
+									            <f:facet name="header">
+														#{messages.CU292_tele}
+													</f:facet>
+									            	<h:outputText 
+													value="#{_itemsAcla.telefono}" />
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU292_emai}
+													</f:facet>
+									            	      	<h:outputText 
+													value="#{_itemsAcla.email}" />
+									       </rich:column>
+									       <rich:column >
+									            <f:facet name="header">
+														#{messages.CU292_horario_desde}
+													</f:facet>
+									            	<h:outputText value="#{_itemsAcla.horarioDesde}">
+									            	 <s:convertDateTime type="both" pattern="HH:mm" />
+									            	 </h:outputText>
+									       </rich:column>
+									        <rich:column >
+									            <f:facet name="header">
+														#{messages.CU292_horario_hasta}
+													</f:facet>
+													<h:outputText value="#{_itemsAcla.horarioHasta}">
+													 <s:convertDateTime type="both" pattern="HH:mm" />
+													 </h:outputText>
+									       </rich:column>
+									      	<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editAclaDet" value="#{messages.msg_edit}" 
+								                    reRender="aclaracionList,panelAclaracion"  eventsQueue="default" rendered="#{_itemsAcla.idPresentAclaracDoc!=null}"
+								                    action="#{lugarPresentacionAclaracionFormController.editarAclaracion(rowNr)}" />
+											  #{' '}
+											  
+											   <h:commandLink id="delAclaDet" value="Eliminar"  
+											    onclick="return confirm('#{messages.msg_confirm_delete}');"
+								                    reRender="aclaracionList,panelAclaracion"  eventsQueue="default" rendered="#{_itemsAcla.idPresentAclaracDoc!=null}"
+								                    action="#{lugarPresentacionAclaracionFormController.eliminarAcla(_itemsAcla.idPresentAclaracDoc)}" />
+								            <h:commandLink id="delAclaDetaux" value="Eliminar"  
+											    onclick="return confirm('#{messages.msg_confirm_delete}');"
+								                    reRender="aclaracionList,panelAclaracion"  eventsQueue="default" rendered="#{_itemsAcla.idPresentAclaracDoc==null}"
+								                    action="#{lugarPresentacionAclaracionFormController.eliminarAclaAux(_itemsAcla.idPresentAclaracDoc)}" />
+								            
+											</rich:column>
+											
+										</rich:dataTable><rich:datascroller for="aclaracionList" renderIfSinglePage="false"
+							id="scrolls">
+							</rich:datascroller>
+							 		 </div> </rich:panel>
+		         
+		         </h:panelGrid> 
+			
+			</rich:panel>
+	
+<div style="clear:both">
+         <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass" style="color:Red;"/>
+  </div>
+	 <div class="actionButtons">
+
+             <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{lugarPresentacionAclaracionFormController.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"/>
+            
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_done}"
+             propagation="join"
+             view="/#{empty from ? 'seleccion/concurso/modificacionConcurso/ModificarDatosConcursoList' : from}.xhtml">
+              <f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{lugarPresentacionAclaracionFormController.idFromCU}"/>
+              </s:button>         
+      </div>
+	
+  </rich:simpleTogglePanel>
+</h:form>
+</ui:define>
+
+</ui:composition>

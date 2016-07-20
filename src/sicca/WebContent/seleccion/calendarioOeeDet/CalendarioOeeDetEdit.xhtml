@@ -1,0 +1,281 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="calendarioOeeDet" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{calendarioOeeDetHome.managed ? 'Edit' : 'Add'} Calendario oee det</f:facet>
+
+
+            <s:decorate id="idCalendarioOeeDetField" template="layout/edit.xhtml">
+                <ui:define name="label">Id calendario oee det</ui:define>
+                <h:inputText id="idCalendarioOeeDet"
+                       required="true"
+                       disabled="#{calendarioOeeDetHome.managed}"
+                          value="#{calendarioOeeDetHome.instance.idCalendarioOeeDet}">
+                    <a:support event="onblur" reRender="idCalendarioOeeDetField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="descripcionField" template="layout/edit.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputText id="descripcion"
+                       required="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{calendarioOeeDetHome.instance.descripcion}">
+                    <a:support event="onblur" reRender="descripcionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaFestivaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha festiva</ui:define>
+                <rich:calendar id="fechaFestiva"
+                       required="true"
+                          value="#{calendarioOeeDetHome.instance.fechaFestiva}" datePattern="MM/dd/yyyy" />
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{calendarioOeeDetHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{calendarioOeeDetHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{calendarioOeeDetHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{calendarioOeeDetHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{calendarioOeeDetHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{calendarioOeeDetHome.persist}"
+                       disabled="#{!calendarioOeeDetHome.wired}"
+                       rendered="#{!calendarioOeeDetHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{calendarioOeeDetHome.update}"
+                       rendered="#{calendarioOeeDetHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{calendarioOeeDetHome.remove}"
+                      immediate="true"
+                       rendered="#{calendarioOeeDetHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/CalendarioOeeDet.xhtml"
+                rendered="#{calendarioOeeDetHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty calendarioOeeDetFrom ? 'CalendarioOeeDetList' : calendarioOeeDetFrom}.xhtml"
+                rendered="#{!calendarioOeeDetHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Calendario oee cab *" labelClass="required">
+    <div class="association" id="calendarioOeeCabParent">
+
+        <h:outputText value="There is no calendarioOeeCab associated with this calendarioOeeDet."
+                   rendered="#{calendarioOeeDetHome.instance.calendarioOeeCab == null}"/>
+
+        <rich:dataTable var="_calendarioOeeCab"
+                   value="#{calendarioOeeDetHome.instance.calendarioOeeCab}"
+                rendered="#{calendarioOeeDetHome.instance.calendarioOeeCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="calendarioOeeCabTable">
+            <h:column>
+                <f:facet name="header">Id calendario oee cab</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.idCalendarioOeeCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Anho</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.anho}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lun hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.lunHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lun hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.lunHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mar hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.marHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mar hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.marHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mie hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.mieHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mie hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.mieHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Jue hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.jueHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Jue hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.jueHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vie hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.vieHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vie hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.vieHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sab hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.sabHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sab hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.sabHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dom hora desde</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.domHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dom hora hasta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.domHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_calendarioOeeCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{calendarioOeeDetHome.instance.calendarioOeeCab != null ? 'changeParent' : 'selectParent'}" value="#{calendarioOeeDetHome.instance.calendarioOeeCab != null ? 'Change' : 'Select'} calendarioOeeCab"
+                       view="/CalendarioOeeCabList.xhtml">
+                <f:param name="from" value="CalendarioOeeDetEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

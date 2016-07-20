@@ -1,0 +1,103 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h1>#{messages.CU645_titulo}</h1>
+	<rich:panel style="width:900px">
+		<f:facet name="header"> #{messages.CU645_panel_grales}</f:facet>
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/edit.xhtml" id="grupoField">
+				<ui:define name="label">#{messages.CU645_grupo_sangre}
+				</ui:define>
+				<h:selectOneMenu id="grupo" style="width : 50px;" disabled="true"
+					value="#{datosSaludLegajoFC.grupoSanguineo}">
+					<f:selectItem id="item1" itemLabel="O" itemValue="O" />
+					<f:selectItem id="item2" itemLabel="A" itemValue="A" />
+					<f:selectItem id="item3" itemLabel="B" itemValue="B" />
+					<f:selectItem id="item4" itemLabel="AB" itemValue="AB" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml" id="rhField">
+				<ui:define name="label">#{messages.CU645_rh}
+				</ui:define>
+				<h:selectOneMenu id="rh" style="width : 50px;" disabled="true"
+					value="#{datosSaludLegajoFC.rh}">
+					<f:selectItem id="it1" itemLabel="+" itemValue="+" />
+					<f:selectItem id="it2" itemLabel="-" itemValue="-" />
+
+				</h:selectOneMenu>
+			</s:decorate>
+
+
+		</h:panelGrid>
+	</rich:panel>
+	<br />
+
+	<rich:panel id="resultadoEnfermedadesPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU645_panel_enfermedades}(#{datosSaludLegajoFC.listaEnfermedades.size()})</f:facet>
+
+		<div class="results" id="tblEnfermedadesList"
+			style="overflow: scroll;" width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty datosSaludLegajoFC.listaEnfermedades}" /> <rich:dataTable
+			id="enfermedadesList" var="_enfermedad" rows="5" first="0"
+			rendered="#{not empty datosSaludLegajoFC.listaEnfermedades}"
+			value="#{datosSaludLegajoFC.listaEnfermedades}" rowKeyVar="rowNrEnf">
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_enfermedad}</f:facet>
+				<h:outputText value="#{_enfermedad.datosEspEnfermedad.descripcion}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_documento}</f:facet>
+				<h:commandLink value="Descargar" target="_blank"
+					rendered="#{_enfermedad.documento.idDocumento != null}"
+					action="#{datosSaludLegajoFC.abrirDocEnfermedad(rowNrEnf)}" />
+			</rich:column>
+
+		</rich:dataTable> <rich:datascroller for="enfermedadesList" id="scrollEnfermedades"
+			renderIfSinglePage="false" /></div>
+	</rich:panel>
+
+	<br />
+
+
+	<rich:panel id="resultadoSeguroPanel" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU645_panel_seg_med}(#{datosSaludLegajoFC.listaSeguros.size()})</f:facet>
+
+		<div class="results" id="tblSeguroList" style="overflow: scroll;"
+			width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty datosSaludLegajoFC.listaSeguros}" /> <rich:dataTable
+			id="seguroList" var="_seg" rows="5" first="0"
+			rendered="#{not empty datosSaludLegajoFC.listaSeguros}"
+			value="#{datosSaludLegajoFC.listaSeguros}" rowKeyVar="rowNrSeg">
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_seg}</f:facet>
+				<h:outputText value="#{_seg.datosEspSeguroMedico.descripcion}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_plan}</f:facet>
+				<h:outputText value="#{_seg.planSeguroMedico}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Asegurador</f:facet>
+				<h:outputText value="#{_seg.nombreAsegurador}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU645_fec_ingreso}</f:facet>
+				<h:outputText value="#{_seg.fechaIngreso}" />
+			</rich:column>
+
+		</rich:dataTable> <rich:datascroller for="seguroList" id="scrollSeguro"
+			renderIfSinglePage="false" /></div>
+	</rich:panel>
+</ui:composition>

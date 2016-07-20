@@ -1,0 +1,78 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+
+		<h1><img src="#{request.contextPath}/img/question.jpg"
+			width="100" />#{messages.CU368_title}</h1>
+		<h:form>
+			<rich:panel id="panelTipo">
+				<f:facet name="header">#{messages.CU368_title_panel}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tipoPreguntaField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU286_tipo_pregunta}
+					</ui:define>
+						<h:selectOneMenu id="idTipoPregunta"
+							value="#{adminPregFrecuentesPortalFormController.idTipoPregunta}"
+							style="width:250px">
+							<f:selectItems value="#{datosEspecificossByTipoPreguntaSelectItems}" />
+						</h:selectOneMenu> #{' '}
+						<a:commandButton id="showTema" value="Consultar"
+							action="#{adminPregFrecuentesPortalFormController.buscarPreguntasFrecuentes()}"
+							reRender="panelTemas" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<br />
+			<rich:panel id="panelTemas">
+				<div style="clear: both; overflow: auto;"><rich:dataList
+					var="tema" type="disc"
+					rendered="#{adminPregFrecuentesPortalFormController.idTipoPregunta == null}"
+					value="#{adminPregFrecuentesPortalFormController.listaPreguntasFrecuentes}">
+
+					<h:outputText value="#{tema.datosEspecificos.descripcion} - "
+						style="font-weight:bold" />
+
+					<h:outputText value="#{tema.preguntaFrecuente}"
+						style="font-weight:bold" />
+					<br />
+					<h:outputText value="#{tema.respuestaPregunta} " />
+
+				</rich:dataList> <rich:dataList var="tema" type="disc"
+					rendered="#{adminPregFrecuentesPortalFormController.idTipoPregunta != null}"
+					value="#{adminPregFrecuentesPortalFormController.listaPreguntasFrecuentes}">
+
+					<h:outputText value="#{tema.preguntaFrecuente}"
+						style="font-weight:bold" />
+					<br />
+					<h:outputText value="#{tema.respuestaPregunta} " />
+
+				</rich:dataList>
+				</div>
+				
+				<br /><br />
+				<div class="actionButtons">
+					<h:outputText value="#{messages.CU368_msg}" style="font-weight:bold" /> 
+					<h:commandLink
+						id="print" value="#{messages.GENERICO_AQUI}"
+						action="#{adminPregFrecuentesPortalFormController.pdf()}" />
+				</div>
+			</rich:panel>
+
+			<div class="actionButtons">
+					<s:button id="cancelAdd" value="#{messages.GENERICO_VOLVER}" propagation="none"
+							view="/#{empty preguntasFrecuentesFrom ? 'PreguntasFrecuentesList' : preguntasFrecuentesFrom}.xhtml"/>
+			</div>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

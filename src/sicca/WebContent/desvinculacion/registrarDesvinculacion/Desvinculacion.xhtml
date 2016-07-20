@@ -1,0 +1,237 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU440_titulo_carga}</h1>
+		<h:form id="desvinculacion" styleClass="edit">
+
+			<rich:panel id="panel">
+				<f:facet name="header">Ver #{messages.CU440_titulo_carga}</f:facet>
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}"
+							size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" 
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidad}"/>
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<a:region>
+					<rich:panel id="panelMotivoDesvinculacion">
+						<f:facet name="header">#{messages.CU440_mot_desvinculacion}</f:facet>
+						<h:panelGrid columns="2">
+							<s:decorate id="motivoDesvinculacionField"
+								template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU440_mot_desvinculacion}
+								</ui:define>
+								<h:inputText size="50" disabled="true"
+									value="#{registrarDesvinculacionFormController.desvinculacion.datosEspecifMotivo.descripcion}"/>
+							</s:decorate>
+							<rich:panel id="panelTipoJubilacion" style="border:none;"
+								rendered="#{registrarDesvinculacionFormController.mostrarPanelJubilacion}">
+								<fieldset><legend>#{messages.CU440_datos_jubilacion}</legend>
+								<h:panelGrid columns="2">
+									<s:decorate id="tipoJubilacionField"
+										template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU440_tipo_jubilacion}
+										</ui:define>
+										<h:inputText id="tipoJubilacion"
+											value="#{registrarDesvinculacionFormController.tipoJub}"
+											disabled="true" size="30" />
+									</s:decorate>
+									<s:decorate id="otroField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU440_otro}
+							</ui:define>
+										<h:inputText id="otroDescripcion"
+											value="#{registrarDesvinculacionFormController.otro}"
+											disabled="true" size="30" />
+									</s:decorate>
+									<s:decorate id="inhabilitadoField"
+										template="/layout/edit.xhtml">
+										<ui:define name="label">#{messages.CU440_inhabilitado}</ui:define>
+										<h:selectBooleanCheckbox id="inhabilitado" disabled="true"
+											value="#{registrarDesvinculacionFormController.inhabilitado}" />
+									</s:decorate>
+								</h:panelGrid></fieldset>
+							</rich:panel>
+
+						</h:panelGrid>
+					</rich:panel>
+				</a:region>
+				<rich:panel id="panelFuncionario">
+					<f:facet name="header">#{messages.CU440_funcionario}
+					</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_ci_func}
+							</ui:define>
+							<h:inputText id="nroCedula" disabled="true"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.persona.documentoIdentidad}"
+								size="20">
+							</h:inputText>
+
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+							<h:inputText id="nombres" disabled="true"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.persona.nombres}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+							<h:inputText id="apellidos" disabled="true"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.persona.apellidos}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU159_unidad_organizativa}</ui:define>
+							<h:inputText id="unidadOrganizativa" disabled="true"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate id="fechaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU440_fecha_ingreso}</ui:define>
+							<rich:calendar id="fecha"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.fechaInicio}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								disabled="true" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_puesto}</ui:define>
+							<h:inputText id="puesto" disabled="true"
+								value="#{registrarDesvinculacionFormController.empleadoPuesto.plantaCargoDet.descripcion}"
+								size="60">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+				<rich:panel id="panelDesvinculacion">
+					<f:facet name="header">#{messages.CU440_datos_desvinculacion}
+					</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate id="fechaDesvinculacionField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU440_fecha}</ui:define>
+							<rich:calendar id="fechaDesvinculacion" disabled="true"
+								value="#{registrarDesvinculacionFormController.fechaDesvinculacion}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_monto_liq}</ui:define>
+							<h:inputText id="montoLiquidacion" styleClass="numeric"
+								disabled="true"
+								value="#{registrarDesvinculacionFormController.desvinculacion.montoLiquidacion}"
+								size="20">
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_concepto}</ui:define>
+							<h:inputTextarea id="concepto" disabled="true"
+								value="#{registrarDesvinculacionFormController.desvinculacion.concepto}"
+								cols="80">
+							</h:inputTextarea>
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU440_obs}</ui:define>
+							<h:inputTextarea id="obs" disabled="true"
+								value="#{registrarDesvinculacionFormController.desvinculacion.observacion}"
+								cols="80">
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button
+				rendered="#{registrarDesvinculacionFormController.desvinculacion.idDesvinculacion != null}" id="anexo" value="Anexo"
+				propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{registrarDesvinculacionFormController.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="desvinculacion_edit" />
+				<f:param name="idCU"
+					value="#{registrarDesvinculacionFormController.desvinculacion.idDesvinculacion}" />
+				<f:param name="nombreTabla" value="Desvinculacion" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="false" />
+				<f:param name="from"
+					value="desvinculacion/registrarDesvinculacion/Desvinculacion" />
+			</s:button> <s:button id="cancelEdit" value="Volver" propagation="end"
+				view="/desvinculacion/registrarDesvinculacion/DesvinculacionList.xhtml" />
+
+			</div>
+			
+			<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml">
+               <ui:define name="label">#{messages.CU440_fecha}</ui:define>
+               <h:outputText id="usuAlta" value="#{registrarDesvinculacionFormController.desvinculacion.fechaAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml">
+               <ui:define name="label">Usuario Baja</ui:define>
+               <h:outputText id="fechaAlta" value="#{registrarDesvinculacionFormController.desvinculacion.usuAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+          
+	</h:panelGrid>
+        
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

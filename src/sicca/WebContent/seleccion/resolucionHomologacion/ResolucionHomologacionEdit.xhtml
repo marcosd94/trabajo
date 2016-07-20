@@ -1,0 +1,451 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<!--******************** MODAL ******************-->
+		<!-- ****Modal tab02**** -->
+	<a:region >
+	
+	<rich:modalPanel id="modalContacto" width="400" height="280" styleClass="centerbox">
+			<f:facet name="header">#{genBorradorResolucionHomologacion.fromCU=='333' ? 'Plantilla Decreto' : 'Plantillas de Resolución'}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalContacto')}.hide()" />
+			</f:facet>
+			 <h:form >
+                 <rich:panel>
+               		<h:panelGrid columns="1">
+            		<rich:dataTable id="tablaContactos"
+						value="#{genBorradorResolucionHomologacion.plResoHomoloList}" var="tag" rows="5"
+						reRender="panelContacto">
+						
+						<rich:column >
+							<f:facet name="header"> Descripción</f:facet>
+							<h:outputText id="outputText1" value="#{tag.descripcion}" />
+						</rich:column>
+					<rich:column >
+							<f:facet name="header">Acción</f:facet>
+							<a:commandLink id="linkSelecEst" reRender="panelPlanilla" eventsQueue="default"
+								action="#{genBorradorResolucionHomologacion.findPlantilla(tag.idPlantillaResolucion)}"
+								onclick="#{rich:component('modalContacto')}.hide()"
+								value="Seleccionar" >
+								</a:commandLink>
+
+						</rich:column>
+					</rich:dataTable>
+					<rich:datascroller for="tablaContactos" renderIfSinglePage="false"
+						id="scrc" reRender="tdPr">
+					</rich:datascroller>
+               </h:panelGrid>
+               
+                </rich:panel>
+                </h:form>
+			
+			
+
+			
+		</rich:modalPanel>
+	
+		
+		<!-- ****Fin Modal**** -->
+		</a:region>
+		
+		<h1 ><h:outputText value="#{messages.CU57_titulo}" rendered="#{genBorradorResolucionHomologacion.fromCU!='333'}"/> </h1>
+		<h1 ><h:outputText value="#{messages.CU333_generar_decreto}" rendered="#{genBorradorResolucionHomologacion.fromCU=='333'}"/> </h1>
+    
+    <h:form id="resolucionHomologacion"  enctype="multipart/form-data" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header"> #{genBorradorResolucionHomologacion.fromCU=='333'? 'Nuevo Decreto' : 'Nueva Resolución' } </f:facet>
+				<h:panelGrid >
+				<rich:tabPanel switchType="server" id="tabGeneral">
+					<rich:tab label="#{ genBorradorResolucionHomologacion.fromCU=='333' ? 'Datos Decreto' : 'Datos Resolución' }" id="tabCargaDatos">
+					<h:panelGrid columns="3">
+						<s:decorate  template="/layout/edit.xhtml">
+								<ui:define name="label">#{genBorradorResolucionHomologacion.fromCU=='333' ? 'Fecha Decreto' : messages.CU57_fec_resoluc}</ui:define>
+								 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"    oninputkeypress="ponerBarra(event);" 
+                            value="#{genBorradorResolucionHomologacion.resolucionHomologacion.fecha}" />
+							</s:decorate>
+					<s:decorate id="lugarField" template="/layout/edit.xhtml">
+								<ui:define name="label">Lugar</ui:define>
+								<h:inputText id="lugar" size="20" maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.lugar}">
+								</h:inputText>
+							</s:decorate>		
+							
+					<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{genBorradorResolucionHomologacion.fromCU=='333' ? 'Nro. Decreto' : messages.CU57_nro_resolu}</ui:define>
+								<h:inputText id="descripcion" size="20"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.nroResolucion}">
+								</h:inputText>
+							</s:decorate>
+					
+            
+					
+					</h:panelGrid>
+					
+					<!-- 
+						<h:panelGrid columns="1">
+							
+							<div class="actionButtons" align="center">
+							<a:region eventsQueue="default"  >
+							<a:commandButton id="showValoracionModalButton"  eventsQueue="default"
+										value="#{genBorradorResolucionHomologacion.fromCU=='333' ? 'Copiar Formato Decreto' :  messages.CU57_popup_button}"
+										onclick="Richfaces.showModalPanel('modalContacto');" />
+							</a:region>
+						</div>
+							
+							</h:panelGrid>
+							-->
+							<h:panelGroup >
+							<a:outputPanel id="panelPlanilla">
+							  <fieldset><legend>Plantilla</legend>
+	         	<!-- 	   <h:panelGrid columns="1">
+	                
+					
+							 <s:decorate id="tituloField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_titulo}</ui:define>
+                <h:inputTextarea id="titulo"
+                               cols="80"
+                               rows="6"
+                           required="true"
+                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.titulo}">
+                              <f:validateLength maximum="1000" />
+                             </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="vField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_visto}</ui:define>
+                <h:inputTextarea id="vist"
+                       required="true"
+                           cols="80"
+                               rows="6"
+                          value="#{genBorradorResolucionHomologacion.resolucionHomologacion.visto}">
+                           <f:validateLength maximum="1000" />
+                 </h:inputTextarea>
+            </s:decorate>
+
+
+            <s:decorate id="considerandoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU248_considerado}</ui:define>
+                <h:inputTextarea id="considerando"  cols="80"
+                               rows="6" required="true"
+                          value="#{genBorradorResolucionHomologacion.resolucionHomologacion.considerando}">
+                          <f:validateLength maximum="2000" />
+               </h:inputTextarea>
+            </s:decorate>
+			 <s:decorate id="porTantoField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.CU248_portanto}</ui:define>
+			                <h:inputTextarea id="porTanto"
+			                               cols="80"
+			                               rows="6"
+			                           required="true"
+			                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.porTanto}">
+			                             <f:validateLength maximum="2000" />
+			                             </h:inputTextarea>
+			            </s:decorate>
+			
+			
+			            <s:decorate id="resuelveField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.CU248_resuelve}</ui:define>
+			                <h:inputTextarea id="resuelve"
+			                               cols="80"
+			                               rows="6"
+			                           required="true"
+			                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.resuelve}">
+			                              <f:validateLength maximum="2000" />
+			                             </h:inputTextarea>
+			            </s:decorate>
+			        
+						 <s:decorate id="firmaField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_firma}</ui:define>
+						                <h:inputText id="firma"
+						                               cols="80"
+						                           required="true" maxlength="250"
+						                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.firma}" style=" width : 571px;"/>
+						            </s:decorate>
+						
+						
+						            <s:decorate id="cargoField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_cargo_firma}</ui:define>
+						                 <h:inputText id="cargo"
+						                              style=" width : 571px;"
+						                           required="true" maxlength="250"
+						                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.cargo}"/>
+						            </s:decorate>
+						
+						
+						            <s:decorate id="institucionField" template="/layout/edit.xhtml">
+						                <ui:define name="label">#{messages.CU248_institucion}</ui:define>
+						              <h:inputText  id="institucion"
+						                              style=" width : 571px;"
+						                           required="true" maxlength="250"
+						                              value="#{genBorradorResolucionHomologacion.resolucionHomologacion.institucion}"/>
+						            </s:decorate>
+						         
+							</h:panelGrid>
+							-->
+           				<h:panelGrid columns="2">
+           				<s:decorate id="documentoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU57_adjuntar}</ui:define>
+				<h:inputText disabled="true" id="nomFinal" size="50" value="#{genBorradorResolucionHomologacion.nombreDoc}"/>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<s:fileUpload size="30"  id="archivo" 
+						contentType="#{genBorradorResolucionHomologacion.contentType}"
+						data="#{genBorradorResolucionHomologacion.uploadedFile}"
+						fileName="#{genBorradorResolucionHomologacion.fileName}"
+						style=" width : 382px;" >
+					</s:fileUpload>
+					</s:decorate>
+           				</h:panelGrid>
+           				<h:panelGrid >
+           				<h:commandLink value="Descargar Documento"   target="_blank"    
+           				 rendered="#{genBorradorResolucionHomologacion.modoUpdate and  genBorradorResolucionHomologacion.resolucionHomologacion.documentos.idDocumento!=null}"
+				action="#{genBorradorResolucionHomologacion.abrirDoc()}" />
+           				</h:panelGrid>
+							</fieldset></a:outputPanel>
+							</h:panelGroup>
+						
+					</rich:tab>
+					<!-- 
+					<rich:tab label="#{messages.CU248_vista_preliminar}" id="tabVistaPreliminar"  action="#{genBorradorResolucionHomologacion.findFecha()}" >
+					    		<rich:panel style=" width : 750px;" >
+					    		<table style=" width : 600px;"> 
+					    		<tr> 
+					    		<td style="text-align:center;">
+					    		<h:graphicImage value="/img/cabecera.jpg" alt="Cabecera" />
+					    		
+					    		</td>
+					    		
+					    		
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:center;font-size:medium;font-weight:bold;width : 640px"> 
+					    		
+					    		<font style="text-transform: uppercase;"><h:outputText id="descripcionvp" required="true" size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.fromCU=='333'? 'DECRETO':'RESOLUCION' }  SFP N #{genBorradorResolucionHomologacion.resolucionHomologacion.nroResolucion}#{genBorradorResolucionHomologacion.anio}" >
+								</h:outputText></font>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:center;">
+					    		<font style="text-transform: uppercase;"><h:outputText id="titulovp" required="true" size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.titulo}" style="text-align:center;font-size:medium;font-weight:bold;">
+								</h:outputText></font>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td style="text-align:right;">
+					    		<h:outputText id="fec" required="true" size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.fechaResolucion}" style="text-align:right;">
+								</h:outputText>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td> 
+					    		<table>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold; width : 128px;"> 
+					    		<h:outputText size="10"
+									maxlength="150"
+									value="VISTO" >
+								</h:outputText>
+					    		</td>
+					    		<td style="text-align:justify;font-size:medium;">
+					    		<h:inputTextarea  size="100"
+									maxlength="150" disabled="true"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.visto}" style=" width : 500px; height : 150px;font-size: 12pt;">
+									</h:inputTextarea>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="CONSIDERANDO" >
+								</h:outputText>
+					    		</td>
+					    		<td     style="text-align:justify;font-size:medium;">
+					    		<h:inputTextarea  size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.considerando}" disabled="true" style=" width : 500px; height : 150px;font-size: 12pt;"/>
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="POR TANTO" >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:inputTextarea  size="100"
+									maxlength="150" style=" width : 500px; height : 150px;font-size: 12pt;" disabled="true"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.porTanto}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td     style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="RESUELVE" >
+								</h:outputText>
+					    		</td>
+					    			<td  style="text-align:justify;font-size:medium;">
+					    		<h:inputTextarea  size="100"  style=" width : 500px; height : 150px;font-size: 12pt;" disabled="true"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.resuelve}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="FIRMA" >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.firma}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="CARGO " >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.cargo}" />
+					    		</td>
+					    		</tr>
+					    		<tr>
+					    		<td><rich:spacer height="6px" /></td>
+					    		</tr>
+					    		<tr>
+					    		<td    style="text-align:justify;font-size:medium;font-weight:bold; width : 225px;"> 
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="INSTITUCIÓN " >
+								</h:outputText>
+					    		</td>
+					    			<td style="text-align:justify;font-size:medium;">
+					    		<h:outputText size="100"
+									maxlength="150"
+									value="#{genBorradorResolucionHomologacion.resolucionHomologacion.institucion}" />
+					    		</td>
+					    		</tr>
+					    		</table>
+					    		</td>
+					    		
+					    		</tr>
+					    		<tr>
+					    		<td><h:commandButton id="print"  value="#{messages.msg_list_search_print_button}"
+									  action="#{genBorradorResolucionHomologacion.print()}" /></td>
+					    		</tr>
+					    		</table>
+					    	</rich:panel>	
+					    	
+							
+							
+							
+					</rich:tab>
+					-->
+			</rich:tabPanel>
+			</h:panelGrid>
+
+
+
+           
+
+
+           
+
+           
+
+
+           
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!genBorradorResolucionHomologacion.modoUpdate}"   styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{genBorradorResolucionHomologacion.modoUpdate}"  styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+  
+
+
+            <h:commandButton id="save" 
+                          value="#{messages.msg_save}"
+                         action="#{genBorradorResolucionHomologacion.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!genBorradorResolucionHomologacion.modoUpdate}">
+                       </h:commandButton>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{genBorradorResolucionHomologacion.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{genBorradorResolucionHomologacion.modoUpdate}">
+                      </h:commandButton>
+
+
+            
+
+            <s:button id="cancelEdit"
+                   value="#{messages.CU412_volver}"
+             propagation="none"
+                view="/#{plantillaResolucionHomologacionFrom}.xhtml">
+                <f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{genBorradorResolucionHomologacion.idConcurso411}"/>
+                 <f:param name="resolucionHomologacionIdResolucionHomologacion"/>
+               </s:button>
+
+           
+
+        </div>
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

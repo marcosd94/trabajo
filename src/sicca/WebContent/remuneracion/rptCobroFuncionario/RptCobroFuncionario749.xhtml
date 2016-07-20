@@ -1,0 +1,228 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU749_titulo}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('remuneracion/listadoSalarioPercibidos731/ListadoSalarioPercibidos731')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('remuneracion/listadoSalarioPercibidos731/ListadoSalarioPercibidos731')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('remuneracion/listadoSalarioPercibidos731/ListadoSalarioPercibidos731')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+					</a:outputPanel>
+					<a:outputPanel >
+			<s:decorate template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" 
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2" 
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('remuneracion/rptCobroFuncionario/RptCobroFuncionario749')}" />
+							</s:decorate>
+				</a:outputPanel>
+
+				</h:panelGrid>
+				<a:region >
+				<h:panelGrid columns="1">
+				
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU731_nivel_agrupacion}
+						</ui:define>
+						<h:selectOneMenu  id="estado" immediate="true" style="width : 200px;" 
+						value="#{rptCobroFuncionario749FC.nivelAgrupacion}" >
+						<s:selectItems var="tipox" label="#{tipox.descripcion}"
+							value="#{enumAppHelper.nivelAgrupacionEnum}" />
+						<s:convertEnum />
+						 <a:support event="onchange" action="#{rptCobroFuncionario749FC.changeCb()}" eventsQueue="default"  reRender="panelBusqueda,outPanelNivel"/>
+					</h:selectOneMenu>
+					</s:decorate>
+					
+					
+					
+						<a:outputPanel ajaxRendered="true" id="outPanelNivel" rendered="#{rptCobroFuncionario749FC.habPanel}" >
+			
+					
+					<fieldset><legend>#{messages.CU749_seleccione}</legend>
+					<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Desde</ui:define>
+							<h:selectOneMenu id="desde"
+									value="#{rptCobroFuncionario749FC.valDesde}" style=" width : 275px;">
+									<f:selectItems
+										value="#{rptCobroFuncionario749FC.desdeSelectItem()}" />
+								</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Hasta</ui:define>
+							<h:selectOneMenu id="hasta"
+									value="#{rptCobroFuncionario749FC.valHasta}" style=" width : 275px;">
+									<f:selectItems
+										value="#{rptCobroFuncionario749FC.hastaSelectItem()}" />
+								</h:selectOneMenu>
+					</s:decorate>
+					</h:panelGrid>
+					
+					</fieldset>
+					</a:outputPanel>
+					 		
+				</h:panelGrid></a:region>
+				<h:panelGrid >
+				
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU749_puesto}
+						</ui:define>
+							<h:inputText value="#{rptCobroFuncionario749FC.puesto}" style=" width : 395px;"/>
+					</s:decorate> 
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU120_link3_codigo}
+						</ui:define>
+						<h:inputText id="codigo" styleClass="numeric"
+						onkeypress="return soloNumeros(event);"
+							value="#{rptCobroFuncionario749FC.codigoObj}" size="10">
+							<a:support event="onblur" eventsQueue="default"
+								reRender="catOut"
+								action="#{rptCobroFuncionario749FC.buildCategoriasSI()}" />
+						</h:inputText>
+				
+					</s:decorate>
+					<a:outputPanel ajaxRendered="true" id="catOut">
+						<s:decorate id="catFied" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU671_categoria}
+								</ui:define>
+								<h:selectOneMenu id="cat"
+									value="#{rptCobroFuncionario749FC.idCategoria}" style=" width : 275px;">
+									<f:selectItems
+										value="#{rptCobroFuncionario749FC.buildCategoriasSI()}" />
+								</h:selectOneMenu>
+							</s:decorate> </a:outputPanel>
+							
+							<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU749_rango_desde}
+						</ui:define>
+						<h:inputText value="#{rptCobroFuncionario749FC.monto1}" onkeypress="return soloNumeros(event);"/>
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU749_rango_hasta}
+						</ui:define>
+							<h:inputText value="#{rptCobroFuncionario749FC.monto2}" onkeypress="return soloNumeros(event);"/>
+					</s:decorate>  		
+				</h:panelGrid>
+				
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton 
+				value="#{messages.CU737_imp1}" action="#{rptCobroFuncionario749FC.imprimir('PDF')}">
+			</h:commandButton>
+			<h:commandButton
+				value="#{messages.CU737_imp2}" action="#{rptCobroFuncionario749FC.imprimir('EXCEL')}">
+			</h:commandButton> <s:button 
+				id="reset" value="Limpiar"
+				action="#{rptCobroFuncionario749FC.limpiar()}"
+				reRender="panelBusqueda">
+			</s:button></div>
+
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

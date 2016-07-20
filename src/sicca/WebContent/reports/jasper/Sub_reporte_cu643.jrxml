@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sub_reporte_cu643" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+OEE.DENOMINACION_UNIDAD AS OEE,
+SNE.NEN_CODIGO AS NEN_COD,
+SNE.NEN_NOMBRE AS NEN_NOM, SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO AS ENT_COD,
+SIN_ENTIDAD.ENT_NOMBRE AS ENT_NOMBRE,SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN AS ORDEN,
+SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN AS NRO_UO,
+E.TITULO,
+E.FECHA_EVAL_DESDE,
+E.FECHA_EVAL_HASTA,
+GE.GRUPO,
+DE.DESCRIPCION AS PLANTILLA,
+P.ORDEN AS NRO,
+P.RESULTADO_ESPERADO AS CRITERIO,
+DES.DESCRIPCION AS TIPO,
+p.peso_percepcion
+FROM EVAL_DESEMPENO.PLANTILLA_EVAL_CONF_DET P
+JOIN EVAL_DESEMPENO.GRUPO_METODOLOGIA GM
+ON GM.ID_GRUPO_METODOLOGIA = P.ID_GRUPO_METODOLOGIA
+JOIN EVAL_DESEMPENO.GRUPOS_EVALUACION GE
+ON GE.ID_GRUPOS_EVALUACION = GM.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.GRUPOS_SUJETOS GS
+ON GS.ID_GRUPOS_EVALUACION = GE.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.SUJETOS S
+ON S.ID_SUJETOS = GS.ID_SUJETOS
+JOIN GENERAL.EMPLEADO_PUESTO EMP
+ON EMP.ID_EMPLEADO_PUESTO = S.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PER
+ON PER.ID_PERSONA = EMP.ID_PERSONA
+JOIN EVAL_DESEMPENO.EVALUACION_DESEMPENO E
+ON E.ID_EVALUACION_DESEMPENO = GE.ID_EVALUACION_DESEMPENO
+JOIN SELECCION.DATOS_ESPECIFICOS DE
+ON DE.ID_DATOS_ESPECIFICOS = GM.ID_DATOS_ESPECIF_METOD
+JOIN SELECCION.DATOS_ESPECIFICOS DES
+ON DES.ID_DATOS_ESPECIFICOS = P.ID_DATOS_ESPECIF_TIPO_VAR
+JOIN EVAL_DESEMPENO.PLANTILLA_EVAL_ESCALA EVAL
+ON EVAL.ID_PLANTILLA_EVAL_CONF_DET = P.ID_PLANTILLA_EVAL_CONF_DET
+JOIN EVAL_DESEMPENO.ESCALA_EVAL ES
+ON ES.ID_ESCALA_EVAL = EVAL.ID_ESCALA_EVAL
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON E.ID_CONFIGURACION_UO_CAB = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+  JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD ON SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+  JOIN SINARH.SIN_NIVEL_ENTIDAD SNE ON (SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO)
+WHERE GM.ID_GRUPO_METODOLOGIA = $P{id}
+and eval.activo = true
+ORDER BY P.ORDEN,criterio]]>
+	</queryString>
+	<field name="oee" class="java.lang.String"/>
+	<field name="nen_cod" class="java.math.BigDecimal"/>
+	<field name="nen_nom" class="java.lang.String"/>
+	<field name="ent_cod" class="java.lang.String"/>
+	<field name="ent_nombre" class="java.lang.String"/>
+	<field name="orden" class="java.lang.String"/>
+	<field name="nro_uo" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="fecha_eval_desde" class="java.sql.Timestamp"/>
+	<field name="fecha_eval_hasta" class="java.sql.Timestamp"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="plantilla" class="java.lang.String"/>
+	<field name="nro" class="java.lang.Long"/>
+	<field name="criterio" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="peso_percepcion" class="java.lang.Float"/>
+	<variable name="peso_SUM" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{peso_percepcion}]]></variableExpression>
+	</variable>
+	<group name="tipo">
+		<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		<groupHeader>
+			<band height="29">
+				<textField>
+					<reportElement style="SubTitle" mode="Transparent" x="47" y="0" width="506" height="24" forecolor="#666666"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="0" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="33"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="139" y="0" width="263" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[CRITERIOS DE LA EVALUACIÓN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="444" y="0" width="75" height="20" backcolor="#99CCFF"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Pesos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="0" width="384" height="20" backcolor="#99CCFF"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Criterios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="20" backcolor="#99CCFF"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Nro.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="60" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{nro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="60" y="0" width="384" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{criterio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="444" y="0" width="75" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{peso_percepcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="519" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="444" y="4" width="75" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$V{peso_SUM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="369" y="4" width="75" height="15" backcolor="#99CCFF"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

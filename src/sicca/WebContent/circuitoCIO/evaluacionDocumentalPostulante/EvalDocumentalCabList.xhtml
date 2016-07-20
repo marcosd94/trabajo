@@ -1,0 +1,296 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		
+		<h1>#{messages.CU41_title}</h1>
+		<h:form id="evalDocumentalCabSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel id="panelBusqueda">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{evaluacionDocPostulantesListCU629FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{evaluacionDocPostulantesListCU629FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo</ui:define>
+						<h:inputText id="grupoCodigo" size="5" disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.concursoPuestoAgr.codGrupo}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="grupoDenominacion" size="45" disabled="true"
+							value="#{evaluacionDocPostulantesListCU629FC.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<fieldset style="width: 500px;"><legend>#{messages.CU41_fecha_eval}</legend>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">Desde</ui:define>
+						<rich:calendar id="fechaDesde"
+							disabled="#{evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+							value="#{evaluacionDocPostulantesListCU629FC.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">Hasta</ui:define>
+						<rich:calendar id="fechaHasta"
+							disabled="#{evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+							value="#{evaluacionDocPostulantesListCU629FC.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+				<s:decorate id="obsField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.gral_observacion}</ui:define>
+					<h:inputTextarea
+						disabled="#{evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+						value="#{evaluacionDocPostulantesListCU629FC.observacion}"
+						cols="50">
+						<f:validateLength maximum="250" />
+					</h:inputTextarea>
+				</s:decorate>
+
+				<div style="clear: both"><h:outputText
+					value="* Se han verificado los documentos de los postulantes"
+					styleClass="labelClass" style="color:Red;" /></div>
+			</rich:simpleTogglePanel>
+			<a:outputPanel id="idPanelBotones" ajaxRendered="true">
+				<div class="actionButtons"><a:commandButton id="search"
+					rendered="#{!evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+					value="#{messages.msg_list_search_button}"
+					action="#{evaluacionDocPostulantesListCU629FC.search()}"
+					reRender="panelResultados">
+					<f:param name="firstResult" value="0" />
+					
+				</a:commandButton> <a:commandButton id="reset"
+					rendered="#{!evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{evaluacionDocPostulantesListCU629FC.searchAll()}"
+					reRender="panelResultados,panelBusqueda">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				
+				<s:button
+					rendered="#{evaluacionDocPostulantesListCU629FC.todosEvaluados and !evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+					id="anexo" value="Anexo"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{evaluacionDocPostulantesListCU629FC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="evaluacion_doc_postulante_CIO_list" />
+					<f:param name="idCU"
+						value="#{evaluacionDocPostulantesListCU629FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="#{evaluacionDocPostulantesListCU629FC.from}" />
+				</s:button> 
+				
+				
+				
+				<s:button
+					rendered="#{evaluacionDocPostulantesListCU629FC.mostrarModal}"
+					id="idBtnDisminuirPuestos" value="Disminuir Puestos"
+					propagation="default"
+					view="#{evaluacionDocPostulantesListCU629FC.view451}">
+				</s:button></div>
+
+			</a:outputPanel>
+
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty evalDocumentalCabList.resultList ? 0 : (evalDocumentalCabList.paginated ? evalDocumentalCabList.resultCount : evalDocumentalCabList.resultList.size)})</f:facet>
+				<div class="results" id="evalDocumentalCabList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty evalDocumentalCabList.resultList}" /> <rich:dataTable
+					id="evalDocumentalCabList" var="_evalDocumentalCab"
+					value="#{evalDocumentalCabList.resultList}"
+					rendered="#{not empty evalDocumentalCabList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU41_cod_postulante}" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.usuAlta" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_evalDocumentalCab.postulacion.personaPostulante.usuAlta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel" value="Evaluado" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.evaluado" />
+							</ui:include>
+						</f:facet>
+						<h:selectBooleanCheckbox id="evaluado" disabled="true"
+							value="#{_evalDocumentalCab.evaluado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU41_fecha_eval}" />
+								<ui:param name="propertyPath"
+									value="evalDocumentalCab.fechaEvaluacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evalDocumentalCabList}" />
+								<ui:param name="propertyLabel" value="Aprobado" />
+								<ui:param name="propertyPath" value="evalDocumentalCab.aprobado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="APROBADO"
+							rendered="#{_evalDocumentalCab.aprobado and _evalDocumentalCab.aprobado != null}" />
+						<h:outputText value="NO APROBADO"
+							rendered="#{!_evalDocumentalCab.aprobado and _evalDocumentalCab.aprobado != null}" />
+					</h:column>
+
+
+
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<h:commandLink action="#{evaluacionDocPostulantesListCU629FC.imprimirCopiaLegajo(_evalDocumentalCab)}" value="Ver Datos del Postulantes"/>
+						
+							#{' '}
+
+						<s:link
+							
+							view="/circuitoCIO/evaluacionDocumentalPostulante/EvalDocumentalCabEdit.xhtml"
+							value="#{evaluacionDocPostulantesListCU629FC.evaluar()}" propagation="none"
+							id="evalDocumentalCabEdit">
+							<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+								value="#{_evalDocumentalCab.idEvalDocumentalCab}" />
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+								value="#{evaluacionDocPostulantesListCU629FC.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="codActividad"
+								value="#{evaluacionDocPostulantesListCU629FC.codActividad}" />
+								<f:param name="isEdit"
+								value="#{isEdit}" />
+						</s:link>
+
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<div class="tableControl"><s:link
+				view="/circuitoCIO/evaluacionDocumentalPostulante/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/circuitoCIO/evaluacionDocumentalPostulante/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/circuitoCIO/evaluacionDocumentalPostulante/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/circuitoCIO/evaluacionDocumentalPostulante/EvalDocumentalCabList.xhtml"
+				rendered="#{evalDocumentalCabList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{evalDocumentalCabList.lastFirstResult}" />
+			</s:link></div>
+
+
+			<s:decorate id="cantField" template="/layout/edit.xhtml">
+				<ui:define name="label">Cant. Evaluados</ui:define>
+				<h:inputText
+					value="#{evaluacionDocPostulantesListCU629FC.cantEvaluados}"
+					size="10" disabled="true" />
+			</s:decorate>
+
+			<br />
+			<br />
+			<a:outputPanel id="idPanelBotonesGral" ajaxRendered="true">
+			<div class="actionButtons"><a:commandButton id="tarea"
+			rendered="#{!evaluacionDocPostulantesListCU629FC.bloquearTodo}"
+				value="#{messages.proceso_sgte_tarea}"
+				reRender="modalPanel,idPanelBotones"
+				action="#{evaluacionDocPostulantesListCU629FC.nextTask()}" />
+				 <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+				</a:outputPanel>
+		</h:form>
+	
+
+	</ui:define>
+
+</ui:composition>

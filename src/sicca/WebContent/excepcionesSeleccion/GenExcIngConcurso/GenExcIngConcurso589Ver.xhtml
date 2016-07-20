@@ -1,0 +1,180 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU589_titulo}</h1>
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages.CU589_titlePanel1}"
+				switchType="client" id="panelParametro">
+				<h:panelGrid columns="3" id="idPanelCampos">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+
+				</h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU589_concurso} 
+							</ui:define>
+					<h:inputText value="#{genExcIngConcurso589FC.descConcursoVer}"
+						disabled="true" style="FONT-SIZE: x-small; width : 400px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU589_tipoConcurso}</ui:define>
+					<h:inputText disabled="true"
+						value="#{genExcIngConcurso589FC.descTipoConcursoVer}"
+						style=" width : 400px;" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU589_grupoDePuesto}
+					</ui:define>
+					<h:inputText value="#{genExcIngConcurso589FC.descGrupoVer}"
+						disabled="true" style=" width : 400px;" />
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<rich:simpleTogglePanel label="#{messages.CU589_titlePanel2}"
+				id="idPanel2" switchType="ajax">
+				<table>
+					<tr>
+						<td valign="top" style="width: 315px;"><s:decorate
+							template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU589_fecha}</ui:define>
+							<rich:calendar id="fechaIni" datePattern="dd/MM/yyyy"
+								disabled="true" inputSize="10"
+								value="#{genExcIngConcurso589FC.fecha}">
+							</rich:calendar>
+						</s:decorate></td>
+						<td><h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU589_tipoExcepcion}</ui:define>
+								<h:inputText value="#{genExcIngConcurso589FC.tipoExcepcion}"
+									disabled="true" style=" width : 250px;" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU589_estado}</ui:define>
+								<h:inputText value="#{genExcIngConcurso589FC.estado}"
+									style=" width : 250px;" disabled="true" />
+							</s:decorate>
+						</h:panelGrid></td>
+					</tr>
+				</table>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU589_descExcepcion}</ui:define>
+					<h:inputTextarea style=" width : 852px;" cols="100" rows="3"
+						disabled="true"
+						value="#{genExcIngConcurso589FC.observacionExcepcion}">
+					</h:inputTextarea>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages.CU589_titlePanel3}"
+				rendered="#{!empty genExcIngConcurso589FC.lElegibles}"
+				switchType="client">
+				<rich:extendedDataTable
+					rendered="#{!empty genExcIngConcurso589FC.lElegibles}"
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					rowKeyVar="rowIdVar"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="800" border="0"
+					var="_record3" height="250px"
+					value="#{genExcIngConcurso589FC.lElegibles}">
+					<rich:column width="33%">
+						<f:facet name="header">
+						#{messages.CU589_paisExpeDoc}
+						</f:facet>
+						<h:outputText style="white-space:normal;word-wrap: break-word"
+							value="#{_record3.postulacion.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</rich:column>
+					<rich:column width="33%">
+						<f:facet name="header">
+						#{messages.CU589_documento}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.postulacion.persona.documentoIdentidad}" />
+					</rich:column>
+
+					<rich:column width="33%">
+						<f:facet name="header">
+						#{messages.CU589_nombreApellido}
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{_record3.postulacion.persona.nombres} #{_record3.postulacion.persona.apellidos}" />
+					</rich:column>
+				</rich:extendedDataTable>
+			</rich:simpleTogglePanel>
+
+			<s:div styleClass="actionButtons">
+				<s:button id="aprobar" value="#{messages.CU589_gestionarExcepcion}"
+					rendered="#{genExcIngConcurso589FC.estado.equalsIgnoreCase('PENDIENTE')}"
+					propagation="join"
+					view="/seleccion/AjustesPuestoPostConcu/AjustesPuestoPostConcu.xhtml">
+					<f:param name="idGrupo"
+						value="#{_record3.excepcion.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="codActividad" value="#{null}" />
+					<f:param name="codCU" value="CU589" />
+					<f:param name="primeraVez" value="#{true}" />
+					<f:param name="idGrupo" value="#{genExcIngConcurso589FC.idGrupo}" />
+					<f:param name="idExcepcion"
+						value="#{genExcIngConcurso589FC.idExcepcion}" />
+					<f:param name="from"
+						value="excepcionesSeleccion/GenExcIngConcurso/GenExcIngConcurso589Ver" />
+
+					<f:param name="texto" value="EXC" />
+				</s:button>
+				<s:button id="cancelAdd" value="Volver" propagation="none"
+					view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml" />
+			</s:div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

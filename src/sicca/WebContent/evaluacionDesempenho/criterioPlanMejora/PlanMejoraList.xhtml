@@ -1,0 +1,205 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU575_titulo_list}</h1>
+    <h:form id="planMejoraSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelResultado">
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"  styleClass="numeric" 
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU575_criterio_plan}</ui:define>
+                <h:inputText id="descripcion" value="#{planMejoraListFC.planMejora.descripcion}"/>
+            </s:decorate>
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU575_codigo}</ui:define>
+                <h:inputText id="codigo" value="#{planMejoraListFC.planMejora.identificador}"/>
+            </s:decorate>
+		</h:panelGrid>
+
+            <s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estados" value="#{planMejoraListFC.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+             <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelResultado,links"
+				action="#{planMejoraListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{planMejoraListFC.searchAll()}" 
+				 reRender="panelParametro,panelResultado,links" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+    </h:form>
+	<a:outputPanel ajaxRendered="true" >
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages['msg_list_search_results']}(#{empty planMejoraList.resultList ? 0 : (planMejoraList.paginated ? planMejoraList.resultCount : planMejoraList.resultList.size)})</f:facet>
+    <div class="results" id="planMejoraList">
+
+    <h:outputText value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty planMejoraList.resultList}"/>
+
+    <rich:dataTable id="planMejoraList"
+                var="_planMejora"
+              value="#{planMejoraList.resultList}"
+           rendered="#{not empty planMejoraList.resultList}">
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planMejoraList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU575_codigo}"/>
+                    <ui:param name="propertyPath" value="planMejora.identificador"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planMejora.identificador}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planMejoraList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU575_criterio_plan}"/>
+                    <ui:param name="propertyPath" value="planMejora.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_planMejora.descripcion}"/>
+        </h:column>
+       
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{planMejoraList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="planMejora.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:selectBooleanCheckbox value="#{_planMejora.activo}" disabled="true"/>
+         </h:column>
+      
+        <rich:column styleClass="action">
+         <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'evaluacionDesempenho/criterioPlanMejora/PlanMejora' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="planMejoraViewId">
+                <f:param name="planMejoraIdPlanMejora"
+                        value="#{_planMejora.idPlanMejora}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none"
+                      id="planMejoraEdit"
+                rendered="#{empty from}">
+                <f:param name="planMejoraIdPlanMejora"
+                        value="#{_planMejora.idPlanMejora}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel></a:outputPanel>
+	<a:outputPanel ajaxRendered="true" id="links">
+    <div class="tableControl">
+
+        <s:link view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraList.xhtml"
+            rendered="#{planMejoraList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraList.xhtml"
+            rendered="#{planMejoraList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{planMejoraList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraList.xhtml"
+            rendered="#{planMejoraList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{planMejoraList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraList.xhtml"
+            rendered="#{planMejoraList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{planMejoraList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/evaluacionDesempenho/criterioPlanMejora/PlanMejoraEdit.xhtml"
+                    id="create"
+           propagation="none"
+                  value="#{messages.msg_create_male}">
+            <f:param name="planMejoraIdPlanMejora"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,157 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="listaSeleccionadosSearch" styleClass="edit">
+			<h1>#{messages.CU161_title}</h1>
+			<rich:simpleTogglePanel id="panel" switchType="ajax">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{elaborarPublicacionSeleccionadosFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{elaborarPublicacionSeleccionadosFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="codConcurso" size="20" disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.codConcurso}" />
+							#{' '}
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{elaborarPublicacionSeleccionadosFormController.concurso.nombre}" />
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel>
+					<f:facet name="header">#{messages.CU86_agr}</f:facet>
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU86_agr}</ui:define>
+
+							<h:inputText id="grupo" size="80" disabled="true"
+								value="#{elaborarPublicacionSeleccionadosFormController.concursoPuestoAgr.descripcionGrupo}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU161_puestos}</ui:define>
+
+							<h:inputText id="vacancia" size="10" disabled="true"
+								value="#{elaborarPublicacionSeleccionadosFormController.vacancia}" />
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:simpleTogglePanel>
+			<div align="center"><rich:panel style="width: 600px;">
+				<f:facet name="header">#{messages.CU161_lista_seleccionados}</f:facet>
+				<div style="clear: both; overflow: auto; HEIGHT: 150px"><rich:dataTable
+					id="tabla" cellpadding="0" cellspacing="0" width="500" border="0"
+					var="record"
+					value="#{elaborarPublicacionSeleccionadosFormController.listaPostulantesSeleccionados}"
+					rowKeyVar="row">
+
+
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU161_ci}
+							</f:facet>
+						<h:outputText
+							value="#{record.postulacion.personaPostulante.documentoIdentidad}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							#{messages.CU161_nombre_apellido}
+							</f:facet>
+						<h:outputText
+							value="#{record.postulacion.personaPostulante.nombres} #{record.postulacion.personaPostulante.apellidos}" />
+					</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel></div>
+			<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU86_obs}</ui:define>
+
+					<h:inputTextarea cols="80"
+						value="#{elaborarPublicacionSeleccionadosFormController.observacion}" />
+				</s:decorate>
+			</h:panelGrid>
+
+			<div class="actionButtons"><h:commandButton id="publicar" disabled="#{elaborarPublicacionSeleccionadosFormController.bloquearTodo}"
+				value="Publicar"
+				action="#{elaborarPublicacionSeleccionadosFormController.publicar()}"
+				onclick="return confirm('#{messages.CU161_msg1}');" /> <h:commandButton
+				id="print" value="#{messages['msg_list_search_print_button']}"
+				action="#{elaborarPublicacionSeleccionadosFormController.print()}" />
+
+			<s:button id="anexo" value="Anexo" propagation="join" disabled="#{elaborarPublicacionSeleccionadosFormController.bloquearTodo}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{elaborarPublicacionSeleccionadosFormController.direccionFisica}" />
+				<f:param name="nombrePantalla" value="publicacion_seleccionados" />
+				<f:param name="idCU"
+					value="#{elaborarPublicacionSeleccionadosFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="nombreTabla" value="ConcursoPuestoAgr" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="seleccion/elaborarPublicacionSeleccionados/ListaSeleccionadosList" />
+			</s:button> <s:button id="control" value="Control Puesto/Postulante"
+				rendered="#{!elaborarPublicacionSeleccionadosFormController.bloquearControlPuesto}"
+				propagation="join"
+				view="/seleccion/AjustesPuestoPostConcu/AjustesPuestoPostConcu.xhtml">
+				<f:param name="codActividad"
+					value="#{elaborarPublicacionSeleccionadosFormController.codActividad}" />
+				<f:param name="idGrupo"
+					value="#{elaborarPublicacionSeleccionadosFormController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="seleccion/elaborarPublicacionSeleccionados/ListaSeleccionadosList" />
+			</s:button> <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

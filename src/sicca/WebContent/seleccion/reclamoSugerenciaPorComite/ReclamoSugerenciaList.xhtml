@@ -1,0 +1,234 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU201_title1}</h1>
+		<rich:panel style="border:none;" id="contenedor">
+			<h:form id="reclamoSugerenciaComiteSearch" styleClass="edit">
+				<rich:panel style="border:none;" id="principal">
+					<rich:simpleTogglePanel
+						label="#{messages['msg_list_search_filter']}" switchType="client"
+						id="panelBusqueda">
+						<h:panelGrid columns="3" rowClasses="rowTop">
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU201_nivel}</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric" size="5"
+									disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.sinNivelEntidad.nenCodigo}" />
+									#{' '}
+									<h:inputText id="nivelNombre" size="50" disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.sinNivelEntidad.nenNombre}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU201_entidad}</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric" size="5"
+									disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+									#{' '}
+									<h:inputText id="entidadNombre" size="50" disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.configuracionUoCab.entidad.sinEntidad.entNombre}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU201_oee}</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.configuracionUoCab.orden}" />
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{reclamoSugerenciaComiteListFormController.configuracionUoCab.denominacionUnidad}" />
+							</s:decorate>
+						</h:panelGrid>
+
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="1">
+								<a:region>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU201_concurso}</ui:define>
+										<h:selectOneMenu id="concurso" style="width : 300px;"
+											value="#{reclamoSugerenciaComiteListFormController.idConcurso}">
+											<f:selectItems
+												value="#{reclamoSugerenciaComiteListFormController.concursoSelecItem}" />
+											<a:support event="onchange" eventsQueue="default"
+												reRender="puesto"
+												action="#{reclamoSugerenciaComiteListFormController.comboPuesto()}" />
+										</h:selectOneMenu>
+									</s:decorate>
+								</a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU201_puesto}</ui:define>
+									<h:selectOneMenu id="puesto" style="width : 300px;"
+										value="#{reclamoSugerenciaComiteListFormController.idPuesto}">
+										<f:selectItems
+											value="#{reclamoSugerenciaComiteListFormController.puestoSelecItem}" />
+									</h:selectOneMenu>
+								</s:decorate>
+
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU201_reclamo_sugerencia}</ui:define>
+									<h:selectOneMenu id="opciones"
+										value="#{reclamoSugerenciaComiteListFormController.tipoReclamo}">
+										<f:selectItem id="item" itemLabel="SELECCIONAR..."
+											itemValue="N" />
+										<f:selectItem id="item1" itemLabel="RECLAMO" itemValue="R" />
+										<f:selectItem id="item2" itemLabel="SUGERENCIA" itemValue="S" />
+									</h:selectOneMenu>
+								</s:decorate>
+							</h:panelGrid>
+							<rich:panel style="border:none;">
+								<fieldset style="width: 600px;"><legend>#{messages.CU201_fecha_reclamo}
+								</legend> <h:panelGrid columns="2">
+									<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+										<ui:define name="label">#{messages.CU201_desde}</ui:define>
+										<rich:calendar id="fechaDesde"
+											value="#{reclamoSugerenciaComiteListFormController.fechaDesde}"
+											enableManualInput="true" oninputkeyup="ponerBarra(event)"
+											datePattern="dd/MM/yyyy" />
+									</s:decorate>
+
+									<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+										<ui:define name="label">#{messages.CU201_hasta}</ui:define>
+										<rich:calendar id="fechaHasta"
+											value="#{reclamoSugerenciaComiteListFormController.fechaHasta}"
+											enableManualInput="true" oninputkeyup="ponerBarra(event)"
+											datePattern="dd/MM/yyyy" />
+									</s:decorate>
+								</h:panelGrid></fieldset>
+							</rich:panel>
+
+						</h:panelGrid>
+					</rich:simpleTogglePanel>
+
+					<div class="actionButtons"><a:commandButton id="search"
+						value="#{messages['msg_list_search_button']}"
+						action="#{reclamoSugerenciaComiteListFormController.search()}"
+						reRender="panelResultados">
+					</a:commandButton> <a:commandButton id="reset"
+						value="#{messages['msg_list_search_reset_button']}"
+						action="#{reclamoSugerenciaComiteListFormController.searchAll()}"
+						reRender="panelResultados, panelBusqueda">
+					</a:commandButton></div>
+
+					<rich:panel id="panelResultados">
+						<f:facet name="header">#{messages['msg_list_search_results']}(#{reclamoSugerenciaComiteListFormController.listaReclamoDto.size()})</f:facet>
+						<div class="results" id="reclamosList" style="overflow: auto;"><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty reclamoSugerenciaComiteListFormController.listaReclamoDto}" />
+						<rich:dataTable id="reclamosSugerenciasDto"
+							var="_reclamoSugerencia"
+							value="#{reclamoSugerenciaComiteListFormController.listaReclamoDto}"
+							rows="10" rowKeyVar="row"
+							rendered="#{not empty reclamoSugerenciaComiteListFormController.listaReclamoDto}">
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_cod_concurso}
+					</f:facet>
+								<h:outputText
+									value="#{reclamoSugerenciaComiteListFormController.obtenerCodigoConcurso(_reclamoSugerencia.reclamoSugerencia)}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU107_concurso}
+					</f:facet>
+								<h:outputText
+									value="#{_reclamoSugerencia.reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.nombre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+					#{messages.CU107_puesto}
+					</f:facet>
+								<h:outputText
+									value="#{_reclamoSugerencia.reclamoSugerencia.postulacion.concursoPuestoAgr.descripcionGrupo}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_estado_concurso}
+					</f:facet>
+								<h:outputText
+									value="#{reclamoSugerenciaComiteListFormController.obtenerEstadoConcurso(_reclamoSugerencia.reclamoSugerencia)}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_r_s}
+					</f:facet>
+								<h:outputText value="RECLAMO"
+									rendered="#{_reclamoSugerencia.reclamoSugerencia.reclamoSugerencia == 'R'}" />
+								<h:outputText value="SUGERENCIA"
+									rendered="#{_reclamoSugerencia.reclamoSugerencia.reclamoSugerencia == 'S'}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_estado_rs}
+					</f:facet>
+								<h:outputText value="PENDIENTE"
+									rendered="#{_reclamoSugerencia.reclamoSugerencia.estado == 'P'}" />
+								<h:outputText value="RESPONDIDO"
+									rendered="#{_reclamoSugerencia.reclamoSugerencia.estado == 'R'}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_fecha_resp}
+					</f:facet>
+								<h:outputText
+									value="#{_reclamoSugerencia.reclamoSugerencia.fechaRespuesta}">
+									<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_ver}
+					</f:facet>
+								<h:selectBooleanCheckbox value="#{_reclamoSugerencia.ver}"
+									disabled="#{!_reclamoSugerencia.ver and reclamoSugerenciaComiteListFormController.marcado}">
+									<a:support event="onclick"
+										action="#{reclamoSugerenciaComiteListFormController.check(row)}"
+										reRender="panelResultados" />
+								</h:selectBooleanCheckbox>
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+						#{messages.CU201_responder}
+					</f:facet>
+								<h:selectBooleanCheckbox value="#{_reclamoSugerencia.responder}"
+									disabled="#{(!_reclamoSugerencia.responder and reclamoSugerenciaComiteListFormController.marcadoResponder) or _reclamoSugerencia.reclamoSugerencia.estado == 'R'}">
+									<a:support event="onclick"
+										action="#{reclamoSugerenciaComiteListFormController.checkResponder(row)}"
+										reRender="panelResultados" />
+								</h:selectBooleanCheckbox>
+							</rich:column>
+
+						</rich:dataTable></div>
+					</rich:panel>
+					<s:div styleClass="actionButtons">
+
+						<h:commandButton id="responder"
+							value="#{messages.CU201_btn_responder_rs}"
+							action="#{reclamoSugerenciaComiteListFormController.prepararListaAResponder()}" />
+							
+							<h:commandButton id="ver"
+							value="#{messages.CU201_btn_ver_rs}"
+							action="#{reclamoSugerenciaComiteListFormController.prepararListaAVer()}" />
+					</s:div>
+
+				</rich:panel>
+			</h:form>
+
+		</rich:panel>
+
+	</ui:define>
+
+</ui:composition>

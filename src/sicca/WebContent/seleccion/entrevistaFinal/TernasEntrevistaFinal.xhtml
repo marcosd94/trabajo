@@ -1,0 +1,284 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU148_title}</h1>
+
+		<h:form id="entrevistaFinalSearch" styleClass="edit">
+
+			<rich:panel id="panelParametro">
+				<f:facet name="header">Grupo de Puestos</f:facet>
+
+				<h:panelGrid columns="3">
+
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Concurso</ui:define>
+						<h:inputText id="concurso" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+							style=" width : 514px;" />
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Grupo de Puestos</ui:define>
+						<h:inputText id="usuMod" disabled="true"
+							value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+							style=" width : 514px;" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label"></ui:define>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU148_vacancias}:</ui:define>
+						<h:outputText id="vacancias"
+							value="#{realizarEntrevistaFinalFormController.cantidadVacancias}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+
+			<br></br>
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['CU148_ternas']}(#{empty realizarEntrevistaFinalFormController.listaTernas ? 0 : (realizarEntrevistaFinalFormController.listaTernas.size)})</f:facet>
+				<div class="results" id="ternaList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty realizarEntrevistaFinalFormController.listaTernas}" />
+
+				<rich:dataTable id="ternaList"
+					var="_ternas"
+					value="#{realizarEntrevistaFinalFormController.listaTernas}"
+					rowKeyVar="fila"
+					rendered="#{not empty realizarEntrevistaFinalFormController.listaTernas}">
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Ternas" />
+						</f:facet>
+						<h:outputText
+							value="#{_ternas.getNombre()}" />
+					</h:column>
+					
+					<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<h:commandLink id="gestionar1" eventsQueue="default"
+						value="#{messages.proceso_gestionar}"
+						action="#{realizarEntrevistaFinalFormController.gestionarTerna(_ternas.getIdTerna())}"
+						rendered="#{not realizarEntrevistaFinalFormController.ternaEntrevistada(_ternas.getIdTerna())}">
+						<f:param name="filaTerna" value="#{realizarEntrevistaFinalFormController.idTernaActual}"/>
+					</h:commandLink>
+					<h:commandLink id="ver" eventsQueue="default"
+						value="#{messages.proceso_ver}"
+						action="#{realizarEntrevistaFinalFormController.gestionarTerna(_ternas.getIdTerna())}"
+						rendered="#{realizarEntrevistaFinalFormController.ternaEntrevistada(_ternas.getIdTerna())}">
+						<f:param name="filaTerna" value="#{realizarEntrevistaFinalFormController.idTernaActual}"/>
+					</h:commandLink>
+				</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel>
+			<br></br>
+			<br></br>
+			<rich:panel>
+				<f:facet name="header"></f:facet>
+				<h:panelGrid columns="5" width="100%">
+					<rich:orderingList
+						value="#{realizarEntrevistaFinalFormController.listaElegibles}"
+						id="ordListaElegibles" var="_evalRefPostulante" listHeight="200"
+						listWidth="800" converter="evalReferencialPostulanteConverter">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.CU148_cod_postulante}" />
+							</f:facet>
+							<h:outputText
+								value="#{_evalRefPostulante.postulacion.personaPostulante.usuAlta}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.CU148_nombres}" />
+							</f:facet>
+							<h:outputText
+								value="#{_evalRefPostulante.postulacion.personaPostulante.persona.nombres}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.CU148_apellidos}" />
+							</f:facet>
+							<h:outputText
+								value="#{_evalRefPostulante.postulacion.personaPostulante.persona.apellidos}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.CU148_puntaje}" />
+							</f:facet>
+							<h:outputText value="#{_evalRefPostulante.puntajeRealizado}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.CU148_presente}" />
+							</f:facet>
+							<h:outputText value="" />
+
+							<h:outputText
+								value="#{_evalRefPostulante.presente ? 'Si' : 'No'}" />
+						</h:column>
+
+					</rich:orderingList>
+				</h:panelGrid>
+			</rich:panel>
+
+			<br></br>
+			<rich:panel>
+				<f:facet name="header">Datos</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU148_observacion}</ui:define>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<h:inputTextarea id="obs"
+							value="#{realizarEntrevistaFinalFormController.observacion.observacion}"
+							cols="60" rows="5" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<s:div styleClass="actionButtons">
+				<s:button
+					disabled="#{realizarEntrevistaFinalFormController.isDesierto}"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml" id="anexos"
+					value="#{messages.gral_anexos}"
+					rendered="#{not realizarEntrevistaFinalFormController.sobranTernasSinEntrevistar()}">
+					<f:param name="direccionFisica"
+						value="#{realizarEntrevistaFinalFormController.ubicacionFisica}" />
+					<f:param name="nombrePantalla"
+						value="#{realizarEntrevistaFinalFormController.nombrePantalla}" />
+					<f:param name="idCU"
+						value="#{realizarEntrevistaFinalFormController.observacion.idObservacion}" />
+					<f:param name="nombreTabla"
+						value="#{realizarEntrevistaFinalFormController.entity}" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="seleccion/entrevistaFinal/TernasEntrevistaFinal" />
+					<f:param name="idConcursoPuestoAgr"
+						value="#{grupoPuestosController.concursoPuestoAgr.idConcursoPuestoAgr}" />
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{grupoPuestosController.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+				</s:button>
+
+				<h:commandButton
+					disabled="#{realizarEntrevistaFinalFormController.isDesierto or realizarEntrevistaFinalFormController.sobranTernasSinEntrevistar() }"
+					id="guardar" value="#{messages.msg_save}"
+					action="#{realizarEntrevistaFinalFormController.save2()}"
+					onclick="return confirm('#{messages.msg_confirm_save}');" />
+
+				<h:commandButton
+					disabled="#{realizarEntrevistaFinalFormController.isDesierto or realizarEntrevistaFinalFormController.sobranTernasSinEntrevistar()}"
+					rendered="#{realizarEntrevistaFinalFormController.ternasEnviadas}"
+					id="tarea" value="#{messages.proceso_sgte_tarea}"
+					action="#{realizarEntrevistaFinalFormController.nextTask('REALIZAR_ENTREVISTA_FINAL')}"
+					onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" >
+					<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+					
+					</h:commandButton>
+
+				<s:button
+					disabled="#{realizarEntrevistaFinalFormController.isDesierto}"
+					view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"
+					id="volver" propagation="none" value="#{messages.msg_done}">
+				</s:button>
+			</s:div>
+
+
+			<div><h:panelGrid columns="2">
+				<s:decorate id="usuarioAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.usuAlta}" />
+				</s:decorate>
+
+				<s:decorate id="fechaAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.fechaAlta}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.usuMod}" />
+				</s:decorate>
+
+				<s:decorate id="fechaModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+					<h:outputText
+						value="#{grupoPuestosController.concursoPuestoAgr.fechaMod}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

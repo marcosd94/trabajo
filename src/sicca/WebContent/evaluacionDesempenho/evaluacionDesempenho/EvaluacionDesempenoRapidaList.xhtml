@@ -1,0 +1,265 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU550_titulo_rapido}</h1>
+
+		<h:form id="evaluacionDesempenoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<ui:remove>
+						<s:decorate template="/layout/display.xhtml">
+												<ui:define name="label">#{messages.CU398_unidadOrganiza}
+														</ui:define>
+												<h:inputText id="orgCodigo2" size="10"
+													disabled="#{!admEvalDesempListFC.esAdministradorSFP}"
+													value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+													<a:support event="onchange" eventsQueue="default"
+														action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+														reRender="orgCodigo2,orgDenominacion2,orden2" />
+												</h:inputText>
+														#{' '}
+														<h:inputText id="orgDenominacion2" size="50" disabled="true"
+													value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+														#{' '}
+														<a:commandButton id="searchUnidadOrgDep2"
+													rendered="#{admEvalDesempListFC.esAdministradorSFP}"
+													eventsQueue="default" image="/img/Buscar.png"
+													action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList')}" />
+											</s:decorate>
+					</ui:remove>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU550_evaluacion}</ui:define>
+						<h:inputText size="100" id="evaluacion"
+							value="#{admEvalDesempListFC.evaluacionDesempeno.titulo}" />
+					</s:decorate>
+
+					<s:decorate id="estadoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU550_estado}
+						</ui:define>
+						<h:selectOneMenu id="estado"
+							value="#{admEvalDesempListFC.idEstado}" style="width:250px">
+							<f:selectItems value="#{admEvalDesempListFC.selectItemsEstado}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParametro,panelResultado"
+				action="#{admEvalDesempListFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admEvalDesempListFC.searchAll()}"
+				reRender="panelParametro,panelResultado" /></div>
+
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty evaluacionDesempenoRapidaList.resultList ? 0 : (evaluacionDesempenoRapidaList.paginated ? evaluacionDesempenoRapidaList.resultCount : evaluacionDesempenoRapidaList.resultList.size)})</f:facet>
+				<div class="results" id="evaluacionDesempenoRapidaList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty admEvalDesempListFC.listaEvaluacion}" /> <rich:dataTable
+					id="evaluacionDesempenoList" var="_evaluacionDesempeno"
+					value="#{admEvalDesempListFC.listaEvaluacion}"
+					rendered="#{not empty admEvalDesempListFC.listaEvaluacion}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evaluacionDesempenoList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+								<ui:param name="propertyPath"
+									value="evaluacionDesempeno.configuracionUoCab.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_evaluacionDesempeno.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+
+					<ui:remove>
+						<h:column>
+												<f:facet name="header">
+													<ui:include src="/layout/sort.xhtml">
+														<ui:param name="entityList" value="#{evaluacionDesempenoList}" />
+														<ui:param name="propertyLabel"
+															value="#{messages.gral_unidad_organizativa}" />
+														<ui:param name="propertyPath"
+															value="evaluacionDesempeno.configuracionUoDet.denominacionUnidad" />
+													</ui:include>
+												</f:facet>
+												<h:outputText
+													value="#{_evaluacionDesempeno.configuracionUoDet.denominacionUnidad}" />
+											</h:column>
+					</ui:remove>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evaluacionDesempenoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU550_evaluacion}" />
+								<ui:param name="propertyPath" value="evaluacionDesempeno.titulo" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_evaluacionDesempeno.titulo}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{evaluacionDesempenoList}" />
+								<ui:param name="propertyLabel" value="Estado" />
+								<ui:param name="propertyPath" value="evaluacionDesempeno.estado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{admEvalDesempListFC.obtenerEstado(_evaluacionDesempeno) == 'RESOLUCION EVALUACION' ? 'REGLAMENTO EVALUACION' : admEvalDesempListFC.obtenerEstado(_evaluacionDesempeno)}" />
+					</h:column>
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapida.xhtml"
+							value="#{messages.CU550_link_ver}" propagation="none"
+							id="evaluacionDesempenoView" rendered="#{empty from}">
+							<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								value="#{_evaluacionDesempeno.idEvaluacionDesempeno}" />
+						</s:link>
+            #{' '}
+            <s:link
+							view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaEdit.xhtml"
+							value="#{messages.CU550_link_editar}" propagation="none"
+							id="evaluacionDesempenoEdit"
+							rendered="#{admEvalDesempListFC.esEstadoCarga(_evaluacionDesempeno)}">
+							<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								value="#{_evaluacionDesempeno.idEvaluacionDesempeno}" />
+						</s:link>
+					 #{' '}
+          		<h:commandLink id="eliminar"
+							rendered="#{admEvalDesempListFC.esEstadoCarga(_evaluacionDesempeno)}"
+							value="#{messages.CU550_link_eliminar}"
+							action="#{admEvalDesempListFC.eliminar(_evaluacionDesempeno)}"
+							onclick="return confirm('#{messages.CU550_conf_eliminar}');" />
+					  #{' '}
+            <s:link
+							view="/evaluacionDesempenho/asignarSujetoEval/asignarSujetoEvalRapida551.xhtml"
+							value="#{messages.CU550_link_asignar}" propagation="none"
+							id="evaluacionDesempenoSujetos"
+							rendered="#{admEvalDesempListFC.esEstadoCarga(_evaluacionDesempeno)}">
+							<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								value="#{_evaluacionDesempeno.idEvaluacionDesempeno}" />
+							<f:param name="from"
+								value="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml" />
+								<f:param name="desdeBandeja"
+								value="desdeBandeja" />
+						</s:link>
+					 #{' '}
+			
+           
+						<s:link
+							view="/evaluacionDesempenho/evaluacionDesempenho/CargaEvaluacionRapidaEdit.xhtml"
+							value="#{messages.CU550_link_carga_eval_rapida}" propagation="none"
+							id="evaluacionDesempenoRapidaCarga"
+							rendered="#{admEvalDesempListFC.puedeCargarEvalRapida(_evaluacionDesempeno)}">
+							<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+								value="#{_evaluacionDesempeno.idEvaluacionDesempeno}" />
+							<f:param name="gruposEvaluacionFrom"
+								value="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml" />
+							<f:param name="ver" value="true" />
+						</s:link>
+					
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</h:form>
+		<div class="tableControl"><s:link
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"
+			rendered="#{evaluacionDesempenoList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"
+			rendered="#{evaluacionDesempenoList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{evaluacionDesempenoList.previousFirstResult}" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"
+			rendered="#{evaluacionDesempenoList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{evaluacionDesempenoList.nextFirstResult}" />
+		</s:link> <s:link
+			view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaList.xhtml"
+			rendered="#{evaluacionDesempenoList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{evaluacionDesempenoList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button
+				view="/evaluacionDesempenho/evaluacionDesempenho/EvaluacionDesempenoRapidaEdit.xhtml"
+				id="create" propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="evaluacionDesempenoIdEvaluacionDesempeno" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{firmarDecretoExcFC.idConcurso}"/>
+       <param name="idExcepcion" value="#{firmarDecretoExcFC.idExcepcion}"/>
+ <param name="idGrupo" value="#{firmarDecretoExcFC.idConcursoPuestoAgr}"/>
+      <param name="nivelCodigo" value="#{nivelEntidadOeeUtil.codNivelEntidad}"/>
+     <param name="entidadCodigo" value="#{nivelEntidadOeeUtil.codSinEntidad}"/>
+     <param name="unidadOrgCodigo" value="#{nivelEntidadOeeUtil.ordenUnidOrg}"/>
+ 	
+ <action execute="#{firmarDecretoExcFC.init()}" on-postback="false"/>
+
+
+ <navigation from-action="#{firmarDecretoExcFC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/GenerarResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{firmarDecretoExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{firmarDecretoExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{firmarDecretoExcFC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/firmarDecretoExc/FirmarDecretoExc"/>
+     <param name="fromCU" value="597"/>
+        <param name="texto" value="DECRETO"/>
+          <param name="idExcepcion" value="#{firmarDecretoExcFC.idExcepcion}"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{firmarDecretoExcFC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/excepcionesSeleccion/resolucion/VerResolucionExc.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{firmarDecretoExcFC.idResoEdit}"/>
+    <param name="idGrupo" value="#{firmarDecretoExcFC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{firmarDecretoExcFC.idResoConsurso}" />
+     <param name="plantillaResolucionHomologacionFrom" value="excepcionesSeleccion/firmarDecretoExc/FirmarDecretoExc"/>
+     <param name="fromCU" value="597"/>
+     <param name="texto" value="DECRETO"/>
+      <param name="idExcepcion" value="#{firmarDecretoExcFC.idExcepcion}"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{firmarDecretoExcFC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"/>
+  </rule>
+ </navigation>
+	 <restrict>#{identity.hasRole('firma_decreto_exc')}</restrict>
+</page>

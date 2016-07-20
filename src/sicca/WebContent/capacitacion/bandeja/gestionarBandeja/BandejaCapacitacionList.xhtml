@@ -1,0 +1,319 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU472_titulo_list}</h1>
+		<h:form id="bandejaCapacitacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="3" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<a:outputPanel>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+									reRender="orgCodigo2,orgDenominacion2,orden2" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList')}" />
+						</s:decorate>
+					</a:outputPanel>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_rol}</ui:define>
+						<h:selectOneMenu id="idRol"
+							value="#{gestionarBandejaTareaCapacitacionFC.idRol}"
+							style="width:250px">
+							<f:selectItems
+								value="#{seguridadUtilFormController.obtenerRolesUsuarioSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU472_capacitacion}</ui:define>
+						<h:inputText id="capacitacion" size="50"
+							value="#{gestionarBandejaTareaCapacitacionFC.descCapacitacion}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tarea</ui:define>
+						<h:inputText id="tareaField" size="50"
+							value="#{gestionarBandejaTareaCapacitacionFC.tarea}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParamentro,lista,listaVirtual"
+				action="#{gestionarBandejaTareaCapacitacionFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{gestionarBandejaTareaCapacitacionFC.searchAll()}"
+				reRender="panelParametro,lista,listaVirtual" /></div>
+
+		</h:form>
+
+		<a:outputPanel id="listaVirtual">
+			<rich:panel id="panelSinResultado"
+				rendered="#{!gestionarBandejaTareaCapacitacionFC.mostrarResultado}">
+				<f:facet name="header">#{messages['msg_list_search_results']}(0)</f:facet>
+				<span class="required"><h:outputText value="Debe asignar una Unidad Organizativa al Usuario actualmente logueado"/></span>
+			</rich:panel>
+		</a:outputPanel>
+		<a:outputPanel id="lista">
+			<rich:panel id="panelResultado"
+				rendered="#{gestionarBandejaTareaCapacitacionFC.mostrarResultado}">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty bandejaCapacitacionList.resultList ? 0 : (bandejaCapacitacionList.paginated ? bandejaCapacitacionList.resultCount : bandejaCapacitacionList.resultList.size)})</f:facet>
+				<div class="results" id="bandejaCapacitacionList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty bandejaCapacitacionList.resultList}" /> <rich:dataTable
+					id="bandejaCapacitacionList" var="_bandejaCapacitacion"
+					value="#{bandejaCapacitacionList.resultList}"
+					rendered="#{not empty bandejaCapacitacionList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU471_uo}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.denominacionUnidadDet" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_bandejaCapacitacion.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU472_capacitacion}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.nombreCapac" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.nombreCapac}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU472_tipo_capacitacion}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU472_tarea}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.actividadDesc" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.actividadDesc}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_fecha_recepcion}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.fechaRecepcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.fechaRecepcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="Fecha Inicio" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.fechaInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_rec}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.diasCreacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.diasCreacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_ini}" />
+								<ui:param name="propertyPath"
+									value="bandejaCapacitacion.diasInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaCapacitacion.diasInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaCapacitacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_atraso}" />
+								<ui:param name="propertyPath" value="bandejaCapacitacion.atraso" />
+							</ui:include>
+						</f:facet>
+						<span class="required"> <h:outputText
+							value="#{_bandejaCapacitacion.atraso}"
+							rendered="#{_bandejaCapacitacion.atraso &gt; 0}" /> </span>
+						<h:outputText value="#{_bandejaCapacitacion.atraso}"
+							rendered="#{_bandejaCapacitacion.atraso &lt;= 0}" />
+
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link id="gestionar" eventsQueue="default"
+						value="#{messages.proceso_gestionar}"
+						action="#{gestionarBandejaTareaCapacitacionFC.redirect()}"
+						onclick="return confirm('#{messages.CU472_question}');"
+						rendered="#{gestionarBandejaTareaCapacitacionFC.gestionar(_bandejaCapacitacion.actividad.idActividad, _bandejaCapacitacion.configuracionUoDet.idConfiguracionUoDet)}">
+						<f:param name="actividad" value="#{_bandejaCapacitacion.codActividad}" />
+						<f:param name="capacitacionesIdCapacitacion"
+							value="#{_bandejaCapacitacion.idCapacitacion}" />
+					</s:link>	
+					#{' '}			
+					<s:link id="redireccionar" eventsQueue="default" rendered="false"
+						value="#{messages.CU546_link}"
+						action="#{gestionarBandejaTareaCapacitacionFC.redireccionar()}">
+						<f:param name="actividad" value="#{_bandejaCapacitacion.codActividad}" />
+						<f:param name="capacitacionesIdCapacitacion"
+							value="#{_bandejaCapacitacion.idCapacitacion}" />
+					</s:link>	
+						</rich:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+		</a:outputPanel>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml"
+				rendered="#{bandejaCapacitacionList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml"
+				rendered="#{bandejaCapacitacionList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{bandejaCapacitacionList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml"
+				rendered="#{bandejaCapacitacionList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{bandejaCapacitacionList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml"
+				rendered="#{bandejaCapacitacionList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{bandejaCapacitacionList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

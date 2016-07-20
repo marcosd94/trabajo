@@ -1,0 +1,243 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.GradoSalarial_}</h1>
+
+    <h:form id="gradoSalarial" styleClass="edit">
+
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">Ver #{messages.GradoSalarial_}</f:facet>
+				<!-- PANEL CABECERA -->
+				<h:panelGroup> 
+				<h:panelGrid columns="2">
+			<a:region>
+				<s:decorate id="tipoCceField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.GradoSalarial_tipoCce}<span class="required">*</span></ui:define>
+	                <h:selectOneMenu id="tipoCce"
+	                	  disabled="true"
+	                          value="#{gradoSalarialFormController.idTipoCce}" style=" width : 200px;">
+	                    <f:selectItems value="#{tipoCcesSelectItems}" />
+	                     <a:support event="onchange" reRender="nivelGradoSalarialField" 
+	                     action="#{gradoSalarialFormController.updatesNivel()}" eventsQueue="default"/>
+	                </h:selectOneMenu>
+	            </s:decorate>	
+				</a:region>
+				<s:decorate id="anioField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.GradoSalarial_anio}<span class="required">*</span></ui:define>
+					<h:inputText id="anio"
+					        	  disabled="true"
+					value="#{gradoSalarialFormController.anho}">
+					</h:inputText>
+				</s:decorate>
+				<a:region >
+				<s:decorate id="numeroField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.GradoSalarialCab_cantidad_grado}<span class="required">*</span></ui:define>
+	                <h:inputText id="numero"
+	                	          	  disabled="true"
+	                       value="#{gradoSalarialFormController.cntGrado}">
+	                  <a:support event="onchange" reRender="gradoField,panelmonto" 
+	                     action="#{gradoSalarialFormController.upGrado()}" eventsQueue="default"/>
+	                </h:inputText>
+	            </s:decorate>
+	            </a:region>
+	             <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.GradoSalarial_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                              	  disabled="true"
+	                       value="#{gradoSalarialFormController.gradoSalarialCab.activo}" />
+	            </s:decorate>
+	          
+				
+				
+				</h:panelGrid>
+				
+				
+				
+				</h:panelGroup>
+				<!-- FIN PANEL CABECERA -->
+				<!-- PANEL DETALLE -->
+				<h:panelGroup> 
+						<h:panelGrid> 
+									<rich:panel id="panelmonto">
+											<h:panelGroup >
+											<h:panelGrid columns="2"> 
+				
+				 <s:decorate id="nivelGradoSalarialField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.GradoSalarial_agrup_cce}<span class="required">*</span></ui:define>
+	                <h:selectOneMenu id="nivelGradoSalarial" style=" width : 200px;"
+	                	         	  disabled="true"
+	                          value="#{gradoSalarialFormController.idNivelGradoSalarial}">
+	                    <f:selectItems value="#{gradoSalarialFormController.nivelesTipoCeeSelectItem}" />
+	                </h:selectOneMenu>
+	            </s:decorate>	
+	           
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+
+						<s:decorate id="gradoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.GradoSalarialCabs_grado}<span
+								class="required">*</span>
+								</ui:define>
+								<h:inputText id="grado" disabled="true"
+									value="#{gradoSalarialFormController.grado}">
+								</h:inputText>
+						</s:decorate>
+						<s:decorate id="montoMin" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.GradoSalarial_monto_minimo}<span class="required">*</span></ui:define>
+								<h:inputText id="montoMin"
+								        	  disabled="true"
+								value="#{gradoSalarialFormController.montoMinimo}">
+								</h:inputText>
+						</s:decorate>
+							
+						<s:decorate id="montoMaxField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.GradoSalarial_monto_max}<span class="required">*</span></ui:define>
+								<h:inputText id="montoMax"
+								  disabled="true"
+								value="#{gradoSalarialFormController.montoMaximo}">
+								</h:inputText>
+						</s:decorate>
+						
+								
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<a:commandButton id="add"         	  disabled="true" eventsQueue="default"
+					rendered="#{!gradoSalarialFormController.esEditDet}"	value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="montosList,panelmonto"
+						action="#{gradoSalarialFormController.agregarDet()}">
+				</a:commandButton> 
+					
+			
+			</h:panelGrid>
+			</h:panelGroup>
+					<h:panelGroup >
+							<h:panelGrid  >
+							<div class="results" id="tblMontosList" style="overflow:auto;">
+								   	<rich:dataTable id="montosList" var="_montos" 
+												value="#{gradoSalarialFormController.gradoSalaDetList}"
+											 rowKeyVar="rowNr">
+												<h:column>
+													<f:facet name="header">
+														#{messages.GradoSalarial_agrup_cce}<span class="required">*</span>
+													</f:facet>
+													 <h:selectOneMenu id="nivelGradoSalarial" style=" width : 200px;"
+	                									required ="true"
+					                    				  disabled="true" 
+					                         			 value="#{_montos.agrupamientoCce.idAgrupamientoCce}">
+					                    					<f:selectItems value="#{nivelGradoSalarialsSelectItems}" />
+					               						 </h:selectOneMenu>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														#{messages.GradoSalarialCabs_grado}
+													</f:facet>
+													<h:outputText value="#{_montos.numero}" />
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														#{messages.GradoSalarial_monto_minimo}<span class="required">*</span>
+													</f:facet>
+													<h:inputText disabled="true"  
+													value="#{_montos.montoMinimo}" >
+													  
+	                     							</h:inputText>
+													
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														#{messages.GradoSalarial_monto_max}<span class="required">*</span>
+													</f:facet>
+													<h:inputText disabled="true" 
+													value="#{_montos.montoMaximo}" >
+												     </h:inputText>
+											</h:column>
+											
+										</rich:dataTable>
+							 		 </div> 
+								</h:panelGrid> 
+							</h:panelGroup>
+						 </rich:panel>
+				</h:panelGrid>
+			</h:panelGroup>
+					
+	            
+	           
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+      
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+          
+
+          
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/gradoSalarialCab/GradoSalarialCabList.xhtml"
+                rendered="#{gradoSalarialCabHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty gradoSalarialFrom ? 'planificacion/gradoSalarialCab/GradoSalarialCabList' : gradoSalarialFrom}.xhtml"
+                rendered="#{!gradoSalarialCabHome.managed}"/>
+
+        </div>
+          <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"    rendered="#{gradoSalarialCabHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{gradoSalarialCabHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{gradoSalarialCabHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{gradoSalarialCabHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{gradoSalarialCabHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{gradoSalarialCabHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"  rendered="#{gradoSalarialCabHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{gradoSalarialCabHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>
+

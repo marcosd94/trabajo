@@ -1,0 +1,227 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<h1>#{messages.CU652_titulo}</h1>
+	<rich:panel id="discap" switchType="ajax" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU652_acciones}(#{procesosJuridicosLegajoFC.listaAccionesDTO.size()})</f:facet>
+		<div class="results" id="tblAccionesList" style="overflow: scroll;"
+			width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty procesosJuridicosLegajoFC.listaAccionesDTO}" /> <rich:dataTable
+			id="accionesList" var="_accion" rows="5" first="0"
+			rendered="#{not empty procesosJuridicosLegajoFC.listaAccionesDTO}"
+			value="#{procesosJuridicosLegajoFC.listaAccionesDTO}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_estado}
+				</f:facet>
+				<h:outputText value="#{_accion.estado}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_ley}
+				</f:facet>
+				<h:outputText value="#{_accion.ley}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_fecha}
+				</f:facet>
+				<h:outputText value="#{_accion.fecha}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_obs}
+				</f:facet>
+				<h:outputText value="#{_accion.observacion}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_acuerdo}
+				</f:facet>
+				<h:outputText value="#{_accion.acuerdo}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_adjunto}
+				</f:facet>
+				<s:link value="Ver Anexos" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{procesosJuridicosLegajoFC.ubicacionInconstitucionalidad}" />
+					<f:param name="nombrePantalla"
+						value="registrar_acciones_inconstitucionales_edit" />
+					<f:param name="idCU" value="#{_accion.id}" />
+					<f:param name="nombreTabla" value="AccionInconstCab" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="false" />
+					<f:param name="from" value="legajos/MenuDatosPersonales" />
+				</s:link>
+
+			</rich:column>
+
+		</rich:dataTable></div>
+	</rich:panel>
+	<br />
+	<rich:panel id="sumario" switchType="ajax" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU652_sumario}(#{procesosJuridicosLegajoFC.listaSumarioDTO.size()})</f:facet>
+		<div class="results" id="tblSumarioList" style="overflow: scroll;"
+			width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty procesosJuridicosLegajoFC.listaSumarioDTO}" /> <rich:dataTable
+			id="sumarioList" var="_sumario" rows="5" first="0"
+			rendered="#{not empty procesosJuridicosLegajoFC.listaSumarioDTO}"
+			value="#{procesosJuridicosLegajoFC.listaSumarioDTO}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_oee}
+				</f:facet>
+				<h:outputText value="#{_sumario.oee}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_fecha}
+				</f:facet>
+				<h:outputText value="#{_sumario.fecha}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				Estado
+				</f:facet>
+				<h:outputText value="#{_sumario.estado}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_nro}
+				</f:facet>
+				<h:outputText value="#{_sumario.nroInterno}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_falta}
+				</f:facet>
+				<h:outputText value="#{_sumario.faltas}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_recomendacion}
+				</f:facet>
+				<h:outputText value="#{_sumario.recomendacionJuez}" />
+			</rich:column>
+
+
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_decision}
+				</f:facet>
+				<h:outputText value="#{_sumario.decisionMai}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_obs_mai}
+				</f:facet>
+				<h:outputText value="#{_sumario.obsMai}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_adjunto}
+				</f:facet>
+				<s:link value="Ver Anexos" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{procesosJuridicosLegajoFC.ubicacionSumario}" />
+					<f:param name="nombrePantalla" value="sumariosEdit" />
+					<f:param name="idCU" value="#{_sumario.id}" />
+					<f:param name="nombreTabla" value="sumario_cab" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="false" />
+					<f:param name="from" value="legajos/MenuDatosPersonales" />
+				</s:link>
+			</rich:column>
+		</rich:dataTable></div>
+	</rich:panel>
+
+	<br />
+	<rich:panel id="excepcionados" switchType="ajax"
+		style=" width : 900px;">
+		<f:facet name="header">#{messages.CU652_excepcionado}(#{procesosJuridicosLegajoFC.listaExcepcionados.size()})</f:facet>
+		<div class="results" id="tblExcepcionadoList"
+			style="overflow: scroll;" width="310"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty procesosJuridicosLegajoFC.listaExcepcionados}" />
+		<rich:dataTable id="excepcionadoList" var="_exc" rows="5" first="0"
+			rendered="#{not empty procesosJuridicosLegajoFC.listaExcepcionados}"
+			value="#{procesosJuridicosLegajoFC.listaExcepcionados}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_oee}
+				</f:facet>
+				<h:outputText value="#{_exc.configuracionUoCab.denominacionUnidad}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_fec_desde}
+				</f:facet>
+				<h:outputText value="#{_exc.fecha}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_fec_hasta}
+				</f:facet>
+				<h:outputText value="#{_exc.fechaHasta}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_nro_dictamen}
+				</f:facet>
+				<h:outputText value="#{_exc.nroDictamen}/#{_exc.anio}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_motivo}
+				</f:facet>
+				<h:outputText value="#{_exc.motivo}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+				#{messages.CU652_adjunto}
+				</f:facet>
+				<s:link value="Ver Anexos" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{procesosJuridicosLegajoFC.ubicacionExcepcionados}" />
+					<f:param name="nombrePantalla" value="excepcionados_edit" />
+					<f:param name="idCU" value="#{_exc.idExcepcionado}" />
+					<f:param name="nombreTabla" value="Excepcionados" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="false" />
+					<f:param name="from" value="legajos/MenuDatosPersonales" />
+				</s:link>
+			</rich:column>
+		</rich:dataTable></div>
+	</rich:panel>
+
+
+
+</ui:composition>

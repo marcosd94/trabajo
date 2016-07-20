@@ -1,0 +1,285 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.public_publicacion} - #{administrarConcursoFormController.concursoPuestoAgrNuevo.descripcionGrupo}</h1>
+		<h:form id="concurso" styleClass="edit" prependId="false"  enctype="multipart/form-data">
+
+			<rich:panel id="panel">
+				<f:facet name="header"> #{messages.public_publicacion}</f:facet>
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="2">
+						<a:region>
+						
+							<s:decorate id="nombreField1" template="/layout/edit.xhtml" >
+								<ui:define name="label">#{messages.public_titulo} </ui:define>
+								<h:inputText id="titulo" size="100"
+									maxlength="100"
+									value="#{administrarConcursoFormController.publicTitulo}" style=" width :400px;">
+									<a:support event="onblur" eventsQueue="default" ></a:support>
+								</h:inputText>
+							</s:decorate>
+							
+							<s:decorate id="detalleField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.public_detalle}</ui:define>
+									
+									<h:inputText id="detalle" size="100"
+												maxlength="100"
+												value="#{administrarConcursoFormController.publicDetalle}" style=" width : 400px;">
+												<a:support event="onblur" eventsQueue="default" ></a:support>
+											</h:inputText>
+							</s:decorate>
+							
+							<s:decorate id="detalleFieldsinNegrita" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.public_detalle_sin_negrita}</ui:define>
+						<h:inputTextarea id="detalleSinNegrita" cols="80" rows="3"
+							onkeypress="return imposeMaxLength(event, this, 250);"
+							value="#{administrarConcursoFormController.publicDetalleSinNegrita}" style=" width : 400px;">
+							<f:validateLength maximum="250" />
+						</h:inputTextarea>
+					</s:decorate>
+					
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+							<ui:define name="label" >#{messages.public_observacion}</ui:define>
+							<h:inputText id="Observacion" size="50"
+								maxlength="50"
+								value="#{administrarConcursoFormController.publicObservacion}" style=" width :200px;" 
+								title="Hola">
+								
+							</h:inputText>
+							
+							<h:inputText id="ObservacionSinNegritaIn" size="50"
+								value="#{administrarConcursoFormController.publicObservacionSinNegrita}" style=" width :200px;" >
+								
+							</h:inputText>
+							
+					</s:decorate>
+					
+					<s:decorate id="nombreField2" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.public_titulo_adjunto} </ui:define>
+								<h:inputText id="titulo" size="50"
+									maxlength="100"
+									value="#{administrarConcursoFormController.tituloDocumentoAdjunto}" style=" width :140px;">
+									<a:support event="onblur" eventsQueue="default"></a:support>
+								</h:inputText>
+					
+								<s:fileUpload size="60" 
+									contentType="#{administrarConcursoFormController.contentType}"
+									data="#{administrarConcursoFormController.uploadedFile}"
+									fileName="#{administrarConcursoFormController.fileName}"
+									fileSize="#{administrarConcursoFormController.tamArchivo}"
+									style=" width : 260px;" />
+							</s:decorate>
+											
+												
+							
+				</a:region>
+				<a:region >
+					<h:panelGrid columns="1">			
+					<h:panelGrid columns="2">
+					<s:decorate id="tituloConvocatoria" template="/layout/edit.xhtml" >
+							<ui:define name="label">Titulo Convocatoria </ui:define>
+							<h:inputText id="tituloConvocatoriaIn" size="100"
+								maxlength="100"
+								value="#{administrarConcursoFormController.tituloConvocatoria}" style=" width :400px;">
+								<a:support event="onblur" eventsQueue="default" ></a:support>
+							</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="fecha" template="/layout/edit.xhtml">
+							<ui:define name="label">Fecha
+							</ui:define>
+							<rich:calendar id="fechaIn" 
+								value="#{administrarConcursoFormController.fechaConvocatoria}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">hora Desde
+									</ui:define>
+									<h:inputText id="horaDesde" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaDesdeConvocatoria}" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">hora Hasta
+									</ui:define>
+									<h:inputText id="horaHasta" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{administrarConcursoFormController.horaHastaConvocatoria}" />
+								</s:decorate>
+								
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="Lugar" template="/layout/edit.xhtml" >
+							<ui:define name="label">Lugar </ui:define>
+							<h:inputText id="LugarIn" size="100"
+								maxlength="100"
+								value="#{administrarConcursoFormController.lugarConvocatoria}" style=" width :400px;">
+								<a:support event="onblur" eventsQueue="default" ></a:support>
+							</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="departamento" template="/layout/edit.xhtml" >
+							<ui:define name="label">Departamento </ui:define>
+							<h:inputText id="departamentoIn" size="100"
+								maxlength="100"
+								value="#{administrarConcursoFormController.departamentoConvocatoria}" style=" width :400px;">
+								<a:support event="onblur" eventsQueue="default" ></a:support>
+							</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					<s:decorate id="cuidad" template="/layout/edit.xhtml" >
+							<ui:define name="label">Cuidad </ui:define>
+							<h:inputText id="cuidadIn" size="100"
+								maxlength="100"
+								value="#{administrarConcursoFormController.cuidadConvocatoria}" style=" width :400px;">
+								<a:support event="onblur" eventsQueue="default" ></a:support>
+							</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+					
+					<s:decorate id="direccion" template="/layout/edit.xhtml" >
+							<ui:define name="label">Dirección </ui:define>
+							<h:inputText id="direccionIn" size="100"
+								maxlength="100"
+								value="#{administrarConcursoFormController.direccionConvocatoria}" style=" width :400px;">
+								<a:support event="onblur" eventsQueue="default" ></a:support>
+							</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					
+					
+					
+					
+						
+				</h:panelGrid>		
+				</a:region>
+					
+					
+				</h:panelGrid>
+							
+				
+				
+			</h:panelGrid>
+			
+				
+							
+
+			<h:commandButton id="search"
+				
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+
+				action="#{administrarConcursoFormController.btnAgregarPublicacion()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			
+
+			<br />
+			<br />
+			
+
+				<div class="results" id="datosEspecificosList">
+				 <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty administrarConcursoFormController.publicacionPortalList}"/>
+				
+				<rich:dataTable
+					id="concursoPuestoAgrList" var="_publicacionPortal" rowKeyVar="_index"
+					value="#{administrarConcursoFormController.publicacionPortalList}" >
+					<h:column>
+						<f:facet name="header">#{messages.public_texto}	</f:facet>
+						<h:outputFormat  
+							value="#{administrarConcursoFormController.interpretarHtml(_publicacionPortal.texto)}" />
+					</h:column>
+					
+				
+															
+					<rich:column styleClass="action">
+										<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+								
+			          #{' '}
+
+			         <h:commandLink id="eliminar" value="Eliminar"
+							
+							action="#{administrarConcursoFormController.eliminarPublicacion(_publicacionPortal.idPublicacionPortal)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');" />
+							
+					#{' '}
+
+		         	<h:commandLink id="verAdjunto" value="Ver Adjunto"
+						rendered="#{!administrarConcursoFormController.tieneDocAdjunto(_publicacionPortal.idPublicacionPortal)}"
+						action="#{administrarConcursoFormController.imprimirDocumentoPublicacion(_publicacionPortal.idPublicacionPortal)}" />
+						
+						
+						
+							
+					</rich:column>	
+					
+					 
+					
+					
+			</rich:dataTable></div>
+			
+			
+			<div class="tableControl"><s:link
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{documentosList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{documentosList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{documentosList.lastFirstResult}" />
+			</s:link></div>
+						
+			
+			<div class="actionButtons">
+				<h:commandButton id="volver"
+				
+				value="Volver"
+
+				action="#{administrarConcursoFormController.volverListaGrupos()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			 
+				
+			</div>
+			
+			</rich:panel>
+		</h:form>
+		
+
+	</ui:define>
+
+</ui:composition>

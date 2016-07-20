@@ -1,0 +1,375 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j">
+
+	<h1>#{messages.CU677_titulo}</h1>
+
+	<rich:simpleTogglePanel label="#{messages.CU606_panel1_title}"
+		id="idPanel1">
+
+		<h:panelGrid columns="1">
+		 
+			 
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU644_gradParentezco}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="sexo" style="width : 250px;" 
+						value="#{admDatosFamilia644FC.idGradoParentezco}">
+						<f:selectItems
+							value="#{admDatosFamilia644FC.traerDatosParentezcoSI()}" />
+						<a:support event="onchange" />
+					</h:selectOneMenu>
+				</s:decorate>
+			 
+			 
+			<s:decorate id="paisExpField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU40_paises_expedicion}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="idPaisExped"
+					value="#{admDatosFamilia644FC.idPais}"
+					disabled="#{admDatosFamilia644FC.idElemUpdate!=null}"
+					style="width:250px">
+					<a:support event="onchange" reRender="idPanel1"
+						action="#{admDatosFamilia644FC.limpiarDatosPersona()}"></a:support>
+					<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU528_docIdentidad}	<span
+						class="required">*</span>
+
+				</ui:define>
+				<h:inputText id="concurso" size="30"
+					disabled="#{admDatosFamilia644FC.idElemUpdate!=null}"
+					value="#{admDatosFamilia644FC.nroDoc}" style=" width : 250px;">
+					<a:support event="onblur" reRender="idPanel1"
+						action="#{admDatosFamilia644FC.buscarPersona()}"></a:support>
+				</h:inputText>#{' '}
+							<s:link propagation="join"
+					actionListener="#{gestionarPartCapa528.limpiarIdPostulacion()}"
+					view="/seleccion/persona/PersonaList.xhtml">
+					<f:param name="from"
+						value="/legajos/validarCambiosDatosPersonales/ValidacionDatosPersonalesLegajo" />
+					<s:graphicImage value="/img/Buscar.png" />
+				</s:link>						
+										#{' '}<s:button value="Agregar Persona"
+					action="#{admDatosFamilia644FC.linkAddPersona()}"
+					disabled="#{!admDatosFamilia644FC.habBtnAddPersons}">
+
+				</s:button>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+
+			</s:decorate>
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU644_nombres}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="idNombresApellidos" size="30"
+						value="#{admDatosFamilia644FC.nombres}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU644_apellido}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="idNombresApellidos" size="30"
+						value="#{admDatosFamilia644FC.apellidos}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU644_fechaNacimiento}	<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar value="#{admDatosFamilia644FC.fechaNacimiento}"
+					enableManualInput="true" oninputkeyup="ponerBarra(event);"
+					inputSize="10" datePattern="dd/MM/yyyy"
+					locale="#{siccaAppHelper.localeCode}">
+				</rich:calendar>
+			</s:decorate>
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU528_telefonos}</ui:define>
+					<h:inputText id="idTelefonos" size="30"
+						disabled="#{gestionarPartCapa528.idPostulacion!=null}"
+						value="#{gestionarPartCapa528.telefono}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU528_email}</ui:define>
+					<h:inputText id="idEmail" size="30"
+						value="#{admDatosFamilia644FC.email}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Persona_sexo}	<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="sexo" style="width : 250px;"
+					value="#{admDatosFamilia644FC.idSexo}">
+					<f:selectItems
+						value="#{admDatosFamilia644FC.traerSexoSelectItems()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Persona_estadoCivil}	<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+					value="#{admDatosFamilia644FC.idEstadoCivil}">
+					<f:selectItems value="#{admDatosFamilia644FC.traerEstadoCivilSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+		</h:panelGrid>
+		<fieldset><legend>#{messages.CU644_datosLaborales}</legend>
+		<h:panelGrid columns="1">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU644_personasAcargo}</ui:define>
+				<h:selectOneMenu style="width : 250px;"
+					value="#{admDatosFamilia644FC.idPersonasACargo}">
+					<f:selectItems
+						value="#{admDatosFamilia644FC.traerPersonasACargoSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU644_funcionarioPublicoActivo}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu style="width : 250px;"
+						value="#{admDatosFamilia644FC.idFuncionarioPublicoActivo}">
+						<f:selectItems
+							value="#{admDatosFamilia644FC.traerFuncionarioPublicoSI()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU644_oeeCombo}</ui:define>
+					<h:selectOneMenu style="width : 250px;"
+						value="#{admDatosFamilia644FC.idOee}">
+						<f:selectItems value="#{admDatosFamilia644FC.traerOeeSI()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</h:panelGrid>
+
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU644_observavcion}</ui:define>
+				<h:selectOneMenu style="width : 250px;"
+					value="#{admDatosFamilia644FC.idObservacion}">
+					<f:selectItems value="#{admDatosFamilia644FC.traerObservacionSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+		</h:panelGrid></fieldset>
+
+
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+
+		<s:div styleClass="actionButtons">
+			<h:commandButton value="Agregar"
+				rendered="#{admDatosFamilia644FC.idElemUpdate == null}"
+				action="#{admDatosFamilia644FC.agregar()}" />
+			<h:commandButton value="Actualizar"
+				rendered="#{admDatosFamilia644FC.idElemUpdate!=null}"
+				action="#{admDatosFamilia644FC.actualizar()}" />
+			<a:commandButton value="Cancelar" reRender="idPanel1,idPanel2"
+				action="#{admDatosFamilia644FC.limpiar()}" />
+		</s:div>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel
+		label="#{messages.CU644_panel2_title} (#{empty admDatosFamilia644FC.lGrilla1?0:admDatosFamilia644FC.lGrilla1.size()})"
+		id="idPanel2">
+		<div class="results"
+			style="overflow: scroll; width: 700; HEIGHT: 230px"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty admDatosFamilia644FC.lGrilla1}" /> <rich:dataTable
+			rowKeyVar="rowIndexGrilla1" var="_record"
+			rendered="#{!empty admDatosFamilia644FC.lGrilla1}"
+			value="#{admDatosFamilia644FC.lGrilla1}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_gradoParentezco}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{admDatosFamilia644FC.updateFamiliares(_record).datosEspecificosFamiliar.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_paisExpedeDoc}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar.paisByIdPaisExpedicionDoc.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_docIden}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar.documentoIdentidad}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_nombreApellido}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar.nombres} #{_record.personaFamiliar.apellidos}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_fechaNac}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar.fechaNacimiento}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_sexo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.descLargaRef(_record.personaFamiliar.sexo,'SEXO')}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_esatdoCivil}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.descLargaRef(_record.personaFamiliar.estadoCivil,'ESTADO_CIVIL')}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_funcPublicoActivo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.referencia(_record.funcionarioPublico)}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_oee}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.configuracionUoCab.denominacionUnidad}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+
+				<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+					action="#{admDatosFamilia644FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+					onclick="return confirm('#{messages.msg_confirm_delete}');"
+					action="#{admDatosFamilia644FC.eliminar(rowIndexGrilla1)}" />
+							#{' '}
+						 
+			</h:column>
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+	<rich:panel style="background-color:  #FC1501;">
+		<div id="legajo:includeLink02:j_id6651_header"
+			style="background-color: #FC1501; color: white; padding: 5px 2px;">#{messages.CU644_panelObs}</div>
+		<h:inputTextarea style="width:100%"
+			value="#{valDatosFamiliares677FC.auditLegajoObs.observacion}" />
+	</rich:panel>
+	<rich:panel id="idPanelAudit">
+		<div
+			style="background-color: #FC1501; color: white; padding: 5px 2px;">Modificaciones
+		Realizadas</div>
+		<h:outputText value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty valDatosFamiliares677FC.lGrilla2}" />
+		<div class="results"
+			style="overflow: scroll; width: 700; HEIGHT: 230px"><rich:dataTable
+			rowKeyVar="rowIndexGrilla1" var="_record2"
+			rendered="#{!empty valDatosFamiliares677FC.lGrilla2}"
+			value="#{valDatosFamiliares677FC.lGrilla2}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_tabla}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{_record2.tabla}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_persona}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record2.auditLegajo.persona.documentoIdentidad} - #{_record2.auditLegajo.persona.nombres} #{_record2.auditLegajo.persona.apellidos}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_campo}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record2.campo}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_accion}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record2.accion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_anterior}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record2.anterior}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_nuevo}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record2.nuevo}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_nuevo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record2.fechaMod}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU677_estado}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record2.estado.intValue() ==1?'VERIFICADO':'NO VERIFICADO'}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:selectBooleanCheckbox id="checkAllMail"
+						value="#{valDatosFamiliares677FC.selectAll}">
+						<a:support event="onclick"
+							action="#{valDatosFamiliares677FC.seleccionarTodo()}"
+							reRender="idPanelAudit" />
+					</h:selectBooleanCheckbox>
+				</f:facet>
+				<h:selectBooleanCheckbox id="checkEnviarMail"
+					rendered="#{_record2.estado==2}" value="#{_record2.check}" />
+			</h:column>
+		</rich:dataTable></div>
+	</rich:panel>
+	<h:commandButton value="Guardar"
+		action="#{valDatosFamiliares677FC.save()}" />
+</ui:composition>

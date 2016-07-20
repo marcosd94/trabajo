@@ -1,0 +1,350 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU552_titulo_edit}</h1>
+    <h:form id="gruposEvaluacionEdit" styleClass="edit" enctype="multipart/form-data">
+    
+    	
+
+        <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			  <h:panelGrid >
+			  <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{gruposEvaluacionEditFC.evaluacion}"/>
+            </s:decorate>
+			  </h:panelGrid>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				
+			<a:outputPanel >
+				<ui:remove>
+					<s:decorate template="/layout/display.xhtml">
+														<ui:define name="label">#{messages.CU398_unidadOrganiza}
+														</ui:define>
+														<h:inputText id="orgCodigo2" size="10" disabled="true"
+															value="#{gruposEvaluacionEditFC.codigoUnidOrgDep}">
+														</h:inputText>
+														#{' '}
+														<h:inputText id="orgDenominacion2" size="50" disabled="true"
+															value="#{gruposEvaluacionEditFC.denominacion}" />
+														
+												</s:decorate>
+				</ui:remove>
+				</a:outputPanel>
+			
+           
+
+          
+</h:panelGrid>
+        </rich:panel>
+		<rich:panel id="panelDescargas">
+				<f:facet name="header">#{messages.CU552_definir_grupo}</f:facet>
+				<h:panelGrid columns="2">
+				<a:region >
+					<s:decorate id="docInfoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU552_grupo}<span class="required">*</span></ui:define>
+						<h:inputText id="docInfo" size="50" 
+							value="#{gruposEvaluacionEditFC.grupo}">
+							<a:support event="onchange" reRender="docInfo" eventsQueue="default"/>
+						</h:inputText>
+					</s:decorate></a:region>
+					<a:region >
+						<s:decorate id="comtEvaluacionField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU552_comite_evaluacion}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="idcomtEvaluacion" value="#{gruposEvaluacionEditFC.idComisionEval}" style="width:250px">
+						<f:selectItems value="#{gruposEvaluacionEditFC.comisionEvalSelectItems}">
+							<a:support event="onchange" reRender="idcomtEvaluacion"  eventsQueue="default"/>
+						</f:selectItems>
+					</h:selectOneMenu>
+				</s:decorate></a:region>
+					
+				</h:panelGrid>
+				<h:panelGrid id="panelGrFiltro" rendered="#{!gruposEvaluacionEditFC.ocultandoPaneles()}">
+				<h:panelGroup >
+				<fieldset><legend>#{messages.CU552_filtros}</legend>
+				<h:panelGrid columns="2" >
+				<a:region >
+		    <s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU541_pais}</ui:define>
+									<h:selectOneMenu id="idPaisExped" 
+										value="#{gruposEvaluacionEditFC.idPaisExp}"
+										style="width:150px">
+										<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+									</h:selectOneMenu>
+								</s:decorate>
+          </a:region>
+          	<s:decorate template="/layout/display.xhtml">
+          						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10" 
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" 
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2" 
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('evaluacionDesempenho/admGruposEvaluacion/GruposEvaluacionEdit')}" />
+							</s:decorate>
+								<a:region >
+		<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}
+									</ui:define>
+									<h:inputText id="ci" size="50" 
+										style="width:150px"  
+										value="#{gruposEvaluacionEditFC.docIdentidad}">
+									</h:inputText>
+									</s:decorate></a:region>
+									<s:decorate id="puestoField" template="/layout/edit.xhtml">
+									<ui:define name="label">Puesto
+									</ui:define>
+									<h:inputText id="puesto" size="50" 
+										style="width:150px"  
+										value="#{gruposEvaluacionEditFC.puesto}">
+									</h:inputText>
+									</s:decorate>
+				</h:panelGrid>
+				</fieldset></h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid columns="2" rendered="#{!gruposEvaluacionEditFC.ocultandoPaneles()}">
+				<a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelGrillaRevision"
+				action="#{gruposEvaluacionEditFC.search()}">
+			</a:commandButton>
+			<h:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{gruposEvaluacionEditFC.limpiar()}" 
+				 >
+				 </h:commandButton>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" rendered="#{!gruposEvaluacionEditFC.ocultandoPaneles()}">
+				  
+   
+		<rich:panel id="panelGrillaRevision">
+				<f:facet name="header">#{messages.CU552_funcionarios_sin_agrupar}<span class="required">*</span></f:facet>
+ 			<div class="results" id="tblsinAgruparList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="sinAgrupar" var="_record" 
+					value="#{gruposEvaluacionEditFC.sujetosLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_unidad_org}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_funcionario}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU165_ci}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU541_pais}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_puesto}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_fec_ingreso}
+						</f:facet>
+						<h:outputText value="#{_record.empleadoPuesto.fechaInicio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_antiguedad}
+						</f:facet>
+						
+						<h:outputText value="#{gruposEvaluacionEditFC.antiguedad(_record.idSujetos)}" />
+					</h:column>
+					<rich:column style="text-align: center;" width="5%">
+						<f:facet name="header">
+							<h:selectBooleanCheckbox value="#{gruposEvaluacionEditFC.seleccionarTodos}" >
+								<a:support event="onchange" action="#{gruposEvaluacionEditFC.selectAll()}" reRender="panelGrillaRevision,sinAgrupar"/>
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{_record.selecciono}" />
+					</rich:column>
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+				</h:panelGrid>
+			</rich:panel>
+			<h:panelGrid columns="1">
+			<div class="actionButtons" >
+						<a:commandButton value="Agregar" 
+							onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+						action="#{gruposEvaluacionEditFC.agregarAgrupados()}"
+							reRender="funcionariosAgrupados" rendered="#{!gruposEvaluacionEditFC.ocultandoPaneles()}"/>
+			</div>
+			<rich:panel id="funcionariosAgrupados" rendered="#{!gruposEvaluacionEditFC.ocultandoPaneles()}">
+				<f:facet name="header">#{messages.CU552_funcionario_agrupado}</f:facet>
+ 			<div class="results" id="tblagrupadosList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="agrupados" var="_agrupados"  rowKeyVar="index"
+					value="#{gruposEvaluacionEditFC.gruposSujetoLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_unidad_org}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_funcionario}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU165_ci}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_puesto}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_fec_ingreso}
+						</f:facet>
+						<h:outputText value="#{_agrupados.sujetos.empleadoPuesto.fechaInicio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU552_antiguedad}
+						</f:facet>
+						<h:outputText value="#{gruposEvaluacionEditFC.antiguedad(_agrupados.sujetos.idSujetos)}" />
+					</h:column>
+					 <rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					  <a:commandLink  id="del" reRender="panelGrillaRevision,sinAgrupar,agrupados"
+                          value="#{messages.CU471_eliminar}"
+                        action="#{gruposEvaluacionEditFC.eliminar(index)}"/>
+						
+                     </rich:column>
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+			</h:panelGrid>
+   
+   
+     
+       
+     <div class="actionButtons">
+
+           
+            
+		 
+			 <h:commandButton id="guardar"
+									   value="#{messages.msg_save}"
+									  action="#{gruposEvaluacionEditFC.save()}"
+										onclick="return confirm('#{messages.msg_confirm_save}');"
+								   />
+		
+          
+					 <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="#{gruposEvaluacionFrom}" >
+                    <f:param name="evaluacionDesempenoIdEvaluacionDesempeno" value="#{gruposEvaluacionEditFC.idEvaluacionDesempeno}"/>
+                   </s:button>
+
+        </div>
+       
+        <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass"/>
+            </div>
+        
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

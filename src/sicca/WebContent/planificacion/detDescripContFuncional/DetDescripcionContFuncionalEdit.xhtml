@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="detDescripcionContFuncional" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{detDescripcionContFuncionalHome.managed ? 'Edit' : 'Add'} Det descripcion cont funcional</f:facet>
+
+
+            <s:decorate id="idDetDescripcionContFuncionalField" template="layout/edit.xhtml">
+                <ui:define name="label">Id det descripcion cont funcional</ui:define>
+                <h:inputText id="idDetDescripcionContFuncional"
+                       required="true"
+                       disabled="#{detDescripcionContFuncionalHome.managed}"
+                          value="#{detDescripcionContFuncionalHome.instance.idDetDescripcionContFuncional}">
+                    <a:support event="onblur" reRender="idDetDescripcionContFuncionalField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="descripcionField" template="layout/edit.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputTextarea id="descripcion"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{detDescripcionContFuncionalHome.instance.descripcion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{detDescripcionContFuncionalHome.instance.activo}"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{detDescripcionContFuncionalHome.persist}"
+                       disabled="#{!detDescripcionContFuncionalHome.wired}"
+                       rendered="#{!detDescripcionContFuncionalHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{detDescripcionContFuncionalHome.update}"
+                       rendered="#{detDescripcionContFuncionalHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{detDescripcionContFuncionalHome.remove}"
+                      immediate="true"
+                       rendered="#{detDescripcionContFuncionalHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/DetDescripcionContFuncional.xhtml"
+                rendered="#{detDescripcionContFuncionalHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty detDescripcionContFuncionalFrom ? 'DetDescripcionContFuncionalList' : detDescripcionContFuncionalFrom}.xhtml"
+                rendered="#{!detDescripcionContFuncionalHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Det contenido funcional *" labelClass="required">
+    <div class="association" id="detContenidoFuncionalParent">
+
+        <h:outputText value="There is no detContenidoFuncional associated with this detDescripcionContFuncional."
+                   rendered="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional == null}"/>
+
+        <rich:dataTable var="_detContenidoFuncional"
+                   value="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional}"
+                rendered="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="detContenidoFuncionalTable">
+            <h:column>
+                <f:facet name="header">Id contenido funcional</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.idContenidoFuncional}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Planta cargo det id planta cargo det</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contenido funcional id contenido funcional</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.contenidoFuncional.idContenidoFuncional}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Puntaje</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.puntaje}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional != null ? 'changeParent' : 'selectParent'}" value="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional != null ? 'Change' : 'Select'} detContenidoFuncional"
+                       view="/DetContenidoFuncionalList.xhtml">
+                <f:param name="from" value="DetDescripcionContFuncionalEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

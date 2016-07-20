@@ -1,0 +1,159 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.ProcesoGestion_}</h1>
+
+		<h:form id="procesoGestion" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{procesoGestionHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.ProcesoGestion_}</f:facet>
+				<fieldset><rich:panel style="border:none;">
+					<h:panelGrid columns="2" rowClasses="rowTop">
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ConfiguracionUoDet_nivel}</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+									disabled="true"
+									value="#{admProcesosGestionFormController.sinNivelEntidad.nenCodigo}" />
+								#{' '}
+								<h:inputText id="nivelNombre" size="60" disabled="true"
+									value="#{admProcesosGestionFormController.sinNivelEntidad.nenNombre}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ConfiguracionUoDet_entidad}</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+									disabled="true"
+									value="#{admProcesosGestionFormController.configuracionUoCab.entidad.sinEntidad.entCodigo}" />
+								#{' '}
+								<h:inputText id="entidadNombre" size="60" disabled="true"
+									value="#{admProcesosGestionFormController.configuracionUoCab.entidad.sinEntidad.entNombre}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ConfiguracionUoDet_unidadOrganizativa}</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10"
+									disabled="true"
+									value="#{admProcesosGestionFormController.codigoOrg}" />
+								#{' '}
+								<h:inputText id="unidadOrgDenominacion" size="60"
+									disabled="true"
+									value="#{admProcesosGestionFormController.configuracionUoCab.denominacionUnidad}" />
+							</s:decorate>
+							<s:decorate id="entidadDependienteField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.ConfiguracionUoDet_entidadDelaQueDepende}</ui:define>
+								<h:inputText id="entidadDependiente" disabled="true"
+									value="#{admProcesosGestionFormController.codigoUnidadOrgDependiente} - #{admProcesosGestionFormController.configuracionUoDet.denominacionUnidad}"
+									size="74">
+								</h:inputText>
+							</s:decorate>
+						</h:panelGrid>
+						<rich:panel style="border:none;">
+							<fieldset><legend>#{messages.ConfiguracionUoDet_vigencia}</legend>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.msg_desde}</ui:define>
+								<rich:calendar id="vigenciaDesde"
+									value="#{admProcesosGestionFormController.configuracionUoCab.vigenciaDesde}"
+									datePattern="dd/MM/yyyy" disabled="true"
+									locale="#{siccaAppHelper.localeCode}" inputSize="10" />
+							</s:decorate> <s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.msg_hasta}</ui:define>
+								<rich:calendar id="vigenciaHasta"
+									value="#{admProcesosGestionFormController.configuracionUoCab.vigenciaHasta}"
+									datePattern="dd/MM/yyyy" disabled="true"
+									locale="#{siccaAppHelper.localeCode}" inputSize="10" />
+							</s:decorate></fieldset>
+						</rich:panel>
+					</h:panelGrid>
+				</rich:panel></fieldset>
+				<br />
+
+				<rich:panel id="panelProcesos">
+					<f:facet name="header">#{messages['msg_list_search_results']} (#{empty admProcesosGestionFormController.listProcesos ? 0 : admProcesosGestionFormController.listProcesos.size})</f:facet>
+					<div class="results" id="tblActividadList" style="overflow: auto">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty admProcesosGestionFormController.listProcesos}" />
+					<rich:dataTable id="procesoGestionList" var="_procesoGestion"
+						value="#{admProcesosGestionFormController.listProcesos}"
+						rendered="#{not empty admProcesosGestionFormController.listProcesos}"
+						rowKeyVar="_pos">
+						<h:column>
+							<f:facet name="header">#{messages.ProcesoGestion_descripcion}</f:facet>
+							<h:inputText id="descripcion"
+								disabled="#{!_procesoGestion.activo}" style="width:100%"
+								value="#{_procesoGestion.descripcion}">
+							</h:inputText>
+						</h:column>
+						<rich:column style="text-align:center" width="10%">
+							<f:facet name="header">#{messages.ProcesoGestion_activo}</f:facet>
+							<h:selectBooleanCheckbox id="activo"
+								
+								value="#{_procesoGestion.activo}" />
+						</rich:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<a:commandButton id="btonAdd" value="#{messages.msg_list_add}"
+								rendered="#{_pos == admProcesosGestionFormController.listProcesos.size() - 1}"
+								action="#{admProcesosGestionFormController.addRow()}"
+								reRender="panelProcesos" />
+					#{' '}
+					<a:commandButton id="btonRemove"
+								value="#{messages.msg_list_remove}"
+								rendered="#{_pos != admProcesosGestionFormController.listProcesos.size() - 1}"
+								action="#{admProcesosGestionFormController.removeRow(_pos)}"
+								reRender="panelProcesos" />
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+				<br />
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!procesoGestionHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{procesoGestionHome.managed}" styleClass="labelClass" />
+				</div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{admProcesosGestionFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!procesoGestionHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{admProcesosGestionFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{procesoGestionHome.managed}" /> <h:commandButton
+				id="print" 
+				value="#{messages.msg_list_search_print_button}"
+				action="#{admProcesosGestionFormController.print()}" /> <s:button id="cancelEdit"
+				value="#{messages.msg_cancel}" propagation="none"
+				view="/planificacion/configuracionUoDet/ConfiguracionUoDetList.xhtml"
+				rendered="#{procesoGestionHome.managed}">
+				<f:param name="configuracionUoCabIdConfiguracionUo"
+					value="#{admProcesosGestionFormController.configuracionUoCab.idConfiguracionUo}" />
+			</s:button> <s:button id="cancelAdd" value="Volver"
+				propagation="none"
+				view="/#{empty procesoGestionFrom ? 'planificacion/configuracionUoDet/ConfiguracionUoDetList' : procesoGestionFrom}.xhtml"
+				rendered="#{!procesoGestionHome.managed}">
+				<f:param name="configuracionUoCabIdConfiguracionUo"
+					value="#{admProcesosGestionFormController.configuracionUoCab.idConfiguracionUo}" />
+			</s:button></div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

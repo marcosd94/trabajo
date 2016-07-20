@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU470_postulantes_insc_cancel" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5158f0c8-91a8-471c-b3a5-f3eb30a499bb">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="179"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="ds1" uuid="b22e8d84-eff5-41f6-9b63-c03f2cc13bfb">
+		<parameter name="idGrupo" class="java.lang.Long" isForPrompting="false">
+			<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+	OEE.DENOMINACION_UNIDAD as  denominacion_unidad
+,	CONCURSO.NOMBRE AS concurso
+,	CONCURSO.NRO_EXPEDIENTE ||'/'|| CONCURSO.FECHA_EXPEDIENTE as nro_expediente
+, 	TIPO.DESCRIPCION  AS tipo_concurso
+,	PUESTO_AGR.NRO_ORDEN as  nro_orden
+,	PUESTO_AGR.DESCRIPCION_GRUPO as descripcion_grupo
+,	PER.NOMBRES ||' '||PER.APELLIDOS as nom_ape
+,	PER.E_MAIL as e_mail
+,	PER.TELEFONOS as telefonos
+,	POST.FECHA_POSTULACION as fec_postulacion
+,	POST.INTERES_CARGO as interes_cargo
+,       PER.documento_identidad as ci
+,      PER.usu_alta as codPostulante
+,CASE WHEN post.tipo is null then 'PORTAL'  ELSE 'CARPETA' END as tipo_post
+
+ FROM
+SELECCION.CONCURSO_PUESTO_AGR PUESTO_AGR
+ JOIN
+SELECCION.CONCURSO CONCURSO
+ ON 	CONCURSO.ID_CONCURSO = PUESTO_AGR.ID_CONCURSO
+JOIN
+PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ ON 	CONCURSO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+JOIN
+	SELECCION.DATOS_ESPECIFICOS TIPO
+ON
+	TIPO.ID_DATOS_ESPECIFICOS = CONCURSO.ID_DATOS_ESP_TIPO_CONC
+JOIN
+SELECCION.REFERENCIAS REF
+ ON 	REF.VALOR_NUM = PUESTO_AGR.ESTADO
+ JOIN
+SELECCION.POSTULACION POST
+ ON 	POST.ID_CONCURSO_PUESTO_AGR = PUESTO_AGR.ID_CONCURSO_PUESTO_AGR
+  JOIN
+SELECCION.PERSONA_POSTULANTE PER
+ ON 	POST.ID_PERSONA_POSTULANTE = PER.ID_PERSONA_POSTULANTE
+WHERE
+ 	POST.ACTIVO = TRUE
+AND REF.DOMINIO = 'ESTADOS_GRUPO'
+AND	PUESTO_AGR.ID_CONCURSO_PUESTO_AGR =  $P{idGrupo}]]>
+		</queryString>
+		<field name="denominacion_unidad" class="java.lang.String"/>
+		<field name="concurso" class="java.lang.String"/>
+		<field name="nro_expediente" class="java.lang.String"/>
+		<field name="tipo_concurso" class="java.lang.String"/>
+		<field name="nro_orden" class="java.lang.Integer"/>
+		<field name="descripcion_grupo" class="java.lang.String"/>
+		<field name="nom_ape" class="java.lang.String"/>
+		<field name="e_mail" class="java.lang.String"/>
+		<field name="telefonos" class="java.lang.String"/>
+		<field name="fec_postulacion" class="java.util.Date"/>
+		<field name="interes_cargo" class="java.lang.String"/>
+		<field name="ci" class="java.lang.String"/>
+		<field name="codPostulante" class="java.lang.String"/>
+		<field name="tipo_post" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="ds2" uuid="b10be275-d80a-40b1-b79a-a699026fc077">
+		<parameter name="idGrupo" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+	PUESTO_AGR.DESCRIPCION_GRUPO as descripcion_grupo
+,	PER.NOMBRES ||' '||PER.APELLIDOS as nom_ape
+,	PER.E_MAIL as email
+,	PER.TELEFONOS as telefono
+,	POST.FECHA_POSTULACION as fec_post
+,	POST.FECHA_CANCELACION as fec_cancelacion
+,	POST.OBS_CANCELACION as observacion
+,       PER.documento_identidad as ci
+,      PER.usu_alta as codPostulante
+ FROM
+SELECCION.CONCURSO_PUESTO_AGR PUESTO_AGR
+ JOIN
+SELECCION.CONCURSO CONCURSO
+ ON 	CONCURSO.ID_CONCURSO = PUESTO_AGR.ID_CONCURSO
+JOIN
+PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ ON 	CONCURSO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+ JOIN
+SELECCION.POSTULACION POST
+ ON 	POST.ID_CONCURSO_PUESTO_AGR = PUESTO_AGR.ID_CONCURSO_PUESTO_AGR
+  JOIN
+SELECCION.PERSONA_POSTULANTE PER
+ ON 	POST.ID_PERSONA_POSTULANTE = PER.ID_PERSONA_POSTULANTE
+WHERE
+ 	POST.ACTIVO = FALSE
+AND	PUESTO_AGR.ID_CONCURSO_PUESTO_AGR = $P{idGrupo}]]>
+		</queryString>
+		<field name="descripcion_grupo" class="java.lang.String"/>
+		<field name="nom_ape" class="java.lang.String"/>
+		<field name="email" class="java.lang.String"/>
+		<field name="telefono" class="java.lang.String"/>
+		<field name="fec_post" class="java.util.Date"/>
+		<field name="fec_cancelacion" class="java.util.Date"/>
+		<field name="observacion" class="java.lang.String"/>
+		<field name="ci" class="java.lang.String"/>
+		<field name="codPostulante" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="ds3" uuid="694eb24f-bfca-4add-ab6f-d1b1fb98fb06">
+		<parameter name="idGrupo" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+	PUESTO_AGR.DESCRIPCION_GRUPO as descripcion_grupo
+,	PER.NOMBRES||' '||PER.APELLIDOS as nom_ape
+,	PER.E_MAIL as email
+,	PER.TELEFONOS as telefono
+,	POST.FECHA_POSTULACION as fec_postulacion
+,	POST.FECHA_CANCELACION as fec_cancelacion
+,	EXC.OBSERVACION as observacion
+,       PER.documento_identidad as ci
+,      PER.usu_alta as codPostulante
+ FROM
+SELECCION.CONCURSO_PUESTO_AGR PUESTO_AGR
+ JOIN
+SELECCION.CONCURSO CONCURSO
+ ON 	CONCURSO.ID_CONCURSO = PUESTO_AGR.ID_CONCURSO
+JOIN
+PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ ON 	CONCURSO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+ JOIN
+SELECCION.POSTULACION POST
+ ON 	POST.ID_CONCURSO_PUESTO_AGR = PUESTO_AGR.ID_CONCURSO_PUESTO_AGR
+  JOIN
+SELECCION.PERSONA_POSTULANTE PER
+ ON 	POST.ID_PERSONA_POSTULANTE = PER.ID_PERSONA_POSTULANTE
+   JOIN
+SELECCION.EXCEPCION EXC
+ ON 	EXC.ID_EXCEPCION = POST.ID_EXCEPCION
+WHERE
+ 	POST.ACTIVO = FALSE
+AND	PUESTO_AGR.ID_CONCURSO_PUESTO_AGR =$P{idGrupo}]]>
+		</queryString>
+		<field name="descripcion_grupo" class="java.lang.String"/>
+		<field name="nom_ape" class="java.lang.String"/>
+		<field name="email" class="java.lang.String"/>
+		<field name="telefono" class="java.lang.String"/>
+		<field name="fec_postulacion" class="java.util.Date"/>
+		<field name="fec_cancelacion" class="java.util.Date"/>
+		<field name="observacion" class="java.lang.String"/>
+		<field name="ci" class="java.lang.String"/>
+		<field name="codPostulante" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="logo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="estadoActual" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="observacion" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="idGrupo" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grupo" class="java.lang.String"/>
+	<parameter name="nivel" class="java.lang.String"/>
+	<parameter name="entidad" class="java.lang.String"/>
+	<parameter name="oee" class="java.lang.String"/>
+	<parameter name="concursoCodNom" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 1 as colUNO]]>
+	</queryString>
+	<field name="coluno" class="java.lang.Integer"/>
+	<variable name="totalPuntos" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[new Float("0")]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="240" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="23" y="154" width="771" height="52" uuid="3b7009cd-2047-4dc7-95a8-3e5f5c48f266"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="223" width="165" height="15" uuid="980020ad-6d66-485b-9dc6-14b6d0fb7ace"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estado Actual]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="12" y="5" width="766" height="61" uuid="d362e116-ac92-47df-80ff-1abe287c5a34"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="85" width="755" height="18" uuid="441495b0-11f0-40fe-a8da-5c9bdefadbb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[POSTULANTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="113" width="755" height="17" uuid="8e2f5b00-7fd3-4686-a81a-0677ae75e797"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CONCURSO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="23" y="132" width="755" height="20" uuid="5979e2a4-987a-43ff-8f4b-206bd4bdf34e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$P{concursoCodNom}+""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="163" width="55" height="15" uuid="bc482bf1-16be-4dc2-81e4-cd523cd048a5"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NIVEL :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="181" width="55" height="15" uuid="d319d516-cc9e-49ee-8556-dcc63f5061fe"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[OEE :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="430" y="163" width="74" height="15" uuid="8b3f75b6-7362-42e2-9c79-4904b5fa8771"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ENTIDAD :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="88" y="163" width="325" height="15" uuid="6eeaefc3-339b-4ae6-a3f5-b77a62750bbc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nivel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="181" width="461" height="15" uuid="0e2369a2-68ff-4a1e-9ec0-86996f41c44f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{oee}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="504" y="163" width="274" height="15" uuid="cc0cb41f-ab4b-4ae3-abba-1d0d6e02a964"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{entidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="23" y="208" width="165" height="15" uuid="ecfdd558-e9fb-4b0b-b1b0-f4c27bbedac5"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grupo de Puestos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="188" y="223" width="189" height="15" uuid="99e92ba2-d0fe-4ffa-b3e9-b7354c8838af"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{estadoActual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="208" width="189" height="15" uuid="18f6cfbd-9acc-4bcb-8872-9e3102fd8e07"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{grupo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="70">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" isPrintRepeatedValues="false" x="16" y="17" width="762" height="51" uuid="27793413-2431-44a3-ac91-67294d2b2d43"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ds1" uuid="5f3d9f95-5d0f-43ce-9bb7-406174e4b188">
+						<datasetParameter name="idGrupo">
+							<datasetParameterExpression><![CDATA[$P{idGrupo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="e551afcc-24d9-4574-9220-ad35f09910ac">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="e1fbed33-007e-4a79-bb03-3062871a960c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Código Post.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="8d5e7c4e-aa64-4e5d-bc90-e8bc2bdaf01b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{codPostulante}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="f6b339fc-b1b8-45e0-9442-ef33fb96b311">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="f8749458-1efd-467b-a00b-3988408b1374"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Fecha Postulación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="dd/MM/yyyy">
+								<reportElement x="0" y="0" width="90" height="20" uuid="76dd1571-6b4b-429d-9206-e45cdc397bdc"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fec_postulacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="cf4d0512-adc2-4542-a22e-d55edb183cb9">
+						<jr:tableHeader height="30" rowSpan="1"/>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="06fa2467-3926-40c3-912c-d14f31c1c440"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Tipo Postulación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="1ae5dfd8-cba9-4b4a-8d3c-730344044f36"/>
+								<textElement>
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{tipo_post}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="491" uuid="dab16c91-f974-460f-8ebf-0c289b2ecd98">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="1" y="0" width="490" height="30" uuid="243f42f4-87fe-46f4-9f31-2e2d84187cb8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Interes en el Cargo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="1" y="0" width="490" height="20" uuid="0a1de448-5bc8-44d4-810a-1a543a091797"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{interes_cargo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement key="staticText-2" x="16" y="1" width="762" height="15" uuid="0485442d-221e-42e5-bd93-adeeb0900baf"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[POSTULANTES INSCRIPTOS]]></text>
+			</staticText>
+		</band>
+		<band height="69">
+			<staticText>
+				<reportElement key="staticText-2" x="16" y="4" width="762" height="15" uuid="3e73bb3a-dfed-4f1c-abb6-2e50f5c874e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[POSTULANTES CANCELADOS POR VOLUNTAD PROPIA/POR PRESENTACION DE DOCUMENTOS AL OEE ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="16" y="18" width="762" height="51" uuid="f8457542-33fa-425c-a981-0a6bcd385b1f"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ds2" uuid="e64f6378-2c18-460e-bd17-0578220e7d32">
+						<datasetParameter name="idGrupo">
+							<datasetParameterExpression><![CDATA[$P{idGrupo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:columnGroup width="92" uuid="f7d3678c-6532-4278-85dd-1ec157c7a9b8">
+						<jr:column width="92" uuid="7219b489-26ca-4a6f-9e64-3cff0cf48cc0">
+							<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="30" uuid="d157dbc2-a9e2-41b0-a404-879187278a1f"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+									</textElement>
+									<text><![CDATA[Código Post.]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="90" height="20" uuid="fa867593-7ead-4fc7-a548-f817583bdf0b"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{codPostulante}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:column width="90" uuid="0d00578f-d39a-4136-9a7f-af58490829f3">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="4963bf0a-67e1-4500-9c85-e6a4b80be027"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Fecha Postulación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="20" uuid="e76a2f46-91b4-4bc4-9b5a-2ae13eba54a3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fec_post}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="17fcefbe-b260-43ae-963a-d89eb0939e28">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="5daa2fbb-39ba-42f9-bae7-99ffae1ceea6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Fecha de Cancelación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="20" uuid="bfd00331-0c28-4a9c-8e78-ffb943d066b8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fec_cancelacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="106" uuid="a188d5f8-fc2c-44ca-949b-f9d1de7a6d33">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="105" height="30" uuid="9d064387-3cf4-40aa-8354-615d68d4d0d3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Motivo de Cancelación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="106" height="20" uuid="b98f0d54-66c1-4e1a-aa29-913c52854608"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{observacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<break>
+				<reportElement x="0" y="1" width="100" height="1" uuid="26f9b3d5-e60d-49e6-8229-77f636106e0e"/>
+			</break>
+		</band>
+		<band height="69">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="16" y="18" width="762" height="51" uuid="8b386eb3-88a7-49e6-a473-04d4f6c5f746"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ds3" uuid="596fc62c-6231-41d2-ac1b-b40a1f30de2c">
+						<datasetParameter name="idGrupo">
+							<datasetParameterExpression><![CDATA[$P{idGrupo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="5decdcfd-485a-4318-b010-ac6a55b7f761">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="b7dc9750-507c-4ed4-a7f5-11fbd16d51c8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Código Post.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="20" uuid="cc289624-5853-4000-accf-825da85f16fa"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{codPostulante}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="6e395a41-b207-4934-943c-36861c06faa8">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="c0543c65-a6d8-46dc-b3ca-dd174efe92de"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Fecha Postulación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="20" uuid="d0ff4de2-1c21-4237-a983-4b2a309fcd3d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fec_postulacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="62487966-2dde-454b-b44a-d85671aa88ff">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="92607462-349f-4733-af8e-321fabeaf0da"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Fecha de Cancelación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="20" uuid="7b91cff8-1e5c-44a0-b6c1-5528b0555f9a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fec_cancelacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="106" uuid="4d912042-7ecc-4962-8d7c-40b87159e0e8">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="105" height="30" uuid="fa436f21-d45f-48d1-b9b2-a97f139aadcf"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<text><![CDATA[Motivo de Cancelación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="106" height="20" uuid="275a3f47-ec63-41c8-bc19-38bc4cae90d7"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{observacion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement key="staticText-2" x="16" y="3" width="762" height="15" uuid="9e052fbe-19c1-48d1-b6e9-7b6f67b6708e"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[POSTULANTES CANCELADOS POR EXCEPCIÓN COMISIÓN DE SELECCIÓN]]></text>
+			</staticText>
+			<break>
+				<reportElement x="0" y="0" width="100" height="1" uuid="86e8f3cb-4284-4c44-8f9e-8eeb513aeef8"/>
+			</break>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="705" y="0" width="89" height="20" uuid="0c5beba1-8988-47de-bd86-49e7331c41e4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="206" y="0" width="100" height="20" uuid="f5fcbb15-d715-41af-b1e6-4bfe9e4d6e06"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="652" y="0" width="54" height="20" uuid="c30bdf40-4d4f-4d7c-bf64-df63a286d002"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="306" y="0" width="56" height="20" uuid="9b8f06a9-5dfa-44ad-bf2d-96a611c5f865"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line" x="1" y="0" width="793" height="1" uuid="0be0b69c-03e4-46f4-9109-8a58ca5d968e"/>
+			</line>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="6" y="0" width="109" height="20" uuid="c9ca85b9-2698-4906-8c96-4f09ed9840f8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="21">
+			<line>
+				<reportElement key="line" x="6" y="0" width="788" height="1" uuid="d1e873db-2672-432c-bce3-29ed6ecbfa80"/>
+			</line>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="6" y="0" width="109" height="20" uuid="dc585aa5-446b-4f19-8f9e-ea4f7d2f97ec"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="306" y="0" width="56" height="20" uuid="cc9757c5-384c-4839-9170-9a8b5f910cde"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="653" y="0" width="54" height="20" uuid="4e1fbc52-d85f-44f6-948d-fd11e5d46f0a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="206" y="0" width="100" height="20" uuid="503698ee-9032-46a9-9504-54d707ee59cf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="707" y="0" width="88" height="20" uuid="db906baa-a703-430f-a34e-4e6051943eba"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="800" height="50" uuid="2df7afbd-a7f3-4ff2-86b2-b49f7153d0bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

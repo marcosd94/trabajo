@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	login-required="true"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+	<action execute="#{realizarEvalsFormController.init()}"
+		on-postback="false" />
+	<param name="idConcursoPuesto" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<param name="idPuesto" value="#{grupoPuestosController.idPuesto}" />
+	<param name="from" />
+	<param name="continuarSgteTarea" value="#{realizarEvalsFormController.continuarSgteTarea}" />
+	<param name="tabActivo" value="#{realizarEvalsFormController.tabActivo}" />
+	<param name="idPersonaPostulante" value="#{realizarEvalsFormController.idPersonaPostulante}" />
+	<param name="idPostulacion" value="#{realizarEvalsFormController.idPostulacion}" />
+
+	<navigation from-action="#{realizarEvalsFormController.cerrarEvaluacion()}">
+		<rule if-outcome="OK">
+
+			<redirect view-id="/seleccion/realizarEval/CIO/realizarEvals.xhtml"
+				include-page-params="true">
+				<param name="idConcursoPuesto" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+				<param name="idPuesto" value="#{grupoPuestosController.idPuesto}" />
+			</redirect>
+		</rule>
+	</navigation>
+	<navigation from-action="#{realizarEvalsFormController.nextTask(sgteActividad)}">
+		<rule if-outcome="nextTask">
+			<end-conversation />
+			<redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml">
+			</redirect>
+		</rule>
+	</navigation>
+	<restrict>#{identity.hasRole('realizarEvals')}</restrict>
+</page>

@@ -1,0 +1,315 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<a:outputPanel rendered="#{empty ver}">
+	<h1>#{messages.CU607_titulo}</h1>
+	</a:outputPanel>
+	<a:outputPanel rendered="#{not empty ver}">
+	<h1>#{messages.CU607_titulo_ver}</h1>
+	</a:outputPanel>
+    <h:form id="evaluacionDesempenoSearch" styleClass="edit">
+		
+        <rich:simpleTogglePanel  label="#{messages['CU471_organizado_por']}" switchType="ajax" id="panelParametro">
+
+			<h:panelGrid columns="1">
+			<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU552_evaluacion}</ui:define>
+                <h:inputText size="100" id="evaluacion" disabled="true" value="#{configurarPlantillaEvalRecFC.evaluacion}"/>
+            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2" id="idPanelCampos">
+			
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+			
+						<ui:remove>
+							<a:outputPanel >
+										<s:decorate template="/layout/display.xhtml">
+																<ui:define name="label">#{messages.CU398_unidadOrganiza}
+																</ui:define>
+																<h:inputText id="orgCodigo2" size="10" disabled="true"
+																	value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+																</h:inputText>
+																#{' '}
+																<h:inputText id="orgDenominacion2" size="70" disabled="true"
+																	value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+																
+														</s:decorate>
+											</a:outputPanel>
+						</ui:remove>
+			 
+           
+
+          
+			</h:panelGrid>
+			 </rich:simpleTogglePanel>
+   	<rich:panel id="panelGrupo">	
+			
+        <h:panelGrid columns="2">	
+         
+         <s:decorate id="grupoEvaluacionField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU557_grupo}</ui:define>
+					<h:inputText value="#{configurarPlantillaEvalRecFC.grupo}" disabled="true" style=" width : 250px;"/>
+				</s:decorate>
+         
+         <s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU607_metodologia}
+						</ui:define>
+						<h:inputText value="#{configurarPlantillaEvalRecFC.metodologia}" disabled="true" style=" width : 250px;"/>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU607_criteio}
+						</ui:define>
+						<h:inputText id="cirterio" value="#{configurarPlantillaEvalRecFC.criterio}" style=" width : 250px;"
+					/>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU607_tipo}
+						</ui:define>
+						<h:selectOneMenu id="idTipo"  
+							value="#{configurarPlantillaEvalRecFC.idTipo}"
+							style="width:250px">
+							<f:selectItems
+								value="#{configurarPlantillaEvalRecFC.updateTipoSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">SUMA PESOS: 
+					</ui:define>
+					<h:inputText value="#{configurarPlantillaEvalRecFC.suma()}" disabled="true" style=" width : 30px;"/>
+				</s:decorate>
+        
+       </h:panelGrid>
+       </rich:panel>    
+        
+	
+      <div class="actionButtons">
+           <a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="links,panelResultado"
+				action="#{configurarPlantillaEvalRecFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{configurarPlantillaEvalRecFC.searchAll()}" 
+				 reRender="panelGrupo,links,panelResultado" >
+				 <f:param name="firstResult" value="0" />
+				 </a:commandButton>
+        </div>
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty plantillaEvalConfDetList.resultList ? 0 : (plantillaEvalConfDetList.paginated ? plantillaEvalConfDetList.resultCount : plantillaEvalConfDetList.resultList.size)})</f:facet>
+				<div class="results" id="plantillaEvalConfDetList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty plantillaEvalConfDetList.resultList}" /> <rich:dataTable
+					id="plantillaEvalConfDetList" var="_plantillaEvalConfDet"
+					value="#{configurarPlantillaEvalRecFC.plantillaEvalConfDets}"
+					rendered="#{not empty plantillaEvalConfDetList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{plantillaEvalConfDetList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU607_orden}" />
+								<ui:param name="propertyPath"
+									value="plantillaEvalConfDet.orden" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_plantillaEvalConfDet.orden}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{plantillaEvalConfDetList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU607_criteio}" />
+								<ui:param name="propertyPath"
+									value="plantillaEvalConfDet.resultadoEsperado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_plantillaEvalConfDet.resultadoEsperado}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{plantillaEvalConfDetList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU607_tipo}" />
+								<ui:param name="propertyPath"
+									value="plantillaEvalConfDet.datosEspecificoByTipoVar.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_plantillaEvalConfDet.datosEspecificoByTipoVar.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{plantillaEvalConfDetList}" />
+								<ui:param name="propertyLabel" value="Peso" />
+								<ui:param name="propertyPath"
+									value="plantillaEvalConfDet.pesoPercepcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_plantillaEvalConfDet.pesoPercepcion}" />
+					</h:column>
+					<ui:remove>
+						<rich:column styleClass="action">
+												<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+												<s:link
+													view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRec.xhtml"
+													value="Ver" propagation="join"
+													id="plantillaEvalConfDetViewId">
+													<f:param name="plantillaEvalConfDetIdPlantillaEvalConfDet"
+														value="#{_plantillaEvalConfDet.idPlantillaEvalConfDet}" />
+													 <f:param name="grupoMetodologiaIdGrupoMetodologia"
+													  value="#{configurarPlantillaEvalRecFC.idGrupoMetodologia}"/>
+												</s:link>
+									#{' '}
+									<s:link view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecEdit.xhtml"
+													value="#{messages.msg_edit}" propagation="join" rendered="#{empty ver}"
+													id="plantillaEvalConfDetEdit" >
+													<f:param name="plantillaEvalConfDetIdPlantillaEvalConfDet"
+														value="#{_plantillaEvalConfDet.idPlantillaEvalConfDet}" />
+													 <f:param name="grupoMetodologiaIdGrupoMetodologia"
+													  value="#{configurarPlantillaEvalRecFC.idGrupoMetodologia}"/>
+												</s:link>
+									 #{' '}
+									<h:commandLink id="del" value="#{messages.CU471_eliminar}" rendered="#{empty ver}"
+													action="#{configurarPlantillaEvalRecFC.eliminar(_plantillaEvalConfDet.idPlantillaEvalConfDet)}"
+													onclick="return confirm('#{messages.CU471_eliminar_msg}');" />
+						
+											</rich:column>
+					</ui:remove>
+				</rich:dataTable></div>
+			</rich:panel>
+			<a:outputPanel id="links">
+			<div class="tableControl">
+
+        <s:link view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecList.xhtml"
+            rendered="#{plantillaEvalConfDetList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecList.xhtml"
+            rendered="#{plantillaEvalConfDetList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{plantillaEvalConfDetList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecList.xhtml"
+            rendered="#{plantillaEvalConfDetList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{plantillaEvalConfDetList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecList.xhtml"
+            rendered="#{plantillaEvalConfDetList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{plantillaEvalConfDetList.lastFirstResult}"/>
+        </s:link>
+
+    </div></a:outputPanel>
+      
+        <s:div styleClass="actionButtons" >
+         <s:button view="/evaluacionDesempenho/configurarPlantillaEvalRecepcion/ConfigurarPlantillaEvalRecEdit.xhtml"
+                    id="create"
+           propagation="join" rendered="#{empty ver}"
+                 value="Administrar Criterios">
+            <f:param name="plantillaEvalConfDetIdPlantillaEvalConfDet"/>
+            <f:param name="grupoMetodologiaIdGrupoMetodologia" value="#{configurarPlantillaEvalRecFC.idGrupoMetodologia}"/>
+        </s:button>
+        <s:button id="volver"
+                   value="Volver"
+             propagation="join"
+              view="#{configurarPlantillaEvalRecFC.from}">
+                <f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+                 value="#{configurarPlantillaEvalRecFC.idEvaluacionDesempeno}"/>
+              </s:button>
+              <h:commandButton id="printCriterio"  action="#{configurarPlantillaEvalRecFC.imprimirCriterios()}" 
+						  value="#{messages.CU607_imprimir_criterio}"/>
+						  <ui:remove>
+							  <h:commandButton id="printEvaluacion"   action="#{configurarPlantillaEvalRecFC.imprimirEvaluacion()}"
+														value="#{messages.CU607_imprimir_evaluacion}" />
+						  </ui:remove>
+              
+              
+                  
+                 
+    </s:div>
+   
+        
+    </h:form>
+
+	
+
+    
+</ui:define>
+
+</ui:composition>

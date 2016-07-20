@@ -1,0 +1,262 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU476_titulo_gral}</h1>
+
+		<!-- Modales  -->
+		<rich:modalPanel id="modalHistoricos" width="600" height="400"
+			resizeable="false" moveable="true">
+			<f:facet name="header">#{messages.CU476_titulo_popup}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalHistoricos')}.hide()" />
+			</f:facet>
+			<h:form>
+
+				<rich:panel>
+					<f:facet name="header">#{messages.CU476_popup_doc_adj}</f:facet>
+					<rich:dataTable id="historicos" var="_hist" rows="5"
+						rowKeyVar="rowNr"
+						value="#{aprobarCapacitacionFormController.listaHistoricos}">
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU476_popup_documento}
+						</f:facet>
+							<h:outputText value="#{_hist.documento.nombreFisicoDoc}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU476_popup_fec_alta}
+						</f:facet>
+							<h:outputText value="#{_hist.fechaAlta}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+							#{messages.CU476_popup_usu_alta}
+						</f:facet>
+							<h:outputText value="#{_hist.usuAlta}" />
+						</h:column>
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<h:commandLink value="Descargar" target="_blank"
+								rendered="#{_hist.documento.idDocumento!=null}"
+								action="#{aprobarCapacitacionFormController.abrirDoc(rowNr)}" />
+
+						</rich:column>
+					</rich:dataTable>
+					<rich:datascroller align="center" for="historicos" id="sc2"
+						reRender="sc1"
+						rendered="#{aprobarCapacitacionFormController.listaHistoricos.size() > 5}" />
+				</rich:panel>
+				<div style="clear: both" />
+				<rich:spacer height="10px" />
+				<div class="actionButtons"><a:commandButton id="cancel"
+					value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalHistoricos')" /></div>
+
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="aprobarCapacitaciones" styleClass="edit">
+			<rich:panel>
+				<f:facet name="header">#{messages.CU476_titulo_panel_capacitacion}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU476_titulo}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{aprobarCapacitacionFormController.capacitacion.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU476_tipo_capacitacion}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{aprobarCapacitacionFormController.capacitacion.tipo}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU476_titulo_panel_organizado}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10"
+							disabled="#{!admCapacitacionesEditFC.habUo}"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU476_titulo_panel_capacitacion}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate id="docInfoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU476_tipo_capacitacion}</ui:define>
+						<h:inputText id="docInfo" size="100" disabled="true"
+							value="#{aprobarCapacitacionFormController.capacitacion.documentos.nombreFisicoDoc}">
+						</h:inputText>
+					</s:decorate>
+					<s:div styleClass="botones">
+						<h:commandButton value="#{messages.CU476_btn_descargar}"
+							action="#{aprobarCapacitacionFormController.abrirDoc()}" />
+						<s:button view="/#" id="ver_capac" propagation="join"
+							value="#{messages.CU476_btn_ver_capac}">
+						</s:button>
+						<s:button view="/#" id="ver_instructores" propagation="join"
+							value="#{messages.CU476_btn_ver_instructores}">
+						</s:button>
+					</s:div>
+					<rich:panel style="border:none;">
+						<fieldset><legend>#{messages.CU476_obs_act}</legend> <h:inputTextarea
+							cols="80" disabled="true"
+							value="#{aprobarCapacitacionFormController.obsCapEval.observacion}">
+						</h:inputTextarea></fieldset>
+					</rich:panel>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU476_titulo_panel_revision}</f:facet>
+
+				<rich:dataTable id="revision" var="_record" rows="5"
+					rendered="#{aprobarCapacitacionFormController.listaRevisionCapacitacion.size() > 0}"
+					value="#{aprobarCapacitacionFormController.listaRevisionCapacitacion}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_obs}
+						</f:facet>
+						<h:outputText value="#{_record.observacion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_fecha_obs}
+						</f:facet>
+						<h:outputText value="#{_record.fechaObs}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_usu_obs}
+						</f:facet>
+						<h:outputText value="#{_record.usuObs}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_respuesta}
+						</f:facet>
+						<h:outputText value="#{_record.respuesta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_fecha_rpta}
+						</f:facet>
+						<h:outputText value="#{_record.fechaRpta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU476_usu_rpta}
+						</f:facet>
+						<h:outputText value="#{_record.usuRpta}" />
+					</h:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="revision" id="sc2"
+					reRender="sc1"
+					rendered="#{aprobarCapacitacionFormController.listaRevisionCapacitacion.size() > 5}" />
+				<h:panelGrid columns="1">
+					<s:decorate id="mensajeField" template="/layout/edit.xhtml">
+						<span class="required"><h:outputText
+							value="#{messages.CU476_msg_revision}" /></span>
+					</s:decorate>
+
+					<s:decorate id="obsField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU476_obs_revision}</ui:define>
+						<h:inputTextarea cols="80" disabled="true"
+							onkeypress="return imposeMaxLength(event, this, 1000);"
+							value="#{aprobarCapacitacionFormController.obs}">
+						</h:inputTextarea>
+					</s:decorate>
+					<a:commandButton value="#{messages.CU476_btn_historico}"
+						reRender="modalHistoricos" eventsQueue="default"
+						action="#{aprobarCapacitacionFormController.buscarHistoricos()}"
+						oncomplete="#{rich:component('modalHistoricos')}.show()" />
+				</h:panelGrid>
+			</rich:panel>
+
+			<div class="actionButtons">
+			<s:button id="cancelAdd" value="Volver" propagation="join"
+				
+				view="/#{from}.xhtml" />
+			</div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

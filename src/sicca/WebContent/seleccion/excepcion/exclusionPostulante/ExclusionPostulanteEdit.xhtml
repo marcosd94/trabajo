@@ -1,0 +1,229 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU308_tittle}</h1>
+		
+		<h3>#{messages.CU308_sub_tittle}</h3>
+		 
+		<h:form id="exclusionPostulanteSearch" styleClass="edit">
+		
+			<rich:panel id="panelParametro">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+									value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+							
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+				
+
+			<br></br>
+			<rich:panel>
+			    <f:facet name="header">#{messages.CU308_datos_grupo_puesto}</f:facet> 
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="concurso3" style="width : 500px;"
+							value="#{grupoPuestosController.idConcurso}"
+							disabled="#{exclusionPostulanteFC.idExcepcion != null}">
+							<f:selectItems value="#{grupoPuestosController.concursosNoFinalizadosSelectItem}" />
+							<a:support event="onchange" action="#{grupoPuestosController.cargarListaFiltradaConcursoPuestoAgr()}" reRender="grupoSel,panelListaPuestos"/>
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU314_grupo}
+							<span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="grupoSel" style="width : 500px;"
+							value="#{grupoPuestosController.idConcursoPuestoAgr}"
+							disabled="#{exclusionPostulanteFC.idExcepcion != null}">
+							<f:selectItems value="#{grupoPuestosController.concursoPuestoAgrFiltradoSelectItem}" />
+							<a:support event="onchange" action="#{exclusionPostulanteFC.buscarPostulantes()}" reRender="panelResultados"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+				
+			<br></br>
+			<rich:panel>	
+				<h:panelGrid columns="3">
+					<s:decorate id="doc" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_cin}</ui:define>
+						<h:inputText id="documento" size="25" value="#{exclusionPostulanteFC.documento}"
+							disabled="#{exclusionPostulanteFC.idExcepcion != null}"/>
+					</s:decorate>
+					
+					<a:commandButton id="search"
+						value="#{messages.msg_list_search_button}"
+						action="#{exclusionPostulanteFC.buscarPostulantes()}"
+						reRender="panelResultados"
+						rendered="#{exclusionPostulanteFC.idExcepcion == null}">
+					</a:commandButton> 
+					
+					<a:commandButton id="reset"
+						value="#{messages['gral_mostrar_todos']}"
+						action="#{exclusionPostulanteFC.buscarTodosPostulantes()}"
+						reRender="documento,panelResultados"
+						rendered="#{exclusionPostulanteFC.idExcepcion == null}">
+					</a:commandButton>
+				</h:panelGrid>
+			</rich:panel>
+			
+			<br></br>
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['CU308_postulantes']}(#{empty exclusionPostulanteFC.listaPostulacion ? 0 : exclusionPostulanteFC.listaPostulacion.size()})</f:facet>
+				<div class="results" id="tblPostulanteList">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty exclusionPostulanteFC.listaPostulacion}" /> 
+					
+				  	<rich:dataTable id="postulanteList" var="_postulacion"
+						value="#{exclusionPostulanteFC.listaPostulacion}"
+						rendered="#{not empty exclusionPostulanteFC.listaPostulacion}">
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{messages.gral_cin}"/>
+							</f:facet>
+							<h:outputText value="#{_postulacion.personaPostulante.documentoIdentidad}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{messages.CU306_nombres}"/>
+							</f:facet>
+							<h:outputText value="#{_postulacion.personaPostulante.nombreCompleto}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{messages.gral_fecNac}"/>
+							</f:facet>
+							<h:outputText value="#{_postulacion.personaPostulante.fechaNacimiento}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{messages.gral_correo_electronico}"/>
+							</f:facet>
+							<h:outputText value="#{_postulacion.personaPostulante.EMail}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{messages.gral_telefonos}"/>
+							</f:facet>
+							<h:outputText value="#{_postulacion.personaPostulante.telefonos}" />
+						</h:column>
+						
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.CU308_cancelar_postulacion}?</f:facet>
+							<h:selectBooleanCheckbox value="#{_postulacion.seleccionado}"
+								disabled="#{exclusionPostulanteFC.idExcepcion != null}"/>
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</rich:panel>
+			
+			<br></br>
+			<rich:panel>
+			    <f:facet name="header">#{messages.CU308_datos_exclusion_postulantes}</f:facet> 
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}</ui:define>
+						<h:inputText value="#{exclusionPostulanteFC.fecha}" disabled="true"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_motivo}
+							<span class="required">*</span>
+						</ui:define>
+						<h:inputTextarea value="#{exclusionPostulanteFC.motivo}" rows="4" cols="60"
+						disabled="#{exclusionPostulanteFC.idExcepcion != null}"/>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			
+		<s:div styleClass="actionButtons">
+			 <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{exclusionPostulanteFC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                        rendered="#{exclusionPostulanteFC.idExcepcion == null}"/>
+                          
+			<s:button
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="#{messages.gral_anexos}"
+				rendered="#{exclusionPostulanteFC.idExcepcion != null}">
+				<f:param name="direccionFisica" value="#{exclusionPostulanteFC.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="#{exclusionPostulanteFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{exclusionPostulanteFC.idExcepcion}" />
+				<f:param name="nombreTabla" value="#{exclusionPostulanteFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="seleccion/excepcion/exclusionPostulante/ExclusionPostulanteEdit" />
+			</s:button>
+                          
+			<s:button view="#{exclusionPostulanteFC.from}"
+				id="volver" propagation="none" value="#{messages.msg_done}">
+			</s:button>
+		</s:div>
+		
+		<br />
+		<div style="clear:both">
+			 <span class="required">*</span>
+			 #{messages.msg_required_fields}
+		</div>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>

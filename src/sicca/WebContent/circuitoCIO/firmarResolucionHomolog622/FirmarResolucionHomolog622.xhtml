@@ -1,0 +1,254 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	<!--******************** MODAL ******************-->
+		<!-- ****Modal Resolucion**** -->
+		<a:region>
+
+			<rich:modalPanel id="modalResolucion" width="400" height="280"
+				styleClass="centerbox">
+				<f:facet name="header">Resolución</f:facet>
+				<f:facet name="controls">
+					<h:graphicImage value="/img/dialog-close.png" width="18"
+						height="18" style="cursor:pointer"
+						onclick="#{rich:component('modalResolucion')}.hide()" />
+				</f:facet>
+				<h:form>
+					<rich:panel>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU57_fec_resoluc}</ui:define>
+								<rich:calendar id="fechaIni" datePattern="dd/MM/yyyy"
+									inputSize="10" enableManualInput="true"
+									oninputkeypress="ponerBarra(event);"
+									value="#{firmarResolucionHomolog622FC.fecha}">
+									<a:support event="onchanged" eventsQueue="default" />
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="lugarField" template="/layout/edit.xhtml">
+								<ui:define name="label">Lugar</ui:define>
+								<h:inputText id="lugar" size="20" maxlength="150"
+									value="#{firmarResolucionHomolog622FC.lugar}">
+									<a:support event="onblur" eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU57_nro_resolu}</ui:define>
+								<h:inputText id="descripcion" size="20"
+									value="#{firmarResolucionHomolog622FC.nroResolucion}">
+									<a:support event="onblur" eventsQueue="default" />
+								</h:inputText>
+							</s:decorate>
+
+						</h:panelGrid>
+						<rich:spacer height="20px" />
+						<div class="actionButtons" align="center"><a:commandButton
+							id="save" value="Guardar"
+							action="#{firmarResolucionHomolog622FC.actualizarResolucion()}"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('modalResolucion')" /> <a:commandButton
+							id="cancel" value="Cancelar" ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('modalResolucion')" /></div>
+					</rich:panel>
+				</h:form>
+
+
+
+
+			</rich:modalPanel>
+
+
+			<!-- ****Fin Modal**** -->
+		</a:region>
+		<h:form id="concursoPuestoAgrSearch" styleClass="edit">
+			
+					<h:panelGrid columns="1"></h:panelGrid>
+					
+					<rich:panel>
+						<h1><h:outputText value="#{messages.CU412_titulo}"
+							rendered="#{firmarResolucionHomolog622FC.fromActividad==7}" />
+						 <h:outputText
+							value="#{messages.CU412_titulo2}"
+							rendered="#{firmarResolucionHomolog622FC.fromActividad==21}" /> 
+						<h:outputText
+							value="#{messages.CU412_titulo3}"
+							rendered="#{firmarResolucionHomolog622FC.fromActividad==26}" />
+							
+						</h1>
+						<h:panelGrid columns="1"></h:panelGrid>
+							<rich:panel id="panelParametro" style="width : 820px;">
+
+								<h:panelGrid columns="3" id="idPanelCampos">
+
+									<s:decorate template="/layout/display.xhtml">
+											<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+												class="required">*</span>
+										
+									</ui:define>
+											<h:inputText id="nivelCodigo" styleClass="numeric"
+												onkeypress="return soloNumeros(event);"
+												value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+												disabled="true">
+											</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+												disabled="true" />
+										</s:decorate>
+									<s:decorate template="/layout/display.xhtml">
+											<ui:define name="label">#{messages.Usuario_entidad}<span
+												class="required">*</span>
+									
+									</ui:define>
+											<h:inputText id="entidadCodigo" styleClass="numeric" onkeypress="return soloNumeros(event);" value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5" disabled="true">
+											</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+												disabled="true" />
+										</s:decorate>
+									
+										<s:decorate template="/layout/display.xhtml">
+											<ui:define name="label">#{messages.gral_oee}<span
+												class="required">*</span>
+										
+									</ui:define>
+											<h:inputText id="unidadOrgCodigo" styleClass="numeric"
+												size="5" value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+												onkeypress="return soloNumeros(event);" disabled="true">
+											</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="40"
+												disabled="true"
+												value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+										</s:decorate>
+										
+								</h:panelGrid>
+								<h:panelGrid>
+									<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU243_concurso}</ui:define>
+									<h:inputText id="concurso" disabled="true"
+										value="#{firmarResolucionHomolog622FC.concurso.nombre}"
+										style=" width : 514px;" />
+								</s:decorate>
+							</h:panelGrid>
+
+						</rich:panel>
+
+					<br/><br/>
+
+							<rich:panel style=" width : 820px;">
+								<f:facet name="header">Grupos - #{messages['msg_list_search_results']} (#{empty firmarResolucionHomolog622FC.listaGruposParaFirmar ? 0 :  firmarResolucionHomolog622FC.listaGruposParaFirmar.size})</f:facet>
+								<div class="results" id="concursoPuestoAgrList3">
+									<h:outputText value="#{messages.msg_list_search_no_results}"
+										rendered="#{empty firmarResolucionHomolog622FC.listaGruposParaFirmar}" />
+									<rich:dataTable id="concursoPuestoAgrList2"
+										var="gruposParaFirmar" rowKeyVar="_indice"
+										value="#{firmarResolucionHomolog622FC.listaGruposParaFirmar}"
+										rendered="#{not empty firmarResolucionHomolog622FC.listaGruposParaFirmar }"
+										style=" width : 800px;">
+				
+										<rich:column>
+											<f:facet name="header">Nombre</f:facet>
+											<h:outputText value="#{gruposParaFirmar.descripcionGrupo}" />
+										</rich:column>
+
+										<rich:column styleClass="action">
+											<f:facet name="header">Acción</f:facet>
+											<h:commandLink id="print"
+												value="#{messages['CU53_imprimir']}"
+												action="#{homologPerfilMatrizDetListFormController.imprimirPerfilMatrizDelGrupo(gruposParaFirmar.idConcursoPuestoAgr)}" />
+												#{' '}
+												<s:link value="Ver Observaciones" 
+												view="/circuitoCIO/firmarResolucionHomolog622/ObservacionesRespuestasFirmaRes.xhtml"> 
+												<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{gruposParaFirmar.idConcursoPuestoAgr}"/>
+												<f:param name="fromAct"  value="#{firmarResolucionHomolog622FC.fromActividad}"/>
+												</s:link>
+												
+											
+										</rich:column>
+										
+									
+									</rich:dataTable>
+								</div>
+								
+							</rich:panel>
+							
+							
+							<br/><br/>
+								
+							<rich:panel style=" width : 820px;">
+							<f:facet name="header">Otros Grupos - #{messages['msg_list_search_results']} (#{empty firmarResolucionHomolog622FC.listaGruposAtrasados ? 0 :  firmarResolucionHomolog622FC.listaGruposAtrasados.size})</f:facet>
+							<div class="results" id="concursoPuestoAgrOtrosList">
+									<h:outputText value="#{messages.msg_list_search_no_results}"
+										rendered="#{empty firmarResolucionHomolog622FC.listaGruposAtrasados}" />
+									<rich:dataTable id="concursoPuestoAgrList"
+										var="gruposAtrasados" rowKeyVar="_index"
+										value="#{firmarResolucionHomolog622FC.listaGruposAtrasados}"
+										rendered="#{not empty firmarResolucionHomolog622FC.listaGruposAtrasados}"
+										style=" width : 800px;">
+										<h:column><f:facet name="header">Nombre</f:facet>
+											<h:outputText value="#{gruposAtrasados.descripcionGrupo}" />
+										</h:column>
+									
+										<rich:column styleClass="action"><f:facet name="header">Actividad</f:facet>
+											<h:outputText value="#{firmarResolucionHomolog622FC.mostrarEstado(gruposAtrasados.estado)}" />
+										</rich:column>
+									</rich:dataTable>
+									</div>
+							</rich:panel>
+						<br/>
+						<s:decorate id="buttonsField" template="/layout/display.xhtml">
+						<h:commandButton id="tareaModificar"
+							disabled="#{firmarResolucionHomolog622FC.ok()}"
+							value="#{messages.proceso_sgte_tarea}"
+							action="#{firmarResolucionHomolog622FC.nextTask()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"
+							rendered="#{!firmarResolucionHomolog622FC.hayObs}" />
+							
+						<h:commandButton id="tareasSFP"
+							value="#{messages.proceso_sgte_tarea}"
+							action="#{firmarResolucionHomolog622FC.nextTask2()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"
+							rendered="#{firmarResolucionHomolog622FC.hayObs}" />
+						
+						
+							<a:commandButton id="showResolucionButton" eventsQueue="default"
+								value="Cargar Datos Resolución" reRender="modalResolucion"
+								action="#{firmarResolucionHomolog622FC.prepararModal()}"
+								oncomplete="#{rich:component('modalResolucion')}.show()" />
+						<!-- disabled="#{!firmarResolucionHomolog622FC.existeResolucion}" -->
+						<a:commandButton id="uploadResolucionButton" eventsQueue="default"
+								value="Anexar Resolución" reRender="modalResolucion"
+								action="#{firmarResolucionHomolog622FC.anexar(firmarResolucionHomolog622FC.idConcursoPuestoAgr)}">
+								<f:param name="idConcurso" value="#{firmarResolucionHomolog622FC.idConcurso}"/>
+								
+						</a:commandButton>
+						<!-- disabled="#{firmarResolucionHomolog622FC.existeResolucion}" -->
+						
+						 
+						<s:button
+							view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml"
+							id="volver" propagation="none" value="#{messages.CU412_volver}">
+						</s:button>
+						
+							
+						</s:decorate>
+					</rich:panel>
+					
+				
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

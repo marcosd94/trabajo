@@ -1,0 +1,401 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<script>
+			document.getElementById('form:guardar').style.visibility = "hidden";
+		</script>
+
+
+		<h1>#{messages.CU255_title}</h1>
+
+		<rich:panel style="border:none;">
+			<rich:tabPanel switchType="client" id="tagGeneral">
+				<rich:tab label="PERFIL" id="tabF1">
+					<h:form id="form">
+					
+						<fieldset><legend>CPT</legend> <h:panelGrid>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_tipo_cpt}</ui:define>
+								<h:selectOneMenu id="cpt" style="width : 330px;"
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}"
+									value="#{funcionarioUtilFormController.idTipoCpt}">
+									<f:selectItems value="#{tipoCptsSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml"
+								rendered="#{!admBancoPerfilesFormController.vista and !admBancoPerfilesFormController.modoEditado}">
+								<ui:define name="label">#{messages.CU159_generalEspecifico}<span
+										class="required">* </span>
+								</ui:define>
+								<h:selectOneMenu id="modalidad" style="width :250px;"
+									rendered="#{!admBancoPerfilesFormController.vista and !admBancoPerfilesFormController.modoEditado}"
+									value="#{funcionarioUtilFormController.tipoEspGeneral}">
+									<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+										disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}"
+										value="#{enumAppHelper.tipoGeneralEspecifico}" />
+									<s:convertEnum />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml" id="cptDecorate">
+								<ui:define name="label">#{messages.gral_cpt}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="cpt"
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}"
+									rendered="#{!admBancoPerfilesFormController.vista and !admBancoPerfilesFormController.modoEditado}"
+									value="#{funcionarioUtilFormController.codigoCpt}" size="20">
+									<a:support event="onblur" eventsQueue="default"
+										reRender="denominacionCPT"
+										action="#{funcionarioUtilFormController.findCpt()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="denominacionCPT"
+									value="#{funcionarioUtilFormController.cpt.denominacion}"
+									size="50" disabled="true" />
+										
+									#{' '}
+									<a:commandButton id="searchCpt"
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}"
+									rendered="#{!admBancoPerfilesFormController.vista and !admBancoPerfilesFormController.modoEditado}"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{admBancoPerfilesFormController.getUrlToCPT()}">
+
+									<f:param name="from"
+										value="seleccion/homologacion/AdmBancoPerfilesEdit" />
+								</a:commandButton>
+
+								<span class="required"><h:message id="cptError"
+									for="denominacionCPT" /></span>
+							</s:decorate>
+						</h:panelGrid></fieldset>
+
+						<h:panelGrid>
+							<s:decorate template="/layout/display.xhtml"
+								id="denominacionDecorate">
+								<ui:define name="label">#{messages.CU255_denominacion}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="denominacion"
+									value="#{admBancoPerfilesFormController.homologacionPerfilMatriz.denominacion}"
+									size="70" 
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}" > 
+									
+									</h:inputText>
+
+								<span class="required"><h:message id="denominacionError"
+									for="denominacion" /></span>
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml"
+								id="objetivoDecorate">
+								<ui:define name="label">#{messages.CU255_objetivo}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputTextarea id="objetivo"
+									value="#{admBancoPerfilesFormController.homologacionPerfilMatriz.objetivo}"
+									rows="4" cols="59"
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}" />
+
+								<span class="required"><h:message id="objetivoError"
+									for="objetivo" /></span>
+							</s:decorate>
+
+							<s:decorate template="/layout/display.xhtml" id="misionDecorate">
+								<ui:define name="label">#{messages.CU255_mision}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputTextarea id="mision"
+									disabled="#{admBancoPerfilesFormController.vista or admBancoPerfilesFormController.modoEditado}"
+									value="#{admBancoPerfilesFormController.homologacionPerfilMatriz.mision}"
+									rows="4" cols="59" />
+								<span class="required"><h:message id="misionError"
+									for="mision" /></span>
+							</s:decorate>
+						</h:panelGrid>
+
+
+						<br />
+						<fieldset><legend>#{messages.CU255_principales_tareas_puesto}</legend>
+						<rich:dataTable id="tablaLink2" cellpadding="0" cellspacing="0"
+							width="600" border="0" var="record"
+							value="#{admBancoPerfilesFormController.listaDtoLink6}"
+							rowKeyVar="row">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="1" width="200px">
+										<h:outputText value="#{messages.Tab02_Contenido_Funcional}" />
+									</rich:column>
+									<rich:column colspan="1" width="350px">
+									</rich:column>
+
+									<rich:column colspan="1" width="100px">
+									</rich:column>
+
+									<rich:column colspan="1" width="100px">
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="50px">
+								<h:outputText value="#{record.contenidoFuncional.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detalle"
+								value="#{record.listaDetDescripContFuncional}"
+								rowKeyVar="subRow">
+								<rich:column>
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="#{messages.Tab02_Descripcion}" />
+									</f:facet>
+									<h:inputText value="#{detalle.descripcion}" size="80"
+										disabled="#{not empty plantaCargoDetFrom} or #{admBancoPerfilesFormController.vista}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+
+									<h:outputText value="#{detalle.descripcion}"
+										rendered="#{admBancoPerfilesFormController.vista}" />
+								</rich:column>
+
+								<rich:column width="50px;" style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="#{messages.Tab02_Activo}" />
+									</f:facet>
+									<h:selectBooleanCheckbox value="#{detalle.activo}"
+										disabled="#{not empty plantaCargoDetFrom}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+
+									<h:outputText value="#{detalle.activo ? 'SI' : 'NO'}"
+										rendered="#{admBancoPerfilesFormController.vista and not empty detalle.descripcion}" />
+								</rich:column>
+
+								<rich:column width="100px;" style="text-align: center;">
+									<f:facet name="header">
+										<a:commandButton value="+"
+											action="#{admBancoPerfilesFormController.agregarListaLink6(row)}"
+											reRender="tablaLink2,msg"
+											disabled="#{not empty plantaCargoDetFrom}"
+											rendered="#{!admBancoPerfilesFormController.vista}" />
+									</f:facet>
+
+									<a:commandButton value="-"
+										action="#{admBancoPerfilesFormController.eliminarListaLink6(row, subRow)}"
+										reRender="tablaLink2"
+										disabled="#{not empty plantaCargoDetFrom}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+								</rich:column>
+
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+
+
+						<br />
+						<fieldset><legend>#{messages.CU255_req_min_puesto}</legend>
+						<rich:dataTable id="tablaLink7" cellpadding="0" cellspacing="0"
+							width="700" border="0" var="record"
+							value="#{admBancoPerfilesFormController.listaDtoLink7}"
+							rowKeyVar="row">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column rowspan="1" width="200px">
+										<h:outputText value="Componente" />
+									</rich:column>
+
+									<rich:column colspan="1" width="350px">
+									</rich:column>
+
+									<rich:column colspan="1" width="100px">
+									</rich:column>
+									<rich:column colspan="1" width="100px">
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:column colspan="4" style="background-color:lightgrey;"
+								width="50px">
+								<h:outputText value="#{record.requisitoMinimoCpt.descripcion}" />
+							</rich:column>
+
+							<rich:subTable var="detalle1"
+								value="#{record.listaDetMinimosRequeridos}" rowKeyVar="subRow1">
+								<rich:column>
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="#{messages.Tab03_requerimientos}" />
+									</f:facet>
+									<h:inputText value="#{detalle1.minimosRequeridos}" size="80"
+										disabled="#{not empty plantaCargoDetFrom}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+
+									<h:outputText value="#{detalle1.minimosRequeridos}"
+										rendered="#{admBancoPerfilesFormController.vista}" />
+								</rich:column>
+
+								<rich:column width="50px;" style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="#{messages.Tab02_Activo}" />
+									</f:facet>
+
+									<h:selectBooleanCheckbox value="#{detalle1.activo}"
+										disabled="#{not empty plantaCargoDetFrom}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+
+									<h:outputText value="#{detalle1.activo ? 'SI' : 'NO'}"
+										rendered="#{admBancoPerfilesFormController.vista and not empty detalle1.minimosRequeridos}" />
+								</rich:column>
+
+								<rich:column width="100px;" style="text-align: center;">
+									<f:facet name="header">
+										<a:commandButton value="+"
+											action="#{admBancoPerfilesFormController.agregarListaMinimosReqLink7(row)}"
+											reRender="tablaLink7,msg03"
+											disabled="#{not empty plantaCargoDetFrom}"
+											rendered="#{!admBancoPerfilesFormController.vista}" />
+									</f:facet>
+
+									<a:commandButton value="-"
+										action="#{admBancoPerfilesFormController.eliminarListaMinimosReqLink7(row, subRow1)}"
+										reRender="tablaLink7"
+										disabled="#{not empty plantaCargoDetFrom}"
+										rendered="#{!admBancoPerfilesFormController.vista}" />
+								</rich:column>
+
+							</rich:subTable>
+						</rich:dataTable></fieldset>
+
+
+						<h:commandButton id="guardar" value="guardar"
+							style="visibility:hidden;"
+							action="#{admBancoPerfilesFormController.save()}" />
+
+						<h:panelGrid>
+							<s:decorate id="activo" template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_activo}</ui:define>
+								<h:selectBooleanCheckbox
+									value="#{admBancoPerfilesFormController.homologacionPerfilMatriz.activo}"
+									disabled="#{admBancoPerfilesFormController.vista}" />
+							</s:decorate>
+						</h:panelGrid>
+
+					</h:form>
+				</rich:tab>
+
+				<rich:tab label="MATRIZ" id="tabF2">
+					<a:outputPanel layout="block"
+						rendered="#{!admBancoPerfilesFormController.modoEditado}">
+						<a:include id="includeLinkCrear"
+							viewId="/seleccion/homologacion/MatrizRefConfCrear.xhtml">
+						</a:include>
+					</a:outputPanel>
+					<a:outputPanel layout="block"
+						rendered="#{admBancoPerfilesFormController.modoEditado and !admBancoPerfilesFormController.modoVer}">
+						<a:include id="includeLinkEditar"
+							viewId="/seleccion/homologacion/MatrizRefConfEditar.xhtml">
+						</a:include>
+					</a:outputPanel>
+					<a:outputPanel layout="block"
+						rendered="#{admBancoPerfilesFormController.modoVer}">
+						<a:include id="includeLinkVer"
+							viewId="/seleccion/homologacion/MatrizRefConf.xhtml">
+						</a:include>
+					</a:outputPanel>
+				</rich:tab>
+			</rich:tabPanel>
+		</rich:panel>
+
+
+
+		<br />
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+
+		<br />
+		<div style="clear: both"><h:outputText
+			value="#{messages.msg_obs_save}"
+			rendered="#{!homologacionPerfilMatrizHome.managed}"
+			styleClass="labelClass" /> <h:outputText
+			value="#{messages.msg_obs_update}"
+			rendered="#{homologacionPerfilMatrizHome.managed}"
+			styleClass="labelClass" /></div>
+
+		<br />
+
+
+		<div class="actionButtons"><h:commandButton id="save"
+			value="#{messages.msg_save}"
+			onclick="if(confirm('#{messages.msg_confirm_save}')){document.getElementById('form:guardar').click();}"
+			rendered="#{!homologacionPerfilMatrizHome.managed}" /> <h:commandButton
+			id="update" value="#{messages.msg_update}"
+			onclick="if(confirm('#{messages.msg_confirm_update}')){document.getElementById('form:guardar').click();}"
+			rendered="#{homologacionPerfilMatrizHome.managed and !admBancoPerfilesFormController.vista}" />
+
+		<s:button id="cancelEdit" value="#{messages.msg_done}"
+			propagation="none" includePageParams="false"
+			view="/seleccion/homologacion/AdmBancoPerfilesList.xhtml">
+			 
+			 
+
+		</s:button></div>
+
+
+
+
+
+
+		<div><h:panelGrid columns="2">
+			<s:decorate id="usuarioAlta"
+				rendered="#{homologacionPerfilMatrizHome.managed}"
+				template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText
+					value="#{homologacionPerfilMatrizHome.instance.usuAlta}" />
+			</s:decorate>
+
+			<s:decorate id="fechaAlta" template="/layout/display.xhtml"
+				rendered="#{homologacionPerfilMatrizHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText
+					value="#{homologacionPerfilMatrizHome.instance.fechaAlta}">
+					<s:convertDateTime type="date" dateStyle="short"
+						pattern="dd/MM/yyyy hh:mm:ss" />
+				</h:outputText>
+			</s:decorate>
+
+			<s:decorate id="usuarioModi" template="/layout/display.xhtml"
+				rendered="#{homologacionPerfilMatrizHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText
+					value="#{homologacionPerfilMatrizHome.instance.usuMod}" />
+			</s:decorate>
+
+			<s:decorate id="fechaModi" template="/layout/display.xhtml"
+				rendered="#{homologacionPerfilMatrizHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText
+					value="#{homologacionPerfilMatrizHome.instance.fechaMod}">
+					<s:convertDateTime type="date" dateStyle="short"
+						pattern="dd/MM/yyyy hh:mm:ss" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid></div>
+
+
+	</ui:define>
+
+</ui:composition>

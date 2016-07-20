@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubRptSeguridadUC199" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPlantaCargoDet" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT cs.descripcion AS condicion_seguridad,
+    dcs.puntaje_cond_segur AS puntaje,
+    dcs.justificacion AS justificacion,
+    dcs.ajustes AS ajustes
+FROM planificacion.det_condicion_segur dcs
+    INNER JOIN planificacion.condicion_segur cs
+        ON dcs.id_condicion_segur = cs.id_condicion_segur
+    INNER JOIN planificacion.planta_cargo_det pcd
+        ON dcs.id_planta_cargo_det = pcd.id_planta_cargo_det
+WHERE pcd.id_planta_cargo_det = $P{idPlantaCargoDet}
+    AND lower(dcs.tipo) = 'puesto'
+    AND dcs.activo = true]]>
+	</queryString>
+	<field name="condicion_seguridad" class="java.lang.String"/>
+	<field name="puntaje" class="java.lang.Float"/>
+	<field name="justificacion" class="java.lang.String"/>
+	<field name="ajustes" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="3" y="7" width="335" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONDICIONES DE SEGURIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="23" y="27" width="231" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición de Trabajo]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="23" y="47" width="518" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="257" y="27" width="64" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Puntaje]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="324" y="27" width="103" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Justificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="430" y="27" width="111" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ajustes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="23" y="0" width="231" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{condicion_seguridad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="257" y="0" width="64" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntaje}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="324" y="0" width="103" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{justificacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="430" y="0" width="111" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ajustes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

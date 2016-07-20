@@ -1,0 +1,162 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		
+
+		<h1>#{messages.EmprTercerizada_title}</h1>
+		<rich:panel>
+			<f:facet name="header">#{messages.msg_list_view} #{messages.EmprTercerizada_title}</f:facet>
+
+			<s:decorate id="nombreField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_nombre}</ui:define>
+				<h:inputText id="nombre" required="true" size="60" maxlength="150"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.nombre}"
+					disabled="true">
+				</h:inputText>
+			</s:decorate>
+
+
+			<s:decorate id="direccionField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_direccion}</ui:define>
+				<h:inputTextarea id="direccion" cols="51" rows="1" required="true"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.direccion}"
+					disabled="true" />
+			</s:decorate>
+
+
+			<s:decorate id="telefonoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_telefono}</ui:define>
+				<h:inputText id="telefono" required="true" size="20" maxlength="100"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.telefono}"
+					disabled="true">
+				</h:inputText>
+			</s:decorate>
+
+
+			<s:decorate id="rucField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_ruc}</ui:define>
+				<h:inputText id="ruc" required="true" size="20" maxlength="30"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.ruc}"
+					disabled="true">
+				</h:inputText>
+			</s:decorate>
+
+
+			<s:decorate id="EMailField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_eMail}</ui:define>
+				<h:inputText id="EMail" size="60" maxlength="50"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.EMail}"
+					disabled="true">
+				</h:inputText>
+			</s:decorate>
+
+			<a:region>
+				<s:decorate id="paisField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.EmprTercerizada_pais}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="pais"
+						value="#{empresaTercerizadaFormController.codPais}"
+						style="width:300px" disabled="true">
+						<f:selectItems value="#{paissSelectItems}" />
+						<a:support event="onchange"
+							action="#{empresaTercerizadaFormController.updateDepartamento()}"
+							reRender="departamentoField" focus="departamento" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+
+			<a:region>
+				<s:decorate id="departamentoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.EmprTercerizada_departamento}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="departamento"
+						value="#{empresaTercerizadaFormController.codDepartamento}"
+						style="width:300px" disabled="true">
+						<f:selectItems
+							value="#{empresaTercerizadaFormController.departamentoSelectItems}" />
+						<a:support event="onchange"
+							action="#{empresaTercerizadaFormController.updateCiudad()}"
+							reRender="ciudadField" focus="ciudad" />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<s:decorate id="ciudadField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_ciudad}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="ciudad"
+					value="#{empresaTercerizadaFormController.codCiudad}"
+					style="width:300px" disabled="true">
+					<f:selectItems
+						value="#{empresaTercerizadaFormController.ciudadSelectItems}" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate id="activoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.EmprTercerizada_activo}</ui:define>
+				<h:selectBooleanCheckbox id="activo" required="true"
+					value="#{empresaTercerizadaFormController.empresaTercerizada.activo}"
+					disabled="true" />
+			</s:decorate>
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<br />
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}"
+				rendered="#{!emprTercerizadaHome.managed}" styleClass="labelClass" />
+			<h:outputText value="#{messages.msg_obs_update}"
+				rendered="#{emprTercerizadaHome.managed}" styleClass="labelClass" />
+			</div>
+		</rich:panel>
+
+		<div class="actionButtons"><s:button
+			view="/#{empty emprTercerizadaFrom ? 'seleccion/empresasTercerizadas/EmprTercerizadaList' : emprTercerizadaFrom}.xhtml"
+			id="done" value="#{messages.msg_done}" /></div>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{emprTercerizadaHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{emprTercerizadaHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{emprTercerizadaHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{emprTercerizadaHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{emprTercerizadaHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{emprTercerizadaHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{emprTercerizadaHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{emprTercerizadaHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

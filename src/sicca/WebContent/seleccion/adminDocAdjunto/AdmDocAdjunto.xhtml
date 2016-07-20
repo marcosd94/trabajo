@@ -1,0 +1,238 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU289_titulo}</h1>
+		<h:form id="docsSearch" prependId="false"
+			enctype="multipart/form-data" styleClass="edit">
+
+			<rich:panel label="#{messages['CU289_adjuntar_doc']}"
+				rendered="#{isEdit == 'true'}" switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_nombre_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nombre"
+							value="#{admDocAdjuntoFormController.documentos.nombreLogDoc}"
+							size="60" style=" width : 250px;" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml" rendered="#{!admDocAdjuntoFormController.ocultandoReglamento()}">
+						<ui:define name="label">#{messages.CU289_nr_doc}
+							<span class="required"> #{admDocAdjuntoFormController.renderizandoSpan()}</span>
+						</ui:define>
+						<h:inputText id="nroDoc" onkeypress="return soloNumeros(event);"
+							rendered="#{admDocAdjuntoFormController.mostrarDoc}"
+							value="#{admDocAdjuntoFormController.documentos.nroDocumento}"
+							style=" width : 155px;" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml" rendered="#{!admDocAdjuntoFormController.ocultandoReglamento()}">
+						<ui:define name="label">#{messages.CU289_anio_doc}
+							<span class="required"> #{admDocAdjuntoFormController.renderizandoSpan()}</span>
+						</ui:define>
+						<h:inputText id="anioDoc" onkeypress="return soloNumeros(event);"
+							rendered="#{admDocAdjuntoFormController.mostrarDoc}"
+							value="#{admDocAdjuntoFormController.documentos.anhoDocumento}"
+							style=" width : 155px;" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="datosGral"
+							value="#{admDocAdjuntoFormController.idFuncionDatosEsp}"
+							style="width:250px">
+							<f:selectItems
+								value="#{admDocAdjuntoFormController.getDatosEspecificosFuncionSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputTextarea id="descripcion"
+							value="#{admDocAdjuntoFormController.documentos.descripcion}"
+							size="60" style=" width : 411px;" />
+					</s:decorate>
+
+
+
+				</h:panelGrid>
+				<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto<span class="required">*</span>
+					</ui:define>
+					<s:fileUpload size="60"
+						contentType="#{admDocAdjuntoFormController.contentType}"
+						data="#{admDocAdjuntoFormController.uploadedFile}"
+						fileName="#{admDocAdjuntoFormController.fileName}"
+						style=" width : 382px;" />
+				</s:decorate>
+				<div style="clear: both">
+					<span class="required">*</span> #{messages.msg_required_fields}
+				</div>
+				<div style="clear: both">
+					<h:outputText value="#{messages.CU289_obd_add2}"
+						rendered="#{isEdit == 'true'}" styleClass="labelClass" />
+				</div>
+			</rich:panel>
+
+			<rich:panel style=" width : 820px;" rendered="#{!admDocAdjuntoFormController.ocultandoPanelGrupo()}">
+							<f:facet name="header">Grupos - #{messages.grupos_incluidos}</f:facet>
+							<div class="results" id="concursoPuestoAgrList3">
+								<h:outputText value="#{messages.msg_list_search_no_results}"
+									rendered="#{empty admDocAdjuntoFormController.listaGruposParaFirmar}" />
+								<rich:dataTable id="concursoPuestoAgrList2" var="gruposParaFirmar"
+									rowKeyVar="_indice"
+									value="#{admDocAdjuntoFormController.listaGruposParaFirmar}"
+									rendered="#{not empty admDocAdjuntoFormController.listaGruposParaFirmar }"
+									style=" width : 800px;">
+			
+									<rich:column>
+										<f:facet name="header">Nombre</f:facet>
+										<h:outputText value="#{gruposParaFirmar.descripcionGrupo}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">Incluir</f:facet>
+			
+										<h:selectBooleanCheckbox id="seleccionado"
+											value="#{gruposParaFirmar.seleccionado}"
+											disabled="false" reRender="search">
+											<a:support event="onclick" reRender="search"
+												action="#{admDocAdjuntoFormController.changeSeleccionado(_indice)}"/>
+										</h:selectBooleanCheckbox>
+									</rich:column>
+									<rich:column styleClass="action">
+										<f:facet name="header">Acción</f:facet>
+										<h:commandLink id="print" value="#{messages['CU53_imprimir']}"
+											action="#{homologPerfilMatrizDetListFormController.imprimirPerfilMatrizDelGrupo(gruposParaFirmar.idConcursoPuestoAgr)}" />
+										<!--#{' '}
+															<s:link value="Ver Observaciones"
+															view="/seleccion/firmarResolucionHomologacion/ObservacionesRespuestasFirmaRes.xhtml">
+															<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{gruposParaFirmar.idConcursoPuestoAgr}"/>
+															<f:param name="fromAct"  value="#{firmarResolucionAdjudicacionFormController.fromActividad}"/>
+															</s:link>-->
+									</rich:column>
+			
+									
+								</rich:dataTable>
+							</div>
+			
+						</rich:panel>
+
+			<div class="actionButtons">
+				<h:commandButton id="search" propagation="join"
+					rendered="#{isEdit == 'true'}"
+					value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+					reRender="panelResultado,panelParametro"
+					action="#{admDocAdjuntoFormController.addDocs()}">
+					<f:param name="firstResult" value="0" />
+				</h:commandButton>
+			</div>
+
+		</h:form>
+		<h:form>
+			<rich:panel id="panelResultado">
+				<f:facet name="header">Documentos Adjuntos</f:facet>
+				<div class="results" id="datosEspecificosList">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty admDocAdjuntoFormController.documentoDTOList}" />
+
+					<rich:dataTable id="documentoList" var="_documentos"
+						rowKeyVar="_index"
+						value="#{admDocAdjuntoFormController.documentoDTOList}">
+						<h:column rendered="#{!admDocAdjuntoFormController.ocultandoReglamento()}">
+							<f:facet name="header">Nº	</f:facet>
+							<h:outputText
+								value="#{_documentos.nroDocumento}-#{_documentos.anhoDocumento}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU289_doc}	</f:facet>
+							<h:outputText value="#{_documentos.nombreLogDoc}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU289_descrip}	</f:facet>
+							<h:outputText value="#{_documentos.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU289_tipo_doc}	</f:facet>
+							<h:outputText value="#{_documentos.datosEspecificos.descripcion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{messages.CU289_fec_alta}	</f:facet>
+							<h:outputText value="#{_documentos.fechaAlta}" />
+						</h:column>
+
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<h:commandLink value="Descargar" target="_blank"
+								action="#{admDocAdjuntoFormController.abrirDocumento(_index)}" />
+          #{' '}
+           <a:commandLink id="delDet" value="Eliminar"
+								rendered="#{isEdit == 'true'}"
+								reRender="documentoList,panelResultado" eventsQueue="default"
+								action="#{admDocAdjuntoFormController.eliminar(_index)}" />
+
+
+
+
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</rich:panel>
+			<div class="tableControl">
+				<s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					rendered="#{documentosList.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link>
+				<s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					rendered="#{documentosList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{documentosList.previousFirstResult}" />
+				</s:link>
+				<s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					rendered="#{documentosList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{documentosList.nextFirstResult}" />
+				</s:link>
+				<s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					rendered="#{documentosList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{documentosList.lastFirstResult}" />
+				</s:link>
+			</div>
+
+
+			<a:commandButton onclick="history.back();" value="Vover"
+				rendered="false" />
+			<s:button value="#{messages.CU412_volver}" propagation="join"
+				view="#{admDocAdjuntoFormController.from}">
+				<f:param name="isEdit"
+						value="#{admDocAdjuntoFormController.isEdit}" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+						value="#{admDocAdjuntoFormController.idConcursoPuestoAgr}" />
+				<f:param name="plantaCargoDetFrom"
+						value="#{admDocAdjuntoFormController.plantaCargoDetFrom}" />
+				
+			</s:button>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

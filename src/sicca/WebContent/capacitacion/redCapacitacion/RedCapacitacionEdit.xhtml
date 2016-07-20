@@ -1,0 +1,260 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="redCapacitacion" styleClass="edit">
+<h1>#{messages.CU489_titulo_edit}</h1>
+        <rich:panel id="panelPrincipal">
+            <f:facet name="header">#{redCapacitacionEditFC.habUpdate ? messages.msg_edit : 'Cargar'} Integrante</f:facet>
+
+
+				<h:panelGrid>
+					<a:region>
+						<s:decorate id="paisExpField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU484_pais_exp}<span class="required">*</span></ui:define>
+							<h:selectOneMenu id="idPaisExped" 
+								disabled="#{redCapacitacionEditFC.habUpdate}"
+								value="#{redCapacitacionEditFC.idPaisExp}" style="width:150px">
+								<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+								 	<a:support event="onchange" eventsQueue="default"
+									action="#{redCapacitacionEditFC.limpiarDatosPersona()}" reRender="panelPrincipal" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<a:status id="idSatatusPersonSearch"
+							onstart="Richfaces.showModalPanel('espera')"
+							onstop="#{rich:component('espera')}.hide()" />
+					</a:region>
+				</h:panelGrid>
+	<h:panelGrid columns="3">
+		<a:region >
+		<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px"  disabled="#{redCapacitacionEditFC.habUpdate}"
+										value="#{redCapacitacionEditFC.docIdentidad}">
+										<a:support event="onblur"  eventsQueue="default"
+											action="#{redCapacitacionEditFC.buscarPersona()}"
+											reRender="panelPrincipal"
+											focus="telefono" />
+									</h:inputText>
+			</s:decorate>
+		</a:region>
+			<a:commandButton id="searchper" eventsQueue="default"
+						image="/img/Buscar.png"  rendered="#{!redCapacitacionEditFC.habUpdate}"
+						action="#{redCapacitacionEditFC.toFindPersonaList()}" />
+					<a:commandButton id="createPersona"  rendered="#{redCapacitacionEditFC.habBtnAddPersons and !redCapacitacionEditFC.habUpdate}"
+							eventsQueue="default" value="Agregar Persona"
+						action="#{redCapacitacionEditFC.toFindPersona()}" />
+				
+		</h:panelGrid>
+	<h:panelGrid columns="1">
+
+           <a:outputPanel ajaxRendered="true" id="outNombre">
+					<s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU489_nom_ape}</ui:define>
+						<h:inputText id="usuMod" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{redCapacitacionEditFC.persona.nombreCompleto}" />
+					</s:decorate>
+		</a:outputPanel>
+		<a:region >
+		  <s:decorate id="telefonoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.gral_telefonos}</ui:define>
+                <h:inputText id="telefono"
+                          size="50"
+                      maxlength="50"
+                          value="#{redCapacitacionEditFC.telefono}">
+                          	<a:support event="onchange" eventsQueue="default"
+									reRender="telefonoField" />
+                </h:inputText>
+            </s:decorate>
+          </a:region>
+
+		<a:region >
+            <s:decorate id="emailField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU489_email}<span class="required">*</span></ui:define>
+                <h:inputText id="email"
+                       size="50"
+                      maxlength="50"
+                          value="#{redCapacitacionEditFC.email}">
+                          	<a:support event="onchange" eventsQueue="default"
+									reRender="emailField" />
+                </h:inputText>
+            </s:decorate>
+         </a:region>
+            </h:panelGrid>
+<h:panelGrid columns="1">
+           		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('capacitacion/redCapacitacion/RedCapacitacionEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('capacitacion/redCapacitacion/RedCapacitacionEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('capacitacion/redCapacitacion/RedCapacitacionEdit')}" />
+						</s:decorate>
+					</a:region>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+				<a:region>
+            <s:decorate id="cargoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU489_cargo}<span class="required">*</span></ui:define>
+                <h:inputText id="cargo"
+                             size="100"
+                      maxlength="150"
+                          value="#{redCapacitacionEditFC.redCapacitacion.cargo}">
+                           	<a:support event="onchange" eventsQueue="default"
+									reRender="cargoField" />
+                </h:inputText>
+            </s:decorate>
+            </a:region>
+ 			<s:decorate id="activoField" template="/layout/edit.xhtml" rendered="#{redCapacitacionEditFC.habUpdate}">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" 
+                                      value="#{redCapacitacionEditFC.redCapacitacion.activo}"/>
+            </s:decorate>
+
+
+          </h:panelGrid>
+
+
+         
+
+             <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!redCapacitacionEditFC.habUpdate}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{redCapacitacionEditFC.habUpdate}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+             <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{redCapacitacionEditFC.save()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       rendered="#{!redCapacitacionEditFC.habUpdate}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{redCapacitacionEditFC.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{redCapacitacionEditFC.habUpdate}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/capacitacion/redCapacitacion/RedCapacitacionList.xhtml"
+                rendered="#{redCapacitacionEditFC.habUpdate}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty redCapacitacionFrom ? 'capacitacion/redCapacitacion/RedCapacitacionList' : redCapacitacionFrom}.xhtml"
+                rendered="#{!redCapacitacionEditFC.habUpdate}"/>
+                
+
+        </div>
+    </h:form>
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{redCapacitacionEditFC.habUpdate}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{redCapacitacionEditFC.redCapacitacion.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{redCapacitacionEditFC.habUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{redCapacitacionEditFC.redCapacitacion.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{redCapacitacionEditFC.habUpdate}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{redCapacitacionEditFC.redCapacitacion.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{redCapacitacionEditFC.habUpdate}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{redCapacitacionEditFC.redCapacitacion.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,280 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+				<h1>#{messages.CU587_titulo_edit}</h1>
+
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+				<div class="results" id="tblList"
+								style="overflow: scroll; width: 400; HEIGHT: 230px">
+								<h:panelGrid>
+								<rich:dataTable
+								id="itemsDoc" var="_docs" 
+								value="#{ingresoPorRenovacionContratoFC.listaDocumentos}"
+								rowKeyVar="rowNrDoc">
+								<rich:column>
+									<f:facet name="header">
+														Nº
+													</f:facet>
+									<h:outputText value="#{rowNrDoc + 1}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.nroDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+									<h:outputText value="#{_docs.anhoDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.nombreFisicoDoc}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.fechaDoc}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Firma Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.fechaFirmaContrato}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Fin Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.fechaFinContrato}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Tipo de Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Acciones
+													</f:facet>
+									<h:commandLink id="down" value="Descargar"
+										
+										action="#{ingresoPorRenovacionContratoFC.descargarDocBD(rowNrDoc)}" />
+								</rich:column>
+
+							</rich:dataTable>
+							</h:panelGrid>
+							</div>
+			</rich:panel>
+
+			<rich:panel id="panelPersonas">
+				<f:facet name="header">#{messages.CU541_persona}</f:facet>
+				<a:region>
+					<h:panelGrid columns="3">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU541_pais}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText
+								value="#{ingresoPorRenovacionContratoFC.personaView.paisByIdPaisExpedicionDoc.descripcion}"
+								disabled="true" size="20" />
+						</s:decorate>
+
+						<s:decorate id="documentoIdentidadField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU165_ci}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="documentoIdentidad" disabled="true"
+								value="#{ingresoPorRenovacionContratoFC.docIdentidad}"
+								styleClass="numeric" style="width:100px" size="10" />
+						</s:decorate>
+						<s:decorate id="buttonField" template="/layout/edit.xhtml">
+
+							<a:commandButton id="searchper" eventsQueue="default"
+								value="#{messages.CU541_ver_datos_persona}"
+								rendered="#{ingresoPorRenovacionContratoFC.personaView.idPersona != null}"
+								action="#{ingresoPorRenovacionContratoFC.toFindPersonaToView()}" />
+						</s:decorate>
+						<s:decorate id="nomField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+							<h:inputText id="nombres" size="40" disabled="true"
+								maxlength="50" required="true"
+								value="#{ingresoPorRenovacionContratoFC.personaView.nombres}" />
+						</s:decorate>
+
+						<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+							<h:inputText id="apellido" size="40" disabled="true"
+								maxlength="50"
+								value="#{ingresoPorRenovacionContratoFC.personaView.apellidos}">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid>
+				</a:region>
+			</rich:panel>
+
+			<rich:panel id="panelPuestoCat">
+				<f:facet name="header">#{messages.CU541_puesto_categoria_remu}</f:facet>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigoField">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigoField">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigoField">
+								<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+									onkeypress="return soloNumeros(event);">
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+						</a:region>
+
+						<s:decorate template="/layout/display.xhtml" id="uoCodigoField">
+							<ui:define name="label">UO
+										 
+									</ui:define>
+							<h:inputText id="uoCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml" id="puestoField">
+							<ui:define name="label">Puesto<span class="required">*</span>
+
+							</ui:define>
+							<h:inputText id="puesto" styleClass="numeric" size="10"
+								value="#{ingresoPorRenovacionContratoFC.obtenerCodigoPuesto()}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{ingresoPorRenovacionContratoFC.plantaCargoDetView.descripcion}" />
+									#{' '}
+	                	</s:decorate>
+
+					</h:panelGrid>
+					<rich:panel id="conceptoPagosPaneles">
+						
+
+							<div class="results" id="tbldet2List"
+								style="overflow: scroll; width: 400; HEIGHT: 230px">
+								<h:panelGrid>
+								<rich:dataTable
+								id="itemsList2" var="_pagos" 
+								value="#{ingresoPorRenovacionContratoFC.empleadoConceptoPagos}"
+								rowKeyVar="rowNr2">
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+									<h:outputText value="#{_pagos.objCodigo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+									<h:outputText value="#{_pagos.categoria}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+									<h:outputText value="#{_pagos.monto}" />
+								</rich:column>
+
+							</rich:dataTable>
+							</h:panelGrid>
+							</div>
+
+						
+					</rich:panel>
+
+
+				</h:panelGrid>
+
+
+
+			</rich:panel>
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			
+			<div ><s:button id="cancelEdit"
+				value="Volver" propagation="none"
+				view="/seleccion/ingresoDirecto/porRenovacionContrato/RenovacionContratoList.xhtml" />
+
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU580_AnalisisMatrizDesempIndivi" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
+	<subDataset name="grafico">
+		<parameter name="id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="idSujeto" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DISTINCT
+    GE.GRUPO,
+    PER.NOMBRES || ' '|| PER.APELLIDOS AS FUNCIONARIO,
+    OEE.DENOMINACION_UNIDAD AS OEE,
+    SNE.NEN_CODIGO                                              AS NEN_COD,
+    SNE.NEN_NOMBRE                                              AS NEN_NOM,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO                 AS ENT_COD,
+    SIN_ENTIDAD.ENT_NOMBRE                                      AS ENT_NOMBRE,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN AS ORDEN,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN as UO_DET,
+    E.TITULO,
+    E.FECHA_EVAL_DESDE,
+    E.FECHA_EVAL_HASTA,
+    PUESTO.DESCRIPCION as puesto,
+    GS.PUNTAJE_PERCEPCION AS PuntajePercepción,
+    GS.PUNTAJE_PDEC AS PuntajePdec,
+    GS.PUNTAJE_FINAL AS PuntajeFinal
+FROM
+EVAL_DESEMPENO.GRUPO_METODOLOGIA GM
+JOIN EVAL_DESEMPENO.GRUPOS_EVALUACION GE
+ON
+    GE.ID_GRUPOS_EVALUACION = GM.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.GRUPOS_SUJETOS GS
+ON
+    GS.ID_GRUPOS_EVALUACION = GE.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.SUJETOS S
+ON
+    S.ID_SUJETOS = GS.ID_SUJETOS
+JOIN GENERAL.EMPLEADO_PUESTO EMP
+ON
+    EMP.ID_EMPLEADO_PUESTO = S.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON
+    PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PER
+ON
+    PER.ID_PERSONA = EMP.ID_PERSONA
+JOIN EVAL_DESEMPENO.EVALUACION_DESEMPENO E
+ON
+    E.ID_EVALUACION_DESEMPENO = GE.ID_EVALUACION_DESEMPENO
+JOIN SELECCION.DATOS_ESPECIFICOS DE
+ON
+    DE.ID_DATOS_ESPECIFICOS = GM.ID_DATOS_ESPECIF_METOD
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+    E.ID_CONFIGURACION_UO_CAB = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON
+    ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD
+ON
+    SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+JOIN SINARH.SIN_NIVEL_ENTIDAD SNE
+ON
+    (
+        SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE
+    AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO
+    )
+WHERE
+    E.ID_EVALUACION_DESEMPENO = $P{id}
+    And S.ID_SUJETOS = $P{idSujeto}
+ORDER BY
+    GE.GRUPO,
+    PER.NOMBRES || ' '|| PER.APELLIDOS]]>
+		</queryString>
+		<field name="grupo" class="java.lang.String"/>
+		<field name="funcionario" class="java.lang.String"/>
+		<field name="oee" class="java.lang.String"/>
+		<field name="nen_cod" class="java.math.BigDecimal"/>
+		<field name="nen_nom" class="java.lang.String"/>
+		<field name="ent_cod" class="java.lang.String"/>
+		<field name="ent_nombre" class="java.lang.String"/>
+		<field name="orden" class="java.lang.String"/>
+		<field name="uo_det" class="java.lang.String"/>
+		<field name="titulo" class="java.lang.String"/>
+		<field name="fecha_eval_desde" class="java.sql.Timestamp"/>
+		<field name="fecha_eval_hasta" class="java.sql.Timestamp"/>
+		<field name="puesto" class="java.lang.String"/>
+		<field name="puntajepercepción" class="java.lang.Float"/>
+		<field name="puntajepdec" class="java.lang.Float"/>
+		<field name="puntajefinal" class="java.lang.Float"/>
+	</subDataset>
+	<parameter name="fecha_desde" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="fecha_hasta" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Werner\\Desktop\\SICCA_Eval_Dese\\trunk\\src\\sicca\\WebContent\\img"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\work\\sicca\\03.implementacion\\sistema integrado\\sicca\\WebContent\\reports\\jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["user"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="oee" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="path_image" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\tmp\\organigrama6.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="oee_usuario" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="nivel" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="entidad" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="idSujeto" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+    GE.GRUPO,
+    PER.NOMBRES || ' '|| PER.APELLIDOS AS FUNCIONARIO,
+    OEE.DENOMINACION_UNIDAD AS OEE,
+    SNE.NEN_CODIGO                                              AS NEN_COD,
+    SNE.NEN_NOMBRE                                              AS NEN_NOM,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO                 AS ENT_COD,
+    SIN_ENTIDAD.ENT_NOMBRE                                      AS ENT_NOMBRE,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN AS ORDEN,
+    SNE.NEN_CODIGO||'.'||SIN_ENTIDAD.ENT_CODIGO||'.'||OEE.ORDEN as UO_DET,
+    E.TITULO,
+    E.FECHA_EVAL_DESDE,
+    E.FECHA_EVAL_HASTA,
+    PUESTO.DESCRIPCION as puesto,
+    GS.PUNTAJE_PERCEPCION AS PuntajePercepción,
+    GS.PUNTAJE_PDEC AS PuntajePdec,
+    GS.PUNTAJE_FINAL AS PuntajeFinal
+FROM
+EVAL_DESEMPENO.GRUPO_METODOLOGIA GM
+JOIN EVAL_DESEMPENO.GRUPOS_EVALUACION GE
+ON
+    GE.ID_GRUPOS_EVALUACION = GM.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.GRUPOS_SUJETOS GS
+ON
+    GS.ID_GRUPOS_EVALUACION = GE.ID_GRUPOS_EVALUACION
+JOIN EVAL_DESEMPENO.SUJETOS S
+ON
+    S.ID_SUJETOS = GS.ID_SUJETOS
+JOIN GENERAL.EMPLEADO_PUESTO EMP
+ON
+    EMP.ID_EMPLEADO_PUESTO = S.ID_EMPLEADO_PUESTO
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO
+ON
+    PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA PER
+ON
+    PER.ID_PERSONA = EMP.ID_PERSONA
+JOIN EVAL_DESEMPENO.EVALUACION_DESEMPENO E
+ON
+    E.ID_EVALUACION_DESEMPENO = GE.ID_EVALUACION_DESEMPENO
+JOIN SELECCION.DATOS_ESPECIFICOS DE
+ON
+    DE.ID_DATOS_ESPECIFICOS = GM.ID_DATOS_ESPECIF_METOD
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE
+ON
+    E.ID_CONFIGURACION_UO_CAB = OEE.ID_CONFIGURACION_UO
+JOIN PLANIFICACION.ENTIDAD ENTIDAD
+ON
+    ENTIDAD.ID_ENTIDAD= OEE.ID_ENTIDAD
+JOIN SINARH.SIN_ENTIDAD SIN_ENTIDAD
+ON
+    SIN_ENTIDAD.ID_SIN_ENTIDAD=ENTIDAD.ID_SIN_ENTIDAD
+JOIN SINARH.SIN_NIVEL_ENTIDAD SNE
+ON
+    (
+        SIN_ENTIDAD.ANI_ANIOPRE = SNE.ANI_ANIOPRE
+    AND SIN_ENTIDAD.NEN_CODIGO = SNE.NEN_CODIGO
+    )
+WHERE
+    E.ID_EVALUACION_DESEMPENO = $P{id}
+    And S.ID_SUJETOS = $P{idSujeto}
+ORDER BY
+    GE.GRUPO,
+    PER.NOMBRES || ' '|| PER.APELLIDOS]]>
+	</queryString>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="funcionario" class="java.lang.String"/>
+	<field name="oee" class="java.lang.String"/>
+	<field name="nen_cod" class="java.math.BigDecimal"/>
+	<field name="nen_nom" class="java.lang.String"/>
+	<field name="ent_cod" class="java.lang.String"/>
+	<field name="ent_nombre" class="java.lang.String"/>
+	<field name="orden" class="java.lang.String"/>
+	<field name="uo_det" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="fecha_eval_desde" class="java.sql.Timestamp"/>
+	<field name="fecha_eval_hasta" class="java.sql.Timestamp"/>
+	<field name="puesto" class="java.lang.String"/>
+	<field name="puntajepercepción" class="java.lang.Float"/>
+	<field name="puntajepdec" class="java.lang.Float"/>
+	<field name="puntajefinal" class="java.lang.Float"/>
+	<group name="oee">
+		<groupExpression><![CDATA[$F{orden}]]></groupExpression>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="uo">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="grupo_plantilla">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band height="562">
+				<bubbleChart>
+					<chart isShowLegend="false" renderType="draw" theme="default">
+						<reportElement stretchType="RelativeToBandHeight" x="85" y="57" width="395" height="373"/>
+						<box rightPadding="0">
+							<pen lineStyle="Double"/>
+							<topPen lineStyle="Double" lineColor="#00FFFF"/>
+							<leftPen lineStyle="Double"/>
+							<bottomPen lineStyle="Double" lineColor="#00FFFF"/>
+							<rightPen lineStyle="Double"/>
+						</box>
+						<chartTitle position="Top"/>
+						<chartSubtitle/>
+						<chartLegend position="Top"/>
+					</chart>
+					<xyzDataset>
+						<dataset>
+							<datasetRun subDataset="grafico">
+								<datasetParameter name="id">
+									<datasetParameterExpression><![CDATA[$P{id}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="idSujeto">
+									<datasetParameterExpression><![CDATA[$P{idSujeto}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<xyzSeries>
+							<seriesExpression><![CDATA[$F{funcionario}+"\n PDEC: "+$F{puntajepdec}+" Percepción: "+$F{puntajepercepción}+
+" Final: "+$F{puntajefinal}]]></seriesExpression>
+							<xValueExpression><![CDATA[$F{puntajepercepción}]]></xValueExpression>
+							<yValueExpression><![CDATA[$F{puntajepdec}]]></yValueExpression>
+							<zValueExpression><![CDATA[2.5]]></zValueExpression>
+							<itemHyperlink hyperlinkType="Reference" hyperlinkTarget="Top">
+								<hyperlinkReferenceExpression><![CDATA[$F{funcionario}+" "+$F{puntajefinal}+"%"]]></hyperlinkReferenceExpression>
+								<hyperlinkTooltipExpression><![CDATA[$F{funcionario}+" "+$F{puntajefinal}+"%"]]></hyperlinkTooltipExpression>
+								<hyperlinkParameter name="fun">
+									<hyperlinkParameterExpression><![CDATA[$F{funcionario}+" "+$F{puntajefinal}+"%"]]></hyperlinkParameterExpression>
+								</hyperlinkParameter>
+							</itemHyperlink>
+						</xyzSeries>
+					</xyzDataset>
+					<bubblePlot scaleType="DomainAxis">
+						<plot backgroundAlpha="1.0" foregroundAlpha="1.0"/>
+						<xAxisLabelExpression><![CDATA["Percepción"]]></xAxisLabelExpression>
+						<xAxisFormat>
+							<axisFormat axisLineColor="#FFFFFF">
+								<labelFont>
+									<font isBold="true" isItalic="true"/>
+								</labelFont>
+								<tickLabelFont>
+									<font isBold="true" isItalic="true"/>
+								</tickLabelFont>
+							</axisFormat>
+						</xAxisFormat>
+						<yAxisLabelExpression><![CDATA["PDEC"]]></yAxisLabelExpression>
+						<yAxisFormat>
+							<axisFormat axisLineColor="#FFFFFF">
+								<labelFont>
+									<font isBold="true" isItalic="true"/>
+								</labelFont>
+								<tickLabelFont>
+									<font isBold="true" isItalic="true"/>
+								</tickLabelFont>
+							</axisFormat>
+						</yAxisFormat>
+						<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+						<domainAxisMaxValueExpression><![CDATA[100]]></domainAxisMaxValueExpression>
+						<rangeAxisMinValueExpression><![CDATA[0]]></rangeAxisMinValueExpression>
+						<rangeAxisMaxValueExpression><![CDATA[100]]></rangeAxisMaxValueExpression>
+					</bubblePlot>
+				</bubbleChart>
+				<image>
+					<reportElement x="40" y="101" width="44" height="261"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{path_logo}+"/flechaY.jpg"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement x="167" y="445" width="279" height="52"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{path_logo}+"/flechaX.jpg"]]></imageExpression>
+				</image>
+				<line>
+					<reportElement x="135" y="59" width="337" height="332" forecolor="#CCCC00"/>
+				</line>
+				<line>
+					<reportElement x="136" y="225" width="169" height="166" forecolor="#FF6600"/>
+				</line>
+				<line>
+					<reportElement x="305" y="60" width="167" height="165" forecolor="#33CC00"/>
+				</line>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" x="45" y="24" width="115" height="28"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Requiere revisarse
+    la Evaluación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" x="444" y="24" width="111" height="28"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Óptima Evaluación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" x="59" y="410" width="101" height="28"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Pésima Evaluación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" x="466" y="410" width="95" height="28"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[     Problemas
+Organizacionales]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" x="239" y="24" width="135" height="28"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[MATRIZ DE EVALUACIÓN]]></text>
+				</staticText>
+				<line>
+					<reportElement x="136" y="225" width="1" height="166" forecolor="#FF6600"/>
+				</line>
+				<line>
+					<reportElement x="137" y="391" width="168" height="1" forecolor="#FF6600"/>
+				</line>
+				<line>
+					<reportElement x="305" y="391" width="167" height="1" forecolor="#CCCC00"/>
+				</line>
+				<line>
+					<reportElement x="137" y="60" width="167" height="1" forecolor="#CCCC00"/>
+				</line>
+				<line>
+					<reportElement x="136" y="59" width="1" height="166" forecolor="#CCCC00"/>
+				</line>
+				<line>
+					<reportElement x="305" y="60" width="167" height="1" forecolor="#33CC00"/>
+				</line>
+				<line>
+					<reportElement x="471" y="61" width="1" height="166" forecolor="#33CC00"/>
+				</line>
+				<line>
+					<reportElement x="471" y="225" width="1" height="166" forecolor="#CCCC00"/>
+				</line>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="1" y="491" width="89" height="22" forecolor="#000000" backcolor="#99CCFF"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Funcionario:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="94" y="491" width="461" height="22"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{funcionario}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="1" y="540" width="89" height="22" forecolor="#FFFFFF" backcolor="#990000"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[PDEC:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="94" y="540" width="88" height="21"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntajepdec}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="1" y="517" width="89" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Puesto:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="185" y="539" width="87" height="23" forecolor="#FFFFFF" backcolor="#000099"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Percepción:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="275" y="540" width="89" height="21"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntajepercepción}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="94" y="517" width="461" height="20"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" positionType="Float" mode="Opaque" x="370" y="540" width="87" height="21" forecolor="#000000" backcolor="#99CCFF"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[FINAL:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="false">
+					<reportElement x="461" y="540" width="94" height="21"/>
+					<box>
+						<pen lineWidth="1.75" lineStyle="Double"/>
+						<topPen lineWidth="1.75" lineStyle="Double"/>
+						<leftPen lineWidth="1.75" lineStyle="Double"/>
+						<bottomPen lineWidth="1.75" lineStyle="Double"/>
+						<rightPen lineWidth="1.75" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true" isItalic="true" isUnderline="false" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntajefinal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="91" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="409" y="67" width="86" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha_eval_hasta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="47" width="553" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Evaluación "+$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="166" y="67" width="86" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha_eval_desde}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="85" y="67" width="81" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha desde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="333" y="67" width="76" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha hasta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="Float" x="0" y="23" width="555" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Análisis de la Evaluación realizada en la Matriz de Desempeño.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="0" width="555" height="23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{oee}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="497" y="3" width="60" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="2" y="3" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="308" y="3" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="208" y="3" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="443" y="3" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="2" width="555" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="24">
+			<staticText>
+				<reportElement key="staticText-3" x="443" y="2" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="208" y="1" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="308" y="1" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="2" y="1" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="497" y="2" width="60" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="1" width="555" height="1"/>
+			</line>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

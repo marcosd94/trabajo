@@ -1,0 +1,240 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+
+		<h1>#{admJubiladosFC.titulo}</h1>
+
+		<h:form>
+			<rich:simpleTogglePanel label="#{messages['Persona_']}"
+				switchType="client" id="panelParamentro">
+
+				<h:panelGrid columns="2">
+					<s:decorate id="docField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU304_ci}</ui:define>
+						<h:inputText id="doc" size="30" disabled="true"
+							value="#{admJubiladosFC.jubilados.persona.documentoIdentidad}" />
+					</s:decorate>
+					<s:decorate id="paisField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU456_pais_expe}</ui:define>
+						<h:inputText id="pais" size="30" disabled="true"
+							value="#{admJubiladosFC.jubilados.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombre" size="53" disabled="true"
+							value="#{admJubiladosFC.jubilados.persona.nombres}" />
+					</s:decorate>
+
+					<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+						<h:inputText id="apellido" size="53" disabled="true"
+							value="#{admJubiladosFC.jubilados.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="1">
+					<s:decorate id="inhabilitadoPorField" template="/layout/edit.xhtml">
+						<ui:define name="label">Inhabilitado por:</ui:define>
+
+					</s:decorate>
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                	#{' '}
+		                	<h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+					</s:decorate>
+
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                	#{' '}
+		                	<h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.sinEntidad.entNombre}" />
+					</s:decorate>
+
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                	#{' '}
+		                	<h:inputText id="configUoCab" size="40"
+							disabled="true"
+							value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+
+
+			</rich:simpleTogglePanel>
+
+
+			<br />
+			<rich:simpleTogglePanel
+				label="#{messages['CU442_datos_desvinculacion']}"
+				switchType="client">
+				<h:panelGrid>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}</ui:define>
+						<rich:calendar value="#{admJubiladosFC.fechaDesvinculacion}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU442_motivo_desvinculacion}</ui:define>
+						<h:inputTextarea disabled="true" cols="80" rows="3"
+							value="#{admJubiladosFC.motivoDesvinculacion}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+
+			<br />
+			<rich:simpleTogglePanel label="#{messages['CU442_datos_jubilacion']}"
+				switchType="client">
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_fecha}</ui:define>
+						<rich:calendar value="#{admJubiladosFC.jubilados.fechaAlta}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU442_tipo_jubilacion}</ui:define>
+						<h:inputText size="53" disabled="true"
+							value="#{admJubiladosFC.jubilados.datosEspecifTipo == null ? '' : admJubiladosFC.jubilados.datosEspecifTipo.descripcion}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU442_otro}</ui:define>
+						<h:inputText size="53" disabled="true"
+							value="#{admJubiladosFC.jubilados.otroTipo}" />
+					</s:decorate>
+
+					<s:decorate id="inhabiField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU442_inhabilitado_}</ui:define>
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{admJubiladosFC.jubilados.inhabilitado}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages['CU442_habilitacion']}"
+				switchType="client">
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU442_usuario_habilitacion}</ui:define>
+						<h:inputText size="20" disabled="true"
+							value="#{admJubiladosFC.jubilados.usuHabilit}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU442_fecha_habilitacion}</ui:define>
+						<rich:calendar value="#{admJubiladosFC.jubilados.fechaHabilit}"
+							inputSize="10" datePattern="dd/MM/yyyy" disabled="true" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU442_motivo_habilitacion} <span class="required">*</span></ui:define>
+						<h:inputTextarea value="#{admJubiladosFC.motivo}" cols="40" disabled="#{admJubiladosFC.modoVista}"
+						onkeypress="return imposeMaxLength(event, this, 1000);"/>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <div style="clear:both">
+            <h:outputText value="#{messages.CU442_obs}" rendered="#{!admJubiladosFC.modoVista}" styleClass="labelClass"/>
+         
+        </div>
+
+			<s:div styleClass="actionButtons">
+				<h:commandButton id="habilitar"
+					value="#{messages.CU442_habilitar_funcionario}"
+					action="#{admJubiladosFC.habilitarFuncionario()}"
+					rendered="#{!admJubiladosFC.modoVista and admJubiladosFC.jubilados.fechaHabilit == null}" />
+
+				<s:button view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+					id="anexos" value="#{messages.gral_anexos}">
+					<f:param name="direccionFisica"
+						value="#{admJubiladosFC.ubicacionFisica}" />
+					<f:param name="nombrePantalla" value="admJubiladosSFP" />
+					<f:param name="idCU" value="#{admJubiladosFC.jubilados.idJubilado}" />
+					<f:param name="nombreTabla" value="jubilados" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="#{!admJubiladosFC.modoVista}" />
+					<f:param name="from"
+						value="desvinculacion/admJubilados/JubiladosEdit.seam?idJubilado=#{admJubiladosFC.jubilados.idJubilado}&amp;modoVista=#{admJubiladosFC.modoVista}" />
+				</s:button>
+
+				<s:button view="/desvinculacion/admJubilados/JubiladosList.xhtml"
+					id="volver" propagation="none" value="#{messages.msg_done}">
+				</s:button>
+			</s:div>
+
+
+			<div><h:panelGrid columns="2">
+				<s:decorate id="usuarioAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.usuAlta}" />
+				</s:decorate>
+
+				<s:decorate id="fechaAlta" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.fechaAlta}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.usuMod}" />
+				</s:decorate>
+
+				<s:decorate id="fechaModi" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.fechaMod}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+
+				<s:decorate id="usuarioHab" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU442_habilitado_por}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.usuHabilit}" />
+				</s:decorate>
+
+				<s:decorate id="fechaHab" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU442_fecha_habilitacion}</ui:define>
+					<h:outputText value="#{admJubiladosFC.jubilados.fechaHabilit}">
+						<s:convertDateTime type="date" dateStyle="short"
+							pattern="dd/MM/yyyy hh:mm:ss" />
+					</h:outputText>
+				</s:decorate>
+			</h:panelGrid></div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

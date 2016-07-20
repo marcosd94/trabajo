@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{editarDocPresidencia704FC.idConcurso}"/>
+ 
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{editarDocPresidencia704FC.idConcursoPuestoAgr}"/>
+      <param name="nivelCodigo" value="#{nivelEntidadOeeUtil.codNivelEntidad}"/>
+     <param name="entidadCodigo" value="#{nivelEntidadOeeUtil.codSinEntidad}"/>
+     <param name="unidadOrgCodigo" value="#{nivelEntidadOeeUtil.ordenUnidOrg}"/>
+ 	
+ <action execute="#{editarDocPresidencia704FC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{editarDocPresidencia704FC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/> 
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{editarDocPresidencia704FC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{editarDocPresidencia704FC.idSave}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{editarDocPresidencia704FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{editarDocPresidencia704FC.paramIdConcurso}"/>
+     <param name="fromCU" value="333"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/editarDocPresidencia704/EditarDocPresidencia704"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{editarDocPresidencia704FC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{editarDocPresidencia704FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{editarDocPresidencia704FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{editarDocPresidencia704FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/editarDocPresidencia704/EditarDocPresidencia704"/>
+     <param name="fromCU" value="333"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{editarDocPresidencia704FC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{editarDocPresidencia704FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{editarDocPresidencia704FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{editarDocPresidencia704FC.idResoConsurso}" />
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/editarDocPresidencia704/EditarDocPresidencia704"/>
+     <param name="fromCU" value="540"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{editarDocPresidencia704FC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+	 <restrict>#{identity.hasRole('EditarDocumPresidenciaConcursoSimplificado')}</restrict>
+</page>

@@ -1,0 +1,95 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU713_titulo}</h1>
+			<!-- MODAL PANEL PARA CARGA -->
+		<rich:modalPanel id="modalSelect" height="200" width="310">
+			<f:facet name="header">Generar Backup</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<h:form>
+			<h:outputText value="Esta seguro que  desea relizar la operacion, los registros sera eliminados de la Base de Datos" style="color:Red;"/>
+				
+				
+				<br></br>
+				<h:panelGrid columns="2">
+						<h:commandButton id="desc"
+							value="Aceptar"
+							action="#{generarBakupFC.print()}">
+						</h:commandButton>
+						
+						<a:commandButton id="cerrar" 
+							onclick="#{rich:component('modalSelect')}.hide();return false;"
+							value="Cancelar" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<div style="clear:both">
+					         <span class="required">*</span>
+					          #{messages.msg_required_fields}
+					</div>
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['CU713_parametros']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="2">
+				 <s:decorate template="/layout/edit.xhtml" id="fechaIniField" rendered="#{!tab2FormacionAcademicaPorCarpetaFC.esNingunaInsNingunTit}">
+					<ui:define name="label">#{messages.CU713_fecha_desde}</ui:define>
+					 <rich:calendar id="fechaIni" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" required="true"   oninputkeypress="ponerBarra(event);" 
+                            value="#{generarBakupFC.fechaInicio}" >
+                             <a:support event="onchanged" eventsQueue="default"  reRender="fechaIniField"/>
+                           </rich:calendar>
+				</s:decorate>
+				 <s:decorate template="/layout/edit.xhtml" id="fechaFinField" >
+					<ui:define name="label">#{messages.CU713_fecha_hasta}</ui:define>
+					 <rich:calendar id="fechaFin" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true"  required="true"  oninputkeypress="ponerBarra(event);" 
+                            value="#{generarBakupFC.fechaFin}" >
+                             <a:support event="onchanged" eventsQueue="default"  reRender="fechaFinField"/>
+                           </rich:calendar>
+				</s:decorate>
+
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+			
+			<a:commandButton id="imprimir" 
+						onclick="#{rich:component('modalSelect')}.show();return false;"
+						value="#{messages['CU713_generar_bk']}"/>
+
+			 <s:button 
+				id="reset" value="Limpiar"
+				action="#{generarBakupFC.limpiar()}"
+				>
+			</s:button></div>
+
+
+
+		</h:form>
+
+	<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+  <h:outputText value="#{messages.CU713_obs}"  styleClass="labelClass"/>
+
+
+	</ui:define>
+
+</ui:composition>

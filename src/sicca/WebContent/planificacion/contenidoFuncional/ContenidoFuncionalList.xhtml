@@ -1,0 +1,159 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.ContenidoFuncional_titulo}</h1>
+		
+
+		<h:form id="contenidoFuncionalSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" id="panelParametro"
+				switchType="client">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.msg_descripcion}</ui:define>
+					<h:inputText id="descripcion"  size="100"
+						value="#{contenidoFuncionalList.contenidoFuncional.descripcion}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{contenidoFuncionalList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}" reRender="panelParametro,panelResultado,links"
+				action="#{contenidoFuncionalList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			 <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{contenidoFuncionalList.limpiar()}" 
+				 reRender="panelParametro,panelResultado,links" >
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+				 <h:commandButton id="print"  
+						  value="#{messages.msg_list_search_print_button}"
+						 action="#{contenidoFuncionalList.pdf()}" /></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty contenidoFuncionalList.resultList ? 0 : (contenidoFuncionalList.paginated ? contenidoFuncionalList.resultCount : contenidoFuncionalList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty contenidoFuncionalList.obtenerListaContenidoFuncionals()}" /> <rich:dataTable
+				id="contenidoFuncionalList" var="_contenidoFuncional"
+				value="#{contenidoFuncionalList.resultList}"
+				rendered="#{not empty contenidoFuncionalList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{contenidoFuncionalList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ContenidoFuncional_orden}" />
+							<ui:param name="propertyPath" value="contenidoFuncional.orden" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_contenidoFuncional.orden}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{contenidoFuncionalList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.msg_descripcion}" />
+							<ui:param name="propertyPath" value="contenidoFuncional.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_contenidoFuncional.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{contenidoFuncionalList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ContenidoFuncional_activo}" />
+							<ui:param name="propertyPath" value="contenidoFuncional.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_contenidoFuncional.activo}" disabled="true"/>
+				</h:column>
+				
+				
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/contenidoFuncional/ContenidoFuncional' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="contenidoFuncionalViewId">
+						<f:param name="contenidoFuncionalIdContenidoFuncional"
+							value="#{_contenidoFuncional.idContenidoFuncional}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/contenidoFuncional/ContenidoFuncional.xhtml"
+						value="Ver" propagation="none"
+						id="contenidoFuncional" rendered="#{empty from}">
+						<f:param name="contenidoFuncionalIdContenidoFuncional"
+							value="#{_contenidoFuncional.idContenidoFuncional}" />
+					</s:link>
+            		<s:link
+						view="/planificacion/contenidoFuncional/ContenidoFuncionalEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="contenidoFuncionalEdit" rendered="#{empty from}">
+						<f:param name="contenidoFuncionalIdContenidoFuncional"
+							value="#{_contenidoFuncional.idContenidoFuncional}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+<a:outputPanel ajaxRendered="true" id="links">
+		<div class="tableControl"><s:link view="/planificacion/contenidoFuncional/ContenidoFuncionalList.xhtml"
+			rendered="#{contenidoFuncionalList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/contenidoFuncional/ContenidoFuncionalList.xhtml"
+			rendered="#{contenidoFuncionalList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{contenidoFuncionalList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/contenidoFuncional/ContenidoFuncionalList.xhtml"
+			rendered="#{contenidoFuncionalList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{contenidoFuncionalList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/contenidoFuncional/ContenidoFuncionalList.xhtml"
+			rendered="#{contenidoFuncionalList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{contenidoFuncionalList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/contenidoFuncional/ContenidoFuncionalEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="contenidoFuncionalIdContenidoFuncional" />
+			</s:button>
+		</s:div></a:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,1 @@
+ALTER TABLE seleccion.concurso_puesto_agr ADD COLUMN carpeta boolean;

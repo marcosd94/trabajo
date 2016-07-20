@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{tachasReclamosModifFormController.init()}"
+		on-postback="false" />
+	<param name="firstResult" value="#{listaList.firstResult}" />
+	<param name="sort" value="#{listaList.orderColumn}" />
+	<param name="dir" value="#{listaList.orderDirection}" />
+	<param name="logic" value="#{listaList.restrictionLogicOperator}" />
+
+	<param name="from" />
+	<param name="usuPublicacion" value="#{listaList.lista.usuPublicacion}" />
+	<param name="lugar" value="#{listaList.lista.lugar}" />
+	<param name="direccion" value="#{listaList.lista.direccion}" />
+	<param name="observacion" value="#{listaList.lista.observacion}" />
+	<param name="usuMod" value="#{listaList.lista.usuMod}" />
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr"
+		value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+	<param name="idConcursoGrupoPuestoAgr"
+		value="#{tachasReclamosModifFormController.idConcursoGrupoPuestoAgr}" />
+		
+	<param name="idEvalDocumentalCab"
+		value="#{tachasReclamosModifFormController.idEvalDocumentalCab}" />
+
+	<restrict>#{identity.hasRole('lista_larga_list')}</restrict>
+	<navigation from-action="#{tachasReclamosModifFormController.publicar()}">
+      <rule if-outcome="next">
+         <end-conversation/>
+         <redirect view-id="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"/>
+      </rule>
+   </navigation>
+</page>

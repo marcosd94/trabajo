@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU55_Datos_Denerales" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="descripcion" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="sql" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path_logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="idPersona" class="java.lang.Long"/>
+	<parameter name="sinDetalle" class="java.lang.String"/>
+	<parameter name="nombreCompleto" class="java.lang.String"/>
+	<parameter name="datosPersonales" class="java.lang.String"/>
+	<parameter name="whereExLab" class="java.lang.String"/>
+	<parameter name="whereIdioma" class="java.lang.String"/>
+	<parameter name="whereExProfe" class="java.lang.String"/>
+	<parameter name="whereDiscapacidad" class="java.lang.String"/>
+	<parameter name="whereRepresentate" class="java.lang.String"/>
+	<parameter name="whereExLabOtros" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+	PERSONA.NOMBRES ||' '|| PERSONA.APELLIDOS as nombreCompleto
+,	PERSONA.DOCUMENTO_IDENTIDAD AS documentoIdentidad
+,	PERSONA.FECHA_NACIMIENTO AS fechaNac
+,	CIUDAD_NAC.DESCRIPCION AS lugarNacimiento
+,	DATOS_ESPECIFICOS.DESCRIPCION AS nacionalidad
+, 	PERSONA.CALLE_PRINCIPAL AS direcParticular
+,	CIUDAD_DIR.DESCRIPCION AS ciudad
+,	DEPARTAMENTO.DESCRIPCION AS departamento
+,	PERSONA.TELEFONOS AS telefonos
+,	PERSONA.TELEFONO_PART AS telef_part
+,	PERSONA.TELEFONO_LAB AS telef_lab
+,	PERSONA.e_mail AS email
+,	PERSONA.SEXO AS sexo
+,	PAIS.DESCRIPCION AS pais
+,	PERSONA.ESTADO_CIVIL AS estadoCivil
+FROM general.persona PERSONA
+LEFT OUTER JOIN general.ciudad CIUDAD_NAC
+ON	CIUDAD_NAC.ID_CIUDAD = PERSONA.ID_CIUDAD_NAC
+LEFT OUTER JOIN general.ciudad CIUDAD_DIR
+ON	CIUDAD_DIR.ID_CIUDAD = PERSONA.ID_CIUDAD_DIRECC
+LEFT OUTER JOIN general.departamento DEPARTAMENTO
+ON	DEPARTAMENTO.ID_DEPARTAMENTO = CIUDAD_DIR.ID_DEPARTAMENTO
+JOIN general.pais PAIS
+ON PAIS.ID_PAIS = PERSONA.ID_PAIS_EXPEDICION_DOC
+JOIN seleccion.datos_especificos DATOS_ESPECIFICOS
+ON	 DATOS_ESPECIFICOS.ID_DATOS_ESPECIFICOS = PERSONA.ID_DATOS_ESPECIFICOS_NACIONALID
+WHERE	PERSONA.ID_PERSONA =$P{idPersona}]]>
+	</queryString>
+	<field name="nombrecompleto" class="java.lang.String"/>
+	<field name="documentoidentidad" class="java.lang.String"/>
+	<field name="fechanac" class="java.sql.Date"/>
+	<field name="lugarnacimiento" class="java.lang.String"/>
+	<field name="nacionalidad" class="java.lang.String"/>
+	<field name="direcparticular" class="java.lang.String"/>
+	<field name="ciudad" class="java.lang.String"/>
+	<field name="departamento" class="java.lang.String"/>
+	<field name="telefonos" class="java.lang.String"/>
+	<field name="telef_part" class="java.lang.String"/>
+	<field name="telef_lab" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="pais" class="java.lang.String"/>
+	<field name="estadocivil" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="0" width="553" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CURRICULUM  VITAE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-6" positionType="Float" mode="Opaque" x="0" y="45" width="553" height="47" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#F29900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="28"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nombreCompleto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="9" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="523" height="17">
+					<printWhenExpression><![CDATA[( $P{datosPersonales}=="si" ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="sql">
+					<subreportParameterExpression><![CDATA[$P{sql}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_DatosPersonales.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="162">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="114" width="523" height="17"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereDiscapacidad">
+					<subreportParameterExpression><![CDATA[$P{whereDiscapacidad}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Discapacidad.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="78" width="523" height="17">
+					<printWhenExpression><![CDATA[( $P{sinDetalle}=="no" ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereExProfe">
+					<subreportParameterExpression><![CDATA[$P{whereExProfe}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Experiencia.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="25" width="523" height="17"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereExLab">
+					<subreportParameterExpression><![CDATA[$P{whereExLab}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Estudios.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="96" width="523" height="17">
+					<printWhenExpression><![CDATA[( $P{sinDetalle}=="si" ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereExProfe">
+					<subreportParameterExpression><![CDATA[$P{whereExProfe}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_ExperienciaSinDetalle.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="2" width="231" height="23" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[B. FORMACIÓN ACADÉMICA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="60" width="523" height="17"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereIdioma">
+					<subreportParameterExpression><![CDATA[$P{whereIdioma}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Idioma.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="132" width="523" height="17"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whereRepresentate">
+					<subreportParameterExpression><![CDATA[$P{whereRepresentate}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Representante2.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="43" width="523" height="16"/>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="whereExLab">
+					<subreportParameterExpression><![CDATA[$P{whereExLabOtros}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Otros_Estudios.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

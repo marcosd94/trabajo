@@ -1,0 +1,246 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Persona discapacidad Details</f:facet>
+
+        <s:decorate id="idPersonaDiscapacidad" template="layout/display.xhtml">
+            <ui:define name="label">Id persona discapacidad</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.idPersonaDiscapacidad}"/>
+        </s:decorate>
+
+        <s:decorate id="idPersona" template="layout/display.xhtml">
+            <ui:define name="label">Id persona</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.idPersona}"/>
+        </s:decorate>
+
+        <s:decorate id="causa" template="layout/display.xhtml">
+            <ui:define name="label">Causa</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.causa}"/>
+        </s:decorate>
+
+        <s:decorate id="grado" template="layout/display.xhtml">
+            <ui:define name="label">Grado</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.grado}"/>
+        </s:decorate>
+
+        <s:decorate id="nroCertificado" template="layout/display.xhtml">
+            <ui:define name="label">Nro certificado</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.nroCertificado}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaEmision" template="layout/display.xhtml">
+            <ui:define name="label">Fecha emision</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.fechaEmision}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="dificultadActividad" template="layout/display.xhtml">
+            <ui:define name="label">Dificultad actividad</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.dificultadActividad}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{personaDiscapacidadHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/PersonaDiscapacidadEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty personaDiscapacidadFrom ? 'PersonaDiscapacidadList' : personaDiscapacidadFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Datos especificos by id datos especificos discapac</h:panelGroup>
+        </f:facet>
+    <div class="association" id="datosEspecificosByIdDatosEspecificosDiscapacParent">
+
+        <h:outputText value="There is no datosEspecificosByIdDatosEspecificosDiscapac associated with this personaDiscapacidad."
+                   rendered="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosDiscapac == null}"/>
+
+        <rich:dataTable var="_datosEspecificos"
+                   value="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosDiscapac}"
+                rendered="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosDiscapac != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="datosEspecificosByIdDatosEspecificosDiscapacTable">
+            <h:column>
+                <f:facet name="header">Id datos especificos</f:facet>
+                <h:outputText value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos generales id datos generales</f:facet>
+                <h:outputText value="#{_datosEspecificos.datosGenerales.idDatosGenerales}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_datosEspecificos.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor alf</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor num</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorNum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_datosEspecificos.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewdatosEspecificos"
+                     value="View"
+                      view="/DatosEspecificos.xhtml">
+                    <f:param name="datosEspecificosIdDatosEspecificos"
+                           value="#{_datosEspecificos.idDatosEspecificos}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Datos especificos by id datos especificos grado autonom</h:panelGroup>
+        </f:facet>
+    <div class="association" id="datosEspecificosByIdDatosEspecificosGradoAutonomParent">
+
+        <h:outputText value="There is no datosEspecificosByIdDatosEspecificosGradoAutonom associated with this personaDiscapacidad."
+                   rendered="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosGradoAutonom == null}"/>
+
+        <rich:dataTable var="_datosEspecificos"
+                   value="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosGradoAutonom}"
+                rendered="#{personaDiscapacidadHome.instance.datosEspecificosByIdDatosEspecificosGradoAutonom != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="datosEspecificosByIdDatosEspecificosGradoAutonomTable">
+            <h:column>
+                <f:facet name="header">Id datos especificos</f:facet>
+                <h:outputText value="#{_datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos generales id datos generales</f:facet>
+                <h:outputText value="#{_datosEspecificos.datosGenerales.idDatosGenerales}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_datosEspecificos.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor alf</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorAlf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor num</f:facet>
+                <h:outputText value="#{_datosEspecificos.valorNum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_datosEspecificos.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_datosEspecificos.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewdatosEspecificos"
+                     value="View"
+                      view="/DatosEspecificos.xhtml">
+                    <f:param name="datosEspecificosIdDatosEspecificos"
+                           value="#{_datosEspecificos.idDatosEspecificos}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

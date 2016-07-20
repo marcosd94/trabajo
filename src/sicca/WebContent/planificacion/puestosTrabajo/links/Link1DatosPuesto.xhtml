@@ -1,0 +1,249 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<h3>#{messages.CU120_link1}</h3>
+	<h:panelGrid columns="1" id="panelGridId">
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+					class="required">*</span>
+			</ui:define>
+			<h:inputText id="nivelCodigo" styleClass="numeric"
+				value="#{administrarPuestosTrabajoFormController.nivelEntidad.nenCodigo}"
+				disabled="#{administrarPuestosTrabajoFormController.tieneUsuario}"
+				size="10">
+				<a:support event="onblur" eventsQueue="default"
+					reRender="nivelDescripcion"
+					action="#{administrarPuestosTrabajoFormController.findNivelEntidad()}" />
+			</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+				value="#{administrarPuestosTrabajoFormController.nivelEntidad.nenNombre}"
+				size="80" disabled="true" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages.Usuario_entidad}<span
+					class="required">*</span>
+			</ui:define>
+			<h:inputText id="entidadCodigo" styleClass="numeric"
+				value="#{administrarPuestosTrabajoFormController.sinEntidad.entCodigo}"
+				disabled="#{administrarPuestosTrabajoFormController.tieneUsuario}"
+				size="10">
+				<a:support event="onblur" eventsQueue="default"
+					action="#{administrarPuestosTrabajoFormController.findEntidad()}"
+					reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+			</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+				value="#{administrarPuestosTrabajoFormController.sinEntidad.entNombre}"
+				size="80" disabled="true" />
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">OEE<span class="required">*</span>
+			</ui:define>
+			<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="10"
+				disabled="#{administrarPuestosTrabajoFormController.tieneUsuario}"
+				value="#{administrarPuestosTrabajoFormController.ordenUnidOrg}">
+				<a:support event="onblur" eventsQueue="default"
+					action="#{administrarPuestosTrabajoFormController.findUnidadOrganizativa()}"
+					reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+			</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="80"
+				disabled="true"
+				value="#{administrarPuestosTrabajoFormController.configuracionUoCab.denominacionUnidad}" />
+		</s:decorate>
+		<rich:panel id="panelDatosPuestos" style="border:none;">
+			<fieldset id="fieldSetIdDatosPuesto"><legend>#{messages.CU120_link1}</legend>
+			<s:decorate id="idDecorateDatosPuesto"
+				template="/layout/display.xhtml">
+				<ui:define name="label">Unidad Organizativa<span
+						class="required">*</span>
+				</ui:define>
+				<h:inputText id="oeeDepCodigo" size="8" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.ordenOEEDep}">
+
+				</h:inputText>
+				#{' '}
+				<h:inputText id="orgCodigo" size="12"
+					disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+					value="#{administrarPuestosTrabajoFormController.codigoUnidOrgDep}">
+					<a:support event="onblur" eventsQueue="default"
+						action="#{administrarPuestosTrabajoFormController.obtenerUnidadOrganizativaDep()}"
+						reRender="panelDatosPuestos" />
+				</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion" size="70" disabled="true"
+					value="#{administrarPuestosTrabajoFormController.configuracionUoDet.denominacionUnidad}" />
+					 #{' '}
+               <a:commandButton id="searchUnidadOrgDep"
+					eventsQueue="default"
+					disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+					image="/img/Buscar.png"
+					action="#{administrarPuestosTrabajoFormController.getUrlToPageUnidadOrgDep()}" />
+			</s:decorate>
+			<fieldset id="idFieldSetCpt" style="width: 700px;"><legend>#{messages.Cpt_especifico}</legend>
+			<h:panelGrid columns="1" id="panelGridCpt">
+				<s:decorate id="idDecorateTipoClasificadorPT"
+					template="/layout/display.xhtml">
+					<ui:define name="label">Tipo Clasificador de Puestos de Trabajo <span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="cpt" style="width : 250px;"
+						disabled="#{administrarPuestosTrabajoFormController.estadoCab.descripcion != 'VACANTE' or plantaCargoDetFrom == 'ver'}"
+						value="#{administrarPuestosTrabajoFormController.idTipoCpt}">
+						<f:selectItems value="#{tipoCptsSelectItems}" />
+						<a:support event="onchange"
+							action="#{administrarPuestosTrabajoFormController.updateCpt()}"
+							reRender="cptSelect,cptField" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<h:outputText id="mensajeCpt" style="color:red;"
+					value="Ha modificado el CPT Específico, al actualizar insertará un nuevo registro"
+					rendered="#{plantaCargoDetHome.managed and plantaCargoDetHome.instance.cpt.idCpt != administrarPuestosTrabajoFormController.idCpt}" />
+
+				<s:decorate id="cptField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Cpt_especifico}</ui:define>
+					<!--  disabled="#{administrarPuestosTrabajoFormController.estadoCab.descripcion != 'VACANTE' or 
+						plantaCargoDetFrom == 'ver' or administrarPuestosTrabajoFormController.idTipoCpt == null}"-->
+					<h:inputText id="cpt"
+						disabled="true"
+						value="#{administrarPuestosTrabajoFormController.codigoCpt}"
+						size="20">
+						<a:support event="onblur" eventsQueue="default"
+							reRender="cptSelect,panelGridCpt"
+							action="#{administrarPuestosTrabajoFormController.findCpt()}" />
+					</h:inputText>	
+		              	#{' '}<span class="required">*</span>
+
+				<!-- <h:selectOneMenu id="cptSelect" style="width : 250px;"
+						disabled="#{administrarPuestosTrabajoFormController.estadoCab.descripcion != 'VACANTE' or plantaCargoDetFrom == 'ver' or administrarPuestosTrabajoFormController.idTipoCpt == null}"
+						rendered="#{administrarPuestosTrabajoFormController.idCptFromList == null}"
+						value="#{administrarPuestosTrabajoFormController.idCpt}">
+						<f:selectItems
+							value="#{administrarPuestosTrabajoFormController.cptSelecItem}" />
+						<a:support event="onchange" eventsQueue="default"
+							action="#{administrarPuestosTrabajoFormController.obtenerCodigoCpt()}"
+							reRender="cptField,panelGridCpt" />
+					</h:selectOneMenu>-->
+
+					<h:inputText id="denominacioncpt"						
+						value="#{administrarPuestosTrabajoFormController.descripcionCpt}"
+						disabled="true" size="40" />
+					#{' '}
+               <a:commandButton id="searchCpt" eventsQueue="default"
+						disabled="#{administrarPuestosTrabajoFormController.estadoCab.descripcion != 'VACANTE' or plantaCargoDetFrom == 'ver' or administrarPuestosTrabajoFormController.idTipoCpt == null}"
+						image="/img/Buscar.png" reRender="cptField,panelGridCpt"
+						action="#{administrarPuestosTrabajoFormController.getUrlToPageCpt()}" />
+				</s:decorate>
+
+			</h:panelGrid></fieldset>
+			<h:panelGrid columns="1">
+				<s:decorate id="idDecorateDescripcion" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Ciudad_descripcion}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="descripcion"
+						disabled="#{plantaCargoDetFrom == 'ver'}"
+						value="#{administrarPuestosTrabajoFormController.plantaCargoDet.descripcion}"
+						size="80" maxlength="200">
+						<s:validate />
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Orden</ui:define>
+					<h:inputText id="orden"
+						disabled="#{administrarPuestosTrabajoFormController.isEdit}"
+						value="#{administrarPuestosTrabajoFormController.ordenPuesto}"
+						size="10" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Jefatura?</ui:define>
+					<h:selectBooleanCheckbox
+						value="#{administrarPuestosTrabajoFormController.jefatura}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml" rendered="#{administrarPuestosTrabajoFormController.esHomologador}">
+					<ui:define name="label">Es Plantilla?</ui:define>
+					<h:selectBooleanCheckbox
+						value="#{administrarPuestosTrabajoFormController.plantaCargoDet.esPlantilla}" />
+				</s:decorate>
+
+				<s:decorate id="idDecorateModalidad"
+					template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Title_Tab01}<span
+							class="required">*</span>
+					</ui:define>										
+					<h:selectOneMenu id="modalidad"
+						disabled="#{administrarPuestosTrabajoFormController.isEdit and 
+						administrarPuestosTrabajoFormController.estadoCab.descripcion != 'VACANTE'}"
+						value="#{administrarPuestosTrabajoFormController.modalidadOcupLink1}">
+						<f:selectItem id="item1" itemLabel="Permanente" itemValue="1" />
+						<f:selectItem id="item2" itemLabel="Contratado" itemValue="2" />
+						<f:selectItem id="item3" itemLabel="Comisionado" itemValue="3" />
+						<a:support event="onchange" eventsQueue="default" reRender="puesto"
+							action="#{administrarPuestosTrabajoFormController.obtenerCodigo()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU253_puesto}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="puesto" disabled="true"
+						value="#{administrarPuestosTrabajoFormController.codigoPuestoLink1}"
+						size="20" />
+				</s:decorate>
+				<ui:remove> <!-- Ya no usamos fundamentacion tecnica -->
+					<s:decorate id="idDecorateFundaTecnica"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.PlantaCargoDet_fundamentacionTecnica} <span
+								class="required">*</span>
+						</ui:define>
+						<h:inputTextarea id="idFundaTecnica"
+							disabled="#{plantaCargoDetFrom == 'ver'}"
+							value="#{administrarPuestosTrabajoFormController.plantaCargoDet.fundamentacionTecnica}"
+							cols="50">
+							<f:validateLength maximum="250" />
+							<s:validate />
+						</h:inputTextarea>
+					</s:decorate>
+				</ui:remove>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.PlantaCargoDet_mision}</ui:define>
+					<h:inputTextarea id="mision"
+						disabled="#{plantaCargoDetFrom == 'ver'}"
+						value="#{administrarPuestosTrabajoFormController.plantaCargoDet.mision}"
+						cols="50">
+						<f:validateLength maximum="500" />
+						<s:validate />
+					</h:inputTextarea>
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Especialidad</ui:define>
+					<h:selectOneMenu id="especialidadSelect" style="width : 250px;"
+						disabled="#{plantaCargoDetFrom == 'ver'}"
+						value="#{administrarPuestosTrabajoFormController.idEspecialidad}">
+						<f:selectItems value="#{especialidadesSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+					<ui:remove>
+						<s:decorate id="activoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.msg_carga_req_activo}</ui:define>
+							<h:selectBooleanCheckbox id="activo"
+								disabled="#{plantaCargoDetFrom == 'ver'}"
+								value="#{administrarPuestosTrabajoFormController.plantaCargoDet.activo}" />
+						</s:decorate>
+					</ui:remove>
+				</h:panelGrid></fieldset>
+		</rich:panel>
+	</h:panelGrid>
+
+</ui:composition>

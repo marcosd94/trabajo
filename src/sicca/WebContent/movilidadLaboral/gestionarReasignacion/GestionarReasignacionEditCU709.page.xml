@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      login-required="true">
+	
+	<begin-conversation flush-mode="MANUAL" join="true"/>
+	<param name="personaIdPersona" value="#{gestionarReasignacionCU709FC.idPersona}"/>
+		
+		<param name="from" />
+	<action execute="#{gestionarReasignacionCU709FC.init()}" on-postback="false" />
+	
+   
+   	<param name="sinNivelEntidadIdSinNivelEntidad" value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad" value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo" value="#{nivelEntidadOeeUtil.idConfigCab}" />
+	<param name="empleadoPuestoIdEmpleadoPuesto" value="#{gestionarReasignacionCU709FC.idFuncionario}"/>
+	<param name="sinAnxIdAnx" value="#{seleccionUtilFormController.idSinAnx}"/>
+	<param name="sinCatCont" value="#{seleccionUtilFormController.idSinCategoria}"/>
+	<param name="cadenaRecibida" value="#{asignarCategoriaReasignacion.cadenaRecibida}" />
+   
+   
+     <navigation from-action="#{gestionarReasignacionCU709FC.save()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/movilidadLaboral/gestionarReasignacion/GestionarReasignacionListCU709.xhtml"/>
+      </rule>
+   </navigation>
+<restrict>#{identity.hasRole('gestionarReasignacion_edit')}</restrict>
+
+</page>
+

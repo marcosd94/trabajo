@@ -1,0 +1,269 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+td {
+	vertical-align: top;
+}
+</style>
+		<a:outputPanel id="idModalPanel" ajaxRendered="true">
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{depoPostulaFC.mostrarModal}">
+				<h:form id="idPanelAdjuntos" enctype="multipart/form-data">
+					<rich:panel id="idPanel">
+						<f:facet name="header">#{messages.CU539_modal_title} </f:facet>
+						<h:panelGrid columns="1">
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU539_observacion}</ui:define>
+								<h:inputTextarea id="observacion" cols="80" rows="10"
+									value="#{depoPostulaFC.observacion}" />
+							</s:decorate>
+							<a:outputPanel>
+								<h:outputText value="#{messages.CU539_docAdjunto}" />
+								<span class="required">*</span>
+							</a:outputPanel>
+							<s:fileUpload size="30" contentType="#{depoPostulaFC.cType}"
+								data="#{depoPostulaFC.uFile}" fileName="#{depoPostulaFC.fName}">
+								<s:conversationPropagation type="join" />
+							</s:fileUpload>
+							<div style="clear: both"><span class="required">*</span>
+							#{messages.msg_required_fields}</div>
+						</h:panelGrid>
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><h:commandButton
+						id="idBtnAceptar" value="Aceptar"  
+						onclick="return confirm('#{messages.CU539_estaSeguroCancelarPostu}');"
+						action="#{depoPostulaFC.cancelarPostulacion()}" /> <s:button
+						id="idBtnCancelar" value="Cancelar"
+						action="#{depoPostulaFC.limpiar2()}"
+						oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}
+			</script>
+
+		</a:outputPanel>
+		<h1>#{messages.CU539_title}</h1>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="3">
+					<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codNivelEntidad}">
+						</h:inputText>						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" />
+					</s:decorate>
+					<s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}">
+						</h:inputText>						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+							disabled="true" value="#{nivelEntidadOeeUtil.nombreSinEntidad}" />
+					</s:decorate>
+					<s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+						<h:inputText id="orden" size="10" disabled="true"
+							styleClass="numeric" value="#{nivelEntidadOeeUtil.ordenUnidOrg}" />								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU539_docIdentidad}</ui:define>
+						<h:inputText style=" width : 250px;" value="#{depoPostulaFC.ci}" />
+					</s:decorate>
+
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU479_pais_exp}</ui:define>
+						<h:selectOneMenu id="idPaisExp"
+							value="#{depoPostulaFC.idPaisEpeDoc}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU539_nombres}</ui:define>
+						<h:inputText style=" width : 250px;"
+							value="#{depoPostulaFC.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU539_apellidos}</ui:define>
+						<h:inputText style=" width : 250px;"
+							value="#{depoPostulaFC.apellido}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				disabled="#{depoPostulaFC.deshabilitarTodo}"
+				value="#{messages.msg_list_search_button}"
+				action="#{depoPostulaFC.cargarPostulantes()}"
+				reRender="idPanelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{depoPostulaFC.limpiar()}" id="reset"
+				propagation="end" value="Limpiar" includePageParams="false">
+
+			</s:button></div>
+		</a:form>
+		<a:form>
+
+			<rich:panel id="idPanelResultados">
+				<h:panelGrid columns="2" width="100%">
+					<h:panelGrid columns="1" width="100%">
+						<rich:panel>
+							<f:facet name="header">
+    Postulantes (#{empty depoPostulaFC.lPostulantes? 0 : (depoPostulaFC.lPostulantes.size)})
+        </f:facet>
+							<rich:extendedDataTable id="idTblPostulantes"
+								noDataLabel="#{messages.msg_list_search_no_results}"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								cellpadding="0" cellspacing="0" width="500px" border="0"
+								var="_record" height="250px"
+								value="#{depoPostulaFC.lPostulantes}">
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_docIdentidad}
+						</f:facet>
+									<h:outputText style="white-space:normal;word-wrap: break-word"
+										value="#{_record.documentoIdentidad}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_paisDoc}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{_record.paisByIdPaisExpedicionDoc.descripcion}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_nombreApellido}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{_record.nombres} #{' '} #{_record.apellidos}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+									<a:commandLink id="verInstructores"
+										value="#{messages.CU539_verConcursos}"
+										reRender="idPanelConcursos"
+										action="#{depoPostulaFC.cargarConcursos(_record.idPersona)}"
+										propagation="join">
+									</a:commandLink>
+								</rich:column>
+							</rich:extendedDataTable>
+						</rich:panel>
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="1" width="100%">
+
+						<rich:panel id="idPanelConcursos">
+							<f:facet name="header">
+    Concursos (#{empty depoPostulaFC.lConcursos? 0 : (depoPostulaFC.lConcursos.size)})
+        </f:facet>
+							<rich:extendedDataTable
+								noDataLabel="#{messages.msg_list_search_no_results}"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								cellpadding="0" cellspacing="0" width="500px" border="0" var="_record2"
+								height="250px" value="#{depoPostulaFC.lConcursos}">
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_tipoConcurso}
+						</f:facet>
+									<h:outputText style="white-space:normal;word-wrap: break-word"
+										value="#{_record2.datosEspecificosTipoConc.descripcion}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_concurso}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{_record2.nombre}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">
+						#{messages.CU539_nroConcurso}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{_record2.numero}" />
+								</rich:column>
+								<rich:column width="25%">
+									<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+									<a:commandLink id="verInstructores"
+										value="Ver Grupos" reRender="idGrupos"
+										action="#{depoPostulaFC.cargarGrupos(_record2.idConcurso)}"
+										propagation="join">
+									</a:commandLink>
+								</rich:column>
+							</rich:extendedDataTable>
+						</rich:panel>
+						<rich:panel id="idGrupos">
+							<f:facet name="header">
+    Grupos (#{empty depoPostulaFC.lGrupos? 0 : (depoPostulaFC.lGrupos.size())})
+        </f:facet>
+							<rich:extendedDataTable
+								noDataLabel="#{messages.msg_list_search_no_results}"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								cellpadding="0" cellspacing="0" width="100%" border="0"
+								var="_record3" height="250px" value="#{depoPostulaFC.lGrupos}">
+								<rich:column width="33%">
+									<f:facet name="header">
+						#{messages.CU539_codigo}
+						</f:facet>
+									<h:outputText style="white-space:normal;word-wrap: break-word"
+										value="#{_record3.concursoPuestoAgr.codGrupo}" />
+								</rich:column>
+								<rich:column width="33%">
+									<f:facet name="header">
+						#{messages.CU539_denominacion}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{_record3.concursoPuestoAgr.descripcionGrupo}" />
+								</rich:column>
+								<rich:column width="33%">
+									<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+									<a:commandLink value="#{messages.CU539_cancelarPostulacion}"
+										reRender="idModalPanel"
+										action="#{depoPostulaFC.selectIdPos(_record3.idPostulacion)}">
+									</a:commandLink>
+								</rich:column>
+							</rich:extendedDataTable>
+						</rich:panel>
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</rich:panel>
+		</a:form>
+
+	</ui:define>
+</ui:composition>

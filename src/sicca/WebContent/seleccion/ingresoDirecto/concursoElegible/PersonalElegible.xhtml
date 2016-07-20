@@ -1,0 +1,329 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="otrasCarreras" styleClass="edit" enctype="multipart/form-data">
+<h1>#{messages.CU609_titulo_list}</h1>
+
+		<rich:panel id="panelAdjuntar">
+		 <f:facet name="header">#{messages.CU541_acto_administrativo}</f:facet>
+		<div class="results" id="tblList"
+								style="overflow: scroll; width: 400; HEIGHT: 230px">
+								<h:panelGrid>
+								<rich:dataTable
+								id="itemsDoc" var="_docs" 
+								value="#{personalElegibleEditFC.adjuntos}"
+								rowKeyVar="rowNrDoc">
+								<rich:column>
+									<f:facet name="header">
+														Nº
+													</f:facet>
+									<h:outputText value="#{rowNrDoc + 1}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.nroDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.fechaDoc}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Firma Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.fechaFirmaContrato}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Fin Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.fechaFinContrato}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Tipo de Contrato
+													</f:facet>
+									<h:outputText value="#{_docs.documentos.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+														Acciones
+													</f:facet>
+									<h:commandLink id="down" value="Descargar"
+										
+										action="#{personalElegibleEditFC.descargarDocumentos(rowNrDoc)}" />
+								</rich:column>
+
+							</rich:dataTable>
+							</h:panelGrid>
+							</div>
+			</rich:panel>
+	
+
+        <rich:panel id="panelPersona">
+            <f:facet name="header">#{messages.CU541_persona}</f:facet>
+
+		<h:panelGrid columns="5">
+		<a:region >
+		    <s:decorate id="paisExpField" template="/layout/display.xhtml" >
+									<ui:define name="label">#{messages.CU541_pais}</ui:define>
+									<h:selectOneMenu id="idPaisExped"  disabled="true"
+										value="#{personalElegibleEditFC.persona.paisByIdPaisExpedicionDoc.idPais}"
+										style="width:150px">
+										<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+										<a:support event="onchange" eventsQueue="default"
+									action="#{personalElegibleEditFC.limpiarDatosPersona()}" reRender="panelPersona" />
+									</h:selectOneMenu>
+								</s:decorate>
+          </a:region>
+		
+			
+					
+						
+				
+				 <a:outputPanel ajaxRendered="true" id="outNombre">
+					<s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombres" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{personalElegibleEditFC.persona.nombres}" />
+					</s:decorate>
+					
+					
+					
+		</a:outputPanel>
+				
+		</h:panelGrid>
+	<h:panelGrid columns="2">
+
+          
+		<a:region >
+		<s:decorate id="ciField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU165_ci}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="ci" size="50" maxlength="50"
+										style="width:150px"   disabled="true"
+										value="#{personalElegibleEditFC.persona.documentoIdentidad}">
+										<a:support event="onblur"  eventsQueue="default"
+											action="#{personalElegibleEditFC.buscarPersona()}"
+											reRender="panelPersona"
+											focus="telefono" />
+									</h:inputText>
+									
+						<a:commandButton id="searchper" eventsQueue="default"
+						value="#{messages.CU541_ver_datos_persona}" reRender="#{personalElegibleEditFC.persona.idPersona!=null}"
+						action="#{personalElegibleEditFC.toFindPersonaView()}" />
+			</s:decorate>
+		</a:region>
+
+		<a:region >
+            <s:decorate id="apellidoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+                <h:inputText id="apellido"
+                       size="50" disabled="true"
+                      maxlength="50"
+                          value="#{personalElegibleEditFC.persona.apellidos}">
+                </h:inputText>
+            </s:decorate>
+         </a:region>
+         
+            </h:panelGrid>
+            </rich:panel>
+            <rich:panel id="panelPuestoCat">
+            <f:facet name="header">#{messages.CU541_puesto_categoria_remu}</f:facet>
+            
+            
+            <h:panelGrid columns="2">
+            <h:panelGrid columns="1" >
+            <a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" 
+								disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							disabled="true"	onkeypress="return soloNumeros(event);">
+													</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">UO</ui:define>
+							<h:inputText styleClass="numeric" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}"
+							disabled="true"	onkeypress="return soloNumeros(event);">
+													</h:inputText>
+										#{' '}
+										<h:inputText size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">Puesto
+										 
+									</ui:define>
+							<h:inputText  styleClass="numeric" size="5"
+								value="#{personalElegibleEditFC.plantaCargoDetView.orden}"
+							disabled="true"	onkeypress="return soloNumeros(event);">
+													</h:inputText>
+										#{' '}
+										<h:inputText size="50"
+								disabled="true"
+								value="#{personalElegibleEditFC.plantaCargoDetView.descripcion}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					
+					
+				
+					
+					
+					
+            </h:panelGrid>
+            
+            <h:panelGrid id="panelGridCodigoObjeto" >
+           	
+					 <rich:panel >
+		         <div class="results" id="tbldet2List" style=" overflow: scroll;  width:310 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList2" var="_pagos"  first="0"
+												value="#{personalElegibleEditFC.empleadoConceptoPagos}"
+											 rowKeyVar="rowNr2">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+													<h:outputText value="#{_pagos.objCodigo}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+													<h:outputText value="#{_pagos.categoria}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+													<h:outputText value="#{_pagos.monto}" />
+											</rich:column>
+											
+																					
+											
+												
+						</rich:dataTable>
+					</div>
+					</rich:panel>
+				
+            </h:panelGrid>
+            
+            
+            
+            </h:panelGrid>
+           
+            
+            
+            
+            
+		
+
+
+         
+
+           
+
+        </rich:panel>
+          
+           
+
+        <div class="actionButtons">
+
+             
+
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/seleccion/ingresoDirecto/concursoElegible/PersonalElegibleList.xhtml"
+                />
+
+          
+                
+
+        </div>
+    </h:form>
+    
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,475 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Concurso puesto det Details</f:facet>
+
+        <s:decorate id="idConcursoPuestoDet" template="layout/display.xhtml">
+            <ui:define name="label">Id concurso puesto det</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.idConcursoPuestoDet}"/>
+        </s:decorate>
+
+        <s:decorate id="nroOrden" template="layout/display.xhtml">
+            <ui:define name="label">Nro orden</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.nroOrden}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{concursoPuestoDetHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ConcursoPuestoDetEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty concursoPuestoDetFrom ? 'ConcursoPuestoDetList' : concursoPuestoDetFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Planta cargo det</h:panelGroup>
+        </f:facet>
+    <div class="association" id="plantaCargoDetParent">
+
+        <h:outputText value="There is no plantaCargoDet associated with this concursoPuestoDet."
+                   rendered="#{concursoPuestoDetHome.instance.plantaCargoDet == null}"/>
+
+        <rich:dataTable var="_plantaCargoDet"
+                   value="#{concursoPuestoDetHome.instance.plantaCargoDet}"
+                rendered="#{concursoPuestoDetHome.instance.plantaCargoDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="plantaCargoDetTable">
+            <h:column>
+                <f:facet name="header">Id planta cargo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Entidad id entidad</f:facet>
+                <h:outputText value="#{_plantaCargoDet.entidad.idEntidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_plantaCargoDet.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Oficina id oficina</f:facet>
+                <h:outputText value="#{_plantaCargoDet.oficina.idOficina}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado cab id estado cab</f:facet>
+                <h:outputText value="#{_plantaCargoDet.estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Configuracion uo det id configuracion uo det</f:facet>
+                <h:outputText value="#{_plantaCargoDet.configuracionUoDet.idConfiguracionUoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Especialidades id especialidades</f:facet>
+                <h:outputText value="#{_plantaCargoDet.especialidades.idEspecialidades}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_plantaCargoDet.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fundamentacion tecnica</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fundamentacionTecnica}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_plantaCargoDet.mision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.objetivo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contratado</f:facet>
+                <h:outputText value="#{_plantaCargoDet.contratado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Permanente</f:facet>
+                <h:outputText value="#{_plantaCargoDet.permanente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_plantaCargoDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora desde</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraDesde}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lu hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.luHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ma hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.maHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.miHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ju hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.juHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vi hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.viHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sa hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.saHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Do hora hasta</f:facet>
+                <h:outputText value="#{_plantaCargoDet.doHoraHasta}">
+                    <s:convertDateTime type="time"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Orden</f:facet>
+                <h:outputText value="#{_plantaCargoDet.orden}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewplantaCargoDet"
+                     value="View"
+                      view="/PlantaCargoDet.xhtml">
+                    <f:param name="plantaCargoDetIdPlantaCargoDet"
+                           value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Concurso puesto enc</h:panelGroup>
+        </f:facet>
+    <div class="association" id="concursoPuestoEncParent">
+
+        <h:outputText value="There is no concursoPuestoEnc associated with this concursoPuestoDet."
+                   rendered="#{concursoPuestoDetHome.instance.concursoPuestoEnc == null}"/>
+
+        <rich:dataTable var="_concursoPuestoEnc"
+                   value="#{concursoPuestoDetHome.instance.concursoPuestoEnc}"
+                rendered="#{concursoPuestoDetHome.instance.concursoPuestoEnc != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoEncTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto enc</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.idConcursoPuestoEnc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoEnc.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewconcursoPuestoEnc"
+                     value="View"
+                      view="/ConcursoPuestoEnc.xhtml">
+                    <f:param name="concursoPuestoEncIdConcursoPuestoEnc"
+                           value="#{_concursoPuestoEnc.idConcursoPuestoEnc}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Concurso puesto agr</h:panelGroup>
+        </f:facet>
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this concursoPuestoDet."
+                   rendered="#{concursoPuestoDetHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{concursoPuestoDetHome.instance.concursoPuestoAgr}"
+                rendered="#{concursoPuestoDetHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewconcursoPuestoAgr"
+                     value="View"
+                      view="/ConcursoPuestoAgr.xhtml">
+                    <f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+                           value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Estado det</h:panelGroup>
+        </f:facet>
+    <div class="association" id="estadoDetParent">
+
+        <h:outputText value="There is no estadoDet associated with this concursoPuestoDet."
+                   rendered="#{concursoPuestoDetHome.instance.estadoDet == null}"/>
+
+        <rich:dataTable var="_estadoDet"
+                   value="#{concursoPuestoDetHome.instance.estadoDet}"
+                rendered="#{concursoPuestoDetHome.instance.estadoDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="estadoDetTable">
+            <h:column>
+                <f:facet name="header">Id estado det</f:facet>
+                <h:outputText value="#{_estadoDet.idEstadoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado cab id estado cab</f:facet>
+                <h:outputText value="#{_estadoDet.estadoCab.idEstadoCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_estadoDet.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_estadoDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_estadoDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_estadoDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_estadoDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_estadoDet.activo}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewestadoDet"
+                     value="View"
+                      view="/EstadoDet.xhtml">
+                    <f:param name="estadoDetIdEstadoDet"
+                           value="#{_estadoDet.idEstadoDet}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

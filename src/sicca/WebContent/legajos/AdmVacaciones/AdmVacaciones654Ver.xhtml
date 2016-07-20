@@ -1,0 +1,63 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j">
+
+
+
+	<h1>#{messages.CU654_titulo}</h1>
+
+
+	<rich:simpleTogglePanel
+		label="#{messages.CU654_panel2_title} (#{empty admVacaciones654FC.lGrilla1?0:admVacaciones654FC.lGrilla1.size()})"
+		id="idPanel2">
+		<div class="results"
+			style="overflow: scroll; width: 700; HEIGHT: 230px"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty admVacaciones654FC.lGrilla1}" /> <rich:dataTable
+			rowKeyVar="rowIndexGrilla1" var="_record"
+			value="#{admVacaciones654FC.lGrilla1}">
+			
+				<h:column>
+				<f:facet name="header">
+						#{messages.gral_observacion}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.obsVacaciones}" />
+			</h:column>
+
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_nroActo}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.nroActo}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaInicio}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.fechaInicio}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaFin}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.fechaFin}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_documento}
+						</f:facet>
+				<h:commandLink value="Descargar"
+					action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record.documentos.idDocumento)}"
+					rendered="#{_record.documentos!=null}" />
+			</h:column>
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+</ui:composition>

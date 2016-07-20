@@ -1,0 +1,265 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+     xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU717_titulo}</h1>
+    <h:form id="homologacionPerfilMatrizDetSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel switchType="ajax">
+<rich:panel id="panelParametro" >	<f:facet name="header">#{messages.CU243_grupo_puesto}</f:facet>
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{admPerfilMatHomologInsListFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{admPerfilMatHomologInsListFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadbField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{admPerfilMatHomologInsListFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{admPerfilMatHomologInsListFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{admPerfilMatHomologInsListFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{admPerfilMatHomologInsListFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{admPerfilMatHomologInsListFormController.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU252_grupoPuestos}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{admPerfilMatHomologInsListFormController.concursoPuestoAgr.descripcionGrupo}" style=" width : 514px;"/>
+            </s:decorate>
+
+        
+			</h:panelGrid>
+			</rich:panel>
+
+        </rich:simpleTogglePanel>
+
+       
+
+    
+
+    <rich:panel id="datosHomolog">
+        <f:facet name="header">#{messages.CU52_obs_resp} (#{empty homologacionPerfilMatrizDetList.resultList ? 0 : (homologacionPerfilMatrizDetList.paginated ? homologacionPerfilMatrizDetList.resultCount : homologacionPerfilMatrizDetList.resultList.size)})</f:facet>
+    <div class="results" id="homologacionPerfilMatrizDetList">
+
+    <h:outputText  value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty homologacionPerfilMatrizDetList.resultList}"/>
+
+    <rich:dataTable id="homologacionPerfilMatrizDetList"
+                var="_homologacionPerfilMatrizDet" rowKeyVar="index"
+              value="#{homologacionPerfilMatrizDetList.resultList}"
+           rendered="#{not empty homologacionPerfilMatrizDetList.resultList}">
+        
+       
+        <h:column rendered="false">
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_nro_obs}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.nroObs"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.nroObs}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_obs}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.observacion}"/>
+        </h:column>
+      
+      
+        <h:column rendered="false">
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_nrp_rpta}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.nroRpta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.nroRpta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_repuesta}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.respuesta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.respuesta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU52_fecha}"/>
+                    <ui:param name="propertyPath" value="homologacionPerfilMatrizDet.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_homologacionPerfilMatrizDet.fechaAlta}">
+              	<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+            </h:outputText>
+        </h:column>
+        
+				
+
+				<rich:column style="text-align:center;" width="10%"> 
+							<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU52_enviar_ajusteOee}" />
+							<ui:param name="propertyPath" value="homologacionPerfilMatrizDet.activo" />
+						</ui:include>
+					</f:facet>
+							<h:selectBooleanCheckbox value="#{_homologacionPerfilMatrizDet.ajustadoOee}"  disabled="#{_homologacionPerfilMatrizDet.ajustadoOee}"/>
+						</rich:column>
+			
+		<rich:column styleClass="action">
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718.xhtml"
+                   value="Ver"
+             propagation="default"
+                      id="homologacionPerfilMatrizDetViewId">
+                <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+                        value="#{_homologacionPerfilMatrizDet.idHomologacionDet}"/>
+                         <f:param name="idGrupo" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718Edit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none" disabled="#{empty _homologacionPerfilMatrizDet.respuesta || _homologacionPerfilMatrizDet.ajustadoOee ||ver=='true'}"
+               >
+                <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+                        value="#{_homologacionPerfilMatrizDet.idHomologacionDet}"/>
+                                      <f:param name="fromRpta"
+                        value="false"/>
+                  <f:param name="idGrupo" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718Edit.xhtml"
+                   value="#{messages.CU53_resp}"
+             propagation="none" disabled="#{!admPerfilMatHomologInsListFormController.habRpta(_homologacionPerfilMatrizDet.idHomologacionDet) || ver=='true'}"
+              >
+                <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+                        value="#{_homologacionPerfilMatrizDet.idHomologacionDet}"/>
+              <f:param name="fromRpta"
+                        value="true"/>
+             <f:param name="idGrupo" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718List.xhtml"
+            rendered="#{homologacionPerfilMatrizDetList.previousExists}"
+               value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718List.xhtml"
+            rendered="#{homologacionPerfilMatrizDetList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizDetList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/HomologacionPerfilMatrizDetList.xhtml"
+            rendered="#{homologacionPerfilMatrizDetList.nextExists}"
+               value="#{messages.msg_list_next_page}  #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizDetList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718List.xhtml"
+            rendered="#{homologacionPerfilMatrizDetList.nextExists}"
+               value="#{messages.msg_list_last_page}  #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{homologacionPerfilMatrizDetList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+	<h:panelGrid columns="4" >
+	<s:button view="/seleccion/basesCondiciones/BasesYCondiciones.xhtml"
+                  id="basesycondiciones"  disabled="#{ver=='true'}"
+           propagation="join"  
+                 value="#{messages.CU53_editar_condiciones}">
+                 <f:param name="idConcursoPuestoAgr"
+					value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}" />
+				<f:param name="from"
+					value="circuitoCSI/admPerfilMatrizHomolog718/PerfilHomologInstitucion718List" />
+			<f:param name="nomPantalla"
+					value="admPerfilMatrizHomologInstitucion_list" />
+					<f:param name="CU"
+					value="52" />
+        </s:button>
+        
+        
+        <h:commandButton id="print"
+					value="#{messages['CU53_imprimir']}"
+					action="#{admPerfilMatHomologInsListFormController.imprimirPerfilMatriz()}"/> 
+                          
+        <h:commandButton  disabled="#{ver=='true'}" 
+                          value="#{messages.CU53_enviar_sfp}"
+                          action="#{admPerfilMatHomologInsListFormController.enviarSfp()}"
+           onclick="return confirm('#{messages.CU52_msg}');"/>
+           
+        <s:button view="/circuitoCSI/enviarHomologPerfMatr688/EnviarHomologPerfMatr688.xhtml"
+                    id="volver"
+           propagation="none"
+                 value="#{messages.CU52_volver}">
+         <f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}" />
+        </s:button>
+	</h:panelGrid>
+   </h:form>
+</ui:define>
+
+</ui:composition>

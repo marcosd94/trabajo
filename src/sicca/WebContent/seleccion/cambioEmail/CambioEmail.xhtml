@@ -1,0 +1,77 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/templatePortal.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="cambioContrasenha" styleClass="edit">
+	<h1>#{messages.CU406_title}</h1>
+	
+        <rich:panel>
+			<h:panelGrid columns="1">
+			
+			  <s:decorate id="emailActualField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU406_correo_actual}</ui:define>
+                <h:inputText id="emailActual" disabled="true" size="50"
+                          value="#{admCambioEmailFormController.persona.EMail}">
+               </h:inputText>
+            </s:decorate>
+			<a:region>
+			  <s:decorate id="mailNuevoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU406_correo_nuevo}</ui:define>
+                <h:inputText id="mailNuevo"
+                       required="true" size="50" maxlength="50"
+                          value="#{admCambioEmailFormController.emailNuevo}">
+                           <a:support event="onblur" reRender="mailNuevoField" bypassUpdates="true" ajaxSingle="true"/>
+               </h:inputText>
+            </s:decorate>
+            </a:region>
+            <a:region>
+            <s:decorate id="mailConfirmacionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU406_correo_confirmacion}</ui:define>
+                <h:inputText id="mailConfirmacion"
+                       required="true" size="50" maxlength="50"
+                          value="#{admCambioEmailFormController.emailConfirmacion}">
+                         <a:support event="onblur" reRender="mailConfirmacionField" bypassUpdates="true" ajaxSingle="true"/>
+               </h:inputText>
+            </s:decorate>
+            </a:region>
+            </h:panelGrid>
+            
+            <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+            </div>
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass"/>
+	        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{admCambioEmailFormController.save()}"
+                          onclick="return confirm('#{messages.msg_confirm_save}');"
+                     />
+	    <s:button id="cancelEdit"
+                   value="#{messages.msg_done}"
+             propagation="none"
+                    view="/cuentaUsuarioPortal.xhtml"
+                />
+
+        </div>
+    </h:form>
+
+
+</ui:define>
+
+</ui:composition>

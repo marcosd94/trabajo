@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/PlantillaEvalList.xhtml" login-required="true">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<action execute="#{plantillaEvalDesempFC.init()}" on-postback="false" />
+
+	<action execute="#{plantillaEvalHome.wire}" />
+
+	<param name="plantillaEvalFrom" />
+	<param name="plantillaEvalIdPlantillaEval" value="#{plantillaEvalDesempFC.idPlantillaEval}" />
+
+
+	<navigation from-action="#{plantillaEvalDesempFC.save()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/evaluacionDesempenho/plantillaEvaluacion/PlantillaEvalList.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{plantillaEvalDesempFC.updated()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/evaluacionDesempenho/plantillaEvaluacion/PlantillaEvalList.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('plantilla_evaluacion_desemp_edit')}</restrict>
+</page>

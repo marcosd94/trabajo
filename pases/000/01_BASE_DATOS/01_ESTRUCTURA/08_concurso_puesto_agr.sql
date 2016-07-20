@@ -1,0 +1,1 @@
+ALTER TABLE seleccion.concurso_puesto_agr ALTER COLUMN remuneracion TYPE VARCHAR(1000);

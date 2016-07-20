@@ -1,0 +1,264 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="concursoPuestoAgrSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="ConcursoPuestoAgr Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Cod grupo</ui:define>
+                <h:inputText id="codGrupo" value="#{concursoPuestoAgrList.concursoPuestoAgr.codGrupo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Descripcion grupo</ui:define>
+                <h:inputText id="descripcionGrupo" value="#{concursoPuestoAgrList.concursoPuestoAgr.descripcionGrupo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputText id="observacion" value="#{concursoPuestoAgrList.concursoPuestoAgr.observacion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{concursoPuestoAgrList.concursoPuestoAgr.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{concursoPuestoAgrList.concursoPuestoAgr.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{concursoPuestoAgrList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/ConcursoPuestoAgrList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">ConcursoPuestoAgr Search Results (#{empty concursoPuestoAgrList.resultList ? 0 : (concursoPuestoAgrList.paginated ? concursoPuestoAgrList.resultCount : concursoPuestoAgrList.resultList.size)})</f:facet>
+    <div class="results" id="concursoPuestoAgrList">
+
+    <h:outputText value="The concursoPuestoAgr search returned no results."
+               rendered="#{empty concursoPuestoAgrList.resultList}"/>
+
+    <rich:dataTable id="concursoPuestoAgrList"
+                var="_concursoPuestoAgr"
+              value="#{concursoPuestoAgrList.resultList}"
+           rendered="#{not empty concursoPuestoAgrList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Id concurso puesto agr"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.idConcursoPuestoAgr"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Concurso id concurso"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.concurso.idConcurso"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Cod grupo"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.codGrupo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Descripcion grupo"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.descripcionGrupo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Nro orden"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.nroOrden"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Observacion"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Id process instance"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.idProcessInstance"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{concursoPuestoAgrList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="concursoPuestoAgr.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'ConcursoPuestoAgr' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="concursoPuestoAgrViewId">
+                <f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+                        value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/ConcursoPuestoAgrEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="concursoPuestoAgrEdit"
+                rendered="#{empty from}">
+                <f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+                        value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/ConcursoPuestoAgrList.xhtml"
+            rendered="#{concursoPuestoAgrList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/ConcursoPuestoAgrList.xhtml"
+            rendered="#{concursoPuestoAgrList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{concursoPuestoAgrList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/ConcursoPuestoAgrList.xhtml"
+            rendered="#{concursoPuestoAgrList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{concursoPuestoAgrList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/ConcursoPuestoAgrList.xhtml"
+            rendered="#{concursoPuestoAgrList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{concursoPuestoAgrList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/ConcursoPuestoAgrEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create concursoPuestoAgr">
+            <f:param name="concursoPuestoAgrIdConcursoPuestoAgr"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

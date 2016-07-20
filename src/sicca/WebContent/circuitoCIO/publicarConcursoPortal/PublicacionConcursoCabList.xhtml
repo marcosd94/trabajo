@@ -1,0 +1,180 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="publicacionConcursoCabSearch" styleClass="edit">
+			<h1>#{messages.CU74_title}</h1>
+			<rich:panel id="panelParametro">
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{publicarConcursoPortalListCU624FC.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{publicarConcursoPortalListCU624FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{publicarConcursoPortalListCU624FC.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{publicarConcursoPortalListCU624FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{publicarConcursoPortalListCU624FC.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{publicarConcursoPortalListCU624FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+
+						<h:inputText id="concurso" size="60" disabled="true"
+							value="#{publicarConcursoPortalListCU624FC.concurso.nombre}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+
+			</rich:panel>
+			<div style="clear: both; overflow: auto; HEIGHT: 350px"><rich:panel
+				id="panelResultado">
+				<f:facet name="header">Grupos de Puestos(#{publicarConcursoPortalListCU624FC.listaGruposDTO.size()})</f:facet>
+				<div class="results" id="puestList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty publicarConcursoPortalListCU624FC.listaGruposDTO}" />
+				<rich:dataTable id="grupoList" var="_dto" rowKeyVar="row"
+					value="#{publicarConcursoPortalListCU624FC.listaGruposDTO}"
+					rendered="#{not empty publicarConcursoPortalListCU624FC.listaGruposDTO}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_puesto}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.fechasGrupo.concursoPuestoAgr.descripcionGrupo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_desde}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.fechasGrupo.fechaPublicacionDesde}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_hasta}
+						</f:facet>
+						<h:outputText
+							value="#{_dto.fechasGrupo.fechaPublicacionHasta}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_estado}
+						</f:facet>
+						<h:outputText value="#{_dto.estado}" />
+					</h:column>
+
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+
+						<s:link
+							view="/circuitoCIO/publicarConcursoPortal/PublicacionConcursoCabEdit.xhtml"
+							value="#{messages.CU74_agregar_medios_public}" propagation="none"
+							id="agregar">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.fechasGrupo.concursoPuestoAgr.idConcursoPuestoAgr}" />
+						</s:link>
+							  #{' '}
+							   <s:link
+							view="/circuitoCIO/publicarConcursoPortal/PublicacionConcursoCab.xhtml"
+							value="#{messages.CU74_ver_medios_public}" propagation="none"
+							id="ver">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_dto.fechasGrupo.concursoPuestoAgr.idConcursoPuestoAgr}" />
+							<f:param name="publicacionConcursoCabFrom"
+								value="circuitoCIO/publicarConcursoPortal/PublicacionConcursoCabList" />
+						</s:link>
+					</h:column>
+				</rich:dataTable></div>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+						<h:inputTextarea id="obs" cols="80" 
+						onkeypress="return imposeMaxLength(event, this, 250);"
+							value="#{publicarConcursoPortalListCU624FC.obs}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel> <h:panelGrid columns="5">
+
+				<h:commandButton id="generar"
+					value="#{messages.CU74_generar_formato}"
+					action="#{publicarConcursoPortalListCU624FC.print()}" />
+				<h:commandButton id="solicitar"
+					rendered="#{publicarConcursoPortalListCU624FC.habilitarBoton}"
+					value="#{messages.CU74_solicitar_autorizacion}"
+					action="#{publicarConcursoPortalListCU624FC.validarAutorizacionSfp()}"
+					onclick="return confirm('#{messages.CU_74_msg1}');" />
+				<s:button id="anexo" value="Anexo" propagation="join"
+					view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+					<f:param name="direccionFisica"
+						value="#{publicarConcursoPortalListCU624FC.direccionFisica}" />
+					<f:param name="nombrePantalla" value="publicacion_concursos_portal_CIO_list" />
+					<f:param name="idCU"
+						value="#{publicarConcursoPortalListCU624FC.concurso.idConcurso}" />
+					<f:param name="nombreTabla" value="Concurso" />
+					<f:param name="mostrarDoc" value="true" />
+					<f:param name="isEdit" value="true" />
+					<f:param name="from"
+						value="circuitoCIO/publicarConcursoPortal/PublicacionConcursoCabList" />
+				</s:button>
+
+				<s:button id="cancelEdit" value="Volver" propagation="none"
+					view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" />
+
+			</h:panelGrid></div>
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

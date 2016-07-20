@@ -1,0 +1,227 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionarioOee" styleClass="edit">
+			<h1>#{messages.FuncionarioOee_}</h1>
+			<rich:panel id="panelSuperior">
+				<f:facet name="header">#{messages.FuncionarioOee_}</f:facet>
+
+				<rich:panel id="panelEsFuncionario" style="border:none">
+					<fieldset><s:decorate id="esFuncionarioOeeField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_esFuncionarioPublico}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneRadio id="esFuncionarioOee"
+							value="#{funcionarioOeeCarpetaFC.persona.esFuncionario}">
+							<f:selectItems
+								value="#{enumAppHelper.enumsValueItems('EsFuncionario', 'getValor', false)}" />
+							<a:support event="onchange" reRender="panelSuperior" />
+						</h:selectOneRadio>
+					</s:decorate></fieldset>
+				</rich:panel>
+				<h:outputText value="#{messages.CU303_obs_datos}"
+					style="color:#3A01DF;font-size:12px;font-weight:bold;" />
+
+				<rich:panel id="panelDatosFuncionario" style="border:none"
+					rendered="#{funcionarioOeeCarpetaFC.persona.esFuncionario}">
+					<fieldset><legend>#{messages.FuncionarioOee_datosEntidad}</legend>
+					<h:outputText value="#{messages.CU303_ingreseDatos}"
+						style="color:#3A01DF;font-size:12px;font-weight:bold;" /> <a:outputPanel
+						id="idPanelCampos" ajaxRendered="true">
+						<s:decorate id="fechaIngresoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_fechaIngreso}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaIngreso" inputSize="10"
+								enableManualInput="true" oninputkeyup="ponerBarra(event);"
+								value="#{funcionarioOeeCarpetaFC.funcionarioOee.fechaIngreso}"
+								datePattern="dd/MM/yyyy">
+								<a:support ajaxSingle="true" event="onchanged"
+									focus="nivelCodigo" />
+								<a:support ajaxSingle="true" event="oninputblur"
+									focus="nivelCodigo" />
+							</rich:calendar>
+							<span class="required">Formato: dd/MM/yyyy</span>
+						</s:decorate>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									<a:support event="onblur" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/administrarFuncionarioOee/FuncionarioOeeEdit')}" />
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+									<a:support event="onblur" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/administrarFuncionarioOee/FuncionarioOeeEdit')}" />
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onblur" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="modalidad" />
+								</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/administrarFuncionarioOee/FuncionarioOeeEdit')}" />
+							</s:decorate>
+						</a:region>
+					</a:outputPanel> <a:region>
+						<a:status onstart="Richfaces.showModalPanel('espera')"
+							onstop="#{rich:component('espera')}.hide()" />
+						<s:decorate id="tipoPlantaField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU303_modalidad_ocupacion}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="modalidad" style="width : 330px;"
+								value="#{funcionarioOeeCarpetaFC.modalidadOcupacionSeleccion}">
+								<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+									value="#{enumAppHelper.modalidadOcupacionSeleccions}" />
+								<s:convertEnum />
+								<a:support reRender="tipoNombramientoField" event="onchange"
+									action="#{funcionarioOeeCarpetaFC.cambioModalidad()}"></a:support>
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region> <s:decorate id="tipoNombramientoField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_tipoNombramiento}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="tipoNombramiento"
+							disabled="#{!funcionarioOeeCarpetaFC.mostrarTipoNombramiento}"
+							value="#{funcionarioOeeCarpetaFC.idTipoNombramiento}"
+							style="width:330px">
+							<f:selectItems value="#{tipoNombramientosSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate></fieldset>
+					<br />
+
+
+
+
+
+
+					<div style="clear: both"><span class="required">*</span>
+					#{messages.msg_required_fields} <br />
+					#{messages.msg_add_required_fields}</div>
+
+					<a:commandButton id="add" value="#{messages.msg_list_add}"
+						action="#{funcionarioOeeCarpetaFC.addRow()}"
+						reRender="panelDetails,panelSuperior,panelEsFuncionario,panelDatosFuncionario" />
+
+				</rich:panel>
+
+			</rich:panel>
+
+			<br />
+
+			<rich:panel id="panelDetails">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty funcionarioOeeCarpetaFC.listDetail ? 0 : funcionarioOeeCarpetaFC.listDetail.size})</f:facet>
+				<div class="results" id="detailList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty funcionarioOeeCarpetaFC.listDetail}" /> <rich:dataTable
+					id="details" var="_detail" rowKeyVar="row"
+					value="#{funcionarioOeeCarpetaFC.listDetail}"
+					rendered="#{not empty funcionarioOeeCarpetaFC.listDetail}">
+					<h:column>
+						<f:facet name="header">#{messages.FuncionarioOee_oee}</f:facet>
+						<h:outputText
+							value="#{_detail.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Title_Tab01}</f:facet>
+						<h:outputText
+							value="#{_detail.modalidadOcupacion=='P'?'NOMBRADO':'CONTRATADO'}"
+							rendered="#{_detail.modalidadOcupacion!=null}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.FuncionarioOee_tipoNombramiento}</f:facet>
+						<h:outputText value="#{_detail.tipoNombramiento.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.FuncionarioOee_fechaIngreso}</f:facet>
+						<h:outputText value="#{_detail.fechaIngreso}">
+							<s:convertDateTime pattern="dd/MM/yyyy"
+								locale="#{siccaAppHelper.localeCode}" />
+						</h:outputText>
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<h:commandLink id="delete" value="#{messages.msg_list_remove}"
+							action="#{funcionarioOeeCarpetaFC.eliminar(row)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');"
+							rendered="#{_detail.mostrarEliminar}" />
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="#{messages.GENERICO_VOLVER}" propagation="join"
+				view="/cargarCarpeta/postulantePorCarpeta/FichaPostulacionPorCarpeta.xhtml">
+				<f:param name="personaIdPersona"
+					value="#{funcionarioOeeCarpetaFC.personaIdPersona}" />
+				<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+					value="#{funcionarioOeeCarpetaFC.concursoPuestoAgrIdConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

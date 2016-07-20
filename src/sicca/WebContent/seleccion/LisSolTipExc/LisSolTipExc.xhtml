@@ -1,0 +1,260 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+
+		<rich:modalPanel id="modalSelect" width="450" autosized="true"
+			styleClass="centerbox">
+			<f:facet name="header">#{messages.CU427_excepciones}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+			<a:form id="formContacto">
+				<rich:panel>
+					<h:panelGrid>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU427_tipoExcepcion}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipoExcepcionModal" style="width :250px;"
+								value="#{lisSolTipExcFC.idTipoExcepcion}">
+								<f:selectItems value="#{lisSolTipExcFC.getTipoExcepcionNuevo()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<div style="clear: both"><span class="required">*</span>
+						#{messages.msg_required_fields}</div>
+					</h:panelGrid>
+				</rich:panel>
+				<a:outputPanel id="idPanelBotones" ajaxRendered="true">
+					<div class="actionButtons"><a:commandButton id="confirm"
+						value="#{messages.msg_acept}" propagation="join"
+						action="#{lisSolTipExcFC.irCU()}">
+
+					</a:commandButton> <a:commandButton id="clear" value="#{messages.GENERICO_VOLVER}"
+						onclick="#{rich:component('modalSelect')}.hide()" /></div>
+				</a:outputPanel>
+
+			</a:form>
+
+		</rich:modalPanel>
+		<h1>#{messages.CU427_title}</h1>
+
+		<rich:panel id="panelParametro">
+
+			<h:panelGrid columns="3">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{lisSolTipExcFC.nivelCod}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{lisSolTipExcFC.nivelDesc}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{lisSolTipExcFC.entidadCod}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true" value="#{lisSolTipExcFC.entidadDesc}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{lisSolTipExcFC.oeeCod}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true" value="#{lisSolTipExcFC.oeeDesc}" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+
+		<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+			switchType="client">
+			<a:form>
+				<h:panelGrid>
+					<s:decorate id="montoMinField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU427_concurso}</ui:define>
+						<h:inputText id="montoMin" style="width :250px;" maxlength="150"
+							value="#{lisSolTipExcFC.concursoFil}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU427_fechaDesde} 
+						</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{lisSolTipExcFC.fechaDesdeFil}" enableManualInput="true"
+							oninputkeyup="ponerBarra(event);" inputSize="10"
+							datePattern="dd/MM/yyyy" locale="#{siccaAppHelper.localeCode}">
+
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU427_fechaHasta} 
+						</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{lisSolTipExcFC.fechaHastaFil}" enableManualInput="true"
+							oninputkeyup="ponerBarra(event);" inputSize="10"
+							datePattern="dd/MM/yyyy" locale="#{siccaAppHelper.localeCode}">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU427_tipoExcepcion}</ui:define>
+						<h:selectOneMenu id="modalidad" style="width :250px;"
+							value="#{lisSolTipExcFC.tipoExcepcion}">
+							<s:selectItems var="ocupacion" label="#{ocupacion.descripcion}"
+								value="#{enumAppHelper.tipoExcepcion}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+				<div class="actionButtons"><a:commandButton id="search"
+					value="#{messages.msg_list_search_button}"
+					action="#{lisSolTipExcFC.search()}"
+					reRender="idPanelResultados, excepcionViewId">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> <s:button action="#{lisSolTipExcFC.limpiar()}" id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					includePageParams="false">
+					<f:param name="from" value="#{from}" />
+				</s:button></div>
+			</a:form>
+
+		</rich:simpleTogglePanel>
+		<a:form>
+			<rich:panel id="idPanelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty excepcionList.resultList ? 0 : (excepcionList.paginated ? excepcionList.resultCount : excepcionList.resultList.size)})</f:facet>
+				<div class="results" id="concursoListFormController"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty excepcionList.resultList}" /> <rich:dataTable
+					id="excepcionList" var="_excepcion"
+					value="#{excepcionList.resultList}"
+					rendered="#{not empty excepcionList.resultList}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{excepcionList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU427_tipo}" />
+								<ui:param name="propertyPath" value="excepcion.tipo" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_excepcion.tipo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{excepcionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU427_fechaSolicitud}" />
+								<ui:param name="propertyPath" value="excepcion.fechaAlta" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{lisSolTipExcFC.formatFecha(_excepcion.fechaAlta)}">
+							<s:convertDateTime type="both" dateStyle="short" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{excepcionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU427_concurso}" />
+								<ui:param name="propertyPath"
+									value="excepcion.concurso.idConcurso" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_excepcion.concurso.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{excepcionList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU427_estado}" />
+								<ui:param name="propertyPath" value="excepcion.estado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_excepcion.estado}" />
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.GENERICO_ACCION}</f:facet>
+						<a:commandLink value="#{messages.CU427_ver}"
+							action="#{lisSolTipExcFC.irCUVer()}" id="excepcionViewId">
+							<a:actionparam name="idExcepcion"
+								value="#{_excepcion.idExcepcion}"
+								assignTo="#{lisSolTipExcFC.idExecpion}" />
+						</a:commandLink>
+						
+						#{' '}
+			            <s:link
+							view="/seleccion/admSolicitudProrroga/SolicitudProrroga.xhtml"
+							value="#{messages.msg_edit}" propagation="none"
+							id="actividadEdit"
+							rendered="#{_excepcion.solicProrrogaCab.idSolicCab != null and _excepcion.estado == 'A SOLICITAR'}">
+							<f:param name="idSolicCab"
+								value="#{_excepcion.solicProrrogaCab.idSolicCab}" />
+							<f:param name="idExcepcion" value="#{_excepcion.idExcepcion}" />
+							<f:param name="modoVista" value="false" />
+							<f:param name="from"
+								value="/seleccion/LisSolTipExc/LisSolTipExc.xhtml" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</a:form>
+
+		<div class="tableControl"><s:link
+			view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+			rendered="#{excepcionList.previousExists}"
+			value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+			rendered="#{excepcionList.previousExists}"
+			value="#{messages.left}  #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{excepcionList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+			rendered="#{excepcionList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{excepcionList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"
+			rendered="#{excepcionList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{excepcionList.lastFirstResult}" />
+		</s:link></div>
+		<s:div styleClass="actionButtons" id="divBtn">
+			<s:button
+				onclick="#{rich:component('modalSelect')}.show();return false;"
+				id="createBTN" propagation="none"
+				value="#{messages.msg_create_male}">
+			</s:button>
+
+
+
+
+		</s:div>
+	</ui:define>
+</ui:composition>

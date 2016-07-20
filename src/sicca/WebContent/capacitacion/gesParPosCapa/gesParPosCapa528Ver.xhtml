@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+	<ui:define name="body">
+		<a:outputPanel id="idPanelModal" ajaxRendered="true">
+
+			<rich:modalPanel id="modal" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{gestionarPartCapa528.mostrarModal}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">Documentos Adjuntos (#{empty gestionarPartCapa528.lpostulacionCapAdj ? 0 : gestionarPartCapa528.lpostulacionCapAdj.size()})</f:facet>
+						<div class="results" id="idListado"><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty gestionarPartCapa528.lpostulacionCapAdj}" /> <rich:extendedDataTable
+							noDataLabel="#{messages.msg_list_search_no_results}"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							id="idMatDatosAdj"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							cellpadding="0" cellspacing="0" width="800" border="0"
+							var="_record" height="250px"
+							value="#{gestionarPartCapa528.lpostulacionCapAdj}"
+							rendered="#{not empty gestionarPartCapa528.lpostulacionCapAdj}">
+							<rich:column width="25%">
+								<f:facet name="header">
+						#{messages.CU528_documento}
+						</f:facet>
+								<h:outputText style="white-space:normal;word-wrap: break-word"
+									value="#{gestionarPartCapa528.actualizarAdjuntos(_record).documento.nombreFisicoDoc}" />
+							</rich:column>
+							<rich:column width="25%">
+								<f:facet name="header">
+						#{messages.CU528_fechaAlta}
+						</f:facet>
+								<h:outputText style="white-space:normal"
+									value="#{gestionarPartCapa528.formatearFecha(_record.fechaAlta)}" />
+							</rich:column>
+							<rich:column width="30%">
+								<f:facet name="header">
+						#{messages.CU528_tipoDocumento}
+						</f:facet>
+								<h:outputText style="white-space:normal"
+									value="#{_record.documento.datosEspecificos.descripcion}" />
+							</rich:column>
+							<rich:column width="20%">
+								<f:facet name="header">
+						#{messages.CU528_accion}
+						</f:facet>
+								<h:commandLink target="_blank" id="verHistorialId"
+									action="#{gestionarPartCapa528.abrirDocumento(_record.idPostulacionAdj)}"
+									reRender="panelModalSelect">
+									<h:graphicImage value="/img/application_form_magnify.png"
+										title="#{messages.gral_descargar}"
+										alt="#{messages.gral_descargar}" />
+								</h:commandLink>
+							</rich:column>
+
+						</rich:extendedDataTable></div>
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button
+						id="idBtnAceptar" value="Aceptar"
+						oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal')!=null){
+				Richfaces.showModalPanel('modal');
+			}				
+			</script>
+		</a:outputPanel>
+		<h1>#{messages.CU528_title}</h1>
+		<rich:panel id="panelTitulo">
+			<f:facet name="header">#{messages.CU526_titulo}</f:facet>
+			<h:panelGrid columns="1">
+				<s:decorate id="tituloField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU526_titulo}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="titulo" size="10" disabled="true"
+						value="#{gestionarPartCapa528.titulo}" style=" width : 450px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="tipoCapacitaField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU526_tipoCapacitacion}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="capacitacion" disabled="true"
+						value="#{gestionarPartCapa528.tipoCapacitacion}"
+						style=" width : 450px;">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<rich:panel id="panelOrganizadoPor">
+			<f:facet name="header">#{messages.CU526_titulo_organizadoPor}</f:facet>
+			<h:panelGrid columns="2">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{nivelEntidadOeeUtil.codNivelEntidad}">
+					</h:inputText>						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}">
+					</h:inputText>						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+						disabled="true" value="#{nivelEntidadOeeUtil.nombreSinEntidad}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						styleClass="numeric" value="#{nivelEntidadOeeUtil.ordenUnidOrg}" />								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+						value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+				</s:decorate>
+				<s:decorate id="uniddadOrgField" template="/layout/display.xhtml">
+					<ui:define name="label">Unidad. Organizativa 
+					</ui:define>
+					<h:inputText id="unidadOrgCod" size="10" disabled="true"
+						styleClass="numeric"
+						value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}" />								
+				            #{' '}
+				            <h:inputText id="unidadOrgCodDesc" size="40"
+						disabled="true"
+						value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<h:panelGrid columns="1">
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_paises_expedicion}</ui:define>
+						<h:selectOneMenu id="idPaisExped"
+							value="#{gestionarPartCapa528.idPaisExpe}"
+							style="width:
+							250px">
+							<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU526_docIdentidad}</ui:define>
+						<h:inputText id="concurso" size="30"
+							value="#{gestionarPartCapa528.docIdentidad}"
+							style=" width : 250px;">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.GENERICO_MOSTRAR}</ui:define>
+						<h:selectOneMenu id="estado" style="width : 250px;"
+							value="#{gestionarPartCapa528.idMostrar}">
+							<f:selectItem itemLabel="TODOS" itemValue="#{null}" />
+							<f:selectItem itemLabel="PARTICIPANTES" itemValue="P" />
+							<f:selectItem itemLabel="DESVINCULADOS" itemValue="D" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{gestionarPartCapa528.search()}"
+				reRender="idPanelResultados,idPanelModal">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button action="#{gestionarPartCapa528.limpiar()}" id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				includePageParams="false">
+				<f:param name="from" value="#{from}" />
+			</s:button><h:commandButton id="print"
+				action="#{gestionarPartCapa528.imprimir()}"
+				value="#{messages.msg_list_search_print_button}" /></div>
+		</a:form>
+		<h:form>
+			<rich:panel id="idPanelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty gestionarPartCapa528.lista ? 0 : gestionarPartCapa528.lista.size()})</f:facet>
+				<div class="results" id="idListado"><rich:extendedDataTable
+					noDataLabel="#{messages.msg_list_search_no_results}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					id="matrizEval"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					cellpadding="0" cellspacing="0" width="700" border="0" var="record"
+					height="300px" value="#{gestionarPartCapa528.lista}">
+
+					<rich:column width="17%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_postulante}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{gestionarPartCapa528.actualizarPostulacion(record).postulacionCap.persona.nombres} #{record.postulacionCap.persona.apellidos}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_docIdentidad}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.postulacionCap.persona.documentoIdentidad}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_paisExpe}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.postulacionCap.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</rich:column>
+					<rich:column width="14%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_email}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{record.postulacionCap.persona.EMail}" />
+					</rich:column>
+					<rich:column width="14%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU528_tipo}" />
+						</f:facet>
+						<h:outputText style="white-space:normal"
+							value="#{gestionarPartCapa528.descTipo(record.tipo)}" />
+					</rich:column>
+					<rich:column width="35%">
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU526_accion}" />
+						</f:facet>
+						<s:link value="Ver Ficha Insc." rendered="#{record.postulacionCap.personaPostulante!=null}" style="white-space:normal"
+							propagation="join"
+							view="/capacitacion/fichaPostulacion/VerFichaInscripcion.xhtml">
+							<f:param name="cu" value="CU528" />
+							<f:param name="id"
+								value="#{record.postulacionCap.personaPostulante.idPersonaPostulante}" />
+							<f:param name="from"
+								value="capacitacion/gesParPosCapa/gesParPosCapa528Ver" />
+						</s:link>#{' '}
+				<a:commandLink value="Ver Documentos" reRender="idPanelModal"
+							style="white-space:normal"
+							action="#{gestionarPartCapa528.cargarDocumentosAdjuntos(record.postulacionCap.idPostulacion)}">
+						</a:commandLink>#{' '}
+						<s:link value="Ver Desvinc."
+							rendered="#{record.tipo.equalsIgnoreCase('D')}"
+							view="/capacitacion/desvinculacionCapacitacion/AdmDesvinculacionCapacitacionVer.xhtml"
+							style="white-space:normal">
+							<f:param name="cu" value="CU528" />
+							<f:param name="listaDetIdlistaDet" value="#{record.idListaDet}" />
+							<f:param name="from"
+								value="capacitacion/gesParPosCapa/gesParPosCapa528" />
+						</s:link>
+					</rich:column>
+				</rich:extendedDataTable></div>
+			</rich:panel>
+		</h:form>
+		<div class="actionButtons"><s:button id="cancelAdd"
+			value="Volver" propagation="none"
+			view="/capacitacion/gestionCapacitacion/GestionCapacitaciones.xhtml" /></div>
+	</ui:define>
+</ui:composition>

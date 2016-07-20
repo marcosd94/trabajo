@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU126_IMPRIMIR_CONF_UO_LISTA_LINEAL" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.128947860107555"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="path_logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="codigoEntida" class="java.lang.String"/>
+	<parameter name="denominacionEntidad" class="java.lang.String"/>
+	<parameter name="codUo" class="java.lang.String"/>
+	<parameter name="denominacionUo" class="java.lang.String"/>
+	<parameter name="where" class="java.lang.String">
+		<defaultValueExpression><![CDATA["where 1=1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idConfiguracionUoCab" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select
+codigo_oee,
+id_configuracion_uo_det,
+descripcion_corta,
+orden,
+denominacion_unidad,
+cond_politica,
+prod_adm_publica,
+prod_sociedad,
+interno,
+descripcion_finalidad,
+direccion,
+telefono,
+usu_alta,
+usu_mod,
+fecha_mod,
+fecha_alta,
+activo,
+id_configuracion_uo_det_padre,
+id_clasificador_uo,
+id_configuracion_uo,
+estado_anterior
+from
+(select
+
+	(det1.codigo_uo) as codigo_oee,
+	det1.* as det
+
+from planificacion.configuracion_uo_det det1
+where det1.id_configuracion_uo_det_padre is null
+and det1.id_configuracion_uo = $P{idConfiguracionUoCab}
+and det1.activo = true
+union
+select
+	case
+	when det2.id_configuracion_uo_det_padre is not null then
+		(select repeat('   ',((select length(det2.codigo_uo)) - (select length((select codigo_uo from planificacion.configuracion_uo_det det1
+										where det1.id_configuracion_uo_det_padre is null
+										and det1.id_configuracion_uo = $P{idConfiguracionUoCab}
+										and det1.activo = true limit 1)
+						  )
+					     )
+				     )
+			     )
+		     )
+		|| (det2.codigo_uo)
+	end  as codigo_oee,
+
+	det2.* as det
+
+from planificacion.configuracion_uo_det det2
+join planificacion.configuracion_uo_det det3
+on det3.id_configuracion_uo_det = det2.id_configuracion_uo_det_padre
+and det3.activo = true
+and det3.id_configuracion_uo = $P{idConfiguracionUoCab}
+and det3.activo = true
+
+order by codigo_oee) as detalle;
+
+
+
+
+
+
+
+
+]]>
+	</queryString>
+	<field name="codigo_oee" class="java.lang.String"/>
+	<field name="id_configuracion_uo_det" class="java.lang.Long"/>
+	<field name="descripcion_corta" class="java.lang.String"/>
+	<field name="orden" class="java.lang.Integer"/>
+	<field name="denominacion_unidad" class="java.lang.String"/>
+	<field name="cond_politica" class="java.lang.Integer"/>
+	<field name="prod_adm_publica" class="java.lang.Integer"/>
+	<field name="prod_sociedad" class="java.lang.Integer"/>
+	<field name="interno" class="java.lang.Integer"/>
+	<field name="descripcion_finalidad" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>
+	<field name="telefono" class="java.lang.String"/>
+	<field name="usu_alta" class="java.lang.String"/>
+	<field name="usu_mod" class="java.lang.String"/>
+	<field name="fecha_mod" class="java.sql.Timestamp"/>
+	<field name="fecha_alta" class="java.sql.Timestamp"/>
+	<field name="activo" class="java.lang.Boolean"/>
+	<field name="id_configuracion_uo_det_padre" class="java.lang.Long"/>
+	<field name="id_clasificador_uo" class="java.lang.Long"/>
+	<field name="id_configuracion_uo" class="java.lang.Long"/>
+	<field name="estado_anterior" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="126" splitType="Immediate">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}.intValue()==1]]></printWhenExpression>
+			<line>
+				<reportElement positionType="Float" x="2" y="120" width="550" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="103" y="99" width="120" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{denominacionEntidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="365" y="99" width="151" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{denominacionUo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="9" y="99" width="89" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{codigoEntida}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="237" y="99" width="120" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{codUo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="237" y="67" width="279" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OEE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="237" y="83" width="124" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[COD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="365" y="83" width="151" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DENOMINACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="9" y="67" width="213" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="103" y="83" width="119" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DENOMINACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="9" y="83" width="89" height="12" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="21" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="9" y="0" width="543" height="16"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{codigo_oee} +". "+ $F{denominacion_unidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="191" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="2" y="0" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="492" y="0" width="60" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="439" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="291" y="0" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="24">
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="2" y="0" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="191" y="1" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line" x="0" y="0" width="552" height="1"/>
+			</line>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="291" y="1" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="502" y="0" width="50" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="439" y="1" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="2" y="10" width="550" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

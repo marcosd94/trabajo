@@ -1,0 +1,103 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Det descripcion cont funcional Details</f:facet>
+
+        <s:decorate id="idDetDescripcionContFuncional" template="layout/display.xhtml">
+            <ui:define name="label">Id det descripcion cont funcional</ui:define>
+            <h:outputText value="#{detDescripcionContFuncionalHome.instance.idDetDescripcionContFuncional}"/>
+        </s:decorate>
+
+        <s:decorate id="descripcion" template="layout/display.xhtml">
+            <ui:define name="label">Descripcion</ui:define>
+            <h:outputText value="#{detDescripcionContFuncionalHome.instance.descripcion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{detDescripcionContFuncionalHome.instance.activo}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/DetDescripcionContFuncionalEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty detDescripcionContFuncionalFrom ? 'DetDescripcionContFuncionalList' : detDescripcionContFuncionalFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Det contenido funcional</h:panelGroup>
+        </f:facet>
+    <div class="association" id="detContenidoFuncionalParent">
+
+        <h:outputText value="There is no detContenidoFuncional associated with this detDescripcionContFuncional."
+                   rendered="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional == null}"/>
+
+        <rich:dataTable var="_detContenidoFuncional"
+                   value="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional}"
+                rendered="#{detDescripcionContFuncionalHome.instance.detContenidoFuncional != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="detContenidoFuncionalTable">
+            <h:column>
+                <f:facet name="header">Id contenido funcional</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.idContenidoFuncional}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Planta cargo det id planta cargo det</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.plantaCargoDet.idPlantaCargoDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cpt id cpt</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.cpt.idCpt}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contenido funcional id contenido funcional</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.contenidoFuncional.idContenidoFuncional}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Puntaje</f:facet>
+                <h:outputText value="#{_detContenidoFuncional.puntaje}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewdetContenidoFuncional"
+                     value="View"
+                      view="/DetContenidoFuncional.xhtml">
+                    <f:param name="detContenidoFuncionalIdContenidoFuncional"
+                           value="#{_detContenidoFuncional.idContenidoFuncional}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

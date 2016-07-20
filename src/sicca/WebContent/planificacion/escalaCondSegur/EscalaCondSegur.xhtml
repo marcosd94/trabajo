@@ -1,0 +1,119 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.EscalaCondSegur_t}</h1>
+
+    <h:form id="escalaCondSegur" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.EscalaCondSegur_t}</f:facet>
+
+	          
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.msg_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true"
+	                			size="100"
+	                		maxlength="250"
+	                       disabled="true"
+	                          value="#{escalaCondSegurHome.instance.descripcion}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="desdeField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EscalaCondSegur_desde}</ui:define>
+	                <h:inputText id="desde"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{escalaCondSegurHome.instance.desde}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="hastaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EscalaCondSegur_hasta}</ui:define>
+	                <h:inputText id="hasta"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{escalaCondSegurHome.instance.hasta}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EscalaCondSegur_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="true"
+	                          value="#{escalaCondSegurHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+		
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            
+
+            
+
+            
+
+            
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty escalaCondSegurFrom ? 'planificacion/escalaCondSegur/EscalaCondSegurList' : escalaCondSegurFrom}.xhtml"
+              />
+
+        </div>
+        
+         <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"    rendered="#{escalaCondSegurHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{escalaCondSegurHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{escalaCondSegurHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{escalaCondSegurHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{escalaCondSegurHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{escalaCondSegurHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"  rendered="#{escalaCondSegurHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{escalaCondSegurHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

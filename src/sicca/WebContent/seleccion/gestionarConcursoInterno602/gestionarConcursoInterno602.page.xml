@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/seleccion/gestionarIngresosConcursos/gestionarIngresosConcurso.xhtml"
+	login-required="true">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+	<action execute="#{gestConcursoInternoExc601FC.init()}"
+		on-postback="false" />
+	<param name="idConcursoPuestoAgr" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<param name="idExcepcion" value="#{gestIngresoConcursoInter602FC.idExcepcion}" />
+	<restrict>#{identity.hasRole('gestIngresoConcursoInter602FC')}</restrict>
+	<navigation from-action="#{gestIngresoConcursoInter602FC.save()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect
+				view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml">
+				<param name="idConcursoPuestoAgr" value="#{grupoPuestosController.idConcursoPuestoAgr}"></param>
+			</redirect>
+		</rule>
+	</navigation>
+	<navigation from-action="#{gestIngresoConcursoInter602FC.nextTask()}">
+		<rule if-outcome="nextTask">
+			<end-conversation />
+			<redirect
+				view-id="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml">
+
+			</redirect>
+		</rule>
+	</navigation>
+</page>

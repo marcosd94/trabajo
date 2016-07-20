@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/HomologacionPerfilMatrizDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ <action execute="#{cptObsHome.wire}"/>
+ <action execute="#{administrarCptFormController.initCptHomologacionRespuestaOee()}" on-postback="false"/>
+<param name="cptFrom" />
+	<param name="tipo" value="#{administrarCptFormController.tipo}" />
+	<param name="cptIdCpt" value="#{cptHome.cptIdCpt}" />
+	<param name="cptIdCptPadre" value="#{administrarCptFormController.idCptPadre}" />
+	<param name="sinAnxIdAnx" value="#{administrarCptFormController.idAnx}" />
+	<param name="idCpt" value="#{administrarCptFormController.idCpt}"/>
+ 	<param name="idCptObs" value="#{cptObsHome.cptIdCpt}"/>
+ <param name="from" value="#{cptListFormController.from}"/>
+ <navigation from-action="#{administrarCptFormController.updateCptResp()}">
+  <rule if-outcome="updated">
+   <end-conversation/>
+   <redirect view-id="/planificacion/cpt/CptGestionarHomologacion.xhtml">
+      <param name="idCpt" value="#{administrarCptFormController.idCpt}"/>
+      <param name="tipo" value="#{administrarCptFormController.tipo}" />
+   </redirect>
+  </rule>
+ </navigation>
+
+
+</page>

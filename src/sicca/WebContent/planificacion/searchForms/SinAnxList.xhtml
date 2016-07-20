@@ -1,0 +1,213 @@
+&ntilde;<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="sinAnxSearch" styleClass="edit">
+			<h1>#{messages.CU193_title}</h1>
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_anho}</ui:define>
+					<h:inputText id="aniAniopre" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						value="#{categoriaAnexoSearchListFormController.sinAnx.aniAniopre}" />
+				</s:decorate>
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						disabled="#{categoriaAnexoSearchListFormController.filtroSinar}"
+						value="#{categoriaAnexoSearchListFormController.sinNivelEntidad.nenCodigo}">
+						<a:support event="onchange"
+							action="#{categoriaAnexoSearchListFormController.obtenerDescNivelEntidad()}"
+							reRender="nivelField" focus="entidadCodigo" />
+					</h:inputText>
+                #{' '}
+                <h:inputText id="nivelDesc" size="60" disabled="true"
+						value="#{categoriaAnexoSearchListFormController.sinNivelEntidad.nenNombre}" />
+                #{' '}
+                <s:button id="searchNivel" disabled="#{categoriaAnexoSearchListFormController.filtroSinar}"
+						image="#{request.contextPath}/img/Buscar.png"
+						view="/planificacion/sinNivelEntidad/SinNivelEntidadList.xhtml"
+						propagation="join">
+						<f:param name="from" value="planificacion/searchForms/SinAnxList" />
+					</s:button>
+				</s:decorate>
+
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						onkeypress="return soloNumeros(event);"
+						value="#{categoriaAnexoSearchListFormController.sinEntidad.entCodigo}"
+						disabled="#{categoriaAnexoSearchListFormController.filtroSinar}">
+						<a:support event="onchange"
+							action="#{categoriaAnexoSearchListFormController.obtenerDescEntidad()}"
+							reRender="entidadField" focus="anxDescrip" />
+					</h:inputText>
+                #{' '}
+                <h:inputText id="entidadDesc" size="60" disabled="true"
+						value="#{categoriaAnexoSearchListFormController.sinEntidad.entNombre}" />
+                #{' '}
+                <a:commandButton id="searchEntidad"
+						eventsQueue="default" image="/img/Buscar.png"
+						disabled="#{categoriaAnexoSearchListFormController.filtroSinar}"
+						action="#{categoriaAnexoSearchListFormController.getUrlToPageEntidad()}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_denominacion}</ui:define>
+					<h:inputText id="anxDescrip"
+						value="#{categoriaAnexoSearchListFormController.sinAnx.anxDescrip}"
+						size="74" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Categoria</ui:define>
+					<h:inputText id="ctgCodigo"
+						value="#{categoriaAnexoSearchListFormController.sinAnx.ctgCodigo}"
+						size="10" />
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{categoriaAnexoSearchListFormController.search()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{categoriaAnexoSearchListFormController.searchAll()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton>
+			<s:button id="volver" value="Volver" propagation="nest"
+			rendered="#{not empty fromToPage}"
+								view="/#{fromToPage}.xhtml" />
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty sinAnxList.resultList ? 0 : (sinAnxList.paginated ? sinAnxList.resultCount : sinAnxList.resultList.size)})</f:facet>
+			<div class="results" id="sinAnxList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty sinAnxList.resultList}" /> <rich:dataTable
+				id="sinAnxList" var="_sinAnx" value="#{sinAnxList.resultList}"
+				rendered="#{not empty sinAnxList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU193_anho}" />
+							<ui:param name="propertyPath" value="sinAnx.aniAniopre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.aniAniopre}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU193_nivel}" />
+							<ui:param name="propertyPath" value="sinAnx.nenCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.nenCodigo}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU193_entidad}" />
+							<ui:param name="propertyPath" value="sinAnx.entCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.entCodigo}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU193_obj_gasto}" />
+							<ui:param name="propertyPath" value="sinAnx.objCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.objCodigo}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU193_cat}" />
+							<ui:param name="propertyPath" value="sinAnx.ctgCodigo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.ctgCodigo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{sinAnxList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU193_denominacion}" />
+							<ui:param name="propertyPath" value="sinAnx.anxDescrip" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_sinAnx.anxDescrip}" />
+				</h:column>
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty fromToPage ? 'planificacion/searchForms/SinAnx' : fromToPage}.xhtml"
+						value="#{empty fromToPage ? messages.msg_list_view : messages.msg_list_select}"
+						 propagation="nest"
+						id="sinAnxViewId" rendered="#{not empty fromToPage}">
+						<f:param name="sinAnxIdAnx" value="#{_sinAnx.idAnx}" />
+					</s:link>
+
+
+
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<a:outputPanel ajaxRendered="true">
+			<div class="tableControl"><s:link
+				view="/planificacion/searchForms/SinAnxList.xhtml"
+				rendered="#{sinAnxList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/planificacion/searchForms/SinAnxList.xhtml"
+				rendered="#{sinAnxList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{sinAnxList.previousFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/SinAnxList.xhtml"
+				rendered="#{sinAnxList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult" value="#{sinAnxList.nextFirstResult}" />
+			</s:link> <s:link view="/planificacion/searchForms/SinAnxList.xhtml"
+				rendered="#{sinAnxList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult" value="#{sinAnxList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

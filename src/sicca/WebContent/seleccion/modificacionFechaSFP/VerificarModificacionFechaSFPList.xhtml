@@ -1,0 +1,292 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+     xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU52_perfil}</h1>
+    <h:form id="solicProrrogaDetSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel switchType="ajax">
+<rich:panel id="panelParametro" >	<f:facet name="header">#{messages.CU261_dato_concurso}</f:facet>
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{verificarModifFechaSFPListFormController.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{verificarModifFechaSFPListFormController.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadbField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{verificarModifFechaSFPListFormController.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{verificarModifFechaSFPListFormController.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{verificarModifFechaSFPListFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{verificarModifFechaSFPListFormController.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{verificarModifFechaSFPListFormController.concurso.nombre}" style=" width : 414px;"/>
+            </s:decorate>
+             <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU252_grupoPuestos}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{verificarModifFechaSFPListFormController.concursoPuestoAgr.descripcionGrupo}" style=" width : 414px;"/>
+            </s:decorate>
+			<a:outputPanel >
+					<h:outputText value="#{messages.CU261_fecha_fin_actual}" style="color:Red;"/>
+					 <rich:calendar id="fechaDesde" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" disabled="true"
+                            value="#{verificarModifFechaSFPListFormController.solicProrrogaCab.fechaVigHastaAnt}" />
+			</a:outputPanel>
+				<a:outputPanel >
+					<h:outputText value="#{messages.CU261_fecha_fin_nueva}" style="color:Red;"/>
+					 <rich:calendar id="fechaHasta" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" disabled="true"
+                            value="#{verificarModifFechaSFPListFormController.solicProrrogaCab.fechaVigHastaNuev}" />
+				</a:outputPanel>
+			</h:panelGrid>
+			
+			</rich:panel>
+			<rich:panel ><f:facet name="header">#{messages.CU261_datos_solicitud}</f:facet>
+			<h:panelGrid columns="3">
+			<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_nro_soli}</ui:define>
+						<h:inputText disabled="true"
+							value="#{verificarModifFechaSFPListFormController.solicProrrogaCab.nroSol}"
+							size="40" />
+					</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_fecha}</ui:define>
+						<rich:calendar  datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" disabled="true"
+                            value="#{verificarModifFechaSFPListFormController.solicProrrogaCab.fechaSol}" />
+					</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_estado}</ui:define>
+						<h:inputText  disabled="true"
+							value="#{verificarModifFechaSFPListFormController.solicProrrogaCab.estado}"
+							size="40" />
+					</s:decorate>
+			</h:panelGrid>
+			</rich:panel>
+
+        </rich:simpleTogglePanel>
+
+       
+
+    
+
+    <rich:panel>
+        <f:facet name="header">#{messages.CU261_obs_rpta} (#{empty solicProrrogaDetList.resultList ? 0 : (solicProrrogaDetList.paginated ? solicProrrogaDetList.resultCount : solicProrrogaDetList.resultList.size)})</f:facet>
+    <div class="results" id="solicProrrogaDetList">
+
+    <h:outputText  value="#{messages.msg_list_search_no_results}"
+                 rendered="#{empty solicProrrogaDetList.resultList}"/>
+
+     <rich:dataTable id="solicProrrogaDetList"
+                var="_solicProrrogaDet" rowKeyVar="_index"
+              value="#{verificarModifFechaSFPListFormController.prorrogaDetList}"
+           rendered="#{not empty solicProrrogaDetList.resultList}">
+       
+      <rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{solicProrrogaDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU261_nro}"/>
+                    <ui:param name="propertyPath" value="solicProrrogaDet.nro"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_solicProrrogaDet.nro}"/>
+        </rich:column>
+      <rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{solicProrrogaDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU261_obs}"/>
+                    <ui:param name="propertyPath" value="solicProrrogaDet.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_solicProrrogaDet.observacion}"/>
+       </rich:column>
+         <rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{solicProrrogaDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU261_fec_obs}"/>
+                    <ui:param name="propertyPath" value="solicProrrogaDet.fechaObs"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_solicProrrogaDet.fechaObs}">
+                  	<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+                  	</h:outputText>
+  </rich:column>
+      
+     <rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{solicProrrogaDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU261_rpts}"/>
+                    <ui:param name="propertyPath" value="solicProrrogaDet.respuesta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_solicProrrogaDet.respuesta}"/>
+        </rich:column>
+       
+       
+      <rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">
+                <ui:include src="/layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{solicProrrogaDetList}"/>
+                    <ui:param name="propertyLabel" value="#{messages.CU261_fecha_rpta}"/>
+                    <ui:param name="propertyPath" value="solicProrrogaDet.fechaRpta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_solicProrrogaDet.fechaRpta}">
+              	<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+            </h:outputText>
+      </rich:column>
+       	<rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{solicProrrogaDetList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU261_aprobado_sfp}" />
+							<ui:param name="propertyPath" value="_solicProrrogaDet.aceptaSfp" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{_solicProrrogaDet.aceptaSfp}" 
+					disabled="true"/>
+			</rich:column>
+       	<rich:column styleClass="#{verificarModifFechaSFPListFormController.getRowClass(_index)}" >
+            <f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+            <s:link view="/#{empty from ? 'seleccion/modificacionFechaSFP/ObservacionRespuesta' : from}.xhtml"
+                   value="#{empty from ? 'Ver' : ''}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="solicProrrogaDetViewId">
+                  <f:param name="solicProrrogaDetIdSolicDet"
+                        value="#{_solicProrrogaDet.idSolicDet}"/>
+                     <f:param name="solicProrrogaCabIdSolicCab"
+                        value="#{verificarModifFechaSFPListFormController.idSolicCab}"/>
+              </s:link>
+            #{' '}
+            <s:link view="/seleccion/modificacionFechaSFP/ObservacionRespuestaEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none" disabled="#{!_solicProrrogaDet.enviadoSfp}"
+                rendered="#{empty from}">
+                <f:param name="solicProrrogaDetIdSolicDet"
+                        value="#{_solicProrrogaDet.idSolicDet}"/>
+                <f:param name="fromRpta"
+                        value="false"/>
+                        <f:param name="solicProrrogaCabIdSolicCab"
+                        value="#{verificarModifFechaSFPListFormController.idSolicCab}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/seleccion/modificacionFechaSFP/ObservacionRespuestaEdit.xhtml"
+                   value="#{messages.CU53_resp}"
+             propagation="join" disabled="#{!verificarModifFechaSFPListFormController.habRpta(_solicProrrogaDet.idSolicDet) }"
+               rendered="#{empty from}">
+                <f:param name="solicProrrogaDetIdSolicDet"
+                        value="#{_solicProrrogaDet.idSolicDet}"/>
+              <f:param name="fromRpta"
+                        value="true"/>
+                         <f:param name="solicProrrogaCabIdSolicCab"
+                        value="#{verificarModifFechaSFPListFormController.idSolicCab}"/>
+             </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/seleccion/modificacionFechaSFP/VerificarModificacionFechaSFPList.xhtml"
+            rendered="#{solicProrrogaDetList.previousExists}"
+               value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/modificacionFechaSFP/VerificarModificacionFechaSFPList.xhtml"
+            rendered="#{solicProrrogaDetList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{solicProrrogaDetList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/solicProrrogaDetList.xhtml"
+            rendered="#{solicProrrogaDetList.nextExists}"
+               value="#{messages.msg_list_next_page}  #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{solicProrrogaDetList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/modificacionFechaSFP/VerificarModificacionFechaSFPList.xhtml"
+            rendered="#{solicProrrogaDetList.nextExists}"
+               value="#{messages.msg_list_last_page}  #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{solicProrrogaDetList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+	<h:panelGrid columns="4" >
+	 <h:commandButton id="auto" disabled="#{verificarModifFechaSFPListFormController.esPublicado() || verificarModifFechaSFPListFormController.esAprobado()}"
+                          value="#{messages.CU261_autorizar_rech}"
+                          action="#{verificarModifFechaSFPListFormController.autorizarRechazar()}"
+                          onclick="return confirm('#{messages.CU261_msg_autorizar_recha}');"/>
+                          
+        <h:commandButton id="pubicar" disabled="#{verificarModifFechaSFPListFormController.esPublicado() || verificarModifFechaSFPListFormController.esPendienteAp()}"
+                          value="#{messages.CU261_publicar}"
+                          action="#{verificarModifFechaSFPListFormController.publicar()}"
+                          onclick="return confirm('#{messages.CU261_mg_publicar}');"/>
+                          
+        <s:button view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+                    id="verCronograma"
+           propagation="nest"
+                 value="#{messages.CU261_ver_cronograma}">
+                 <f:param value="seleccion/modificacionFechaSFP/VerificarModificacionFechaSFPList" name="from"/>
+        </s:button>
+					                 
+        <s:button view="/proceso/BandejaExcepcionList.xhtml"
+                    id="volver"
+           propagation="none"
+                 value="#{messages.CU52_volver}">
+        </s:button>
+	</h:panelGrid>
+   </h:form>
+</ui:define>
+
+</ui:composition>

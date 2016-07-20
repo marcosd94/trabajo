@@ -1,0 +1,181 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU306_title}</h1>
+		 
+		<h:form id="envioHomologacionSearch" styleClass="edit">
+		
+				<rich:panel id="panelParametro">
+					<f:facet name="header">#{reemplazoMiemboComiteFC.esExclusion()? messages.CU306_ver_excepcion : messages.CU306_ver_reemplazo}</f:facet>
+
+					<h:panelGrid columns="3">
+
+						<s:decorate id="nivelField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_nivel}
+								<span class="required">*</span>
+							</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+								value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+						</s:decorate>
+						<s:decorate id="entidadField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU193_entidad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entCodigo}">
+							</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.sinEntidad.entNombre}" />
+						</s:decorate>
+						<s:decorate id="oeeField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="orden" size="10" disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+								disabled="true"
+								value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+						</s:decorate>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.gral_concurso}
+										<span class="required">*</span>
+									</ui:define>
+									<h:selectOneMenu id="cpt" style="width : 400px;"
+										value="#{grupoPuestosController.idConcurso}"
+										disabled="true">
+										<f:selectItems value="#{grupoPuestosController.concursosNoFinalizadosSelectItem}" />
+									</h:selectOneMenu>
+						</s:decorate>
+						
+
+						<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU306_comision_seleccion}
+									<span class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="comisionSel" style="width : 400px;"
+									value="#{reemplazoMiemboComiteFC.idComisionSeleccion}"
+									disabled="true">
+									<f:selectItems value="#{reemplazoMiemboComiteFC.comisionSeleccionSelectItem}" />
+								</h:selectOneMenu>
+						</s:decorate>
+
+					</h:panelGrid>
+				</rich:panel>
+				
+
+				<br></br>
+				<rich:panel id="seleccionDet">
+				    <f:facet name="header">#{reemplazoMiemboComiteFC.esExclusion() ? messages.CU306_exclusion_integrante : messages.CU306_reemplazo_integrante}</f:facet> 
+					
+					<rich:dataTable id="reemplazoList" 
+			  		var="_comisionSeleccionDet" rowKeyVar="fila"
+					value="#{reemplazoMiemboComiteFC.listaComisionSeleccionDet}">
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.gral_cin}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_comisionSeleccionDet.persona.documentoIdentidad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU306_nombres}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_comisionSeleccionDet.persona.nombreCompleto}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.gral_oee}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_comisionSeleccionDet.configuracionUo.denominacionUnidad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.gral_rol}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_comisionSeleccionDet.rol.descripcion}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU306_titular_suplente}"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{_comisionSeleccionDet.titularSuplente == 'T' ? 'TITULAR' : 'SUPLENTE'}" />
+					</h:column>
+				</rich:dataTable>
+				</rich:panel>
+		
+
+		
+		
+		<br></br>
+		<rich:panel id="motivoPanel">
+			<f:facet name="header">#{reemplazoMiemboComiteFC.esExclusion() ? messages.CU306_datos_exclusion : messages.CU306_datos_excepcion}</f:facet> 
+				<h:panelGrid columns="2">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{reemplazoMiemboComiteFC.esExclusion() ? messages.CU306_motivo_exclusion : messages.CU306_motivo_reemplazo}</ui:define>
+							 <h:inputTextarea id="motivo" value="#{reemplazoMiemboComiteFC.motivoExclusion}" cols="60" rows="4"
+							 	disabled="true">
+							 </h:inputTextarea>
+						</s:decorate>
+
+						
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{reemplazoMiemboComiteFC.esExclusion() ? messages.CU306_fecha_exclusion : messages.CU306_fecha_reemplazo}</ui:define>
+						<h:inputText id="fechaReemplazo" value="#{reemplazoMiemboComiteFC.fechaExclusion}" disabled="true"/>
+					</s:decorate>
+				</h:panelGrid>
+					
+				<div style="clear:both">
+			        <s:button
+						view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+						rendered="#{grupoPuestosController.idConcurso != null}"
+						id="anexos" value="#{messages.gral_anexos}"
+						propagation="join">
+						<f:param name="direccionFisica" value="#{reemplazoMiemboComiteFC.ubicacionFisica}" />
+						<f:param name="nombrePantalla" value="#{reemplazoMiemboComiteFC.nombrePantalla}" />
+						<f:param name="idCU" value="" />
+						<f:param name="nombreTabla" value="#{reemplazoMiemboComiteFC.entity}" />
+						<f:param name="mostrarDoc" value="true" /> 
+						<f:param name="isEdit" value="false" />
+						<f:param name="from" value="seleccion/reemplazoMiembroComite/ReemplazoMiembro" />
+					</s:button>
+			    </div>
+		</rich:panel>
+
+		<s:div styleClass="actionButtons">         
+			<s:button view="#{reemplazoMiemboComiteFC.from}"
+				id="volver" propagation="none" value="#{messages.msg_done}">
+			</s:button>
+		</s:div>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,893 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>Editar #{messages.CU496_titulo_edit}</h1>
+<script type="text/javascript">
+	function format(input)
+	{
+	var num = input.value.replace(/\./g,"");
+	if(!isNaN(num)){
+		num = num.toString().split("").reverse().join("").replace(/(?=\d*\.?)(\d{3})/g,'$1.');
+		num = num.split("").reverse().join("").replace(/^[\.]/,"");
+		input.value = num;
+	 }
+	else{ alert("Solo se permiten numeros");
+		input.value = input.value.replace(/[^\d\.]*/g,"");
+	}
+	}
+</script>
+    <h:form id="capacitacionesSearch" styleClass="edit"  enctype="multipart/form-data" >
+
+        <rich:simpleTogglePanel label="#{messages.CU474_capacitacion}" switchType="ajax" id="panelParametro">
+			
+			<h:panelGrid columns="2">
+		<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo0" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion0"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo0" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion0"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo0" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion0" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<a:outputPanel >
+			<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="orgCodigo0" size="10"  disabled="true"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											/>
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion0" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					
+							</s:decorate>
+				</a:outputPanel>
+		</h:panelGrid>
+			<h:panelGrid columns="1">
+			<a:region >
+			<s:decorate id="tituloField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_titulo}</ui:define>
+                <h:inputText id="idDatosEspecificosTipoCap"
+                      size="100" maxlength="300" 
+                          value="#{cargarDatosObjetoGasto290FC.capacitaciones.nombre}">
+                          	<a:support event="onchange" eventsQueue="default"
+									reRender="tituloField" />
+                </h:inputText>
+            </s:decorate>
+            </a:region>
+         
+
+			<a:region >
+            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU471_tipo_cap}<span class="required">*</span> </ui:define>
+               <h:selectOneMenu id="tipo" value="#{cargarDatosObjetoGasto290FC.idTipoCapacitacion}" 
+							style="width:250px">
+							<f:selectItems
+								value="#{cargarDatosObjetoGasto290FC.tipoCapacitacionItems}" />
+								<a:support event="onchange" eventsQueue="default"
+									reRender="tipoField" />	
+						</h:selectOneMenu>
+            </s:decorate>
+           </a:region>
+		 
+</h:panelGrid>
+        </rich:simpleTogglePanel>
+
+   
+
+    <rich:panel id="panelResultado">
+        <f:facet name="header">#{messages.CU474_identificacion}</f:facet>
+    	<h:panelGrid columns="1">
+    		<a:region >
+    	 	<s:decorate template="/layout/edit.xhtml" id="requiereRecepcionField">
+    	   <ui:define name="label">#{messages.CU496_require_publicacion} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="requiereRecepcion" value="#{cargarDatosObjetoGasto290FC.requierePublicacion}" >
+						<s:selectItems var="recep" value="#{enumAppHelper.sinos}"
+							label="#{recep.descripcion}" />
+						<s:convertEnum/>
+						<a:support event="onchange" eventsQueue="default"
+									reRender="requiereRecepcionField" />
+					</h:selectOneRadio>
+				</s:decorate>
+		</a:region>
+		<a:region >
+			<s:decorate template="/layout/edit.xhtml" id="modalidadCapacitacionField">
+    	   <ui:define name="label">#{messages.CU474_modalidad} <span class="required">*</span> </ui:define>
+					<h:selectOneRadio id="modalidadCapacitacion" value="#{cargarDatosObjetoGasto290FC.modalidadCapacitacion}">
+						<s:selectItems var="modalidad" value="#{enumAppHelper.modalidadCapacitacions}"
+							label="#{modalidad.descripcion}" />
+						<s:convertEnum/>
+						<a:support event="onchange" eventsQueue="default"
+									reRender="modalidadCapacitacionField" />
+					</h:selectOneRadio>
+				</s:decorate>
+			</a:region>
+			<a:region >
+				<s:decorate template="/layout/edit.xhtml" id="sedeField">
+					<ui:define name="label">#{messages.CU474_sede}<span class="required">*</span></ui:define>
+					<h:inputText id="sede" size="100" maxlength="500" 
+						value="#{cargarDatosObjetoGasto290FC.capacitaciones.sede}" >
+						<a:support event="onchange" eventsQueue="default"
+									reRender="sedeField" />
+					</h:inputText>
+				</s:decorate>
+		</a:region>
+		<a:region >
+				<s:decorate template="/layout/display.xhtml" id="direccionField">
+					<ui:define name="label">#{messages.CU474_direccion}</ui:define>
+					<h:inputText id="direccion" size="100" maxlength="500"
+						value="#{cargarDatosObjetoGasto290FC.capacitaciones.direccion}" >
+						<a:support event="onchange" eventsQueue="default"
+									reRender="direccionField" />
+					</h:inputText>
+				</s:decorate>
+		</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<a:region >
+				 <s:decorate template="/layout/edit.xhtml" id="paisNacField">
+						<ui:define name="label">#{messages.Barrio_pais}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="paisNac" style="width : 250px;" 
+							value="#{cargarDatosObjetoGasto290FC.idPais}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac,dptOutPanel,cioudadOutPanel" eventsQueue="default" limitToList="true" 
+								action="#{cargarDatosObjetoGasto290FC.updateDepartamentoChange()}"/>
+						</h:selectOneMenu>
+					</s:decorate>
+					</a:region>
+					<a:region >
+					<a:outputPanel ajaxRendered="true" id="dptOutPanel">
+					<s:decorate id="dptoNacField" template="/layout/edit.xhtml" >
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;" 
+							value="#{cargarDatosObjetoGasto290FC.idDepartamento}">
+							<f:selectItems
+								value="#{cargarDatosObjetoGasto290FC.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{cargarDatosObjetoGasto290FC.updateCiudad()}"
+								reRender="ciudadNac,cioudadOutPanel" />
+						</h:selectOneMenu>
+					</s:decorate></a:outputPanel>
+					</a:region>
+					<a:region ><a:outputPanel ajaxRendered="true" id="cioudadOutPanel">
+					<s:decorate id="ciudadNacField" template="/layout/edit.xhtml" >
+							<ui:define name="label">#{messages.Persona_idCiudadDirecc}<span class="required">*</span></ui:define>
+							<h:selectOneMenu id="ciudadNac" style="width : 250px;" 
+								value="#{cargarDatosObjetoGasto290FC.idCiudad}">
+								<f:selectItems
+									value="#{cargarDatosObjetoGasto290FC.ciudadSelecItem}" />
+									<a:support event="onchange" eventsQueue="default"
+									reRender="ciudadNacField" />
+							</h:selectOneMenu>
+					</s:decorate>
+					</a:outputPanel>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+				<a:region >
+					<s:decorate id="fechaIniDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_fecIni}<span class="required">*</span> </ui:define>
+						<rich:calendar id="fechaIni" 
+							value="#{cargarDatosObjetoGasto290FC.capacitaciones.fechaInicio}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+						<a:support event="onchanged" eventsQueue="default"
+									reRender="fechaIniDecorate" />
+						</rich:calendar>
+					</s:decorate>
+				</a:region>
+				<a:region >
+					<s:decorate id="fechaFinDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU82_fecFin}<span class="required">*</span></ui:define>
+						<rich:calendar id="fechaFin" 
+							value="#{cargarDatosObjetoGasto290FC.capacitaciones.fechaFin}" inputSize="10"
+							datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+							<a:support event="onchanged" eventsQueue="default"
+									reRender="fechaFinDecorate" />
+						</rich:calendar>
+					</s:decorate>
+			</a:region>
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+				<a:region >
+				<s:decorate template="/layout/edit.xhtml" id="costoField">
+					<ui:define name="label">#{messages.CU474_costo}<span class="required">*</span></ui:define>
+					 
+					<h:inputText id="costo" size="25" onkeyup="format(this)" styleClass="numeric"   onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosObjetoGasto290FC.costo}">
+						    <a:support event="onchange" eventsQueue="default"
+									reRender="costoField" />
+						</h:inputText>
+				</s:decorate>
+			</a:region>
+			<a:region >
+				<s:decorate id="becasField" template="/layout/edit.xhtml">
+						<ui:define name="label"><span class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="becas"
+							value="#{cargarDatosObjetoGasto290FC.valorAlf}"
+							style=" width : 184px;">
+							<f:selectItems
+								value="#{becasSelectItems}" />
+						 <a:support event="onchange" eventsQueue="default"
+									reRender="becasField" />
+						</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<a:region >
+				<s:decorate template="/layout/edit.xhtml" id="cupoMinimoField">
+					<ui:define name="label">Cupo Mínimo</ui:define>
+					<h:inputText id="cupoMinimo" size="20" styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosObjetoGasto290FC.capacitaciones.cupoMinimo}" >
+						 <a:support event="onchange" eventsQueue="default"
+									reRender="cupoMinimoField" />
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml" id="cupoMaximoField">
+					<ui:define name="label">Cupo Máximo</ui:define>
+					<h:inputText id="cupoMaximo" size="20" styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosObjetoGasto290FC.capacitaciones.cupoMaximo}" >
+						 <a:support event="onchange" eventsQueue="default"
+									reRender="cupoMaximoField" />
+					</h:inputText>
+				</s:decorate>
+			</a:region>
+			<a:region >
+				<s:decorate template="/layout/edit.xhtml" id="cHorariaField">
+					<ui:define name="label">#{messages.CU474_carga_horaria}<span class="required">*</span></ui:define>
+					<h:inputText id="cHoraria" size="20"  styleClass="numeric" onkeypress="return soloNumeros(event);"
+						value="#{cargarDatosObjetoGasto290FC.capacitaciones.cargaHoraria}" >
+						 <a:support event="onchange" eventsQueue="default"
+									reRender="cHorariaField" />
+					</h:inputText>
+						<h:outputText value="Hs."/>
+				</s:decorate>
+			</a:region>
+				</h:panelGrid>
+					
+		</rich:panel>
+		<rich:panel >
+		 <f:facet name="header">#{messages.CU496_instituciones_que_dicta}</f:facet>
+		 <h:panelGrid columns="1">
+		  <h:outputText value="#{messages.CU496_mgs_selecicone_oee}" style="color:Red;"/>
+		 </h:panelGrid>
+		 
+		 
+		<h:panelGrid columns="2">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField3">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo3" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivelDescripcion3" focus="entidadCodigo3"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion3"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi3" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.getUrlToPageNivel('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+					<a:region >
+					<s:decorate id="institucionEducativaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU496_institucion_educativa}
+						</ui:define>
+						<h:selectOneMenu id="institucionEducativa" 
+							value="#{cargarDatosObjetoGasto290FC.idInstEducativa}"
+							style=" width : 250px;">
+							<f:selectItems
+								value="#{institucionEducativaSelectItems}" />
+								 <a:support event="onchange" eventsQueue="default"
+									reRender="institucionEducativaField" />
+						</h:selectOneMenu>
+				</s:decorate>
+				</a:region>
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField3">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo3" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.findEntidad()}" focus="unidadOrgCodigo3"
+									reRender="entidadDescripcion3" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion3"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad3"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.getUrlToPageEntidad('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+					<a:region >
+						<s:decorate id="consultorasField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU496_consultoras}
+						</ui:define>
+						<h:selectOneMenu id="consultoras" 
+							value="#{cargarDatosObjetoGasto290FC.idConsultoras}"
+							style=" width : 250px;">
+							<f:selectItems
+								value="#{cargarDatosObjetoGasto290FC.consultorasItems}" />
+								 <a:support event="onchange" eventsQueue="default"
+									reRender="consultorasField" />
+						</h:selectOneMenu>
+				</s:decorate>
+				</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigo3Field">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo3" styleClass="numeric" size="5"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo3,unidadOrgDenominacion3" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion3" size="50"
+								disabled="true"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad3"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilInstitucion.getUrlToPageOee('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+		</h:panelGrid>
+		
+		</rich:panel>
+		
+		
+		<rich:panel id="fuenteInstFinancieraPanel">
+		 <f:facet name="header">#{messages.CU496_fuente_institucion_finaciadora}</f:facet>
+		 <h:panelGrid columns="1" >
+		 <a:region >
+		 <s:decorate template="/layout/display.xhtml" id="fuenteFinaciacionField">
+					<ui:define name="label">#{messages.CU474_fuente_finaciaciona}<span
+								class="required">*</span></ui:define>
+					<h:inputText id="fuenteFinaciacion" size="100"  maxlength="500"
+						value="#{cargarDatosObjetoGasto290FC.fuenteFinanciacion}" >
+					
+						<a:support event="onchange" eventsQueue="default"
+									reRender="fuenteFinaciacionField" />
+					</h:inputText>
+				</s:decorate>
+			</a:region>
+		 </h:panelGrid>
+		 <h:panelGrid columns="2">
+		<s:decorate template="/layout/edit.xhtml" id="instituFinanciadoraField">
+    	   <ui:define name="label">#{messages.CU474_int_financiadora}<span
+								class="required">*</span></ui:define>
+					<h:selectOneRadio id="instituFinanciadora" value="#{cargarDatosObjetoGasto290FC.institucionFinaciadora}" >
+						<s:selectItems var="institu" value="#{enumAppHelper.institucionFinaciadoras}" 
+							label="#{institu.descripcion}" />
+							
+						<s:convertEnum/>
+						<a:support event="onchange"
+							action="#{cargarDatosObjetoGasto290FC.selecOee()}"
+							reRender="fuenteInstFinancieraPanel,oeeOutPanel"/>
+					</h:selectOneRadio>
+			</s:decorate>
+			<s:decorate id="otrosDatosField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU474_otras_institucion}
+						</ui:define>
+						<h:selectOneMenu id="otrosDatos" disabled="#{cargarDatosObjetoGasto290FC.habOee}"
+							value="#{cargarDatosObjetoGasto290FC.idOtrasInstituciones}"
+							style=" width : 250px;">
+							<f:selectItems
+								value="#{cargarDatosObjetoGasto290FC.otrasInstitucionesSelecItems()}" />
+						</h:selectOneMenu>
+				</s:decorate>
+		</h:panelGrid>	
+		<a:outputPanel id="oeeOutPanel" ajaxRendered="true" rendered="#{cargarDatosObjetoGasto290FC.habOee}">
+		<fieldset id="fielsset1">
+		<legend>Oee</legend>
+		<h:panelGrid columns="1">
+		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.getUrlToPageNivel('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.getUrlToPageEntidad('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilFinanciacion.getUrlToPageOee('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+				
+		</h:panelGrid>
+		</fieldset>	 
+		</a:outputPanel>
+		
+		<a:outputPanel id="panelBotonesInst" ajaxRendered="true">
+		<h:panelGrid columns="4">
+		<h:commandButton id="add"  eventsQueue="default" rendered="#{!cargarDatosObjetoGasto290FC.esEditFinaciacion}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" 
+						reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						action="#{cargarDatosObjetoGasto290FC.addInstitucion()}"/>
+       <a:commandButton id="limpiar"  eventsQueue="default" rendered="#{!cargarDatosObjetoGasto290FC.esEditFinaciacion}"
+						value="Limpiar" reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						action="#{cargarDatosObjetoGasto290FC.limpiarInsti()}"/>
+		  <h:commandButton id="update"  eventsQueue="default" rendered="#{cargarDatosObjetoGasto290FC.esEditFinaciacion}"
+						 value="#{messages.msg_update}" reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{cargarDatosObjetoGasto290FC.upInstitucion()}"/>
+       
+       
+            <a:commandButton id="cancelEdit" rendered="#{cargarDatosObjetoGasto290FC.esEditFinaciacion}" 
+            reRender="fuenteInstFinancieraPanel,institucionFuentePaneles,panelBotonesInst,outeliminar"
+                   value="#{messages.msg_cancel}" action="#{cargarDatosObjetoGasto290FC.limpiarInsti()}" />
+              
+       </h:panelGrid>
+       </a:outputPanel>
+		
+		
+		        <rich:panel id="institucionFuentePaneles" style=" width : 672px;"><f:facet name="header">#{messages.CU474_fuente_inst_financiera}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList" var="_items"   first="0"
+												value="#{cargarDatosObjetoGasto290FC.capacitacionFinanciacionList}"
+											 rowKeyVar="rowNr">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU474_fuente_finaciaciona}
+													</f:facet>
+													<h:outputText value="#{_items.fuenteFinanciacion}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU474_oee_institucion}
+													</f:facet>
+													<h:outputText value="#{_items.configuracionUo.denominacionUnidad}" />
+														<h:outputText value="#{_items.datosEspecificosInst.descripcion}" />
+											</rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet" value="#{messages.msg_edit}" 
+								                    reRender="panelBotonesInst,fuenteInstFinancieraPanel,oeeOutPanel,outeliminar"  eventsQueue="default" 
+								                    action="#{cargarDatosObjetoGasto290FC.editarFinanciacion(rowNr)}" />
+											  #{' '}
+											  	<a:outputPanel ajaxRendered="true" id="outeliminar" >
+										         <a:commandLink id="removeRow" 
+										         rendered="#{cargarDatosObjetoGasto290FC.habEliminarInst(rowNr)}"
+													action="#{cargarDatosObjetoGasto290FC.eliminarInst(rowNr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="institucionFuentePaneles"/>
+												</a:outputPanel>
+												</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+				
+			</rich:panel>
+				<rich:panel id="panelInstitucionParticipadoras" >
+				<f:facet name="header">#{messages.CU474_inst_participadoras}</f:facet><span
+								class="required">*</span>
+				<h:panelGrid columns="1">
+				<s:decorate template="/layout/edit.xhtml">
+    	  		<h:selectOneRadio id="instituFinanciadora" value="#{cargarDatosObjetoGasto290FC.destinadoA}">
+						<s:selectItems var="institu" value="#{enumAppHelper.destinadoAs}"
+							label="#{institu.descripcion}" />
+						<s:convertEnum/>
+						<a:support event="onchange"
+							action="#{cargarDatosObjetoGasto290FC.selecCerrado()}"
+							reRender="cerradoOutPanel,panelInstitucionParticipadoras"/>
+					</h:selectOneRadio>
+			</s:decorate>
+			</h:panelGrid>
+						
+					<a:outputPanel id="cerradoOutPanel" ajaxRendered="true" rendered="#{cargarDatosObjetoGasto290FC.cerrado()}">
+			
+				<fieldset id="fieldSet2">
+		<legend>#{messages.CU474_cerrado}</legend>
+		<h:panelGrid columns="1">
+		<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigo2Field">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+								class="required">*</span></ui:define>
+							<h:inputText id="nivelCod" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="nivel2Descripcion" focus="entidadCodigo2"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivel2Descripcion"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi2" eventsQueue="default"
+								image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.getUrlToPageNivel('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+				
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigo2fi">
+							<ui:define name="label">#{messages.Usuario_entidad}<span
+								class="required">*</span>
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default" focus="unidadOrgCodigo2"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.findEntidad()}" 
+									reRender="entidadDescripcion2" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.getUrlToPageEntidad('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+					
+				
+				
+				<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigo2Fiels">
+							<ui:define name="label">#{messages.gral_oee}<span
+								class="required">*</span></ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default" focus="orgCo2"
+									action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.findUnidadOrganizativa()}"
+									reRender="unidadOrgDenominaciones" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominaciones" size="50"
+								disabled="true"
+								value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.getUrlToPageOee('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+						</s:decorate>
+					</a:region>
+					<a:region >
+			<s:decorate template="/layout/display.xhtml" id="orgCodigoFiels2">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+									<h:inputText id="orgCo2" size="10" 
+										value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default" focus="cupo"
+											action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCo2,orgDenominacion2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"  
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{cargarDatosObjetoGasto290FC.nivelEntidadOeeUtilCerrado.getUrlToPageUnidadOrgDep('capacitacion/registrarCursosOg290/EditDatosObjeto290')}" />
+							</s:decorate>
+				</a:region>
+				<a:region >
+					
+					<s:decorate id="cupoField" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU474_cupo}</ui:define>
+				<h:inputText id="cupo" onkeypress="return soloNumeros(event);"
+					value="#{cargarDatosObjetoGasto290FC.cupo}">
+					<a:support event="onchange" eventsQueue="default"
+									reRender="cupoField" />
+				</h:inputText>
+				</s:decorate>
+				</a:region>
+				
+		</h:panelGrid>
+		
+		<a:outputPanel ajaxRendered="true" id="panelBotonesCerrado">
+		<h:panelGrid columns="4">
+		<h:commandButton id="add2"  eventsQueue="default" rendered="#{!cargarDatosObjetoGasto290FC.esEditCerrado}"
+						value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						action="#{cargarDatosObjetoGasto290FC.addCerrado()}"/>
+       <a:commandButton id="limpiar2"  eventsQueue="default"  rendered="#{!cargarDatosObjetoGasto290FC.esEditCerrado}"
+						value="Limpiar" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						action="#{cargarDatosObjetoGasto290FC.limpiarCerrado()}"/>
+						  <h:commandButton id="update2"  eventsQueue="default" rendered="#{cargarDatosObjetoGasto290FC.esEditCerrado}"
+						 value="#{messages.msg_update}" reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+						 onclick="if(!confirm('#{messages.msg_confirm_update}')){return false;}"
+						action="#{cargarDatosObjetoGasto290FC.upCerrado()}"/>
+         <a:commandButton id="cancelEdit2" rendered="#{cargarDatosObjetoGasto290FC.esEditCerrado}"
+            reRender="cerradoOutPanel,oeePanel,outEliminarCerrado"
+                   value="#{messages.msg_cancel}" action="#{cargarDatosObjetoGasto290FC.limpiarCerrado()}" />
+						
+		</h:panelGrid>
+		</a:outputPanel>
+		<h:panelGrid columns="1">
+		 <rich:panel id="oeePanel" style=" width : 672px;"><f:facet name="header">#{messages.gral_oee}</f:facet>
+		   
+		         <div class="results" id="tbldetList" style=" overflow: scroll;  width:610 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="items2List" var="_itemsCerrado"   first="0"
+												value="#{cargarDatosObjetoGasto290FC.capacitacionCerradasList}"
+											 rowKeyVar="rowNrCerr">
+												<rich:column  >
+													<f:facet name="header">
+														OEE
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.configuracionUo.denominacionUnidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														Unidad Organizativa
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.configuracionUoDet.denominacionUnidad}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														Cupo
+													</f:facet>
+													<h:outputText value="#{_itemsCerrado.cupo}" />
+											</rich:column>
+											<rich:column >
+											 <f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+													 <a:commandLink id="editDet2" value="#{messages.msg_edit}" 
+								                    reRender="cerradoOutPanel,panelInstitucionParticipadoras,panelBotonesCerrado,outEliminarCerrado"  eventsQueue="default" 
+								                    action="#{cargarDatosObjetoGasto290FC.editarCerrado(rowNrCerr)}" />
+											  #{' '}
+											  
+											  <a:outputPanel ajaxRendered="true" id="outEliminarCerrado">
+								               <a:commandLink id="removeRow2" rendered="#{cargarDatosObjetoGasto290FC.habEliminarCerrado(rowNrCerr)}"
+													action="#{cargarDatosObjetoGasto290FC.eliminarCerrado(rowNrCerr)}"
+													value="#{messages.msg_list_remove}"
+													onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+													reRender="panelInstitucionParticipadoras,oeePanel"/>
+													</a:outputPanel>
+												</rich:column>
+						</rich:dataTable>
+					</div>
+				</rich:panel>
+				
+		</h:panelGrid>
+		</fieldset>
+				</a:outputPanel>
+			
+				</rich:panel>
+		
+		<rich:panel >
+			<f:facet name="header">#{messages.CU474_info_capacticación}</f:facet><span
+								class="required">*</span>
+			<div style="clear:both">
+            <h:outputText value="#{messages.CU496_seleccione_doc_mgs}" id="see" styleClass="labelClass"/>
+        	</div>
+			<h:panelGrid columns="1">
+				
+			<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="datosGral"
+							value="#{cargarDatosObjetoGasto290FC.idTipoDocumento}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoDocCapaSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Adjunto<span
+								class="required">*</span></ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{cargarDatosObjetoGasto290FC.contentType}"
+						data="#{cargarDatosObjetoGasto290FC.uploadedFile}"
+						fileName="#{cargarDatosObjetoGasto290FC.fileName}">
+						<s:conversationPropagation type="join"/>
+					</s:fileUpload>
+						
+						
+				</s:decorate>
+				
+				
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+		<a:outputPanel >
+		<s:decorate id="archivoDescargaField" template="/layout/edit.xhtml">
+		<h:commandButton id="descargar" value="Descargar" target="_blank" rendered="#{cargarDatosObjetoGasto290FC.documentos.idDocumento!=null}"
+							action="#{cargarDatosObjetoGasto290FC.abrirDocumento()}" >
+			<rich:toolTip for="descargar"> <span> #{messages.CU495_descargar_doc}</span> </rich:toolTip>
+		</h:commandButton>
+		<h:inputText disabled="true" value="#{cargarDatosObjetoGasto290FC.nombreDoc}" id="nombreDoc" style=" width : 389px;"/>
+			</s:decorate>
+			</a:outputPanel>
+		</h:panelGrid>
+			</rich:panel>		
+		
+		
+		
+		
+     <div class="actionButtons">
+
+            
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{cargarDatosObjetoGasto290FC.update()}"
+                           onclick="return confirm('#{messages.msg_confirm_save}');"
+                      />
+
+          
+					 <s:button id="volvers"
+                   value="Volver"
+             propagation="none"
+                   view="/capacitacion/registrarCursosOg290/CursosOg290List.xhtml">
+                </s:button>
+
+        </div>
+        <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}"  styleClass="labelClass" />
+          </div>
+    
+    </h:form>
+    
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{cargarDatosObjetoGasto290FC.capacitaciones.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{cargarDatosObjetoGasto290FC.capacitaciones.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{cargarDatosObjetoGasto290FC.capacitaciones.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{cargarDatosObjetoGasto290FC.capacitaciones.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

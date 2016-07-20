@@ -1,0 +1,130 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU613_titulo_ver}</h1>
+		<h:form id="concurso" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">Ver #{messages.CU613_titulo_concurso}</f:facet>
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{concursoCU613FC.nivelEntidad.nenCodigo}"
+							size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{concursoCU613FC.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{concursoCU613FC.sinEntidad.entCodigo}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{concursoCU613FC.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true"
+							value="#{concursoCU613FC.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="40"
+							disabled="true"
+							value="#{concursoCU613FC.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre</ui:define>
+						<h:inputText id="nombre" disabled="true" size="100"
+							maxlength="100"
+							value="#{concursoCU613FC.concurso.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_tipo_concurso}</ui:define>
+						<h:selectOneMenu id="idTipoPregunta" disabled="true"
+							value="#{concursoCU613FC.idTipoConcurso}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoConcursoCircuitoCIOSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<s:decorate id="adReferendumField" template="/layout/edit.xhtml"
+						rendered="#{administrarConcursoFormController.mostrarAdReferendum}">
+						<ui:define name="label">#{messages.CU40_referendum} Si</ui:define>
+						<h:selectBooleanCheckbox id="adReferendum" disabled="true"
+							value="#{concursoCU613FC.concurso.adReferendum}" />
+					</s:decorate>
+
+					<s:decorate id="pcdField" template="/layout/edit.xhtml">
+						<ui:define name="label">PcD Si</ui:define>
+						<h:selectBooleanCheckbox id="pcd" disabled="true"
+							value="#{concursoCU613FC.concurso.pcd}" />
+					</s:decorate>
+					<s:decorate id="desprecarizadoField" template="/layout/edit.xhtml"
+						rendered="#{concursoCU613FC.mostrarDesprecarizado}">
+						<ui:define name="label">Desprecarizado
+						</ui:define>
+						<h:selectBooleanCheckbox id="desprecarizado" disabled="true"
+							value="#{concursoCU613FC.concurso.desprecarizacion}" />
+						
+					</s:decorate>
+
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="3"
+							disabled="true"
+							value="#{concursoCU613FC.concurso.observacion}" />
+					</s:decorate>
+
+
+				</h:panelGrid>
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button
+				rendered="#{concursoHome.managed}" id="anexo" value="Anexo"
+				propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{concursoCU613FC.ubicacionFisica}" />
+				<f:param name="nombrePantalla" value="concursoCIO_edit" />
+				<f:param name="idCU" value="#{concursoHome.concursoIdConcurso}" />
+				<f:param name="nombreTabla" value="Concurso" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="circuitoCIO/concurso/Concurso" />
+			</s:button> <s:button id="cancelEdit" value="Volver" propagation="none"
+				view="/circuitoCIO/concurso/ConcursoList.xhtml" /></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,129 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="funcion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{funcionHome.managed ? 'Edit' : 'Add'} Funcion</f:facet>
+
+
+            <s:decorate id="idFuncionField" template="layout/edit.xhtml">
+                <ui:define name="label">Id funcion</ui:define>
+                <h:inputText id="idFuncion"
+                       required="true"
+                       disabled="#{funcionHome.managed}"
+                          value="#{funcionHome.instance.idFuncion}">
+                    <a:support event="onblur" reRender="idFuncionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="descripcionField" template="layout/edit.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputTextarea id="descripcion"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{funcionHome.instance.descripcion}"/>
+            </s:decorate>
+
+
+            <s:decorate id="urlField" template="layout/edit.xhtml">
+                <ui:define name="label">Url</ui:define>
+                <h:inputTextarea id="url"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{funcionHome.instance.url}"/>
+            </s:decorate>
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{funcionHome.persist}"
+                       disabled="#{!funcionHome.wired}"
+                       rendered="#{!funcionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{funcionHome.update}"
+                       rendered="#{funcionHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{funcionHome.remove}"
+                      immediate="true"
+                       rendered="#{funcionHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/Funcion.xhtml"
+                rendered="#{funcionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty funcionFrom ? 'FuncionList' : funcionFrom}.xhtml"
+                rendered="#{!funcionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Rol funcions">
+        <h:form styleClass="association" id="rolFuncionsChildren">
+
+            <h:outputText value="There are no rolFuncions associated with this funcion."
+                       rendered="#{empty funcionHome.rolFuncions}"/>
+
+            <rich:dataTable value="#{funcionHome.rolFuncions}"
+                           var="_rolFuncion"
+                      rendered="#{not empty funcionHome.rolFuncions}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="rolFuncionsTable">
+                <rich:column sortBy="#{_rolFuncion.idRolFuncion}">
+                    <f:facet name="header">Id rol funcion</f:facet>
+                    <h:outputText value="#{_rolFuncion.idRolFuncion}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{funcionHome.managed}" id="rolFuncions">
+        <div class="actionButtons">
+            <s:button id="addrolFuncion"
+                   value="Add rolFuncion"
+                    view="/RolFuncionEdit.xhtml"
+             propagation="none">
+                 <f:param name="funcionIdFuncion"
+                         value="#{funcionHome.instance.idFuncion}"/>
+                 <f:param name="rolFuncionFrom" value="Funcion"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

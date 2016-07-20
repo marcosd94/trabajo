@@ -1,0 +1,363 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="evalDocumentalComis" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{evalDocumentalComisHome.managed ? 'Edit' : 'Add'} Eval documental comis</f:facet>
+
+
+            <s:decorate id="idEvalDocumentalComisField" template="layout/edit.xhtml">
+                <ui:define name="label">Id eval documental comis</ui:define>
+                <h:inputText id="idEvalDocumentalComis"
+                       required="true"
+                       disabled="#{evalDocumentalComisHome.managed}"
+                          value="#{evalDocumentalComisHome.instance.idEvalDocumentalComis}">
+                    <a:support event="onblur" reRender="idEvalDocumentalComisField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+
+            <s:decorate id="activoField" template="layout/edit.xhtml">
+                <ui:define name="label">Activo</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true"
+                                      value="#{evalDocumentalComisHome.instance.activo}"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{evalDocumentalComisHome.instance.usuAlta}">
+                    <a:support event="onblur" reRender="usuAltaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaAltaField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha alta</ui:define>
+                <rich:calendar id="fechaAlta"
+                       required="true"
+                          value="#{evalDocumentalComisHome.instance.fechaAlta}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="usuModField" template="layout/edit.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod"
+                           size="50"
+                      maxlength="50"
+                          value="#{evalDocumentalComisHome.instance.usuMod}">
+                    <a:support event="onblur" reRender="usuModField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaModField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha mod</ui:define>
+                <rich:calendar id="fechaMod"
+                          value="#{evalDocumentalComisHome.instance.fechaMod}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{evalDocumentalComisHome.persist}"
+                       disabled="#{!evalDocumentalComisHome.wired}"
+                       rendered="#{!evalDocumentalComisHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{evalDocumentalComisHome.update}"
+                       rendered="#{evalDocumentalComisHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{evalDocumentalComisHome.remove}"
+                      immediate="true"
+                       rendered="#{evalDocumentalComisHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/EvalDocumentalComis.xhtml"
+                rendered="#{evalDocumentalComisHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty evalDocumentalComisFrom ? 'EvalDocumentalComisList' : evalDocumentalComisFrom}.xhtml"
+                rendered="#{!evalDocumentalComisHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Comision seleccion det">
+    <div class="association" id="comisionSeleccionDetParent">
+
+        <h:outputText value="There is no comisionSeleccionDet associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.comisionSeleccionDet == null}"/>
+
+        <rich:dataTable var="_comisionSeleccionDet"
+                   value="#{evalDocumentalComisHome.instance.comisionSeleccionDet}"
+                rendered="#{evalDocumentalComisHome.instance.comisionSeleccionDet != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="comisionSeleccionDetTable">
+            <h:column>
+                <f:facet name="header">Id comision sel det</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion cab id comision sel</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id rol</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idRol}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Titular suplente</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.titularSuplente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id documento</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idDocumento}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Puesto</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.puesto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documentos</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.documentos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Equipo tecnico</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.equipoTecnico}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalComisHome.instance.comisionSeleccionDet != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalComisHome.instance.comisionSeleccionDet != null ? 'Change' : 'Select'} comisionSeleccionDet"
+                       view="/ComisionSeleccionDetList.xhtml">
+                <f:param name="from" value="EvalDocumentalComisEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Empresa persona">
+    <div class="association" id="empresaPersonaParent">
+
+        <h:outputText value="There is no empresaPersona associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.empresaPersona == null}"/>
+
+        <rich:dataTable var="_empresaPersona"
+                   value="#{evalDocumentalComisHome.instance.empresaPersona}"
+                rendered="#{evalDocumentalComisHome.instance.empresaPersona != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="empresaPersonaTable">
+            <h:column>
+                <f:facet name="header">Id sel empresa persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empr tercerizada id empresa tercerizada</f:facet>
+                <h:outputText value="#{_empresaPersona.emprTercerizada.idEmpresaTercerizada}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cargo</f:facet>
+                <h:outputText value="#{_empresaPersona.cargo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_empresaPersona.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_empresaPersona.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_empresaPersona.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_empresaPersona.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_empresaPersona.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalComisHome.instance.empresaPersona != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalComisHome.instance.empresaPersona != null ? 'Change' : 'Select'} empresaPersona"
+                       view="/EmpresaPersonaList.xhtml">
+                <f:param name="from" value="EvalDocumentalComisEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Eval documental cab *" labelClass="required">
+    <div class="association" id="evalDocumentalCabParent">
+
+        <h:outputText value="There is no evalDocumentalCab associated with this evalDocumentalComis."
+                   rendered="#{evalDocumentalComisHome.instance.evalDocumentalCab == null}"/>
+
+        <rich:dataTable var="_evalDocumentalCab"
+                   value="#{evalDocumentalComisHome.instance.evalDocumentalCab}"
+                rendered="#{evalDocumentalComisHome.instance.evalDocumentalCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="evalDocumentalCabTable">
+            <h:column>
+                <f:facet name="header">Id eval documental cab</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.idEvalDocumentalCab}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion det id comision sel det</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.comisionSeleccionDet.idComisionSelDet}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Empresa persona id sel empresa persona</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.empresaPersona.idSelEmpresaPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Postulacion id postulacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.postulacion.idPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Aprobado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.aprobado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Evaluado</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.evaluado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha evaluacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaEvaluacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_evalDocumentalCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{evalDocumentalComisHome.instance.evalDocumentalCab != null ? 'changeParent' : 'selectParent'}" value="#{evalDocumentalComisHome.instance.evalDocumentalCab != null ? 'Change' : 'Select'} evalDocumentalCab"
+                       view="/EvalDocumentalCabList.xhtml">
+                <f:param name="from" value="EvalDocumentalComisEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

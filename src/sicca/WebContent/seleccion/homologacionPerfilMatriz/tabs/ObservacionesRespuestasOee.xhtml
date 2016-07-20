@@ -1,0 +1,123 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+
+
+
+
+       
+
+    
+
+    <rich:panel id="datosHomolog" style=" width : 1095px;">
+        <f:facet name="header">#{messages.CU52_obs_resp} (#{empty enviarHomologacionPerfilFromController.listaObsRptas ? 0 : enviarHomologacionPerfilFromController.listaObsRptas.size()})</f:facet>
+		<div class="results" id="homologacionPerfilMatrizDetList">
+
+			<h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty homologacionPerfilMatrizDetList.resultList}" />
+
+			<rich:dataTable id="homologacionPerfilMatrizDetList" var="_ObsRptas"
+				rowKeyVar="index" rows="10"
+				value="#{enviarHomologacionPerfilFromController.listaObsRptas}"
+				rendered="#{not empty enviarHomologacionPerfilFromController.listaObsRptas}">
+
+				<h:column>
+					<f:facet name="heade">Descripción</f:facet>
+					<h:outputText value="#{_ObsRptas.observacion}" />
+				</h:column>
+				<!-- FECHA DE OBSERVACION -->
+				<h:column>
+					<f:facet name="header">#{messages.CU52_fecha}</f:facet>
+					<h:outputText value="#{_ObsRptas.fechaObs}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages.CU52_repuesta}</f:facet>
+					<h:outputText value="#{_ObsRptas.respuesta}" />
+				</h:column>
+
+
+				<h:column>
+					<f:facet name="header">#{messages.CU52_fecha}</f:facet>
+					<h:outputText value="#{_ObsRptas.fechaRpta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+				<!--  	<rich:column style="text-align:center;" width="10%"> 
+							<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{homologacionPerfilMatrizDetList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU52_enviar_ajusteOee}" />
+							<ui:param name="propertyPath" value="homologacionPerfilMatrizDet.activo" />
+						</ui:include>
+					</f:facet>
+							<h:selectBooleanCheckbox value="#{_homologacionPerfilMatrizDet.ajustadoOee}"  
+							disabled="#{_homologacionPerfilMatrizDet.ajustadoOee}"/>
+						</rich:column>-->
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+  	        #{' '}
+            <s:link
+						view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucionEdit.xhtml"
+						value="#{messages.CU53_resp}" propagation="none"
+						disabled="#{!enviarHomologacionPerfilFromController.habRpta(_ObsRptas.idHomologacionDet) || ver=='true'}">
+						<f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+							value="#{_ObsRptas.idHomologacionDet}" />
+						<f:param name="fromRpta" value="true" />
+						<f:param name="idGrupo"
+							value="#{enviarHomologacionPerfilFromController.idConcursoPuestoAgr}" />
+						<f:param name="codActividad"  value="#{enviarHomologacionPerfilFromController.codActividad}"/>	
+					</s:link>
+					 #{' '}
+<!-- 					 AdmPerfilMatHomologInsEditFormController.java; codActividad está en null cuando se entra en editar, deshabilitado temporalmente; Werner. -->
+<!-- 					 <s:link -->
+<!-- 						view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucionEdit.xhtml" -->
+						
+<!-- 						value="Editar" propagation="none" -->
+<!-- 						rendered="#{enviarHomologacionPerfilFromController.canEdit(_ObsRptas.idHomologacionDet)}"> -->
+<!-- 						<f:param name="homologacionPerfilMatrizDetIdHomologacionDet" -->
+<!-- 							value="#{_ObsRptas.idHomologacionDet}" /> -->
+<!-- 						<f:param name="fromRpta" value="true" /> -->
+<!-- 						<f:param name="idGrupo" -->
+<!-- 							value="#{enviarHomologacionPerfilFromController.idConcursoPuestoAgr}" /> -->
+<!-- 							<f:param name="codActividad"  value="#{enviarHomologacionPerfilFromController.codActividad}"/> -->
+<!-- 					</s:link> -->
+				</rich:column>
+			</rich:dataTable>
+			<rich:datascroller for="homologacionPerfilMatrizDetList"
+				id="scrollObsRptasOee" renderIfSinglePage="false" />
+
+		</div>
+	</rich:panel>
+
+   
+</ui:composition>
+ <!--  <s:link view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucion.xhtml"
+                   value="Ver"
+             propagation="default"
+                      id="homologacionPerfilMatrizDetViewId">
+                <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+                        value="#{_homologacionPerfilMatrizDet.idHomologacionDet}"/>
+                         <f:param name="idGrupo" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}"/>
+            </s:link> 
+            #{' '}
+            <s:link view="/seleccion/HomologacionPerfilMatrizDet/AdmPerfilMatrizHomologInstitucionEdit.xhtml"
+                   value="#{messages.msg_edit}"
+             propagation="none" disabled="#{empty _homologacionPerfilMatrizDet.respuesta || _homologacionPerfilMatrizDet.ajustadoOee ||ver=='true'}">
+                <f:param name="homologacionPerfilMatrizDetIdHomologacionDet"
+                        value="#{_homologacionPerfilMatrizDet.idHomologacionDet}"/>
+                                      <f:param name="fromRpta"
+                        value="false"/>
+                  <f:param name="idGrupo" value="#{admPerfilMatHomologInsListFormController.idConcursoPuestoAgr}"/>
+            </s:link>-->

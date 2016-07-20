@@ -1,0 +1,226 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<script type="text/javascript">  
+     
+       </script>
+
+
+		<a:outputPanel id="idModalPanel" ajaxRendered="true">
+
+			<rich:modalPanel id="modal1" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{importaMasivaRemuNomi680FC.mostrarModalRemplazo}">
+				<h:form>
+					<rich:panel id="idPanel">
+						<f:facet name="header">Info </f:facet>
+						<h:outputText value="#{messages.CU680_EsteArchivoYaExisteEnLaDB}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+					
+					<s:button
+						propagation="join" value="#{messages.CU680_Si}"
+						disabled="#{!importaMasivaRemuNomi680FC.mostrarModalRemplazo}"
+						action="#{importaMasivaRemuNomi680FC.procesarRespuestaModal('SI')}">
+					</s:button> <s:button id="idBtnCancelar" value="#{messages.CU680_No}"
+						propagation="join"
+						action="#{importaMasivaRemuNomi680FC.procesarRespuestaModal('NO')}"></s:button>
+					<s:button value="#{messages.CU680_Terminar}" propagation="join"
+						action="#{importaMasivaRemuNomi680FC.limpiarModales()}">
+					</s:button></div>
+				</h:form>
+			</rich:modalPanel>
+			<rich:modalPanel id="modal2" autosized="true" width="500"
+				resizeable="false" moveable="true"
+				rendered="#{importaMasivaRemuNomi680FC.mostrarModalAgregar}">
+				<h:form enctype="multipart/form-data">
+					<rich:panel id="idPanel">
+						<f:facet name="header">Info </f:facet>
+						<h:outputText value="#{messages.CU680_DeseaAgregarArchivo}" />
+					</rich:panel>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button
+						propagation="join" value="#{messages.CU680_Si}"
+						action="#{importaMasivaRemuNomi680FC.massiveImport()}" /> <s:button
+						propagation="join" id="idBtnCancelar" value="#{messages.CU680_No}"
+						action="#{importaMasivaRemuNomi680FC.limpiarModales()}" /><s:button
+						value="#{messages.CU680_Terminar}" propagation="join"
+						action="#{importaMasivaRemuNomi680FC.limpiarModales()}">
+					</s:button></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			if(document.getElementById('modal1')!=null){
+				Richfaces.showModalPanel('modal1');
+			}
+			if(document.getElementById('modal2')!=null){
+				Richfaces.showModalPanel('modal2');
+			}
+	        
+			</script>
+
+		</a:outputPanel>
+		<h1>#{messages.CU680_title}</h1>
+
+		<h:form id="empleadoPuestoSearch" enctype="multipart/form-data">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									rendered="#{importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('/remuneracion/ImportaMasivaRemuNomi/ImportaMasivaRemuNomi680')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									rendered="#{importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('/remuneracion/ImportaMasivaRemuNomi/ImportaMasivaRemuNomi680')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									disabled="#{!importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									rendered="#{importaMasivaRemuNomi680FC.esAdministradorSFP}"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('/remuneracion/ImportaMasivaRemuNomi/ImportaMasivaRemuNomi680')}" />
+							</s:decorate>
+						</a:region>
+					</a:outputPanel>
+
+
+				</h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Archivo CSV a procesar</ui:define>
+					<s:fileUpload size="30"
+						contentType="#{importaMasivaRemuNomi680FC.cType}"
+						data="#{importaMasivaRemuNomi680FC.uFile}"
+						fileName="#{importaMasivaRemuNomi680FC.fName}"
+						style=" width : 651px;">
+						<s:conversationPropagation type="join" />
+					</s:fileUpload>
+				</s:decorate>
+				<s:decorate id="tipoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU680_Mes}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="tipo"
+						value="#{importaMasivaRemuNomi680FC.mes}" style="width:250px">
+						<f:selectItems
+							value="#{importaMasivaRemuNomi680FC.mesAnhoSI('MESES')}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU680_Anho}<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="tipo"
+						value="#{importaMasivaRemuNomi680FC.anho}" style="width:250px">
+						<f:selectItems
+							value="#{importaMasivaRemuNomi680FC.mesAnhoSI('ANHO')}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Cantidad de Registros<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="regs" size="12"
+						value="#{importaMasivaRemuNomi680FC.registros}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Total Remuneraciones<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="remuns" size="15"
+						value="#{importaMasivaRemuNomi680FC.remuneracionesTotales}" />
+				</s:decorate>
+				
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton id="search"
+				value="#{messages.CU680_btnGenerarImportacion}"
+				action="#{importaMasivaRemuNomi680FC.massiveImport2()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton> <s:button id="reset" value="Limpiar"
+				action="#{importaMasivaRemuNomi680FC.limpiar()}">
+			</s:button></div>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,135 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.ClasificadorUoRequisito_}</h1>
+    <h:form id="clasificadorUo" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header"> #{messages.ClasificadorUoRequisito_}</f:facet>
+            <rich:panel style="border:none">
+            <h:panelGrid columns="1">
+	            <s:decorate id="nivelField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+	                <h:inputText id="nivel"
+	                       disabled="true"
+	                          value="#{clasificadorUoReqMinFormController.clasificadorUo.nivel}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="subnivelField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_subnivel}</ui:define>
+	                <h:inputText id="subnivel"
+	                       disabled="true"
+	                          value="#{clasificadorUoReqMinFormController.clasificadorUo.subnivel}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="nroField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_nro}</ui:define>
+	                <h:inputText id="nro"
+	                       disabled="true"
+	                          value="#{clasificadorUoReqMinFormController.clasificadorUo.nro}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="denominacionUnidadField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ClasificadorUo_denominacionUnidad}</ui:define>
+	                <h:inputText id="denominacionUnidad"
+	                       disabled="true"
+	                       size="100"
+	                       maxlength="200"
+	                          value="#{clasificadorUoReqMinFormController.clasificadorUo.denominacionUnidad}">
+	                </h:inputText>
+	            </s:decorate>
+	           </h:panelGrid>
+	           
+	          
+            </rich:panel>
+             <rich:panel>
+              <f:facet name="header"> #{messages.msg_carga_req_min}</f:facet>
+             
+             	<rich:dataTable id="requisitosList" var="_requisitos"
+             	rows="10"
+				value="#{clasificadorUoReqMinFormController.listaDto}"
+				rendered="#{not empty clasificadorUoReqMinFormController.listaDto}" rowKeyVar="rowNr">
+				<h:column>
+					<f:facet name="header">
+						#{messages.msg_carga_requisito}
+					</f:facet>
+					<h:outputText value="#{_requisitos.requisitoMinimoCuo.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.msg_carga_req_descripcion}
+					</f:facet>
+					<h:inputText id="descripcion" value="#{_requisitos.descripcion}"  size="150" maxlength="500" disabled="#{!_requisitos.activo}">
+					</h:inputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.msg_carga_req_activo}
+					</f:facet>
+					<h:selectBooleanCheckbox id="activo" disabled="false"
+						value="#{_requisitos.activo}">
+						<a:support event="onchange" ajaxSingle="true" 
+								reRender="descripcion" />
+						</h:selectBooleanCheckbox>
+				</h:column>
+				</rich:dataTable>
+             <rich:datascroller align="center" for="requisitosList" id="sc2"
+					reRender="sc1" />
+             </rich:panel>
+            
+				
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+        <div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_actualizar}"/></div>
+        </rich:panel>
+        <div class="actionButtons">
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{clasificadorUoReqMinFormController.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"/>
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/clasificadorUo/ClasificadorUoList.xhtml"/>
+        </div>
+    </h:form>
+
+		<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{clasificadorUoHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{clasificadorUoHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{clasificadorUoHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{clasificadorUoHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{clasificadorUoHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+        
+</ui:define>
+
+</ui:composition>

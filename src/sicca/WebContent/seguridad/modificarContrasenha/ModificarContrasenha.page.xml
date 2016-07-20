@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      login-required="true">
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	
+   <param name="usuarioFrom"/>
+   <param name="usuarioIdUsuario" value="#{usuarioHome.usuarioIdUsuario}"/>
+   <param name="from" value="#{modificarPassFormController.from}"/>
+   <param name="template"/>
+
+	<action execute="#{modificarPassFormController.init()}" on-postback="false"/>
+	
+	<navigation from-action="#{modificarPassFormController.save()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="#{modificarPassFormController.from}"/>
+      </rule>
+   </navigation>
+	
+	<restrict>#{identity.hasRole('modificarPass')}</restrict>
+</page>

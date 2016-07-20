@@ -1,0 +1,152 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+
+		<rich:panel id="elPanelCab">
+			<f:facet name="header">Cronograma de Actividades</f:facet>
+			<a:form>
+				<h1>Cargar Actividad</h1>
+				<h:panelGrid columns="2" border="0">
+					<s:decorate id="nroCronogramaField2" template="/layout/edit.xhtml">
+						<ui:define name="label">Nro cronograma</ui:define>
+						<h:outputText disabled="#{cronogramaConcCabHome.managed}"
+							id="nroCronograma" style="width :250px;"
+							value="#{AdmCronogramaConcursoFromController.cronogramaConcCab.nroCronograma}">
+
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="descripcionField2" template="/layout/edit.xhtml">
+						<ui:define name="label">Descripcion</ui:define>
+						<h:outputText id="descripcion" style="width :250px;"
+							maxlength="150" readonly="true"
+							value="#{AdmCronogramaConcursoFromController.cronogramaConcCab.descripcion}">
+
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				<rich:panel>
+					<f:facet name="header">#{messages.CU252_agregarActividad}</f:facet>
+					<h:panelGrid columns="3" styleClass="gridhello"
+						columnClasses="gridhellocolumn">
+
+						<h:panelGrid columns="1" border="0" id="elpanelGrid">
+							<s:decorate id="actividadField" template="/layout/edit.xhtml">
+								<ui:define name="label">Actividad</ui:define>
+								<h:selectOneMenu id="actividad" style="width :250px;"
+									required="true"
+									value="#{AdmCronogramaConcursoFromController.actividadId}">
+									<f:selectItems
+										value="#{AdmCronogramaConcursoFromController.actividadSelecItem}" />
+
+								</h:selectOneMenu>
+							</s:decorate>
+
+
+							<s:decorate id="lugarField2" template="/layout/edit.xhtml">
+								<ui:define name="label">Lugar</ui:define>
+								<h:inputText id="lugar" style="width :250px;" maxlength="150"
+									value="#{AdmCronogramaConcursoFromController.lugar}">
+
+								</h:inputText>
+							</s:decorate>
+							<h:panelGrid columns="2">
+								<s:decorate id="fechaFieldDesde" template="/layout/edit.xhtml">
+									<ui:define name="label">Fecha Desde</ui:define>
+									<rich:calendar id="fechaDesde" required="true"
+										value="#{AdmCronogramaConcursoFromController.fechaDesde}"
+										enableManualInput="true" oninputkeyup="ponerBarra(event);"
+										inputSize="10" datePattern="dd/MM/yyyy"
+										locale="#{siccaAppHelper.localeCode}">
+									</rich:calendar>
+								</s:decorate>
+								<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+									<ui:define name="label">Fecha Hasta</ui:define>
+									<rich:calendar id="fechaDesde" required="true"
+										value="#{AdmCronogramaConcursoFromController.fechaHasta}"
+										enableManualInput="true" oninputkeyup="ponerBarra(event);"
+										inputSize="10" datePattern="dd/MM/yyyy"
+										locale="#{siccaAppHelper.localeCode}">
+
+									</rich:calendar>
+								</s:decorate>
+								<s:decorate id="horaDesdeField" template="/layout/edit.xhtml">
+									<ui:define name="label">Hora Desde</ui:define>
+									<p:inputMask
+										value="#{AdmCronogramaConcursoFromController.horaDesde}"
+										mask="99:99">
+									</p:inputMask>
+								</s:decorate>
+								<s:decorate id="horaHastaField" template="/layout/edit.xhtml">
+									<ui:define name="label">Hora Hasta</ui:define>
+									<p:inputMask
+										value="#{AdmCronogramaConcursoFromController.horaHasta}"
+										mask="99:99">
+									</p:inputMask>
+								</s:decorate>
+
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</h:panelGrid>
+				</rich:panel>
+				<rich:spacer height="7" />
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<div class="actionButtons"><h:commandButton id="save"
+					value="#{messages.msg_save}"
+					action="#{AdmCronogramaConcursoFromController.saveDetalle()}"
+					rendered="#{AdmCronogramaConcursoFromController.cronogramaConcDet.idCronogramaConcDet==null}">
+					<f:param name="from"
+						value="#{AdmCronogramaConcursoFromController.fromConcurso}" />
+					<f:param name="modoConcurso"
+						value="#{AdmCronogramaConcursoFromController.modoConcurso}" />
+				</h:commandButton> <h:commandButton id="update" value="#{messages.msg_update}"
+					action="#{AdmCronogramaConcursoFromController.saveDetalle()}"
+					rendered="#{AdmCronogramaConcursoFromController.cronogramaConcDet.idCronogramaConcDet!=null}">
+					<f:param name="from"
+						value="#{AdmCronogramaConcursoFromController.fromConcurso}" />
+					<f:param name="modoConcurso"
+						value="#{AdmCronogramaConcursoFromController.modoConcurso}" />
+				</h:commandButton> <s:button id="cancelEdit" value="#{messages.GENERICO_VOLVER}"
+					propagation="join"
+					view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+					rendered="#{cronogramaConcCabHome.managed}">
+					<f:param name="from"
+						value="#{AdmCronogramaConcursoFromController.fromConcurso}" />
+
+				</s:button> <s:button id="cancelAdd" value="#{messages.GENERICO_VOLVER}"
+					propagation="join"
+					view="/#{empty cronogramaConcCabFrom ? 'seleccion/administrarCronogramaConcurso/CronogramaConcCabList' : cronogramaConcCabFrom}.xhtml"
+					rendered="#{!cronogramaConcCabHome.managed}">
+					<f:param name="from"
+						value="#{AdmCronogramaConcursoFromController.fromConcurso}" />
+				</s:button></div>
+			</a:form>
+
+		</rich:panel>
+
+
+		<br />
+		<div style="clear: both"><h:outputText
+			value="#{messages.msg_obs_actualizar}"
+			rendered="#{cronogramaConcCabHome.managed}" /></div>
+		<div style="clear: both"><h:outputText
+			value="#{messages.msg_obs_guardar}"
+			rendered="#{!cronogramaConcCabHome.managed}" /></div>
+		<br />
+
+	</ui:define>
+
+</ui:composition>

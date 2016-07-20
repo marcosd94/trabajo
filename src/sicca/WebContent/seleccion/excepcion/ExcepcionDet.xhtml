@@ -1,0 +1,188 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Excepcion det Details</f:facet>
+
+        <s:decorate id="idExcepcionDet" template="layout/display.xhtml">
+            <ui:define name="label">Id excepcion det</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.idExcepcionDet}"/>
+        </s:decorate>
+
+        <s:decorate id="observacion" template="layout/display.xhtml">
+            <ui:define name="label">Observacion</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.observacion}"/>
+        </s:decorate>
+
+        <s:decorate id="usuObs" template="layout/display.xhtml">
+            <ui:define name="label">Usu obs</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.usuObs}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaObs" template="layout/display.xhtml">
+            <ui:define name="label">Fecha obs</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.fechaObs}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="respuesta" template="layout/display.xhtml">
+            <ui:define name="label">Respuesta</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.respuesta}"/>
+        </s:decorate>
+
+        <s:decorate id="usuRpta" template="layout/display.xhtml">
+            <ui:define name="label">Usu rpta</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.usuRpta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaRpta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha rpta</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.fechaRpta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="ajustadoOee" template="layout/display.xhtml">
+            <ui:define name="label">Ajustado oee</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.ajustadoOee}"/>
+        </s:decorate>
+
+        <s:decorate id="enviadoSfp" template="layout/display.xhtml">
+            <ui:define name="label">Enviado sfp</ui:define>
+            <h:outputText value="#{excepcionDetHome.instance.enviadoSfp}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ExcepcionDetEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty excepcionDetFrom ? 'ExcepcionDetList' : excepcionDetFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Excepcion</h:panelGroup>
+        </f:facet>
+    <div class="association" id="excepcionParent">
+
+        <h:outputText value="There is no excepcion associated with this excepcionDet."
+                   rendered="#{excepcionDetHome.instance.excepcion == null}"/>
+
+        <rich:dataTable var="_excepcion"
+                   value="#{excepcionDetHome.instance.excepcion}"
+                rendered="#{excepcionDetHome.instance.excepcion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="excepcionTable">
+            <h:column>
+                <f:facet name="header">Id excepcion</f:facet>
+                <h:outputText value="#{_excepcion.idExcepcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_excepcion.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_excepcion.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comision seleccion cab id comision sel</f:facet>
+                <h:outputText value="#{_excepcion.comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_excepcion.tipo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_excepcion.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_excepcion.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_excepcion.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_excepcion.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_excepcion.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_excepcion.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu solicitud</f:facet>
+                <h:outputText value="#{_excepcion.usuSolicitud}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha solicitud</f:facet>
+                <h:outputText value="#{_excepcion.fechaSolicitud}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu aprobacion</f:facet>
+                <h:outputText value="#{_excepcion.usuAprobacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha aprobacion</f:facet>
+                <h:outputText value="#{_excepcion.fechaAprobacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_excepcion.idProcessInstance}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewexcepcion"
+                     value="View"
+                      view="/Excepcion.xhtml">
+                    <f:param name="excepcionIdExcepcion"
+                           value="#{_excepcion.idExcepcion}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,137 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CondicionTrabajoEspecif_}</h1>
+
+    <h:form id="condicionTrabajoEspecif" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{condicionTrabajoEspecifHome.managed ? messages.msg_edit  : messages.msg_save} #{messages.CondicionTrabajoEspecif_}</f:facet>
+
+	            <s:decorate id="tipoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CondicionTrabajoEspecif_tipo}</ui:define>
+	                <h:inputText id="tipo"
+	                		required ="true"
+	                		maxlength="100"
+	                       disabled="false"
+	                           size="60"
+	                          value="#{condicionTrabajoEspecifHome.instance.tipo}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CondicionTrabajoEspecif_descripcion}</ui:define>
+	                <h:inputText id="descripcion"
+	                		required ="true"
+	                       disabled="false"
+	                       maxlength="500"
+	                      	   size="60"
+	                          value="#{condicionTrabajoEspecifHome.instance.descripcion}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="ordenField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CondicionTrabajoEspecif_orden}</ui:define>
+	                <h:inputText id="orden"
+	                		required ="true"
+	                       disabled="false"
+	                     styleClass="numeric"
+	                     onkeypress="return soloNumeros(event);"
+	                       	   size="10"
+	                          value="#{condicionTrabajoEspecifHome.instance.orden}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CondicionTrabajoEspecif_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{condicionTrabajoEspecifHome.instance.activo}" />
+	            </s:decorate>
+	            
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+			<div style="clear:both">
+	            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!condicionTrabajoEspecifHome.managed}" styleClass="labelClass"/>
+	            <h:outputText value="#{messages.msg_obs_update}" rendered="#{condicionTrabajoEspecifHome.managed}" styleClass="labelClass"/>
+	        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{condicionTrabajoEspecifHome.persist}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"
+                       disabled="#{!condicionTrabajoEspecifHome.wired}"                      
+                       rendered="#{!condicionTrabajoEspecifHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{condicionTrabajoEspecifHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{condicionTrabajoEspecifHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{condicionTrabajoEspecifHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="false"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/planificacion/condicionTrabajoEspecif/CondicionTrabajoEspecifList.xhtml"
+                rendered="#{condicionTrabajoEspecifHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty condicionTrabajoEspecifFrom ? 'planificacion/condicionTrabajoEspecif/CondicionTrabajoEspecifList' : condicionTrabajoEspecifFrom}.xhtml"
+                rendered="#{!condicionTrabajoEspecifHome.managed}"/>
+
+        </div>
+        
+        <h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{condicionTrabajoEspecifHome.managed}">
+	                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+	                <h:outputText id="usuAlta" value="#{condicionTrabajoEspecifHome.instance.usuAlta}"/>
+	            </s:decorate>
+	            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{condicionTrabajoEspecifHome.managed}">
+	                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+	                <h:outputText id="fechaAlta" value="#{condicionTrabajoEspecifHome.instance.fechaAlta}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+					</h:outputText>
+	            </s:decorate>
+	            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{condicionTrabajoEspecifHome.managed}">
+	                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+	                <h:outputText id="usuMod" value="#{condicionTrabajoEspecifHome.instance.usuMod}"/>
+	            </s:decorate>
+	            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{condicionTrabajoEspecifHome.managed}">
+	                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+	                <h:outputText id="fechaMod" value="#{condicionTrabajoEspecifHome.instance.fechaMod}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+					</h:outputText>
+	            </s:decorate>
+			
+		</h:panelGrid>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,178 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU243_titulo}</h1>
+		<h:form id="matrizDocConfigDet" styleClass="edit">
+
+			<rich:panel id="panelcofig">
+				<f:facet name="header">Ver #{messages.CU243_titulo}</f:facet>
+				
+				
+				<rich:panel style=" width :877px;">
+					<f:facet name="header"> #{messages.CU243_plantilla_matriz_doc_config}</f:facet>
+					<h:panelGrid >
+						
+							<rich:panel id="panelItems3" style=" width :800px;">
+							<f:facet name="header">#{matrizDocConfigDetHome.managed ? 'Items Configurados' : messages.CU243_items_seleciconados_config}  #{'-  '}         Documentos a ser solicitados en: </f:facet>
+							
+							<div style="clear: both;height: 477px; width:400;overflow: auto;" id="item3List">
+							<rich:dataTable style=" width : 680px;"
+								id="item3List" rowKeyVar="_index3" var="_itemsSelec" 
+								value="#{matrizDocConfigDetEditFormController.matrizDocConfigDetList}">
+								<rich:column 
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}" >
+									<f:facet name="header">#{messages.CU243_nro_orden}	</f:facet>
+									<h:outputText value="#{_index3+1}" />
+								</rich:column>
+								<rich:column
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_tipo_doc}</f:facet>
+									<h:outputText
+										value="#{_itemsSelec.datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_agrupado}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.agrupado}"
+										disabled="true" />
+								</rich:column>
+								<rich:column 
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_Nro_grupo}</f:facet>
+									<h:outputText
+										value="#{_itemsSelec.matrizDocConfigGrupos.nroOrden}"  />
+								</rich:column>
+								<rich:column
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_obligatorio}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.obligatorio}"
+										disabled="true" />
+								</rich:column>
+								<rich:column rendered="#{!matrizDocConfigDetEditFormController.esSimplificado}"
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_eval_documental}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.evaluacionDoc}"
+										disabled="true" />
+								</rich:column>
+								<rich:column rendered="#{!matrizDocConfigDetEditFormController.esSimplificado}"
+									styleClass="#{matrizDocConfigDetEditFormController.getRowEditClass(_index3)}">
+									<f:facet name="header">#{messages.CU243_adjundicacion}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.adjudicacion}"
+										disabled="true"/>
+								</rich:column>
+
+							</rich:dataTable>
+							
+							
+							
+							
+							<rich:dataTable style=" width : 680px;"
+								id="grupoList" rowKeyVar="_index3" var="_itemsSelec"  
+								value="#{matrizDocConfigDetEditFormController.matrizDocConfigGruposList}">
+														
+								
+								<rich:column>
+									
+									<f:facet name="header">#{messages.CU243_Nro_grupo}</f:facet>
+									<h:outputText
+										value="#{_itemsSelec.nroOrden}" />
+								</rich:column>
+								<rich:column>
+									
+									<f:facet name="header">#{messages.CU243_descripcion_grupo}</f:facet>
+									<h:inputText 
+										value="#{_itemsSelec.descripcion}" disabled="true"/>
+																	
+								</rich:column>
+								
+								<rich:column>
+									
+									<f:facet name="header">#{messages.CU243_obligatorio}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.obligatorio}"
+										disabled="true" />
+								</rich:column>
+								<rich:column rendered="#{!matrizDocConfigDetEditFormController.esSimplificado}">
+									
+									<f:facet name="header">#{messages.CU243_eval_documental}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.evaluacionDoc}"
+										disabled="true" />
+								</rich:column>
+								<rich:column rendered="false">
+									
+									<f:facet name="header">#{messages.CU243_adjundicacion}</f:facet>
+									<h:selectBooleanCheckbox value="#{_itemsSelec.adjudicacion}"
+										disabled="true" />
+								</rich:column>
+
+								
+							</rich:dataTable> </div>
+						</rich:panel>
+					</h:panelGrid>
+				</rich:panel>
+
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				
+			</rich:panel>
+
+			<div class="actionButtons">  <s:button
+				id="cancelEdit" value="#{messages.msg_done}" propagation="end"
+				view="/seleccion/matrizDocConfigDet/MatrizDocConfigDetList.xhtml"
+				rendered="#{matrizDocConfigDetHome.managed}">
+				<f:param name="idConcursoPuestoAgr"
+					value="#{matrizDocConfigDetEditFormController.idConcursoPuestoAgr}" />
+			</s:button> <s:button id="cancelAdd" value="#{messages.msg_done}"
+				propagation="end"
+				view="/#{empty matrizDocConfigDetFrom ? '/seleccion/matrizDocConfigDet/MatrizDocConfigDetList' : matrizDocConfigDetFrom}.xhtml"
+				rendered="#{!matrizDocConfigDetHome.managed}">
+				<f:param name="idConcursoPuestoAgr"
+					value="#{matrizDocConfigDetEditFormController.idConcursoPuestoAgr}" />
+			</s:button></div>
+		</h:form>
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{matrizDocConfigDetHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{matrizDocConfigDetEditFormController.matrizDocConfigDet.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{matrizDocConfigDetHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{matrizDocConfigDetEditFormController.matrizDocConfigDet.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{matrizDocConfigDetHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{matrizDocConfigDetEditFormController.matrizDocConfigDet.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{matrizDocConfigDetHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{matrizDocConfigDetEditFormController.matrizDocConfigDet.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+
+
+	</ui:define>
+
+</ui:composition>

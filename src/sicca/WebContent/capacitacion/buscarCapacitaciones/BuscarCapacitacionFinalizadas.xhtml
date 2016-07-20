@@ -1,0 +1,279 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/templateCapacitacion.xhtml">
+
+	<ui:define name="body">
+
+
+
+
+		<h1>#{messages.CU481_titulo_finalizada}</h1>
+		<h:form id="postulacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelParametro">
+				<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU481_capa_becas}</ui:define>
+				</s:decorate>
+					<a:region>
+				<h:outputLabel value="" for="acSimple" />
+				<p:autoComplete id="acSimple"
+					value="#{buscarCapacitacionFinalizadasFC.sugestion}"
+					completeMethod="#{buscarCapacitacionFinalizadasFC.autocompletar}" />
+						</a:region>
+				<rich:spacer /> #{messages.CU481_msg_capa}	
+				</h:panelGrid>
+			
+				<h:panelGrid columns="2">
+				<a:region >
+				 <s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Barrio_pais}</ui:define>
+						<h:selectOneMenu id="codPais" style="width : 250px;"
+							value="#{buscarCapacitacionFinalizadasFC.codPais}">
+							<f:selectItems value="#{paissSelectItems}" />
+							<a:support event="onchange" reRender="dptoNac,ciudadNac" eventsQueue="default" limitToList="true" 
+								action="#{buscarCapacitacionFinalizadasFC.updateDepartamentoChange()}"/>
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+					<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU481_tipo_capac_beca}
+						</ui:define>
+						  <h:selectOneMenu id="idTipoCapacitacion" value="#{buscarCapacitacionFinalizadasFC.idTipoCapacitacion}" 
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoCapaTodosSelectItems}" />
+						</h:selectOneMenu>
+				</s:decorate>
+				<a:region >
+					<s:decorate id="dptoNacField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Ciudad_idDepartamento}</ui:define>
+						<h:selectOneMenu id="dptoNac" style="width : 250px;"
+							value="#{buscarCapacitacionFinalizadasFC.codDepartamento}">
+							<f:selectItems
+								value="#{buscarCapacitacionFinalizadasFC.departamentosSelecItem}" />
+							<a:support event="onchange" eventsQueue="default"
+								action="#{buscarCapacitacionFinalizadasFC.updateCiudad()}"
+								reRender="ciudadNac" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+					<s:decorate id="modalidadField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU481_modalidad}</ui:define>
+						<h:selectOneMenu id="modalidadCapaSeleccione" immediate="true" style="width : 250px;"
+							value="#{buscarCapacitacionFinalizadasFC.modalidadCapaSeleccione}">
+							<s:selectItems var="tipo" label="#{tipo.descripcion}"
+								value="#{enumAppHelper.modalidadCapaSelecciones}" />
+							<s:convertEnum />
+								</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate id="ciudadNacField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Persona_idCiudadDirecc}</ui:define>
+							<h:selectOneMenu id="ciudadNac" style="width : 250px;"
+								value="#{buscarCapacitacionFinalizadasFC.idCiudad}">
+								<f:selectItems
+									value="#{buscarCapacitacionFinalizadasFC.ciudadSelecItem}" />
+									
+							</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+
+
+
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelResultado,idPanelPaginador"
+				action="#{buscarCapacitacionFinalizadasFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{buscarCapacitacionFinalizadasFC.searchAll()}"
+				reRender="panelParametro,panelResultado,idPanelPaginador">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty buscarCapacitacionFinalizadasFC.capacfinalizadasListas ? 0 : (capacitacionFinalizadaList.paginated ? capacitacionFinalizadaList.resultCount : buscarCapacitacionFinalizadasFC.capacfinalizadasListas.size())})</f:facet>
+				<div class="results" id="postulacionList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty buscarCapacitacionFinalizadasFC.capacfinalizadasListas}" />
+				<rich:dataTable id="postulacionList" var="_capacitacionFinalizada"
+					value="#{buscarCapacitacionFinalizadasFC.capacfinalizadasListas}"
+					rendered="#{not empty buscarCapacitacionFinalizadasFC.capacfinalizadasListas}">
+
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_capa_becas}" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.nombre" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_tip_ca_beca}" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.datosEspecificos.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.datosEspecificos.descripcion}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_modalidad}" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.modalidalidadDesc" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.modalidalidadDesc}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="Fecha Inicio" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.fechaInicio}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="Fecha Fin" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.fechaFin" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.fechaFin}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_inipostulacion}" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.fechaPubDesde" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.fechaPubDesde}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{capacitacionFinalizadaList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU481_termino_pos}" />
+								<ui:param name="propertyPath"
+									value="capacitacionFinalizada.fechaPubHasta" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_capacitacionFinalizada.fechaPubHasta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.CU481_prospecto}</f:facet>
+ 							<div align="center">
+						<h:commandLink  target="_blank"
+							id="verHistorialId"
+							action="#{buscarCapacitacionFinalizadasFC.abrirDocumento(_capacitacionFinalizada.idCapacitacion)}"
+							reRender="panelModalSelect">
+							<h:graphicImage value="/img/application_form_magnify.png"
+								title="#{messages.gral_descargar}"
+								alt="#{messages.gral_descargar}" />
+						</h:commandLink> 
+							</div>
+					</h:column>
+
+				
+
+					<rich:column styleClass="action">
+					
+						<s:link  value="#{messages.CU481_ver_info}"
+					view="/capacitacion/publicarCapacitacion/datosPublicacion/PublicarCapacitacion.xhtml"
+					propagation="join">
+					<f:param name="capacitacionesIdCapacitacion"
+								value="#{_capacitacionFinalizada.idCapacitacion}" />
+								<f:param name="from"
+								value="capacitacion/buscarCapacitaciones/BuscarCapacitacionFinalizadas" />
+					</s:link>
+           					 #{' '}
+          
+			         
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+			<a:outputPanel id="idPanelPaginador" ajaxRendered="true">
+				<div class="tableControl"><s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCapacitacionFinalizadas.xhtml"
+					rendered="#{capacitacionFinalizadaList.previousExists}"
+					value="#{messages.left}#{messages.left}  #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCapacitacionFinalizadas.xhtml"
+					rendered="#{capacitacionFinalizadaList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{capacitacionFinalizadaList.previousFirstResult}" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCapacitacionFinalizadas.xhtml"
+					rendered="#{capacitacionFinalizadaList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{capacitacionFinalizadaList.nextFirstResult}" />
+				</s:link> <s:link
+					view="/capacitacion/buscarCapacitaciones/BuscarCapacitacionFinalizadas.xhtml"
+					rendered="#{capacitacionFinalizadaList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{capacitacionFinalizadaList.lastFirstResult}" />
+				</s:link></div>
+			</a:outputPanel>
+
+
+
+
+			<s:button id="cancelEdit" value="#{messages.msg_done}"
+				propagation="none" view="/capacitacion/portal/portalCapacitacion.xhtml" />
+
+		</h:form>
+	</ui:define>
+
+
+
+</ui:composition>

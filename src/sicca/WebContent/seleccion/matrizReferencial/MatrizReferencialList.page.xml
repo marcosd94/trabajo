@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<action execute="#{matrizReferencialListFormController.init()}" on-postback="false"/>
+
+
+	<navigation from-action="#{matrizReferencialListFormController.peticionNuevoRegistro()}">
+		<rule if-outcome="tipoMatriz">
+			
+			<redirect view-id="/seleccion/matrizReferencial/MatrizReferencialEdit.xhtml"/>
+		</rule>
+		<rule if-outcome="factorEvaluacion">
+			
+			<redirect view-id="/seleccion/matrizReferencialEnc/MatrizReferencialEncEdit.xhtml"/>
+		</rule>
+	</navigation>
+
+
+   <param name="firstResult" value="#{matrizReferencialList.firstResult}"/>
+   <param name="sort" value="#{matrizReferencialList.orderColumn}"/>
+   <param name="dir" value="#{matrizReferencialList.orderDirection}"/>
+   <param name="logic" value="#{matrizReferencialList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="descripcion" value="#{matrizReferencialListFormController.matrizReferencial.descripcion}"/>
+   <param name="tipoConcurso" value="#{matrizReferencialListFormController.idDatosEspecificos}"/>
+   <param name="activo" value="#{matrizReferencialListFormController.matrizReferencial.activo}"/>
+
+	<restrict>#{identity.hasRole('matrizReferencial_list')}</restrict>
+
+</page>

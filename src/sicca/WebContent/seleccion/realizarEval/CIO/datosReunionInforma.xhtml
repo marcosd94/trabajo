@@ -1,0 +1,130 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<rich:simpleTogglePanel 
+			label="Cronograma por Concurso – Grupo de Puestos"
+			switchType="client">
+			<h:panelGrid columns="3">
+
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Concurso</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Grupo de Puestos</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+		<rich:simpleTogglePanel  
+			label="#{messages.CU88_datos_convoca_reunion_info}"
+			switchType="client">
+			<h:panelGrid columns="2" style=" width : 803px;">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_fecha}</ui:define>
+					<rich:calendar id="fechaPublicacionDesde" required="true"
+						value="#{fechasGrupoPuestoHome.instance.fechaPublicacionDesde}"
+						enableManualInput="true" oninputkeyup="ponerBarra(event);"
+						inputSize="10" datePattern="dd/MM/yyyy"
+						locale="#{siccaAppHelper.localeCode}" />
+				</s:decorate>
+				<fieldset><legend>#{messages.CU88_hora}</legend> <h:panelGrid
+					columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU88_desde}</ui:define>
+						<h:inputText />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU88_hasta}</ui:define>
+						<h:inputText />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_lugar}</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+				<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU88_ciudad}</ui:define>
+					<h:selectOneMenu id="ciudad" required="true" disabled="true"
+						value="#{realizarEvalsFormController.idCiudad}"
+						style="width:250px">
+						<f:selectItems
+							value="#{realizarEvalsFormController.ciudadSelectItem}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_direccion}</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">messages.CU88_observacion</ui:define>
+					<h:inputTextarea style=" width : 516px;"/>
+				</s:decorate>
+			</h:panelGrid>
+
+		</rich:simpleTogglePanel>
+	</ui:define>
+</ui:composition>

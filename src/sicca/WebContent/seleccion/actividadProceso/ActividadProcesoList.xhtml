@@ -1,0 +1,201 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.CU391_title}</h1>
+		
+		<h:form id="actividadProcesoSearch" styleClass="edit">
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+			
+			<a:region >
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_proceso}</ui:define>
+					<h:selectOneMenu id="idProceso" value="#{actividadProcesoList.idProceso}" style=" width : 250px;">
+						<f:selectItems value="#{procesoSelectItems}"/>
+						<a:support action="#{actividadProcesoFormController.changeProceso(actividadProcesoList.idProceso)}" 
+						 event="onchange" eventsQueue="default" limitToList="true" reRender="idActividad"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				</a:region>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_actividad}</ui:define>
+					<h:selectOneMenu id="idActividad" value="#{actividadProcesoList.idActividad}" style=" width : 250px;">
+						<f:selectItems value="#{actividadProcesoFormController.actividadSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_estado}</ui:define>
+					<h:selectOneRadio id="estado" value="#{actividadProcesoList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}" label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+				
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					value="#{messages.msg_list_search_button}"
+					action="#{actividadProcesoList.buscarResultados()}"
+					reRender="panelResultados">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<a:commandButton id="reset"
+					value="#{messages['msg_list_search_reset_button']}"
+					action="#{actividadProcesoList.limpiarResultados()}"
+					reRender="panelBusqueda,panelResultados">
+					<f:param name="firstResult" value="0" />
+				 </a:commandButton>
+			</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty actividadProcesoList.resultList ? 0 : (actividadProcesoList.paginated ? actividadProcesoList.resultCount : actividadProcesoList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList">
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty actividadProcesoList.resultList}" /> 
+				
+			  	<rich:dataTable id="actividadProcesoList" var="_actividadProceso"
+					value="#{actividadProcesoList.resultList}"
+					rendered="#{not empty actividadProcesoList.resultList}">
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{actividadProcesoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.gral_proceso}" />
+								<ui:param name="propertyPath" value="actividadProceso.proceso.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_actividadProceso.proceso.descripcion}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{actividadProcesoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU390_nro_actividad}" />
+								<ui:param name="propertyPath" value="actividadProceso.actividad.nroActividad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_actividadProceso.actividad.nroActividad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{actividadProcesoList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_actividad}" />
+								<ui:param name="propertyPath" value="actividadProceso.actividad.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_actividadProceso.actividad.descripcion}" />
+					</h:column>
+					
+					<rich:column style="text-align:center;" width="10%">
+						<f:facet name="header">#{messages.gral_activo}</f:facet>
+						<h:selectBooleanCheckbox value="#{_actividadProceso.activo}" disabled="true"/>
+					</rich:column>
+	
+	
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/#{empty from ? 'seleccion/actividadProceso/ActividadProceso' : from}.xhtml"
+							value="#{empty from ? messages.msg_list_view : messages.msg_list_select}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="actividadProcesoViewId">
+							<f:param name="actividadProcesoIdActividadProceso"
+								value="#{_actividadProceso.idActividadProceso}" />
+							<f:param name="vista" value="true" />
+						</s:link>
+	            		#{' '}
+	            		<s:link
+							view="/seleccion/actividadProceso/ActividadProcesoEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="none"
+							id="actividadProcesoEdit" rendered="#{empty from}">
+							<f:param name="actividadProcesoIdActividadProceso"
+								value="#{_actividadProceso.idActividadProceso}" />
+							<f:param name="vista" value="false" />
+						</s:link>
+						
+						#{' '}
+	            		<s:link
+							view="/seleccion/actividadProceso/ActividadProcesoEditRol.xhtml"
+							value="#{messages.CU391_asignar_rol}" propagation="none"
+							id="actividadProcesoEditRol" rendered="#{empty from}">
+							<f:param name="actividadProcesoIdActividadProceso"
+								value="#{_actividadProceso.idActividadProceso}" />
+							<f:param name="vista" value="false" />
+						</s:link>
+						#{' '}
+	            		<s:link
+							view="/seleccion/actividadProceso/ActividadProcesoEditRol.xhtml"
+							value="#{messages.CU391_ver_rol}" propagation="none"
+							id="actividadProcesoViewRol" rendered="#{empty from}">
+							<f:param name="actividadProcesoIdActividadProceso"
+								value="#{_actividadProceso.idActividadProceso}" />
+							<f:param name="vista" value="true" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable>
+			</div>
+		</rich:panel>
+
+		<a:outputPanel ajaxRendered="true">
+			<div class="tableControl">
+				<s:link view="/seleccion/actividadProceso/ActividadProcesoList.xhtml"
+					rendered="#{actividadProcesoList.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link> 
+				
+				<s:link view="/seleccion/actividadProceso/ActividadProcesoList.xhtml"
+					rendered="#{actividadProcesoList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{actividadProcesoList.previousFirstResult}" />
+				</s:link>
+				 
+				<s:link view="/seleccion/actividadProceso/ActividadProcesoList.xhtml"
+					rendered="#{actividadProcesoList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{actividadProcesoList.nextFirstResult}" />
+				</s:link>
+				 
+				<s:link view="/seleccion/actividadProceso/ActividadProcesoList.xhtml"
+					rendered="#{actividadProcesoList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{actividadProcesoList.lastFirstResult}" />
+				</s:link>
+			</div>
+		</a:outputPanel>
+		
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/seleccion/actividadProceso/ActividadProcesoEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="actividadProcesoIdActividadProceso" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

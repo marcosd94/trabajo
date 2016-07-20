@@ -1,0 +1,154 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<h1>#{messages.TipoPlanta_}</h1>
+		
+
+		<h:form id="tipoPlantaSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.TipoPlanta_descripcion}</ui:define>
+					<h:inputText id="descripcion" size="100"
+						value="#{tipoPlantaList.tipoPlanta.descripcion}" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{tipoPlantaList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum/>
+					</h:selectOneRadio>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+		<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{tipoPlantaList.listaResultados()}"
+				reRender="panelResultados" >
+				<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{tipoPlantaList.limpiar()}"
+				reRender="panelResultados, panelBusqueda">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+				<s:button id="print" rendered="false"
+				value="#{messages.msg_list_search_print_button}"
+				view="/planificacion/tipoPlanta/TipoPlantaListPdf.xhtml" />
+				</div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty tipoPlantaList.resultList ? 0 : (tipoPlantaList.paginated ? tipoPlantaList.resultCount : tipoPlantaList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty tipoPlantaList.obtenerListaTipoPlantas()}" /> <rich:dataTable
+				id="tipoPlantaList" var="_tipoPlanta"
+				value="#{tipoPlantaList.resultList}"
+				rendered="#{not empty tipoPlantaList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{tipoPlantaList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.TipoPlanta_descripcion}" />
+							<ui:param name="propertyPath" value="tipoPlanta.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_tipoPlanta.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{tipoPlantaList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.TipoPlanta_activo}" />
+							<ui:param name="propertyPath" value="tipoPlanta.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox id="activo" disabled="true"
+						value="#{_tipoPlanta.activo}" />
+				</h:column>
+			
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/#{empty from ? 'planificacion/tipoPlanta/TipoPlanta' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="tipoPlantaViewId">
+						<f:param name="tipoPlantaIdTipoPlanta"
+							value="#{_tipoPlanta.idTipoPlanta}" />
+					</s:link>
+					#{' '}
+            		<s:link
+						view="/planificacion/tipoPlanta/TipoPlanta.xhtml"
+						value="Ver" propagation="none"
+						id="tipoPlanta" rendered="#{empty from}">
+						<f:param name="tipoPlantaIdTipoPlanta"
+							value="#{_tipoPlanta.idTipoPlanta}" />
+					</s:link>
+            		#{' '}
+            		<s:link
+						view="/planificacion/tipoPlanta/TipoPlantaEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none"
+						id="tipoPlantaEdit" rendered="#{empty from}">
+						<f:param name="tipoPlantaIdTipoPlanta"
+							value="#{_tipoPlanta.idTipoPlanta}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+		<div class="tableControl"><s:link view="/planificacion/tipoPlanta/TipoPlantaList.xhtml"
+			rendered="#{tipoPlantaList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/planificacion/tipoPlanta/TipoPlantaList.xhtml"
+			rendered="#{tipoPlantaList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{tipoPlantaList.previousFirstResult}" />
+		</s:link> <s:link view="/planificacion/tipoPlanta/TipoPlantaList.xhtml"
+			rendered="#{tipoPlantaList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult"
+				value="#{tipoPlantaList.nextFirstResult}" />
+		</s:link> <s:link view="/planificacion/tipoPlanta/TipoPlantaList.xhtml"
+			rendered="#{tipoPlantaList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult"
+				value="#{tipoPlantaList.lastFirstResult}" />
+		</s:link></div></a:outputPanel>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/planificacion/tipoPlanta/TipoPlantaEdit.xhtml" id="create"
+				propagation="none"
+				value="#{messages.msg_create_male}">
+				<f:param name="tipoPlantaIdTipoPlanta" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

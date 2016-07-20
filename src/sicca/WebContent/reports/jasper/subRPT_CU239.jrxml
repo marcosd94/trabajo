@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU239_curriculum" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<import value="java.util.*"/>
+	<parameter name="idPersona" class="java.lang.Long"/>
+	<parameter name="path_logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+CASE WHEN TITULO_ACADEMICO.DESCRIPCION IS NULL THEN 'OTRO_TITULO' END AS tituloObtenido
+,	ESPECIALIDAD.DESCRIPCION AS especialidad
+,	INSTITUCION_EDUCATIVA.DESCRIPCION AS institucion
+,	CASE WHEN Extract(year from es.FECHA_FIN) IS NULL THEN 'PENDIENTE' END AS anioEgreso
+,	es.DURACION_HORAS AS duracion
+FROM seleccion.estudios_realizados es
+LEFT OUTER JOIN seleccion.titulo_academico  TITULO_ACADEMICO
+ON
+	TITULO_ACADEMICO.ID_TITULO_ACADEMICO =es.ID_TITULO_ACADEMICO
+LEFT OUTER JOIN seleccion.especialidad  ESPECIALIDAD
+ON
+	ESPECIALIDAD.ID_ESPECIALIDAD = TITULO_ACADEMICO.ID_ESPECIALIDAD
+JOIN seleccion.institucion_educativa  INSTITUCION_EDUCATIVA
+ON
+	INSTITUCION_EDUCATIVA.ID_INST_EDUCATIVA =es.ID_INST_EDUCATIVA
+WHERE
+	es.ID_PERSONA = $P{idPersona}]]>
+	</queryString>
+	<field name="tituloobtenido" class="java.lang.String"/>
+	<field name="especialidad" class="java.lang.String"/>
+	<field name="institucion" class="java.lang.String"/>
+	<field name="anioegreso" class="java.lang.String"/>
+	<field name="duracion" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="76" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="1" y="0" width="231" height="23" forecolor="#009999" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[B. FORMACIÓN ACADÉMICA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="1" y="34" width="498" height="34"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idPersona">
+					<subreportParameterExpression><![CDATA[$P{idPersona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/subRPT_CU239_Estudios.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

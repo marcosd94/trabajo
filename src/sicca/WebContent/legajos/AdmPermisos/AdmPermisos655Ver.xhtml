@@ -1,0 +1,84 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j">
+
+	<h1>#{messages.CU655_titulo}</h1>
+
+
+	<rich:simpleTogglePanel
+		label="#{messages.CU655_panel2_title} (#{empty admPermisos655FC.lGrilla1?0:admPermisos655FC.lGrilla1.size()})"
+		id="idPanel2">
+		<div class="results"
+			style="overflow: scroll; width: 700; HEIGHT: 230px"><h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty admPermisos655FC.lGrilla1}" /> <rich:dataTable
+			rowKeyVar="rowIndexGrilla1" var="_record"
+			value="#{admPermisos655FC.lGrilla1}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU655_motivo}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{admPermisos655FC.updateMotivo(_record).datosEspMotivoPermiso.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU655_observacion}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.obsPermiso}" />
+			</h:column>
+
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU655_actoAdmin}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.nroActo}" />
+			</h:column>
+
+
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaInicio}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.fechaInicio}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_fechaFin}
+						</f:facet>
+				<h:outputText style="white-space:normal" value="#{_record.fechaFin}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU654_documento}
+						</f:facet>
+				<h:commandLink value="Descargar"
+					action="#{cargarResultEvalMetodo571FC.descargarDocumento(_record.documentos.idDocumento)}"
+					rendered="#{_record.documentos!=null}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+				<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+					action="#{admPermisos655FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+					onclick="return confirm('#{messages.msg_confirm_delete}');"
+					action="#{admPermisos655FC.eliminar(rowIndexGrilla1)}" />
+			</h:column>
+		</rich:dataTable></div>
+	</rich:simpleTogglePanel>
+
+</ui:composition>

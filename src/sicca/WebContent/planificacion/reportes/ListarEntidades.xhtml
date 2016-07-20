@@ -1,0 +1,56 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionSearch" styleClass="edit">
+			<h1>#{messages.cu039_}</h1>
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.cu039_anho}</ui:define>
+					<h:inputText id="anho"
+						value="#{listarEntidadesRptController.entidad.aniAniopre}"
+						onkeypress="return soloNumeros(event);" styleClass="numeric"
+						size="5" />
+				</s:decorate>
+
+				<a:region>
+					<s:decorate id="nivelField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.cu039_codNivel}</ui:define>
+						<h:inputText id="codigoNivel" styleClass="numeric" onkeypress="return soloNumeros(event);"
+							value="#{listarEntidadesRptController.nivelEntidad.nenCodigo}"
+							size="5">
+							<a:support event="onchange"
+								action="#{listarEntidadesRptController.findNivelEntidad()}"
+								reRender="nivelField" />
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="nivel"
+							value="#{listarEntidadesRptController.nivelEntidad.nenNombre}"
+							disabled="true" size="60" />
+					</s:decorate>
+				</a:region>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton id="print"
+				value="#{messages.msg_list_search_print_button}"
+				action="#{listarEntidadesRptController.print()}" /> <s:button
+				id="reset" propagation="none"
+				value="#{messages.msg_list_search_clear_button}" />
+			</div>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

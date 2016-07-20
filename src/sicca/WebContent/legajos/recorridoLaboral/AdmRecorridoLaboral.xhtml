@@ -1,0 +1,527 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+		<a:outputPanel rendered="#{admRecorridoLaboralFC.texto=='G'}" >
+		<h1>#{messages.CU651_titulo}</h1>
+		</a:outputPanel>
+		<a:outputPanel  rendered="#{admRecorridoLaboralFC.texto=='P'}" >
+		<h1>#{messages.CU651_ver_historico}</h1>
+		</a:outputPanel>
+		
+		
+
+		
+		
+	<rich:panel id="discap" switchType="ajax" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU651_estado_actual}</f:facet>
+		<h:panelGrid columns="2">
+			 <a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+						<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							
+									
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+						<a:region>
+						<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">Unid. Org.</ui:define>
+							
+										<h:inputText size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					
+					
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_puesto}
+									</ui:define>
+						
+										<h:inputText size="50"
+								disabled="true"
+								value="#{admRecorridoLaboralFC.puesto}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+					<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_vinculacion}</ui:define>
+							<h:inputText value="#{admRecorridoLaboralFC.vinculacion}" disabled="true"/>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_situacion}</ui:define>
+							<h:inputText value="#{admRecorridoLaboralFC.situacion}" disabled="true"/>
+					</s:decorate>
+					
+			</h:panelGrid>
+			<h:panelGrid columns="4">
+			<a:region>
+						<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_ingreso_por}</ui:define>
+						<h:inputText size="50"
+								disabled="true"
+								value="#{admRecorridoLaboralFC.ingresoPor}" />
+							
+	                	</s:decorate>
+					</a:region>
+					<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU651_fec_ini}<span class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaDoc" enableManualInput="true" disabled="true"
+								value="#{admRecorridoLaboralFC.empleadoPuesto.fechaInicio}" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						
+								<h:commandButton value="#{messages.CU651_antiguedad}"
+									action="#{admRecorridoLaboralFC.calAntiguedad()}" />
+									<s:decorate template="/layout/edit.xhtml">
+							
+							<h:inputText disabled="true" value="#{admRecorridoLaboralFC.antiguedad}"/>
+						</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			<h:panelGroup >
+			<fieldset><legend>#{messages.CU651_valor_eco}</legend>
+			 <rich:panel >
+		         <div class="results" id="tbldet2List" style=" overflow: scroll;  width:310 ;HEIGHT: 230px"  >
+								   	<rich:dataTable id="itemsList2" var="_pagos"  first="0"
+												value="#{admRecorridoLaboralFC.empleadoConceptoPagos}"
+											 rowKeyVar="rowNr2">
+												<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+													<h:outputText value="#{_pagos.objCodigo}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+													<h:outputText value="#{_pagos.categoria}" />
+											</rich:column>
+											<rich:column  >
+													<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+													<h:outputText value="#{_pagos.monto}" />
+											</rich:column>
+											
+																					
+											
+												
+						</rich:dataTable>
+					</div>
+					</rich:panel>
+					<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_total_valor}</ui:define>
+						<h:inputText size="20"
+								disabled="true"
+								value="#{admRecorridoLaboralFC.valorTotal}" />
+							
+	                	</s:decorate>
+					
+					</fieldset></h:panelGroup>
+					<h:panelGroup ><fieldset><legend>#{messages.CU651_ultimo_pago}</legend>
+					<rich:panel id="ultimoPanel" style=" width : 500px;">
+		<div class="results" id="tbldetList" style="overflow: scroll;HEIGHT: 230px"
+			width="310"><rich:dataTable id="itemsList" var="_items"
+			
+			value="#{admRecorridoLaboralFC.remuneraciones}"
+			rowKeyVar="rowNr">
+			<rich:column>
+				<f:facet name="header">#{messages.CU651_linea}			</f:facet>
+				<h:outputText
+					value="#{_items.linea}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">	#{messages.CU651_obj_gasto}			</f:facet>
+				<h:outputText value="#{_items.objCodigo}" />
+
+			</rich:column>
+			<rich:column>
+
+				<f:facet name="header">#{messages.CU651_obj_concepto}
+													</f:facet>
+				<h:outputText value="#{_items.descripConcepto}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU651_categoria}
+													</f:facet>
+				<h:outputText value="#{_items.categoria}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">#{messages.CU651_desc_cat}
+													</f:facet>
+				<h:outputText value="#{_items.descripCategoria}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">	#{messages.CU651_monto_presu}
+													</f:facet>
+				<h:outputText value="#{_items.presupuestado}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">	#{messages.CU651_monto_dev}
+													</f:facet>
+				<h:outputText value="#{_items.devengado}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">	#{messages.CU651_anio}
+													</f:facet>
+				<h:outputText value="#{_items.anho}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">	#{messages.CU651_mes}
+													</f:facet>
+				<h:outputText value="#{_items.mes}"/>
+			
+			</rich:column>
+			
+
+		</rich:dataTable></div>
+
+	</rich:panel>
+	<s:decorate template="/layout/display.xhtml" >
+							<ui:define name="label">#{messages.CU651_total_ultimo_pago}</ui:define>
+						<h:inputText size="20"
+								disabled="true"
+								value="#{admRecorridoLaboralFC.ultimo1}" />
+							<h:inputText size="20"
+								disabled="true"
+								value="#{admRecorridoLaboralFC.ultimo2}" />
+							
+	                	</s:decorate>
+	</fieldset></h:panelGroup>
+					
+			</h:panelGrid>
+			
+			
+	</rich:panel>
+
+	<rich:panel rendered="#{admRecorridoLaboralFC.texto=='G'}" id="panelDetalles" style=" width : 900px;">
+	<f:facet name="header">#{messages.CU651_registro_historico_puestos}</f:facet>
+	<h:panelGrid columns="1">
+		<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU651_institucion}<span
+									class="required">*</span></ui:define>
+								<h:inputText value="#{admRecorridoLaboralFC.empleadoPuestoAdd.descOeeHistorico}"
+								disabled="#{admRecorridoLaboralFC.ver}"	maxlength="200" style=" width : 519px;" />
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU726_uo}</ui:define>
+					<h:inputText value="#{admRecorridoLaboralFC.empleadoPuestoAdd.descUoHistorico}"
+					disabled="#{admRecorridoLaboralFC.ver}"	maxlength="200" style=" width : 519px;" />
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Empleado_categoria}</ui:define>
+					<h:inputText value="#{admRecorridoLaboralFC.categoria}"
+					disabled="#{admRecorridoLaboralFC.ver}"	maxlength="10" style=" width : 50px;" />
+		</s:decorate>		
+		
+		<s:decorate template="/layout/edit.xhtml">	
+				<ui:define name="label">#{messages.objetoDeGasto}</ui:define>
+					<h:inputText value="#{admRecorridoLaboralFC.objCodigo}" styleClass="numeric"
+					disabled="#{admRecorridoLaboralFC.ver}"	maxlength="3" onkeypress="return soloNumeros(event);"  style=" width : 50px;" />
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.Monto}</ui:define>
+			<h:inputText value="#{admRecorridoLaboralFC.empleadoConceptoPagoAdd.monto}" styleClass="numeric" 
+				disabled="#{admRecorridoLaboralFC.ver}"		onkeypress="return soloNumeros(event);"/>
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages.tipo_vinculacion}<span
+				class="required">*</span>
+			</ui:define>
+			<h:selectOneMenu id="tipoV" disabled="#{admRecorridoLaboralFC.ver}" rendered="#{!admRecorridoLaboralFC.ver}"
+				value="#{admRecorridoLaboralFC.idEstado}"
+				style="width:250px">
+				<f:selectItems value="#{admRecorridoLaboralFC.getTipoVinculacionSelectItems()}" />
+			</h:selectOneMenu>
+			<h:inputText value="#{admRecorridoLaboralFC.vinculacion}"
+				disabled="#{admRecorridoLaboralFC.ver}" rendered="#{admRecorridoLaboralFC.ver}"/>	
+		</s:decorate>
+	</h:panelGrid>
+	<h:panelGrid columns="4">
+	<s:decorate id="fechaIniciosContratoField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU651_fec_ini}<span
+									class="required">*</span></ui:define>
+							<rich:calendar id="fechaInicios" enableManualInput="true"
+							disabled="#{admRecorridoLaboralFC.ver}"
+								value="#{admRecorridoLaboralFC.empleadoPuestoAdd.fechaInicio}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						<s:decorate id="fechaFinField"
+							template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU651_fecha_fin}</ui:define>
+							<rich:calendar id="fechaFin" enableManualInput="true"
+							disabled="#{admRecorridoLaboralFC.ver}"
+								value="#{admRecorridoLaboralFC.empleadoPuestoAdd.fechaFin}"
+								datePattern="dd/MM/yyyy" />
+						</s:decorate>
+						 <s:decorate id="activoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU651_incide_antiguedad}</ui:define>
+                <h:selectBooleanCheckbox id="activo" disabled="#{admRecorridoLaboralFC.ver}"
+                                 value="#{admRecorridoLaboralFC.empleadoPuestoAdd.incidenAntiguedad}"/>
+            </s:decorate>
+            
+						
+	</h:panelGrid>
+	
+	<legend>#{messages.CU651_acto_admin}</legend>
+	<rich:panel>
+	
+	<h:panelGrid columns="4">
+	<s:decorate id="tipoField" template="/layout/display.xhtml" rendered="#{!admRecorridoLaboralFC.ver}">
+								<ui:define name="label">#{messages.CU289_tipo_doc}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipo" disabled="#{admRecorridoLaboralFC.ver}"
+									value="#{admRecorridoLaboralFC.idTipoDoc}" style=" width : 275px;" onclick="#{admRecorridoLaboralFC.esOtroTipo()}" onchange="submit()">
+									<f:selectItems
+										value="#{admRecorridoLaboralFC.updateTipoDocSelectItems()}" />
+									<f:param name="personaIdPersona" value="#{admRecorridoLaboralFC.idPersona}" />
+								</h:selectOneMenu>
+							</s:decorate>
+						
+					
+						<span class="required">*</span>
+								<s:fileUpload size="30" contentType="#{admRecorridoLaboralFC.contentType}"
+						data="#{admRecorridoLaboralFC.uploadedFile}" rendered="#{!admRecorridoLaboralFC.ver}"
+						fileName="#{admRecorridoLaboralFC.fileName}" style=" width : 299px;">
+									<s:conversationPropagation type="join" />
+
+								</s:fileUpload>
+								<h:inputText value="#{admRecorridoLaboralFC.nombreDoc}"
+									disabled="true" style=" width : 169px;" />
+								<h:commandButton  value="Descargar"   target="_blank" rendered="#{admRecorridoLaboralFC.ver}"
+					action="#{admRecorridoLaboralFC.abrirDoc(admRecorridoLaboralFC.empleadoPuestoAdd.idEmpleadoPuesto)}" />
+					
+					
+									
+	</h:panelGrid>
+	#{' '}
+	<s:decorate id="descDocField" template="/layout/edit.xhtml" rendered="#{admRecorridoLaboralFC.esOtro}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{admRecorridoLaboralFC.descTipoDoc}"
+							size="30" maxlength="100" disabled="#{admRecorridoLaboralFC.ver}"/>
+					</s:decorate>
+	#{' '}
+	<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU651_acto_administativo}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText value="#{admRecorridoLaboralFC.actoAdmin}" id="idNroDoc" styleClass="numeric" 
+								disabled="#{admRecorridoLaboralFC.ver}"		onkeypress="return soloNumeros(event);"/>
+						</s:decorate>
+						#{' '}
+	<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU541_fecha}<span class="required">*</span>
+							</ui:define>
+							<rich:calendar enableManualInput="true" disabled="#{admRecorridoLaboralFC.ver}"
+								value="#{admRecorridoLaboralFC.fecActo}" datePattern="dd/MM/yyyy" />
+						</s:decorate>
+	#{' '}
+	<h:panelGrid columns="1">            
+            <s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.encabezadoActoAdministrativo}<span class="required">*</span></ui:define>
+		                <h:inputTextarea id="descActo"
+		                               cols="80" disabled="#{admRecorridoLaboralFC.ver}"
+		                               rows="6"
+		                         value="#{admRecorridoLaboralFC.empleadoPuestoAdd.encabezadoActoAdministrativo}" style="height : 76px; width : 519px;">
+				                 <f:validateLength maximum="500" />
+				        </h:inputTextarea>
+            </s:decorate>
+            
+            <s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU651_descripcion_puesto}<span
+									class="required">*</span></ui:define>
+                <h:inputTextarea id="obs"
+                               cols="80" disabled="#{admRecorridoLaboralFC.ver}"
+                               rows="6"
+                         value="#{admRecorridoLaboralFC.empleadoPuestoAdd.descPuestoHistorico}" style="height : 55px; width : 400px;">
+                 <f:validateLength maximum="200" />
+        </h:inputTextarea>
+            </s:decorate>
+            
+            <s:decorate  template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.descripcionFunciones}</ui:define>
+		                <h:inputTextarea id="descFunciones"
+		                               cols="80" disabled="#{admRecorridoLaboralFC.ver}"
+		                               rows="6"
+		                         value="#{admRecorridoLaboralFC.empleadoPuestoAdd.descripcionFunciones}" style="height : 90px; width : 519px;">
+				        </h:inputTextarea>
+            </s:decorate>
+    </h:panelGrid>
+	
+	</rich:panel>
+	
+	</rich:panel>
+	<a:outputPanel ajaxRendered="true" rendered="#{admRecorridoLaboralFC.texto=='G'}">
+	<div class="actionButtons"><h:commandButton id="addToList"
+				action="#{admRecorridoLaboralFC.addRow()}"
+				value="#{messages.msg_list_add}" 
+				onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+				rendered="#{admRecorridoLaboralFC.empleadoPuestoAdd.idEmpleadoPuesto == null}" />
+
+			<h:commandButton id="updateOnList"
+				action="#{admRecorridoLaboralFC.addRow()}"
+				value="#{messages.msg_update}"
+				onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+				rendered="#{admRecorridoLaboralFC.empleadoPuestoAdd.idEmpleadoPuesto != null and !admRecorridoLaboralFC.ver}" />
+
+			<a:commandButton id="cancelEditOnList"
+				action="#{admRecorridoLaboralFC.limpiar()}"
+				value="#{messages.msg_cancel}"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{admRecorridoLaboralFC.empleadoPuestoAdd.idEmpleadoPuesto != null}" />
+			<a:commandButton id="ClearOnList"
+				action="#{admRecorridoLaboralFC.limpiar()}"
+				value="Limpiar"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{admRecorridoLaboralFC.empleadoPuestoAdd.idEmpleadoPuesto == null}" />
+
+			</div></a:outputPanel>
+	
+
+	<rich:panel id="panelSuperior" style=" width : 900px;">
+		<f:facet name="header">#{messages.CU651_puestos_cargos}</f:facet>
+		<h:panelGrid columns="1">
+		
+			<a:outputPanel ajaxRendered="true" id="panelPuestos">
+				<div class="results" id="tblIdiomaList" style="overflow: scroll;">
+				<rich:dataTable id="itemsEventoList" var="_evento"  style=" width : 850px;"
+					value="#{admRecorridoLaboralFC.empleadoPuestoLista}"
+					rowKeyVar="rowNr" rows="5">
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_institucion}</f:facet>
+						<h:outputText value="#{_evento.oee}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Unidad Orga.	</f:facet>
+						<h:outputText value="#{_evento.uo}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_tipo_ingreso}</f:facet>
+						<h:outputText value="#{_evento.tipo}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_puesto}</f:facet>
+						<h:outputText  value="#{_evento.puesto}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_vinculacion}</f:facet>
+						<h:outputText  value="#{_evento.estado}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_fec_ini}</f:facet>
+						<h:outputText  value="#{_evento.fechaInicio}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">#{messages.CU651_fecha_fin}</f:facet>
+						<h:outputText  value="#{_evento.fechaFin}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Documento</f:facet>
+						#{' '}	
+						<h:commandLink value="Descargar"   target="_blank" disabled="#{_evento.tipo=='INGRESO POR INSERCION MASIVA'}"
+					action="#{admRecorridoLaboralFC.abrirDoc(_evento.id)}" /> 
+					</rich:column>
+
+
+					<rich:column rendered="#{admRecorridoLaboralFC.texto=='G'}">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<a:commandLink id="removeRow" rendered="#{admRecorridoLaboralFC.texto=='G' and _evento.tipo=='HISTORICO DE PUESTOS'}"
+						action="#{admRecorridoLaboralFC.deleteRow(rowNr)}"
+						value="#{messages.msg_list_remove}"
+						onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+						reRender="panelDetalles" />
+						
+	            		#{' '}
+	            		<h:commandLink id="editRow"
+						action="#{admRecorridoLaboralFC.editar(rowNr)}"
+						value="#{messages.msg_edit}"
+						rendered="#{_evento.tipo=='HISTORICO DE PUESTOS' and admRecorridoLaboralFC.texto=='G'}"/>
+						#{' '}
+	            		<a:commandLink id="verRow"
+						action="#{admRecorridoLaboralFC.ver(rowNr)}"
+						value="Ver"
+						rendered="#{admRecorridoLaboralFC.texto=='G'}"
+						reRender="panelSuperior,panelDetalles" />
+						#{' '}
+						<a:commandLink id="verEventoModalOculto"
+						action="#{admRecorridoLaboralFC.cargarEncabezadoModal(rowNr)}"
+						value="Eventos"
+						reRender="eventosModal"
+						oncomplete="#{rich:component('eventosModal')}.show()" 
+						rendered="false"
+						/>
+						
+						
+						<s:link view="/legajos/recorridoLaboral/EventoRecorridoLaboral.xhtml" value="Eventos ">
+								<f:param name="from" value="legajos/MenuDatosPersonales" />
+								<f:param name="indiceEvento" value="#{rowNr}" />
+								<f:param name="texto" value="GShow651" />
+								<f:param name="accion" value="EDITAR" />
+						</s:link>
+						
+											
+						#{' '}
+					</rich:column>
+				</rich:dataTable><rich:datascroller for="itemsEventoList" id="scrollRec"
+			renderIfSinglePage="false" /></div>
+					
+			
+			</a:outputPanel>
+		</h:panelGrid>
+		
+		
+		
+	</rich:panel>
+
+
+
+
+</ui:composition>

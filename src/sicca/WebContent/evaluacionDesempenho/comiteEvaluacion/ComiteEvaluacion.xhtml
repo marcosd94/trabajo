@@ -1,0 +1,190 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU553_comision}</h1>
+    <h:form id="capacitacionesSearch" styleClass="edit" enctype="multipart/form-data">
+    	<h2>#{messages.CU553_ver}</h2>
+    	 <rich:panel   switchType="ajax" id="panelNiveles">
+			  <f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+			<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+										disabled="true">
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+					  		</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codSinEntidad}" size="5"
+										disabled="true">
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{seguridadUtilFormController.nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+							</s:decorate>
+						</a:region>
+							
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{seguridadUtilFormController.nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);"
+										disabled="true">
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+							</s:decorate>
+						</a:region>
+				
+						<ui:remove>
+							<a:outputPanel >
+										<s:decorate template="/layout/display.xhtml">
+																<ui:define name="label">#{messages.CU398_unidadOrganiza}
+																</ui:define>
+																<h:inputText id="orgCodigo2" size="10" disabled="true"
+																	value="#{seguridadUtilFormController.nivelEntidadOeeUtil.codigoUnidOrgDep}">
+																</h:inputText>
+																#{' '}
+																<h:inputText id="orgDenominacion2" size="50" disabled="true"
+																	value="#{seguridadUtilFormController.nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+																
+														</s:decorate>
+											</a:outputPanel>
+						</ui:remove>
+			
+           
+
+          
+</h:panelGrid>
+		
+		<h:panelGrid >
+		<s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU553_comite_eval}</ui:define>
+                <h:inputText id="comite" size="70" disabled="true"
+                value="#{comiteEvaluacionEditFC.comite}">
+                <a:support event="onchange" eventsQueue="default" reRender="comite" />
+                </h:inputText>
+            </s:decorate>
+		</h:panelGrid>
+        </rich:panel>
+     
+		
+   
+		<rich:panel id="panelGrillaComision">
+				<f:facet name="header">#{messages.cu484_integrantes_comi}</f:facet>
+ 			<div class="results" id="tbldetList" style=" overflow: scroll;  width:510 ;HEIGHT: 230px"  >
+				<rich:dataTable id="comision" var="_record"  rowKeyVar="rowNr"
+					value="#{comiteEvaluacionEditFC.capacEvalLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU484_pais_exp}
+						</f:facet>
+						<h:outputText value="#{_record.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU484_cedula}
+						</f:facet>
+						<h:outputText value="#{_record.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU484_nom_ape}
+						</f:facet>
+						<h:outputText value="#{_record.persona.nombreCompleto}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.gral_oee}
+						</f:facet>
+						<h:outputText value="#{_record.configuracionUo.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU165_puesto}
+						</f:facet>
+						<h:outputText value="#{_record.puesto}" />
+					</h:column>
+					
+											
+				</rich:dataTable>
+				</div>
+				
+			</rich:panel>
+   
+   
+     
+       
+     <div class="actionButtons">
+
+             
+		 <ui:remove>
+			 <s:button propagation="join"
+							 view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+							 id="anesxos" value="Ver Anexos"
+							 >
+							 <f:param name="direccionFisica" value="#{comiteEvaluacionEditFC.direccionFisica}" />
+							 <f:param name="nombrePantalla" value="#{comiteEvaluacionEditFC.nombrePantalla}" />
+							 <f:param name="idCU" value="#{comiteEvaluacionEditFC.idComisionEval}" />
+							 <f:param name="nombreTabla" value="#{comiteEvaluacionEditFC.entity}" />
+							 <f:param name="mostrarDoc" value="true" />
+							 <f:param name="isEdit" value="false" />
+							 <f:param name="from" value="#{comiteEvaluacionEditFC.from}" />
+						 </s:button>
+		 </ui:remove>
+ 
+          
+				<s:button id="cancelAdd"
+                   value="Volver"
+             propagation="join" 
+                   view="/evaluacionDesempenho/comiteEvaluacion/ComiteEvaluacionList.xhtml"
+                >
+                 <f:param name="evaluacionDesempenoIdEvaluacionDesempeno" 
+                 value="#{comiteEvaluacionEditFC.idReturn}"/>
+								
+                </s:button>
+        </div>
+       
+       
+       
+    
+    </h:form>
+ 
+ 
+
+   
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU446_Cant_Desvinculacion_Edades" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0245201830476058"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="34"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="secundario">
+		<parameter name="id_entidad" class="java.lang.Long"/>
+		<parameter name="motivo" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["Motivo"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="sql_secundario" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT distinct nivel.nen_codigo ||'.'|| sin_entidad.ent_codigo ||'.'||oee.orden as cod_oee,
+oee.denominacion_unidad as desc_oee,
+CASE
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 0 AND 17
+    THEN '0-17'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 18 AND 20
+    THEN '18-20'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 20 AND 25
+    THEN '20-25'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 25 AND 30
+    THEN '25-30'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 30 AND 35
+    THEN '30-35'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 35 AND 40
+    THEN '35-40'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 40 AND 45
+    THEN '40-45'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 45 AND 50
+    THEN '45-50'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 50 AND 55
+    THEN '50-55'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 55 AND 60
+    THEN '55-60'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 60 AND 65
+    THEN '60-65'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 65 AND 70
+    THEN '65-70'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 70 AND 75
+    THEN '70-75'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT BETWEEN 75 AND 80
+    THEN '75-80'
+    WHEN SUBSTRING(AGE(NOW(),PERSONA.FECHA_NACIMIENTO)::TEXT FROM 1 FOR 2)::INT >= 80
+    THEN '80 O MAS'
+END AS GRUPOS,
+desvinculacion.cant_desv_por_edad (nivel.id_sin_nivel_entidad, sin_entidad.id_sin_entidad, oee.id_configuracion_uo, 'M',desvinculacion.cant_desv_edad1(persona.id_persona),desvinculacion.cant_desv_edad2(persona.id_persona)) AS MASCULINO,
+desvinculacion.cant_desv_por_edad (nivel.id_sin_nivel_entidad, sin_entidad.id_sin_entidad, oee.id_configuracion_uo, 'F', desvinculacion.cant_desv_edad1(persona.id_persona),desvinculacion.cant_desv_edad2(persona.id_persona)) AS FEMENINO
+
+
+FROM
+    SINARH.SIN_NIVEL_ENTIDAD NIVEL,
+    SINARH.SIN_ENTIDAD SIN_ENTIDAD
+    INNER JOIN
+    PLANIFICACION.ENTIDAD ENTIDAD
+    ON
+    ENTIDAD.ID_SIN_ENTIDAD = SIN_ENTIDAD.ID_SIN_ENTIDAD
+    INNER JOIN
+    PLANIFICACION.CONFIGURACION_UO_CAB OEE
+    ON
+    OEE.ID_ENTIDAD = ENTIDAD.ID_ENTIDAD
+    INNER JOIN
+    PLANIFICACION.CONFIGURACION_UO_DET UO
+    ON
+    UO.ID_CONFIGURACION_UO = OEE.ID_CONFIGURACION_UO
+    INNER JOIN
+    PLANIFICACION.PLANTA_CARGO_DET PUESTO
+    ON
+    PUESTO.ID_CONFIGURACION_UO_DET = UO.ID_CONFIGURACION_UO_DET
+    INNER JOIN
+    GENERAL.EMPLEADO_PUESTO EMP
+    ON
+    EMP.ID_PLANTA_CARGO_DET = PUESTO.ID_PLANTA_CARGO_DET
+    INNER JOIN
+    DESVINCULACION.DESVINCULACION DES
+    ON
+    EMP.ID_EMPLEADO_PUESTO = DES.ID_EMPLEADO_PUESTO
+    INNER JOIN
+    GENERAL.PERSONA PERSONA
+    ON
+    EMP.ID_PERSONA = PERSONA.ID_PERSONA
+JOIN seleccion.datos_especificos de
+			on de.id_datos_especificos = des.id_datos_especif_motivo
+$P!{sql_secundario}]]>
+		</queryString>
+		<field name="cod_oee" class="java.lang.String"/>
+		<field name="desc_oee" class="java.lang.String"/>
+		<field name="grupos" class="java.lang.String"/>
+		<field name="masculino" class="java.lang.Integer"/>
+		<field name="femenino" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_desde" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="fecha_hasta" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_motivo" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="sql" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sql_secundario" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="oee_usuario" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct (sin_entidad.id_sin_entidad) as id, nivel.nen_codigo as cod_nivel,
+nivel.nen_nombre as nivel, nivel.nen_codigo ||'.'|| sin_entidad.ent_codigo as cod_entidad,
+sin_entidad.ent_nombre as entidad
+from sinarh.sin_nivel_entidad nivel, sinarh.sin_entidad sin_entidad
+join planificacion.entidad entidad
+on entidad.id_sin_entidad = sin_entidad.id_sin_entidad
+join planificacion.configuracion_uo_cab oee
+on oee.id_entidad = entidad.id_entidad
+join planificacion.configuracion_uo_det uo
+on uo.id_configuracion_uo = oee.id_configuracion_uo
+join planificacion.planta_cargo_det puesto
+on puesto.id_configuracion_uo_det = uo.id_configuracion_uo_det
+join general.empleado_puesto emp
+on emp.id_planta_cargo_det = puesto.id_planta_cargo_det
+join desvinculacion.desvinculacion des
+on des.id_empleado_puesto = emp.id_empleado_puesto
+join seleccion.datos_especificos de
+on de.id_datos_especificos = des.id_datos_especif_motivo
+$P!{sql}]]>
+	</queryString>
+	<field name="id" class="java.lang.Long"/>
+	<field name="cod_nivel" class="java.math.BigDecimal"/>
+	<field name="nivel" class="java.lang.String"/>
+	<field name="cod_entidad" class="java.lang.String"/>
+	<field name="entidad" class="java.lang.String"/>
+	<group name="nivel">
+		<groupExpression><![CDATA[$F{cod_nivel}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<staticText>
+					<reportElement x="10" y="0" width="38" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Nivel:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="48" y="1" width="112" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{cod_nivel}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="160" y="0" width="303" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nivel}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="entidad">
+		<groupExpression><![CDATA[$F{entidad}]]></groupExpression>
+		<groupHeader>
+			<band height="120">
+				<staticText>
+					<reportElement x="10" y="5" width="53" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Entidad:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="63" y="5" width="100" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cod_entidad}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="163" y="5" width="300" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{entidad}]]></textFieldExpression>
+				</textField>
+				<crosstab>
+					<reportElement x="10" y="34" width="791" height="86"/>
+					<crosstabDataset>
+						<dataset>
+							<datasetRun subDataset="secundario">
+								<datasetParameter name="id_entidad">
+									<datasetParameterExpression><![CDATA[$F{id}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="sql_secundario">
+									<datasetParameterExpression><![CDATA[$P{sql_secundario}]]></datasetParameterExpression>
+								</datasetParameter>
+								<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+							</datasetRun>
+						</dataset>
+					</crosstabDataset>
+					<crosstabHeaderCell>
+						<cellContents>
+							<staticText>
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="54" y="0" width="125" height="36" backcolor="#9999FF"/>
+								<box>
+									<pen lineWidth="0.5"/>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true"/>
+								</textElement>
+								<text><![CDATA[OEE]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="54" height="36" backcolor="#9999FF"/>
+								<box>
+									<pen lineWidth="0.5"/>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Código OEE]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabHeaderCell>
+					<rowGroup name="cod_oee" width="54" totalPosition="End">
+						<bucket>
+							<bucketExpression class="java.lang.String"><![CDATA[$F{cod_oee}]]></bucketExpression>
+						</bucket>
+						<crosstabRowHeader>
+							<cellContents backcolor="#F0F8FF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="54" height="25"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$V{cod_oee}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabRowHeader>
+						<crosstabTotalRowHeader>
+							<cellContents backcolor="#005FB3" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement x="53" y="0" width="126" height="25" forecolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Total]]></text>
+								</staticText>
+							</cellContents>
+						</crosstabTotalRowHeader>
+					</rowGroup>
+					<rowGroup name="desc_oee" width="125" totalPosition="End">
+						<bucket>
+							<bucketExpression class="java.lang.String"><![CDATA[$F{desc_oee}]]></bucketExpression>
+						</bucket>
+						<crosstabRowHeader>
+							<cellContents backcolor="#F0F8FF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="125" height="25"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$V{desc_oee}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabRowHeader>
+						<crosstabTotalRowHeader>
+							<cellContents backcolor="#BFE1FF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+							</cellContents>
+						</crosstabTotalRowHeader>
+					</rowGroup>
+					<columnGroup name="grupos" height="36" totalPosition="End">
+						<bucket>
+							<bucketExpression class="java.lang.String"><![CDATA[$F{grupos}]]></bucketExpression>
+						</bucket>
+						<crosstabColumnHeader>
+							<cellContents backcolor="#F0F8FF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="59" height="22" backcolor="#9999FF"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$V{grupos}]]></textFieldExpression>
+								</textField>
+								<staticText>
+									<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="22" width="29" height="14" backcolor="#CCCCFF"/>
+									<box>
+										<pen lineWidth="0.5"/>
+										<topPen lineWidth="0.5"/>
+										<leftPen lineWidth="0.5"/>
+										<bottomPen lineWidth="0.5"/>
+										<rightPen lineWidth="0.5"/>
+									</box>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[M]]></text>
+								</staticText>
+								<staticText>
+									<reportElement style="Crosstab Data Text" mode="Opaque" x="29" y="22" width="30" height="14" backcolor="#CCCCFF"/>
+									<box>
+										<pen lineWidth="0.5"/>
+										<topPen lineWidth="0.5"/>
+										<leftPen lineWidth="0.5"/>
+										<bottomPen lineWidth="0.5"/>
+										<rightPen lineWidth="0.5"/>
+									</box>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[F]]></text>
+								</staticText>
+							</cellContents>
+						</crosstabColumnHeader>
+						<crosstabTotalColumnHeader>
+							<cellContents backcolor="#BFE1FF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+							</cellContents>
+						</crosstabTotalColumnHeader>
+					</columnGroup>
+					<measure name="masculinoMeasure" class="java.lang.Integer" calculation="Sum">
+						<measureExpression><![CDATA[$F{masculino}]]></measureExpression>
+					</measure>
+					<measure name="femenino" class="java.lang.Integer" calculation="Sum">
+						<measureExpression><![CDATA[$F{femenino}]]></measureExpression>
+					</measure>
+					<crosstabCell width="59" height="25">
+						<cellContents>
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="29" height="25"/>
+								<box>
+									<pen lineWidth="0.5"/>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{masculinoMeasure}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="29" y="0" width="30" height="25"/>
+								<box>
+									<pen lineWidth="0.5"/>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{femenino}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="59" height="25" rowTotalGroup="cod_oee">
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="29" height="24" forecolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{masculinoMeasure}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="29" y="1" width="30" height="24" forecolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{femenino}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="0" height="25" columnTotalGroup="grupos">
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="0" height="25" rowTotalGroup="cod_oee" columnTotalGroup="grupos">
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="59" height="0" rowTotalGroup="desc_oee">
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="0" height="0" rowTotalGroup="desc_oee" columnTotalGroup="grupos">
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabCell>
+				</crosstab>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="199" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="110" width="802" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Cantidad de Desvinculaciones por Grupo de Edades]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="142" width="169" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Motivo de Desvinculación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="161" width="169" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha de Baja desde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="256" y="161" width="42" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[hasta:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="179" y="142" width="612" height="19"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{motivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="179" y="161" width="77" height="19"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{fecha_desde}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="298" y="161" width="85" height="19"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{fecha_hasta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="180" width="99" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Referencias:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="91" y="0" width="584" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="109" y="180" width="99" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[M: Masculino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="180" width="99" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[F: Femenino]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="78" width="802" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="18"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{oee_usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="23">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="520" y="2" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="1" y="3" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="2" width="798" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="24">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="519" y="3" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="4" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="3" width="798" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="801" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

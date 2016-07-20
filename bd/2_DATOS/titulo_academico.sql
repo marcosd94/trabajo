@@ -1,0 +1,50 @@
+--Titulo Academico de Estudiante Universitario
+
+INSERT INTO seleccion.titulo_academico VALUES (129, 'TECNICO INDUSTRIAL', NULL, 21, true, 'ADMIN', '2011-10-03 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (130, 'OTROS', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (131, 'INGENIERO EN INFORMATICA', 1, 21, true, 'ADMIN', '2011-10-21 10:23:13.188', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (132, 'NINGUNO', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (133, 'INGENIERÍA COMERCIAL', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (134, 'ING. CIVIL', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (135, 'ING. ELÉCTRICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (136, 'ING. ELECTROMECÁNICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (137, 'ING. TELECOMUNICACIONES', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (138, 'ING. INFORMÁTICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (139, 'DERECHO', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (140, 'DISEÑO GRÁFICO', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (141, 'ADMINISTRACIÓN DE EMPRESAS', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (142, 'BIOQUÍMICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (143, 'ESCRIBANÍA PÚBLICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (144, 'EDUCACIÓN FÍSICA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (145, 'ENFERMERÍA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (146, 'FISIOTERAPIA Y KINESIOLOGÍA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (147, 'MERCADOTÉCNIA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (148, 'MEDICINA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (149, 'OBSTETRICIA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (150, 'ODONTOLOGÍA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (151, 'CIENCIAS DE LA EDUCACIÓN', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (152, 'CIENCIAS POLÍTICAS', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (153, 'COMERCIO EXTERIOR', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (154, 'CIENCIAS CONTABLES', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (155, 'PERIODISMO', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (156, 'PUBLICIDAD', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (157, 'QUÍMICA Y FARMACIA', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (158, 'ANÁLISIS DE SISTEMAS', NULL, 21, true, 'ADMIN', '2011-10-03 00:00:00', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (159, 'ECONOMIA AGROPECUARIA', NULL, 21, true, 'TALLER13', '2012-03-14 13:44:35.111', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (160, 'TITULO DE PRUEBA', NULL, 21, true, 'ADMIN', '2012-03-14 13:44:39.605', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (161, 'PSICOLOGIA CLINICA', NULL, 21, true, 'TALLER7', '2012-03-14 13:45:46.599', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (162, 'LIC. EN MARKETING', NULL, 21, true, 'TALLER12', '2012-03-14 13:46:04.265', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (163, 'ARQUITECTO/A', NULL, 21, true, 'TALLER12', '2012-03-14 13:44:41.51', 'TALLER4', '2012-03-14 13:46:42.824');
+INSERT INTO seleccion.titulo_academico VALUES (164, 'ING. ELECTRÒNICO', NULL, 21, true, 'TALLER12', '2012-03-14 13:48:10.454', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (165, 'ECOLOGÍA HUMANA', NULL, 21, true, 'TALLER7', '2012-03-14 13:58:31.84', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (166, 'LIC. EN ADMINISTRACION DE EMPRESAS', NULL, 21, true, 'TALLER6', '2012-03-14 14:02:05.155', NULL, NULL);
+INSERT INTO seleccion.titulo_academico VALUES (167, 'ABOGADA UJIER', NULL, 21, true, 'TALLER13', '2012-03-14 13:45:29.482', 'TALLER13', '2012-03-14 14:04:34.454');
+INSERT INTO seleccion.titulo_academico VALUES (168, 'ANÁLISIS QUÍMICO', NULL, 21, false, 'ADMIN', '2011-12-19 00:00:00', 'TALLER15', '2012-04-25 09:41:46.563');
+INSERT INTO seleccion.titulo_academico VALUES (169, 'ADMINISTRACIÓN RURAL', NULL, 21, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+
+--Titulo Academico de Estudiante Bachiller
+INSERT INTO seleccion.titulo_academico VALUES (170, 'BACHILLER TECNICO', NULL, 20, true, 'ADMIN', '2012-03-14 13:45:29.482', 'ADMIN', '2012-03-14 14:04:34.454');
+INSERT INTO seleccion.titulo_academico VALUES (171, 'BACHILLER HUMANISTICO', NULL, 20, false, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-04-25 09:41:46.563');
+INSERT INTO seleccion.titulo_academico VALUES (172, 'BACHILLER TÉCNICO EN ADMINISTRACIÓN', NULL, 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+INSERT INTO seleccion.titulo_academico VALUES (173, 'BACHILLER TÉCNICO EN INFORMÁTICA', NULL, 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');
+INSERT INTO seleccion.titulo_academico VALUES (174, 'BACHILLER TECNICO EN CONTABILIDAD', NULL, 20, true, 'ADMIN', '2011-12-19 00:00:00', 'ADMIN', '2012-05-21 09:04:10.407');

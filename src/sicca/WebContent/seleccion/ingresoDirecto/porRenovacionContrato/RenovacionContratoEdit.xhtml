@@ -1,0 +1,204 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>#{messages.CU587_titulo_edit}</h1>
+
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_nr_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nroDoc" onkeypress="return soloNumeros(event);"
+							value="#{buscadorDocsFC.nroDoc}" style=" width : 45px;" />
+					</s:decorate>
+					<s:decorate id="fechaDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU541_fecha}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fecha" value="#{buscadorDocsFC.fechaDoc}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)">
+							<a:support event="onchanged" eventsQueue="default"
+								action="#{rptDesvinculacionesCapacitacionFC.cargarSelectItem()}"
+								reRender="panelCombos" />
+						</rich:calendar>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<s:decorate id="datosGralField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU289_tipo_doc}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="datosGral"
+							value="#{buscadorDocsFC.idTipoDoc}" style="width:200px">
+							<f:selectItems
+								value="#{ingresoPorRenovacionContratoFC.updateTipoDocSelectItems()}" />
+						</h:selectOneMenu>
+
+					</s:decorate>
+					<h:panelGrid columns="3">
+						<a:commandButton value="#{messages.CU541_busca_acto}"
+							reRender="panelAdjuntar,idPanelAdjuntar"
+							action="#{buscadorDocsFC.buscarDoc()}" />
+						<s:button value="Descargar"
+							disabled="#{buscadorDocsFC.fNameMostrar==null}"
+							action="#{buscadorDocsFC.descargarDoc()}" />
+						<s:button value="#{messages.CU541_cambiar_acto}"
+							action="#{buscadorDocsFC.cambiarActo()}" />
+					</h:panelGrid>
+					<s:decorate id="fechaIngresoDecorate" template="/layout/edit.xhtml">
+						<ui:define name="label">Fecha Ingreso<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaIngreso"
+							value="#{personalReposicionJudicialEditFC.fechaIngreso}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Nombre del Archivo</ui:define>
+						<h:inputText value="#{buscadorDocsFC.fNameMostrar}"
+							disabled="true" style=" width : 250px;" />
+					</s:decorate>
+					<a:outputPanel id="idPanelAdjuntar" ajaxRendered="true">
+						<h:panelGrid columns="2"
+							rendered="#{buscadorDocsFC.mostrarPanelAdjunto}"
+							style="border-style: dotted;border-color: gray;">
+							<s:fileUpload size="30" contentType="#{buscadorDocsFC.cType}"
+								data="#{buscadorDocsFC.uFile}"
+								fileName="#{buscadorDocsFC.fName}" style=" width : 299px;">
+								<s:conversationPropagation type="join" />
+
+							</s:fileUpload>
+
+							<h:commandButton value="Adjuntar Documento"
+								action="#{buscadorDocsFC.adjuntarDoc()}" />
+						</h:panelGrid>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel id="lista">
+				<div class="results" id="tblContrato"
+					style="overflow: scroll; width: 980; HEIGHT: 230px"><rich:dataTable
+					id="itemsList" var="_items" first="0"
+					value="#{ingresoPorRenovacionContratoFC.renovacionContratoList}"
+					rowKeyVar="rowNr">
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_nombre}
+													</f:facet>
+						<h:outputText value="#{_items.nombre}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_apellido}
+													</f:facet>
+						<h:outputText value="#{_items.apellido}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_codPuesto}
+													</f:facet>
+						<h:outputText
+							value="#{ingresoPorRenovacionContratoFC.obtenerCodigoPuesto(_items.idPuesto)}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_puesto}
+													</f:facet>
+						<h:outputText value="#{_items.descripcion}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_nro_contrato}<span class="required">*</span>
+						</f:facet>
+						<h:inputText value="#{_items.nroContrato}" size="10"
+							onkeypress="return soloNumeros(event);" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_inicio}<span class="required">*</span>
+						</f:facet>
+
+						<rich:calendar id="fechaInicio" value="#{_items.fechaInicio}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_fin}
+													</f:facet>
+						<rich:calendar id="fechaFin" value="#{_items.fechaFin}"
+							inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="false"
+							oninputkeyup="ponerBarra(event)">
+						</rich:calendar>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+														#{messages.CU587_monto}
+													</f:facet>
+						<h:inputText value="#{_items.monto}" onkeypress="return soloNumeros(event);" size="15"/>
+					</rich:column>
+
+
+					<rich:column>
+						<f:facet name="header">
+														#{messages.msg_list_action_column}
+													</f:facet>
+						<a:commandLink id="eliminar" value="Eliminar" reRender="lista"
+							eventsQueue="default"
+							action="#{ingresoPorRenovacionContratoFC.eliminar(_items)}" />
+					</rich:column>
+
+				</rich:dataTable></div>
+			</rich:panel>
+
+
+
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_save}" styleClass="labelClass" /></div>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{ingresoPorRenovacionContratoFC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/ingresoDirecto/porRenovacionContrato/RenovacionContratoList.xhtml" />
+
+
+
+
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,132 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU391_title}</h1>
+
+    <h:form id="nivelGradoSalarial" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.CU391_title}</f:facet>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.gral_proceso}</ui:define>
+					<h:selectOneMenu id="idProceso" value="#{actividadProcesoFormController.idProceso}" required ="true" disabled="true">
+						<f:selectItems value="#{procesoSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.gral_actividad}</ui:define>
+					<h:selectOneMenu id="idActividad" value="#{actividadProcesoFormController.idActividad}" required ="true" disabled="true">
+						<f:selectItems value="#{actividadSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+
+	            <s:decorate id="plazoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CU391_plazo_actividad}</ui:define>
+	                <h:inputText id="plazo"
+	                		required ="true"
+	                       disabled="true"
+	                       styleClass="numeric"
+	                       size="10"
+	                          value="#{actividadProcesoFormController.plazoActividad}">
+	                </h:inputText>
+	                <h:outputLabel value="#{messages.gral_dias}"/>
+	            </s:decorate>
+	            
+	            <s:decorate id="observacionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.gral_observacion}</ui:define>
+	                <h:inputTextarea id="observacion"
+	                       disabled="true"
+	                          value="#{actividadProcesoFormController.observacion}"
+	                          cols="50" rows="3">
+	                </h:inputTextarea>
+	            </s:decorate>
+	            
+	           <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.gral_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo" disabled="true"
+	                       value="#{actividadProcesoFormController.activo}" />
+	            </s:decorate>
+
+		<div style="clear:both" >
+                <span class="required" >
+                <h:outputText value="#{messages.CU391_actividad_repetida}" rendered="#{actividadProcesoFormController.actividadRepetida}"/>
+                </span>
+        </div>
+        <br />
+        
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+        <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!actividadProcesoHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{actividadProcesoHome.managed}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+        
+        
+
+        <div class="actionButtons">
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             propagation="end"
+             		action="#{actividadProcesoFormController.cancelAdd}"
+                    view="/#{empty actividadProcesoFrom ? 'seleccion/actividadProceso/ActividadProcesoList' : actividadProcesoFrom}.xhtml"/>
+        </div>
+        
+         <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta" rendered="#{actividadProcesoHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{actividadProcesoHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{actividadProcesoHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{actividadProcesoHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{actividadProcesoHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{actividadProcesoHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"   rendered="#{actividadProcesoHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{actividadProcesoHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+        
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

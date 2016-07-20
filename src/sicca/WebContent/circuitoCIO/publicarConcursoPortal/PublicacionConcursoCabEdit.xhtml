@@ -1,0 +1,134 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="publicacionConcursoCab" styleClass="edit">
+			<h1>#{messages.CU74_medios}</h1>
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages.CU74_add_medios}</f:facet>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU74_medios}<span
+								class="required">*</span>
+						</ui:define>
+						<h:selectOneMenu id="idMedio" 
+							value="#{publicacionConcursoPortalCU624FC.idMedioPublic}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByMediosPublicacionSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+					<rich:panel style="border:none;">
+						<fieldset><legend>#{messages.CU74_fecha_presentacion}
+						Laborales </legend> <h:panelGrid columns="2">
+							<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU74_desde}</ui:define>
+								<rich:calendar id="fechaDesde"
+									value="#{publicacionConcursoPortalCU624FC.fechaDesde}"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)"
+									datePattern="dd/MM/yyyy" />
+							</s:decorate>
+							<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU74_hasta}</ui:define>
+								<rich:calendar id="fechaHasta"
+									value="#{publicacionConcursoPortalCU624FC.fechaHasta}"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)"
+									datePattern="dd/MM/yyyy" />
+							</s:decorate>
+						</h:panelGrid></fieldset>
+					</rich:panel>
+				</h:panelGrid>
+
+				
+
+			</rich:panel>
+			<h:panelGrid columns="1">
+			<div class="actionButtons"><a:commandButton id="agregar"
+					value="Agregar"
+					action="#{publicacionConcursoPortalCU624FC.agregarLista()}"
+					reRender="panelResultado,msg,panel">
+				</a:commandButton></div>
+				<s:decorate id="msgField" template="/layout/edit.xhtml">
+					<h:outputText id="msg"
+						value="#{publicacionConcursoPortalCU624FC.mensaje}"
+						style="color:red;" />
+				</s:decorate>
+				</h:panelGrid>
+			<rich:panel
+				id="panelResultado">
+				<f:facet name="header">#{messages.CU74_medios}(#{publicacionConcursoPortalCU624FC.listaDetalle.size()})</f:facet>
+				<div class="results" id="puestList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty publicacionConcursoPortalCU624FC.listaDetalle}" />
+				<rich:dataTable id="grupoList" var="_dto" rowKeyVar="row"
+					value="#{publicacionConcursoPortalCU624FC.listaDetalle}"
+					rows="10"
+					rendered="#{not empty publicacionConcursoPortalCU624FC.listaDetalle}">
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_medios}
+						</f:facet>
+						<h:outputText value="#{_dto.datosEspecificos.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_desde}
+						</f:facet>
+						<h:outputText value="#{_dto.fechaDesde}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU74_fecha_hasta}
+						</f:facet>
+						<h:outputText value="#{_dto.fechaHasta}">
+							<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+						<a:commandLink value="Eliminar"
+										action="#{publicacionConcursoPortalCU624FC.eliminar(row)}"
+										reRender="panelResultado" />
+
+					</h:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="puestList" id="sc2"
+					reRender="sc1" rendered="#{publicacionConcursoPortalCU624FC.listaDetalle.size() > 10}"/>
+</div>
+
+			</rich:panel>
+
+
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+
+
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}" action="#{publicacionConcursoPortalCU624FC.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{publicacionConcursoPortalCU624FC.listaDetalleCompleta.size() == 0}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{publicacionConcursoPortalCU624FC.update()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{publicacionConcursoPortalCU624FC.listaDetalleCompleta.size() > 0}" />  <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/circuitoCIO/publicarConcursoPortal/PublicacionConcursoCabList.xhtml" /> </div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

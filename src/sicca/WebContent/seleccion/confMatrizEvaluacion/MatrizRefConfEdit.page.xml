@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/MatrizRefConfList.xhtml" login-required="true">
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+	<action execute="#{confMatrizEvalFormController.initCrear()}"
+		on-postback="false" />
+	<param name="puesto_agr" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<param name="modoEditado" value="#{confMatrizEvalFormController.modoEditado}" />
+	<param name="idCabRefConf" value="#{confMatrizEvalFormController.idCabRefConf}" />
+	<param name="idCabRefConfEnc" value="#{confMatrizEvalFormController.idCabRefConfEnc}" />
+	<param name="tipoOperacion" value="#{confMatrizEvalFormController.tipoOperacion}" />
+	
+	<navigation from-action="#{matrizRefConfHome.persist}">
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{matrizRefConfHome.update}">
+		<rule if-outcome="updated">
+			<end-conversation />
+			<redirect view-id="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml" />
+		</rule>
+	</navigation>
+	
+	
+	<navigation from-action="#{confMatrizEvalFormController.update()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect view-id="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml" />
+		</rule>
+	</navigation>
+	<navigation from-action="#{confMatrizEvalFormController.guardar()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect view-id="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml" />
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{confMatrizEvalFormController.eliminarPlantilla()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect view-id="/seleccion/confMatrizEvaluacion/MatrizRefConfList.xhtml" />
+		</rule>
+	</navigation>
+	
+
+</page>

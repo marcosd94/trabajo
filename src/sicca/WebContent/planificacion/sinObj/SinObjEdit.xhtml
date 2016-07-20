@@ -1,0 +1,103 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="sinObj" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{sinObjHome.managed ? 'Edit' : 'Add'} Sin obj</f:facet>
+
+
+            <s:decorate id="idObjField" template="layout/edit.xhtml">
+                <ui:define name="label">Id obj</ui:define>
+                <h:inputText id="idObj"
+                       required="true"
+                       disabled="#{sinObjHome.managed}"
+                          value="#{sinObjHome.instance.idObj}">
+                    <a:support event="onblur" reRender="idObjField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="aniAniopreField" template="layout/edit.xhtml">
+                <ui:define name="label">Ani aniopre</ui:define>
+                <h:inputText id="aniAniopre"
+                       required="true"
+                          value="#{sinObjHome.instance.aniAniopre}">
+                    <a:support event="onblur" reRender="aniAniopreField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="objCodigoField" template="layout/edit.xhtml">
+                <ui:define name="label">Obj codigo</ui:define>
+                <h:inputText id="objCodigo"
+                       required="true"
+                          value="#{sinObjHome.instance.objCodigo}">
+                    <a:support event="onblur" reRender="objCodigoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="objNombreField" template="layout/edit.xhtml">
+                <ui:define name="label">Obj nombre</ui:define>
+                <h:inputTextarea id="objNombre"
+                               cols="80"
+                               rows="2"
+                           required="true"
+                              value="#{sinObjHome.instance.objNombre}"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{sinObjHome.persist}"
+                       disabled="#{!sinObjHome.wired}"
+                       rendered="#{!sinObjHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{sinObjHome.update}"
+                       rendered="#{sinObjHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{sinObjHome.remove}"
+                      immediate="true"
+                       rendered="#{sinObjHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/SinObj.xhtml"
+                rendered="#{sinObjHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty sinObjFrom ? 'SinObjList' : sinObjFrom}.xhtml"
+                rendered="#{!sinObjHome.managed}"/>
+
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

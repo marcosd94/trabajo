@@ -1,0 +1,149 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU107_listado_titulo}</h1>
+		<h:form id="reclamoSugerenciaSearch" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{reclamoSugerenciaHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CU107_listado_titulo}</f:facet>
+
+
+				<fieldset style="width: 800px;"><legend>#{messages.CU107_datos_postulante}</legend>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_postulante}</ui:define>
+						<h:inputText id="nombre"
+							value="#{reclamoSugerenciaConcursoFormController.persona.nombres} #{reclamoSugerenciaConcursoFormController.persona.apellidos}"
+							size="30" disabled="true" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_doc_nro}</ui:define>
+						<h:inputText id="nroDoc"
+							value="#{reclamoSugerenciaConcursoFormController.persona.documentoIdentidad}"
+							size="10" disabled="true" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<br />
+				<fieldset style="width: 800px;"><legend>#{messages.CU107_datos_concurso}</legend>
+				<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU107_puesto}<span class="required">*</span></ui:define>
+							<h:selectOneMenu id="puesto" style="width : 300px;"
+								value="#{reclamoSugerenciaConcursoFormController.idGrupo}">
+								<f:selectItems
+									value="#{reclamoSugerenciaConcursoFormController.gruposSelecItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									reRender="concurso"
+									action="#{reclamoSugerenciaConcursoFormController.updateConcurso()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU107_concurso}<span class="required">*</span></ui:define>
+							<h:selectOneMenu id="concurso" style="width : 300px;"
+								value="#{reclamoSugerenciaConcursoFormController.idConcurso}">
+								<f:selectItems
+									value="#{reclamoSugerenciaConcursoFormController.concursoSelecItem}" />
+								<a:support event="onchange" eventsQueue="default"
+									reRender="oee,entidad"
+									action="#{reclamoSugerenciaConcursoFormController.buscarOee()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</a:region>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_oee}</ui:define>
+						<h:inputText id="oee"
+							value="#{reclamoSugerenciaConcursoFormController.oee.denominacionUnidad}"
+							size="50" disabled="true" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_entidad}</ui:define>
+						<h:inputText id="entidad"
+							value="#{reclamoSugerenciaConcursoFormController.entidad.entNombre}"
+							size="50" disabled="true" />
+					</s:decorate>
+				</h:panelGrid></fieldset>
+
+				<br />
+				<fieldset style="width: 800px;"><legend>#{messages.CU107_datos_reclamo}</legend>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo}<span class="required">*</span></ui:define>
+						<h:selectOneMenu id="opciones"
+							value="#{reclamoSugerenciaConcursoFormController.tipoReclamo}">
+							<f:selectItem id="item" itemLabel="SELECCIONAR..." itemValue="N" />
+							<f:selectItem id="item1" itemLabel="RECLAMO" itemValue="R" />
+							<f:selectItem id="item2" itemLabel="SUGERENCIA" itemValue="S" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_asunto}<span class="required">*</span></ui:define>
+						<h:inputText id="asunto"
+							value="#{reclamoSugerenciaConcursoFormController.asunto}"
+							size="90" maxlength="150" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU107_reclamo_descripcion}<span class="required">*</span></ui:define>
+						<h:inputTextarea id="texto"
+							value="#{reclamoSugerenciaConcursoFormController.descripcion}"
+							cols="80"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/display.xhtml">
+						<h:outputText value="#{messages.CU107_enviar_correo}"/>
+						<h:selectBooleanCheckbox value="#{reclamoSugerenciaConcursoFormController.enviarEmail}"/>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+			</rich:panel>
+			<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}"
+					rendered="#{!reclamoSugerenciaHome.managed}" styleClass="labelClass" />
+				<h:outputText value="#{messages.msg_obs_update}"
+					rendered="#{reclamoSugerenciaHome.managed}" styleClass="labelClass" />
+				</div>
+				
+				<div class="actionButtons">
+			<h:commandButton id="save"
+				value="#{messages.msg_save}" action="#{reclamoSugerenciaConcursoFormController.save()}"
+				    onclick="return confirm('#{messages.msg_confirm_save}');"    
+				rendered="#{!reclamoSugerenciaHome.managed}" /> 
+				
+				<s:button id="anexo" value="Anexo" propagation="join"
+				rendered="#{reclamoSugerenciaHome.managed}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{reclamoSugerenciaConcursoFormController.direccionFisica}" />
+				<f:param name="nombrePantalla" value="reclamo_sugerencia_concurso_edit" />
+				<f:param name="idCU"
+					value="#{reclamoSugerenciaConcursoFormController.reclamoSugerencia.idReclamoSugerencia}" />
+				<f:param name="nombreTabla" value="ReclamoSugerencia" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from"
+					value="seleccion/administrarReclamosConcurso/ReclamoSugerenciaEdit" />
+			</s:button>
+				<s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/administrarReclamosConcurso/ReclamoSugerenciaList.xhtml" />
+			</div>
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

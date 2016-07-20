@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/planificacion/cpt/CptList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+   <begin-conversation join="true" flush-mode="MANUAL"/>	
+     <action execute="#{parentescoHome.wire}"/>
+	<action execute="#{tab7ParentescoFormController.init()}"  on-postback="false" />
+	
+	 <navigation from-action="#{parentescoHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/Parentesco.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{parentescoHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/Parentesco.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{parentescoHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/ParentescoList.xhtml"/>
+      </rule>
+   </navigation>
+ 
+</page>

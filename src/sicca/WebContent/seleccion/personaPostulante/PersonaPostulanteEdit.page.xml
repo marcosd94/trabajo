@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/PersonaPostulanteList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{personaPostulanteHome.wire}"/>
+
+   <param name="personaPostulanteFrom"/>
+   <param name="personaPostulanteIdPersonaPostulante" value="#{personaPostulanteHome.personaPostulanteIdPersonaPostulante}"/>
+   <param name="datosEspecificosFrom"/>
+   <param name="datosEspecificosIdDatosEspecificos" value="#{datosEspecificosHome.datosEspecificosIdDatosEspecificos}"/>
+   <param name="datosGeneralesFrom"/>
+   <param name="datosGeneralesIdDatosGenerales" value="#{datosGeneralesHome.datosGeneralesIdDatosGenerales}"/>
+
+
+
+
+   <navigation from-action="#{personaPostulanteHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/PersonaPostulante.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{personaPostulanteHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/PersonaPostulante.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{personaPostulanteHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/PersonaPostulanteList.xhtml"/>
+      </rule>
+   </navigation>
+
+</page>

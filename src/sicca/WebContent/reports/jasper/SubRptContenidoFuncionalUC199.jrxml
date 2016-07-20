@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubRptContenidoFuncionalUC199" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPlantaCargoDet" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT cf.descripcion AS contenido_funcional,
+        dcf.puntaje AS puntaje,
+        ddcf.descripcion AS descripcion_detalle,
+        cf.descripcion || ' - ' || dcf.puntaje AS concat
+FROM planificacion.contenido_funcional cf LEFT JOIN planificacion.det_contenido_funcional dcf
+    ON dcf.id_contenido_funcional = cf.id_contenido_funcional INNER JOIN planificacion.det_descripcion_cont_funcional ddcf
+    ON dcf.id_det_contenido_funcional = ddcf.id_contenido_funcional INNER JOIN planificacion.planta_cargo_det pcd
+    ON dcf.id_planta_cargo_det = pcd.id_planta_cargo_det
+WHERE pcd.id_planta_cargo_det = $P{idPlantaCargoDet}
+    AND lower(dcf.tipo) = 'puesto'
+    AND cf.activo = true
+ORDER BY contenido_funcional, puntaje]]>
+	</queryString>
+	<field name="contenido_funcional" class="java.lang.String"/>
+	<field name="puntaje" class="java.lang.Float"/>
+	<field name="descripcion_detalle" class="java.lang.String"/>
+	<field name="concat" class="java.lang.String"/>
+	<group name="contenido_funcional_group">
+		<groupExpression><![CDATA[$F{concat}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="0" width="239" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{contenido_funcional}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="262" y="0" width="64" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntaje}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="3" y="7" width="165" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTENIDO FUNCIONAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="23" y="27" width="239" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contenido Funcional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="326" y="27" width="215" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="23" y="47" width="518" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="262" y="27" width="64" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Puntaje]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="326" y="0" width="215" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion_detalle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,331 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU200_titulo_list}</h1>
+		<h:form id="reclamoSugerenciaSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				 <h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								value="#{admReclamoSugConcursoListFormController.nivelEntidad.nenCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion"
+									action="#{admReclamoSugConcursoListFormController.findNivelEntidad()}" />
+							</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+								value="#{admReclamoSugConcursoListFormController.nivelEntidad.nenNombre}"
+								size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{admReclamoSugConcursoListFormController.getUrlToPageNivel()}" />
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								value="#{admReclamoSugConcursoListFormController.sinEntidad.entCodigo}"
+								size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{admReclamoSugConcursoListFormController.findEntidad()}"
+									reRender="entidadCodigo,entidadDescripcion" focus="codigo" />
+							</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+								value="#{admReclamoSugConcursoListFormController.sinEntidad.entNombre}"
+								size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{admReclamoSugConcursoListFormController.getUrlToPageEntidad()}" />
+						</s:decorate>
+					</a:region>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{admReclamoSugConcursoListFormController.ordenUnidOrg}">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{admReclamoSugConcursoListFormController.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{admReclamoSugConcursoListFormController.configuracionUoCab.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{admReclamoSugConcursoListFormController.getUrlToPageOee()}" />
+						</s:decorate>
+					</a:region>
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_concurso}</ui:define>
+						<h:inputText 
+							value="#{admReclamoSugConcursoListFormController.nomConcurso}"
+							size="40" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_grupo}</ui:define>
+						<h:inputText 
+							value="#{admReclamoSugConcursoListFormController.nomGrupo}"
+							size="40" />
+					</s:decorate>
+				</h:panelGrid>
+				<fieldset><legend>#{messages.CU200_fecha_reclamo_sug}</legend>
+				<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU261_desde}</ui:define>
+					 <rich:calendar id="fechaDesde" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" 
+                            value="#{admReclamoSugConcursoListFormController.desde}" />
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.msg_hasta}</ui:define>
+					 <rich:calendar id="fechaHasta" datePattern="dd/MM/yyyy" 
+                            inputSize="10" enableManualInput="true" 
+                            value="#{admReclamoSugConcursoListFormController.hasta}" />
+				</s:decorate>
+				</h:panelGrid>
+				</fieldset>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_concurso}</ui:define>
+						<h:inputText 
+							value="#{admReclamoSugConcursoListFormController.nomConcurso}"
+							size="40" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU261_grupo}</ui:define>
+						<h:inputText 
+							value="#{admReclamoSugConcursoListFormController.nomGrupo}"
+							size="40" />
+					</s:decorate>
+					<s:decorate id="estadoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU367_tipo}
+					</ui:define>
+					<h:selectOneMenu id="estado" immediate="true" style="width : 330px;"
+						value="#{admReclamoSugConcursoListFormController.estado}" >
+						<s:selectItems var="tipo" label="#{tipo.descripcion}"
+							value="#{enumAppHelper.estadoReclamos}" />
+						<s:convertEnum />
+					</h:selectOneMenu>
+				</s:decorate>
+				</h:panelGrid>
+				
+				
+				
+				
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{admReclamoSugConcursoListFormController.search()}"
+				reRender="panelResultados">
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{admReclamoSugConcursoListFormController.searchAll()}"
+				reRender="panelResultados, panelBusqueda">
+			</a:commandButton></div>
+
+		
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']}(#{empty reclamoSugerenciaList.resultList ? 0 : (reclamoSugerenciaList.paginated ? reclamoSugerenciaList.resultCount : reclamoSugerenciaList.resultList.size)})</f:facet>
+			<div class="results" id="tblActividadList" style="overflow: auto;"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty reclamoSugerenciaList.resultList}" />
+			<rich:dataTable id="reclamosSugerenciasList" var="_reclamoSugerencia"
+				value="#{reclamoSugerenciaList.resultList}"
+				rows="10"
+				rendered="#{not empty reclamoSugerenciaList.resultList}">
+
+				
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU200_nro}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.nroReclamo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_reclamoSugerencia.nroReclamo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU200_fecha_reclamo_sug}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.fechaReclamoSugerencia" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_reclamoSugerencia.fechaReclamoSugerencia}" >
+							<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="Estadp" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.estado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="RECLAMO"
+						rendered="#{_reclamoSugerencia.estado == 'R'}" />
+					<h:outputText value="SUGERENCIA"
+						rendered="#{_reclamoSugerencia.estado == 'S'}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU261_concurso}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.nombre" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.nombre}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU200_puesto}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.postulacion.concursoPuestoAgr.descripcionGrupo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_reclamoSugerencia.postulacion.concursoPuestoAgr.descripcionGrupo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU200_ci}" />
+							<ui:param name="propertyPath"
+								value="reclamoSugerencia.postulacion.personaPostulante.documentoIdentidad" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_reclamoSugerencia.postulacion.personaPostulante.documentoIdentidad}">
+					
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU200_estado_conc}" />
+							<ui:param name="propertyPath" value="reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.estado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{admReclamoSugConcursoListFormController.findEstado(_reclamoSugerencia.postulacion.concursoPuestoAgr.concurso.estado)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{reclamoSugerenciaList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU200_nom_apes}" />
+							<ui:param name="propertyPath" value="reclamoSugerencia.personaPostulante.nombreCompleto" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_reclamoSugerencia.postulacion.personaPostulante.nombreCompleto}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<s:link
+						view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcurso.xhtml"
+						value="Ver" propagation="none" id="reclamoSugerenciaEdit">
+						<f:param name="reclamoSugerenciaIdReclamoSugerencia"
+							value="#{_reclamoSugerencia.idReclamoSugerencia}" />
+							<f:param name="fromRpta"
+                        value="false"/>
+					</s:link>
+						#{' '}
+					 <s:link view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoEdit.xhtml"
+                   value="#{messages.CU53_resp}"
+             propagation="join" disabled="#{_reclamoSugerencia.estado!='R'}"
+              >
+               <f:param name="reclamoSugerenciaIdReclamoSugerencia"
+							value="#{_reclamoSugerencia.idReclamoSugerencia}" />
+              <f:param name="fromRpta"
+                        value="true"/>
+             </s:link>
+					
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		 <div class="tableControl">
+
+        <s:link view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml"
+            rendered="#{reclamoSugerenciaList.previousExists}"
+               value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml"
+            rendered="#{reclamoSugerenciaList.previousExists}"
+               value="#{messages.left} #{messages.msg_list_previous_page}"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{reclamoSugerenciaList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml"
+            rendered="#{reclamoSugerenciaList.nextExists}"
+               value="#{messages.msg_list_next_page} #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{reclamoSugerenciaList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/seleccion/admReclamoSugerenciaConcurso/AdmReclamoSugerenciaConcursoList.xhtml"
+            rendered="#{reclamoSugerenciaList.nextExists}"
+               value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{reclamoSugerenciaList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+		
+		
+		
+		
+</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

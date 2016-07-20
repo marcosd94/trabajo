@@ -1,0 +1,229 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="usuarioPortalSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="UsuarioPortal Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Contrasenha</ui:define>
+                <h:inputText id="contrasenha" value="#{usuarioPortalList.usuarioPortal.contrasenha}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Observacion</ui:define>
+                <h:inputText id="observacion" value="#{usuarioPortalList.usuarioPortal.observacion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{usuarioPortalList.usuarioPortal.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{usuarioPortalList.usuarioPortal.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{usuarioPortalList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/UsuarioPortalList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">UsuarioPortal Search Results (#{empty usuarioPortalList.resultList ? 0 : (usuarioPortalList.paginated ? usuarioPortalList.resultCount : usuarioPortalList.resultList.size)})</f:facet>
+    <div class="results" id="usuarioPortalList">
+
+    <h:outputText value="The usuarioPortal search returned no results."
+               rendered="#{empty usuarioPortalList.resultList}"/>
+
+    <rich:dataTable id="usuarioPortalList"
+                var="_usuarioPortal"
+              value="#{usuarioPortalList.resultList}"
+           rendered="#{not empty usuarioPortalList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Id usuario portal"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.idUsuarioPortal"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.idUsuarioPortal}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Persona id persona"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.persona.idPersona"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.persona.idPersona}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Contrasenha"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.contrasenha"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.contrasenha}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Observacion"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.observacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.observacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{usuarioPortalList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="usuarioPortal.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_usuarioPortal.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'UsuarioPortal' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="usuarioPortalViewId">
+                <f:param name="usuarioPortalIdUsuarioPortal"
+                        value="#{_usuarioPortal.idUsuarioPortal}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/UsuarioPortalEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="usuarioPortalEdit"
+                rendered="#{empty from}">
+                <f:param name="usuarioPortalIdUsuarioPortal"
+                        value="#{_usuarioPortal.idUsuarioPortal}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/UsuarioPortalList.xhtml"
+            rendered="#{usuarioPortalList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/UsuarioPortalList.xhtml"
+            rendered="#{usuarioPortalList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{usuarioPortalList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/UsuarioPortalList.xhtml"
+            rendered="#{usuarioPortalList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{usuarioPortalList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/UsuarioPortalList.xhtml"
+            rendered="#{usuarioPortalList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{usuarioPortalList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/UsuarioPortalEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create usuarioPortal">
+            <f:param name="usuarioPortalIdUsuarioPortal"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

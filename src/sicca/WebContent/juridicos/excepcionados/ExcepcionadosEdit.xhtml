@@ -1,0 +1,296 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU456_excepcionados}</h1>
+    <h:form id="excepcionados" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{excepcionadosHome.managed ? messages.msg_edit : messages.msg_add_male} #{messages.CU456_excepcionados}</f:facet>
+					<rich:panel id="panelPrincipal"><f:facet name="header">#{messages['CU456_datos_persona']}</f:facet>
+					<h:panelGrid columns="1">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="#{excepcionadosHome.managed}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelPrincipal" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png" rendered="#{!excepcionadosHome.managed}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('juridicos/excepcionados/ExcepcionadosEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="#{excepcionadosHome.managed}"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default" focus="unidadOrgCodigo"
+									action="#{nivelEntidadOeeUtil.findEntidad()}"
+									reRender="panelPrincipal" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" rendered="#{!excepcionadosHome.managed}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('juridicos/excepcionados/ExcepcionadosEdit')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="#{excepcionadosHome.managed}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" rendered="#{!excepcionadosHome.managed}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('juridicos/excepcionados/ExcepcionadosEdit')}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<a:region>
+							<h:panelGrid columns="2">
+								<s:decorate id="paisExpField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU40_paises_expedicion}<s:div
+									style="float:right">
+									<span class="required">*</span>
+								</s:div>
+							</ui:define>
+							<h:selectOneMenu id="idPaisExped"  disabled="#{excepcionadosHome.managed}"
+								value="#{excepcionadosEditFC.idPaisExp}"
+								style="width: 
+							250px">
+								<a:support event="onchange" reRender="nombreApePersona,createPersona,docCI"
+									action="#{excepcionadosEditFC.limpiarDatosPersona()}"></a:support>
+								<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+								<a:status id="idSatatusPersonSearch"
+									onstart="Richfaces.showModalPanel('espera')"
+									onstop="#{rich:component('espera')}.hide()" />
+								<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU528_docIdentidad}<span class="required">*</span><s:div style="float:right">
+								</s:div>
+							</ui:define>
+							<h:inputText id="docCI" size="30"  disabled="#{excepcionadosHome.managed}"
+								value="#{excepcionadosEditFC.docIdentidad}"
+								style=" width : 250px;">
+								<a:support event="onblur" reRender="nombreApePersona,createPersona"
+									action="#{excepcionadosEditFC.buscarPersona()}"></a:support>
+							</h:inputText>#{' '}
+							<s:link propagation="join" rendered="#{!excepcionadosHome.managed}"
+								view="/seleccion/persona/PersonaList.xhtml">
+								<f:param name="from" 
+									value="/juridicos/excepcionados/ExcepcionadosEdit" />
+								<s:graphicImage value="/img/Buscar.png" />
+							</s:link>						
+									#{' '}
+							<a:commandButton id="createPersona" disabled="#{!excepcionadosEditFC.habBtnAddPersons}"
+							eventsQueue="default" value="Agregar Persona" rendered="#{!excepcionadosHome.managed}"
+						action="#{excepcionadosEditFC.toFindPersona()}" />
+							#{' '}
+						</s:decorate>	
+					</h:panelGrid>
+			</a:region>
+						
+				
+				
+				<h:panelGrid columns="1" id="nombreApePersona">
+           <s:decorate id="nomField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_nombres}</ui:define>
+						<h:inputText id="nombre" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{excepcionadosEditFC.persona.nombres}" />
+					</s:decorate>
+
+
+          <s:decorate id="apeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_apellido}</ui:define>
+						<h:inputText id="apellido" size="50" disabled="true" maxlength="50"
+							required="true"
+							value="#{excepcionadosEditFC.persona.apellidos}" />
+					</s:decorate>
+				</h:panelGrid>
+				</rich:panel>
+				
+				<rich:panel ><f:facet name="header">#{messages['CU456_datos_excepcion']}</f:facet>
+				<h:panelGrid >
+				 <s:decorate id="anioField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_anio}</ui:define>
+                <h:inputText id="anio" styleClass="numeric"
+                       required="true" disabled="#{excepcionadosHome.managed}"
+                          value="#{excepcionadosEditFC.excepcionados.anio}">
+                 </h:inputText>
+            </s:decorate>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+            
+            <s:decorate id="fechaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_fecha} Desde</ui:define>
+                <rich:calendar id="fecha" required="true"
+                 disabled="#{excepcionadosHome.managed}"
+			         locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadosEditFC.excepcionados.fecha}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+            <s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.gral_fecha_hasta}</ui:define>
+                <rich:calendar id="fechaHasta" required="true"
+                 disabled="#{excepcionadosHome.managed}"
+			         locale="#{siccaAppHelper.localeCode}"
+						value="#{excepcionadosEditFC.excepcionados.fechaHasta}"
+						datePattern="dd/MM/yyyy" enableManualInput="true" />
+            </s:decorate>
+            </h:panelGrid>
+            <h:panelGrid >
+             <s:decorate id="nroDictamenField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_nro_dictamen}</ui:define>
+                <h:inputText id="nroDictamen" styleClass="numeric" onkeypress="return soloNumeros(event);"
+                            required="true" disabled="#{excepcionadosHome.managed}"
+                              value="#{excepcionadosEditFC.excepcionados.nroDictamen}"/>
+            </s:decorate>
+             <s:decorate id="motivoField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU456_motivo}</ui:define>
+                <h:inputTextarea id="motivo"
+                               cols="80" disabled="#{excepcionadosHome.managed}"
+                               rows="6"
+                           required="true"
+                              value="#{excepcionadosEditFC.excepcionados.motivo}">
+                                <f:validateLength maximum="500" />
+                              </h:inputTextarea>
+            </s:decorate>
+
+            <s:decorate id="activoField" template="/layout/edit.xhtml"   rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.DatosEspecificos_activo}</ui:define>
+                <h:selectBooleanCheckbox id="activo"
+                                   required="true" 
+                                      value="#{excepcionadosEditFC.excepcionados.activo}"/>
+            </s:decorate>
+            
+				</h:panelGrid>
+				</rich:panel>
+				
+           
+
+
+           
+
+
+      	<div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" rendered="#{!excepcionadosHome.managed}" styleClass="labelClass"/>
+            <h:outputText value="#{messages.msg_obs_update}" rendered="#{excepcionadosHome.managed}" styleClass="labelClass"/>
+        </div>
+        </rich:panel>
+
+        <div class="actionButtons">
+
+           <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{excepcionadosEditFC.save()}"
+                       disabled="#{!excepcionadosHome.wired}"         
+                       onclick="return confirm('#{messages.msg_confirm_save}');"              
+                       rendered="#{!excepcionadosHome.managed and excepcionadosEditFC.habSave}"/>
+				
+				
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{excepcionadosEditFC.update()}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{excepcionadosHome.managed and excepcionadosEditFC.habUpdate}"/>
+
+
+        <s:button propagation="join" rendered="#{!excepcionadosEditFC.habSave}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anesxos" value="#{messages.gral_anexos}"
+				>
+				<f:param name="direccionFisica" value="#{excepcionadosEditFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{excepcionadosEditFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{excepcionadosEditFC.excepcionados.idExcepcionado}" />
+				<f:param name="nombreTabla" value="#{excepcionadosEditFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="juridicos/excepcionados/ExcepcionadosEdit" />
+			</s:button>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="none"
+                    view="/juridicos/excepcionados/ExcepcionadosList.xhtml"
+                rendered="#{excepcionadosHome.managed}">
+           	 </s:button>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="none"
+                    view="/#{empty excepcionadosFrom ? 'juridicos/excepcionados/ExcepcionadosList' : excepcionadosFrom}.xhtml"
+                rendered="#{!excepcionadosHome.managed}">
+                 </s:button>
+
+        </div>
+    </h:form>
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{excepcionadosEditFC.excepcionados.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{excepcionadosEditFC.excepcionados.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{excepcionadosEditFC.excepcionados.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{excepcionadosHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{excepcionadosEditFC.excepcionados.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

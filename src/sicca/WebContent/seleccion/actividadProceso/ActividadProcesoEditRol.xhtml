@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CU391_title}</h1>
+
+    <h:form id="nivelGradoSalarial" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{actividadProcesoFormController.vista ? messages.msg_list_view  : messages.msg_add_edit} #{messages.CU391_asignacion_rol}</f:facet>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU391_title}</ui:define>
+					<h:selectOneMenu id="idProceso" value="#{actividadProcesoFormController.idProceso}" required ="true" disabled="true">
+						<f:selectItems value="#{procesoSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.gral_actividad}</ui:define>
+					<h:selectOneMenu id="idActividad" value="#{actividadProcesoFormController.idActividad}" required ="true" disabled="true">
+						<f:selectItems value="#{actividadSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+
+	            <br />
+	            <br />
+	            <div style="clear:both">
+					<fieldset style="width: 70%;">
+						<legend>Roles</legend>
+						<rich:listShuttle sourceValue="#{actividadProcesoFormController.rolesSinAsignar}" id="filtro"
+				            targetValue="#{actividadProcesoFormController.rolesAsignados}" var="rol" listsHeight="150"
+				            sourceListWidth="400" targetListWidth="400" sourceCaptionLabel="#{messages.Rol_funciones_sin_asignar}"
+				            targetCaptionLabel="#{messages.Rol_funciones_asignados}"
+				            converter="org.jboss.seam.ui.EntityConverter"
+				            > 
+				            <rich:column width="18"> 
+				            	<h:outputText value="#{rol.descripcion}"/>
+				            </rich:column>
+				        </rich:listShuttle>
+					</fieldset>
+				</div>
+	            <br />
+	            
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+        <br />
+        <div style="clear:both">
+            <h:outputText value="#{messages.msg_obs_save}" styleClass="labelClass"/>
+        </div>
+
+        </rich:panel>
+        
+        
+
+        <div class="actionButtons">
+        	<h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{actividadProcesoFormController.saveRol()}"
+                        onclick="return confirm('#{messages.msg_confirm_save}');"                     
+                       rendered="#{!actividadProcesoFormController.vista}"/>
+                       
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_done}"
+             	   propagation="end"
+             		action="#{actividadProcesoFormController.cancelAdd}"
+                    view="/#{empty actividadProcesoFrom ? 'seleccion/actividadProceso/ActividadProcesoList' : actividadProcesoFrom}.xhtml"/>
+        </div>
+        
+         <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta" rendered="#{actividadProcesoHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{actividadProcesoHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{actividadProcesoHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{actividadProcesoHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{actividadProcesoHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{actividadProcesoHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"   rendered="#{actividadProcesoHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{actividadProcesoHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+        
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

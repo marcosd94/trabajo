@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/PlantillaEncuestaList.xhtml"
+      login-required="true">
+<restrict>#{identity.hasRole('plantillaEncuestaEdit')}</restrict>
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+ <action execute="#{nivelEntidadOeeUtil.init2()}" on-postback="false"/>
+
+   <action execute="#{plantillaEncuestaHome.wire}"/>
+
+   <param name="plantillaEncuestaFrom"/>
+   <param name="plantillaEncuestaIdPlantilla" value="#{plantillaEncuestaHome.plantillaEncuestaIdPlantilla}"/>
+
+
+   <navigation from-action="#{plantillaEncuestaHome.persist()}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/capacitacion/plantillaEvaluaciones/PlantillaEncuestaList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{plantillaEncuestaHome.update()}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/capacitacion/plantillaEvaluaciones/PlantillaEncuestaList.xhtml"/>
+      </rule>
+   </navigation>
+
+   
+
+</page>

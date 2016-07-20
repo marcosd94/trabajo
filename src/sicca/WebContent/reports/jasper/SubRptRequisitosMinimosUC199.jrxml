@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubRptRequisitosMinimosUC199" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPlantaCargoDet" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT rm.descripcion AS componente,
+        drm.puntaje_req_min AS puntaje,
+        mr.minimos_requeridos AS minimos_requeridos,
+        op.opc_convenientes AS opciones_convenientes,
+        rm.descripcion || ' - ' || drm.puntaje_req_min AS concat
+FROM planificacion.det_req_min drm
+    INNER JOIN planificacion.planta_cargo_det pcd
+        ON drm.id_planta_cargo_det = pcd.id_planta_cargo_det
+    INNER JOIN planificacion.requisito_minimo_cpt rm
+        ON drm.id_requisito_minimo_cpt = rm.id_requisito_minimo_cpt
+    INNER JOIN planificacion.det_opciones_convenientes op
+        ON op.id_det_req_min = drm.id_det_req_min
+    INNER JOIN planificacion.det_minimos_requeridos mr
+        ON mr.id_det_req_min = drm.id_det_req_min
+WHERE pcd.id_planta_cargo_det = $P{idPlantaCargoDet}
+    AND op.activo = true
+ORDER BY componente, puntaje]]>
+	</queryString>
+	<field name="componente" class="java.lang.String"/>
+	<field name="puntaje" class="java.lang.Float"/>
+	<field name="minimos_requeridos" class="java.lang.String"/>
+	<field name="opciones_convenientes" class="java.lang.String"/>
+	<field name="concat" class="java.lang.String"/>
+	<group name="requisito_minimo_group">
+		<groupExpression><![CDATA[$F{concat}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="0" width="179" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{componente}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="202" y="0" width="64" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntaje}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="3" y="7" width="165" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REQUISITOS MINIMOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="23" y="27" width="179" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Componente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="266" y="27" width="160" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mínimos Requeridos]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="23" y="47" width="518" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="202" y="27" width="64" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Puntaje]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="426" y="27" width="115" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Opc. Convenientes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="266" y="0" width="160" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{minimos_requeridos}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="426" y="0" width="115" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{opciones_convenientes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

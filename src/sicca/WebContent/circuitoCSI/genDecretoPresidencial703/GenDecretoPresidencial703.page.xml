@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/MatrizDocConfigDetList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <restrict>#{identity.hasRole('administrarDecreto_editConcursoSimplificado')}</restrict>
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+
+ <param name="idConcurso" value="#{genDecretoPresidencial703FC.idConcurso}"/>
+ 
+ <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{genDecretoPresidencial703FC.idConcursoPuestoAgr}"/>
+ 
+ <action execute="#{genDecretoPresidencial703FC.init()}" on-postback="false"/>
+ 
+ <navigation from-action="#{genDecretoPresidencial703FC.resolucion()}">
+  <rule if-outcome="ir">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="idConcursoPuestoAgr" value="#{genDecretoPresidencial703FC.paramReso}"/>
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{genDecretoPresidencial703FC.idSave}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{genDecretoPresidencial703FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{genDecretoPresidencial703FC.paramIdConcurso}"/>
+     <param name="fromCU" value="333"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/genDecretoPresidencial703/GenDecretoPresidencial703"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{genDecretoPresidencial703FC.finIdConcursoReso(reso.idResolucion,'edit')}">
+  <rule if-outcome="edit">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacionEdit.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{genDecretoPresidencial703FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{genDecretoPresidencial703FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{genDecretoPresidencial703FC.idResoConsurso}"/>
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/genDecretoPresidencial703/GenDecretoPresidencial703"/>
+     <param name="fromCU" value="333"/>
+   </redirect>
+  </rule>
+ </navigation>
+
+ <navigation from-action="#{genDecretoPresidencial703FC.finIdConcursoReso(reso.idResolucion,'view')}">
+  <rule if-outcome="view">
+   <end-conversation/>
+   <redirect view-id="/seleccion/resolucionHomologacion/ResolucionHomologacion.xhtml">
+    <param name="resolucionHomologacionIdResolucionHomologacion" value="#{genDecretoPresidencial703FC.idResoEdit}"/>
+    <param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{genDecretoPresidencial703FC.idConcursoPuestoAgr}"/>
+    <param name="idConcursoAgr" value="#{genDecretoPresidencial703FC.idResoConsurso}" />
+     <param name="plantillaResolucionHomologacionFrom" value="circuitoCSI/genDecretoPresidencial703/GenDecretoPresidencial703"/>
+     <param name="fromCU" value="333"/>
+   </redirect>
+  </rule>
+ </navigation>
+ 
+ <navigation from-action="#{genDecretoPresidencial703FC.nextTask()}">
+  <rule if-outcome="next">
+   <redirect view-id="/circuitoCSI/bandejaEntrada/BandejaEntradaList.xhtml"/>
+  </rule>
+ </navigation>
+
+</page>

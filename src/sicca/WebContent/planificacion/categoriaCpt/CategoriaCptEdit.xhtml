@@ -1,0 +1,86 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.CategoriaCpt_}</h1>
+
+    <h:form id="categoriaCpt" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{categoriaCptHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.CategoriaCpt_}</f:facet>
+
+	            <s:decorate id="cptField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CategoriaCpt_idCpt}</ui:define>
+	                <h:selectOneMenu id="cpt"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{categoriaCptHome.idCpt}">
+	                    <f:selectItems value="#{cptsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="categoriaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CategoriaCpt_categoria}</ui:define>
+	                <h:inputText id="categoria"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{categoriaCptHome.instance.categoria}">
+	                    <a:support event="onblur" reRender="categoriaField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{categoriaCptHome.persist}"
+                       disabled="#{!categoriaCptHome.wired}"                      
+                       rendered="#{!categoriaCptHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{categoriaCptHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{categoriaCptHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{categoriaCptHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{categoriaCptHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/categoriaCpt/CategoriaCptList.xhtml"
+                rendered="#{categoriaCptHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty categoriaCptFrom ? 'planificacion/categoriaCpt/CategoriaCptList' : categoriaCptFrom}.xhtml"
+                rendered="#{!categoriaCptHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

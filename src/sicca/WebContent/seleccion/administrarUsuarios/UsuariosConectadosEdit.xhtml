@@ -1,0 +1,115 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="usuariosConectados" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{usuariosConectadosHome.managed ? 'Edit' : 'Add'} Usuarios conectados</f:facet>
+
+
+            <s:decorate id="idUsuariosConectadosField" template="layout/edit.xhtml">
+                <ui:define name="label">Id usuarios conectados</ui:define>
+                <h:inputText id="idUsuariosConectados"
+                       required="true"
+                       disabled="#{usuariosConectadosHome.managed}"
+                          value="#{usuariosConectadosHome.instance.idUsuariosConectados}">
+                    <a:support event="onblur" reRender="idUsuariosConectadosField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="usuarioField" template="layout/edit.xhtml">
+                <ui:define name="label">Usuario</ui:define>
+                <h:inputText id="usuario"
+                       required="true"
+                          value="#{usuariosConectadosHome.instance.usuario}">
+                    <a:support event="onblur" reRender="usuarioField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="navegadorField" template="layout/edit.xhtml">
+                <ui:define name="label">Navegador</ui:define>
+                <h:inputText id="navegador"
+                       required="true"
+                           size="30"
+                      maxlength="30"
+                          value="#{usuariosConectadosHome.instance.navegador}">
+                    <a:support event="onblur" reRender="navegadorField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="direccionIpField" template="layout/edit.xhtml">
+                <ui:define name="label">Direccion ip</ui:define>
+                <h:inputText id="direccionIp"
+                       required="true"
+                           size="50"
+                      maxlength="50"
+                          value="#{usuariosConectadosHome.instance.direccionIp}">
+                    <a:support event="onblur" reRender="direccionIpField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="fechaIngresoField" template="layout/edit.xhtml">
+                <ui:define name="label">Fecha ingreso</ui:define>
+                <rich:calendar id="fechaIngreso"
+                       required="true"
+                          value="#{usuariosConectadosHome.instance.fechaIngreso}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{usuariosConectadosHome.persist}"
+                       disabled="#{!usuariosConectadosHome.wired}"
+                       rendered="#{!usuariosConectadosHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{usuariosConectadosHome.update}"
+                       rendered="#{usuariosConectadosHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{usuariosConectadosHome.remove}"
+                      immediate="true"
+                       rendered="#{usuariosConectadosHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/UsuariosConectados.xhtml"
+                rendered="#{usuariosConectadosHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty usuariosConectadosFrom ? 'UsuariosConectadosList' : usuariosConectadosFrom}.xhtml"
+                rendered="#{!usuariosConectadosHome.managed}"/>
+
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

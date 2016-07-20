@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="evalDesempenho">
+
+
+	<start-state name="INICIO">
+		<transition to="ASIGNAR_PLANTILLA" name="start_TO_asgPlan"></transition>
+	</start-state>
+
+
+	<task-node name="ASIGNAR_PLANTILLA">
+		<task name="ASIGNAR_PLANTILLA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="GENERAR_RESOLUCION" name="asgPlan_TO_genRes"></transition>
+	</task-node>
+
+	<task-node name="GENERAR_RESOLUCION">
+		<task name="GENERAR_RESOLUCION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_EVALUACION" name="genRes_TO_aprEva"></transition>
+	</task-node>
+
+	<task-node name="APROBAR_EVALUACION">
+		<task name="APROBAR_EVALUACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="ADJUNTAR_RESOLUCION_FIRMADA" name="aprEva_TO_adjResFir"></transition>
+		<transition to="REVISAR_EVALUACION" name="aprEva_TO_revEva"></transition>
+	</task-node>
+
+	<task-node name="ADJUNTAR_RESOLUCION_FIRMADA">
+		<task name="ADJUNTAR_RESOLUCION_FIRMADA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="FIN" name="adjResFir_TO_end"></transition>
+	</task-node>
+
+	<task-node name="REVISAR_EVALUACION">
+		<task name="REVISAR_EVALUACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_EVALUACION" name="revEva_TO_aprEva"></transition>
+	</task-node>
+
+
+	<end-state name="FIN"></end-state>
+
+
+</process-definition>

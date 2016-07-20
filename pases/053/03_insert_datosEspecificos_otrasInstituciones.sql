@@ -1,0 +1,2 @@
+INSERT INTO seleccion.datos_especificos (id_datos_especificos, descripcion, valor_alf, valor_num, id_datos_generales, activo, usu_alta, fecha_alta, usu_mod, fecha_mod)
+ VALUES ((SELECT MAX(ID_DATOS_ESPECIFICOS) FROM SELECCION.DATOS_ESPECIFICOS)+1, 'CEAMSO', NULL, NULL, 43, true, 'rtrinidad', localtimestamp, NULL, NULL);

@@ -1,0 +1,64 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>Importacion de Remuneraciones desde Ministerio de Hacienda</h1>
+
+		<h:form id="empleadoPuestoSearch" enctype="multipart/form-data">
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">Archivo a importar</ui:define>
+				<h:inputText id="nombre" size="100"
+					value="#{clientServiceMH.nombreArchivo}" />
+			</s:decorate>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			
+			<div class="actionButtons">
+				<h:commandButton id="search"
+					value="Importacion desde json"
+					action="#{clientServiceMH.traerRegistrosRemuneracionesFROMJSON()}" />
+			
+				<h:commandButton id="search2" value="Importacion desde csv"
+					action="#{clientServiceMH.traerRegistrosRemuneracionesFROMCVS()}" />
+			</div>
+			
+			<h2>Formato JSON</h2>
+			
+			<h:inputTextarea disabled="true" rows="15" cols="100" value="[{'filaId':1,'planillaUniqueId':11111111,'cedula':'222212312',
+			'anio':2015,'nivel':11,'entidad':1,'tipoPresupuesto':1,'programa':2,'mes':1,
+			'nombres':'xxxxxxxxxxxxx','lineaPresupuestaria':'NO CORRESPONDE A OBJETO DE GASTO DEL ANEXO',
+			'codObjeto':144,'objetoGasto':'JORNALES','fuenteFinanc':10,'orgFinanciador':1,'categoria':'XJ3',
+			'descripCategoria':null,'montoPresupuestado':100000,'montoDevengado':100000,'montoLiquido':100000,
+			'fechaActualizacion':1426162731000},{'filaId':2,'planillaUniqueId':11111112,'cedula':'222212312',
+			'anio':2015,'nivel':11,'entidad':1,'tipoPresupuesto':1,'programa':2,'mes':1,
+			'nombres':'xxxxxxxxxxxxx','lineaPresupuestaria':'NO CORRESPONDE A OBJETO DE GASTO DEL ANEXO',
+			'codObjeto':144,'objetoGasto':'JORNALES','fuenteFinanc':10,'orgFinanciador':1,'categoria':'XJ3',
+			'descripCategoria':null,'montoPresupuestado':100000,'montoDevengado':100000,'montoLiquido':100000,
+			'fechaActualizacion':1426162731000}]"/>
+			
+			<h2>Formato CSV</h2>
+			
+			<h:inputTextarea disabled="true" rows="10" cols="100" 
+			value="'filaid','planillaUniqueId','anio','nivel','entidad','tipoPresupuesto','programa','mes','cedula','nombres','lineaPresupuestaria','codObjeto','objetoGasto','fuenteFinanc','orgFinanciador','codCategoria','descripCategoria','presupuestado','devengado','liquido','fecha'newline
+					'1','123123123','2015','11','3','1','1','1','2333312','XXXXXXXXXXXX','3','112','DIETAS','10','1','A09','MIEMBROS','1111111','1111111','111111','26/01/2015 03:09:17 p.m.'"/>
+			
+			
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

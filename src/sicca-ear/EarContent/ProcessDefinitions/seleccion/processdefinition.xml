@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="seleccion">
+
+
+	<start-state name="Inicio">
+		<transition name="next" to="CARGA_GRUPO"></transition>
+		<transition to="REVISION_EMPATES" name="next3"></transition>
+		<transition to="VALIDAR_MATRIZ_DOCUMENTAL_ADJ" name="next2"></transition>
+		<transition to="MODIFICAR_DATOS_CONCURSO" name="next4"></transition>
+	</start-state>
+
+
+	<task-node name="CARGA_GRUPO">
+		<task name="CARGA_GRUPO">
+			<assignment pooled-actors="#{roles}"/>
+		</task>
+		<transition to="Fin 1" name="end"></transition>
+		<transition to="APROBAR_HOMOLOG_SFP" name="next"></transition>
+	</task-node>
+
+	<task-node name="APROBAR_HOMOLOG_SFP">
+		<task name="APROBAR_HOMOLOG_SFP">
+			<assignment pooled-actors="#{roles}"/>
+		</task>
+		<transition name="next1" to="HOMOLOGACION_OEE"></transition>
+		<transition to="Fin 2" name="end"></transition>
+		<transition to="FIRMA_RESOL_HOMOLOG" name="next2"></transition>
+	</task-node>
+
+	<task-node name="FIRMA_RESOL_HOMOLOG">
+		<task name="FIRMA_RESOL_HOMOLOG">
+			<assignment pooled-actors="#{roles}"/>
+		</task>
+		<transition to="MODIFICAR_DATOS_CONCURSO" name="next"></transition>
+		<transition to="Fin 2" name="end"></transition>
+		<transition to="APROBAR_HOMOLOG_SFP" name="next2"></transition>
+	</task-node>
+
+	<task-node name="MODIFICAR_DATOS_CONCURSO">
+		<task name="MODIFICAR_DATOS_CONCURSO">
+			<assignment pooled-actors="#{roles}"/>
+		</task>
+		<transition to="Fin 2" name="end"></transition>
+		<transition to="RECIBIR_POSTULACIONES" name="next"></transition>
+	</task-node>
+
+	<task-node name="RECIBIR_POSTULACIONES">
+		<task name="RECIBIR_POSTULACIONES">
+			<assignment pooled-actors="#{roles}"/>
+		</task>
+		<transition to="PRORROGAR_POSTULACION" name="next"></transition>
+		<transition to="EVALUACION_DOCUMENTAL" name="next2"></transition>
+		<transition to="COMPLETAR_CARPETAS" name="recPos_TO_ComCar"></transition>
+		<transition to="END5" name="recPos_TO_end5"></transition>
+	</task-node>
+
+	<task-node name="HOMOLOGACION_OEE">
+		<task name="HOMOLOGACION_OEE">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="APROBAR_HOMOLOG_SFP" name="next"></transition>
+		<transition to="Fin 2" name="end"></transition>
+	</task-node>
+
+	<task-node name="PRORROGAR_POSTULACION">
+		<task name="PRORROGAR_POSTULACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="RECIBIR_POSTULACIONES" name="next"></transition>
+	</task-node>
+
+	<task-node name="EVALUACION_DOCUMENTAL">
+		<task name="EVALUACION_DOCUMENTAL">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="ELABORAR_PUBLICACION_LISTA_LARGA" name="next"></transition>
+		<transition to="Fin 2" name="end"></transition>
+	</task-node>
+
+	<task-node name="ELABORAR_PUBLICACION_LISTA_LARGA">
+		<task name="ELABORAR_PUBLICACION_LISTA_LARGA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="REALIZAR_EVALUACIONES" name="next"></transition>
+	</task-node>
+	
+	<task-node name="TACHAS_RECLAMOS_MODIF">
+		<task name="TACHAS_RECLAMOS_MODIF">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="VALIDAR_MATRIZ_DOCUMENTAL_ADJ" name="next2"></transition>
+		<transition to="REALIZAR_ENTREVISTA_FINAL" name="next1"></transition>
+	</task-node>
+
+	<task-node name="REALIZAR_EVALUACIONES">
+		<task name="REALIZAR_EVALUACIONES">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="ELABORAR_PUBLICACION_LISTA_CORTA" name="next"></transition>
+		<transition to="END5" name="reaEva_TO_end5"></transition>
+	</task-node>
+
+	<task-node name="ELABORAR_PUBLICACION_LISTA_CORTA">
+		<task name="ELABORAR_PUBLICACION_LISTA_CORTA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="END5" name="elaPubLisCor_TO_end5"></transition>
+		<transition to="TACHAS_RECLAMOS_MODIF" name="next"></transition>
+	</task-node>
+
+	<task-node name="REALIZAR_ENTREVISTA_FINAL">
+		<task name="REALIZAR_ENTREVISTA_FINAL">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="VALIDAR_MATRIZ_DOCUMENTAL_ADJ" name="next1"></transition>
+		<transition to="END5" name="reaEntFinMai_TO_end5"></transition>
+	</task-node>
+
+	<task-node name="VALIDAR_MATRIZ_DOCUMENTAL_ADJ">
+		<task name="VALIDAR_MATRIZ_DOCUMENTAL_ADJ">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="PUBLICAR_ADJUDICADOS" name="next"></transition>
+		<transition to="END5" name="valMatDocAdj_TO_end5"></transition>
+	</task-node>
+
+	<task-node name="PUBLICAR_ADJUDICADOS">
+		<task name="PUBLICAR_ADJUDICADOS">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="FIRMAR_RESOLUCION_ADJUDICACION" name="next"></transition>
+		<transition to="END6" name="pubAdj_TO_end6"></transition>
+	</task-node>
+
+	<task-node name="FIRMAR_RESOLUCION_ADJUDICACION">
+		<task name="FIRMAR_RESOLUCION_ADJUDICACION">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="END6" name="elaResAdj_TO_end6"></transition>
+		<transition to="ELABORAR_DECRECTO_PRESIDENCIAL" name="next1"></transition>
+		<transition to="INGRESAR_POSTULANTE" name="next2"></transition>
+	</task-node>
+
+	<task-node name="ELABORAR_DECRECTO_PRESIDENCIAL">
+		<task name="ELABORAR_DECRECTO_PRESIDENCIAL">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="INGRESAR_POSTULANTE" name="next"></transition>
+	</task-node>
+
+	<task-node name="INGRESAR_POSTULANTE">
+		<task name="INGRESAR_POSTULANTE">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="Fin" name="next"></transition>
+	</task-node>
+
+	<task-node name="REVISION_EMPATES">
+		<task name="REVISION_EMPATES">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="Fin2" name="next"></transition>
+	</task-node>
+
+	<task-node name="COMPLETAR_CARPETAS">
+		<task name="COMPLETAR_CARPETAS">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="EVALUACION_DOCUMENTAL" name="comCar_TO_EvaDoc"></transition>
+		<transition to="END5" name="comCar_TO_end5"></transition>
+	</task-node>
+
+	
+
+
+	<end-state name="Fin"></end-state>
+
+	<end-state name="Fin 1"></end-state>
+
+	<end-state name="Fin2"></end-state>
+
+	<end-state name="Fin 2"></end-state>
+
+	<end-state name="END5"></end-state>
+
+	<end-state name="END6"></end-state>
+
+
+</process-definition>

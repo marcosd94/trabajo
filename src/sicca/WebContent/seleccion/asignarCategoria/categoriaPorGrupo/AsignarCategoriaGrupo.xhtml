@@ -1,0 +1,200 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU251_title}</h1>
+		<h:form id="categoria" styleClass="edit">
+
+			<rich:panel>
+
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+							disabled="true">
+						</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							onkeypress="return soloNumeros(event);"
+							value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+							disabled="true">
+						</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+							onkeypress="return soloNumeros(event);" disabled="true">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<rich:panel id="panel" style="width:700px">
+					<f:facet name="header">Categorias</f:facet>
+
+					<h:panelGrid columns="2">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU251_categoria}</ui:define>
+							<h:inputText id="searchCategoria" size="20"
+								value="#{asignarCategoriaGrupo.codigoSearch}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU251_descripcion}</ui:define>
+							<h:inputText id="searchDescripcion" size="30"
+								value="#{asignarCategoriaGrupo.categoriaSearch}" />
+						</s:decorate>
+
+
+					</h:panelGrid>
+					<div><a:commandButton id="search"
+						value="#{messages['msg_list_search_button']}"
+						action="#{asignarCategoriaGrupo.search()}" reRender="panel">
+					</a:commandButton> <a:commandButton id="searchAll"
+						value="#{messages['msg_list_search_reset_button']}"
+						action="#{asignarCategoriaGrupo.searchAll()}" reRender="panel">
+					</a:commandButton></div>
+					<br />
+
+					<div style="clear: both; overflow: auto; HEIGHT: 250px"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{asignarCategoriaGrupo.cadenaRecibida.equalsIgnoreCase('PERMANENTE') and empty asignarCategoriaGrupo.listaCategorias}" /> <rich:dataTable
+						style="width:650px" id="categoriasList" var="_cat" rowKeyVar="row"
+						value="#{asignarCategoriaGrupo.listaCategorias}"
+						rendered="#{asignarCategoriaGrupo.cadenaRecibida.equalsIgnoreCase('PERMANENTE') and not empty asignarCategoriaGrupo.listaCategorias}" >
+						<rich:column style="text-align: left; vertical-align:left"
+							width="50px">
+							<f:facet name="header">
+						#{messages.CU251_categoria}
+						</f:facet>
+							<h:outputText value="#{_cat.ctgCodigo}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="300px">
+							<f:facet name="header">
+						#{messages.CU251_descripcion}
+						</f:facet>
+							<h:outputText value="#{_cat.anxDescrip}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="50px">
+							<f:facet name="header">
+						#{messages.CU251_cant_disponible}
+						</f:facet>
+							<h:outputText value="#{_cat.cantDisponible}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="200px">
+							<h:outputText value="#{_cat.estado}" />
+						</rich:column>
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							#{' '}
+            		<s:link view="/#{asignarCategoriaGrupo.from}.xhtml"
+								value="Seleccionar" id="categoria" propagation="nest">
+								<f:param name="sinAnxIdAnx" value="#{_cat.idAnx}" />
+							</s:link>
+
+						</h:column>
+					</rich:dataTable>
+					<h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{asignarCategoriaGrupo.cadenaRecibida.equalsIgnoreCase('CONTRATADO') and empty asignarCategoriaGrupo.listaCategoriasContratados}" /> <rich:dataTable
+						style="width:650px" id="categoriasContratadosList" var="_categ" rowKeyVar="row"
+						value="#{asignarCategoriaGrupo.listaCategoriasContratados}"
+						rendered="#{asignarCategoriaGrupo.cadenaRecibida.equalsIgnoreCase('CONTRATADO') and not empty asignarCategoriaGrupo.listaCategoriasContratados}" >
+						<rich:column style="text-align: left; vertical-align:left"
+							width="50px">
+							<f:facet name="header">
+						#{messages.CU251_categoria}
+						</f:facet>
+							<h:outputText value="#{_categ.conCtg}" />
+						</rich:column>
+						<rich:column style="text-align: left; vertical-align:left"
+							width="300px">
+							<f:facet name="header">
+						#{messages.CU251_descripcion}
+						</f:facet>
+							<h:outputText value="#{_categ.ctgDescrip}" />
+						</rich:column>
+						
+						<h:column>
+							<f:facet name="header">#{messages.msg_list_action_column}
+					</f:facet>
+							#{' '}
+            		<s:link view="/#{asignarCategoriaGrupo.from}.xhtml"
+								value="Seleccionar" id="categoriaCont" propagation="nest">
+								<f:param name="sinCatCont" value="#{_categ.idSinCategoriaContratados}" />
+								<f:param name="habilitarCategoria" value="true" />
+							</s:link>
+
+						</h:column>
+					</rich:dataTable>
+					
+					</div>
+				</rich:panel>
+
+
+			</rich:panel>
+
+			<div class="actionButtons"><s:button id="cancelAdd1"
+				value="Volver" propagation="join"
+				view="/#{asignarCategoriaGrupo.from}.xhtml">
+
+			</s:button></div>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

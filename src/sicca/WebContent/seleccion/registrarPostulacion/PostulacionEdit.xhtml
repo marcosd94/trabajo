@@ -1,0 +1,354 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/templatePortal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="formGeneral">
+
+			<h:form id="tieneParientes"
+				rendered="#{!registrarPostulacionFormController.tieneParientes}">
+
+				<h:panelGrid columns="1" style="margin: 0 auto;">
+					<s:decorate template="/layout/display.xhtml">
+						<h2>Cargar datos en parentesco antes de postularse</h2>
+					</s:decorate>
+					<br />
+					<h:panelGrid style="margin: 0 auto;">
+						<s:button id="cancelAddVolver" style="margin: center"
+							value="#{messages.GENERICO_VOLVER}" propagation="none"
+							view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</h:form>
+			
+			<h:form id="fueraFechaPostu"
+				rendered="#{!registrarPostulacionFormController.estaEnRangoFechaPostu}">
+
+				<h:panelGrid columns="1" style="margin: 0 auto;">
+					<s:decorate template="/layout/display.xhtml">
+						<h2>El concurso en el que desea postularse se encuentra fuera del rango de fecha de postulación.</h2>
+						<h:outputText value="El rango de fecha de postulación es desde #{registrarPostulacionFormController.fechaPostulacionDesde} hasta #{registrarPostulacionFormController.fechaPostulacionHasta}." style="FONT-SIZE: small;" />
+					</s:decorate>
+					<br />
+					<h:panelGrid style="margin: 0 auto;">
+						<s:button id="cancelAddVolver" style="margin: center"
+							value="#{messages.GENERICO_VOLVER}" propagation="none"
+							view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</h:form>
+
+			<h:form id="listarDocs"
+				rendered="#{registrarPostulacionFormController.faltanDocs}">
+				<h2>No se puede postular para este Concurso. Verifique los Documentos Pendientes. </h2>
+
+				
+				
+				<table border="0" width="100%">
+					<tr>
+						<td align="left" valign="top">
+							<h3>Documenos Solicitados </h3>
+							<s:decorate>
+								<fieldset>
+									<legend>Documentos Obligatorios</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.docsSolicitados}">
+										<h:outputText value="#{elItem}"  style="FONT-SIZE: 	x-small;"/>
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+							<s:decorate>
+								<fieldset>
+									<legend>Documentos No Obligatorios</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.docsSolicitadosNoObligatorios}">
+										<h:outputText value="#{elItem}" style="FONT-SIZE: x-small;" />
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+							<s:decorate>
+								<fieldset>
+									<legend>Documentos Agrupados</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.docsSolicitadosAgrupados}">
+										<h:outputText value="#{elItem}" style="FONT-SIZE: x-small;" />
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+						
+						</td>
+						<td align="left" valign="top">
+							<h3>Documenos Pendientes</h3>
+								<s:decorate rendered="#{registrarPostulacionFormController.faltanDocs}">
+								<fieldset>
+									<legend>Documentos Obligatorios</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.docsFaltantesList}">
+										<h:outputText value="#{elItem}" style="FONT-SIZE: x-small;" />
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+							
+							<s:decorate 
+								rendered="#{registrarPostulacionFormController.faltanDocsNoObligatorios}">
+								<fieldset>
+									<legend>Documentos No Obligatorios</legend>
+									<rich:dataList var="elItem2"
+										value="#{registrarPostulacionFormController.docsNoObligatoriosFaltantesList}">
+										<h:outputText value="#{elItem2}" style="FONT-SIZE: x-small;" />
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+							
+							<s:decorate  
+								rendered="#{registrarPostulacionFormController.faltanDocsAgrupados}">
+								<fieldset>
+									<legend>Documentos Agrupados</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.docsAgrupadosFaltantesList}">
+										<h:outputText value="#{elItem}" style="FONT-SIZE: x-small;" />
+						
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+							<h3>Documentos Presentados</h3>
+							<s:decorate >
+								<fieldset>
+									<legend>Documentos Presentados</legend>
+									<rich:dataList var="elItem2"
+										value="#{registrarPostulacionFormController.docsPresentados}">
+										<h:outputText value="#{elItem2}" style="FONT-SIZE: x-small;" />
+										
+									</rich:dataList>
+								</fieldset>
+							</s:decorate>
+								
+						
+						</td>
+						
+					</tr>
+				</table>
+			
+				<h:panelGrid style="margin: 0 auto;">
+					<s:button id="cancelAdd" style="margin: center"
+						value="#{messages.GENERICO_VOLVER}" propagation="none"
+						view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml" />
+				</h:panelGrid>
+			
+			</h:form>
+
+				
+					
+					
+
+
+
+			<h:form id="listarDocsNoObligatorios"
+				rendered="#{registrarPostulacionFormController.faltanDocsNoObligatorios and !registrarPostulacionFormController.faltanDocs}">
+
+				<h:panelGrid columns="1" style="margin: 100px; margin-left: 320px">
+					<s:decorate template="/layout/display.xhtml">
+						<fieldset style="align: left;">
+							<legend>#{messages.CU241_obs}</legend>
+							<rich:dataList var="elItem"
+								value="#{registrarPostulacionFormController.docsNoObligatoriosFaltantesList}">
+								<h:outputText value="#{elItem}" style="FONT-SIZE: small;" />
+								<br />
+							</rich:dataList>
+						</fieldset>
+					</s:decorate>
+
+
+					<h:panelGrid columns="1">
+
+						<h:panelGrid style="margin-left: 50px">
+							<h3 align="center">¿Continuar de todos modos?</h3>
+
+							<p style="FONT-SIZE: small;" align="CENTER">
+								*Tenga en cuenta que la puntuación de su evaluación <br />
+								podría verse afectada.
+							</p>
+
+							<s:decorate template="/layout/display.xhtml"
+								style="margin-left: 20px;">
+								<s:button id="_volver" value="Volver" propagation="none"
+									view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml" />
+								<a:commandButton id="_continuar" value="Continuar"
+									action="#{registrarPostulacionFormController.continuar()}"
+									reRender="formGeneral" />
+							</s:decorate>
+
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</h:form>
+
+
+
+
+
+			<rich:modalPanel id="modalSelect" width="700" height="350"
+				onshow="hideModal('formSelect:campoError','modalSelectContainer')">
+				<f:facet name="header">#{messages.CU241_confirm_postula}</f:facet>
+				<f:facet name="controls">
+					<h:graphicImage value="/img/dialog-close.png" width="18"
+						height="18" style="cursor:pointer"
+						onclick="#{rich:component('modalSelect')}.hide()" />
+				</f:facet>
+				<h:form id="formSelect">
+					<rich:panel>
+						<f:facet name="header">#{''}</f:facet>
+						<h:panelGrid columns="1">
+							<h:inputHidden id="campoError"
+								value="#{registrarPostulacionFormController.msjError}" />
+
+							<h1>#{messages.CU241_registroExitoso}</h1>
+
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU241_nroConcurso}:</ui:define>
+								<h:outputText
+									value="#{registrarPostulacionFormController.codConcurso}" />
+							</s:decorate>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU241_puesto}:</ui:define>
+								<h:outputText
+									value="#{registrarPostulacionFormController.concursoPuestoAgr.descripcionGrupo}" />
+							</s:decorate>
+							<h:outputText value="#{messages.CU241_enBreveMail}" />
+							<s:decorate template="/layout/display.xhtml">
+								<fieldset>
+									<legend>#{messages.CU241_obs}</legend>
+									<rich:dataList var="elItem"
+										value="#{registrarPostulacionFormController.listaDocsNoPresentados}">
+										<h:outputText value="#{elItem}" />
+										<br />
+									</rich:dataList>
+									<h:outputText
+										rendered="#{empty registrarPostulacionFormController.listaDocsNoPresentados}"
+										value="#{messages.CU241_noObs}" />
+								</fieldset>
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+					</rich:panel>
+
+					<div class="actionButtons">
+						<h:commandButton id="confirm" value="Imprimir"
+							action="#{registrarPostulacionFormController.imprimir()}"
+							onclick="#{rich:component('modalSelect')}.hide()" />
+						<a:commandButton
+							action="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml"
+							id="clear" value="#{messages.GENERICO_ACEPTAR}"
+							onclick="#{rich:component('modalSelect')}.hide()" />
+					</div>
+
+				</h:form>
+
+			</rich:modalPanel>
+			<h:form id="postulacion" styleClass="edit"
+				rendered="#{!registrarPostulacionFormController.faltanDocs and !registrarPostulacionFormController.faltanDocsAgrupados  and !registrarPostulacionFormController.faltanDocsNoObligatorios 
+											and registrarPostulacionFormController.tieneParientes and registrarPostulacionFormController.estaEnRangoFechaPostu}">
+				<h1>#{messages.CU241_titulo}</h1>
+				<rich:panel>
+					<f:facet name="header">#{messages.CU241_titulo_panel}</f:facet>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU241_concurso}:</ui:define>
+							<h:outputText
+								value="#{registrarPostulacionFormController.codConcurso} - #{registrarPostulacionFormController.concurso.nombre}" />
+						</s:decorate>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU241_puesto}:</ui:define>
+							<h:outputText
+								value="#{registrarPostulacionFormController.concursoPuestoAgr.descripcionGrupo}" />
+						</s:decorate>
+						<h:outputLabel value="#{messages.CU241_label1}:" />
+						<s:decorate template="/layout/display.xhtml">
+							<h:inputTextarea
+								onkeypress="return imposeMaxLength(event, this, 1000);"
+								value="#{registrarPostulacionFormController.interesDescripcion}"
+								cols="80" />
+						</s:decorate>
+
+						<h:outputText value="Obs.:#{messages.CU241_label2}"
+							style="color:red;" />
+						<br></br>
+
+						<P style="FONT-SIZE: small; FONT-FAMILY: 'Arial';">
+							<br /> Por este medio dejo expresa constancia de tener total
+							conocimiento de las Bases y Condiciones del presente concurso, a
+							las cuales acepto íntegramente y en el caso de ser seleccionado/a
+							para este cargo administrativo, renunciaré a otro cargo
+							administrativo si lo tuviere, de conformidad a las normativas que
+							rigen sobre la prohibición a la doble remuneración en el estado.<br />
+							<br /> Declaro reunir las condiciones para ingresar a la función
+							pública indicados en el Art.14 de la Ley Nº 1.626/00 de la
+							Función Pública y de no estar comprendido en las inhabilidades
+							indicadas en el Art. 16 de la misma Ley.<br />
+							<br /> Condiciones para ingresar a la función pública (Art. 14 de
+							la Ley N° 1.626/00):<br /> a) ser de nacionalidad paraguaya<br />
+							b) contar con la mayoría de edad<br /> c) justificar el
+							cumplimiento de las obligaciones personales previstas por la
+							Constitución Nacional y las leyes<br /> d) poseer idoneidad y
+							capacidad, necesarias para el ejercicio del cargo, comprobadas
+							mediante el sistema de selección establecido para el efecto<br />
+							e) estar en pleno goce de los derechos civiles y políticos<br />
+							f) presentar certificado de antecedentes policiales y judiciales<br />
+							g) no registrar antecedentes de mal desempeño de la función
+							publica<br />
+							<br /> Están inhabilitados para ingresar a la función pública,
+							así como para contratar con el Estado (Art. 14 de la Ley N°
+							1.626/00):<br /> a) los condenados por sentencia firme a pena
+							privativa de libertad, mientras dure la condena<br /> b) los
+							condenados a penas de inhabilitación para el ejercicio de la
+							función publica<br /> c) los condenados por la comisión de
+							delitos electorales<br /> d) los declarados incapaces en juicio
+							de conformidad a lo establecido en el Art. 73 del Código Civil<br />
+							e) los ex funcionarios y empleados que hubiesen terminado su
+							relación jurídica con el Estado por causa justificada no
+							imputable al empleador, salvo que hayan transcurrido más de 5
+							años de la destitución<br /> f) los jubilados con jubilación
+							completa o total de la administración pública.<br />
+							<br /> Declaro también no haber sido beneficiado por el Programa
+							de Retiro Voluntario, de conformidad a la Ley Nº 3.409/08 ni de
+							haberme acogido al Régimen Jubilatorio, a excepción de los
+							docentes y la investigación científica, conforme al Art. 143 de
+							la Ley Nº 1.626/00 “De la Función Pública”<br />
+							<br />
+						</P>
+
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+
+						<h:outputText value="#{messages.CU241_label4}"
+							style="font-weight:bold" />
+						<h:commandLink value="#{messages.CU241_aqui}"
+							action="#{registrarPostulacionFormController.pdf()}" />
+					</h:panelGrid>
+				</rich:panel>
+				<div class="actionButtons">
+					<s:button id="save" value="#{messages.CU241_confirmar}"
+						action="#{registrarPostulacionFormController.confirmar()}"
+						rendered="#{registrarPostulacionFormController.valido}"
+						view="/seleccion/registrarPostulacion/PostulacionExitosa.xhtml" />
+					<s:button id="cancelAdd" value="#{messages.GENERICO_VOLVER}"
+						propagation="none"
+						view="/seleccion/buscarConcurso/procesoPostula/procPostulac.xhtml" />
+				</div>
+			</h:form>
+		</h:form>
+	</ui:define>
+</ui:composition>

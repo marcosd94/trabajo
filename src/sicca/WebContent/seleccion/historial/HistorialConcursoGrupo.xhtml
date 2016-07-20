@@ -1,0 +1,296 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU463_tittle}</h1>
+
+
+		<h:form>
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParamentro">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }">
+
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('seleccion/historial/HistorialConcursoGrupo')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/historial/HistorialConcursoGrupo')}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }"
+									onkeypress="return soloNumeros(event);">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									disabled="#{!historialConcursoGrupoFC.verOEETodas }"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('seleccion/historial/HistorialConcursoGrupo')}" />
+							</s:decorate>
+						</a:region>
+
+					</a:outputPanel>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate id="nombreField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_concurso}</ui:define>
+						<h:inputText id="concurso" size="50"
+							value="#{historialConcursoGrupoFC.concurso}" />
+					</s:decorate>
+					<h:panelGrid columns="5"
+						style="border-style: dotted;border-color: gray; width : 30px;">
+						<s:decorate id="campoField" style="width: 140px;"
+							template="/layout/edit.xhtml">
+							<s:label styleClass="name" style="width: 140px;">#{messages.CU463_nroExpedienteAnho}														 
+							</s:label>
+						</s:decorate>
+						<h:inputText id="nroExpediente" size="10"
+							onkeypress="return soloNumeros(event);"
+							value="#{historialConcursoGrupoFC.nroExpediente}" />
+						 #{'/'}<h:inputText id="anhoExpediente" size="10"
+							onkeypress="return soloNumeros(event);"
+							value="#{historialConcursoGrupoFC.anhoExpediente}">
+
+						</h:inputText>
+						<h:outputText value="(yyyy)" />
+					</h:panelGrid>
+					<h:panelGrid>
+						<s:decorate id="tipoField" template="/layout/display.xhtml">
+							<ui:define name="label">Tipo Concurso
+								</ui:define>
+							<h:selectOneMenu id="tipo"
+								value="#{historialConcursoGrupoFC.idTipoConcurso}"
+								style=" width : 275px;">
+								<f:selectItems
+									value="#{historialConcursoGrupoFC.updateTipoConcItems()}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+
+				</h:panelGrid>
+				<h:panelGrid>
+					<s:decorate id="apellidoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_grupo_puestos}</ui:define>
+						<h:inputText id="grupo" size="50"
+							value="#{historialConcursoGrupoFC.grupo}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+
+			<div class="actionButtons">
+				<a:commandButton id="search" eventsQueue="default"
+					value="#{messages.msg_list_search_button}"
+					reRender="panelParamentro,panelResultado"
+					action="#{historialConcursoGrupoFC.search()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton>
+				<a:commandButton id="reset" eventsQueue="default"
+					value="#{messages['GENERICO_LIMPIAR']}"
+					action="#{historialConcursoGrupoFC.searchAll()}"
+					reRender="panelParamentro,panelResultado" />
+			</div>
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty concursoPuestoAgrList.resultList ? 0 : (concursoPuestoAgrList.paginated ? concursoPuestoAgrList.resultCount : concursoPuestoAgrList.resultList.size)})</f:facet>
+				<div class="results" id="concursoPuestoAgrList">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty concursoPuestoAgrList.resultList}" />
+					<rich:dataTable id="concursoPuestoAgrListt"
+						var="_concursoPuestoAgr"
+						value="#{historialConcursoGrupoFC.listaGrupos}"
+						rendered="#{not empty concursoPuestoAgrList.resultList}">
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{concursoPuestoAgrList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText
+								value="#{_concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{concursoPuestoAgrList}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.gral_concurso}" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoAgr.concurso.nombre" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_concursoPuestoAgr.concurso.nombre}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{concursoPuestoAgrList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_grupo}" />
+									<ui:param name="propertyPath"
+										value="concursoPuestoAgr.descripcionGrupo" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}" />
+						</h:column>
+
+
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+							<s:link
+								view="/seleccion/historial/HistorialConcursoGrupoView.xhtml"
+								value="Ver" propagation="none" id="idconcursoPuestoAgr">
+								<f:param name="idConcursoPuestoAgr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="sinNivelEntidadIdSinNivelEntidad" 
+									value="#{nivelEntidadOeeUtil.idSinNivelEntidad}" />
+								<f:param name="sinEntidadIdSinEntidad"
+									value="#{nivelEntidadOeeUtil.idSinEntidad}" />
+								<f:param name="configuracionUoCabIdConfiguracionUo"
+									value="#{nivelEntidadOeeUtil.idConfigCab}" />
+								<f:param name="configuracionUoDetIdConfiguracionUoDet"
+									value="#{nivelEntidadOeeUtil.idUnidadOrganizativa}" />								
+								<f:param name="concurso"
+									value="#{historialConcursoGrupoFC.concurso}"/>
+								<f:param name="grupo" 
+									value="#{historialConcursoGrupoFC.grupo}"/>
+								<f:param name="idConcursoPuestoAgrBsq"
+									value="#{historialConcursoGrupoFC.idConcursoPuestoAgr}"/>
+								<f:param name="anhoExpediente" 
+									value="#{historialConcursoGrupoFC.anhoExpediente}"/>
+								<f:param name="nroExpediente" 
+									value="#{historialConcursoGrupoFC.nroExpediente}"/>
+								<f:param name="tipo" 
+									value="#{historialConcursoGrupoFC.idTipoConcurso}"/>
+								<f:param name="from"
+									value="seleccion/historial/HistorialConcursoGrupo" />
+							</s:link>
+						#{' '}
+						<s:link
+								rendered="#{historialConcursoGrupoFC.mostrarCronograma(_concursoPuestoAgr.estado) == 'SI'}"
+								view="/seleccion/administrarCronogramaConcurso/CronogramaConcCabList.xhtml"
+								value="Cronograma" propagation="none"
+								id="idconcursoPuestoAgrCronograma">
+								<f:param name="puesto_agr"
+									value="#{_concursoPuestoAgr.idConcursoPuestoAgr}" />
+								<f:param name="idConcurso"
+									value="#{_concursoPuestoAgr.concurso.idConcurso}" />
+								<f:param name="from"
+									value="seleccion/historial/HistorialConcursoGrupo" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</rich:panel>
+
+		</h:form>
+
+		<a:outputPanel ajaxRendered="true">
+			<div class="tableControl">
+				<s:link view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+					rendered="#{concursoPuestoAgrList.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link>
+				<s:link view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+					rendered="#{concursoPuestoAgrList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoAgrList.previousFirstResult}" />
+				</s:link>
+				<s:link view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+					rendered="#{concursoPuestoAgrList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoAgrList.nextFirstResult}" />
+				</s:link>
+				<s:link view="/seleccion/historial/HistorialConcursoGrupo.xhtml"
+					rendered="#{concursoPuestoAgrList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult"
+						value="#{concursoPuestoAgrList.lastFirstResult}" />
+				</s:link>
+			</div>
+		</a:outputPanel>
+
+	</ui:define>
+</ui:composition>

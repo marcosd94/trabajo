@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" no-conversation-view-id="/planificacion/cpt/CptList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{cptHome.wire}" />
+	<action execute="#{administrarCptFormController.init()}" on-postback="false" />
+	<param name="cptFrom" />
+	<param name="tipo" value="#{administrarCptFormController.tipo}" />
+	<param name="cptIdCpt" value="#{cptHome.cptIdCpt}" />
+	<param name="cptIdCptPadre" value="#{administrarCptFormController.idCptPadre}" />
+	<param name="sinAnxIdAnx" value="#{administrarCptFormController.idAnx}" />
+
+
+	<navigation from-action="#{administrarCptFormController.saveMore()}">
+		<rule if-outcome="persisted">
+			<begin-conversation join="true" />
+			<redirect view-id="/planificacion/cpt/CptHomologacionEdit.xhtml" />
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{administrarCptFormController.updated()}">
+		<rule if-outcome="updated">
+			<begin-conversation join="true" />
+			<redirect view-id="/planificacion/cpt/CptHomologacionEdit.xhtml" />
+		</rule>
+		
+		<rule if-outcome="updatedHomologacion">
+			<begin-conversation join="true" />
+			<redirect view-id="/planificacion/cpt/CptGestionarHomologacion.xhtml" />
+		</rule>
+		
+		<rule if-outcome="updatedCpt">
+			<begin-conversation join="true" />
+		  
+			<redirect view-id="/planificacion/cpt/CptList.xhtml"   >
+					<param name="tipo" value="#{administrarCptFormController.tipo}"/>
+			</redirect>
+		</rule>
+	</navigation>
+	
+
+	<restrict>#{identity.hasRole('tipo_nombramiento_edit')}</restrict>
+</page>

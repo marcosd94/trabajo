@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU421_IMPRIMIR_EVALUACIONES_CON_DET" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataSet">
+		<parameter name="idEvalReferencial" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+		</parameter>
+		<parameter name="totalPuntos" class="java.lang.Float"/>
+		<parameter name="alcanzado" class="java.lang.Float"/>
+		<queryString>
+			<![CDATA[SELECT
+    ref_enc.nro_orden,
+    ref_enc.descripcion AS desc_ref_enc,
+    eval_ref_det.puntaje_realizado,
+    ref_enc.puntaje_maximo,
+    ref_det.descripcion AS desc_ref_det,
+    eval_ref_cab.id_eval_referencial
+FROM
+    seleccion.eval_referencial_det eval_ref_det
+INNER JOIN seleccion.matriz_ref_conf_det ref_det
+ON
+    (
+        eval_ref_det.id_matriz_ref_conf_det = ref_det.id_matriz_ref_conf_det
+    )
+INNER JOIN seleccion.matriz_ref_conf_enc ref_enc
+ON
+    (
+        ref_det.id_matriz_ref_conf_enc = ref_enc.id_matriz_ref_conf_enc
+    )
+INNER JOIN seleccion.eval_referencial_cab eval_ref_cab
+ON
+    (
+        eval_ref_det.id_eval_referencial_cab = eval_ref_cab.id_eval_referencial_cab
+    )
+WHERE
+eval_ref_cab.id_eval_referencial = $P!{idEvalReferencial}
+AND ref_det.activo = TRUE
+ORDER BY
+    ref_det.id_matriz_ref_conf_det ASC ;]]>
+		</queryString>
+		<field name="nro_orden" class="java.lang.Integer"/>
+		<field name="desc_ref_enc" class="java.lang.String"/>
+		<field name="puntaje_realizado" class="java.lang.Float"/>
+		<field name="puntaje_maximo" class="java.lang.Float"/>
+		<field name="desc_ref_det" class="java.lang.String"/>
+		<field name="id_eval_referencial" class="java.lang.Long"/>
+		<group name="desc_ref_enc">
+			<groupExpression><![CDATA[$F{desc_ref_enc}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="logo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nivel" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="entidad" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="oee" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="concurso" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grupo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="minAplicar" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="porMin" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="idConcursoPuestoAgr" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idConcurso" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="elWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA[" where 1=1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="printCedula" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    personaPostulante.nombres               AS NOMBRE_POSTU,
+    personaPostulante.apellidos             AS APELLIDO_POSTU,
+    personaPostulante.documento_identidad   AS DOC_IDEN,
+    seleccion.datos_especificos.descripcion AS TIPO_EVAL,
+    evalRef.puntaje_realizado               AS TOTAL_PUNTOS,
+    evalRef.id_eval_referencial,
+    personaPostulante.usu_alta AS COD_USU,
+    (
+        SELECT
+            SUM(refconfenc.puntaje_maximo)
+        FROM
+            seleccion.matriz_ref_conf_enc refconfenc, seleccion.matriz_ref_conf refconf
+        WHERE
+            refconfenc.id_datos_especificos_tipo_eval =
+            evalRefTipoEval.id_datos_especificos_tipo_eval
+            and refconf.id_matriz_ref_conf = refconfenc.id_matriz_ref_conf
+            and refconf.id_concurso_puesto_agr = postulacion.id_concurso_puesto_agr
+            and refconf.tipo = 'GRUPO'
+    )AS PUNT_MAXIMO
+FROM
+    seleccion.eval_referencial evalRef
+INNER JOIN seleccion.postulacion postulacion
+ON
+    (
+        evalRef.id_postulacion = postulacion.id_postulacion
+    )
+INNER JOIN seleccion.concurso_puesto_agr grupo
+ON
+    (
+        postulacion.id_concurso_puesto_agr = grupo.id_concurso_puesto_agr
+    )
+INNER JOIN seleccion.eval_referencial_tipoeval evalRefTipoEval
+ON
+    (
+        evalRef.id_eval_referencial_tipoeval = evalRefTipoEval.id_eval_referencial_tipoeval
+    )
+INNER JOIN seleccion.persona_postulante personaPostulante
+ON
+    (
+        postulacion.id_persona_postulante = personaPostulante.id_persona_postulante
+    )
+INNER JOIN seleccion.datos_especificos
+ON
+    (
+        evalRefTipoEval.id_datos_especificos_tipo_eval =
+        seleccion.datos_especificos.id_datos_especificos
+    )
+INNER JOIN seleccion.concurso
+ON
+    (
+        grupo.id_concurso = seleccion.concurso.id_concurso
+    )
+$P!{elWhere}
+ORDER BY
+    evalRef.id_eval_referencial asc,
+    personaPostulante.nombres ,
+    personaPostulante.apellidos]]>
+	</queryString>
+	<field name="nombre_postu" class="java.lang.String"/>
+	<field name="apellido_postu" class="java.lang.String"/>
+	<field name="doc_iden" class="java.lang.String"/>
+	<field name="tipo_eval" class="java.lang.String"/>
+	<field name="total_puntos" class="java.lang.Float"/>
+	<field name="id_eval_referencial" class="java.lang.Long"/>
+	<field name="cod_usu" class="java.lang.String"/>
+	<field name="punt_maximo" class="java.lang.Float"/>
+	<variable name="totalPuntos" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[new Float("0")]]></initialValueExpression>
+	</variable>
+	<group name="tipoEval">
+		<groupExpression><![CDATA[$F{tipo_eval}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<staticText>
+					<reportElement key="staticText-2" stretchType="RelativeToTallestObject" mode="Opaque" x="16" y="5" width="126" height="20" backcolor="#99CCFF"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Tipo de Evaluación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" stretchType="RelativeToTallestObject" mode="Opaque" x="362" y="5" width="95" height="20" backcolor="#99CCFF"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Puntaje Máximo:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement mode="Opaque" x="142" y="5" width="220" height="20" backcolor="#99CCFF"/>
+					<textElement verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_eval}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="457" y="5" width="90" height="20" backcolor="#99CCFF"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{punt_maximo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="178" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="4" y="96" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NIVEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="4" y="110" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ENTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="4" y="124" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[OEE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="4" y="138" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Concurso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="4" y="152" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Grupo de Puestos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="3" y="164" width="126" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% Mínimo a aplicar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="370" y="164" width="74" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% Mínimo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="96" width="414" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{nivel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="110" width="414" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{entidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="124" width="414" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{oee}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="138" width="414" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{concurso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="152" width="414" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{grupo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="129" y="164" width="241" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{minAplicar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="164" width="100" height="14"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$P{porMin}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="81" width="555" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[EVALUACIONES REFERENCIALES DETALLADO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="118" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="17" y="0" width="65" height="20">
+					<printWhenExpression><![CDATA[$P{printCedula}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nro. Doc.:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[$P{printCedula}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{doc_iden}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="15" y="20" width="532" height="1"/>
+			</line>
+			<componentElement>
+				<reportElement key="table 5" style="table 5" x="11" y="27" width="485" height="80"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataSet">
+						<datasetParameter name="idEvalReferencial">
+							<datasetParameterExpression><![CDATA[$F{id_eval_referencial}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="alcanzado">
+							<datasetParameterExpression><![CDATA[($F{total_puntos}.floatValue()/$F{punt_maximo}.floatValue())]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="totalPuntos">
+							<datasetParameterExpression><![CDATA[$F{total_puntos}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="365">
+						<jr:groupHeader groupName="desc_ref_enc">
+							<jr:cell style="table 5_TH" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="365" height="15"/>
+									<box leftPadding="3"/>
+									<textElement textAlignment="Justified" verticalAlignment="Bottom"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_orden}+"."+$F{desc_ref_enc}]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:groupFooter groupName="desc_ref_enc">
+							<jr:cell height="0" rowSpan="1"/>
+						</jr:groupFooter>
+						<jr:columnHeader style="table 5_CH" height="30" rowSpan="1"/>
+						<jr:columnFooter height="29" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="365" height="15"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Bottom">
+									<font fontName="Times New Roman" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Alcanzado]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="14" width="365" height="15"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Bottom">
+									<font fontName="Times New Roman" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total de Puntos]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="table 5_TD" height="15" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="365" height="15"/>
+								<box leftPadding="17">
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textElement textAlignment="Justified" verticalAlignment="Bottom"/>
+								<textFieldExpression class="java.lang.String"><![CDATA[$F{desc_ref_det}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="57">
+						<jr:groupHeader groupName="desc_ref_enc">
+							<jr:cell style="table 5_TH" height="15" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupFooter groupName="desc_ref_enc">
+							<jr:cell height="0" rowSpan="1"/>
+						</jr:groupFooter>
+						<jr:columnHeader style="table 5_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="57" height="30"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right"/>
+								<text><![CDATA[Puntaje Realizado]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="29" rowSpan="1">
+							<textField pattern="#,##0.00 %">
+								<reportElement x="0" y="0" width="57" height="15"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Bottom">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Float"><![CDATA[$P{alcanzado}!=null?($P{alcanzado}.floatValue()):new Float("0")]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="14" width="57" height="15"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Bottom">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Float"><![CDATA[$P{totalPuntos}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 5_TD" height="15" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="57" height="15"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Bottom">
+									<font size="10" isBold="false" pdfFontName="Times-Bold"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntaje_realizado}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="57">
+						<jr:groupHeader groupName="desc_ref_enc">
+							<jr:cell style="table 5_TH" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="57" height="15"/>
+									<box rightPadding="3"/>
+									<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+									<textFieldExpression class="java.lang.Float"><![CDATA[$F{puntaje_maximo}]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:groupFooter groupName="desc_ref_enc">
+							<jr:cell height="0" rowSpan="1"/>
+						</jr:groupFooter>
+						<jr:columnHeader style="table 5_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="57" height="30"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right"/>
+								<text><![CDATA[Puntaje Máximo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="29" rowSpan="1"/>
+						<jr:detailCell style="table 5_TD" height="15" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="471" y="0" width="84" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="175" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="418" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="275" y="0" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line" x="1" y="0" width="555" height="1"/>
+			</line>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="6" y="0" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="20">
+			<line>
+				<reportElement key="line" x="6" y="0" width="555" height="1"/>
+			</line>
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="6" y="0" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="275" y="0" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="419" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="175" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="473" y="0" width="83" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

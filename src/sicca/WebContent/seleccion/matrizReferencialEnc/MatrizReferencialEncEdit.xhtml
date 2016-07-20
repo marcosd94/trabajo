@@ -1,0 +1,309 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="matrizReferencialEnc" styleClass="edit">
+			<h1>#{messages.MatrizReferencial_factorEvaluacion}</h1>
+			<rich:panel>
+				<f:facet name="header">#{matrizReferencialEncHome.managed ? messages.msg_edit : messages.msg_save} #{messages.MatrizReferencial_factorEvaluacion}</f:facet>
+				<h:outputLabel style="color: red;" value="#{messages.CU78_evalCurriObli}" />
+				<rich:panel id="panelSuperiorEncabezadoPlantilla"
+					style="border:none;">
+					<fieldset><legend>#{messages.MatrizReferencial_encabezadoPlantilla}</legend>
+
+					<rich:panel style="border:none;">
+						<h:panelGrid columns="2" id="gridSuperior">
+							<a:region>
+								<s:decorate id="plantillaMatrizRefField"
+									template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.MatrizReferencial_plantillaMatrizRef}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectOneMenu id="plantillaMatrizRef"
+										value="#{factorEvaluacionFormController.idMatrizReferencial}"
+										disabled="#{matrizReferencialEncHome.managed}"
+										style="width:377px">
+										<f:selectItems
+											value="#{factorEvaluacionFormController.plantillaMatrizSelectItems}" />
+										<a:support event="onchange"
+											action="#{factorEvaluacionFormController.obtenerMatrizReferencial()}"
+											reRender="gridSuperior" focus="tipoEvaluacion"
+											eventsQueue="default" />
+									</h:selectOneMenu>
+								</s:decorate>
+							</a:region>
+							<br />
+							<s:decorate id="tipoConcursoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.MatrizReferencial_tipoConcurso}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="tipoConcurso" disabled="true" size="60"
+									value="#{factorEvaluacionFormController.matrizReferencial.datosEspecificos.descripcion}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate id="puntajeMaximoCabField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.MatrizReferencial_puntajeMaximo}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="puntajeMaximoCab" disabled="true"
+									styleClass="numeric" size="5"
+									value="#{factorEvaluacionFormController.matrizReferencial.puntajeMaximo}">
+								</h:inputText>
+							</s:decorate>
+						</h:panelGrid>
+					</rich:panel></fieldset>
+				</rich:panel>
+
+				<rich:panel id="panelSuperiorFactorEval"
+					rendered="#{!matrizReferencialEncHome.managed}"
+					style="border:none;">
+					<fieldset><legend>#{messages.MatrizReferencial_addFactoresEvaluacion}</legend>
+					<rich:panel style="border:none;">
+						<h:panelGrid columns="2">
+							<s:decorate id="tipoEvaluacionField"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.MatrizReferencial_tipoEvaluacion}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="tipoEvaluacion"
+									value="#{factorEvaluacionFormController.idDatosEspecificosByTipoEvaluacion}"
+									style="width:250px">
+									<f:selectItems
+										value="#{datosEspecificossByTipoEvaluacionSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+							<s:decorate id="descripcionField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.MatrizReferencial_descripcion}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="descripcion" size="50" maxlength="50"
+									value="#{factorEvaluacionFormController.matrizReferencialEnc.descripcion}">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate id="nroOrdenField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.MatrizReferencial_nroOrden}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="nroOrden" size="5" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{factorEvaluacionFormController.matrizReferencialEnc.nroOrden}">
+								</h:inputText>
+							</s:decorate>
+							<h:panelGrid columns="3">
+								<s:decorate id="puntajeMaximoField"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.MatrizReferencial_graduacionPuntaje}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="puntajeMaximo" styleClass="numeric" size="5"
+										onkeypress="return soloNumeros(event);"
+										value="#{factorEvaluacionFormController.matrizReferencialEnc.puntajeMaximo}">
+									</h:inputText>
+								</s:decorate>
+								<s:decorate id="obligatorioSNField"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.MatrizReferencial_obligatorio_question}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectBooleanCheckbox id="obligatorioSN"
+										value="#{factorEvaluacionFormController.matrizReferencialEnc.obligatorioSN}" />
+								</s:decorate>
+								<s:decorate id="sumItemsSNField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.MatrizReferencial_sumItems}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectBooleanCheckbox id="sumItemsSN"
+										value="#{factorEvaluacionFormController.matrizReferencialEnc.sumItemsSN}" />
+								</s:decorate>
+							</h:panelGrid>
+						</h:panelGrid>
+					</rich:panel></fieldset>
+
+					<a:commandButton id="addRow" value="#{messages.msg_list_add}"
+						action="#{factorEvaluacionFormController.addRow()}"
+						reRender="panelInferiorDetails,panelSuperiorFactorEval,panelSuperiorEncabezadoPlantilla"
+						eventsQueue="default" />
+
+				</rich:panel>
+				<rich:panel id="panelSearch" style="border:none;">
+
+					<table align="center">
+						<tr>
+
+							<td>
+							<fieldset style="width: 450px"><legend>Filtros
+							de #{messages['MatrizReferencial_factorEvaluacion_plural']}</legend> <s:decorate
+								template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.msg_estado}</ui:define>
+								<h:selectOneRadio id="activo"
+									value="#{factorEvaluacionFormController.filtroActivo}">
+									<f:selectItems
+										value="#{enumAppHelper.enumsValueItems('Estado', 'getValor', false)}" />
+								</h:selectOneRadio>
+							</s:decorate> <br />
+							<br />
+							<br />
+
+							<a:commandButton id="search"
+								value="#{messages.msg_list_search_button}"
+								action="#{factorEvaluacionFormController.search()}"
+								reRender="panelInferiorDetails">
+
+							</a:commandButton> <a:commandButton id="reset"
+								value="#{messages['msg_list_search_reset_button']}"
+								action="#{factorEvaluacionFormController.searchAll()}"
+								reRender="panelSearch, panelInferiorDetails">
+
+							</a:commandButton></fieldset>
+							</td>
+						</tr>
+					</table>
+				</rich:panel>
+
+
+				<rich:panel id="panelInferiorDetails" style="border:none;">
+					<rich:panel id="panelDetails">
+						<f:facet name="header">#{messages['MatrizReferencial_factorEvaluacion_plural']} (#{factorEvaluacionFormController.listDetails.size()})</f:facet>
+						<div class="results" id="factorEvaluacionList"><h:outputText
+							value="#{messages.msg_list_search_no_results}"
+							rendered="#{empty factorEvaluacionFormController.listDetails}" />
+
+						<rich:dataTable id="factoresEvaluacion" var="_factores"
+							value="#{factorEvaluacionFormController.listDetails}"
+							rendered="#{not empty factorEvaluacionFormController.listDetails}"
+							rowKeyVar="_index">
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}">
+								<f:facet name="header">#{messages.MatrizReferencial_tipoEvaluacion}</f:facet>
+								<h:outputText value="#{_factores.datosEspecificos.descripcion}" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:right;" width="5%">
+								<f:facet name="header">#{messages.MatrizReferencial_nroOrden}</f:facet>
+								<h:outputText value="#{_factores.nroOrden}" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}">
+								<f:facet name="header">#{messages.MatrizReferencial_descripcion}</f:facet>
+								<h:inputText value="#{_factores.descripcion}" size="50" maxlength="100" disabled="#{_factores.idMatrizReferencialEnc == null 			
+												  or _factores.idMatrizReferencialEnc != matrizReferencialEncHome.matrizReferencialEncIdMatrizReferencialEnc}"/>
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:right" width="10%">
+								<f:facet name="header">#{messages.MatrizReferencial_graduacionPuntaje}</f:facet>
+								<h:outputText value="#{_factores.puntajeMaximo}" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:center" width="10%">
+								<f:facet name="header">#{messages.MatrizReferencial_obligatorio_question}</f:facet>
+								<h:selectBooleanCheckbox value="#{_factores.obligatorioSN}"
+									disabled="true" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:center" width="10%">
+								<f:facet name="header">#{messages.MatrizReferencial_sumItems}</f:facet>
+								<h:selectBooleanCheckbox value="#{_factores.sumItemsSN}"
+									disabled="true" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:center" width="10%">
+								<f:facet name="header">#{messages.MatrizReferencial_activo}</f:facet>
+								<h:selectBooleanCheckbox value="#{_factores.activo}"
+									disabled="#{_factores.idMatrizReferencialEnc == null 			
+												  or _factores.idMatrizReferencialEnc != matrizReferencialEncHome.matrizReferencialEncIdMatrizReferencialEnc}" />
+							</rich:column>
+							<rich:column
+								styleClass="#{factorEvaluacionFormController.getRowClass(_index)}"
+								style="text-align:center;" width="5%">
+								<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+								<a:region>
+									<a:commandLink id="removeDetail"
+										value="#{messages.msg_list_remove}"
+										rendered="#{_factores.idMatrizReferencialEnc == null}"
+										action="#{factorEvaluacionFormController.removeRow(_index)}"
+										reRender="panelDetails" eventsQueue="default" />
+								</a:region>
+							</rich:column>
+						</rich:dataTable></div>
+					</rich:panel>
+				</rich:panel>
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				<div style="clear: both"><h:outputText
+					value="#{messages.msg_obs_save}" styleClass="labelClass"
+					rendered="#{!matrizReferencialEncHome.managed}" /> <h:outputText
+					value="#{messages.msg_obs_update}" styleClass="labelClass"
+					rendered="#{!matrizReferencialEncHome.managed}" /></div>
+
+			</rich:panel>
+
+			<div class="actionButtons"><h:commandButton id="save"
+				value="#{messages.msg_save}"
+				action="#{factorEvaluacionFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				rendered="#{!matrizReferencialEncHome.managed}" /> <h:commandButton
+				id="update" value="#{messages.msg_update}"
+				action="#{factorEvaluacionFormController.save()}"
+				onclick="return confirm('#{messages.msg_confirm_update}');"
+				rendered="#{matrizReferencialEncHome.managed}" /> <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/matrizReferencial/MatrizReferencialList.xhtml"
+				rendered="#{matrizReferencialEncHome.managed}" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				view="/#{empty matrizReferencialEncFrom ? 'seleccion/matrizReferencial/MatrizReferencialList' : matrizReferencialEncFrom}.xhtml"
+				rendered="#{!matrizReferencialEncHome.managed}" /></div>
+		</h:form>
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{matrizReferencialEncHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{matrizReferencialEncHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{matrizReferencialEncHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{matrizReferencialEncHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{matrizReferencialEncHome.managed}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{matrizReferencialEncHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{matrizReferencialEncHome.managed}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{matrizReferencialEncHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>

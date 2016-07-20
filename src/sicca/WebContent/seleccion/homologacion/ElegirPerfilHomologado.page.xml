@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" no-conversation-view-id="/FuncionarioOeeList.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<restrict>#{identity.hasRole('elegir_perfil_homologado')}</restrict>
+	<begin-conversation flush-mode="MANUAL" join="true" />
+
+
+	<action execute="#{elegirPerfilHomologadoFormController.init()}"
+		on-postback="false" />
+	<param name="firstResult" value="#{homologacionPerfilMatrizList.firstResult}" />
+	<param name="sort" value="#{homologacionPerfilMatrizList.orderColumn}" />
+	<param name="dir" value="#{homologacionPerfilMatrizList.orderDirection}" />
+	<param name="logic"
+		value="#{homologacionPerfilMatrizList.restrictionLogicOperator}" />
+	<param name="denominacion" value="#{funcionarioUtilFormController.denominacion}" />
+	<param name="cptIdCpt" value="#{funcionarioUtilFormController.idCpt}" />
+
+	<param name="sinNivelEntidadIdSinNivelEntidad"
+		value="#{funcionarioUtilFormController.sinNivelEntidad.idSinNivelEntidad}" />
+	<param name="sinEntidadIdSinEntidad"
+		value="#{funcionarioUtilFormController.sinEntidad.idSinEntidad}" />
+	<param name="configuracionUoCabIdConfiguracionUo"
+		value="#{funcionarioUtilFormController.configuracionUoCab.idConfiguracionUo}" />
+	<param name="from" value="#{funcionarioUtilFormController.from}" />
+	<param name="idConcursoPuestoAgr"
+		value="#{elegirPerfilHomologadoFormController.idConcursoPuestoAgr}" />
+	<param name="idHomologacion"
+		value="#{elegirPerfilHomologadoFormController.idHomologacion}" />
+	<param name="cptIdCpt" value="#{funcionarioUtilFormController.idCpt}" />
+	<param name="fromx" value="#{elegirPerfilHomologadoFormController.fromX}" />
+	<param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{elegirPerfilHomologadoFormController.idAgr}" />
+	<param name="fromConcurso"
+		value="#{elegirPerfilHomologadoFormController.fromConcurso}" />
+	<navigation from-action="#{funcionarioUtilFormController.toFindOee()}">
+		<rule if-outcome="find">
+			<redirect view-id="/planificacion/searchForms/FindDependencias.xhtml">
+				<param name="sinEntidadIdSinEntidad"
+					value="#{funcionarioUtilFormController.sinEntidad.idSinEntidad}" />
+				<param name="sinNivelEntidadIdSinNivelEntidad"
+					value="#{funcionarioUtilFormController.sinNivelEntidad.idSinNivelEntidad}" />
+				<param name="from" value="seleccion/homologacion/ElegirPerfilHomologado" />
+
+			</redirect>
+		</rule>
+	</navigation>
+
+	<param name="funcionarioOeeFrom" />
+	<param name="fromLink" />
+
+
+
+</page>

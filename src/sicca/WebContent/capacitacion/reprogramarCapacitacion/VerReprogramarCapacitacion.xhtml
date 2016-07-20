@@ -1,0 +1,522 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>Ver Reprogramación Capacitación</h1>
+
+		<h:form id="reprogramar" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU485_panel_capacitacion}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="tituloField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_titulo}</ui:define>
+						<h:inputText id="titulo" size="100" disabled="true"
+							value="#{reprogramarCapacitacionFC.capacitaciones.nombre}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="tipoCapField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_tipo_cap}</ui:define>
+						<h:inputText id="tipoCap" size="100" disabled="true"
+							value="#{reprogramarCapacitacionFC.capacitaciones.datosEspecificosTipoCap.descripcion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">#{messages.CU485_panel_org}</f:facet>
+				<h:panelGrid columns="2">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+						<h:inputText id="orgCodigo2" size="10" disabled="true"
+							value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+								reRender="orgCodigo2,orgDenominacion2,orden2" />
+						</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+							value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel>
+				<f:facet name="header">#{messages.CU485_datos_public}</f:facet>
+				<h:panelGrid columns="2">
+					<rich:panel style="border:none">
+						<fieldset><legend>#{messages.CU485_fec_act_recep}<span
+							class="required">*</span></legend> <h:panelGrid columns="2">
+							<s:decorate id="fechaDesdePublicActualDecorate"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_fecha_desde}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fechaDesdePublicActual"
+									value="#{reprogramarCapacitacionFC.capacitaciones.fechaRecepDesde}"
+									inputSize="10" datePattern="dd/MM/yyyy" disabled="true"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="fechaHastaPublicActualDecorate"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_fecha_hasta}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fechaHastaPublicActual"
+									value="#{reprogramarCapacitacionFC.capacitaciones.fechaRecepHasta}"
+									inputSize="10" datePattern="dd/MM/yyyy" disabled="true"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+
+						</h:panelGrid></fieldset>
+					</rich:panel>
+
+					<rich:panel style="border:none">
+						<fieldset><legend><span class="required">#{messages.CU485_fec_nva_recep}</span></legend>
+						<h:panelGrid columns="2">
+							<s:decorate id="fechaDesdePublicNvaDecorate"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_fecha_desde}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fechaDesdePublicNva" disabled="true"
+									value="#{reprogramarCapacitacionFC.fechaDesdeNva}"
+									inputSize="10" datePattern="dd/MM/yyyy"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="fechaHastaPublicNvaDecorate"
+								template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_fecha_hasta}<span
+										class="required">*</span>
+								</ui:define>
+								<rich:calendar id="fechaHastaPublicNva" disabled="true"
+									value="#{reprogramarCapacitacionFC.fechaHastaNva}"
+									inputSize="10" datePattern="dd/MM/yyyy"
+									enableManualInput="true" oninputkeyup="ponerBarra(event)">
+								</rich:calendar>
+							</s:decorate>
+
+						</h:panelGrid></fieldset>
+					</rich:panel>
+				</h:panelGrid>
+
+				<rich:panel style="border:none">
+					<h:panelGrid columns="1">
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_sede}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="sede" size="100" maxlength="500" disabled="true"
+								value="#{reprogramarCapacitacionFC.capacitaciones.sede}" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_direccion}<span
+									class="required">*</span>
+							</ui:define>
+							<h:inputText id="direccion" size="100" maxlength="500"
+								disabled="true"
+								value="#{reprogramarCapacitacionFC.capacitaciones.direccion}" />
+						</s:decorate>
+					</h:panelGrid>
+
+					<h:panelGrid columns="3">
+						<a:region>
+							<s:decorate id="paisField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU485_pais}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="pais" disabled="true"
+									value="#{reprogramarCapacitacionFC.idPais}" style="width:200px">
+									<f:selectItems value="#{paissSelectItems}" />
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+						<a:region>
+							<s:decorate id="departamentoField" template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.CU478_dpto}<span
+										class="required">*</span>
+								</ui:define>
+								<h:selectOneMenu id="dpto" disabled="true"
+									value="#{reprogramarCapacitacionFC.codDepartamento}"
+									style="width:180px">
+									<f:selectItems
+										value="#{reprogramarCapacitacionFC.departamentosSelecItem}" />
+
+								</h:selectOneMenu>
+							</s:decorate>
+						</a:region>
+						<s:decorate id="ciudadField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Barrio_ciudad}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="ciudad" disabled="true"
+								value="#{reprogramarCapacitacionFC.idCiudad}"
+								style="width:180px">
+								<f:selectItems
+									value="#{reprogramarCapacitacionFC.ciudadSelecItem}" />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<s:decorate id="fechaInicioDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_fec_inicio}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaInicio" disabled="true"
+								value="#{reprogramarCapacitacionFC.capacitaciones.fechaInicio}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate id="fechaFinDecorate" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU485_fec_fin}<span
+									class="required">*</span>
+							</ui:define>
+							<rich:calendar id="fechaFin" disabled="true"
+								value="#{reprogramarCapacitacionFC.capacitaciones.fechaFin}"
+								inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true"
+								oninputkeyup="ponerBarra(event)">
+							</rich:calendar>
+						</s:decorate>
+					</h:panelGrid>
+				</rich:panel>
+			</rich:panel>
+			<rich:panel id="panelInstitucionParticipadoras">
+				<f:facet name="header">#{messages.CU485_panel_inst_part}<span
+						class="required">*</span>
+				</f:facet>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<h:selectOneRadio id="instituFinanciadora" disabled="true"
+							value="#{reprogramarCapacitacionFC.destinadoA}">
+							<s:selectItems var="institu" value="#{enumAppHelper.destinadoAs}"
+								label="#{institu.descripcion}" />
+							<s:convertEnum />
+							<a:support event="onchange"
+								action="#{reprogramarCapacitacionFC.selecCerrado()}"
+								reRender="cerradoOutPanel,panelInstitucionParticipadoras" />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				<a:outputPanel id="cerradoOutPanel" ajaxRendered="true"
+					rendered="#{reprogramarCapacitacionFC.destinadoA.id.equals('C')}">
+
+					<fieldset id="fieldSet2"><legend>#{messages.CU485_panel_cerrado}</legend>
+					<h:panelGrid columns="2">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="nivelCodigo2Field">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.codNivelEntidad}"
+									size="5">
+
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.nombreNivelEntidad}"
+									size="50" disabled="true" />
+
+							</s:decorate>
+						</a:region>
+						<a:outputPanel>
+							<s:decorate template="/layout/display.xhtml"
+								id="orgCodigo21Fiels">
+								<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+								<h:inputText id="orgCodigo2" size="10" disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.codigoUnidOrgDep}">
+
+								</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.denominacionUnidadOrgaDep}" />
+
+							</s:decorate>
+						</a:outputPanel>
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="entidadCodigo2fi">
+								<ui:define name="label">#{messages.Usuario_entidad}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);" disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.codSinEntidad}"
+									size="5">
+
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.nombreSinEntidad}"
+									size="50" disabled="true" />
+
+							</s:decorate>
+						</a:region>
+						<s:decorate id="cupoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU474_cupo}</ui:define>
+							<h:inputText id="cupo" onkeypress="return soloNumeros(event);"
+								disabled="true" value="#{reprogramarCapacitacionFC.cupo}">
+							</h:inputText>
+						</s:decorate>
+					</h:panelGrid> <h:panelGrid columns="1">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml"
+								id="unidadOrgCodigo2Fiels">
+								<ui:define name="label">#{messages.gral_oee}<span
+										class="required">*</span>
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);">
+
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{reprogramarCapacitacionFC.nivelEntidadOeeUtilCerrado.denominacionUnidad}" />
+
+							</s:decorate>
+						</a:region>
+
+					</h:panelGrid> <a:outputPanel ajaxRendered="true" id="panelBotonesCerrado">
+						<h:panelGrid columns="1">
+							<rich:panel id="oeePanel" style=" width : 672px;">
+								<f:facet name="header">#{messages.gral_oee}</f:facet>
+
+								<div class="results" id="tbldetList"><rich:dataTable
+									id="items2List" var="_itemsCerrado" rows="5" first="0"
+									value="#{reprogramarCapacitacionFC.listaCapacitacionCerradas}"
+									rowKeyVar="rowNrCerr">
+									<rich:column>
+										<f:facet name="header">
+														OEE
+													</f:facet>
+										<h:outputText
+											value="#{_itemsCerrado.configuracionUo.denominacionUnidad}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+														Unidad Organizativa
+													</f:facet>
+										<h:outputText
+											value="#{_itemsCerrado.configuracionUoDet.denominacionUnidad}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+														Cupo
+													</f:facet>
+										<h:outputText value="#{_itemsCerrado.cupo}" />
+									</rich:column>
+									
+										
+								</rich:dataTable> <rich:datascroller align="center" for="items2List" id="s2"
+									reRender="s1"
+									rendered="#{reprogramarCapacitacionFC.listaCapacitacionCerradas.size() > 5}" />
+								</div>
+							</rich:panel>
+
+						</h:panelGrid>
+
+					</a:outputPanel></fieldset>
+				</a:outputPanel>
+
+			</rich:panel>
+			<rich:panel id="panelLugar">
+				<f:facet name="header">#{messages.CU485_panel_lugar}
+				</f:facet>
+				<h:panelGrid columns="1">
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_lugar}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="lugar" size="100" maxlength="1000" disabled="true"
+							value="#{reprogramarCapacitacionFC.lugar}" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_direccion}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="direccion" size="100" maxlength="1000" disabled="true"
+							value="#{reprogramarCapacitacionFC.direccion}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_tel}</ui:define>
+						<h:inputText id="telefono" size="50" maxlength="500" disabled="true"
+							value="#{reprogramarCapacitacionFC.telefono}" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_email}</ui:define>
+						<h:inputText id="email" size="100" maxlength="500" disabled="true"
+							value="#{reprogramarCapacitacionFC.email}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_horario}</ui:define>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_desde}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="horaDesde" size="5" maxlength="5"
+							onkeyup="ponerDosPuntos(event);" disabled="true"
+							value="#{reprogramarCapacitacionFC.horaAtencionDesde}" />
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_hasta}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="horaHasta" size="5" maxlength="5"
+							onkeyup="ponerDosPuntos(event);" disabled="true"
+							value="#{reprogramarCapacitacionFC.horaAtencionHasta}" />
+					</s:decorate>
+				</h:panelGrid>
+
+				
+				<br />
+				<rich:dataTable id="consultas" var="_c" rows="5" rowKeyVar="rowNr"
+					value="#{reprogramarCapacitacionFC.listaConsultaCapacitacion}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_lugar}
+						</f:facet>
+						<h:outputText value="#{_c.lugar}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_direccion}
+						</f:facet>
+						<h:outputText value="#{_c.direccion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_telef}
+						</f:facet>
+						<h:outputText value="#{_c.telefono}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU478_emai}
+						</f:facet>
+						<h:outputText value="#{_c.email}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Horario Desde
+						</f:facet>
+						<h:outputText
+							value="#{reprogramarCapacitacionFC.buscarHora(_c.horaDesde)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							Horario Hasta
+						</f:facet>
+						<h:outputText
+							value="#{reprogramarCapacitacionFC.buscarHora(_c.horaHasta)}" />
+					</h:column>
+					
+				</rich:dataTable>
+				<rich:datascroller align="center" for="consultas" id="sc2"
+					reRender="sc1"
+					rendered="#{reprogramarCapacitacionFC.listaConsultaCapacitacion.size() > 5}" />
+			</rich:panel>
+
+			<rich:panel style="border:none">
+				<fieldset><legend><span class="required">#{messages.CU485_panel_motivo}</span></legend>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU485_motivo}
+						</ui:define>
+						<h:inputTextarea id="motivoCancelacion" cols="100" rows="7" disabled="true"
+							value="#{reprogramarCapacitacionFC.capacitaciones.motivoCancelacion}">
+
+							<f:validateLength maximum="1000" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid></fieldset>
+			</rich:panel>
+			
+			
+			<div class="actionButtons"> <s:button
+				id="cancelAdd" value="Volver" propagation="join"
+				view="/#{from}.xhtml" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

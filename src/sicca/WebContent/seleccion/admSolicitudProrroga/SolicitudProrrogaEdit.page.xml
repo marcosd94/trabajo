@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+ login-required="true">
+ 
+ <begin-conversation join="true" flush-mode="MANUAL"/>
+  
+  <action execute="#{grupoPuestosController.initCabecera()}" on-postback="false"/>
+  <action execute="#{solicitudProrrogaFormController.initEdit()}" on-postback="false"/>
+
+ <param name="from"/>
+ <param name="idSolicCab" value="#{solicitudProrrogaFormController.idSolicCab}"/>
+ <param name="idExcepcion" value="#{solicitudProrrogaFormController.idExcepcion}"/>
+ 
+ <navigation from-action="#{solicitudProrrogaFormController.save()}">
+      <rule if-outcome="ok">
+         <end-conversation/>
+         <redirect view-id="/seleccion/LisSolTipExc/LisSolTipExc.xhtml"/>
+      </rule>
+ </navigation>
+ 
+ <restrict>#{identity.hasRole('solicitud_prorroga_oee_edit')}</restrict>
+</page>
+
+

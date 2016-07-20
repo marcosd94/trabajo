@@ -1,0 +1,85 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="actividad" styleClass="edit">
+		<h1>#{messages.CU390_actividad}</h1>
+        <rich:panel>
+            <f:facet name="header">Ver #{messages.CU390_actividad}</f:facet>
+
+            <s:decorate id="descripcionField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.gral_descripcion}</ui:define>
+                <h:outputLabel value="#{actividadHome.instance.descripcion}"/>
+            </s:decorate>
+            
+            <s:decorate id="historialField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.gral_descripcion} #{messages.CU390_historial}</ui:define>
+                <h:inputTextarea id="historial"
+							disabled="true"
+                           rows="4" cols="60"
+                          value="#{actividadHome.instance.descripcionHistorial}">
+                </h:inputTextarea>
+            </s:decorate>
+
+			<s:decorate id="nroField" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages.CU390_nro_actividad}</ui:define>
+                <h:outputText value="#{actividadHome.instance.nroActividad}"/>
+            </s:decorate>
+            
+             <s:decorate id="activoField" template="/layout/edit.xhtml">
+	            <ui:define name="label">#{messages.gral_activo}</ui:define>
+	            <h:selectBooleanCheckbox id="activo" value="#{actividadHome.instance.activo}" disabled="true"/>
+	        </s:decorate>
+
+	        <br />
+			<div style="clear:both">
+	           
+	        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_done}"
+             propagation="none"
+                    view="/proceso/admActividad/ActividadList.xhtml"
+                rendered="#{actividadHome.managed}"/>
+        </div>
+    </h:form>
+
+	<h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{actividadHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+                <h:outputText id="usuAlta" value="#{actividadHome.instance.usuAlta}"/>
+            </s:decorate>
+            <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{actividadHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+                <h:outputText id="fechaAlta" value="#{actividadHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+            <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{actividadHome.managed}">
+                <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+                <h:outputText id="usuMod" value="#{actividadHome.instance.usuMod}"/>
+            </s:decorate>
+            <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{actividadHome.managed}">
+                <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+                <h:outputText id="fechaMod" value="#{actividadHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+				</h:outputText>
+            </s:decorate>
+		
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

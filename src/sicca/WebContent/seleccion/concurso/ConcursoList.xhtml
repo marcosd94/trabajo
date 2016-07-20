@@ -1,0 +1,233 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU40_title}</h1>
+		<h:form id="concursoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParametro">
+
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true" value="#{nivelEntidadOeeUtil.codSinEntidad}"
+							size="5">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="40"
+							disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+							disabled="true" value="#{nivelEntidadOeeUtil.ordenUnidOrg}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="45"
+							disabled="true" value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concurso" size="40"
+							value="#{adminConcursosListFormController.concursoDesc}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_tipo_concurso}</ui:define>
+						<h:selectOneMenu id="idTipoConcurso"
+							value="#{adminConcursosListFormController.idTipoConcurso}"
+							style="width:250px">
+							<f:selectItems
+								value="#{datosEspecificossByTipoConcursoCPOCMESelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParamentro,panelResultado,links"
+				action="#{adminConcursosListFormController.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{adminConcursosListFormController.searchAll()}"
+				reRender="panelParametro,panelResultado,links" /></div>
+
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty concursoList.resultList ? 0 : (concursoList.paginated ? concursoList.resultCount : concursoList.resultList.size)})</f:facet>
+				<div class="results" id="concursoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty concursoList.resultList}" /> <rich:dataTable
+					id="concursoList" var="_concurso"
+					value="#{concursoList.resultList}" rowKeyVar="row"
+					rendered="#{not empty concursoList.resultList}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel" value="Nombre" />
+								<ui:param name="propertyPath" value="concurso.nombre" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_concurso.nombre}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{concursoList}" />
+								<ui:param name="propertyLabel" value="Tipo" />
+								<ui:param name="propertyPath"
+									value="concurso.datosEspecificosTipoConc.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_concurso.datosEspecificosTipoConc.descripcion}" />
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link
+							view="/seleccion/concurso/#{empty from ? 'Concurso' : from}.xhtml"
+							value="#{empty from ? '' : ''}"
+							propagation="#{empty from ? 'none' : 'default'}"
+							id="concursoViewId">
+							<f:param name="concursoIdConcurso"
+								value="#{_concurso.idConcurso}" />
+						</s:link>
+					  #{' '}
+		            <s:link view="/seleccion/concurso/Concurso.xhtml"
+							value="Ver" propagation="none" id="concurso"
+							rendered="#{empty from}">
+							<f:param name="concursoIdConcurso"
+								value="#{_concurso.idConcurso}" />
+						</s:link>
+		            #{' '}
+		            <s:link view="/seleccion/concurso/ConcursoEdit.xhtml"
+							rendered="#{adminConcursosListFormController.habilitarLinkEditar(_concurso)}"
+							value="#{messages.msg_edit}" propagation="none" id="concursoEdit"
+							>
+							<f:param name="concursoIdConcurso"
+								value="#{_concurso.idConcurso}" />
+						</s:link>
+					
+					 #{' '}
+			         <h:commandLink id="eliminar" value="Eliminar"
+							disabled="#{adminConcursosListFormController.desHabilitarLink(_concurso)}"
+							action="#{adminConcursosListFormController.eliminar(row)}"
+							onclick="return confirm('#{messages.msg_confirm_delete}');" />
+								
+					#{' '}
+			         <s:link
+							view="/seleccion/concursoPuestoDet/ConcursoPuestoDetList.xhtml"
+							value="Reservar y Agrupar Puestos" propagation="join"
+							id="concursoAgrupar" rendered="#{empty from}">
+							<f:param name="concursoIdConcurso"
+								value="#{_concurso.idConcurso}" />
+							<f:param name="fromConcurso"
+								value="seleccion/concurso/ConcursoList" />
+							<f:param name="configuracionUoDetIdConfiguracionUoDet" />
+							<f:param name="nroActividad" value="1" />
+						</s:link>
+					#{' '}
+					  <s:link
+							view="/seleccion/comisionSeleccionCab/ComisionSeleccionCabList.xhtml"
+							value="#{messages.CU40_link_nuevo_comite}" propagation="none">
+							<f:param name="idConcursoPuestoAgr"
+								value="#{_concurso.idConcurso}" />
+								<f:param name="from"
+								value="seleccion/concurso/ConcursoList" />
+						</s:link>
+						
+					#{' '}
+					 
+			         <s:link
+							view="/seleccion/selGrupoPuestos/seleGrupoPuesto.xhtml"
+							value="#{messages.CU40_link_asignar_comite}" propagation="none"
+							rendered="#{empty from}">
+							<f:param name="idConcurso" value="#{_concurso.idConcurso}" />
+							<f:param name="fromSele" value="seleccion/concurso/ConcursoList" />
+
+						</s:link>
+					
+					
+					
+					#{' '}
+			         <h:commandLink id="initprocess"
+							disabled="#{adminConcursosListFormController.desHabilitarLink(_concurso)}"
+							value="#{messages.proceso_iniciar}"
+							action="#{adminConcursosListFormController.iniciarProceso(row)}"
+							onclick="return confirm('#{messages.proceso_confirmar_iniciar}');" />
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</h:form>
+		<a:outputPanel ajaxRendered="true" id="links">
+		<div class="tableControl"><s:link
+			view="/seleccion/concurso/ConcursoList.xhtml"
+			rendered="#{concursoList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/concurso/ConcursoList.xhtml"
+			rendered="#{concursoList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{concursoList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/concurso/ConcursoList.xhtml"
+			rendered="#{concursoList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{concursoList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/concurso/ConcursoList.xhtml"
+			rendered="#{concursoList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{concursoList.lastFirstResult}" />
+		</s:link></div>
+		</a:outputPanel>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/seleccion/concurso/ConcursoEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="concursoIdConcurso" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

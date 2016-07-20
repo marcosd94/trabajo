@@ -1,0 +1,247 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU333_titulo}</h1>
+		<h:form id="matrizDocConfigDetSearch" styleClass="edit">
+			<rich:panel>
+				<h:panelGrid columns="2" border="0">
+					
+
+					<rich:panel>
+						<h:panelGrid columns="1" border="0">
+
+							<rich:panel id="panelParametro">
+
+								<h:panelGrid columns="3" border="0">
+
+									<s:decorate id="nivelField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_nivel}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+											disabled="true"
+											value="#{administrarDecretoFormController.sinNivelEntidad.nenCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+											value="#{administrarDecretoFormController.sinNivelEntidad.nenNombre}" />
+									</s:decorate>
+									<s:decorate id="entidadField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU193_entidad}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+											disabled="true"
+											value="#{administrarDecretoFormController.sinEntidad.entCodigo}">
+										</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+											disabled="true"
+											value="#{administrarDecretoFormController.sinEntidad.entNombre}" />
+									</s:decorate>
+									<s:decorate id="oeeField" template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="orden" size="10" disabled="true"
+											value="#{administrarDecretoFormController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+											disabled="true"
+											value="#{administrarDecretoFormController.configuracionUoCab.denominacionUnidad}" />
+
+									</s:decorate>
+								</h:panelGrid>
+								<h:panelGrid>
+
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.CU243_concurso}</ui:define>
+										<h:inputText id="concurso" disabled="true"
+											value="#{administrarDecretoFormController.concurso.nombre}"
+											style=" width : 514px;" />
+									</s:decorate>
+
+
+								</h:panelGrid>
+							</rich:panel>
+
+
+
+							<h:panelGrid columns="2">
+								<s:decorate template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.gral_observacion}</ui:define>
+
+									<h:inputTextarea id="obs" cols="40"
+										value="#{administrarDecretoFormController.obs}"
+										style=" width : 859px;">
+										<f:validateLength maximum="250" />
+									</h:inputTextarea>
+								</s:decorate>
+
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<a:commandButton id="marcar"
+									value="#{messages.CU411_marcar_todos}" rendered="false"
+									action="#{administrarDecretoFormController.marcarTodos()}"
+									reRender="panelResultado">
+								</a:commandButton>
+								<a:commandButton id="desmarcar"
+									value="#{messages.CU411_desmarcar_todos}" rendered="false"
+									action="#{administrarDecretoFormController.desmarcarTodos()}"
+									reRender="panelResultado">
+								</a:commandButton>
+							</h:panelGrid>
+
+									<rich:panel style=" width : 820px;">
+										<f:facet name="header">Grupos por firmar - #{messages['msg_list_search_results']} (#{empty administrarDecretoFormController.listaGruposParaFirmar ? 0 :  administrarDecretoFormController.listaGruposParaFirmar.size})</f:facet>
+										<div class="results" id="concursoPuestoAgrList3">
+											<h:outputText value="#{messages.msg_list_search_no_results}"
+												rendered="#{empty administrarDecretoFormController.listaGruposParaFirmar}" />
+											<rich:dataTable id="concursoPuestoAgrList2"
+												var="gruposParaFirmar" rowKeyVar="_index"
+												value="#{administrarDecretoFormController.listaGruposParaFirmar}"
+												rendered="#{not empty administrarDecretoFormController.listaGruposParaFirmar }"
+												style=" width : 800px;">
+
+												<rich:column>
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{gruposParaFirmar.descripcionGrupo}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Tiene Decreto</f:facet>
+
+											<h:selectBooleanCheckbox 
+												id="seleccionado"
+												value="#{not empty gruposParaFirmar.decreto}" 
+												disabled="true">
+											</h:selectBooleanCheckbox>
+												</rich:column>
+												<rich:column styleClass="action">
+													<f:facet name="header">Acción</f:facet>
+													<h:commandLink id="print"
+														value="#{messages['CU53_imprimir']}"
+														action="#{homologPerfilMatrizDetListFormController.imprimirPerfilMatrizDelGrupo(gruposParaFirmar.idConcursoPuestoAgr)}" />
+													<!--#{' '}
+												<s:link value="Ver Observaciones" 
+												view="/seleccion/firmarResolucionHomologacion/ObservacionesRespuestasFirmaRes.xhtml"> 
+												<f:param name="concursoPuestoAgrIdConcursoPuestoAgr" value="#{gruposParaFirmar.idConcursoPuestoAgr}"/>
+												<f:param name="fromAct"  value="#{firmarResolucionAdjudicacionFormController.fromActividad}"/>
+												</s:link>-->
+												</rich:column>
+
+
+											</rich:dataTable>
+										</div>
+
+									</rich:panel>
+									<rich:panel style=" width : 820px;">
+										<f:facet name="header">Grupos Atrasados - #{messages['msg_list_search_results']} (#{empty administrarDecretoFormController.listaGruposAtrasados ? 0 :  administrarDecretoFormController.listaGruposAtrasados.size})</f:facet>
+										<div class="results" id="concursoPuestoAgrOtrosList">
+											<h:outputText value="#{messages.msg_list_search_no_results}"
+												rendered="#{empty administrarDecretoFormController.listaGruposAtrasados}" />
+											<rich:dataTable id="concursoPuestoAgrList"
+												var="gruposAtrasados" rowKeyVar="_index"
+												value="#{administrarDecretoFormController.listaGruposAtrasados}"
+												rendered="#{not empty administrarDecretoFormController.listaGruposAtrasados}"
+												style=" width : 800px;">
+												<h:column>
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{gruposAtrasados.descripcionGrupo}" />
+												</h:column>
+
+												<rich:column styleClass="action">
+													<f:facet name="header">Actividad</f:facet>
+													<h:outputText
+														value="#{administrarDecretoFormController.mostrarEstado(gruposAtrasados.estado)}" />
+												</rich:column>
+											</rich:dataTable>
+										</div>
+									</rich:panel>
+
+								</h:panelGrid>
+
+
+							<ui:remove>
+								<h:panelGrid columns="1">
+
+									<a:commandButton id="createReso"
+										value="#{messages.CU333_generar_decreto}"
+										disabled="#{!administrarDecretoFormController.habDecreto}"
+										action="#{administrarDecretoFormController.resolucion()}">
+									</a:commandButton>
+									<div style="clear: both">
+										<h:outputText value="Decretos" styleClass="labelClass" />
+									</div>
+
+								</h:panelGrid>
+							</ui:remove>
+
+							<ui:remove>
+								<h:panelGrid columns="6">
+								
+																<rich:dataTable
+																	value="#{administrarDecretoFormController.decretoList}"
+																	id="tablaData" var="reso" rows="5" first="0" width="264">
+																	<rich:column>
+																		<f:facet name="header">
+																			<h:outputText value="Nro. Decreto" />
+																		</f:facet>
+																		<h:outputText value="#{reso.nroResolucion}" />
+																	</rich:column>
+																	<rich:column>
+																		<f:facet name="header">
+																			<h:outputText value="#{messages.CU411_fecha}" />
+																		</f:facet>
+																		<h:outputText value="#{reso.fecha}">
+																			<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+																		</h:outputText>
+																	</rich:column>
+																	<rich:column>
+																		<h:commandLink
+																			action="#{administrarDecretoFormController.finIdConcursoReso(reso.idResolucion,'view')}"
+																			value="Ver" propagation="none">
+																		</h:commandLink>#{' '}
+													<h:commandLink
+																			action="#{administrarDecretoFormController.finIdConcursoReso(reso.idResolucion,'edit')}"
+																			value="Editar">
+																		</h:commandLink>
+																	</rich:column>
+																</rich:dataTable>
+																<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+															</h:panelGrid>
+							</ui:remove>
+							</rich:panel>
+						</h:panelGrid>
+					<s:decorate id="buttonsField" template="/layout/display.xhtml">
+						<a:commandButton id="uploadResolucionAdjudicacionButton" eventsQueue="default"
+								value="Anexar Resolución"
+								action="#{administrarDecretoFormController.anexar(administrarDecretoFormController.idConcursoPuestoAgr)}">
+								<f:param name="idConcurso" value="#{administrarDecretoFormController.idConcurso}"/>
+								<f:param name="idConcursoPuestoAgr"
+										value="#{administrarDecretoFormController.idConcursoPuestoAgr}" />
+						</a:commandButton>
+						<h:commandButton id="tarea" value="#{messages.proceso_sgte_tarea}"
+							action="#{administrarDecretoFormController.nextTask()}"
+							onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');" />
+
+						<s:button
+							view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml"
+							id="volver" propagation="none" value="#{messages.CU412_volver}">
+						</s:button>
+
+					</s:decorate>
+						
+					</rich:panel>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

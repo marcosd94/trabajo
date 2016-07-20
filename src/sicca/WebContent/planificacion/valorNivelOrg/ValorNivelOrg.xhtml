@@ -1,0 +1,84 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.ValorNivelOrg_title}</h1>
+    <rich:panel>
+        <f:facet name="header">#{messages.msg_list_view} #{messages.ValorNivelOrg_}</f:facet>
+		<s:decorate id="contenidoFuncionalField" template="/layout/edit.xhtml">
+              <ui:define name="label">#{messages.ValorNivelOrg_idContenidoFuncional}</ui:define>
+              <h:selectOneMenu id="contenidoFuncional"
+              		required ="true"
+                     disabled="true"
+                     style="width:333px;"
+                        value="#{valorNivelOrgHome.idContenidoFuncional}">
+                  <f:selectItems value="#{contenidoFuncionalsSelectItems}" />
+              </h:selectOneMenu>
+         </s:decorate>
+        <s:decorate id="descripcion" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.ValorNivelOrg_descripcion}<span class="required">*</span></ui:define>
+            <h:outputText value="#{valorNivelOrgHome.instance.descripcion}"/>
+        </s:decorate>
+
+ 	    <s:decorate id="desde" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.ValorNivelOrg_desde}<span class="required">*</span></ui:define>
+            <h:outputText value="#{valorNivelOrgHome.instance.desde}"/>
+        </s:decorate>
+
+        <s:decorate id="hasta" template="/layout/display.xhtml">
+            <ui:define name="label">#{messages.ValorNivelOrg_hasta}<span class="required">*</span></ui:define>
+            <h:outputText value="#{valorNivelOrgHome.instance.hasta}"/>
+        </s:decorate>
+		
+		<s:decorate id="activoField" template="/layout/edit.xhtml">
+             <ui:define name="label">#{messages.ValorNivelOrg_activo}</ui:define>
+             <h:selectBooleanCheckbox id="activo"
+             		required ="true"
+                    disabled="true"
+                       value="#{valorNivelOrgHome.instance.activo}" />
+         </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+        <s:button view="/#{empty valorNivelOrgFrom ? 'planificacion/valorNivelOrg/ValorNivelOrgList' : valorNivelOrgFrom}.xhtml"
+                    id="done"
+                 value="Volver"/>
+
+    </div>
+    
+    <h:panelGrid columns="2">
+		<s:decorate id="usuAltaField" template="/layout/edit.xhtml" rendered="#{valorNivelOrgHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+               <h:outputText id="usuAlta" value="#{valorNivelOrgHome.instance.usuAlta}"/>
+           </s:decorate>
+           <s:decorate id="fechaAltaField" template="/layout/edit.xhtml" rendered="#{valorNivelOrgHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+               <h:outputText id="fechaAlta" value="#{valorNivelOrgHome.instance.fechaAlta}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+           </s:decorate>
+           <s:decorate id="usuModField" template="/layout/edit.xhtml" rendered="#{valorNivelOrgHome.managed}">
+               <ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+               <h:outputText id="usuMod" value="#{valorNivelOrgHome.instance.usuMod}"/>
+           </s:decorate>
+           <s:decorate id="fechaModField" template="/layout/edit.xhtml" rendered="#{valorNivelOrgHome.managed}">
+               <ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+               <h:outputText id="fechaMod" value="#{valorNivelOrgHome.instance.fechaMod}">
+				<s:convertDateTime pattern="dd/MM/yyyy" locale="ES"/>
+			</h:outputText>
+        </s:decorate>
+	</h:panelGrid>
+
+</ui:define>
+
+</ui:composition>

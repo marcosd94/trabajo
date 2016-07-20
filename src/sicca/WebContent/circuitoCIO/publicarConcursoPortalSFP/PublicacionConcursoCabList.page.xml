@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<begin-conversation join="true" flush-mode="MANUAL" />
+	<action execute="#{publicarConcursoSFPCU625FC.init()}"
+		on-postback="false" />
+
+	<param name="idConcursoPuestoAgr"
+		value="#{concursoPuestoAgrHome.concursoPuestoAgrIdConcursoPuestoAgr}" />
+
+	<param name="idGrupo" value="#{publicarConcursoSFPCU625FC.idConcursoPuestoAgr}" />
+
+	<navigation from-action="#{publicarConcursoSFPCU625FC.siguienteTarea()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{publicarConcursoSFPCU625FC.autorizar()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{publicarConcursoSFPCU625FC.devolver()}">
+		<rule if-outcome="ok">
+			<end-conversation />
+			<redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" />
+		</rule>
+	</navigation>
+
+	<restrict>#{identity.hasRole('publicacion_concursos_CIO_sfp')}</restrict>
+</page>

@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT_CU460_Listado_Procesos_Juridicos" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="282"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="accion">
+		<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT CASE WHEN AC.ESTADO = 'P' THEN 'PENDIENTE CON MEDIDA CAUTELAR' WHEN AC.ESTADO = 'A' THEN 'ACUERDO Y SENTENCIA' END AS ACCION,
+AC.FECHA_ALTA AS FECHA,
+AC.RESULTADO AS RESULTADO
+FROM JURIDICOS.ACCION_INCONST_CAB AC
+where AC.ID_PERSONA = $P{id}
+ORDER BY AC.FECHA_ALTA DESC]]>
+		</queryString>
+		<field name="accion" class="java.lang.String"/>
+		<field name="fecha" class="java.sql.Timestamp"/>
+		<field name="resultado" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="sumario">
+		<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT SC.FECHA_ALTA AS FECHA_SUM,OEE.DENOMINACION_UNIDAD AS OEE,
+CASE WHEN SC.ESTADO = 'EC' THEN 'EN CURSO'
+		WHEN SC.ESTADO = 'RJ' THEN 'CON RESOLUCION DEL JUEZ'
+		WHEN SC.ESTADO = 'SO' THEN 'SOBRESEIMIENTO'
+		WHEN SC.ESTADO = 'SA' THEN 'SANCION'
+	WHEN SC.ESTADO = 'AR' THEN 'ARCHIVO' END AS ESTADO_SUMARIO,
+	SC.NRO_EXP || '/' ||SC.ANIO_EXP AS Nro_Interno,
+	SC.NRO_EXP_SFP || '/' ||SC.ANIO_EXP_SFP AS Nro_sfp,
+		CASE WHEN SC.ESTADO_JUEZ = 'SO' THEN 'SOBRESEIMIENTO'
+WHEN SC.ESTADO_JUEZ = 'SA' THEN 'SANCION' ||' - '|| S.DESCRIPCION ||' - '|| SC.TIEMPO_J ||' '|| CASE WHEN SC.EXPRESADO_J = 'D' THEN 'DÍA/S' WHEN SC.EXPRESADO_J = 'M' THEN 'MES/ES' WHEN SC.EXPRESADO_J = 'A' THEN 'AÑO/S' END
+WHEN SC.ESTADO_JUEZ = 'AR' THEN 'ARCHIVO' END ||' - Obs.: '|| SC.OBS_J AS OBS_JUEZ,
+	CASE WHEN SC.ESTADO = 'SO' THEN 'SOBRESEIMIENTO - MAI'
+WHEN SC.ESTADO = 'SA' THEN 'SANCION MAI - ' || SD.DESCRIPCION ||' '|| CASE WHEN SD.INHABILITA = TRUE THEN SC.TIEMPO_M ||' '|| CASE WHEN SC.EXPRESADO_M = 'D' THEN 'DÍA/S' WHEN SC.EXPRESADO_M = 'M' THEN 'MES/ES' WHEN SC.EXPRESADO_M = 'A' THEN 'AÑO/S' END ELSE  SD.DESCRIPCION END
+	WHEN SC.ESTADO = 'AR' THEN 'ARCHIVO - MAI' END ||' - Obs.: '|| SC.OBS_M AS OBS_MAI,
+	--DE.DESCRIPCION AS FALTAS,
+	SC.ID_SUMARIO_CAB AS ID_CAB--, SDET.ID_SUMARIO_DET AS ID_DET
+FROM JURIDICOS.SUMARIO_CAB SC
+LEFT JOIN JURIDICOS.SANCION S ON S.ID_SANCION = SC.ID_SANCION_J
+LEFT JOIN JURIDICOS.SANCION SD ON SD.ID_SANCION = SC.ID_SANCION_M
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE ON OEE.ID_CONFIGURACION_UO = SC.ID_CONFIGURACION_UO
+--JOIN JURIDICOS.SUMARIO_DET SDET ON SDET.ID_SUMARIO_CAB = SC.ID_SUMARIO_CAB
+--JOIN SELECCION.DATOS_ESPECIFICOS DE ON DE.ID_DATOS_ESPECIFICOS= SDET.ID_DATOS_ESPECIF_FALTA
+WHERE SC.ID_PERSONA = $P{id}
+ORDER BY SC.FECHA_ALTA]]>
+		</queryString>
+		<field name="fecha_sum" class="java.sql.Timestamp"/>
+		<field name="oee" class="java.lang.String"/>
+		<field name="estado_sumario" class="java.lang.String"/>
+		<field name="nro_interno" class="java.lang.String"/>
+		<field name="nro_sfp" class="java.lang.String"/>
+		<field name="obs_juez" class="java.lang.String"/>
+		<field name="obs_mai" class="java.lang.String"/>
+		<field name="id_cab" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="inhabilitado">
+		<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT CASE WHEN INH.INHABILITADO = TRUE THEN 'NO' ELSE 'SI' END as inhabilitado,
+INH.FECHA_DESDE, INH.FECHA_HASTA, INH.FECHA_HABILIT as fecha_habilitacion,
+CASE WHEN INH.TIPO = 'D' THEN 'DESVINCULACION' WHEN INH.TIPO = 'J' THEN 'PROCESOS JURIDICOS' END as motivo
+FROM DESVINCULACION.INHABILITADOS INH
+WHERE INH.ID_PERSONA = $P{id}]]>
+		</queryString>
+		<field name="inhabilitado" class="java.lang.String"/>
+		<field name="fecha_desde" class="java.sql.Timestamp"/>
+		<field name="fecha_hasta" class="java.sql.Timestamp"/>
+		<field name="fecha_habilitacion" class="java.sql.Timestamp"/>
+		<field name="motivo" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="leyes">
+		<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+CASE WHEN DE.DESCRIPCION IS NULL THEN DET.OTRA_LEY ELSE DE.DESCRIPCION END AS LEY,
+CASE WHEN DET.ART_TODOS = TRUE THEN 'TODOS' ELSE 'SOLO LOS ART.: ' || DET.ART_ESPECIF END AS ART
+FROM JURIDICOS.ACCION_INCONST_CAB AC
+JOIN JURIDICOS.ACCION_INCONST_DET DET ON DET.ID_ACCION_CAB = AC.ID_ACCION_CAB
+JOIN SELECCION.DATOS_ESPECIFICOS DE ON DE.ID_DATOS_ESPECIFICOS = DET.ID_DATOS_ESPECIF_LEY
+WHERE AC.ID_PERSONA = $P{id}
+ORDER BY AC.FECHA_ALTA DESC]]>
+		</queryString>
+		<field name="ley" class="java.lang.String"/>
+		<field name="art" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="faltas">
+		<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT DE.DESCRIPCION AS FALTAS,  SDET.ID_SUMARIO_DET AS ID_DET
+FROM JURIDICOS.SUMARIO_CAB SC
+LEFT JOIN JURIDICOS.SANCION S ON S.ID_SANCION = SC.ID_SANCION_J
+LEFT JOIN JURIDICOS.SANCION SD ON SD.ID_SANCION = SC.ID_SANCION_M
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE ON OEE.ID_CONFIGURACION_UO = SC.ID_CONFIGURACION_UO
+JOIN JURIDICOS.SUMARIO_DET SDET ON SDET.ID_SUMARIO_CAB = SC.ID_SUMARIO_CAB
+JOIN SELECCION.DATOS_ESPECIFICOS DE ON DE.ID_DATOS_ESPECIFICOS= SDET.ID_DATOS_ESPECIF_FALTA
+WHERE SC.ID_PERSONA = $P{id}
+ORDER BY SC.FECHA_ALTA]]>
+		</queryString>
+		<field name="faltas" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path_logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuario" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT distinct(sin_entidad.id_sin_entidad) as id_sin_entidad,
+nivel.id_sin_nivel_entidad as id_nivel, nivel.nen_codigo as cod_nivel,
+nivel.nen_nombre as nivel, nivel.nen_codigo ||'.'|| sin_entidad.ent_codigo as cod_entidad,
+sin_entidad.ent_nombre as entidad, oee.id_configuracion_uo as id_oee,
+nivel.nen_codigo ||'.'|| sin_entidad.ent_codigo ||'.'||oee.orden as cod_oee,
+oee.denominacion_unidad as desc_oee,
+PERSONA.DOCUMENTO_IDENTIDAD AS CI,
+PAIS.DESCRIPCION AS PAIS,
+PERSONA.NOMBRES || ' ' || PERSONA.APELLIDOS AS NOMBRES, PERSONA.ID_PERSONA AS ID_PERSONA
+FROM sinarh.sin_nivel_entidad nivel, GENERAL.EMPLEADO_PUESTO EMP
+JOIN PLANIFICACION.PLANTA_CARGO_DET PUESTO ON PUESTO.ID_PLANTA_CARGO_DET = EMP.ID_PLANTA_CARGO_DET
+JOIN GENERAL.PERSONA ON EMP.ID_PERSONA = PERSONA.ID_PERSONA
+JOIN PLANIFICACION.CONFIGURACION_UO_DET UO ON UO.ID_CONFIGURACION_UO_DET = PUESTO.ID_CONFIGURACION_UO_DET
+JOIN PLANIFICACION.CONFIGURACION_UO_CAB OEE ON OEE.ID_CONFIGURACION_UO = UO.ID_CONFIGURACION_UO
+JOIN GENERAL.PAIS ON PAIS.ID_PAIS = PERSONA.ID_PAIS_EXPEDICION_DOC
+Join planificacion.entidad entidad
+on oee.id_entidad = entidad.id_entidad
+join sinarh.sin_entidad sin_entidad
+on entidad.id_sin_entidad = sin_entidad.id_sin_entidad
+where nivel.nen_codigo = sin_entidad.nen_codigo
+and nivel.ani_aniopre = sin_entidad.ani_aniopre
+AND EMP.ACTUAL = TRUE]]>
+	</queryString>
+	<field name="id_sin_entidad" class="java.lang.Long"/>
+	<field name="id_nivel" class="java.lang.Long"/>
+	<field name="cod_nivel" class="java.lang.Long"/>
+	<field name="nivel" class="java.lang.String"/>
+	<field name="cod_entidad" class="java.lang.String"/>
+	<field name="entidad" class="java.lang.String"/>
+	<field name="id_oee" class="java.lang.Long"/>
+	<field name="cod_oee" class="java.lang.String"/>
+	<field name="desc_oee" class="java.lang.String"/>
+	<field name="ci" class="java.lang.String"/>
+	<field name="pais" class="java.lang.String"/>
+	<field name="nombres" class="java.lang.String"/>
+	<field name="id_persona" class="java.lang.Long"/>
+	<group name="nivel">
+		<groupExpression><![CDATA[$F{id_nivel}]]></groupExpression>
+		<groupHeader>
+			<band height="26">
+				<staticText>
+					<reportElement x="4" y="0" width="48" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Nivel:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="128" y="0" width="427" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nivel}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="52" y="0" width="76" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Long"><![CDATA[$F{cod_nivel}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="entidad">
+		<groupExpression><![CDATA[$F{id_sin_entidad}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<staticText>
+					<reportElement x="14" y="2" width="48" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Entidad:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="62" y="2" width="100" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cod_entidad}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="162" y="2" width="393" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{entidad}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="oee">
+		<groupExpression><![CDATA[$F{id_oee}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<textField>
+					<reportElement x="178" y="2" width="377" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{desc_oee}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="30" y="2" width="48" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[OEE:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="78" y="2" width="100" height="26"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cod_oee}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="persona">
+		<groupExpression><![CDATA[$F{id_persona}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<staticText>
+					<reportElement mode="Opaque" x="235" y="2" width="183" height="26" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Nombre y Apellido]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="2" width="69" height="26" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[C.I.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="69" y="2" width="166" height="26" backcolor="#99CCFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[País Expedición Doc.]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="149">
+				<componentElement>
+					<reportElement key="table" style="table" positionType="Float" x="0" y="0" width="554" height="20"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="accion">
+							<datasetParameter name="id">
+								<datasetParameterExpression><![CDATA[$F{id_persona}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="100">
+							<jr:columnHeader style="table_CH" height="42" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="100" height="42"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Acción de Inconstitucionalidad Fecha]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman"/>
+									</textElement>
+									<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="211">
+							<jr:columnHeader style="table_CH" height="42" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="211" height="42"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Estado]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="4" y="0" width="207" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{accion}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="245">
+							<jr:columnHeader style="table_CH" height="42" rowSpan="1">
+								<staticText>
+									<reportElement x="2" y="0" width="242" height="42"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Resultado]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="3" y="0" width="241" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{resultado}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement key="table 2" style="table 2" positionType="Float" x="1" y="101" width="554" height="18"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="inhabilitado">
+							<datasetParameter name="id">
+								<datasetParameterExpression><![CDATA[$F{id_persona}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="83">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="83" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Inhabilitado]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="83" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{inhabilitado}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="99">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="99" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Fecha Desde]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="99" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_desde}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="98">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="98" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Fecha Hasta]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="98" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_hasta}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="113">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="113" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Fecha Habilitación]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="113" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_habilitacion}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="166">
+							<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="166" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Motivo]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="166" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="9"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{motivo}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement key="table 3" style="table 3" positionType="Float" x="189" y="22" width="365" height="20"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="leyes">
+							<datasetParameter name="id">
+								<datasetParameterExpression><![CDATA[$F{id_persona}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="188">
+							<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="188" height="30" backcolor="#CCFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Normativa/s]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="5" y="0" width="183" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{ley}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="179">
+							<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="179" height="30" backcolor="#CCFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Artículo/s]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="4" y="0" width="175" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{art}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement key="table 4" style="table 4" positionType="Float" x="4" y="45" width="550" height="27"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="sumario">
+							<datasetParameter name="id">
+								<datasetParameterExpression><![CDATA[$F{id_persona}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="45">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="45" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Sumario Fecha]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="45" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_sum}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="102">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="102" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[OEE]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="102" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{oee}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="52">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="52" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Estado]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="52" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{estado_sumario}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="65">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="65" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Nro./Año Exp. Interno]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="65" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_interno}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="51">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="1" y="0" width="50" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Nro./Año Exp. SFP]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="1" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_sfp}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="113">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="113" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Resultado Juez]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="113" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{obs_juez}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="120">
+							<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="120" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Resultado MAI]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 4_TD" height="21" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="120" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman" size="8"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{obs_mai}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement key="table 5" style="table 5" positionType="Float" x="189" y="74" width="365" height="23"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="faltas">
+							<datasetParameter name="id">
+								<datasetParameterExpression><![CDATA[$F{id_persona}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="365">
+							<jr:columnHeader style="table 5_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="365" height="30" backcolor="#CCFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Times New Roman" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Faltas]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 5_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="365" height="20" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Times New Roman"/>
+									</textElement>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{faltas}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<subreport>
+					<reportElement positionType="Float" x="13" y="135" width="200" height="14"/>
+					<subreportParameter name="id">
+						<subreportParameterExpression><![CDATA[$F{id_persona}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/Subreport2_CU460.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport>
+					<reportElement positionType="Float" x="13" y="121" width="200" height="14"/>
+					<subreportParameter name="id">
+						<subreportParameterExpression><![CDATA[$F{id_persona}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/Subreport1_CU460.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="97" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="61"/>
+				<subreportParameter name="path_logo">
+					<subreportParameterExpression><![CDATA[$P{path_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/header_sicca_small.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="71" width="555" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Listado de Procesos Jurídicos]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="23">
+			<textField>
+				<reportElement x="0" y="0" width="69" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ci}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="235" y="0" width="183" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="69" y="0" width="166" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="4" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="278" y="2" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="1" width="551" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="22">
+			<textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="5" y="2" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="279" y="2" width="277" height="20">
+					<printWhenExpression><![CDATA[$P{usuario} == null ? false : true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{usuario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="5" y="1" width="551" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="556" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON DATOS QUE MOSTRAR]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

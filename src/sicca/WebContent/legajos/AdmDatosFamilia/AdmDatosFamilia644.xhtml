@@ -1,0 +1,344 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:a="http://richfaces.org/a4j">
+
+	<h1>#{messages.CU644_titulo}</h1>
+
+	<rich:simpleTogglePanel label="#{messages.CU606_panel1_title}"
+		id="idPanel1">
+
+		<h:panelGrid columns="1">
+			<a:region>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU644_gradParentezco}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="idGradoParentezco" style="width : 250px;"
+						value="#{admDatosFamilia644FC.idGradoParentezco}">
+						<f:selectItems
+							value="#{admDatosFamilia644FC.traerDatosParentezcoSI()}" />
+						<a:support event="onselect"  />
+					</h:selectOneMenu>
+				</s:decorate>
+			</a:region>
+			<s:decorate id="paisExpField" template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU40_paises_expedicion}<span
+						class="required">*</span>
+				</ui:define>
+				<h:selectOneMenu id="idPaisExped"
+					value="#{admDatosFamilia644FC.idPais}"
+					disabled="#{admDatosFamilia644FC.idElemUpdate != null}"
+					style="width:250px">
+					<a:support event="onchange" reRender="idPanel1"
+						action="#{admDatosFamilia644FC.limpiarDatosPersona()}"></a:support>
+					<f:selectItems value="#{paisHome.getPaisSelectItems()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages.CU528_docIdentidad}	
+
+				</ui:define>
+				<h:inputText id="nroDoc" size="30"
+					disabled="#{admDatosFamilia644FC.idElemUpdate != null and admDatosFamilia644FC.tieneCedula}"
+					value="#{admDatosFamilia644FC.nroDoc}" style=" width : 250px;">
+					<a:support event="onblur" reRender="idPanel1"
+						action="#{admDatosFamilia644FC.buscarPersona()}"></a:support>
+				</h:inputText>#{' '}
+							<s:link propagation="join"
+					actionListener="#{gestionarPartCapa528.limpiarIdPostulacion()}"
+					view="/seleccion/persona/PersonaList.xhtml">
+					<f:param name="from"
+						value="/legajos/MenuDatosPersonales" />
+						
+											
+					<f:param name="texto"
+						value="GShow644" />
+					<s:graphicImage value="/img/Buscar.png" />
+				</s:link>						
+										#{' '}<s:button value="Agregar Persona"
+					action="#{admDatosFamilia644FC.linkAddPersona()}"
+					disabled="#{!admDatosFamilia644FC.habBtnAddPersons}">
+					<f:param name="texto" value="G" />
+					<f:param name="accion" value="EDITAR" />
+					<f:param name="idPersonaFamiliar" value="#{admDatosFamilia644FC.idPersona}" />
+				</s:button>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+
+			</s:decorate>
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU644_nombres}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="idNombresApellidos" size="30"
+						value="#{admDatosFamilia644FC.nombres}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU644_apellido}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="idNombresApellidos" size="30"
+						value="#{admDatosFamilia644FC.apellidos}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.CU644_fechaNacimiento}	<span
+						class="required">*</span>
+				</ui:define>
+				<rich:calendar value="#{admDatosFamilia644FC.fechaNacimiento}"
+					enableManualInput="true" oninputkeyup="ponerBarra(event);"
+					inputSize="10" datePattern="dd/MM/yyyy" id="fecNac"
+					locale="#{siccaAppHelper.localeCode}">
+				</rich:calendar>
+			</s:decorate>
+
+			
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.Persona_sexo}	<span
+							class="required">*</span>
+					</ui:define>
+					<h:selectOneMenu id="sexo" style="width : 250px;"
+						value="#{admDatosFamilia644FC.idSexo}">
+						<f:selectItems
+							value="#{admDatosFamilia644FC.traerSexoSelectItems()}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+			</h:panelGrid>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages.Persona_estadoCivil}
+				</ui:define>
+				<h:selectOneMenu id="estadoCivil" style="width : 250px;"
+					value="#{admDatosFamilia644FC.idEstadoCivil}">
+					<f:selectItems value="#{admDatosFamilia644FC.traerEstadoCivilSI()}" />
+				</h:selectOneMenu>
+			</s:decorate>
+					
+			<a:outputPanel id="panelDocumentosAdjuntos">
+				<s:decorate id="tipoDocField" template="/layout/edit.xhtml"
+					>
+					<ui:define name="label">#{messages.CU289_tipo_doc}<span class="required">*</span></ui:define>
+					<h:selectOneMenu id="datosTdGral" value="#{admDatosFamilia644FC.idTipoDoc}" style="width:250px">
+						<f:selectItems value="#{datosEspecificossByTipoCiPartida}"/>
+						<a:support event="onchange" eventsQueue="default"
+							action="#{admDatosFamilia644FC.esOtroTipo()}"
+							reRender="descDocField" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate id="descDocField" template="/layout/edit.xhtml" rendered="#{admDatosFamilia644FC.esOtro}">
+						<ui:define name="label">#{messages.CU289_descrip}</ui:define>
+						<h:inputText value="#{admDatosFamilia644FC.descTipoDoc}"
+							size="30" maxlength="180" />
+					</s:decorate>	
+				
+			</a:outputPanel>
+			<a:outputPanel id="panelDoc">
+				<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"
+					>
+					<ui:define name="label">Adjunto</ui:define>
+					<s:fileUpload size="30" id="archivo"
+						contentType="#{admDatosFamilia644FC.contentType}"
+						data="#{admDatosFamilia644FC.uploadedFile}"
+						fileName="#{admDatosFamilia644FC.fileName}"
+						style=" width : 382px;">
+
+					</s:fileUpload>
+				</s:decorate>
+				<s:decorate id="documentoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU156_doc}</ui:define>
+					<h:inputText disabled="true" id="nomFinal" size="30"
+						value="#{admDatosFamilia644FC.fileName}" />
+
+				</s:decorate>
+			</a:outputPanel>
+		
+			<h:panelGrid columns="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU528_telefonos}</ui:define>
+					<h:inputText id="idTelefonos" size="30"
+						disabled="#{gestionarPartCapa528.idPostulacion!=null}"
+						value="#{admDatosFamilia644FC.telefono}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU528_email}</ui:define>
+					<h:inputText id="idEmail" size="30"
+						value="#{admDatosFamilia644FC.email}" style=" width : 250px;">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+			
+			<s:decorate id="personaACargoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.CU644_personaACargo}</ui:define>
+	                <h:selectBooleanCheckbox id="personaCargo"
+	                          value="#{admDatosFamilia644FC.personaACargo}" />
+	           </s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">Observaciones </ui:define>
+					<h:inputTextarea cols="80" rows="2"
+						value="#{admDatosFamilia644FC.observaciones}" >
+						<f:validateLength maximum="250" />
+					</h:inputTextarea>
+			</s:decorate>
+
+		</h:panelGrid>
+
+		<div style="clear: both"><span class="required">*</span>
+		#{messages.msg_required_fields}</div>
+
+		<s:div styleClass="actionButtons">
+			<h:commandButton value="Agregar"
+				rendered="#{admDatosFamilia644FC.idElemUpdate == null}"
+				action="#{admDatosFamilia644FC.agregar()}" 
+				reRender="nroDoc"/>
+			<h:commandButton value="Actualizar"
+				rendered="#{admDatosFamilia644FC.idElemUpdate != null}"
+				action="#{admDatosFamilia644FC.actualizar()}" />
+			<a:commandButton value="Cancelar" reRender="idPanel1,idPanel2"
+				action="#{admDatosFamilia644FC.limpiar()}" />
+		</s:div>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel
+		label="#{messages.CU644_panel2_title} (#{empty admDatosFamilia644FC.lGrilla1?0:admDatosFamilia644FC.lGrilla1.size()})"
+		id="idPanel2">
+		<div class="results"
+			style="overflow: scroll; width: 700; HEIGHT: 230px">
+			<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU659_a_cargo}</ui:define>
+					<h:inputText id="totalACargo" size="20"
+						disabled="true"
+						value="#{admDatosFamilia644FC.totalCargo()}" style=" width : 150px;">
+					</h:inputText>
+		</s:decorate>
+			<h:outputText
+			value="#{messages.msg_list_search_no_results}"
+			rendered="#{empty admDatosFamilia644FC.lGrilla1}" /> <rich:dataTable
+			rowKeyVar="rowIndexGrilla1" var="_record"
+			rendered="#{!empty admDatosFamilia644FC.lGrilla1}"
+			value="#{admDatosFamilia644FC.lGrilla1}">
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_gradoParentezco}
+						</f:facet>
+				<h:outputText style="white-space:normal;word-wrap: break-word"
+					value="#{admDatosFamilia644FC.updateFamiliares(_record).datosEspecificosFamiliar.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_paisExpedeDoc}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.paisByIdPaisExpedicionDoc.descripcion}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_docIden}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar != null ? _record.personaFamiliar.documentoIdentidad : 'Sin Documento'}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_nombreApellido}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{ admDatosFamilia644FC.ImprimirNombreYApellidos (_record)} " />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_fechaNac}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.personaFamiliar != null ? _record.fechaNacimiento : _record.fechaNacimiento}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_sexo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.descLargaRef(_record.sexo,'SEXO')}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_esatdoCivil}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.descLargaRef(_record.estadoCivil,'ESTADO_CIVIL')}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_funcPublicoActivo}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{admDatosFamilia644FC.referencia(_record.funcionarioPublico)}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_oee}
+						</f:facet>
+				<h:outputText style="white-space:normal"
+					value="#{_record.configuracionUoCab.denominacionUnidad}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU644_aSuCargo}
+						</f:facet>
+				<h:selectBooleanCheckbox value="#{_record.personaACargo}" disabled="true"/>
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+						#{messages.CU606_accion}
+						</f:facet>
+
+				<a:commandLink value="Editar" reRender="idPanel1,idPanel2"
+					action="#{admDatosFamilia644FC.editar(rowIndexGrilla1)}" />
+							#{' '}
+							<h:commandLink value="Eliminar"
+					onclick="return confirm('#{messages.msg_confirm_delete}');"
+					action="#{admDatosFamilia644FC.eliminar(rowIndexGrilla1)}" />
+							#{' '}
+					 <h:commandLink id="verAdjunto" value="Ver Adjunto"
+						rendered="#{_record.documentos != null}"
+						action="#{admDatosFamilia644FC.imprimirDocumento(_record.documentos.idDocumento)}" />
+					
+					#{' '}
+						
+					<s:link view="/legajos/AdmDatosFamilia/AccionAgregarDocumento.xhtml"
+							
+							value="Otros Adjuntos" propagation="none" id="agregarDocumento"
+							>
+							<f:param name="idFamiliar"
+								value="#{_record.idFamiliar}" />
+							<f:param name="texto" value="GShow644" />
+							<f:param name="accion" value="EDITAR" />
+							<f:param name="idPersona" value="#{_record.persona.idPersona}" />
+							<f:param name="from" value="#{legajos/GestionarLegajo/GestionarLegajo660}" />
+							
+						</s:link>
+			</h:column>
+		</rich:dataTable>
+		</div>
+	</rich:simpleTogglePanel>
+	
+
+</ui:composition>

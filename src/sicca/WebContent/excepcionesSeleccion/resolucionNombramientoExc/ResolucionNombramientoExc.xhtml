@@ -1,0 +1,203 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:a="http://richfaces.org/a4j" 
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.CU419_titulo}</h1>
+    <h:form id="matrizDocConfigDetSearch" styleClass="edit">
+    <rich:panel >
+    <h:panelGrid columns="2">
+	<s:decorate id="buttonsField" template="/layout/display.xhtml">
+		<h:commandButton id="tarea"
+                          value="#{messages.proceso_sgte_tarea}"
+                          action="#{resolucionNombramientoExcFC.nextTask()}"
+                          onclick="return confirm('#{messages.proceso_confirmar_sgte_tarea}');"/>
+    
+    		<s:button view="/excepcionesSeleccion/GestExcIngreso/GestExcIngreso591.xhtml"
+				id="volver" propagation="none" value="#{messages.CU412_volver}">
+			</s:button>
+    
+    </s:decorate>    
+    
+		<rich:panel >
+		<h:panelGrid columns="1">
+        
+			<rich:panel id="panelParametro" >	
+			
+			<h:panelGrid columns="3">
+			
+			<s:decorate id="nivelField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_nivel}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"	value="#{resolucionNombramientoExcFC.sinNivelEntidad.nenCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+							value="#{resolucionNombramientoExcFC.sinNivelEntidad.nenNombre}" />
+		               	</s:decorate> <s:decorate id="entidadField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU193_entidad}<span
+								class="required">*</span>
+						</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+							disabled="true"
+							value="#{resolucionNombramientoExcFC.sinEntidad.entCodigo}">
+						</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+							disabled="true"
+							value="#{resolucionNombramientoExcFC.sinEntidad.entNombre}" />
+		            </s:decorate> <s:decorate id="oeeField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+								class="required">*</span>
+						</ui:define>
+		               <h:inputText id="orden" size="10" disabled="true"
+							value="#{resolucionNombramientoExcFC.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40" disabled="true"
+							value="#{resolucionNombramientoExcFC.configuracionUoCab.denominacionUnidad}" />
+		                
+		            </s:decorate>
+			</h:panelGrid>
+			<h:panelGrid >
+			
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages.CU243_concurso}</ui:define>
+                <h:inputText id="concurso" disabled="true" value="#{resolucionNombramientoExcFC.concurso.nombre}" style=" width : 514px;"/>
+            </s:decorate>
+
+          
+			</h:panelGrid>
+			</rich:panel>
+	
+        
+       
+   			<h:panelGrid columns="2">
+   				<a:region >
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.gral_observacion}</ui:define>
+						<h:inputTextarea id="obs" cols="40" 
+							value="#{resolucionNombramientoExcFC.obs}" style=" width : 859px;">
+						 <a:support event="onchange" eventsQueue="default"  reRender="obsField"/>
+						     <f:validateLength maximum="500" />
+						</h:inputTextarea>
+					</s:decorate></a:region>
+					<s:button propagation="join"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				id="anexos" value="#{messages.gral_anexos}">
+				<f:param name="direccionFisica" value="#{resolucionNombramientoExcFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="#{resolucionNombramientoExcFC.nombrePantalla}" />
+				<f:param name="idCU" value="#{resolucionNombramientoExcFC.idConcurso}" />
+				<f:param name="nombreTabla" value="#{resolucionNombramientoExcFC.entity}" />
+				<f:param name="mostrarDoc" value="true" /> 
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="excepcionesSeleccion/resolucionNombramientoExc/ResolucionNombramientoExc" />
+			</s:button>
+				</h:panelGrid>
+				 <h:panelGrid columns="2">
+        		<a:commandButton id="marcar" value="#{messages.CU411_marcar_todos}" rendered="false"
+					action="#{resolucionNombramientoFromController.marcarTodos()}"
+					reRender="panelResultado">
+				</a:commandButton> <a:commandButton id="desmarcar" value="#{messages.CU411_desmarcar_todos}"
+					action="#{resolucionNombramientoFromController.desmarcarTodos()}" rendered="false"
+					reRender="panelResultado">
+				</a:commandButton>
+        </h:panelGrid>
+   				<h:panelGrid columns="2">
+   		
+			<rich:panel id="panelResultado" style=" width : 859px;">
+				<f:facet name="header">Grupos (#{resolucionNombramientoExcFC.puestoAgrExcList.size()})</f:facet>
+				<div class="results" id="puestList"  style="clear: both; overflow: auto; HEIGHT: 230px">
+				<rich:dataTable 
+					id="grupoList" var="_agr" rowKeyVar="row"
+					value="#{resolucionNombramientoExcFC.puestoAgrExcList}"
+					>
+					<h:column>
+						<f:facet name="header">
+						#{messages.CU411_cod_grupo}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.concursoPuestoAgr.codGrupo}" />
+					</h:column>
+					<h:column >
+						<f:facet name="header">
+						#{messages.CU411_denominacion}
+						</f:facet>
+						<h:outputText
+							value="#{_agr.concursoPuestoAgr.descripcionGrupo}">
+						</h:outputText>
+					</h:column>
+					
+					
+				
+
+					
+				</rich:dataTable></div>
+		
+			</rich:panel>
+		
+     </h:panelGrid>
+		<h:panelGrid columns="1" >
+		
+      	  <h:commandButton id="createReso" value="#{messages.CU419_generar}"  disabled="#{resolucionNombramientoExcFC.resoNombramientoList.size()>0}"
+					action="#{resolucionNombramientoExcFC.resolucion()}">
+			</h:commandButton>
+   
+   
+      	
+		
+		</h:panelGrid>
+		
+		<div style="clear:both">
+            <h:outputText value="#{messages.CU419_resoluciones}	"  styleClass="labelClass"/>
+        </div>
+		<h:panelGrid columns="1">
+			
+		<rich:dataTable
+				value="#{resolucionNombramientoExcFC.resoNombramientoList}"
+				id="tablaData" var="reso" rows="5" first="0" width="264">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU411_nro_resolucion}" />
+						</f:facet>
+						<h:outputText value="#{reso.nroResolucion}"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages.CU411_fecha}" />
+						</f:facet>
+						<h:outputText value="#{reso.fecha}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+						</h:outputText>	
+					</rich:column>
+					<rich:column>
+					<h:commandLink  action="#{resolucionNombramientoExcFC.finIdConcursoReso(reso.idResolucion,'view')}"
+                   value="Ver"
+             propagation="none" >
+            </h:commandLink>#{' '}
+            		<h:commandLink  action="#{resolucionNombramientoExcFC.finIdConcursoReso(reso.idResolucion,'edit')}"
+                   value="Editar"
+              >
+            </h:commandLink>
+					</rich:column>
+			</rich:dataTable>
+			<rich:datascroller for="tablaData" renderIfSinglePage="false" />
+		</h:panelGrid>
+		</h:panelGrid>
+		</rich:panel>
+		
+	</h:panelGrid>
+	</rich:panel>
+		</h:form>
+
+</ui:define>
+
+</ui:composition>

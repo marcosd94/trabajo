@@ -1,0 +1,99 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU468_title}</h1>
+		
+			<h:form>
+				<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+					<h:panelGrid columns="1">
+
+						<s:decorate id="fechaDecorate" template="/layout/edit.xhtml">
+							  <ui:define name="label">#{messages.CU455_fecha_alta_desde}
+							        	<span class="required">*</span>
+							  </ui:define>
+							  <rich:calendar id="fecha" value="#{personasRegistradasPortalFC.fechaDesde}"
+							                inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true" oninputkeyup="ponerBarra(event)">
+							  </rich:calendar>
+							                         
+							  <b><h:outputText value="#{' '} #{messages.msg_hasta} #{' '}"/> <span class="required">*</span><h:outputText value="#{' '}"/></b>
+							  <rich:calendar id="fechaHasta" value="#{personasRegistradasPortalFC.fechaHasta}" 
+							                inputSize="10" datePattern="dd/MM/yyyy" enableManualInput="true" oninputkeyup="ponerBarra(event)">
+							  </rich:calendar>
+						</s:decorate>
+						
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.gral_tipo}</ui:define>
+							<h:selectOneRadio id="idTipo2" value="#{personasRegistradasPortalFC.tipo}">
+									<f:selectItems value="#{personasRegistradasPortalFC.tipoSelectItem}"/>
+									<a:support event="onchange" reRender="filtrosAdicionales"/>
+							</h:selectOneRadio>
+						</s:decorate>
+						
+						
+						<a:outputPanel id="filtrosAdicionales">
+							<s:decorate template="/layout/edit.xhtml" id="algo" rendered="#{personasRegistradasPortalFC.mostrarFiltrosAdicionales()}">
+			
+								<fieldset style="width: 550px">
+									<legend>#{messages.CU468_filtros_adicionales}</legend>
+									<h:panelGrid columns="1" id="panelFiltrosAdicionales">
+										<s:decorate template="/layout/edit.xhtml">
+											<ui:define name="label">#{messages.CU468_titulo_academico}</ui:define>
+											<h:selectOneMenu id="tituloAcademico" value="#{personasRegistradasPortalFC.idTitulo}" style="width:300px;">
+												<f:selectItems value="#{personasRegistradasPortalFC.tituloSelectItem}"/>
+											</h:selectOneMenu>
+										</s:decorate>
+										
+										<s:decorate template="/layout/edit.xhtml">
+											<ui:define name="label">#{messages.CU468_especialidad}</ui:define>
+											<h:selectOneMenu id="especialidad" value="#{personasRegistradasPortalFC.idEspecialidad}" style="width:300px;">
+												<f:selectItems value="#{personasRegistradasPortalFC.especialidadSelectItem}"/>
+											</h:selectOneMenu>
+										</s:decorate>
+									</h:panelGrid>
+								</fieldset>
+								
+							</s:decorate>
+						</a:outputPanel>
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.gral_formato}</ui:define>
+							<h:selectOneMenu id="idTipo" value="#{personasRegistradasPortalFC.formato}" required ="true">
+								<f:selectItems value="#{personasRegistradasPortalFC.formatoSelectItem}"/>
+							</h:selectOneMenu>
+						</s:decorate>	
+								
+						   
+
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+				
+
+				<div class="actionButtons">
+					<h:commandButton id="imprimir"
+							value="#{messages.gral_generar_informe}"
+							action="#{personasRegistradasPortalFC.imprimir()}">
+					</h:commandButton>
+						
+					<a:commandButton id="reset"
+						value="#{messages.GENERICO_LIMPIAR}"
+						action="#{personasRegistradasPortalFC.limpiar()}" reRender="panelBusqueda">
+					</a:commandButton>
+				</div>
+			</h:form>
+	
+			<br />
+			<div style="clear:both">
+				 <span class="required">*</span>
+				 #{messages.msg_required_fields}
+			</div>
+	</ui:define>
+</ui:composition>

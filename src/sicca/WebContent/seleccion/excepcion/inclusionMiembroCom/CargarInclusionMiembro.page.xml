@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true"
+ no-conversation-view-id="/ComisionSeleccionCabList.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ 
+ <begin-conversation flush-mode="MANUAL" join="true"/>
+ 
+
+ <param name="personaIdPersona" value="#{cargarInclusionMiembroFormController.idPersona}"/>
+ 
+ <action execute="#{cargarInclusionMiembroFormController.init()}" on-postback="false"/>
+ <param name="inclusionfrom"/>
+  <param name="sinNivelEntidadIdSinNivelEntidad" value="#{cargarInclusionMiembroFormController.idSinNivelEntidad}"/>
+ <param name="sinEntidadIdSinEntidad" value="#{cargarInclusionMiembroFormController.idSinEntidad}"/>
+ <param name="configuracionUoCabIdConfiguracionUo" value="#{cargarInclusionMiembroFormController.idConfigCab}"/>
+   
+ 
+ <navigation from-action="#{cargarInclusionMiembroFormController.save()}">
+  <rule if-outcome="persisted">
+   <end-conversation/>
+   <redirect view-id="/seleccion/LisSolTipExc/LisSolTipExc.xhtml">
+    </redirect>
+  </rule>
+ </navigation>
+ 
+ 
+ 
+  <navigation from-action="#{cargarInclusionMiembroFormController.anexar()}">
+   <rule if-outcome="anexar">
+	  <redirect view-id="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+	   <param name="direccionFisica" value="#{cargarInclusionMiembroFormController.direccionFisica}" />
+		<param name="nombrePantalla" value="#{cargarInclusionMiembroFormController.nombrePantalla}" />
+		<param name="idCU" value="#{cargarInclusionMiembroFormController.idConcurso}" />
+		<param name="nombreTabla" value="#{cargarInclusionMiembroFormController.entity}" />
+		<param name="mostrarDoc" value="true" /> 
+		<param name="isEdit" value="true" />
+		<param name="from" value="seleccion/excepcion/inclusionMiembroCom/CargarInclusionMiembro" />
+	   </redirect>
+	   </rule>
+ </navigation>
+ 
+ 
+  <restrict>#{identity.hasRole('cargarInclusionMiembro_edit')}</restrict>
+
+</page>

@@ -1,0 +1,337 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU455_tittle_list}</h1>
+
+		<h:form id="solicitudProrrogaSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelParamentro">
+
+				<h:panelGrid columns="3">
+           		<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="#{!admSumariosFC.habOee}"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									reRender="panelBusqueda" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+								image="/img/Buscar.png" disabled="#{!admSumariosFC.habOee}"
+								action="#{nivelEntidadOeeUtil.getUrlToPageNivel('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="#{!admSumariosFC.habOee}"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findEntidad()}" focus="unidadOrgCodigo"
+									reRender="panelBusqueda" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" disabled="#{!admSumariosFC.habOee}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}" disabled="#{!admSumariosFC.habOee}"
+								onkeypress="return soloNumeros(event);">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+									reRender="unidadOrgCodigo,unidadOrgDenominacion" />
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad" disabled="#{!admSumariosFC.habOee}"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageOee('juridicos/excepcionados/ExcepcionadosList')}" />
+						</s:decorate>
+					</a:region>
+				
+				
+				
+				</h:panelGrid>
+
+				
+
+				<h:panelGrid columns="2">
+				<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU156_pais_expedi} <span class="required">*</span></ui:define>
+						<h:selectOneMenu id="idPaisExp" value="#{admSumariosFC.idPaisExp}" style="width:250px">
+							<f:selectItems value="#{paissSelectItems}"/>
+						</h:selectOneMenu>
+			</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_documentoIdentidad}</ui:define>
+						<h:inputText id="cedula" size="40"
+							value="#{admSumariosFC.cedula}">
+						</h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_nombres}</ui:define>
+						<h:inputText id="nombre" size="40"
+							value="#{admSumariosFC.nombre}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+						<h:inputText id="apellido" size="40"
+							value="#{admSumariosFC.apellido}">
+						</h:inputText>
+					</s:decorate>
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+					
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU455_fecha_alta_desde}</ui:define>
+						<rich:calendar id="fechaDesde" value="#{admSumariosFC.fechaDesde}"
+							inputSize="10" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)" datePattern="dd/MM/yyyy" />
+					</s:decorate>
+
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU455_fecha_alta_hasta}</ui:define>
+						<rich:calendar id="fechaHasta" value="#{admSumariosFC.fechaHasta}"
+							inputSize="10" enableManualInput="true"
+							oninputkeyup="ponerBarra(event)" datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="nroExpInte" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU455_nro_exp_interno}</ui:define>
+						<h:inputText id="expInterno" value="#{admSumariosFC.expInterno}" styleClass="numeric" onkeypress="return soloNumeros(event);" style=" width : 58px;"/>
+					</s:decorate>
+					<s:decorate id="anioExpInte" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_anio}</ui:define>
+						<h:inputText id="anioExpInterno" value="#{admSumariosFC.anioExpInterno}" styleClass="numeric" onkeypress="return soloNumeros(event);" style=" width : 81px;"/>
+					</s:decorate>
+					
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_estado}</ui:define>
+
+						<h:selectOneMenu id="estado"
+							value="#{admSumariosFC.estadoSumario}">
+							<s:selectItems var="val" value="#{enumAppHelper.estadoSumario}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+
+					</s:decorate>
+					<s:decorate id="nroExpSfpInte" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU455_nro_exp}</ui:define>
+						<h:inputText id="expSfp" value="#{admSumariosFC.expSfp}" styleClass="numeric" onkeypress="return soloNumeros(event);" style=" width : 58px;"/>
+					</s:decorate>
+					<s:decorate id="anioExpSfpInte" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_anio}</ui:define>
+						<h:inputText id="anioExpSfp" value="#{admSumariosFC.anioExpSfp}" styleClass="numeric" onkeypress="return soloNumeros(event);" style=" width : 81px;"/>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons">
+				<a:commandButton id="search"
+					eventsQueue="default" value="#{messages.msg_list_search_button}"
+					reRender="panelParamentro,panelResultado"
+					action="#{admSumariosFC.search()}">
+					<f:param name="firstResult" value="0" />
+				</a:commandButton> 
+			<s:button id="reset" propagation="none"
+						value="#{messages['msg_list_search_reset_button']}"/>
+				
+					
+				<h:commandButton id="imprimirBtn" value="#{messages.GENERICO_IMPRIMIR}"
+					action="#{admSumariosFC.imprimir()}"/>
+			</div>
+
+
+
+			<rich:panel id="panelResultado">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty sumarioCabList.resultList ? 0 : (sumarioCabList.paginated ? sumarioCabList.resultCount : sumarioCabList.resultList.size)})</f:facet>
+				<div class="results" id="sumarioCabList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty sumarioCabList.resultList}" /> <rich:dataTable
+					id="sumarioCabList" var="_sumarioCab"
+					value="#{admSumariosFC.listaSumarioCab}"
+					rendered="#{not empty sumarioCabList.resultList}">
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.Persona_documentoIdentidad}" />
+								<ui:param name="propertyPath"
+									value="sumarioCab.persona.documentoIdentidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_sumarioCab.persona.documentoIdentidad}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU156_pais_expedi}" />
+								<ui:param name="propertyPath"
+									value="sumarioCab.persona.documentoIdentidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_sumarioCab.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+					
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.gral_nombre_apellido}" />
+								<ui:param name="propertyPath"
+									value="sumarioCab.persona.nombres" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_sumarioCab.persona.nombreCompleto}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel" value="#{messages.gral_estado}" />
+								<ui:param name="propertyPath" value="sumarioCab.estado" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{admSumariosFC.getDescripcionEstado(_sumarioCab.estado)}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.gral_fecha_alta}" />
+								<ui:param name="propertyPath" value="sumarioCab.fechaAlta" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_sumarioCab.fechaAlta}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU455_nro_exp_interno}/#{messages.CU456_anio}" />
+								<ui:param name="propertyPath" value="sumarioCab.nroExp" />
+							</ui:include>
+						</f:facet>
+						<h:outputText rendered="#{_sumarioCab.nroExp!=null}" value="#{_sumarioCab.nroExp}/#{_sumarioCab.anioExp}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{sumarioCabList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU455_nro_exp}/#{messages.CU456_anio}" />
+								<ui:param name="propertyPath" value="sumarioCab.nroExpSfp" />
+							</ui:include>
+						</f:facet>
+						<h:outputText rendered="#{_sumarioCab.nroExpSfp!=null}" value="#{_sumarioCab.nroExpSfp}/#{_sumarioCab.anioExpSfp}" />
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+						<s:link view="/juridicos/sumarios/Sumario.xhtml" value="Ver"
+							propagation="none" id="concurso" rendered="#{empty from}">
+							<f:param name="idSumarioCab" value="#{_sumarioCab.idSumarioCab}" />
+						</s:link>
+				            #{' '}
+				            <s:link view="/juridicos/sumarios/SumarioEdit.xhtml"
+							value="#{messages.msg_edit}" propagation="none" id="sumarioEdit"
+							rendered="#{admSumariosFC.esEditable(_sumarioCab.estado)}">
+							<f:param name="idSumarioCab" value="#{_sumarioCab.idSumarioCab}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+		</h:form>
+
+		<div class="tableControl"><s:link
+			view="/juridicos/sumarios/SumariosList.xhtml"
+			rendered="#{sumarioCabList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/juridicos/sumarios/SumariosList.xhtml"
+			rendered="#{sumarioCabList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{sumarioCabList.previousFirstResult}" />
+		</s:link> <s:link view="/juridicos/sumarios/SumariosList.xhtml"
+			rendered="#{sumarioCabList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{sumarioCabList.nextFirstResult}" />
+		</s:link> <s:link view="/juridicos/sumarios/SumariosList.xhtml"
+			rendered="#{sumarioCabList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{sumarioCabList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/juridicos/sumarios/SumarioEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="idSumarioCab" />
+			</s:button>
+		</s:div>
+
+
+	</ui:define>
+
+</ui:composition>

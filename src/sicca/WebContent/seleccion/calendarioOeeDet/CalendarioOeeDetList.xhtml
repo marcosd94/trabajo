@@ -1,0 +1,226 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="calendarioOeeDetSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="CalendarioOeeDet Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputText id="descripcion" value="#{calendarioOeeDetList.calendarioOeeDet.descripcion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{calendarioOeeDetList.calendarioOeeDet.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{calendarioOeeDetList.calendarioOeeDet.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{calendarioOeeDetList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/CalendarioOeeDetList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">CalendarioOeeDet Search Results (#{empty calendarioOeeDetList.resultList ? 0 : (calendarioOeeDetList.paginated ? calendarioOeeDetList.resultCount : calendarioOeeDetList.resultList.size)})</f:facet>
+    <div class="results" id="calendarioOeeDetList">
+
+    <h:outputText value="The calendarioOeeDet search returned no results."
+               rendered="#{empty calendarioOeeDetList.resultList}"/>
+
+    <rich:dataTable id="calendarioOeeDetList"
+                var="_calendarioOeeDet"
+              value="#{calendarioOeeDetList.resultList}"
+           rendered="#{not empty calendarioOeeDetList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Id calendario oee det"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.idCalendarioOeeDet"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.idCalendarioOeeDet}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Calendario oee cab id calendario oee cab"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.calendarioOeeCab.idCalendarioOeeCab"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.calendarioOeeCab.idCalendarioOeeCab}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Descripcion"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Fecha festiva"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.fechaFestiva"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.fechaFestiva}">
+                <s:convertDateTime type="date" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Activo"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.activo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.activo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{calendarioOeeDetList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="calendarioOeeDet.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_calendarioOeeDet.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'CalendarioOeeDet' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="calendarioOeeDetViewId">
+                <f:param name="calendarioOeeDetIdCalendarioOeeDet"
+                        value="#{_calendarioOeeDet.idCalendarioOeeDet}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/CalendarioOeeDetEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="calendarioOeeDetEdit"
+                rendered="#{empty from}">
+                <f:param name="calendarioOeeDetIdCalendarioOeeDet"
+                        value="#{_calendarioOeeDet.idCalendarioOeeDet}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/CalendarioOeeDetList.xhtml"
+            rendered="#{calendarioOeeDetList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/CalendarioOeeDetList.xhtml"
+            rendered="#{calendarioOeeDetList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{calendarioOeeDetList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/CalendarioOeeDetList.xhtml"
+            rendered="#{calendarioOeeDetList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{calendarioOeeDetList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/CalendarioOeeDetList.xhtml"
+            rendered="#{calendarioOeeDetList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{calendarioOeeDetList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/CalendarioOeeDetEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create calendarioOeeDet">
+            <f:param name="calendarioOeeDetIdCalendarioOeeDet"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

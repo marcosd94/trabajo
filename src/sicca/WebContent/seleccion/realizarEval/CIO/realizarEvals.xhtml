@@ -1,0 +1,580 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+#sptpAEvaluarId_body {
+	height: 400px;
+}
+
+.extdt-menu-div-out {
+	display: none;
+}
+
+.extdt-hsep {
+	display: none;
+}
+</style>
+		<a:outputPanel ajaxRendered="true" id="idPanelModals">
+			<rich:modalPanel
+				rendered="#{realizarEvalsFormController.mostrarModal}" id="modal2"
+				autosized="true" width="300" styleClass="centerbox"
+				resizeable="false" moveable="true">
+
+				<h:form>
+					<a:region>
+						<s:decorate id="ObsField" template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.GENERICO_ATENCION}</ui:define>
+							<h:outputText escape="false"
+								value="#{realizarEvalsFormController.textoModalSgteTarea}" />
+
+						</s:decorate>
+					</a:region>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center"><s:button id="save"
+						propagation="join" value="Aceptar"
+						onclick="#{rich:component('modal2')}.hide()">
+					</s:button> <s:button id="btnSgteTareaModal" propagation="join"
+						rendered="#{!realizarEvalsFormController.hayEvalObliAdelante}"
+						value="Continuar con la Siguiente Tarea "
+						onclick="#{rich:component('modal2')}.hide()"
+						action="#{realizarEvalsFormController.nextTask('ELABORAR_PUBLICACION_LISTA_CORTA_I')}">
+						<f:param name="continuarSgteTarea" value="#{true}"></f:param>
+					</s:button></div>
+				</h:form>
+			</rich:modalPanel>
+			<script type="text/javascript">
+			Richfaces.showModalPanel('modal2');	
+			</script>
+
+		</a:outputPanel>
+
+		<rich:modalPanel id="modal" width="300" height="180"
+			style="display:yes"
+			rendered="#{evaluarDocPostulantesFormController.mostrarModal}"
+			resizeable="false" moveable="true">
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer" onclick="#{rich:component('modal')}.hide()" />
+			</f:facet>
+			<h:form>
+				<a:region>
+					<s:decorate id="ObsField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.GENERICO_ATENCION}</ui:define>
+						<h:outputText escape="false"
+							value="#{evaluarDocPostulantesFormController.mensajeModal}" />
+					</s:decorate>
+				</a:region>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><s:button id="save"
+					value="Aceptar" onclick="#{rich:component('modal')}.hide()"
+					view="#{evaluarDocPostulantesFormController.view451}" /> <a:commandButton
+					id="cancel" value="Cancelar" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modal')" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="modalSelect" autosized="true">
+			<f:facet name="header">#{messages.CU88_imprimirEvalsRefs}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/dialog-close.png" width="18" height="18"
+					style="cursor:pointer"
+					onclick="#{rich:component('modalSelect')}.hide()" />
+			</f:facet>
+
+			<h:form id="formSelect">
+			#{messages.CU88_evaluaciones}
+				<h:panelGrid columns="1" border="1">
+
+					<s:decorate template="/layout/display.xhtml">
+						<h:selectOneRadio id="estado" layout="pageDirection"
+							value="#{realizarEvalsFormController.evalsRefsRadio}">
+							<s:selectItems var="val"
+								value="#{enumAppHelper.evalsReferenciales}"
+								label="#{val.descripcion}" />
+							<s:convertEnum />
+						</h:selectOneRadio>
+					</s:decorate>
+				</h:panelGrid>
+				<div class="actionButtons"><h:commandButton id="confirm"
+					value="#{messages.CU88_imprimir}"
+					action="#{realizarEvalsFormController.imprimir()}"
+					onclick="#{rich:component('modalSelect')}.hide()">
+					<f:param name="idPuesto" value="#{grupoPuestosController.idPuesto}" />
+					<f:param name="idConcursoPuesto"
+						value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+				</h:commandButton> <a:commandButton id="clear" value="#{messages.msg_cancel}"
+					onclick="#{rich:component('modalSelect')}.hide()" /></div>
+			</h:form>
+		</rich:modalPanel>
+		<h1>Evaluaciones de Puntaje</h1>
+		<rich:simpleTogglePanel label="" switchType="client">
+			<h:panelGrid columns="3">
+
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel} 
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad} 
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+		                #{' '}
+		                <h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee} 
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+		                #{' '}
+		                <h:inputText id="configUoCab" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Concurso</ui:define>
+					<h:inputText id="concurso" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.concurso.nombre}"
+						style=" width : 514px;" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Grupo de Puestos</ui:define>
+					<h:inputText id="usuMod" disabled="true"
+						value="#{grupoPuestosController.concursoPuestoAgr.descripcionGrupo}"
+						style=" width : 514px;" />
+				</s:decorate>
+			</h:panelGrid>
+		</rich:simpleTogglePanel>
+		<rich:simpleTogglePanel label="#{messages.CU88_matConfigurada}"
+			switchType="client">
+			<h:panelGrid columns="2">
+				<s:decorate id="matrizField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_matriz} 
+					</ui:define>
+					<h:inputText id="matrizCodigo" disabled="true"
+						value="#{realizarEvalsFormController.matriz}"
+						style=" width : 338px;">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="puntMaxField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_puntMax} 
+					</ui:define>
+					<h:inputText id="puntMaxCodigo" styleClass="numeric"
+						style=" width : 116px;" disabled="true"
+						value="#{realizarEvalsFormController.puntajeMax}">
+					</h:inputText>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+				<s:decorate id="porcMinAppField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_porcMinApp}</ui:define>
+					<h:inputText id="porcMinApp" size="10" disabled="true"
+						style=" width : 228px;"
+						value="#{realizarEvalsFormController.porcMinAplicar}" />
+				</s:decorate>
+				<s:decorate id="seleccionField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_seleccion} 
+					</ui:define>
+					<h:inputText id="seleccion" style=" width : 228px;" disabled="true"
+						value="#{realizarEvalsFormController.seleccion}" />
+				</s:decorate>
+				<s:decorate id="minimoField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU88_minimo}</ui:define>
+					<h:inputText id="minimo" style=" width : 80px;" disabled="true"
+						styleClass="numeric"
+						value="#{realizarEvalsFormController.minimoDesc}" />
+				</s:decorate>
+			</h:panelGrid>
+			<a:form id="elFormCab">
+				<h:panelGrid columns="2">
+					<s:decorate id="tipoEvalField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU88_tipoEval} 
+				</ui:define>
+						<h:inputText id="tipoEval" size="10" disabled="true"
+							value="#{realizarEvalsFormController.tipoEvalDesc}"
+							style=" width : 514px;" />
+					</s:decorate>
+					<a:commandButton id="siguienteEval"
+						disabled="#{realizarEvalsFormController.bloquearComboTipoEval || realizarEvalsFormController.esDesierto}"
+						value="#{messages.GENERICO_SIGUIENTE}"
+						reRender="tipoEval,siguienteEval"
+						action="#{realizarEvalsFormController.siguienteEvaluacion()}"
+						style=" width : 180px;">
+						<f:setPropertyActionListener
+							target="#{realizarEvalsFormController.btnSgteEval}"
+							value="#{true}"></f:setPropertyActionListener>
+					</a:commandButton>
+				</h:panelGrid>
+			</a:form>
+		</rich:simpleTogglePanel>
+		<a:outputPanel ajaxRendered="true" id="idPanelesAbiertasCerradas">
+			<rich:tabPanel switchType="client"
+				selectedTab="#{realizarEvalsFormController.tabActivo}">
+				<rich:tab switchType="ajax" name="tab1"
+					action="#{realizarEvalsFormController.activarTab('tab1')}"
+					label="#{messages.CU88_evaluacionesAbiertas}">
+					<rich:simpleTogglePanel label="#{messages.CU88_evalsAbiertas}"
+						id="sptpAEvaluarId" switchType="client">
+
+						<h:panelGrid columns="2">
+
+							<a:form>
+								<h:commandButton id="cerrarEval"
+									disabled="#{realizarEvalsFormController.esDesierto}"
+									value="#{messages.cu88_cerrarEvaluacion}"
+									action="#{realizarEvalsFormController.cerrarEvaluacion()}"
+									style=" width : 180px;">
+								</h:commandButton>
+								<s:button
+									rendered="#{evaluarDocPostulantesFormController.mostrarModal}"
+									id="idBtnDisminuirPuestos" value="Disminuir Puestos"
+									propagation="default"
+									view="#{evaluarDocPostulantesFormController.view451}">
+								</s:button>
+								<a:commandButton id="siguienteTareaEval"
+									disabled="#{realizarEvalsFormController.esDesierto}"
+									value="#{messages.CU88_siguienteTarea}"
+									reRender="idPanelModals"
+									action="#{realizarEvalsFormController.nextTask('ELABORAR_PUBLICACION_LISTA_CORTA_I')}"
+									style=" width : 180px;">
+								</a:commandButton>
+								<s:button id="volver" value="Volver" propagation="none"
+									view="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml" />
+
+							</a:form>
+
+
+						</h:panelGrid>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU88_observacion}</ui:define>
+							<h:inputTextarea style=" width : 492px;"
+								value="#{realizarEvalsFormController.observacion}" />
+						</s:decorate>
+						<a:outputPanel id="idPanelEvalAbiertas" ajaxRendered="true">
+							<f:facet name="header">Cantidad de Evaluaciones Abiertas (#{evalAbiertasList.resultCount})</f:facet>
+
+							<rich:extendedDataTable enableContextMenu="false"
+								rows="#{evalAbiertasList.resultCount}" height="300px"
+								id="concursoList" var="_dto" rowKeyVar="row"
+								value="#{realizarEvalsFormController.lEvalsAbiertas}"
+								rendered="#{not empty realizarEvalsFormController.lEvalsAbiertas}">
+								<rich:column width="19%" id="cA1">
+									<f:facet name="header">
+						#{messages.CU88_evaluacion}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{realizarEvalsFormController.refreshEvalAbierto(_dto).datosEspecificos.descripcion}" />
+								</rich:column>
+								<rich:column width="14%" id="cA2">
+									<f:facet name="header">
+						#{messages.CU88_fecha_eval}
+						</f:facet>
+									<h:outputText value="#{_dto.evalReferencial.fechaMod}" />
+								</rich:column>
+								<rich:column width="14%" id="cA3">
+									<f:facet name="header">
+						#{messages.CU88_cod_postulante}
+						</f:facet>
+									<h:outputText
+										value="#{_dto.postulacion.personaPostulante.usuAlta}" />
+								</rich:column>
+								<rich:column width="9%" id="cA4"
+									rendered="#{realizarEvalsFormController.mostrarColDisca}">
+									<f:facet name="header">
+						#{messages.CU88_discapacidad}
+						</f:facet>
+									<h:outputText
+										value="#{realizarEvalsFormController.esPersonDisca(_dto.postulacion.personaPostulante.persona.idPersona)}" />
+								</rich:column>
+								<rich:column width="9%" id="cA5">
+									<f:facet name="header">
+						#{messages.CU88_estado}
+						</f:facet>
+									<h:outputText
+										value="#{realizarEvalsFormController.formatAprobado(_dto.evalReferencial)}" />
+								</rich:column>
+								<rich:column width="8%" id="cA6">
+									<f:facet name="header">
+						#{messages.CU88_puntaje_total}
+						</f:facet>
+									<h:outputText value="#{_dto.evalReferencial.puntajeRealizadoFormateado}" />
+								</rich:column>
+								<rich:column width="8%" id="cA7">
+									<f:facet name="header">
+						#{messages.CU88_por_alcanzado}
+						</f:facet>
+									<h:outputText
+										value="#{_dto.evalReferencial.porcRealizadoFormateado}" />
+								</rich:column>
+								<rich:column width="30%" id="cA8">
+									<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+									<s:link
+										view="/seleccion/realizarEval/CIO/evalPuntajePostulante.xhtml"
+										value="#{messages.CU8_evaluar}" propagation="join"
+										id="evalPuntajePostulanteId">
+										<f:param name="idDatosEspecificosVer" value="#{null}" />
+										<f:param name="idConcursoPuesto"
+											value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+										<f:param name="tabActivo" value="tab1" />
+										<f:param name="idPostulacion"
+											value="#{_dto.postulacion.idPostulacion}" />
+										<f:param name="codPostulante"
+											value="#{_dto.postulacion.personaPostulante.usuAlta}" />
+										<f:param name="idPersona"
+											value="#{_dto.postulacion.personaPostulante.persona.idPersona}" />
+										<f:param name="ver" value="#{false}" />
+
+									</s:link>
+									#{' '}
+									<s:link value="Ver Datos del Postulante"  
+										action="#{realizarEvalsFormController.imprimirCopiaLegajo()}">
+										<f:param name="idPostulacion"
+											value="#{_dto.postulacion.idPostulacion}" />
+									</s:link>
+										#{' '}
+									
+									#{' '}
+									<s:link value="Ver Legajo Actual"  
+										action="#{realizarEvalsFormController.imprimirLegajo()}">
+										<f:param name="idPersonaPostulante"
+											value="#{_dto.postulacion.personaPostulante.idPersonaPostulante}" />
+									</s:link>
+									#{' '}
+									<s:link
+										view="/seleccion/realizarEval/CIO/EvalDocumentalCabEdit.xhtml"
+										value="Ver Documentos" propagation="none"
+										id="evalDocumentalCabEdit">
+										<f:param name="evalDocumentalCabIdEvalDocumentalCab"
+											value="#{_dto.evalDocumentalCab.idEvalDocumentalCab}" />
+										<f:param name="isEdit"
+											value="#{realizarEvalsFormController.edit}" />
+										<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+											value="#{realizarEvalsFormController.idConcursoPuestoAgr}" />
+										<f:param name="from"
+											value="#{realizarEvalsFormController.evalDocumentalFromCIO}" />
+									</s:link>
+									
+									
+
+								</rich:column>
+							</rich:extendedDataTable>
+						</a:outputPanel>
+					</rich:simpleTogglePanel>
+
+
+				</rich:tab>
+				<rich:tab name="tab2" label="#{messages.CU88_evaluacionesCerradas}"
+					switchType="page" action="#{realizarEvalsFormController.search()}">
+					<rich:simpleTogglePanel
+						label="#{messages['msg_list_search_filter']}" id="panelBusqueda"
+						switchType="client">
+						<a:form id="idFormParametros">
+							<h:panelGrid columns="2">
+								<s:decorate id="fechaDesdeField"
+									template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU88_fechaDesde}</ui:define>
+									<rich:calendar id="fechaDesde"
+										value="#{realizarEvalsFormController.fechaDesde}"
+										inputSize="10" enableManualInput="true"
+										oninputkeyup="ponerBarra(event)" datePattern="dd/MM/yyyy" />
+								</s:decorate>
+
+								<s:decorate id="fechaHastaField"
+									template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU88_fechaHasta}</ui:define>
+									<rich:calendar id="fechaHasta"
+										value="#{realizarEvalsFormController.fechaHasta}"
+										inputSize="10" enableManualInput="true"
+										oninputkeyup="ponerBarra(event)" datePattern="dd/MM/yyyy" />
+								</s:decorate>
+							</h:panelGrid>
+							<h:panelGrid>
+								<s:decorate id="tipoEvalField" template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU88_tipoEval}</ui:define>
+									<h:selectOneMenu id="tipoEval"
+										value="#{realizarEvalsFormController.idTipoEvalCerradas}"
+										style=" width : 450px;">
+										<f:selectItems
+											value="#{realizarEvalsFormController.tipoEvalSelecItem}" />
+										<a:support event="onchange"
+											action="#{realizarEvalsFormController.ponerTipoEval(rich:findComponent('idFormParametros:tipoEvalField:tipoEval').value)}"
+											ajaxSingle="true">
+										</a:support>
+									</h:selectOneMenu>
+								</s:decorate>
+							</h:panelGrid>
+
+							<div class="actionButtons"><a:commandButton id="search"
+								value="#{messages.msg_list_search_button}"
+								action="#{realizarEvalsFormController.search()}"
+								reRender="panelResultados">
+								<f:param name="firstResult" value="0" />
+							</a:commandButton> <a:commandButton id="reset"
+								value="#{messages['msg_list_search_reset_button']}"
+								action="#{realizarEvalsFormController.searchAll()}"
+								reRender="panelResultados,panelBusqueda">
+								<f:param name="firstResult" value="0" />
+							</a:commandButton> <h:commandButton
+								action="/seleccion/realizarEval/datosConvReunion.xhtml"
+								id="convReunionInforId"
+								value="#{messages.CU88_convReunionInfor}">
+								<f:param name="idConcursoPuesto"
+									value="#{realizarEvalsFormController.grupoPuestosController.idConcursoPuestoAgr}" />
+								<f:param name="idTipoEvalCerradas"
+									value="#{realizarEvalsFormController.idTipoEvalCerradas}" />
+								<f:param name="idPuesto"
+									value="#{realizarEvalsFormController.grupoPuestosController.idPuesto}" />
+								<f:param name="idPostulacion"
+									value="#{realizarEvalsFormController.grupoPuestosController.idPuesto}" />
+							</h:commandButton> <s:button view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+								id="anexosId" propagation="join" value="#{messages.CU88_anexos}">
+								<f:param name="idSolicCab" />
+								<f:param name="direccionFisica"
+									value="#{realizarEvalsFormController.direccionFisica}" />
+								<f:param name="nombrePantalla" value="EvaluacionesDePuntajeDelConcursoInterno" />
+								<f:param name="idCU"
+									value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+								<f:param name="nombreTabla" value="EvalReferencialTipoeval" />
+								<f:param name="mostrarDoc" value="true" />
+								<f:param name="isEdit" value="true" />
+								<f:param name="from"
+									value="/seleccion/realizarEval/realizarEvals.xhtml" />
+							</s:button> <s:button
+								onclick="#{rich:component('modalSelect')}.show();return false"
+								id="publicarEvalId" propagation="none"
+								value="#{messages.CU88_imprimir}">
+							</s:button><s:button id="volver1" value="Volver" propagation="none"
+								view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" /></div>
+						</a:form>
+						<rich:panel id="panelResultados">
+							<f:facet name="header">#{messages['msg_list_search_results']} (#{empty realizarEvalsFormController.lEvalsCerradas ? 0 : (realizarEvalsFormController.lEvalsCerradas.size)})</f:facet>
+							<rich:extendedDataTable  height="200px"
+								id="evalCerradasList" var="_dto" rowKeyVar="row"
+								value="#{realizarEvalsFormController.lEvalsCerradas}"
+								rendered="#{not empty realizarEvalsFormController.lEvalsCerradas}">
+								<rich:column width="14%" id="cC1">
+									<f:facet name="header">
+						#{messages.CU88_evaluacion}
+						</f:facet>
+									<h:outputText style="white-space:normal"
+										value="#{realizarEvalsFormController.refresTipoEval(_dto.evalReferencialTipoeval)}" />
+								</rich:column>
+								<rich:column width="14%" id="cC2">
+									<f:facet name="header">
+						#{messages.CU88_fecha_eval}
+						</f:facet>
+									<h:outputText value="#{_dto.evalReferencial.fechaEvaluacion}" />
+								</rich:column>
+								<rich:column width="14%" id="cC3">
+									<f:facet name="header">
+						#{messages.CU88_cod_postulante}
+						</f:facet>
+									<h:outputText
+										value="#{_dto.postulacion.personaPostulante.usuAlta}" />
+								</rich:column>
+								<rich:column width="14%" id="cC4">
+									<f:facet name="header">
+						#{messages.CU88_estado}
+						</f:facet>
+									<h:outputText
+										value="#{realizarEvalsFormController.formatAprobado(_dto.evalReferencial)}" />
+								</rich:column>
+								<rich:column width="10%" id="cC5">
+									<f:facet name="header">
+						#{messages.CU88_puntaje_total}
+						</f:facet>
+									<h:outputText value="#{_dto.evalReferencial.puntajeRealizadoFormateado}" />
+								</rich:column>
+								<rich:column width="10%" id="cC6">
+									<f:facet name="header">
+						#{messages.CU88_por_alcanzado}
+						</f:facet>
+									<h:outputText
+										value="#{_dto.evalReferencial.porcRealizadoFormateado}" />
+								</rich:column>
+								<rich:column width="22%" id="cC7">
+									<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+									<s:link
+										view="/seleccion/realizarEval/evalPuntajePostulante.xhtml"
+										value="#{messages.CU8_verEvaluacion}" propagation="join"
+										id="evalPuntajePostulanteId">
+										<f:param name="idTipoEval"
+											value="#{realizarEvalsFormController.idTipoEval}" />
+										<f:param name="tabActivo" value="tab2" />
+										<f:param name="idPostulacion"
+											value="#{_dto.postulacion.idPostulacion}" />
+										<f:param name="codPostulante"
+											value="#{_dto.postulacion.personaPostulante.usuAlta}" />
+										<f:param name="ver" value="#{true}" />
+										<f:param name="idDatosEspecificosVer"
+											value="#{_dto.evalReferencialTipoeval.datosEspecificos.idDatosEspecificos}" />
+									</s:link>
+									#{' '}
+									<s:link value="Ver Datos del Postulante"  
+										action="#{realizarEvalsFormController.imprimirTab7()}">
+										<f:param name="idPersonaPostulante"
+											value="#{_dto.postulacion.personaPostulante.idPersonaPostulante}" />
+									</s:link>
+								</rich:column>
+							</rich:extendedDataTable>
+						</rich:panel>
+
+					</rich:simpleTogglePanel>
+				</rich:tab>
+			</rich:tabPanel>
+
+		</a:outputPanel>
+
+		<script type="text/javascript">
+
+// Deshabilita los drag and drop
+
+/*Abiertas*/
+DnD_ExtSimpleDraggable_cA1.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA2.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA3.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA5.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA6.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA7.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cA8.isDragEnabled=false;
+/*Cerradas*/
+DnD_ExtSimpleDraggable_cC1.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cC2.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cC3.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cC5.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cC6.isDragEnabled=false;
+DnD_ExtSimpleDraggable_cC7.isDragEnabled=false; 
+
+
+
+
+</script>
+	</ui:define>
+</ui:composition>

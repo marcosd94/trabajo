@@ -1,0 +1,180 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="detReqMinSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="DetReqMin Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Tipo</ui:define>
+                <h:inputText id="tipo" value="#{detReqMinList.detReqMin.tipo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{detReqMinList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/DetReqMinList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">DetReqMin Search Results (#{empty detReqMinList.resultList ? 0 : (detReqMinList.paginated ? detReqMinList.resultCount : detReqMinList.resultList.size)})</f:facet>
+    <div class="results" id="detReqMinList">
+
+    <h:outputText value="The detReqMin search returned no results."
+               rendered="#{empty detReqMinList.resultList}"/>
+
+    <rich:dataTable id="detReqMinList"
+                var="_detReqMin"
+              value="#{detReqMinList.resultList}"
+           rendered="#{not empty detReqMinList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Id det req min"/>
+                    <ui:param name="propertyPath" value="detReqMin.idDetReqMin"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.idDetReqMin}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Planta cargo det id planta cargo det"/>
+                    <ui:param name="propertyPath" value="detReqMin.plantaCargoDet.idPlantaCargoDet"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.plantaCargoDet.idPlantaCargoDet}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Cpt id cpt"/>
+                    <ui:param name="propertyPath" value="detReqMin.cpt.idCpt"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.cpt.idCpt}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Requisito minimo cpt id requisito minimo cpt"/>
+                    <ui:param name="propertyPath" value="detReqMin.requisitoMinimoCpt.idRequisitoMinimoCpt"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.requisitoMinimoCpt.idRequisitoMinimoCpt}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Tipo"/>
+                    <ui:param name="propertyPath" value="detReqMin.tipo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.tipo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{detReqMinList}"/>
+                    <ui:param name="propertyLabel" value="Puntaje req min"/>
+                    <ui:param name="propertyPath" value="detReqMin.puntajeReqMin"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_detReqMin.puntajeReqMin}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'DetReqMin' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="detReqMinViewId">
+                <f:param name="detReqMinIdDetReqMin"
+                        value="#{_detReqMin.idDetReqMin}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/DetReqMinEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="detReqMinEdit"
+                rendered="#{empty from}">
+                <f:param name="detReqMinIdDetReqMin"
+                        value="#{_detReqMin.idDetReqMin}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/DetReqMinList.xhtml"
+            rendered="#{detReqMinList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/DetReqMinList.xhtml"
+            rendered="#{detReqMinList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{detReqMinList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/DetReqMinList.xhtml"
+            rendered="#{detReqMinList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{detReqMinList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/DetReqMinList.xhtml"
+            rendered="#{detReqMinList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{detReqMinList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/DetReqMinEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create detReqMin">
+            <f:param name="detReqMinIdDetReqMin"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

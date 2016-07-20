@@ -1,0 +1,195 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml" xmlns:a="http://richfaces.org/a4j">
+
+	<ui:define name="body">
+		<h1>#{messages.CU521_titulo}</h1>
+
+		<h:form id="detValidacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				id="panelParametro" switchType="client">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU521_grupo}</ui:define>
+					<h:selectOneMenu id="grupo" value="#{detValidacionList.idGrupo}"
+						style="width:250px">
+						<f:selectItems value="#{cabValidacionesSelectItems}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU521_descripcion}</ui:define>
+					<h:inputText id="nombreValidacion"
+						value="#{detValidacionList.detValidacion.nombreValidacion}"
+						size="50" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{detValidacionList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="Buscar" reRender="panelParametro,panelResultado,links"
+				action="#{detValidacionList.listaResultados()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" value="Mostrar Todos"
+				action="#{detValidacionList.limpiar()}"
+				reRender="panelParametro,panelResultado,links">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultado">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty detValidacionList.resultList ? 0 : (detValidacionList.paginated ? detValidacionList.resultCount : detValidacionList.resultList.size)})</f:facet>
+			<div class="results" id="detValidacionList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty detValidacionList.resultList}" /> <rich:dataTable
+				id="detValidacionList" var="_detValidacion"
+				value="#{detValidacionList.resultList}"
+				rendered="#{not empty detValidacionList.resultList}">
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_codigo}" />
+							<ui:param name="propertyPath"
+								value="detValidacion.idDetValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacion.idDetValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_grupo}" />
+							<ui:param name="propertyPath"
+								value="detValidacion.cabValidacion.nombreGrupoValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_detValidacion.cabValidacion.nombreGrupoValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_nombre}" />
+							<ui:param name="propertyPath"
+								value="detValidacion.nombreValidacion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText
+						value="#{_detValidacion.nombreValidacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_tipo}" />
+							<ui:param name="propertyPath" value="detValidacion.tipo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacion.tipo}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_activo}" />
+							<ui:param name="propertyPath" value="detValidacion.activo" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacion.activo ? 'SI' : 'NO'}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CU521_justificacion}" />
+							<ui:param name="propertyPath" value="detValidacion.justifEstado" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacion.justifEstado}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{detValidacionList}" />
+							<ui:param name="propertyLabel" value="#{messages.CU521_bloqueo}" />
+							<ui:param name="propertyPath" value="detValidacion.bloquea" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_detValidacion.bloquea ? 'SI' : 'NO'}" />
+				</h:column>
+
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					  <s:link view="/general/validaciones/DetValidacion.xhtml" value="Ver"
+						propagation="none" id="detValidacion" rendered="#{empty from}">
+						<f:param name="detValidacionIdDetValidacion"
+							value="#{_detValidacion.idDetValidacion}" />
+					</s:link>
+            #{' '}
+            <s:link view="/general/validaciones/DetValidacionEdit.xhtml" value="#{messages.msg_edit}"
+						propagation="none" id="detValidacionEdit" rendered="#{empty from}">
+						<f:param name="detValidacionIdDetValidacion"
+							value="#{_detValidacion.idDetValidacion}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/general/validaciones/DetValidacionList.xhtml"
+				rendered="#{detValidacionList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/general/validaciones/DetValidacionList.xhtml"
+				rendered="#{detValidacionList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{detValidacionList.previousFirstResult}" />
+			</s:link> <s:link view="/general/validaciones/DetValidacionList.xhtml"
+				rendered="#{detValidacionList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{detValidacionList.nextFirstResult}" />
+			</s:link> <s:link view="/general/validaciones/DetValidacionList.xhtml"
+				rendered="#{detValidacionList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{detValidacionList.lastFirstResult}" />
+			</s:link></div>
+
+			<s:div styleClass="actionButtons" rendered="#{empty from}">
+				<s:button view="/general/validaciones/DetValidacionEdit.xhtml"
+					id="create" propagation="none" value="#{messages.msg_create_male}">
+					<f:param name="detValidacionIdDetValidacion" />
+				</s:button>
+			</s:div>
+
+		</a:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

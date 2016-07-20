@@ -1,0 +1,181 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<rich:simpleTogglePanel id="panel1" switchType="ajax">
+				<h:panelGrid columns="3">
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.ClasificadorUo_nivel}</ui:define>
+						<h:inputText id="nivelCodigo" disabled="true"
+							value="#{bandejaEntradaFormController.nivelEntidad.nenCodigo}"
+							size="4">
+						</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+							value="#{bandejaEntradaFormController.nivelEntidad.nenNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.Usuario_entidad}</ui:define>
+						<h:inputText id="entidadCodigo" styleClass="numeric"
+							disabled="true"
+							value="#{bandejaEntradaFormController.sinEntidad.entCodigo}"
+							size="4">
+						</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+							value="#{bandejaEntradaFormController.sinEntidad.entNombre}"
+							size="40" disabled="true" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_oee}</ui:define>
+						<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="4"
+							disabled="true"
+							value="#{bandejaEntradaFormController.concursoPuestoAgr.concurso.configuracionUoCab.orden}">
+						</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="42"
+							disabled="true"
+							value="#{bandejaEntradaFormController.concursoPuestoAgr.concurso.configuracionUoCab.denominacionUnidad}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU40_concurso}</ui:define>
+						<h:inputText id="concurso" size="80" disabled="true"
+							value="#{bandejaEntradaFormController.concursoPuestoAgr.concurso.nombre}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU86_agr}</ui:define>
+						<h:inputText id="grupo" size="80" disabled="true"
+							value="#{bandejaEntradaFormController.concursoPuestoAgr.descripcionGrupo}" />
+					</s:decorate>
+				</h:panelGrid>
+				
+
+			</rich:simpleTogglePanel>
+		<h:form id="concurso" styleClass="edit" prependId="false"  enctype="multipart/form-data">
+
+			<rich:panel id="panel">
+				<f:facet name="header"> Agregar Documento Concurso Desierto</f:facet>
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="2">
+						<a:region>
+						
+														
+							<s:decorate id="detalleField" template="/layout/edit.xhtml">
+									<ui:define name="label">Titulo Publicación Desierto :</ui:define>
+									
+									<h:inputText id="detalle" size="100"
+												maxlength="100"
+												value="#{bandejaEntradaFormController.publicDetalle}" style=" width : 400px;">
+												<a:support event="onblur" eventsQueue="default" ></a:support>
+											</h:inputText>
+							</s:decorate>
+							
+							
+					
+										
+					<s:decorate id="nombreField2" template="/layout/edit.xhtml">
+								<ui:define name="label">Nombre del Documento:  </ui:define>
+								<h:inputText id="titulo" size="50"
+									maxlength="100"
+									value="#{bandejaEntradaFormController.tituloDocumentoAdjunto}" style=" width :140px;">
+									<a:support event="onblur" eventsQueue="default"></a:support>
+								</h:inputText>
+					
+								<s:fileUpload size="60" 
+									contentType="#{bandejaEntradaFormController.contentType}"
+									data="#{bandejaEntradaFormController.uploadedFile}"
+									fileName="#{bandejaEntradaFormController.fileName}"
+									fileSize="#{bandejaEntradaFormController.tamArchivo}"
+									style=" width : 260px;" />
+							</s:decorate>
+														
+							
+				</a:region>
+				
+					
+					
+				</h:panelGrid>
+							
+				
+				
+			</h:panelGrid>
+			
+				
+							
+
+			<h:commandButton id="search"
+				value="Guardar"
+				onclick="return confirm('#{messages.msg_confirm_save}');"
+				action="#{bandejaEntradaFormController.btnAgregarDocumento()}"
+				rendered="#{bandejaEntradaFormController.tieneDocAdjunto()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			<h:commandButton id="verAdjunto" value="Ver Adjunto"
+						rendered="#{!bandejaEntradaFormController.tieneDocAdjunto()}"
+						action="#{bandejaEntradaFormController.imprimirDocumento()}" />
+
+			<br />
+			<br />
+			
+
+				
+			
+			<div class="tableControl"><s:link
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{documentosList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{documentosList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{documentosList.lastFirstResult}" />
+			</s:link></div>
+						
+			
+			<div class="actionButtons">
+				 <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="/seleccion/bandejaEntrada/BandejaEntradaList.xhtml" />
+			 
+				
+			</div>
+			
+			</rich:panel>
+		</h:form>
+		
+
+	</ui:define>
+
+</ui:composition>

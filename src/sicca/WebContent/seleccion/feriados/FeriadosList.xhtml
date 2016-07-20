@@ -1,0 +1,154 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU299_title}</h1>
+		<h:form id="feriadosSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.Ciudad_descripcion}</ui:define>
+					<h:inputText id="descripcion"
+						value="#{feriadosList.feriados.descripcion}" size="100" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<h:selectOneRadio id="estado" value="#{feriadosList.estado}">
+						<s:selectItems var="val" value="#{enumAppHelper.estados}"
+							label="#{val.descripcion}" />
+						<s:convertEnum />
+					</h:selectOneRadio>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages['msg_list_search_button']}"
+				action="#{feriadosList.listaResultados()}"
+				reRender="panelResultados">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{feriadosList.limpiar()}"
+				reRender="panelResultados, panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <h:commandButton id="copiar" value="#{messages.CU299_copiar_calendario}"
+				action="#{feriadosFormController.copiar()}"
+				onclick="return confirm('#{messages.CU299_msg1}');" /></div>
+
+		</h:form>
+
+		<rich:panel id="panelResultados">
+			<f:facet name="header">#{messages['msg_list_search_results']} (#{empty feriadosList.resultList ? 0 : (feriadosList.paginated ? feriadosList.resultCount : feriadosList.resultList.size)})</f:facet>
+			<div class="results" id="feriadosList"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty feriadosList.resultList}" /> <rich:dataTable
+				id="feriadosList" var="_feriados" value="#{feriadosList.resultList}"
+				rendered="#{not empty feriadosList.resultList}">
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{feriadosList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.Asignacion_fecha}" />
+							<ui:param name="propertyPath" value="feriados.fecha" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_feriados.fecha}">
+						<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{feriadosList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.CondicionTrabajo_descripcion}" />
+							<ui:param name="propertyPath" value="feriados.descripcion" />
+						</ui:include>
+					</f:facet>
+					<h:outputText value="#{_feriados.descripcion}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<ui:include src="/layout/sort.xhtml">
+							<ui:param name="entityList" value="#{feriadosList}" />
+							<ui:param name="propertyLabel"
+								value="#{messages.ClasificadorUo_activo}" />
+							<ui:param name="propertyPath" value="feriados.activo" />
+						</ui:include>
+					</f:facet>
+					<h:selectBooleanCheckbox id="activo" disabled="true"
+						value="#{_feriados.activo}" />
+				</h:column>
+
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+					<s:link
+						view="/seleccion/feriados/#{empty from ? 'Feriados' : from}.xhtml"
+						value="#{empty from ? '' : ''}"
+						propagation="#{empty from ? 'none' : 'default'}"
+						id="feriadosViewId">
+						<f:param name="feriadosIdFeriados" value="#{_feriados.idFeriados}" />
+					</s:link>
+					 #{' '}
+            <s:link view="/seleccion/feriados/Feriados.xhtml"
+						value="Ver" propagation="none" id="feriados"
+						rendered="#{empty from}">
+						<f:param name="feriadosIdFeriados" value="#{_feriados.idFeriados}" />
+					</s:link>
+            #{' '}
+            <s:link view="/seleccion/feriados/FeriadosEdit.xhtml"
+						value="#{messages.msg_edit}" propagation="none" id="feriadosEdit"
+						rendered="#{empty from}">
+						<f:param name="feriadosIdFeriados" value="#{_feriados.idFeriados}" />
+					</s:link>
+				</rich:column>
+			</rich:dataTable></div>
+		</rich:panel>
+
+		<div class="tableControl"><s:link
+			view="/seleccion/feriados/FeriadosList.xhtml"
+			rendered="#{feriadosList.previousExists}"
+			value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+			id="firstPage">
+			<f:param name="firstResult" value="0" />
+		</s:link> <s:link view="/seleccion/feriados/FeriadosList.xhtml"
+			rendered="#{feriadosList.previousExists}"
+			value="#{messages.left} #{messages.msg_list_previous_page}"
+			id="previousPage">
+			<f:param name="firstResult"
+				value="#{feriadosList.previousFirstResult}" />
+		</s:link> <s:link view="/seleccion/feriados/FeriadosList.xhtml"
+			rendered="#{feriadosList.nextExists}"
+			value="#{messages.msg_list_next_page} #{messages.right}"
+			id="nextPage">
+			<f:param name="firstResult" value="#{feriadosList.nextFirstResult}" />
+		</s:link> <s:link view="/seleccion/feriados/FeriadosList.xhtml"
+			rendered="#{feriadosList.nextExists}"
+			value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+			id="lastPage">
+			<f:param name="firstResult" value="#{feriadosList.lastFirstResult}" />
+		</s:link></div>
+
+		<s:div styleClass="actionButtons" rendered="#{empty from}">
+			<s:button view="/seleccion/feriados/FeriadosEdit.xhtml" id="create"
+				propagation="none" value="#{messages.msg_create_male}">
+				<f:param name="feriadosIdFeriados" />
+			</s:button>
+		</s:div>
+
+	</ui:define>
+
+</ui:composition>

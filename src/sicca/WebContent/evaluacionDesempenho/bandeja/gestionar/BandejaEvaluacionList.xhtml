@@ -1,0 +1,317 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU556_titulo_gestionar}</h1>
+		<h:form id="bandejaEvaluacionSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="ajax" id="panelParametro">
+
+				<h:panelGrid columns="3" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<ui:remove>
+						<a:outputPanel>
+												<s:decorate template="/layout/display.xhtml">
+													<ui:define name="label">#{messages.CU398_unidadOrganiza}
+															</ui:define>
+													<h:inputText id="orgCodigo2" size="10"
+														value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+														<a:support event="onchange" eventsQueue="default"
+															action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+															reRender="orgCodigo2,orgDenominacion2,orden2" />
+													</h:inputText>
+															#{' '}
+															<h:inputText id="orgDenominacion2" size="50" disabled="true"
+														value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+															#{' '}
+															<a:commandButton id="searchUnidadOrgDep2"
+														eventsQueue="default" image="/img/Buscar.png"
+														action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList')}" />
+												</s:decorate>
+											</a:outputPanel>
+					</ui:remove>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.gral_rol}</ui:define>
+						<h:selectOneMenu id="idRol"
+							value="#{gestionarBandejaEvaluacionFC.idRol}"
+							style="width:250px">
+							<f:selectItems
+								value="#{seguridadUtilFormController.obtenerRolesUsuarioSelectItems()}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU556_evaluacion}</ui:define>
+						<h:inputText id="evaluacion" size="50"
+							value="#{gestionarBandejaEvaluacionFC.evaluacion}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Tarea</ui:define>
+						<h:inputText id="tareaField" size="50"
+							value="#{gestionarBandejaEvaluacionFC.tarea}" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				eventsQueue="default" value="#{messages.msg_list_search_button}"
+				reRender="panelParamentro,lista,listaVirtual"
+				action="#{gestionarBandejaEvaluacionFC.search()}">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <a:commandButton id="reset" eventsQueue="default"
+				value="#{messages['msg_list_search_reset_button']}"
+				action="#{gestionarBandejaEvaluacionFC.searchAll()}"
+				reRender="panelParametro,lista,listaVirtual" /></div>
+
+		</h:form>
+
+		<a:outputPanel id="listaVirtual">
+			<rich:panel id="panelSinResultado"
+				rendered="#{!gestionarBandejaEvaluacionFC.mostrarResultado}">
+				<f:facet name="header">#{messages['msg_list_search_results']}(0)</f:facet>
+				<span class="required"><h:outputText value="Debe asignar una Unidad Organizativa al Usuario actualmente logueado"/></span>
+			</rich:panel>
+		</a:outputPanel>
+		<a:outputPanel id="lista">
+			<rich:panel id="panelResultado"
+				rendered="#{gestionarBandejaEvaluacionFC.mostrarResultado}">
+				<f:facet name="header">#{messages['msg_list_search_results']} (#{empty bandejaEvaluacionList.resultList ? 0 : (bandejaEvaluacionList.paginated ? bandejaEvaluacionList.resultCount : bandejaEvaluacionList.resultList.size)})</f:facet>
+				<div class="results" id="bandejaEvaluacionList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty bandejaEvaluacionList.resultList}" /> <rich:dataTable
+					id="bandejaEvaluacionList" var="_bandejaEvaluacion"
+					value="#{bandejaEvaluacionList.resultList}"
+					rendered="#{not empty bandejaEvaluacionList.resultList}">
+					<ui:remove>
+						<h:column>
+												<f:facet name="header">
+													<ui:include src="/layout/sort.xhtml">
+														<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+														<ui:param name="propertyLabel" value="#{messages.CU471_uo}" />
+														<ui:param name="propertyPath"
+															value="bandejaEvaluacion.denominacionUnidadDet" />
+													</ui:include>
+												</f:facet>
+												<h:outputText
+													value="#{_bandejaEvaluacion.denominacionUnidadDet}" />
+											</h:column>
+					</ui:remove>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU556_evaluacion}" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.tituloEval" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.tituloEval}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="OEE" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.denominacionUnidadCab" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.denominacionUnidadCab}" />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU472_tarea}" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.actividad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.actividad== 'GENERAR RESOLUCION EVALUACION DE DESEMPEÑO' ? 'GENERAR REGLAMENTO EVALUACION DE DESEMPEÑO' : _bandejaEvaluacion.actividad}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_fecha_recepcion}" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.fechaRecepcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.fechaRecepcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="Fecha Inicio" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.fechaInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.fechaInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_rec}" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.diasCreacion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.diasCreacion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_dias_trans_ini}" />
+								<ui:param name="propertyPath"
+									value="bandejaEvaluacion.diasInicio" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_bandejaEvaluacion.diasInicio}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{bandejaEvaluacionList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.proceso_atraso}" />
+								<ui:param name="propertyPath" value="bandejaEvaluacion.atraso" />
+							</ui:include>
+						</f:facet>
+						<span class="required"> <h:outputText
+							value="#{_bandejaEvaluacion.atraso}"
+							rendered="#{_bandejaEvaluacion.atraso &gt; 0}" /> </span>
+						<h:outputText value="#{_bandejaEvaluacion.atraso}"
+							rendered="#{_bandejaEvaluacion.atraso &lt;= 0}" />
+
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<s:link id="gestionar" eventsQueue="default"
+						value="#{messages.proceso_gestionar}"
+						action="#{gestionarBandejaEvaluacionFC.redirect()}"
+						onclick="return confirm('#{messages.CU472_question}');">
+						<f:param name="actividad" value="#{_bandejaEvaluacion.codActividad}" />
+						<f:param name="evaluacionDesempenoIdEvaluacionDesempeno"
+							value="#{_bandejaEvaluacion.idEvaluacionDesempeno}" />
+					</s:link>
+					
+						</rich:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+		</a:outputPanel>
+
+		<a:outputPanel ajaxRendered="true" id="links">
+			<div class="tableControl"><s:link
+				view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"
+				rendered="#{bandejaEvaluacionList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"
+				rendered="#{bandejaEvaluacionList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{bandejaEvaluacionList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"
+				rendered="#{bandejaEvaluacionList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{bandejaEvaluacionList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/evaluacionDesempenho/bandeja/gestionar/BandejaEvaluacionList.xhtml"
+				rendered="#{bandejaEvaluacionList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{bandejaEvaluacionList.lastFirstResult}" />
+			</s:link></div>
+		</a:outputPanel>
+	</ui:define>
+
+</ui:composition>

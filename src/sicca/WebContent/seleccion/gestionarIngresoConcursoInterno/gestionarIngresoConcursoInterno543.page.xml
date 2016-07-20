@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/seleccion/gestionarIngresosConcursos/gestionarIngresosConcurso.xhtml"
+	login-required="true">
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{grupoPuestosController.initCabecera()}"
+		on-postback="false" />
+	<action execute="#{gestionarIngresoConcurso543FC.init()}" on-postback="false" />
+	<param name="idConcursoPuestoAgr" value="#{grupoPuestosController.idConcursoPuestoAgr}" />
+	<restrict>#{identity.hasRole('gestionar_Ingresos_Concursos')}</restrict>
+	<navigation from-action="#{gestionarIngresoConcurso543FC.save()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect
+				view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml">
+				<param name="idConcursoPuestoAgr" value="#{grupoPuestosController.idConcursoPuestoAgr}"></param>
+			</redirect>
+		</rule>
+	</navigation>
+
+	<navigation from-action="#{gestionarIngresos.nextTask()}">
+		<rule if-outcome="nextTask">
+			<end-conversation />
+			<redirect view-id="/circuitoCIO/bandejaEntrada/BandejaEntradaList.xhtml">
+
+			</redirect>
+		</rule>
+	</navigation>
+
+</page>

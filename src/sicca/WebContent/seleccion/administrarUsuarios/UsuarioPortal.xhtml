@@ -1,0 +1,218 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Usuario portal Details</f:facet>
+
+        <s:decorate id="idUsuarioPortal" template="layout/display.xhtml">
+            <ui:define name="label">Id usuario portal</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.idUsuarioPortal}"/>
+        </s:decorate>
+
+        <s:decorate id="contrasenha" template="layout/display.xhtml">
+            <ui:define name="label">Contrasenha</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.contrasenha}"/>
+        </s:decorate>
+
+        <s:decorate id="observacion" template="layout/display.xhtml">
+            <ui:define name="label">Observacion</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.observacion}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{usuarioPortalHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/UsuarioPortalEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty usuarioPortalFrom ? 'UsuarioPortalList' : usuarioPortalFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Persona</h:panelGroup>
+        </f:facet>
+    <div class="association" id="personaParent">
+
+        <h:outputText value="There is no persona associated with this usuarioPortal."
+                   rendered="#{usuarioPortalHome.instance.persona == null}"/>
+
+        <rich:dataTable var="_persona"
+                   value="#{usuarioPortalHome.instance.persona}"
+                rendered="#{usuarioPortalHome.instance.persona != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="personaTable">
+            <h:column>
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_persona.idPersona}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombres</f:facet>
+                <h:outputText value="#{_persona.nombres}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Apellidos</f:facet>
+                <h:outputText value="#{_persona.apellidos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Apellido casada</f:facet>
+                <h:outputText value="#{_persona.apellidoCasada}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documento identidad</f:facet>
+                <h:outputText value="#{_persona.documentoIdentidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Correo electronico</f:facet>
+                <h:outputText value="#{_persona.correoElectronico}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sexo</f:facet>
+                <h:outputText value="#{_persona.sexo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado civil</f:facet>
+                <h:outputText value="#{_persona.estadoCivil}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha nacimiento</f:facet>
+                <h:outputText value="#{_persona.fechaNacimiento}">
+                    <s:convertDateTime type="date" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id pais expedicion doc</f:facet>
+                <h:outputText value="#{_persona.idPaisExpedicionDoc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id datos especificos nacionalid</f:facet>
+                <h:outputText value="#{_persona.idDatosEspecificosNacionalid}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id ciudad nac</f:facet>
+                <h:outputText value="#{_persona.idCiudadNac}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Calle principal</f:facet>
+                <h:outputText value="#{_persona.callePrincipal}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Primera lateral</f:facet>
+                <h:outputText value="#{_persona.primeraLateral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Segunda lateral</f:facet>
+                <h:outputText value="#{_persona.segundaLateral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Departamento nro</f:facet>
+                <h:outputText value="#{_persona.departamentoNro}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Piso</f:facet>
+                <h:outputText value="#{_persona.piso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id ciudad direcc</f:facet>
+                <h:outputText value="#{_persona.idCiudadDirecc}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Direccion laboral</f:facet>
+                <h:outputText value="#{_persona.direccionLaboral}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Otras direcciones</f:facet>
+                <h:outputText value="#{_persona.otrasDirecciones}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Telefonos</f:facet>
+                <h:outputText value="#{_persona.telefonos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_persona.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_persona.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_persona.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_persona.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_persona.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewpersona"
+                     value="View"
+                      view="/Persona.xhtml">
+                    <f:param name="personaIdPersona"
+                           value="#{_persona.idPersona}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

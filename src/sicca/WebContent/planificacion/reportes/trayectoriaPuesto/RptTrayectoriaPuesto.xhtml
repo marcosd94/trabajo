@@ -1,0 +1,237 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU434_tittle}</h1>
+			<a:form>
+				<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelBusqueda">
+					<h:panelGrid columns="1">
+						<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+											class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+										<a:support event="onchange" eventsQueue="default"
+											reRender="idPanelCampos"
+											action="#{nivelEntidadOeeUtil.findNivelEntidad()}" 
+											focus="entidadCodigo"/>
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageNivel('planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto')}" />
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findEntidad()}"
+											reRender="idPanelCampos" focus="unidadOrgCodigo" />
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto')}" />
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion" 
+											focus="orgCodigo2"/>
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageOee('planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto')}" />
+								</s:decorate>
+							</a:region>
+							
+							
+							<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.CU398_unidadOrganiza}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="orgCodigo2" size="10"
+										value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+											reRender="orgCodigo2,orgDenominacion2,orden2" />
+									</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+						 			#{' '}
+	               					<a:commandButton id="searchUnidadOrgDep2"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto')}" />
+							</s:decorate>
+							
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.CU434_puesto}</ui:define>
+								<h:inputText id="nombre" size="70" value="#{rptTrayectoriaPuestoFC.puesto}"/>
+							</s:decorate>
+						</a:outputPanel>
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+				
+
+				<div class="actionButtons">
+					<a:commandButton id="search"
+						value="#{messages.msg_list_search_button}"
+						action="#{rptTrayectoriaPuestoFC.buscar()}"
+						reRender="panelResultados">
+						<f:param name="firstResult" value="0" />
+					</a:commandButton> 
+					<a:commandButton id="reset"
+						value="#{messages['GENERICO_LIMPIAR']}"
+						action="#{rptTrayectoriaPuestoFC.limpiar()}"
+						reRender="panelBusqueda,panelResultados">
+						<f:param name="firstResult" value="0" />
+					 </a:commandButton>
+				</div>
+			</a:form>
+
+			<h:form>
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty rptTrayectoriaPuestoFC.listaPlantaCargoDet ? 0 : (rptTrayectoriaPuestoFC.plantaCargoDetList.paginated ? rptTrayectoriaPuestoFC.plantaCargoDetList.resultCount : rptTrayectoriaPuestoFC.plantaCargoDetList.resultList.size)})</f:facet>
+				<div class="results" id="tblActividadList">
+					<h:outputText value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty rptTrayectoriaPuestoFC.listaPlantaCargoDet}" /> 
+					
+				  	<rich:dataTable id="plantaCargoDetList" var="_plantaCargoDet"
+						value="#{rptTrayectoriaPuestoFC.listaPlantaCargoDet}"
+						rendered="#{not empty rptTrayectoriaPuestoFC.listaPlantaCargoDet}">
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{plantaCargoDetList}" />
+									<ui:param name="propertyLabel"
+										value="#{messages.CU434_unid_org}" />
+									<ui:param name="propertyPath" value="plantaCargoDet.configuracionUoDet.denominacionUnidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{plantaCargoDetList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU434_cod_puesto}" />
+									<ui:param name="propertyPath" value="plantaCargoDet.orden" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{grupoPuestosController.obtenerCodigoPuesto(_plantaCargoDet)}"/>
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{plantaCargoDetList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU434_descrip_puesto}" />
+									<ui:param name="propertyPath" value="plantaCargoDet.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_plantaCargoDet.descripcion}" />
+						</h:column>
+		
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{plantaCargoDetList}" />
+									<ui:param name="propertyLabel" value="#{messages.msg_estado}" />
+									<ui:param name="propertyPath" value="plantaCargoDet.estadoCab.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_plantaCargoDet.estadoCab.descripcion}" />
+						</h:column>
+						
+		
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						
+							<h:commandLink id="print" value="#{messages.CU434_imprimir_trayectoria}"
+								action="#{rptTrayectoriaPuestoFC.imprimir()}">
+								<f:param name="idPlantaCargoDet" value="#{_plantaCargoDet.idPlantaCargoDet}"/>
+							</h:commandLink>
+						
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</rich:panel>
+			</h:form>
+	
+			<div class="tableControl">
+				<s:link view="/planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto.xhtml"
+					rendered="#{rptTrayectoriaPuestoFC.plantaCargoDetList.previousExists}"
+					value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+					id="firstPage">
+					<f:param name="firstResult" value="0" />
+				</s:link> 
+				
+				<s:link view="/planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto.xhtml"
+					rendered="#{rptTrayectoriaPuestoFC.plantaCargoDetList.previousExists}"
+					value="#{messages.left} #{messages.msg_list_previous_page}"
+					id="previousPage">
+					<f:param name="firstResult" value="#{rptTrayectoriaPuestoFC.plantaCargoDetList.previousFirstResult}" />
+				</s:link>
+				 
+				<s:link view="/planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto.xhtml"
+					rendered="#{rptTrayectoriaPuestoFC.plantaCargoDetList.nextExists}"
+					value="#{messages.msg_list_next_page} #{messages.right}"
+					id="nextPage">
+					<f:param name="firstResult" value="#{rptTrayectoriaPuestoFC.plantaCargoDetList.nextFirstResult}" />
+				</s:link>
+				 
+				<s:link view="/planificacion/reportes/trayectoriaPuesto/RptTrayectoriaPuesto.xhtml"
+					rendered="#{rptTrayectoriaPuestoFC.plantaCargoDetList.nextExists}"
+					value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+					id="lastPage">
+					<f:param name="firstResult" value="#{rptTrayectoriaPuestoFC.plantaCargoDetList.lastFirstResult}" />
+				</s:link>
+			</div>
+			
+	</ui:define>
+</ui:composition>

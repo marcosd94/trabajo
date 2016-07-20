@@ -1,0 +1,85 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.DocumentoActo_}</h1>
+
+    <h:form id="documentoActo" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{documentoActoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.DocumentoActo_}</f:facet>
+
+	            <s:decorate id="plantaCargoDetField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.DocumentoActo_idPlantaCargoDet}</ui:define>
+	                <h:selectOneMenu id="plantaCargoDet"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{documentoActoHome.idPlantaCargoDet}">
+	                    <f:selectItems value="#{plantaCargoDetsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="fechaActoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.DocumentoActo_fechaActo}</ui:define>
+	                <rich:calendar id="fechaActo"
+                             required="true"
+                          datePattern="dd/MM/yyyy"
+                			   locale="#{localeSelector.localeString}"
+                                value="#{documentoActoHome.instance.fechaActo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{documentoActoHome.persist}"
+                       disabled="#{!documentoActoHome.wired}"                      
+                       rendered="#{!documentoActoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{documentoActoHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{documentoActoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{documentoActoHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{documentoActoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/documentoActo/DocumentoActoList.xhtml"
+                rendered="#{documentoActoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty documentoActoFrom ? 'planificacion/documentoActo/DocumentoActoList' : documentoActoFrom}.xhtml"
+                rendered="#{!documentoActoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

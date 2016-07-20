@@ -1,0 +1,691 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Excepcion Details</f:facet>
+
+        <s:decorate id="idExcepcion" template="layout/display.xhtml">
+            <ui:define name="label">Id excepcion</ui:define>
+            <h:outputText value="#{excepcionHome.instance.idExcepcion}"/>
+        </s:decorate>
+
+        <s:decorate id="tipo" template="layout/display.xhtml">
+            <ui:define name="label">Tipo</ui:define>
+            <h:outputText value="#{excepcionHome.instance.tipo}"/>
+        </s:decorate>
+
+        <s:decorate id="estado" template="layout/display.xhtml">
+            <ui:define name="label">Estado</ui:define>
+            <h:outputText value="#{excepcionHome.instance.estado}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{excepcionHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{excepcionHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{excepcionHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{excepcionHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{excepcionHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuSolicitud" template="layout/display.xhtml">
+            <ui:define name="label">Usu solicitud</ui:define>
+            <h:outputText value="#{excepcionHome.instance.usuSolicitud}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaSolicitud" template="layout/display.xhtml">
+            <ui:define name="label">Fecha solicitud</ui:define>
+            <h:outputText value="#{excepcionHome.instance.fechaSolicitud}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuAprobacion" template="layout/display.xhtml">
+            <ui:define name="label">Usu aprobacion</ui:define>
+            <h:outputText value="#{excepcionHome.instance.usuAprobacion}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAprobacion" template="layout/display.xhtml">
+            <ui:define name="label">Fecha aprobacion</ui:define>
+            <h:outputText value="#{excepcionHome.instance.fechaAprobacion}"/>
+        </s:decorate>
+
+        <s:decorate id="idProcessInstance" template="layout/display.xhtml">
+            <ui:define name="label">Id process instance</ui:define>
+            <h:outputText value="#{excepcionHome.instance.idProcessInstance}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ExcepcionEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty excepcionFrom ? 'ExcepcionList' : excepcionFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Concurso puesto agr</h:panelGroup>
+        </f:facet>
+    <div class="association" id="concursoPuestoAgrParent">
+
+        <h:outputText value="There is no concursoPuestoAgr associated with this excepcion."
+                   rendered="#{excepcionHome.instance.concursoPuestoAgr == null}"/>
+
+        <rich:dataTable var="_concursoPuestoAgr"
+                   value="#{excepcionHome.instance.concursoPuestoAgr}"
+                rendered="#{excepcionHome.instance.concursoPuestoAgr != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoPuestoAgrTable">
+            <h:column>
+                <f:facet name="header">Id concurso puesto agr</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion by id resolucion nombramiento id resolucion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionByIdResolucionNombramiento.idResolucion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion by id resolucion adjudicacion id resolucion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionByIdResolucionAdjudicacion.idResolucion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion by id resolucion homologacion id resolucion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionByIdResolucionHomologacion.idResolucion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nota homologacion id nota homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.notaHomologacion.idNotaHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Memo homologacion id memo homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.memoHomologacion.idMemoHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Homologacion perfil matriz id homologacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.homologacionPerfilMatriz.idHomologacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Resolucion by id decreto id resolucion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.resolucionByIdDecreto.idResolucion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cod grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.codGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion grupo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.descripcionGrupo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id process instance</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.idProcessInstance}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.mision}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Objetivo</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.objetivo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Modalidad</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.modalidad}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fuente financiacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fuenteFinanciacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Remuneracion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.remuneracion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cond laborales</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.condLaborales}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Otras inf</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.otrasInf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Post habilitados</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.postHabilitados}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Post no habilitados</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.postNoHabilitados}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Documentos</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.documentos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha limite</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaLimite}">
+                    <s:convertDateTime type="date" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Lugar</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.lugar}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Mision especifica</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.misionEspecifica}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Contacto</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.contacto}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Homologar</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.homologar}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha adjudicacion</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaAdjudicacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha eval doc desde</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaEvalDocDesde}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha eval doc hasta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaEvalDocHasta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha eval ref desde</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaEvalRefDesde}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha eval ref hasta</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.fechaEvalRefHasta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Otros beneficios</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.otrosBeneficios}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Horario</f:facet>
+                <h:outputText value="#{_concursoPuestoAgr.horario}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewconcursoPuestoAgr"
+                     value="View"
+                      view="/ConcursoPuestoAgr.xhtml">
+                    <f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+                           value="#{_concursoPuestoAgr.idConcursoPuestoAgr}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Concurso</h:panelGroup>
+        </f:facet>
+    <div class="association" id="concursoParent">
+
+        <h:outputText value="There is no concurso associated with this excepcion."
+                   rendered="#{excepcionHome.instance.concurso == null}"/>
+
+        <rich:dataTable var="_concurso"
+                   value="#{excepcionHome.instance.concurso}"
+                rendered="#{excepcionHome.instance.concurso != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="concursoTable">
+            <h:column>
+                <f:facet name="header">Id concurso</f:facet>
+                <h:outputText value="#{_concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datos especificos id datos especificos</f:facet>
+                <h:outputText value="#{_concurso.datosEspecificos.idDatosEspecificos}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                <h:outputText value="#{_concurso.nombre}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ad referendum</f:facet>
+                <h:outputText value="#{_concurso.adReferendum}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Desprecarizacion</f:facet>
+                <h:outputText value="#{_concurso.desprecarizacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_concurso.observacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="#{_concurso.estado}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha creacion</f:facet>
+                <h:outputText value="#{_concurso.fechaCreacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_concurso.idConfiguracionUo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_concurso.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_concurso.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_concurso.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_concurso.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_concurso.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Observacion reserva</f:facet>
+                <h:outputText value="#{_concurso.observacionReserva}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro orden</f:facet>
+                <h:outputText value="#{_concurso.nroOrden}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Numero</f:facet>
+                <h:outputText value="#{_concurso.numero}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Anio</f:facet>
+                <h:outputText value="#{_concurso.anio}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha finalizacion</f:facet>
+                <h:outputText value="#{_concurso.fechaFinalizacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu finalizacion</f:facet>
+                <h:outputText value="#{_concurso.usuFinalizacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nro expediente</f:facet>
+                <h:outputText value="#{_concurso.nroExpediente}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha expediente</f:facet>
+                <h:outputText value="#{_concurso.fechaExpediente}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewconcurso"
+                     value="View"
+                      view="/Concurso.xhtml">
+                    <f:param name="concursoIdConcurso"
+                           value="#{_concurso.idConcurso}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Comision seleccion cab</h:panelGroup>
+        </f:facet>
+    <div class="association" id="comisionSeleccionCabParent">
+
+        <h:outputText value="There is no comisionSeleccionCab associated with this excepcion."
+                   rendered="#{excepcionHome.instance.comisionSeleccionCab == null}"/>
+
+        <rich:dataTable var="_comisionSeleccionCab"
+                   value="#{excepcionHome.instance.comisionSeleccionCab}"
+                rendered="#{excepcionHome.instance.comisionSeleccionCab != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="comisionSeleccionCabTable">
+            <h:column>
+                <f:facet name="header">Id comision sel</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.idComisionSel}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso id concurso</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.concurso.idConcurso}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descripcion</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.descripcion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.usuAlta}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.usuMod}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionCab.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewcomisionSeleccionCab"
+                     value="View"
+                      view="/ComisionSeleccionCab.xhtml">
+                    <f:param name="comisionSeleccionCabIdComisionSel"
+                           value="#{_comisionSeleccionCab.idComisionSel}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Comision seleccion dets</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="comisionSeleccionDetsChildren">
+
+        <h:outputText value="There are no comisionSeleccionDets associated with this excepcion."
+                   rendered="#{empty excepcionHome.comisionSeleccionDets}"/>
+
+        <rich:dataTable value="#{excepcionHome.comisionSeleccionDets}"
+                       var="_comisionSeleccionDet"
+                  rendered="#{not empty excepcionHome.comisionSeleccionDets}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="comisionSeleccionDetsTable">
+            <rich:column sortBy="#{_comisionSeleccionDet.idComisionSelDet}">
+                <f:facet name="header">Id comision sel det</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.idPersona}">
+                <f:facet name="header">Id persona</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idPersona}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.idConfiguracionUo}">
+                <f:facet name="header">Id configuracion uo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idConfiguracionUo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.idRol}">
+                <f:facet name="header">Id rol</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idRol}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.titularSuplente}">
+                <f:facet name="header">Titular suplente</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.titularSuplente}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.idDocumento}">
+                <f:facet name="header">Id documento</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.idDocumento}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.puesto}">
+                <f:facet name="header">Puesto</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.puesto}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.activo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.usuAlta}">
+                <f:facet name="header">Usu alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuAlta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.usuMod}">
+                <f:facet name="header">Usu mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.usuMod}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.fechaAlta}">
+                <f:facet name="header">Fecha alta</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaAlta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.fechaMod}">
+                <f:facet name="header">Fecha mod</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.fechaMod}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.documentos}">
+                <f:facet name="header">Documentos</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.documentos}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.equipoTecnico}">
+                <f:facet name="header">Equipo tecnico</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.equipoTecnico}"/>
+            </rich:column>
+            <rich:column sortBy="#{_comisionSeleccionDet.tipo}">
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_comisionSeleccionDet.tipo}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectcomisionSeleccionDet"
+                     value="Select"
+                      view="/ComisionSeleccionDet.xhtml">
+                    <f:param name="comisionSeleccionDetIdComisionSelDet"
+                            value="#{_comisionSeleccionDet.idComisionSelDet}"/>
+                    <f:param name="comisionSeleccionDetFrom" value="Excepcion"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add comisionSeleccionDet"
+                view="/ComisionSeleccionDetEdit.xhtml">
+            <f:param name="excepcionIdExcepcion"
+                    value="#{excepcionHome.instance.idExcepcion}"/>
+            <f:param name="comisionSeleccionDetFrom" value="Excepcion"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Excepcion dets</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="excepcionDetsChildren">
+
+        <h:outputText value="There are no excepcionDets associated with this excepcion."
+                   rendered="#{empty excepcionHome.excepcionDets}"/>
+
+        <rich:dataTable value="#{excepcionHome.excepcionDets}"
+                       var="_excepcionDet"
+                  rendered="#{not empty excepcionHome.excepcionDets}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="excepcionDetsTable">
+            <rich:column sortBy="#{_excepcionDet.idExcepcionDet}">
+                <f:facet name="header">Id excepcion det</f:facet>
+                <h:outputText value="#{_excepcionDet.idExcepcionDet}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.observacion}">
+                <f:facet name="header">Observacion</f:facet>
+                <h:outputText value="#{_excepcionDet.observacion}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.usuObs}">
+                <f:facet name="header">Usu obs</f:facet>
+                <h:outputText value="#{_excepcionDet.usuObs}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.fechaObs}">
+                <f:facet name="header">Fecha obs</f:facet>
+                <h:outputText value="#{_excepcionDet.fechaObs}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.respuesta}">
+                <f:facet name="header">Respuesta</f:facet>
+                <h:outputText value="#{_excepcionDet.respuesta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.usuRpta}">
+                <f:facet name="header">Usu rpta</f:facet>
+                <h:outputText value="#{_excepcionDet.usuRpta}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.fechaRpta}">
+                <f:facet name="header">Fecha rpta</f:facet>
+                <h:outputText value="#{_excepcionDet.fechaRpta}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.activo}">
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_excepcionDet.activo}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.ajustadoOee}">
+                <f:facet name="header">Ajustado oee</f:facet>
+                <h:outputText value="#{_excepcionDet.ajustadoOee}"/>
+            </rich:column>
+            <rich:column sortBy="#{_excepcionDet.enviadoSfp}">
+                <f:facet name="header">Enviado sfp</f:facet>
+                <h:outputText value="#{_excepcionDet.enviadoSfp}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectexcepcionDet"
+                     value="Select"
+                      view="/ExcepcionDet.xhtml">
+                    <f:param name="excepcionDetIdExcepcionDet"
+                            value="#{_excepcionDet.idExcepcionDet}"/>
+                    <f:param name="excepcionDetFrom" value="Excepcion"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add excepcionDet"
+                view="/ExcepcionDetEdit.xhtml">
+            <f:param name="excepcionIdExcepcion"
+                    value="#{excepcionHome.instance.idExcepcion}"/>
+            <f:param name="excepcionDetFrom" value="Excepcion"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,222 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU313_title}</h1>
+		<rich:panel id="panelParametro">
+			<h:panelGrid columns="3">
+				<s:decorate id="nivelField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_nivel}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="nivelCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenCodigo}">
+					</h:inputText>
+						
+			            #{' '}
+			            <h:inputText id="nivelDesc" size="40" disabled="true"
+						value="#{grupoPuestosController.sinNivelEntidad.nenNombre}" />
+				</s:decorate>
+				<s:decorate id="entidadField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.CU193_entidad}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="entidadCodigo" styleClass="numeric" size="10"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entCodigo}">
+					</h:inputText>
+						
+			               	#{' '}
+			               	<h:inputText id="entidadDesc" size="40"
+						disabled="true"
+						value="#{grupoPuestosController.sinEntidad.entNombre}" />
+				</s:decorate>
+
+				<s:decorate id="oeeField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.FuncionarioOee_oee}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputText id="orden" size="10" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.orden}" />
+								
+				            #{' '}
+				            <h:inputText id="configUoCab" size="40" disabled="true"
+						value="#{grupoPuestosController.configuracionUoCab.denominacionUnidad}" />
+
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		<a:form id="idFormPrincipal">
+
+			<rich:simpleTogglePanel label="#{messages.CU313_datosConcurso}"
+				switchType="client">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<table>
+							<tr>
+								<td><a:region>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.ClasificadorUo_nivel}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="nivelCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.codNivelEntidad}"
+											size="10">
+											<a:support event="onblur" eventsQueue="default"
+												reRender="idPanelCampos" bypassUpdates="false"
+												ajaxSingle="true"
+												action="#{admCanConSfpFC.nivelEntidadOeeUtil.findNivelEntidad()}">
+												<f:param value="sinNivelEntidadIdSinNivelEntidad"
+													name="#{admCanConSfpFC.nivelEntidadOeeUtil.idSinNivelEntidad}" />
+											</a:support>
+										</h:inputText>	
+		                #{' '}
+		                <h:inputText id="nivelDescripcion"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.nombreNivelEntidad}"
+											size="50" disabled="true" />
+							 #{' '}
+               
+				  <a:commandButton id="searchNi" eventsQueue="default"
+											image="/img/Buscar.png"
+											action="#{admCanConSfpFC.getUrlToPageNivel('seleccion/admCanConSfp/admCanConSfp')}">
+											<a:actionparam name="modoEditado" value="#{true}"
+												assignTo="#{admCanConSfpFC.modoEditado}" />
+										</a:commandButton>
+									</s:decorate>
+								</a:region> <a:region>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.Usuario_entidad}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="entidadCodigo" styleClass="numeric"
+											onkeypress="return soloNumeros(event);"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.codSinEntidad}"
+											size="10">
+											<a:support event="onblur" eventsQueue="default"
+												action="#{admCanConSfpFC.nivelEntidadOeeUtil.findEntidad()}"
+												reRender="idPanelCampos" focus="codigo">
+												<f:param value="sinNivelEntidadIdSinNivelEntidad"
+													name="#{admCanConSfpFC.nivelEntidadOeeUtil.idSinNivelEntidad}" />
+											</a:support>
+										</h:inputText>
+	                #{' '}
+	                <h:inputText id="entidadDescripcion"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.nombreSinEntidad}"
+											size="50" disabled="true" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{admCanConSfpFC.nivelEntidadOeeUtil.getUrlToPageEntidad('seleccion/admCanConSfp/admCanConSfp')}" />
+									</s:decorate>
+								</a:region> <a:region>
+									<s:decorate template="/layout/display.xhtml">
+										<ui:define name="label">#{messages.gral_oee}<span
+												class="required">*</span>
+										</ui:define>
+										<h:inputText id="unidadOrgCodigo" styleClass="numeric"
+											size="10"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.ordenUnidOrg}"
+											onkeypress="return soloNumeros(event);">
+											<a:support event="onblur" eventsQueue="default"
+												action="#{admCanConSfpFC.nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+												reRender="idPanelCampos" />
+										</h:inputText>
+									#{' '}
+									<h:inputText id="unidadOrgDenominacion" size="50"
+											disabled="true"
+											value="#{admCanConSfpFC.nivelEntidadOeeUtil.denominacionUnidad}" />
+							#{' '}
+                <a:commandButton id="searchEntidad"
+											eventsQueue="default" image="/img/Buscar.png"
+											action="#{admCanConSfpFC.nivelEntidadOeeUtil.getUrlToPageOee('seleccion/admCanConSfp/admCanConSfp')}" />
+									</s:decorate>
+								</a:region></td>
+							</tr>
+							<tr align="center">
+								<td colspan="2"><s:decorate id="ConcursoField"
+									template="/layout/edit.xhtml">
+									<ui:define name="label">#{messages.CU313_concurso}<span
+											class="required">*</span>
+									</ui:define>
+									<h:selectOneMenu id="concurso"
+										value="#{admCanConSfpFC.idConcurso}" style="width:250px">
+										<f:selectItems value="#{admCanConSfpFC.concursoSelecItem}" />
+									</h:selectOneMenu>
+								</s:decorate></td>
+							</tr>
+						</table>
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<rich:simpleTogglePanel label="#{messages.CU313_datosCancelacion}"
+				switchType="client">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU313_fecha}<span
+							class="required">*</span>
+					</ui:define>
+					<rich:calendar id="fechaPublicacionDesde"
+						value="#{admCanConSfpFC.fecha}" enableManualInput="true"
+						disabled="true" oninputkeyup="ponerBarra(event);" inputSize="20"
+						datePattern="dd/MM/yyyy" locale="#{siccaAppHelper.localeCode}">
+					</rich:calendar>
+				</s:decorate>
+				<s:decorate id="descripcionFinalidadField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU313_motivo}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputTextarea id="descripcionFinalidad" rows="3" cols="64"
+						value="#{admCanConSfpFC.motivo}">
+					</h:inputTextarea>
+				</s:decorate>
+			</rich:simpleTogglePanel>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}<br />
+			<h:outputText value="#{messages.msg_obs_guardar}" /></div>
+			<h:commandButton id="save" value="#{messages.msg_save}"
+				action="#{admCanConSfpFC.save()}" />
+			<h:commandButton id="publicar" value="#{messages.CU313_publicar}"
+				disabled="#{admCanConSfpFC.excepcion.idExcepcion !=null}"
+				action="#{admCanConSfpFC.publicar()}" />
+			<s:button id="anexo" value="Anexo" propagation="join"
+				rendered="#{admCanConSfpFC.modoEditado}"
+				disabled="#{admCanConSfpFC.excepcion.idExcepcion !=null}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{admCanConSfpFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="adm_can_con_sfp" />
+				<f:param name="idCU" value="#{admCanConSfpFC.excepcion.idExcepcion}" />
+				<f:param name="nombreTabla" value="Excepcion" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="true" />
+				<f:param name="from" value="#{admCanConSfpFC.elFrom()}" />
+			</s:button>
+			<s:button id="anexoVer" value="Ver Anexo" propagation="join"
+				rendered="#{!admCanConSfpFC.modoEditado}"
+				disabled="#{admCanConSfpFC.excepcion.idExcepcion !=null}"
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml">
+				<f:param name="direccionFisica"
+					value="#{admCanConSfpFC.direccionFisica}" />
+				<f:param name="nombrePantalla" value="adm_can_con_sfp" />
+				<f:param name="idCU" value="#{admCanConSfpFC.excepcion.idExcepcion}" />
+				<f:param name="nombreTabla" value="Excepcion" />
+				<f:param name="mostrarDoc" value="true" />
+				<f:param name="isEdit" value="false" />
+				<f:param name="from" value="seleccion/admCanConSfp/admCanConSfp" />
+			</s:button>
+			<s:button value="#{messages.GENERICO_VOLVER}" propagation="join"
+				view="/seleccion/LisSolTipExc/LisSolTipExc.xhtml">
+			</s:button>
+		</a:form>
+	</ui:define>
+</ui:composition>

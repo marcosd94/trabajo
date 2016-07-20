@@ -1,0 +1,115 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+ 
+	
+	<rich:simpleTogglePanel label="#{!mensajeListFormController.edit ? 'Buscar Mensaje' : 'Editar Mensaje'}" 
+			switchType="client" id="panelBusqueda" style=" height : 112px;">
+
+            
+            <s:decorate id="Codigo" template="/layout/display.xhtml" rendered="#{!mensajeListFormController.edit}">
+	            <ui:define name="label">Código de mensaje</ui:define>
+	            <h:inputText  id="porcod" 
+				   		  value="#{mensajeListFormController.codigo}"
+	            		   size="80"   	  maxlength="50" style=" width : 244px;"/>  
+			  </s:decorate>
+			  <s:decorate id="EditarMensaje" template="/layout/display.xhtml" rendered="#{mensajeListFormController.edit}">
+				     <ui:define name="label">Mensaje</ui:define>
+					   <h:inputText id="porValor"
+		            value="#{mensajeListFormController.valor}"
+		            size="100" maxlength="300" style=" width : 650px; height : 60px;" />
+	           	</s:decorate>      	 
+    </rich:simpleTogglePanel>
+    
+    
+    
+    
+	      <a:outputPanel id="botons">
+	       <div class="actionButtons">
+	       
+	       <!-- BUSCAR -->
+			<a:commandButton id="search"
+				action="#{mensajeListFormController.listar()}"
+				value="#{messages.msg_list_search_button}"
+				reRender="panelResultados"
+				rendered="#{!mensajeListFormController.edit}">
+				<f:param name="firstResult" value="0" />
+				</a:commandButton>	
+				
+			
+	
+			<a:commandButton id="ClearOnList"
+				action="#{mensajeListFormController.searchAll()}"
+				value="#{mensajeListFormController.edit ? 'Cancelar' : 'Todos'}" 
+				reRender="panelBusqueda,panelResultados,Codigo" />
+			
+			
+			<a:commandButton id="update"
+				action="#{mensajeListFormController.update()}"
+				value="#{messages.msg_update}"
+				reRender="panelBusqueda,panelResultados"
+				rendered="#{mensajeListFormController.edit}"/>
+		</div>
+		
+	</a:outputPanel>
+	
+	       
+	       <!-- LISTA DE MENSAJES -->
+	        <rich:panel id="panelResultados">
+      				  <f:facet name="header">#{messages['msg_list_search_results']} (#{mensajeListFormController.listaMensaje.size})</f:facet>
+    				    
+    				  <div class="results" id="detalles" style="overflow: scroll;"
+    				  width="310" rendered="#{empty mensajeListFormController.listaMensaje}">
+    					 <h:outputText value="#{messages.msg_list_search_no_results}"
+               			rendered="#{empty mensajeListFormController.listaMensaje}"/>
+               		</div>
+         
+               
+
+    <rich:dataTable id="mensajesList"
+                var="_mensajes"
+              value="#{mensajeListFormController.listaMensaje}"
+           rendered="#{not empty mensajeListFormController.listaMensaje}"
+           rowKeyVar="index">
+           
+        
+        <h:column>
+            <f:facet name="header">
+                 <h:outputText value="codigo de mensaje" />             
+            </f:facet>
+            <h:outputText value="#{_mensajes.codigoMensaje}"/>
+        </h:column>
+        
+         <h:column>
+            <f:facet name="header">
+                 <h:outputText value="Mensaje" />             
+            </f:facet>
+            <h:outputText value="#{_mensajes.valorMensaje}"/>
+        </h:column>
+        	
+        	<rich:column styleClass="action">	<f:facet name="header">Action</f:facet>
+	       		<a:commandLink id="Editar" 
+	       			value="#{messages.msg_list_edit}"
+	       			eventsQueue="default"
+	       			action="#{/seleccion/adminMensajes/MensajesEdit.xhtml}"
+	       			reRender="EditarMensaje,panelBusqueda" />
+	       			
+	       			
+       	     	</rich:column>
+    </rich:dataTable>
+
+
+    </rich:panel>
+ </ui:define>
+
+</ui:composition>

@@ -1,0 +1,57 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="funcionSearch" styleClass="edit">
+			<h1>#{messages.cu025_}</h1>
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.cu025_anho}</ui:define>
+					<h:inputText id="anho"
+						value="#{listarObjGastoRptController.objetoGasto.aniAniopre}"
+						onkeypress="return soloNumeros(event);" styleClass="numeric"
+						size="5" />
+				</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.cu025_descripcion}</ui:define>
+					<h:inputText id="onjeto"
+						value="#{listarObjGastoRptController.objetoGasto.objNombre}"
+						size="60" />
+				</s:decorate>
+
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.cu025_ordenarPor}</ui:define>
+					<h:selectOneRadio id="order"
+						value="#{listarObjGastoRptController.ordenarPor}"
+						styleClass="radio">
+						<f:selectItems
+							value="#{enumAppHelper.enumsValueItems('OrdenListadoObj', 'getId', false)}" />
+					</h:selectOneRadio>
+				</s:decorate>
+
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton id="print"
+				value="#{messages.msg_list_search_print_button}"
+				action="#{listarObjGastoRptController.print()}">
+				
+			</h:commandButton> <h:commandButton id="reset"
+				value="#{messages.msg_list_search_clear_button}"
+				action="#{listarObjGastoRptController.clearAll()}" /></div>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

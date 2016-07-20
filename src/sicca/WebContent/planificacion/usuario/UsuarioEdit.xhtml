@@ -1,0 +1,102 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Usuario_}</h1>
+
+    <h:form id="usuario" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{usuarioHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Usuario_}</f:facet>
+
+	            <s:decorate id="nombreUsuarioField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_nombreUsuario}</ui:define>
+	                <h:inputText id="nombreUsuario"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{usuarioHome.instance.nombreUsuario}">
+	                    <a:support event="onblur" reRender="nombreUsuarioField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="claveField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_clave}</ui:define>
+	                <h:inputText id="clave"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{usuarioHome.instance.clave}">
+	                    <a:support event="onblur" reRender="claveField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="personaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_idPersona}</ui:define>
+	                <h:selectOneMenu id="persona"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{usuarioHome.idPersona}">
+	                    <f:selectItems value="#{personasSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Usuario_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{usuarioHome.instance.activo}" />
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{usuarioHome.persist}"
+                       disabled="#{!usuarioHome.wired}"                      
+                       rendered="#{!usuarioHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{usuarioHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{usuarioHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{usuarioHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{usuarioHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/usuario/UsuarioList.xhtml"
+                rendered="#{usuarioHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty usuarioFrom ? 'planificacion/usuario/UsuarioList' : usuarioFrom}.xhtml"
+                rendered="#{!usuarioHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.Configuracion_}</h1>
+
+    <h:form id="configuracion" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{configuracionHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.Configuracion_}</f:facet>
+
+	            <s:decorate id="descIdentVacField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_descIdentVac}</ui:define>
+	                <h:inputText id="descIdentVac"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.descIdentVac}">
+	                    <a:support event="onblur" reRender="descIdentVacField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="tiempoIdentVacField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_tiempoIdentVac}</ui:define>
+	                <h:inputText id="tiempoIdentVac"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.tiempoIdentVac}">
+	                    <a:support event="onblur" reRender="tiempoIdentVacField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="undMedIdentVacField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_undMedIdentVac}</ui:define>
+	                <h:inputText id="undMedIdentVac"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.undMedIdentVac}">
+	                    <a:support event="onblur" reRender="undMedIdentVacField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="descConfComiteField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_descConfComite}</ui:define>
+	                <h:inputText id="descConfComite"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.descConfComite}">
+	                    <a:support event="onblur" reRender="descConfComiteField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="tiempoConfComiteField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_tiempoConfComite}</ui:define>
+	                <h:inputText id="tiempoConfComite"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.tiempoConfComite}">
+	                    <a:support event="onblur" reRender="tiempoConfComiteField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="unidMedConfComiteField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.Configuracion_unidMedConfComite}</ui:define>
+	                <h:inputText id="unidMedConfComite"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{configuracionHome.instance.unidMedConfComite}">
+	                    <a:support event="onblur" reRender="unidMedConfComiteField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{configuracionHome.persist}"
+                       disabled="#{!configuracionHome.wired}"                      
+                       rendered="#{!configuracionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{configuracionHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{configuracionHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{configuracionHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{configuracionHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/configuracion/ConfiguracionList.xhtml"
+                rendered="#{configuracionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty configuracionFrom ? 'planificacion/configuracion/ConfiguracionList' : configuracionFrom}.xhtml"
+                rendered="#{!configuracionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

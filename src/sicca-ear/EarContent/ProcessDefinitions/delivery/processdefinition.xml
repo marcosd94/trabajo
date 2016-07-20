@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="delivery">
+
+
+	<start-state name="Inicio">
+		<transition to="PlaceOrder"></transition>
+	</start-state>
+
+
+	<task-node name="PlaceOrder">
+		<task name="placeOrderTask">  
+		   <assignment actor-id="#{actor.id}" />  
+		</task> 
+		<transition name="next" to="Deliver"></transition>
+		<transition name="cancel" to="error"></transition>
+	</task-node>
+
+	<task-node name="Deliver">
+		<task name="getFromStock">  
+		   <assignment actor-id="#{actor.id}" />  
+		</task> 
+		<transition name="next" to="fin" />  
+		<transition name="cancel" to="error" /> 
+	</task-node>
+
+
+	<end-state name="fin"></end-state>
+
+	<end-state name="error"></end-state>
+
+
+</process-definition>

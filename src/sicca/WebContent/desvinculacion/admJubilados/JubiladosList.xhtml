@@ -1,0 +1,268 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+	<ui:define name="body">
+		<h1>#{messages.CU442_tittle_list}</h1>
+		
+			<h:form>
+				<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}" switchType="client" id="panelParamentro">
+					<h:panelGrid columns="1">
+						<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="nivelCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+										<a:support event="onchange" eventsQueue="default"
+											reRender="idPanelCampos" focus="entidadCodigo"
+											action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+									</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+												value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+												disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+										image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageNivel('desvinculacion/admJubilados/JubiladosList')}" />
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.Usuario_entidad}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="entidadCodigo" styleClass="numeric"
+										onkeypress="return soloNumeros(event);"
+										value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findEntidad()}"
+											reRender="idPanelCampos" focus="unidadOrgCodigo" />
+									</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+													value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+													disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('desvinculacion/admJubilados/JubiladosList')}" />
+								</s:decorate>
+							</a:region>
+							
+							<a:region>
+								<s:decorate template="/layout/display.xhtml">
+									<ui:define name="label">#{messages.gral_oee}
+										<span class="required">*</span>
+									</ui:define>
+									<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+										value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+										onkeypress="return soloNumeros(event);">
+										<a:support event="onchange" eventsQueue="default"
+											action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+											reRender="unidadOrgCodigo,unidadOrgDenominacion" 
+											focus="orgCodigo2"/>
+									</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+										disabled="true"
+										value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+										eventsQueue="default" image="/img/Buscar.png"
+										action="#{nivelEntidadOeeUtil.getUrlToPageOee('desvinculacion/admJubilados/JubiladosList')}" />
+								</s:decorate>
+							</a:region>
+							
+							
+						</a:outputPanel>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+					<s:decorate id="paisExpField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU456_pais_expe} </ui:define>
+						<h:selectOneMenu id="paisExp"
+							value="#{admJubiladosFC.idPais}"
+							style="width:250px">
+							<f:selectItems value="#{paissTodosSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					  <s:decorate id="nombreField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.Persona_nombres}</ui:define>
+			                <h:inputText id="nombre" size="50" value="#{admJubiladosFC.nombres}"/>
+			            </s:decorate>
+			            
+						<s:decorate id="docField" template="/layout/display.xhtml">
+			                <ui:define name="label">#{messages.Persona_documentoIdentidad}</ui:define>
+			                <h:inputText id="doc" size="30" value="#{admJubiladosFC.documento}"/>
+			            </s:decorate>
+			            
+			            <s:decorate id="apellidoField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.Persona_apellidos}</ui:define>
+			                <h:inputText id="apellido" size="50" value="#{admJubiladosFC.apellidos}"/>
+			            </s:decorate>
+			          
+			           <s:decorate id="inhabiField" template="/layout/edit.xhtml">
+			                <ui:define name="label">#{messages.CU442_inhabilitado_}</ui:define>
+			                <h:selectOneRadio id="idTipo" value="#{admJubiladosFC.inhabilitado}">
+								<f:selectItems value="#{admJubiladosFC.inhabilitadoSelectItem}"/>
+							</h:selectOneRadio>
+			            </s:decorate>
+					    
+					    
+					</h:panelGrid>
+				</rich:simpleTogglePanel>
+				
+				
+				<div class="actionButtons">
+					<a:commandButton id="search"
+						eventsQueue="default" value="#{messages.msg_list_search_button}"
+						reRender="panelParamentro,panelResultado"
+						action="#{admJubiladosFC.search()}">
+						<f:param name="firstResult" value="0" />
+					</a:commandButton> 
+					
+					<a:commandButton id="reset" eventsQueue="default"
+						value="#{messages['gral_mostrar_todos']}"
+						action="#{admJubiladosFC.searchAll()}"
+						reRender="panelParamentro,panelResultado" />
+				</div>
+				
+				
+				<rich:panel id="panelResultado">
+					<f:facet name="header">#{messages['msg_list_search_results']}(#{empty jubiladosList.resultList ? 0 : (jubiladosList.paginated ? jubiladosList.resultCount : jubiladosList.resultList.size)})</f:facet>
+					<div class="results" id="jubiladosList"><h:outputText
+						value="#{messages.msg_list_search_no_results}"
+						rendered="#{empty jubiladosList.resultList}" /> <rich:dataTable
+						id="jubiladosList" var="_jubilados"
+						value="#{admJubiladosFC.listaJubilados}"
+						rendered="#{not empty jubiladosList.resultList}">
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{jubiladosList}" />
+									<ui:param name="propertyLabel" value="#{messages.gral_oee}" />
+									<ui:param name="propertyPath" value="jubilados.configuracionUoCab.denominacionUnidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_jubilados.configuracionUoCab.denominacionUnidad}" />
+						</h:column>
+						
+						<h:column> 
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{jubiladosList}" />
+									<ui:param name="propertyLabel" value="#{messages.Persona_documentoIdentidad}" />
+									<ui:param name="propertyPath" value="jubilados.persona.documentoIdentidad" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_jubilados.persona.documentoIdentidad}" />
+						</h:column>
+						
+						<h:column> 
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{jubiladosList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU456_pais_expe}" />
+									<ui:param name="propertyPath" value="jubilados.persona.paisByIdPaisExpedicionDoc.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_jubilados.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{jubiladosList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU161_nombre_apellido}" />
+									<ui:param name="propertyPath" value="jubilados.persona.nombres" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_jubilados.persona.nombreCompleto}" />
+						</h:column>
+						
+						<h:column> 
+							<f:facet name="header">
+								<ui:include src="/layout/sort.xhtml">
+									<ui:param name="entityList" value="#{jubiladosList}" />
+									<ui:param name="propertyLabel" value="#{messages.CU442_tipo_jubilacion}" />
+									<ui:param name="propertyPath" value="jubilados.datosEspecifTipo.descripcion" />
+								</ui:include>
+							</f:facet>
+							<h:outputText value="#{_jubilados.datosEspecifTipo.descripcion == null ? _jubilados.otroTipo : _jubilados.datosEspecifTipo.descripcion}" />
+						</h:column>
+						
+						<rich:column style="text-align:center;" width="10%">
+							<f:facet name="header">#{messages.CU442_inhabilitado_}</f:facet>
+							<h:selectBooleanCheckbox value="#{_jubilados.inhabilitado}" disabled="true"/>
+						</rich:column>
+	
+						<rich:column styleClass="action">
+							<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							
+				            <s:link view="/desvinculacion/admJubilados/JubiladosEdit.xhtml"
+									value="Ver" propagation="none" id="jubilados">
+									<f:param name="idJubilado" value="#{_jubilados.idJubilado}" />
+									<f:param name="modoVista" value="true" />
+							</s:link>
+				            #{' '}
+				            <s:link view="/desvinculacion/admJubilados/JubiladosEdit.xhtml"
+									value="#{messages.msg_edit}" propagation="none" id="jubiladosEdit"
+									rendered="#{_jubilados.inhabilitado}">
+									<f:param name="idJubilado" value="#{_jubilados.idJubilado}" />
+									<f:param name="modoVista" value="false" />
+							</s:link>
+						</rich:column>
+					</rich:dataTable></div>
+				</rich:panel>
+				
+			</h:form>
+			
+			<a:outputPanel ajaxRendered="true">
+				<div class="tableControl">
+					<s:link
+						view="/desvinculacion/admJubilados/JubiladosList.xhtml"
+						rendered="#{jubiladosList.previousExists}"
+						value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+						id="firstPage">
+						<f:param name="firstResult" value="0" />
+					</s:link> 
+					<s:link view="/desvinculacion/admJubilados/JubiladosList.xhtml"
+						rendered="#{jubiladosList.previousExists}"
+						value="#{messages.left} #{messages.msg_list_previous_page}"
+						id="previousPage">
+						<f:param name="firstResult"
+							value="#{jubiladosList.previousFirstResult}" />
+					</s:link> 
+					<s:link view="/desvinculacion/admJubilados/JubiladosList.xhtml"
+						rendered="#{jubiladosList.nextExists}"
+						value="#{messages.msg_list_next_page} #{messages.right}"
+						id="nextPage">
+						<f:param name="firstResult" value="#{jubiladosList.nextFirstResult}" />
+					</s:link> 
+					<s:link view="/desvinculacion/admJubilados/JubiladosList.xhtml"
+						rendered="#{jubiladosList.nextExists}"
+						value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+						id="lastPage">
+						<f:param name="firstResult" value="#{jubiladosList.lastFirstResult}" />
+					</s:link>
+				</div>
+			</a:outputPanel>
+			
+	</ui:define>
+</ui:composition>

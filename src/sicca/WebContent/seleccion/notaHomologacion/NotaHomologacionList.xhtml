@@ -1,0 +1,409 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="notaHomologacionSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="NotaHomologacion Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Descripcion</ui:define>
+                <h:inputText id="descripcion" value="#{notaHomologacionList.notaHomologacion.descripcion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Lugar</ui:define>
+                <h:inputText id="lugar" value="#{notaHomologacionList.notaHomologacion.lugar}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Fecha</ui:define>
+                <h:inputText id="fecha" value="#{notaHomologacionList.notaHomologacion.fecha}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Referencia</ui:define>
+                <h:inputText id="referencia" value="#{notaHomologacionList.notaHomologacion.referencia}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Titulo1</ui:define>
+                <h:inputText id="titulo1" value="#{notaHomologacionList.notaHomologacion.titulo1}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Titulo2</ui:define>
+                <h:inputText id="titulo2" value="#{notaHomologacionList.notaHomologacion.titulo2}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Cuerpo</ui:define>
+                <h:inputText id="cuerpo" value="#{notaHomologacionList.notaHomologacion.cuerpo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Firma</ui:define>
+                <h:inputText id="firma" value="#{notaHomologacionList.notaHomologacion.firma}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Cargo</ui:define>
+                <h:inputText id="cargo" value="#{notaHomologacionList.notaHomologacion.cargo}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Institucion firma</ui:define>
+                <h:inputText id="institucionFirma" value="#{notaHomologacionList.notaHomologacion.institucionFirma}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">A</ui:define>
+                <h:inputText id="a" value="#{notaHomologacionList.notaHomologacion.a}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Don</ui:define>
+                <h:inputText id="don" value="#{notaHomologacionList.notaHomologacion.don}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Institucion</ui:define>
+                <h:inputText id="institucion" value="#{notaHomologacionList.notaHomologacion.institucion}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Item final</ui:define>
+                <h:inputText id="itemFinal" value="#{notaHomologacionList.notaHomologacion.itemFinal}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu alta</ui:define>
+                <h:inputText id="usuAlta" value="#{notaHomologacionList.notaHomologacion.usuAlta}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Usu mod</ui:define>
+                <h:inputText id="usuMod" value="#{notaHomologacionList.notaHomologacion.usuMod}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{notaHomologacionList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/NotaHomologacionList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">NotaHomologacion Search Results (#{empty notaHomologacionList.resultList ? 0 : (notaHomologacionList.paginated ? notaHomologacionList.resultCount : notaHomologacionList.resultList.size)})</f:facet>
+    <div class="results" id="notaHomologacionList">
+
+    <h:outputText value="The notaHomologacion search returned no results."
+               rendered="#{empty notaHomologacionList.resultList}"/>
+
+    <rich:dataTable id="notaHomologacionList"
+                var="_notaHomologacion"
+              value="#{notaHomologacionList.resultList}"
+           rendered="#{not empty notaHomologacionList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Id nota homologacion"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.idNotaHomologacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.idNotaHomologacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Plantilla nota homologacion id plantilla nota homologacion"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.plantillaNotaHomologacion.idPlantillaNotaHomologacion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.plantillaNotaHomologacion.idPlantillaNotaHomologacion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Descripcion"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.descripcion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.descripcion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Nro nota"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.nroNota"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.nroNota}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Lugar"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.lugar"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.lugar}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.fecha"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.fecha}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Referencia"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.referencia"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.referencia}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Titulo1"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.titulo1"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.titulo1}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Titulo2"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.titulo2"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.titulo2}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Cuerpo"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.cuerpo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.cuerpo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Firma"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.firma"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.firma}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Cargo"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.cargo"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.cargo}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Institucion firma"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.institucionFirma"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.institucionFirma}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="A"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.a"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.a}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Don"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.don"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.don}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Institucion"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.institucion"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.institucion}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Item final"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.itemFinal"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.itemFinal}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Usu alta"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.usuAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.usuAlta}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha alta"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.fechaAlta"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Usu mod"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.usuMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.usuMod}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{notaHomologacionList}"/>
+                    <ui:param name="propertyLabel" value="Fecha mod"/>
+                    <ui:param name="propertyPath" value="notaHomologacion.fechaMod"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_notaHomologacion.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'NotaHomologacion' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="notaHomologacionViewId">
+                <f:param name="notaHomologacionIdNotaHomologacion"
+                        value="#{_notaHomologacion.idNotaHomologacion}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/NotaHomologacionEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="notaHomologacionEdit"
+                rendered="#{empty from}">
+                <f:param name="notaHomologacionIdNotaHomologacion"
+                        value="#{_notaHomologacion.idNotaHomologacion}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/NotaHomologacionList.xhtml"
+            rendered="#{notaHomologacionList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/NotaHomologacionList.xhtml"
+            rendered="#{notaHomologacionList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{notaHomologacionList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/NotaHomologacionList.xhtml"
+            rendered="#{notaHomologacionList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{notaHomologacionList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/NotaHomologacionList.xhtml"
+            rendered="#{notaHomologacionList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{notaHomologacionList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/NotaHomologacionEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create notaHomologacion">
+            <f:param name="notaHomologacionIdNotaHomologacion"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

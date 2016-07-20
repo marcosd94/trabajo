@@ -1,0 +1,230 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>#{messages.CU732_ver}</h1>
+
+
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+				<div class="results" id="tblList"
+					style="overflow: scroll; width: 400; HEIGHT: 230px"><h:panelGrid>
+					<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{respuestaSolicitudTranslado732FC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+						
+						
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{respuestaSolicitudTranslado732FC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+					
+				</h:panelGrid></div>
+			</rich:panel>
+					<fieldset>			
+				<legend>#{messages.CU732_entidad_datos}</legend>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+			
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+						<h:inputText id="nroCedula" disabled="true"
+							value="#{respuestaSolicitudTranslado732FC.funcionario.persona.documentoIdentidad}"
+							size="20" >
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+						<h:inputText id="nombres" disabled="true"
+							value="#{respuestaSolicitudTranslado732FC.funcionario.persona.nombres}" size="60"
+							maxlength="100">
+						</h:inputText>
+						#{' '}
+						<a:commandButton id="searchper" eventsQueue="default"
+							value="Ver Datos"
+							action="#{respuestaSolicitudTranslado732FC.toFindPersonaView()}" />
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+						<h:inputText id="paisExpDoc" disabled="true"
+							value="#{respuestaSolicitudTranslado732FC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							size="30" >
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+						<h:inputText id="apellidos" disabled="true"
+							value="#{respuestaSolicitudTranslado732FC.funcionario.persona.apellidos}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+									
+										
+
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="puestoField">
+						<ui:define name="label">Puesto
+						</ui:define>
+						<h:inputText id="puesto" styleClass="numeric" 
+							value="#{respuestaSolicitudTranslado732FC.funcionario.plantaCargoDet.descripcion}"
+							disabled="true"  style=" width : 333px;">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</fieldset>
+				<rich:panel ><f:facet name="header">Situacion
+													</f:facet>
+
+					<h:panelGrid columns="1">
+						
+						<rich:dataTable id="itemsList2" var="_puesto"
+							value="#{respuestaSolicitudTranslado732FC.solicitudTraslaDetLista}"
+							rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU732_estado}
+													</f:facet>
+								<h:outputText value="#{_puesto.datosEspEstadoSolicitud.descripcion}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU732_obs}
+													</f:facet>
+								<h:outputText value="#{_pago.observacion}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU732_fecha}
+													</f:facet>
+								<h:outputText value="#{_pago.fechaAlta}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</h:panelGrid>
+
+				</rich:panel>
+			
+
+
+						<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver" 
+				view="/#{respuestaSolicitudTranslado732FC.from}.xhtml" />
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,329 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU429_titulo}</h1>
+		<!-- Modales  -->
+		<rich:modalPanel id="modalEstados" width="450" height="250"
+			resizeable="false" moveable="true">
+			<f:facet name="header">Cambio de Estado</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer"
+					onclick="#{rich:component('modalEstados')}.hide()" />
+			</f:facet>
+			<h:form>
+				<s:decorate id="estadoField" template="/layout/display.xhtml">
+					<ui:define name="label">Estado</ui:define>
+					<h:selectOneMenu id="estado"
+						value="#{contratosAVencerListFormController.idEstadoSeleccionado}"
+						style="width:250px">
+						<f:selectItems
+							value="#{contratosAVencerListFormController.estadosTransicionSelecItem}" />
+						<a:support event="onchange" />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="ObsField" template="/layout/display.xhtml">
+					<ui:define name="label">#{messages.gral_observacion}</ui:define>
+					<h:inputTextarea
+						value="#{contratosAVencerListFormController.observacion}"
+						cols="35">
+						<a:support event="onblur" eventsQueue="default" />
+					</h:inputTextarea>
+				</s:decorate>
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><a:commandButton
+					id="save" value="Guardar"
+					action="#{contratosAVencerListFormController.save()}"
+					ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalEstados')"
+					reRender="panelResultados" /> <a:commandButton id="cancel"
+					value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalEstados')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="empleadoPuestoSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+					<h:panelGrid columns="2">
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="true">
+									
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+										
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="true">
+									
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+										
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="true">
+									
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									
+							</s:decorate>
+						</a:region>
+
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+								</ui:define>
+							<h:inputText id="orgCodigo2" size="10"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+								<a:support event="onchange" eventsQueue="default"
+									action="#{nivelEntidadOeeUtil.obtenerUnidadOrganizativaDep()}"
+									reRender="orgCodigo2,orgDenominacion2,orden2" />
+							</h:inputText>
+								#{' '}
+								<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+							 	#{' '}
+		               			<a:commandButton id="searchUnidadOrgDep2"
+								eventsQueue="default" image="/img/Buscar.png"
+								action="#{nivelEntidadOeeUtil.getUrlToPageUnidadOrgDep('planificacion/contratosAVencer/EmpleadoPuestoList')}" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.Usuario_nombre}</ui:define>
+							<h:inputText id="nombre" size="40"
+								value="#{contratosAVencerListFormController.persona.nombres}">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU429_cant_dias_vto}</ui:define>
+							<h:inputText id="vto" size="10"
+								value="#{contratosAVencerListFormController.cantDiasVto}">
+							</h:inputText>
+						</s:decorate>
+
+					</h:panelGrid>
+				</a:outputPanel>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Apellido</ui:define>
+						<h:inputText id="apellido" size="40"
+							value="#{contratosAVencerListFormController.persona.apellidos}">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">Nro. de Documento</ui:define>
+						<h:inputText id="documento" size="20"
+							value="#{contratosAVencerListFormController.persona.documentoIdentidad}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{contratosAVencerListFormController.search()}"
+				reRender="panelResultados,panelBusqueda">
+				<f:param name="firstResult" value="0" />
+			</a:commandButton> <s:button id="todos" value="Todos" propagation="none"
+									view="/planificacion/contratosAVencer/EmpleadoPuestoList.xhtml" /></div>
+
+			<rich:panel id="panelResultados">
+				<f:facet name="header">#{messages['msg_list_search_results']}(#{empty contratosAVencerListFormController.listaEmpleados ? 0 : (empleadoPuestoList.paginated ? empleadoPuestoList.resultCount : contratosAVencerListFormController.listaEmpleados.size)})</f:facet>
+				<div class="results" id="empleadoPuestoList"><h:outputText
+					value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty contratosAVencerListFormController.listaEmpleados}" />
+				<rich:dataTable id="empleadoPuestoList" var="_empleadoPuesto"
+					value="#{empleadoPuestoList.resultList}" rowKeyVar="row"
+					rendered="#{not empty contratosAVencerListFormController.listaEmpleados}">
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU429_oee}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU429_unidad_org}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="#{messages.CU253_puesto}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.plantaCargoDet.orden" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{contratosAVencerListFormController.obtenerCodigoPuesto(_empleadoPuesto.plantaCargoDet)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel"
+									value="#{messages.CU193_denominacion}" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.plantaCargoDet.descripcion" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.plantaCargoDet.descripcion}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="Fecha de Venc." />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.fechaFinContrato" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_empleadoPuesto.fechaFinContrato}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="Nro. Documento" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.persona.documentoIdentidad" />
+							</ui:include>
+						</f:facet>
+						<h:outputText
+							value="#{_empleadoPuesto.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="Nombres" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.persona.nombres" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_empleadoPuesto.persona.nombres}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<ui:include src="/layout/sort.xhtml">
+								<ui:param name="entityList" value="#{empleadoPuestoList}" />
+								<ui:param name="propertyLabel" value="Apellidos" />
+								<ui:param name="propertyPath"
+									value="empleadoPuesto.persona.apellidos" />
+							</ui:include>
+						</f:facet>
+						<h:outputText value="#{_empleadoPuesto.persona.apellidos}" />
+					</h:column>
+
+					<rich:column styleClass="action">
+						<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+						<a:commandLink value="Cambiar Estado" reRender="modalEstados"
+							eventsQueue="default"
+							action="#{contratosAVencerListFormController.buscarEstadosPosibles(row)}"
+							oncomplete="#{rich:component('modalEstados')}.show()" />
+					</rich:column>
+				</rich:dataTable></div>
+			</rich:panel>
+
+			<div class="tableControl"><s:link
+				view="/planificacion/contratosAVencer/EmpleadoPuestoList.xhtml"
+				rendered="#{empleadoPuestoList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link
+				view="/planificacion/contratosAVencer/EmpleadoPuestoList.xhtml"
+				rendered="#{empleadoPuestoList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.previousFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/contratosAVencer/EmpleadoPuestoList.xhtml"
+				rendered="#{empleadoPuestoList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.nextFirstResult}" />
+			</s:link> <s:link
+				view="/planificacion/contratosAVencer/EmpleadoPuestoList.xhtml"
+				rendered="#{empleadoPuestoList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{empleadoPuestoList.lastFirstResult}" />
+			</s:link></div>
+
+
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

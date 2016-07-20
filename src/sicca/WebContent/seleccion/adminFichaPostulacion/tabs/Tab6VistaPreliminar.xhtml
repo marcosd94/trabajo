@@ -1,0 +1,585 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	<h:form id="idFormVistaPrev">
+		<rich:panel id="discap">
+
+			<h:commandButton id="print"
+				value="#{messages.msg_list_search_print_button}"
+				action="#{tab6VistaPreliminarFormController.pdf()}" />
+			<table id="titulo_nombre">
+				<tr>
+					<td>
+					<h1 style="text-align: center;">CURRICULUM VITAE</h1>
+					</td>
+				</tr>
+				<tr style="height: 5px;">
+					<td></td>
+				</tr>
+				<tr>
+					<td
+						style="color: White; text-align: center; font-size: 35px; background-color: #F29900; font-weight: bold; width: 740px"><h:outputText
+						value="#{tab6VistaPreliminarFormController.persona.nombres}  #{tab6VistaPreliminarFormController.persona.apellidos}" /></td>
+				</tr>
+				<tr style="height: 5px;">
+					<td></td>
+				</tr>
+			</table>
+
+			<table id="datos_personales">
+				<tr>
+					<td><h:outputText value="A. DATOS PERSONALES"
+						style="color:#999977;font-size:20px;font-weight:bold;" /></td>
+				</tr>
+				<tr>
+					<td><h:panelGrid columns="2">
+						<h:outputText value="Documento de Identidad Nro. :" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.documentoIdentidad}" />
+					</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><h:panelGrid columns="7">
+						<h:outputText value="Fecha de Nac. :" />
+						<rich:spacer width="25px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.fechaNacimiento}" />
+						<rich:spacer width="25px" />
+						<h:outputText value="Sexo :" />
+						<rich:spacer width="31px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.sexo=='F'?'FEMENINO':'MASCULINO'}" />
+						<h:outputText value="Lugar de Nacimiento:" />
+						<rich:spacer width="25px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.ciudadByIdCiudadNac.descripcion}" />
+						<rich:spacer width="25px" />
+						<h:outputText value="Pais :" />
+						<rich:spacer width="31px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.ciudadByIdCiudadNac.departamento.pais.descripcion}" />
+						<h:outputText value="Nacionalidad :" />
+						<rich:spacer width="25px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.datosEspecificos.descripcion}" />
+						<rich:spacer width="25px" />
+						<h:outputText value="Estado Civil :" />
+						<rich:spacer width="31px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.estadoCivil(tab6VistaPreliminarFormController.persona.estadoCivil)}" />
+					</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><h:panelGrid columns="3">
+						<h:outputText value="Direccion  Particular :" />
+						<rich:spacer width="28px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.callePrincipal}" />
+						<h:outputText value="Ciudad :" />
+						<rich:spacer width="28px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.ciudadByIdCiudadDirecc.descripcion}" />
+						<h:outputText value="Departamento :" />
+						<rich:spacer width="28px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.ciudadByIdCiudadDirecc.departamento.descripcion}" />
+					</h:panelGrid> 
+					<h:panelGrid columns="7">
+						<h:outputText value="Teléfono Móvil :" />
+						<rich:spacer width="41px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.telefonos}" />
+						<rich:spacer width="25px" />
+						<h:outputText value="Teléfono Particular :" />
+						<rich:spacer width="1px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.telefonoPart}" />
+
+						<h:outputText value="Teléfono Laboral :" />
+						<rich:spacer width="41px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.telefonoLab}" />
+						<rich:spacer width="25px" />
+						<h:outputText value="E-mail :" />
+						<rich:spacer width="1px" />
+						<h:outputText
+							value="#{tab6VistaPreliminarFormController.persona.EMail}" />
+					</h:panelGrid></td>
+				</tr>
+			</table>
+
+			<table id="formacion_academica">
+				<tr>
+					<td><h:outputText value="B. FORMACION ACADEMICA"
+						rendered="#{tab6VistaPreliminarFormController.estudiosRealizadosList.size()>0 or tab6VistaPreliminarFormController.idiomasPersonas.size()>0}"
+						style="color:#999977;font-size:20px;font-weight:bold;" /></td>
+				</tr>
+				<tr>
+					<td><h:panelGrid columns="2">
+						<rich:spacer width="6px" />
+						<h:outputText value="I. Estudios Realizados :"
+							rendered="#{tab6VistaPreliminarFormController.estudiosRealizadosList.size()>0}"
+							style="text-decoration:underline;font-weight:bold;" />
+					</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><rich:dataTable
+						value="#{tab6VistaPreliminarFormController.estudiosRealizadosList}"
+						var="est" style="width : 740px;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Título/Carrera" />
+							</f:facet>
+							<h:outputText rendered="#{est.tituloAcademico.descripcion != 'OTROS'}" value="#{est.tituloAcademico.descripcion}" />
+							<h:outputText rendered="#{est.tituloAcademico.descripcion == 'OTROS'}" value="#{est.otroTituloObt}" />
+						</rich:column>
+				<!--  		<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Especialidad" />
+							</f:facet>
+							<h:outputText value="#{est.especialidades.descripcion}" />
+						</rich:column>-->
+							<rich:column>
+							<f:facet name="header">	<h:outputText styleClass="columnHeader" value="#{messages.CU82_nivel_estu}" /></f:facet>
+							<h:outputText rendered="#{est.tituloAcademico.descripcion != 'otros'}" value="#{est.tituloAcademico.nivelEstudio.descripcion}" />
+							<h:outputText rendered="#{est.tituloAcademico.descripcion == 'otros'}" value="#{est.otroNivel}" />			
+							
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Institucion" />
+							</f:facet>
+							<h:outputText rendered="#{est.institucionEducativa.descripcion != 'OTRAS'}" value="#{est.institucionEducativa.descripcion}" />
+							<h:outputText rendered="#{est.institucionEducativa.descripcion == 'OTRAS'}" value="#{est.otraInstit}" />
+						</rich:column>
+						
+						<!--  <rich:column>
+						
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Fecha Fin" />
+							</f:facet>
+							<h:outputText value="#{est.fechaFin}"
+								rendered="#{est.fechaFin!=null}">
+								<s:convertDateTime type="both" pattern="yyyy" />
+							</h:outputText>
+							<h:outputText value="PENDIENTE" rendered="#{est.fechaFin==null}" />
+						</rich:column>-->
+						
+						<rich:column>
+							<f:facet name="header">#{messages.CU82_fecFin}</f:facet>
+							<h:outputText value="#{est.fechaFin}" />
+						</rich:column>
+						
+						
+						<rich:column>
+							<f:facet name="header">#{messages.msg_estado}</f:facet>
+							<h:outputText value="#{est.estadoActual}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="#{messages.msg_duracion_actual}" />
+							</f:facet>
+							<h:outputText value="#{est.duracionHoras} Año/s"
+								rendered="#{est.tipoDuracion=='A'}" />
+							<h:outputText value="#{est.duracionHoras} Horas"
+								rendered="#{est.tipoDuracion=='H'}" />
+								<h:outputText value="#{est.duracionHoras} Semestre/s"
+								rendered="#{est.tipoDuracion=='S'}" />
+							<h:outputText value="#{est.duracionHoras} Curso"
+								rendered="#{est.tipoDuracion=='C'}" />
+						</rich:column>	
+					</rich:dataTable></td>
+				</tr>
+				
+				<tr>
+					<td><h:panelGrid columns="2">
+						<rich:spacer width="6px" />
+						<h:outputText value="II. Otros Estudios :"
+							style="text-decoration:underline;font-weight:bold;" />
+					</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><rich:dataTable 
+						value="#{tab6VistaPreliminarFormController.otrosEstudiosRealizadosList}"
+						var="oest" style="width : 740px;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Titulo Obtenido" />
+							</f:facet>
+							<h:outputText value="#{oest.otroNivel}" />
+						</rich:column>
+						<!--  <rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Nivel de Estudio" />
+							</f:facet>
+							<h:outputText value="#{oest.especialidades.descripcion}" />
+						</rich:column>-->
+							<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="#{messages.CU82_nivel_estu}" /></f:facet>
+								<h:outputText rendered="#{oest.tituloAcademico.descripcion != 'otros'}" value="#{oest.tituloAcademico.nivelEstudio.descripcion}" />
+								<h:outputText rendered="#{oest.tituloAcademico.descripcion == 'otros'}" value="#{oest.otroNivel}" />	
+								
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Institucion" />
+							</f:facet>
+							<h:outputText rendered="#{oest.institucionEducativa.descripcion != 'OTRAS'}" value="#{oest.institucionEducativa.descripcion}" />
+							<h:outputText rendered="#{oest.institucionEducativa.descripcion == 'OTRAS'}" value="#{oest.otraInstit}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">#{messages.CU82_fecFin}</f:facet>
+							<h:outputText value="#{oest.fechaFin}" />
+						</rich:column>
+						
+						
+						<rich:column>
+							<f:facet name="header">#{messages.msg_estado}</f:facet>
+							<h:outputText value="#{oest.estadoActual}" />
+						</rich:column>
+							
+					
+						
+							<rich:column>
+									<f:facet name="header">
+										<h:outputText styleClass="columnHeader" value="#{messages.msg_duracion_actual}" />
+									</f:facet>
+									<h:outputText value="#{oest.duracionHoras} Año/s"
+										rendered="#{oest.tipoDuracion=='A'}" />
+									<h:outputText value="#{oest.duracionHoras} Horas"
+										rendered="#{oest.tipoDuracion=='H'}" />
+										<h:outputText value="#{oest.duracionHoras} Semestre/s"
+										rendered="#{oest.tipoDuracion=='S'}" />
+									<h:outputText value="#{oest.duracionHoras} Curso"
+										rendered="#{oest.tipoDuracion=='C'}" />
+							</rich:column>
+					</rich:dataTable></td>
+				</tr>
+				<tr>
+					<td><h:panelGrid columns="2">
+						<rich:spacer width="6px" />
+						<h:outputText value="III. Idiomas/Lenguajes :"
+							
+							style="text-decoration:underline;font-weight:bold;" />
+					</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><rich:dataTable
+						value="#{tab6VistaPreliminarFormController.idiomasPersonas}"
+						var="idiom" style="width : 740px;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Idioma/Lenguaje" />
+							</f:facet>
+							<h:outputText value="#{idiom.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Habla" />
+							</f:facet>
+							<h:outputText value="BASICO" rendered="#{idiom.habla=='B'}" />
+							<h:outputText value="MEDIO" rendered="#{idiom.habla=='M'}" />
+							<h:outputText value="AVANZADO" rendered="#{idiom.habla=='A'}" />
+							<h:outputText value="NATIVO" rendered="#{idiom.escribe=='N'}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Escribe" />
+							</f:facet>
+
+							<h:outputText value="BASICO" rendered="#{idiom.escribe=='B'}" />
+							<h:outputText value="MEDIO" rendered="#{idiom.escribe=='M'}" />
+							<h:outputText value="AVANZADO" rendered="#{idiom.escribe=='A'}" />
+							<h:outputText value="NATIVO" rendered="#{idiom.escribe=='N'}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="columnHeader" value="Lee" />
+							</f:facet>
+							<h:outputText value="BASICO" rendered="#{idiom.lee=='B'}" />
+							<h:outputText value="MEDIO" rendered="#{idiom.lee=='M'}" />
+							<h:outputText value="AVANZADO" rendered="#{idiom.lee=='A'}" />
+							<h:outputText value="NATIVO" rendered="#{idiom.escribe=='N'}" />
+						</rich:column>
+					</rich:dataTable></td>
+				</tr>
+			</table>
+
+			<table id="experiencia_profesional">
+				<tr>
+					<td><h:outputText value="C. EXPERIENCIA PROFESIONAL"
+						style="color:#999977;font-size:20px;font-weight:bold;" /></td>
+				</tr>
+				<tr>
+					<td><rich:panel style="border-style:none; width : 740px;"
+						rendered="#{tab6VistaPreliminarFormController.experienciaLaboralsList.size()==0}">
+						<rich:dataTable
+							value="#{tab6VistaPreliminarFormController.experienciaLaboralsList}"
+							var="_expLab" />
+						<table style="width: 740px;">
+							<tr>
+								<td bgcolor="#F1EFE4"
+									style="border-style: solid; border-color: black; border-width: thin;">
+								<table bgcolor="#F1EFE4 ">
+									<td style="FONT-SIZE: x-small;"><h:panelGrid columns="2">
+										<h:outputText value="Desde :" />
+										<h:outputText value="#{_expLab.fechaDesde}"
+											style="font-size:11px;" />
+										<h:outputText value="Hasta :" />
+										<h:outputText value="#{_expLab.fechaHasta}"
+											style="font-size:11px;" />
+									</h:panelGrid></td>
+									<td bgcolor="#F1EFE4" style="width: 6px;" />
+								</table>
+								</td>
+								<td bgcolor="#F1EFE4"
+									style="border-style: solid; border-color: black; border-width: thin;">
+								<table bgcolor="#F1EFE4">
+									<td><h:panelGrid columns="2">
+										<h:outputText value="Institucion/Empresa :" />
+										<h:outputText value="#{_expLab.empresa}"
+											style="font-size:11px;" />
+										<h:outputText value="Referencias Laborales :" />
+										<h:outputText value="#{_expLab.referenciasLaborales}"
+											style="font-size:11px;" />
+									</h:panelGrid></td>
+								</table>
+								</td>
+							</tr>
+
+
+							<tr>
+
+								<td colspan="3"><h:panelGrid width="100%"
+									style="border-style:solid;border-color:black;border-width:thin;">
+									<h:outputText value="Puesto : #{_expLab.puestoCargo}" />
+
+									<h:outputText
+										value="Descripcion breve de las funciones asignadas :" />
+									<h:outputText value="#{_expLab.funcionesRealizadas}"
+										style="font-size:11px;" />
+
+								</h:panelGrid></td>
+							</tr>
+						</table>
+					</rich:panel></td>
+				</tr>
+				<tr>
+					<td><rich:dataTable id="itemsExpList" var="_itemsLab"
+						value="#{tab6VistaPreliminarFormController.experienciaLaboralsList}"
+						rowKeyVar="rowNr">
+						<rich:column style="border-style:none;">
+							<rich:panel style="border-style:none; width : 740px;">
+								<table style="width: 740px;">
+									<tr>
+										<td bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;">
+										<table bgcolor="#F1EFE4">
+											<td><h:panelGrid columns="2">
+												<h:outputText value="Desde :" />
+												<h:outputText value="#{_itemsLab.fechaDesde}"
+													style="font-size:11px;" />
+												<h:outputText value="Hasta :" />
+												<h:outputText value="#{_itemsLab.fechaHasta}"
+													style="font-size:11px;" />
+											</h:panelGrid></td>
+											<td bgcolor="#F1EFE4" style="width: 6px;" />
+										</table>
+										</td>
+										<td bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;">
+										<table bgcolor="#F1EFE4">
+											<td><h:panelGrid columns="2">
+												<h:outputText value="Institucion/Empresa :" />
+												<h:outputText value="#{_itemsLab.empresa}"
+													style="font-size:11px;" />
+												<h:outputText value="Referencias Laborales :" />
+												<h:outputText value="#{_itemsLab.referenciasLaborales}"
+													style="font-size:11px;" />
+											</h:panelGrid></td>
+										</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3"><h:panelGrid width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Puesto : " />
+											<h:outputText value="#{_itemsLab.puestoCargo}"
+												style="font-size:11px;" />
+											<h:outputText
+												value="Descripcion breve de las funciones asignadas :" />
+											<h:outputText value="#{_itemsLab.funcionesRealizadas}"
+												style="font-size:11px;" />
+										</h:panelGrid></td>
+									</tr>
+								</table>
+							</rich:panel>
+						</rich:column>
+					</rich:dataTable></td>
+				</tr>
+			</table>
+
+			<table id="discapacidad">
+
+				<tr>
+					<td><h:outputText value="D. DISCAPACIDAD"
+						rendered="#{tab6VistaPreliminarFormController.personaDiscapacidads.size()>0}"
+						style="color:#999977;font-size:20px;font-weight:bold;" /></td>
+				</tr>
+				<tr>
+					<td><rich:dataTable id="itemsIdiomaList2" var="_items"
+						rendered="#{tab6VistaPreliminarFormController.personaDiscapacidads.size()>0}"
+						value="#{tab6VistaPreliminarFormController.personaDiscapacidads}"
+						rowKeyVar="rowNr">
+						<rich:column style="border-style:none;">
+							<rich:panel style="border-style:none; width : 740px;">
+								<table style="width: 740px;">
+									<tr>
+										<td bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+											value="Discapacidad " /></td>
+										<td bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+											value="#{_items.datosEspecificosByIdDatosEspecificosDiscapac.descripcion}" /></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid columns="8"
+											width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Causa :" />
+											<h:outputText value="#{_items.causa}" style="font-size:11px;" />
+											<rich:spacer width="5px" />
+											<h:outputText value="Grado :" />
+											<h:outputText value="#{_items.grado}" style="font-size:11px;" />
+											<rich:spacer width="5px" />
+											<h:outputText value="Grado de Autonomia :" />
+											<h:outputText
+												value="#{_items.datosEspecificosByIdDatosEspecificosGradoAutonom.descripcion}"
+												style="font-size:11px;" />
+										</h:panelGrid></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid width="100%"
+											columns="5"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Nro. Certificado:" />
+											<h:outputText value="#{_items.nroCertificado}"
+												style="font-size:11px;" />
+											<rich:spacer width="5px" />
+											<h:outputText value="Fecha de Emisión:" />
+											<h:outputText value="#{_items.fechaEmision}"
+												style="font-size:11px;" />
+
+										</h:panelGrid></td>
+									</tr>
+
+									<!--<tr width="100%">
+										<td width="100%" colspan="2"><h:panelGrid width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="¿Tiene dificultad en alguna actividad?" />
+											<h:outputText style="font-size:11px;"
+												value="#{_items.dificultadActividad}" />
+										</h:panelGrid></td>
+									</tr>
+									<tr width="100%">
+										<td width="100%" colspan="2"><h:panelGrid width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="¿Actividades que puede realizar?" />
+											<h:outputText style="font-size:11px;"
+												value="#{_items.actividadRealizar}" />
+										</h:panelGrid></td>
+									</tr>-->
+								</table>
+							</rich:panel>
+						</rich:column>
+					</rich:dataTable> <rich:dataTable id="itemsRepresentareDisc" var="_repre"
+						value="#{tab6VistaPreliminarFormController.reprPersonaDiscapacidadList}"
+						rowKeyVar="rowNr">
+						<rich:column style="border-style:none;">
+							<rich:panel style="border-style:none; width : 740px;">
+								<table style="width: 740px;">
+									<tr>
+										<td width="50%" bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+											value="Representante " /></td>
+										<td width="50%" bgcolor="#F1EFE4"
+											style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+											value="" /></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid columns="8"
+											width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Documento de Identidad :" />
+											<h:outputText value="#{_repre.personaRep.documentoIdentidad}"
+												style="font-size:11px;" />
+											<rich:spacer width="5px" />
+											<h:outputText value="Correo Electrónico :" />
+											<h:outputText value="#{_repre.personaRep.EMail}"
+												style="font-size:11px;" />
+										</h:panelGrid></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid columns="8"
+											width="100%"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Nombre y Apellido :" />
+											<h:outputText value="#{_repre.personaRep.nombreCompleto}"
+												style="font-size:11px;" />
+
+
+										</h:panelGrid></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid width="100%"
+											columns="5"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Pais Expedición de Doc. Identidad:" />
+											<h:outputText
+												value="#{_repre.personaRep.paisByIdPaisExpedicionDoc.descripcion}"
+												style="font-size:11px;" />
+											<rich:spacer width="5px" />
+											<h:outputText value="Nacionalidad:" />
+											<h:outputText
+												value="#{_repre.personaRep.datosEspecificos.descripcion}"
+												style="font-size:11px;" />
+
+										</h:panelGrid></td>
+									</tr>
+									<tr>
+										<td width="100%" colspan="2"><h:panelGrid width="100%"
+											columns="1"
+											style="border-style:solid;border-color:black;border-width:thin;">
+											<h:outputText value="Observaciones:" />
+											<h:outputText value="#{_repre.observacion}"
+												style="font-size:11px;" />
+
+										</h:panelGrid></td>
+									</tr>
+
+								</table>
+							</rich:panel>
+						</rich:column>
+					</rich:dataTable></td>
+
+
+				</tr>
+
+
+			</table>
+		</rich:panel>
+		<s:button id="cancelar" value="#{messages.msg_done}"
+			propagation="none" view="/cuentaUsuarioPortal.xhtml" />
+
+	</h:form>
+</ui:composition>

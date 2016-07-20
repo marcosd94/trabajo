@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<begin-conversation flush-mode="MANUAL" join="true" />
+	<action execute="#{cargarResultEvalMetodo571FC.init()}"
+		on-postback="false" />
+	<param name="idGrupoMetodologia" value="#{cargarResultEvalMetodo571FC.idGrupoMetodologia}" />
+
+	<navigation from-action="#{cargarResultEvalMetodo571FC.saveGrupo()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect
+				view-id="/evaluacionDesempenho/CargarResultEvalMetodo/CargarResultEvalMetodoGrupal571.xhtml">
+				<param name="idGrupoMetodologia"
+					value="#{cargarResultEvalMetodo571FC.idGrupoMetodologia}" />
+			</redirect>
+		</rule>
+	</navigation>
+	<navigation from-action="#{cargarResultEvalMetodo571FC.finalizarEvalua()}">
+		<rule if-outcome="OK">
+			<end-conversation />
+			<redirect
+				view-id="/evaluacionDesempenho/cargaResultadoEvaluacion/GrupoMetodologiaList.xhtml">
+
+			</redirect>
+		</rule>
+	</navigation>
+	<restrict>#{identity.hasRole('cargarResultEvalMetodo571')}</restrict>
+</page>

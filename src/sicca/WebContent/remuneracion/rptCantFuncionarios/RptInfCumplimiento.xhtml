@@ -1,0 +1,133 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.rpt_inf_cumplimiento}</h1>
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('remuneracion/rptCantFuncionarios/RptInfCumplimiento')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('remuneracion/rptCantFuncionarios/RptInfCumplimiento')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('remuneracion/rptCantFuncionarios/RptInfCumplimiento')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+						<s:decorate id="tipoField" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU680_Mes}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipo" value="#{rptCantFuncionariosFC.mes}"
+								style="width:250px">
+								<f:selectItems
+									value="#{rptCantFuncionariosFC.mesAnhoSI('MESES')}" />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.CU680_Anho}<span
+									class="required">*</span>
+							</ui:define>
+							<h:selectOneMenu id="tipo" value="#{rptCantFuncionariosFC.anho}"
+								style="width:250px">
+								<f:selectItems
+									value="#{rptCantFuncionariosFC.mesAnhoSI('ANHO')}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</a:outputPanel>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+			<div class="actionButtons">
+				<h:commandButton value="#{messages.CU737_imp2}"
+					action="#{rptCantFuncionariosFC.descargarInforme()}">
+				</h:commandButton>
+				<s:button id="reset" value="Limpiar"
+					action="#{rptCantFuncionariosFC.limpiar()}"
+					reRender="panelBusqueda">
+				</s:button>
+			</div>
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

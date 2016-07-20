@@ -1,0 +1,198 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+		<a:outputPanel rendered="#{premiosReconocimientosFC.texto=='G'}" >
+		<h1>#{messages.CU657_titulo}</h1>
+		</a:outputPanel>
+		<a:outputPanel  rendered="#{premiosReconocimientosFC.texto=='P'}" >
+		<h1>#{messages.CU657_titulo_ver}</h1>
+		</a:outputPanel>
+		<rich:panel>
+	
+		<rich:panel id="panelSuperior" style=" width : 900px;" rendered="#{premiosReconocimientosFC.texto=='G'}">
+			<f:facet name="header">#{messages.CU657_registro}</f:facet>	
+
+			<h:panelGrid columns="2">
+			<h:panelGrid columns="1">
+			<s:decorate id="observacionField"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU657_obs}<span
+							class="required">*</span>
+					</ui:define>
+					<h:inputTextarea id="observacion" cols="80" rows="3"
+						value="#{premiosReconocimientosFC.datosPremio.obsPremio}" style=" width : 445px;">
+				<f:validateLength maximum="250" />
+				</h:inputTextarea>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<s:decorate id="empresaField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU657_acto_administrativo}</ui:define>
+					<h:inputText id="empresa" size="10"   styleClass="numeric" 
+										onkeypress="return soloNumeros(event);"
+						value="#{premiosReconocimientosFC.datosPremio.nroActo}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.CU657_fecha}<span
+							class="required">*</span>
+					</ui:define>
+					<rich:calendar id="fechaDesde"
+						value="#{premiosReconocimientosFC.datosPremio.fechaActo}"
+						enableManualInput="true" inputSize="10"
+						oninputkeypress="ponerBarra(event);"
+						datePattern="dd/MM/yyyy"
+						 />
+				</s:decorate>
+				</h:panelGrid>
+			</h:panelGrid>
+	
+				<h:panelGrid columns="2">
+				<s:decorate id="tipoDocumentoField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ExperienciaLaboral_tipoDocumento}<span
+							class="required">*</span></ui:define>
+					<h:selectOneMenu id="tipoDocumento"
+						value="#{premiosReconocimientosFC.idTipoDoc}"
+						style=" width : 170px;">
+						<f:selectItems
+							value="#{premiosReconocimientosFC.tipoDocPremiosSelectItems}" />
+					</h:selectOneMenu>
+
+				</s:decorate>
+        
+			<s:decorate id="adjuntoDoc" template="/layout/edit.xhtml"  >
+        	<ui:define name="label">Adjunto<span
+							class="required">*</span></ui:define>
+			 <s:fileUpload size="25" 
+						contentType="#{premiosReconocimientosFC.contentType}"
+						data="#{premiosReconocimientosFC.uploadedFile}"
+						fileName="#{premiosReconocimientosFC.fileName}"
+						style=" width : 382px;" >
+						</s:fileUpload>
+				
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml"  >
+				</s:decorate >
+				   <a:outputPanel ajaxRendered="true" id="panelDocNomex"
+					eventsQueue="default">
+						<s:decorate template="/layout/edit.xhtml"  >
+					<h:inputText id="nomFin" rendered="#{premiosReconocimientosFC.nombreDoc!=null}"
+						value="#{premiosReconocimientosFC.nombreDoc}"
+						disabled="true" /></s:decorate>
+				</a:outputPanel>
+			
+			
+			
+			</h:panelGrid>
+			<div style="clear: both"><span class="required">*</span>
+			#{messages.msg_required_fields}</div>
+			<br />
+			<div style="clear: both"><h:outputText
+				value="#{messages.CU646_mbs_add}"
+				styleClass="labelClass" /></div>
+			<br />
+
+			
+
+		</rich:panel>
+		<a:outputPanel rendered="#{premiosReconocimientosFC.texto=='G'}">
+		<div class="actionButtons" ><h:commandButton id="addToList"
+				action="#{premiosReconocimientosFC.addRow()}"
+				value="#{messages.msg_list_add}" 
+				onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+				rendered="#{premiosReconocimientosFC.datosPremio.idDatosPremio == null}" />
+
+			<h:commandButton id="updateOnList"
+				action="#{premiosReconocimientosFC.updateRow()}"
+				value="#{messages.msg_update}"
+				onclick="if(!confirm('#{messages.GENERICO_ESTA_SEGURO}')){return false;}"
+				rendered="#{premiosReconocimientosFC.datosPremio.idDatosPremio != null}" />
+
+			<a:commandButton id="cancelEditOnList"
+				action="#{premiosReconocimientosFC.limpiar()}"
+				value="#{messages.msg_cancel}"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{premiosReconocimientosFC.datosPremio.idDatosPremio != null}" />
+			<a:commandButton id="ClearOnList"
+				action="#{premiosReconocimientosFC.limpiar()}"
+				value="Limpiar"
+				reRender="panelDetalles,panelSuperior"
+				rendered="#{premiosReconocimientosFC.datosPremio.idDatosPremio == null}" />
+
+			</div></a:outputPanel>
+
+		<br />
+	
+		
+		<rich:panel id="panelDetalles" style="width:900;">
+			<f:facet name="header">#{messages['CU657_listado']} (#{premiosReconocimientosFC.datosPremioLista.size})</f:facet>
+			<div class="results" id="details" style="overflow: scroll;"><h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty premiosReconocimientosFC.datosPremioLista}" />
+			<rich:dataTable id="detailsExperiences" var="_detail"  style=" width : 850px;"
+				value="#{premiosReconocimientosFC.datosPremioLista}"
+				rendered="#{not empty premiosReconocimientosFC.datosPremioLista}"
+				rowKeyVar="_index" rows="5">
+				<rich:column>
+					<f:facet name="header">#{messages.CU657_obs}</f:facet>
+					<h:outputText value="#{_detail.obsPremio}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+				<h:column>
+					<f:facet name="header">#{messages.CU657_acto_admin}</f:facet>
+				<h:outputText value="#{_detail.nroActo}" />
+				</h:column>
+				<rich:column>
+					<f:facet name="header">#{messages.CU657_fecha}</f:facet>
+					<h:outputText value="#{_detail.fechaActo}">
+						<s:convertDateTime pattern="dd/MM/yyyy"
+							locale="#{siccaAppHelper.localeCode}" />
+					</h:outputText>
+				</rich:column>
+					
+				<rich:column>
+					<f:facet name="header">#{messages.CU657_doc}</f:facet>
+					<h:outputText value="#{_detail.documento.nombreFisicoDoc}" />
+				</rich:column>
+			
+				<rich:column styleClass="action">
+					<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+
+					<a:commandLink id="removeRow" rendered="#{premiosReconocimientosFC.texto=='G'}"
+						action="#{premiosReconocimientosFC.deleteRow(_index)}"
+						value="#{messages.msg_list_remove}"
+						onclick="if(!confirm('#{messages.msg_confirm_delete}')){return false;}"
+						reRender="panelDetalles" />
+						
+	            		#{' '}
+	            		<a:commandLink id="editRow"
+						action="#{premiosReconocimientosFC.editar(_detail.idDatosPremio)}"
+						value="#{messages.msg_edit}"
+						rendered="#{premiosReconocimientosFC.texto=='G'}"
+						reRender="panelSuperior,panelDetalles" />
+						#{' '}	
+						<h:commandLink value="Descargar"   target="_blank" rendered="#{_detail.documento.idDocumento!=null}"
+					action="#{premiosReconocimientosFC.abrirDoc(_index)}" />                    
+				</rich:column>
+			</rich:dataTable><rich:datascroller for="itemsEventoList" id="scrollPre"
+			renderIfSinglePage="false" />
+			</div>
+		</rich:panel>
+		</rich:panel>
+		
+		
+		
+
+		
+	
+
+</ui:composition>

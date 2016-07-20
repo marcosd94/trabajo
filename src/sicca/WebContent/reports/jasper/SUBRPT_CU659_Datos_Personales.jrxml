@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SUBRPT_CU659_Datos_Personales" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="197"/>
+	<parameter name="id" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT LEGAJOS.ID_LEGAJO AS NRO_LEGAJO, PERSONA.NOMBRES AS NOMBRES,
+PERSONA.APELLIDOS AS APELLIDOS, PERSONA.DOCUMENTO_IDENTIDAD AS DOCUMENTO_IDENTIDAD,
+PERSONA.FECHA_NACIMIENTO AS FECHA_NACIMIENTO, CIUDAD_NAC.DESCRIPCION AS LUGAR_NACIMIENTO,
+PAIS_NAC.DESCRIPCION AS PAI_NAC, DATOS_ESPECIFICOS.DESCRIPCION AS NACIONALIDAD,
+REF_SEXO.DESC_LARGA AS SEXO, PAIS.DESCRIPCION AS PAIS_EXPEDICION_DOC,
+REF_EST.DESC_LARGA AS ESTADO_CIVIL, PERSONA.CALLE_PRINCIPAL AS CALLE_PRINCIPAL,
+PERSONA.PRIMERA_LATERAL AS PRIMERA_LATERAL, PERSONA.SEGUNDA_LATERAL AS SEGUNDA_LATERAL,
+PERSONA.DEPARTAMENTO_NRO AS NRO_DPTO,PAIS_DIR.DESCRIPCION AS PAIS_DIR, DEPARTAMENTO.DESCRIPCION AS DEPARTAMENTO_DIR,
+CIUDAD_DIR.DESCRIPCION AS CIUDAD_DIR, BARRIO.DESCRIPCION AS BARRIO, PERSONA.TELEFONOS AS TELEFONOS, PERSONA.TELEFONO_PART AS TELEFONO_PART, PERSONA.TELEFONO_LAB AS TELEFONO_LAB,
+PERSONA.E_MAIL AS E_MAIL, PERSONA.GRUPO_SANGUINEO_ABO, PERSONA.GRUPO_SANGUINEO_RH, PERSONA.ACTIVO AS  ESTADO
+FROM GENERAL.PERSONA PERSONA
+JOIN LEGAJO.LEGAJOS LEGAJOS ON LEGAJOS.ID_PERSONA = PERSONA.ID_PERSONA
+LEFT OUTER JOIN GENERAL.CIUDAD CIUDAD_NAC
+ON CIUDAD_NAC.ID_CIUDAD = PERSONA.ID_CIUDAD_NAC
+LEFT OUTER JOIN GENERAL.DEPARTAMENTO DPTO_NAC
+ON DPTO_NAC.ID_DEPARTAMENTO = CIUDAD_NAC.ID_DEPARTAMENTO
+LEFT OUTER JOIN GENERAL.PAIS PAIS_NAC
+ON PAIS_NAC.ID_PAIS = DPTO_NAC.ID_PAIS
+LEFT OUTER JOIN GENERAL.CIUDAD CIUDAD_DIR
+ON CIUDAD_DIR.ID_CIUDAD = PERSONA.ID_CIUDAD_DIRECC
+LEFT OUTER JOIN GENERAL.DEPARTAMENTO DEPARTAMENTO
+ON DEPARTAMENTO.ID_DEPARTAMENTO = CIUDAD_DIR.ID_DEPARTAMENTO
+LEFT OUTER JOIN GENERAL.PAIS PAIS_DIR
+ON PAIS_DIR.ID_PAIS = DEPARTAMENTO.ID_PAIS
+LEFT OUTER JOIN GENERAL.BARRIO BARRIO
+ON BARRIO.ID_BARRIO = PERSONA.ID_BARRIO
+JOIN GENERAL.PAIS PAIS
+ON PAIS.ID_PAIS = PERSONA.ID_PAIS_EXPEDICION_DOC
+JOIN SELECCION.DATOS_ESPECIFICOS DATOS_ESPECIFICOS
+ON DATOS_ESPECIFICOS.ID_DATOS_ESPECIFICOS = PERSONA.ID_DATOS_ESPECIFICOS_NACIONALID
+JOIN SELECCION.REFERENCIAS REF_SEXO
+ON REF_SEXO.DESC_ABREV = PERSONA.SEXO
+JOIN SELECCION.REFERENCIAS REF_EST
+ON REF_EST.DESC_ABREV = PERSONA.ESTADO_CIVIL
+WHERE PERSONA.ID_PERSONA = $P{id}
+AND REF_SEXO.DOMINIO = 'SEXO'
+AND REF_EST.DOMINIO = 'ESTADO_CIVIL']]>
+	</queryString>
+	<field name="nro_legajo" class="java.lang.Long"/>
+	<field name="nombres" class="java.lang.String"/>
+	<field name="apellidos" class="java.lang.String"/>
+	<field name="documento_identidad" class="java.lang.String"/>
+	<field name="fecha_nacimiento" class="java.sql.Date"/>
+	<field name="lugar_nacimiento" class="java.lang.String"/>
+	<field name="pai_nac" class="java.lang.String"/>
+	<field name="nacionalidad" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="pais_expedicion_doc" class="java.lang.String"/>
+	<field name="estado_civil" class="java.lang.String"/>
+	<field name="calle_principal" class="java.lang.String"/>
+	<field name="primera_lateral" class="java.lang.String"/>
+	<field name="segunda_lateral" class="java.lang.String"/>
+	<field name="nro_dpto" class="java.lang.String"/>
+	<field name="pais_dir" class="java.lang.String"/>
+	<field name="departamento_dir" class="java.lang.String"/>
+	<field name="ciudad_dir" class="java.lang.String"/>
+	<field name="barrio" class="java.lang.String"/>
+	<field name="telefonos" class="java.lang.String"/>
+	<field name="telefono_part" class="java.lang.String"/>
+	<field name="telefono_lab" class="java.lang.String"/>
+	<field name="e_mail" class="java.lang.String"/>
+	<field name="grupo_sanguineo_abo" class="java.lang.String"/>
+	<field name="grupo_sanguineo_rh" class="java.lang.String"/>
+	<field name="estado" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="288" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="0" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATOS PERSONALES]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="17" width="407" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{nro_legajo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="1" y="17" width="147" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nro. de Legajo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="33" width="148" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Documento de Identidad Nro.:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="33" width="134" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{documento_identidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="33" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[País de Expedición:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="33" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pais_expedicion_doc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="50" width="148" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nombre(s):]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="50" width="407" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="67" width="147" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Apellido(s):]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="67" width="406" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{apellidos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="84" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Sexo:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="84" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{sexo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="84" width="148" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha de Nacimiento:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="84" width="134" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fecha_nacimiento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="101" width="134" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{lugar_nacimiento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="101" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[País:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="101" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pai_nac}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="101" width="148" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lugar de Nacimiento:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="117" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{estado_civil}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="148" y="117" width="134" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nacionalidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="117" width="148" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nacionalidad:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="117" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estado Civil:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="134" width="555" height="18" forecolor="#0F4229" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lugar de Residencia]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="151" width="461" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{calle_principal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="151" width="93" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Calle Principal:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="168" width="461" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{primera_lateral}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="168" width="93" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Primera Lateral:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="0" y="185" width="93" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Segunda Lateral:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="185" width="461" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{segunda_lateral}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="202" width="461" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nro_dpto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="-1" y="202" width="94" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Departamento Nro.:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="219" width="175" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{departamento_dir}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="219" width="188" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pais_dir}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="-1" y="219" width="94" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[País:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="281" y="219" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Departamento:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="236" width="189" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ciudad_dir}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="236" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{barrio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="-1" y="236" width="94" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ciudad:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="236" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Barrio:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="253" width="189" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefonos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="-1" y="253" width="94" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Teléfono Móvil:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="253" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefono_part}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="253" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Teléfono Particular:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="282" y="271" width="97" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="379" y="271" width="176" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{e_mail}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="271" width="189" height="17"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefono_lab}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" positionType="Float" mode="Transparent" x="-1" y="271" width="94" height="17" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Teléfono Laboral:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+</jasperReport>

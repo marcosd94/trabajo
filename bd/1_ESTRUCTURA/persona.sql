@@ -1,0 +1,1 @@
+ALTER TABLE general.persona ADD COLUMN tel_contacto character varying(20);

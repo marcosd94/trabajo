@@ -1,0 +1,332 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.promocion_titulo_categoria}</h1>
+		<!--******************** MODALES ******************-->
+		<!-- ****Modal Link6 - CONTENIDO FUNCIONAL**** -->
+		
+		<!-- ****Modal Link07 - REQUISITOS MINIMOS**** -->
+		
+		<!-- ****Modal Link08 - CONDICION DE TRABAJO**** -->
+		
+		<!-- ****Modal Link09 - CONDICION DE TRABAJO ESPECIFICO**** -->
+		
+		<!-- ****Modal link10 - CONDICION DE SEGURIDAD**** -->
+		
+		<!-- ****Modal Replicar Datos**** -->
+		<rich:modalPanel id="replicacionMiniModal" width="350" height="350"
+			autosized="false" resizeable="false" moveable="false">
+
+			<f:facet name="header">Desea Replicar este puesto?</f:facet>
+			<h:form id="idFormPrincipal">
+				<rich:panel style="border:none;" id="tab1">
+					<ui:remove>
+						<h:selectOneRadio id="radioButton" value="#{administrarPuestosTrabajoFormController.radioButton}">
+							<f:selectItem id="item1" itemLabel="SI" itemValue="SI" />
+							<f:selectItem id="item2" itemLabel="NO" itemValue="NO" />
+						</h:selectOneRadio>
+					</ui:remove>
+					<s:decorate id="cantField" template="/layout/edit.xhtml">
+						<ui:define name="label">Cantidad de Puestos Similares</ui:define>
+						<h:inputText id="idCantidadReplicar"
+							value="#{administrarPuestosTrabajoFormController.cantPuestosReplicados}"
+							size="10" />
+					</s:decorate>
+					<div style="clear: both" />
+					<rich:spacer height="20px" />
+					<div class="actionButtons" align="center">
+						<h:commandButton id="aceptar" value="Aceptar"
+							action="#{administrarPuestosTrabajoFormController.replicarPuestos()}" />
+						<a:commandButton id="cancel_tap03" value="Volver"
+							ajaxSingle="true"
+							oncomplete="Richfaces.hideModalPanel('replicacionMiniModal')" />
+					</div>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<!-- **************** FIN MODALES ********************** -->
+		
+		
+		
+
+		<h:form id="plantaCargoDet" styleClass="edit">
+			<h:panelGrid columns="1">
+				<s:decorate id="estadoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Estado</ui:define>
+					<h:inputText
+						value="#{administrarPuestosTrabajoFormController.estadoCab.descripcion}"
+						disabled="true" size="20" />
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="1">
+					
+					<rich:panel id="panelLinks" style="border:none;">
+
+						<rich:menuItem>
+							<s:link value="#{messages.promocion_link1}" style="color:blue;"
+								propagation="join"
+								action="#{administrarPuestosTrabajoFormController.mostrar('panel1')}" />
+
+						</rich:menuItem>
+						
+						
+						
+						<h3>Datos del CPT Específico</h3>
+						<rich:menuItem
+							rendered="#{administrarPuestosTrabajoFormController.plantaCargoDetFrom != '' and administrarPuestosTrabajoFormController.mostrarTodosLinks}">
+							<s:link value="#{messages.CU120_link11}" style="color:blue;"
+								propagation="join"
+								action="#{administrarPuestosTrabajoFormController.mostrarPromocion('panel11')}" />
+
+						</rich:menuItem>
+
+					
+						<rich:menuItem
+							rendered="#{administrarPuestosTrabajoFormController.plantaCargoDetFrom != '' and administrarPuestosTrabajoFormController.mostrarTodosLinks}">
+							<s:link value="#{messages.CU120_link6}" style="color:blue;"
+								propagation="join"
+								action="#{administrarPuestosTrabajoFormController.mostrarPromocion('panel6')}" />
+						</rich:menuItem>
+						<rich:menuItem
+							rendered="#{administrarPuestosTrabajoFormController.plantaCargoDetFrom != '' and administrarPuestosTrabajoFormController.mostrarTodosLinks}">
+							<s:link value="#{messages.CU120_link7}" style="color:blue;"
+								propagation="join"
+								action="#{administrarPuestosTrabajoFormController.mostrarPromocion('panel7')}" />
+						</rich:menuItem>
+					</rich:panel>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<rich:panel id="panelesGrales">
+						<f:facet name="header">#{administrarPuestosTrabajoFormController.isEdit ? messages.msg_add_male  : messages.msg_edit} #{messages.promocion_titulo_panel}</f:facet>
+						<rich:panel id="datosPuesto"
+							rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel1'}"
+							style="border:none;">
+							<a:include id="includeLink01Edit"
+								viewId="/planificacion/promocionSalarial/links/Link1DatosPuesto.xhtml">
+								<f:param name="plantaCargoDetFrom" value="#{plantaCargoDetFrom}" />
+							</a:include>
+
+							<h:commandButton id="save" value="#{messages.msg_save}"
+								action="#{administrarPuestosTrabajoFormController.guardarPromocionSalarial()}"
+								onclick="return confirm('#{messages.msg_confirm_save}');"
+								rendered="#{administrarPuestosTrabajoFormController.plantaCargoDetFrom == 'nuevo' and administrarPuestosTrabajoFormController.mostrarPanel == 'panel1'}" />
+
+							<h:commandButton id="updated" value="#{messages.msg_update}"
+								action="#{administrarPuestosTrabajoFormController.actualizarLink1PromocionSalarial()}"
+								onclick="return confirm('#{messages.msg_confirm_update}');"
+								rendered="#{(plantaCargoDetFrom == 'editar' or plantaCargoDetFrom == null)}" />
+
+
+							
+
+							<s:button id="cancelEditL9" value="Volver" propagation="none"
+									view="/#{administrarPuestosTrabajoFormController.from}.xhtml">
+								
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{administrarPuestosTrabajoFormController.idGrupo}" />	
+									
+								</s:button>
+
+							
+						</rich:panel>
+						
+
+						<rich:panel id="contenidoFuncional"
+							rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel6'}"
+							style="border:none;">
+							<h:panelGrid columns="1">
+								<s:decorate id="btnField" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracionModalButton"
+										value="Ver Escala" reRender="valoracionMiniModal"
+										action="#{administrarPuestosTrabajoFormController.buscarValoracionTab02()}"
+										oncomplete="#{rich:component('valoracionMiniModal')}.show()" />
+								</s:decorate>
+
+								<a:include id="includeLink06Edit"
+									viewId="/planificacion/puestosTrabajo/links/Link6ContenidoFuncional.xhtml">
+									<f:param name="plantaCargoDetFrom"
+										value="#{plantaCargoDetFrom}" />
+								</a:include>
+							</h:panelGrid>
+							<h:panelGrid columns="3">
+
+								<h:commandButton id="updatedL6" value="#{messages.msg_update}"
+									action="#{administrarPuestosTrabajoFormController.updatedLink6()}"
+									onclick="return confirm('#{messages.msg_confirm_update}');"
+									rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel6' and !administrarPuestosTrabajoFormController.isNewLink6 and empty plantaCargoDetFrom}" />
+
+								<s:decorate id="boton6Field" template="/layout/edit.xhtml">
+									<a:commandButton id="show5ReplicacionModalButton"
+										value="Replicar Puesto" reRender="replicacionMiniModal"
+										rendered="#{administrarPuestosTrabajoFormController.mostrarReplicarPuesto() }"
+										oncomplete="#{rich:component('replicacionMiniModal')}.show()" />
+								</s:decorate>
+
+								<s:button id="cancelEditL3" value="Volver" propagation="none"
+									view="/#{administrarPuestosTrabajoFormController.from}.xhtml">
+								
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{administrarPuestosTrabajoFormController.idGrupo}" />	
+									
+								</s:button>
+							</h:panelGrid>
+						</rich:panel>
+
+						<rich:panel id="requisitosMinimos"
+							rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel7'}"
+							style="border:none;">
+							<h:panelGrid columns="1">
+								<s:decorate id="btn2Field" template="/layout/edit.xhtml">
+									<a:commandButton id="showValoracion2ModalButton"
+										value="Ver Escala" reRender="valoracionTab03MiniModal"
+										action="#{administrarPuestosTrabajoFormController.buscarValoracionTab03()}"
+										oncomplete="#{rich:component('valoracionTab03MiniModal')}.show()" />
+								</s:decorate>
+
+								<a:include id="includeLink07Edit"
+									viewId="/planificacion/puestosTrabajo/links/Link7RequisitosMinimos.xhtml">
+									<f:param name="plantaCargoDetFrom"
+										value="#{plantaCargoDetFrom}" />
+								</a:include>
+							</h:panelGrid>
+							<h:panelGrid columns="3">
+
+
+								<h:commandButton id="updatedL7" value="#{messages.msg_update}"
+									action="#{administrarPuestosTrabajoFormController.updatedLink7()}"
+									onclick="return confirm('#{messages.msg_confirm_update}');"
+									rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel7' and !administrarPuestosTrabajoFormController.isNewLink7 and empty plantaCargoDetFrom}" />
+
+								<s:decorate id="boton5Field" template="/layout/edit.xhtml">
+									<a:commandButton id="show5ReplicacionModalButton"
+										value="Replicar Puesto" reRender="replicacionMiniModal"
+										rendered="#{administrarPuestosTrabajoFormController.mostrarReplicarPuesto()}"
+										oncomplete="#{rich:component('replicacionMiniModal')}.show()" />
+								</s:decorate>
+								<s:button id="cancelEditL4" value="Volver" propagation="none"
+									view="/#{administrarPuestosTrabajoFormController.from}.xhtml">
+								
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{administrarPuestosTrabajoFormController.idGrupo}" />	
+									
+								</s:button>
+							</h:panelGrid>
+						</rich:panel>
+
+
+						
+						
+						
+						<rich:panel id="nivelesCargos"
+							rendered="#{administrarPuestosTrabajoFormController.mostrarPanel == 'panel11'}"
+							style="border:none;">
+
+							<p
+								style="FONT-FAMILY: 'Arial'; FONT-SIZE: large; text-indent: 5em;">
+								<h3>Niveles de Cargos Posibles</h3>
+							</p>
+
+							<rich:dataTable cellpadding="0" cellspacing="0" width="300px"
+								id="tablaCptPadreNivel" border="0" var="record" rowKeyVar="row"
+								style=" width : 402px;"
+								value="#{administrarPuestosTrabajoFormController.listaNivelesDeCargos}">
+
+								<rich:column styleClass="action">
+									<f:facet name="header">Nivel</f:facet>
+									<h:outputText value="#{record.tipo}" />
+								</rich:column>
+
+								<rich:column styleClass="action">
+									<f:facet name="header">Descripción</f:facet>
+									<h:outputText value="#{record.descripcion}" />
+								</rich:column>
+							</rich:dataTable>
+
+							<!-- <s:button id="backPanel11" value="Volver" propagation="none"
+								view="/#{empty plantafrom ? 'planificacion/puestosTrabajo/PlantaCargoDetList' : plantafrom}.xhtml" >
+							<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{administrarPuestosTrabajoFormController.idGrupo}" />	
+								
+							</s:button>-->
+							<s:button id="cancelEditL8" value="Volver" propagation="none"
+									view="/#{administrarPuestosTrabajoFormController.from}.xhtml">
+								
+								<f:param name="concursoPuestoAgrIdConcursoPuestoAgr"
+										value="#{administrarPuestosTrabajoFormController.idGrupo}" />	
+									
+								</s:button>
+						</rich:panel>
+
+
+
+						<div style="clear: both">
+							<span class="required">*</span> #{messages.msg_required_fields}
+						</div>
+						<br />
+						<div style="clear: both">
+							<h:outputText value="#{messages.msg_obs_actualizar}"
+								rendered="#{administrarPuestosTrabajoFormController.isEdit}" />
+						</div>
+						<div style="clear: both">
+							<h:outputText value="#{messages.msg_obs_guardar}"
+								rendered="#{!administrarPuestosTrabajoFormController.isEdit}" />
+						</div>
+
+					</rich:panel>
+
+				</h:panelGrid>
+			</h:panelGrid>
+
+
+
+		</h:form>
+
+
+		<h:panelGrid columns="2">
+			<s:decorate id="usuAltaField" template="/layout/edit.xhtml"
+				rendered="#{administrarPuestosTrabajoFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+				<h:outputText id="usuAlta"
+					value="#{plantaCargoDetHome.instance.usuAlta}" />
+			</s:decorate>
+			<s:decorate id="fechaAltaField" template="/layout/edit.xhtml"
+				rendered="#{administrarPuestosTrabajoFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+				<h:outputText id="fechaAlta"
+					value="#{plantaCargoDetHome.instance.fechaAlta}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+			<s:decorate id="usuModField" template="/layout/edit.xhtml"
+				rendered="#{administrarPuestosTrabajoFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+				<h:outputText id="usuMod"
+					value="#{plantaCargoDetHome.instance.usuMod}" />
+			</s:decorate>
+			<s:decorate id="fechaModField" template="/layout/edit.xhtml"
+				rendered="#{administrarPuestosTrabajoFormController.isEdit}">
+				<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+				<h:outputText id="fechaMod"
+					value="#{plantaCargoDetHome.instance.fechaMod}">
+					<s:convertDateTime pattern="dd/MM/yyyy" locale="ES" />
+				</h:outputText>
+			</s:decorate>
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

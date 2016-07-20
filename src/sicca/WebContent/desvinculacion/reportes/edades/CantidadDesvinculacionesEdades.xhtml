@@ -1,0 +1,186 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h1>#{messages.CU446_titulo}</h1>
+		<!-- Modales  -->
+		<rich:modalPanel id="modalTipoImpresion" width="350" height="150"
+			resizeable="false" moveable="true">
+			<f:facet name="header">#{messages.CU444_titulo_descarga}</f:facet>
+			<f:facet name="controls">
+				<h:graphicImage value="/img/close.png" style="cursor:pointer"
+					onclick="#{rich:component('modalTipoImpresion')}.hide()" />
+			</f:facet>
+			<h:form>
+				<a:region>
+					<s:decorate id="estadoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU444_formato_informe}</ui:define>
+						<h:selectOneMenu id="opciones" required="true"
+							value="#{cantidadDesvinculacionEdadesFormController.opcionImpresion}">
+							<f:selectItem id="item1" itemLabel="PDF" itemValue="pdf" />
+							<f:selectItem id="item2" itemLabel="Excel" itemValue="xls" />
+							<a:support event="onchange" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</a:region>
+				
+				
+				<div style="clear: both" />
+				<rich:spacer height="20px" />
+				<div class="actionButtons" align="center"><h:commandButton
+					id="imprimir" value="Descargar"
+					action="#{cantidadDesvinculacionEdadesFormController.print()}" />
+				<a:commandButton id="cancel" value="Volver" ajaxSingle="true"
+					oncomplete="Richfaces.hideModalPanel('modalTipoImpresion')" /></div>
+			</h:form>
+		</rich:modalPanel>
+
+		<h:form id="plantaCargoDetSearch" styleClass="edit">
+
+			<rich:simpleTogglePanel label="#{messages['msg_list_search_filter']}"
+				switchType="client" id="panelBusqueda">
+				<h:panelGrid columns="1">
+					<a:outputPanel id="idPanelCampos" ajaxRendered="true">
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.ClasificadorUo_nivel}
+								</ui:define>
+								<h:inputText id="nivelCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										reRender="idPanelCampos" focus="entidadCodigo"
+										action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+								</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+									disabled="true" />
+								 	#{' '}
+	               
+					  				<a:commandButton id="searchNi" eventsQueue="default"
+									image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageNivel('desvinculacion/reportes/edades/CantidadDesvinculacionesEdades')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.Usuario_entidad}
+								</ui:define>
+								<h:inputText id="entidadCodigo" styleClass="numeric"
+									onkeypress="return soloNumeros(event);"
+									value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findEntidad()}"
+										reRender="idPanelCampos" focus="unidadOrgCodigo" />
+								</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+									value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+									disabled="true" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageEntidad('desvinculacion/reportes/edades/CantidadDesvinculacionesEdades')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+
+						<a:region>
+							<s:decorate template="/layout/display.xhtml">
+								<ui:define name="label">#{messages.gral_oee}
+								</ui:define>
+								<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+									value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+									onkeypress="return soloNumeros(event);"
+									disabled="#{!seguridadUtilFormController.esAdministradorSFP}">
+									<a:support event="onchange" eventsQueue="default"
+										action="#{nivelEntidadOeeUtil.findUnidadOrganizativa()}"
+										reRender="unidadOrgCodigo,unidadOrgDenominacion"
+										focus="orgCodigo2" />
+								</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+									disabled="true"
+									value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+									#{' '}
+	                				<a:commandButton id="searchEntidad"
+									eventsQueue="default" image="/img/Buscar.png"
+									action="#{nivelEntidadOeeUtil.getUrlToPageOee('desvinculacion/reportes/edades/CantidadDesvinculacionesEdades')}"
+									rendered="#{seguridadUtilFormController.esAdministradorSFP}" />
+							</s:decorate>
+						</a:region>
+					</a:outputPanel>
+
+					<s:decorate id="motivoField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_motivo}
+						</ui:define>
+						<h:selectOneMenu id="motivoDesvinculacionSelect"
+							style="width : 250px;"
+							value="#{cantidadDesvinculacionEdadesFormController.idMotivo}">
+							<f:selectItems
+								value="#{cantidadDesvinculacionEdadesFormController.motivoSelecItem}" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<s:decorate id="fechaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU444_fecha}
+						</ui:define>
+
+					</s:decorate>
+					<s:decorate id="fechaDesdeField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU444_desde}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaDesde"
+							value="#{cantidadDesvinculacionEdadesFormController.fechaDesde}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="fechaHastaField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU444_hasta}<span
+								class="required">*</span>
+						</ui:define>
+						<rich:calendar id="fechaHasta"
+							value="#{cantidadDesvinculacionEdadesFormController.fechaHasta}"
+							enableManualInput="true" oninputkeyup="ponerBarra(event)"
+							datePattern="dd/MM/yyyy" />
+					</s:decorate>
+				</h:panelGrid>
+			</rich:simpleTogglePanel>
+
+			<div class="actionButtons"><h:commandButton id="printGr"
+				value="#{messages['CU436_btn_grafico']}"
+				action="#{cantidadDesvinculacionEdadesFormController.printGrafico()}" />
+
+			<a:commandButton value="Generar Informe"
+				reRender="modalTipoImpresion" eventsQueue="default"
+				action="#{cantidadDesvinculacionEdadesFormController.prepararImpresion()}"
+				oncomplete="#{rich:component('modalTipoImpresion')}.show()" /> <s:button id="reset" propagation="none"
+						value="#{messages.GENERICO_LIMPIAR}"/></div>
+
+
+
+		</h:form>
+
+
+	<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+
+	</ui:define>
+
+</ui:composition>

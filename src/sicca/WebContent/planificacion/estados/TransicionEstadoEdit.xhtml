@@ -1,0 +1,128 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+<h1>#{messages.TransicionEstado_}</h1>
+    <h:form id="transicionEstado" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{transicionEstadoHome.managed ? messages.msg_edit : messages.msg_add_male} #{messages.TransicionEstado_}</f:facet>
+
+			<h:panelGrid columns="1" >
+            <s:decorate id="tipoCceField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.EstadoCab_}</ui:define>
+					<h:selectOneMenu id="tipoCce"  required="true"
+								  value="#{transicionEstadoHome.idEstadoCab}"		 >
+						<f:selectItems value="#{estadosCabsSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				#{messages.TransicionEstado_posibles}
+				 <s:decorate id="estadoPosibleField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.TransicionEstado_pasar}</ui:define>
+					<h:selectOneMenu id="posible"  required="true"
+								  value="#{transicionEstadoHome.idEstadoPosible}"		 >
+						<f:selectItems value="#{estadosCabsSelectItems}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+				
+		</h:panelGrid>
+	
+
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+               #{messages.msg_required_fields}
+            </div>
+            
+             <div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_actualizar}" styleClass="labelClass"
+				rendered="#{transicionEstadoHome.managed}" /></div>
+			<div style="clear: both"><h:outputText
+				value="#{messages.msg_obs_guardar}" styleClass="labelClass"
+				rendered="#{!transicionEstadoHome.managed}" /></div>
+			<br />
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{transicionEstadoHome.persist}"
+                       disabled="#{!transicionEstadoHome.wired}"
+                       onclick="return confirm('#{messages.msg_confirm_save}');" 
+                        rendered="#{!transicionEstadoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{transicionEstadoHome.update}"
+                            onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{transicionEstadoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Eliminar"
+                         action="#{transicionEstadoHome.remove}"
+                              onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{transicionEstadoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Volver"
+             propagation="end"
+                    view="/planificacion/estados/TransicionEstadoList.xhtml"
+                rendered="#{transicionEstadoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Volver"
+             propagation="end"
+                    view="/#{empty transicionEstadoFrom ? '/planificacion/estados/TransicionEstadoList' : transicionEstadoFrom}.xhtml"
+                rendered="#{!transicionEstadoHome.managed}"/>
+
+        </div>
+    </h:form>
+    
+    
+    	
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"    rendered="#{transicionEstadoHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{transicionEstadoHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{transicionEstadoHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{transicionEstadoHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{transicionEstadoHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{transicionEstadoHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"  rendered="#{transicionEstadoHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{transicionEstadoHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,120 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+	<h1>#{messages.EmpleadoPuesto_}</h1>
+
+    <h:form id="empleadoPuesto" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{empleadoPuestoHome.managed ? messages.msg_edit  : messages.msg_add_male} #{messages.EmpleadoPuesto_}</f:facet>
+
+	            <s:decorate id="plantaCargoDetField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_idPlantaCargoDet}</ui:define>
+	                <h:selectOneMenu id="plantaCargoDet"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.idPlantaCargoDet}">
+	                    <f:selectItems value="#{plantaCargoDetsSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+	            <s:decorate id="actualField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_actual}</ui:define>
+	                <h:inputText id="actual"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.instance.actual}">
+	                    <a:support event="onblur" reRender="actualField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="lineaPresupuestariaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_lineaPresupuestaria}</ui:define>
+	                <h:inputText id="lineaPresupuestaria"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.instance.lineaPresupuestaria}">
+	                    <a:support event="onblur" reRender="lineaPresupuestariaField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="discapacitadoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_discapacitado}</ui:define>
+	                <h:inputText id="discapacitado"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.instance.discapacitado}">
+	                    <a:support event="onblur" reRender="discapacitadoField" bypassUpdates="true" ajaxSingle="true"/>
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.instance.activo}" />
+	            </s:decorate>
+	            <s:decorate id="empleadoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.EmpleadoPuesto_idEmpleado}</ui:define>
+	                <h:selectOneMenu id="empleado"
+	                		required ="true"
+	                       disabled="false"
+	                          value="#{empleadoPuestoHome.idEmpleado}">
+	                    <f:selectItems value="#{empleadosSelectItems}" />
+	                </h:selectOneMenu>
+	            </s:decorate>
+
+        <div style="clear:both">
+                <span class="required">*</span>
+                #{messages.msg_required_fields}
+        </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="#{messages.msg_save}"
+                         action="#{empleadoPuestoHome.persist}"
+                       disabled="#{!empleadoPuestoHome.wired}"                      
+                       rendered="#{!empleadoPuestoHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="#{messages.msg_update}"
+                         action="#{empleadoPuestoHome.update}"
+                          onclick="return confirm('#{messages.msg_confirm_update}');"
+                       rendered="#{empleadoPuestoHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="#{messages.msg_delete}"
+                         action="#{empleadoPuestoHome.remove}"
+                        onclick="return confirm('#{messages.msg_confirm_delete}');"
+                      immediate="true"
+                       rendered="#{empleadoPuestoHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/planificacion/empleadoPuesto/EmpleadoPuestoList.xhtml"
+                rendered="#{empleadoPuestoHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="#{messages.msg_cancel}"
+             propagation="end"
+                    view="/#{empty empleadoPuestoFrom ? 'planificacion/empleadoPuesto/EmpleadoPuestoList' : empleadoPuestoFrom}.xhtml"
+                rendered="#{!empleadoPuestoHome.managed}"/>
+
+        </div>
+    </h:form>
+
+
+        
+</ui:define>
+
+</ui:composition>

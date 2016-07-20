@@ -1,0 +1,252 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.CU486_titulo_evaluacion}</h1>
+		<h:form id="capacitacionesSearch" styleClass="edit"
+			enctype="multipart/form-data">
+
+			<rich:panel id="pantenCapa">
+				<f:facet name="header">#{messages.CU479_capa_beca}</f:facet>
+				<h:panelGrid columns="1">
+					<s:decorate id="idDatosEspecificosTipoCapField"
+						template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU471_titulo}</ui:define>
+						<h:inputText id="idDatosEspecificosTipoCap" size="100"
+							maxlength="300" disabled="true"
+							value="#{evaluacionPostulanteRegistrarFC.titulo}">
+						</h:inputText>
+					</s:decorate>
+
+
+
+					<s:decorate id="tipoField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU471_tipo_cap}</ui:define>
+						<h:inputText id="idDatosEspecificosTipoCap" size="100"
+							maxlength="300" disabled="true"
+							value="#{evaluacionPostulanteRegistrarFC.tipoCapacitacion}">
+						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:panel switchType="ajax" id="panelNiveles">
+				<f:facet name="header">#{messages.CU473_organizado_por}</f:facet>
+				<h:panelGrid columns="2" id="idPanelCampos">
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+										
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5"
+								disabled="true">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.Usuario_entidad}
+									
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5"
+								disabled="true">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.gral_oee}
+										
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{nivelEntidadOeeUtil.ordenUnidOrg}"
+								onkeypress="return soloNumeros(event);" disabled="true">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidad}" />
+						</s:decorate>
+					</a:region>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="1">
+					<a:outputPanel>
+						<s:decorate template="/layout/display.xhtml">
+							<ui:define name="label">#{messages.CU398_unidadOrganiza}
+									</ui:define>
+							<h:inputText id="orgCodigo2" size="10" disabled="true"
+								value="#{nivelEntidadOeeUtil.codigoUnidOrgDep}">
+							</h:inputText>
+									#{' '}
+									<h:inputText id="orgDenominacion2" size="50" disabled="true"
+								value="#{nivelEntidadOeeUtil.denominacionUnidadOrgaDep}" />
+
+						</s:decorate>
+					</a:outputPanel>
+
+
+
+
+				</h:panelGrid>
+			</rich:panel>
+
+
+			<rich:panel id="panelBusqueda">
+				<f:facet name="header">#{messages['msg_list_search_filter']}</f:facet>
+				<h:panelGrid>
+					<s:decorate id="paisExpField" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU479_pais_exp}</ui:define>
+						<h:selectOneMenu id="idPaisExp"
+							value="#{evaluacionPostulanteRegistrarFC.idPaisExpe}"
+							style="width:250px">
+							<f:selectItems value="#{paissSelectItems}" />
+						</h:selectOneMenu>
+					</s:decorate>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<s:decorate id="documentoIdentidadField"
+						template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU326_doc_ci}</ui:define>
+						<h:inputText id="documentoIdentidad"
+							value="#{evaluacionPostulanteRegistrarFC.docIdentidad}" />
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">Mostrar</ui:define>
+						<h:selectOneMenu id="estado" style="width : 250px;"
+							value="#{evaluacionPostulanteRegistrarFC.idMostrar}">
+							<f:selectItem itemLabel="TODOS" itemValue="#{null}" />
+							<f:selectItem itemLabel="SELECCIONADOS" itemValue="S" />
+							<f:selectItem itemLabel="NO SELECCIONADOS" itemValue="N" />
+							<f:selectItem itemLabel="LISTA DE ESPERA" itemValue="L" />
+						</h:selectOneMenu>
+					</s:decorate>
+				</h:panelGrid>
+
+				<h:panelGrid>
+
+
+				</h:panelGrid>
+
+			</rich:panel>
+			<div class="actionButtons"><a:commandButton id="search"
+				value="#{messages.msg_list_search_button}"
+				action="#{evaluacionPostulanteRegistrarFC.search()}"
+				reRender="panelGrillaResulPostulantes,panelBusqueda">
+			</a:commandButton> <a:commandButton id="reset"
+				value="#{messages['msg_list_search_clear_button']}"
+				reRender="panelGrillaResulPostulantes,panelBusqueda"
+				action="#{evaluacionPostulanteRegistrarFC.searchAll()}">
+			</a:commandButton> <h:commandButton id="print"
+				action="#{evaluacionPostulanteRegistrarFC.imprimir()}"
+				value="#{messages.msg_list_search_print_button}" /></div>
+
+			<rich:panel id="panelGrillaResulPostulantes">
+				<f:facet name="header">#{messages.CU479_postulantes} ( #{evaluacionPostulanteRegistrarFC.inscPostLista.size()} )</f:facet>
+				<div class="results" id="tbldetList"
+					style="overflow: scroll; width: 510; HEIGHT: 230px"><rich:dataTable
+					id="revision" var="_record"
+					value="#{evaluacionPostulanteRegistrarFC.inscPostLista}">
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU479_postulant}
+						</f:facet>
+						<h:outputText
+							value="#{_record.postulacionCap.persona.nombreCompleto} " />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU326_doc_ci}
+						</f:facet>
+						<h:outputText
+							value="#{_record.postulacionCap.persona.documentoIdentidad}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU479_pais_exp}
+						</f:facet>
+						<h:outputText
+							value="#{_record.postulacionCap.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU270_email}
+						</f:facet>
+						<h:outputText value="#{_record.postulacionCap.persona.EMail}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							#{messages.CU486_resultado}
+						</f:facet>
+
+						<h:outputText value="SELECCIONADOS"
+							rendered="#{_record.resultado=='S'}" />
+						<h:outputText value="NO SELECCIONADOS"
+							rendered="#{_record.resultado=='N'}" />
+						<h:outputText value="LISTA DE ESPERA"
+							rendered="#{_record.resultado=='L'}" />
+
+					</h:column>
+					<rich:column>
+						<f:facet name="header">	#{messages.msg_list_action_column}</f:facet>
+						<s:link id="verInstructores" value="#{messages.CU486_eval_link}"
+							view="/capacitacion/registrarEvalPostulante/porConcurso/EvaluacionPostulanteEdit.xhtml"
+							propagation="join">
+							<f:param name="evaluacionInscPostIdEvalIp"
+								value="#{_record.idEvalIp}" />
+						</s:link>
+					</rich:column>
+				</rich:dataTable></div>
+
+			</rich:panel>
+
+
+
+
+			<div class="actionButtons"><h:commandButton
+				id="enviarAprobacion" value="Finalizar Evaluación"
+				action="#{evaluacionPostulanteRegistrarFC.finalizarEvaluacion()}"
+				onclick="return confirm('#{messages.cY486_mgs_confi}');" /> <s:button
+				id="cancelAdd" value="Volver" propagation="none"
+				view="/capacitacion/bandeja/gestionarBandeja/BandejaCapacitacionList.xhtml" />
+
+			</div>
+
+
+
+		</h:form>
+
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,1621 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<div id="botones"><h:commandButton id="print"
+		value="Imprimir PDF" action="#{vistaPreviaLegajoFC.pdf()}"
+		rendered="#{vistaPreviaLegajoFC.mostrarBtnImprimir}" /> <h:commandButton
+		id="printXls" value="Imprimir Excel"
+		action="#{vistaPreviaLegajoFC.xls()}"
+		rendered="#{vistaPreviaLegajoFC.mostrarBtnImprimir}" /></div>
+	<table id="titulo_nombre">
+		<tr>
+			<td>
+			<h1 style="text-align: center;">#{messages.CU659_titulo}</h1>
+			</td>
+		</tr>
+		<tr style="height: 5px;">
+			<td></td>
+		</tr>
+		<tr>
+			<td
+				style="color: White; text-align: center; font-size: 35px; background-color: #59BDB9; font-weight: bold; width: 740px"><h:outputText
+				value="#{vistaPreviaLegajoFC.persona.nombres}  #{vistaPreviaLegajoFC.persona.apellidos}" /></td>
+		</tr>
+		<tr style="height: 5px;">
+			<td></td>
+		</tr>
+	</table>
+
+	<table id="datos_personales">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_datos_personales}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_nro_legajo} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.legajo.idLegajo}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_ci} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.documentoIdentidad}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_pais_exp} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.paisByIdPaisExpedicionDoc.descripcion}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_nombre} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.nombres}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_apellido} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.apellidos}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_fecha_nac} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.fechaNacimiento}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_sexo} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.sexo=='F'?'FEMENINO':'MASCULINO'}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="Lugar de Nacimiento :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.ciudadByIdCiudadNac.descripcion}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_pais} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.ciudadByIdCiudadNac.departamento.pais.descripcion}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_nacionalidad} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.datosEspecificos.descripcion}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_estado_civil} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.estadoCivil(vistaPreviaLegajoFC.persona.estadoCivil)}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_lugar_resi}"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_calle_principal} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.callePrincipal}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_primera} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.primeraLateral}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_segunda} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.segundaLateral}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_dpto_nro} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.departamentoNro}" />
+			</h:panelGrid></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_pais} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.ciudadByIdCiudadDirecc.departamento.pais.descripcion}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_dpto} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.ciudadByIdCiudadDirecc.departamento.descripcion}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_ciudad} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.ciudadByIdCiudadDirecc.descripcion}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_barrio} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.barrio.descripcion}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_tel} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.telefonos}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_part} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.telefonoPart}" />
+			</h:panelGrid></td>
+			
+		</tr>
+		<tr>
+		<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_lab} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.telefonoLab}" />
+			</h:panelGrid></td>
+			<rich:spacer width="30px" />
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_email} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.persona.EMail}" />
+			</h:panelGrid></td>
+		</tr>
+
+
+	</table>
+
+	<table id="doc_adicionales">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_doc_adic}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		
+
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaDocAdicionales}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaDocAdicionales}"
+				value="#{vistaPreviaLegajoFC.listaDocAdicionales}" var="doc"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_doc}" />
+					</f:facet>
+					<h:outputText
+						value="#{vistaPreviaLegajoFC.obtenerDescDocAdicional(doc)}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_nro}" />
+					</f:facet>
+					<h:outputText value="#{doc.documentoNro}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Otro Dato" />
+					</f:facet>
+					<h:outputText value="#{doc.otroDato}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_valor}" />
+					</f:facet>
+					<h:outputText
+						value="#{vistaPreviaLegajoFC.obtenerValorDocAdicional(doc)}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	
+	<table id="doc_adjuntos">
+		<tr>
+			<td><h:outputText value="DOCUMENTOS ADJUNTOS"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		
+
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaDocAdjuntos}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaDocAdjuntos}"
+				value="#{vistaPreviaLegajoFC.listaDocAdjuntos}" var="_documentos"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU289_tipo_doc}" />
+					</f:facet>
+					<h:outputText value="#{_documentos.datosEspecificos.descripcion}"/>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU156_nro_documento}" />
+					</f:facet>
+					<h:outputText value="#{_documentos.nroDocumento}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU156_desc_documento}" />
+					</f:facet>
+					<h:outputText value="#{_documentos.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{_documentos.fechaAlta}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="Estado" />
+					</f:facet>
+					<h:outputText value="#{_documentos.validoLegajo? 'Validado' : 'Pendiente de Validación'}"/>
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+
+
+	<table id="salud">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_datos_salud}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_grupo_sang} :" />
+				<h:outputText
+					value="#{vistaPreviaLegajoFC.persona.grupoSanguineoAbo} #{vistaPreviaLegajoFC.persona.grupoSanguineoRh}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="#{messages.CU645_panel_enfermedades}"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaEnfermedades}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaEnfermedades}"
+				value="#{vistaPreviaLegajoFC.listaEnfermedades}" var="enf"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU645_obs}" />
+					</f:facet>
+					<h:outputText value="#{enf.obsEnfermedad}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="seguros">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_seg_med}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaSeguros}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaSeguros}"
+				value="#{vistaPreviaLegajoFC.listaSeguros}" var="seg"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_seguro}" />
+					</f:facet>
+					<h:outputText value="#{seg.datosEspSeguroMedico.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_asegurador}" />
+					</f:facet>
+					<h:outputText value="#{seg.nombreAsegurador}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_plan}" />
+					</f:facet>
+					<h:outputText value="#{seg.planSeguroMedico}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_fecha_ingreso}" />
+					</f:facet>
+					<h:outputText value="#{seg.fechaIngreso}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU645_telefono_seg}" />
+					</f:facet>
+					<h:outputText value="#{seg.telefonoSeguro}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="discapacidad">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_discapacidad}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td
+				style="color: White; text-align: center; font-size: 16px; background-color: #59BDB9; font-weight: bold; width: 740px"><h:outputText
+				value="#{messages.CU659_apoyo}" /></td>
+		</tr>
+		<tr>
+
+			<td><h:outputText value="#{messages.CU659_reh_instituto}" /> <h:selectBooleanCheckbox
+				value="#{vistaPreviaLegajoFC.rehInstituto}" disabled="true" /> <rich:spacer
+				width="30px" /> <h:outputText value="#{messages.CU659_otro}" /> <h:selectBooleanCheckbox
+				value="#{vistaPreviaLegajoFC.otro}" disabled="true" /></td>
+		</tr>
+		<tr>
+
+			<td align="center"><h:inputTextarea cols="60"
+				value="#{vistaPreviaLegajoFC.apoyos.comentario}"
+				rendered="#{vistaPreviaLegajoFC.otro}" disabled="true" /></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_reh_hospital}" />
+				<h:selectBooleanCheckbox value="#{vistaPreviaLegajoFC.rehHospital}"
+					disabled="true" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_reh_particular}" />
+				<h:selectBooleanCheckbox
+					value="#{vistaPreviaLegajoFC.rehParticular}" disabled="true" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_reh_entrenamiento}" />
+				<h:selectBooleanCheckbox
+					value="#{vistaPreviaLegajoFC.rehEntrenamiento}" disabled="true" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_ninguno}" />
+				<h:selectBooleanCheckbox value="#{vistaPreviaLegajoFC.ninguno}"
+					disabled="true" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><rich:panel>
+				<f:facet name="header">Discapacidad</f:facet>
+				<h:outputText value="#{messages.msg_list_search_no_results}"
+					rendered="#{empty vistaPreviaLegajoFC.listaDiscapacidad}" />
+				<rich:dataTable id="itemsDiscapaidadList" var="_items"
+					rendered="#{not empty vistaPreviaLegajoFC.listaDiscapacidad}"
+					value="#{vistaPreviaLegajoFC.listaDiscapacidad}" rowKeyVar="rowNr">
+					<rich:column style="border-style:none;">
+						<rich:panel style="border-style:none; width : 740px;">
+							<table style="width: 740px;">
+								<tr>
+									<td bgcolor="#F1EFE4"
+										style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+										value="Discapacidad " /></td>
+									<td bgcolor="#F1EFE4"
+										style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+										value="#{_items.datosEspecificosByIdDatosEspecificosDiscapac.descripcion}" /></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid columns="8"
+										width="100%"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Causa :" />
+										<h:outputText value="#{_items.causa}" style="font-size:11px;" />
+										<rich:spacer width="5px" />
+										<h:outputText value="Grado :" />
+										<h:outputText value="#{_items.grado}" style="font-size:11px;" />
+										<rich:spacer width="5px" />
+										<h:outputText value="Funcionalidad :" />
+										<h:outputText
+											value="#{_items.datosEspecificosByIdDatosEspecificosGradoAutonom.descripcion}"
+											style="font-size:11px;" />
+									</h:panelGrid></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid width="100%"
+										columns="5"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Nro. Certificado:" />
+										<h:outputText value="#{_items.nroCertificado}"
+											style="font-size:11px;" />
+										<rich:spacer width="5px" />
+										<h:outputText value="Fecha de Emisión:" />
+										<h:outputText value="#{_items.fechaEmision}"
+											style="font-size:11px;" />
+
+									</h:panelGrid></td>
+								</tr>
+
+								<tr width="100%">
+									<td width="100%" colspan="2"><h:panelGrid width="100%"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Potencial :" />
+										<h:outputText style="font-size:11px;"
+											value="#{_items.dificultadActividad}" />
+									</h:panelGrid></td>
+								</tr>
+
+							</table>
+						</rich:panel>
+					</rich:column>
+				</rich:dataTable>
+				<rich:dataTable id="itemsRepresentareDisc" var="_repre"
+					value="#{vistaPreviaLegajoFC.listaRepreDiscapacidad}"
+					rowKeyVar="rowNr">
+					<rich:column style="border-style:none;">
+						<rich:panel style="border-style:none; width : 740px;">
+							<table style="width: 740px;">
+								<tr>
+									<td width="50%" bgcolor="#F1EFE4"
+										style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+										value="Representante/Curador " /></td>
+									<td width="50%" bgcolor="#F1EFE4"
+										style="border-style: solid; border-color: black; border-width: thin;"><h:outputText
+										value="#{_repre.personaRep.nombreCompleto}" /></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid columns="8"
+										width="100%"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Documento de Identidad :" />
+										<h:outputText value="#{_repre.personaRep.documentoIdentidad}"
+											style="font-size:11px;" />
+										<rich:spacer width="5px" />
+										<h:outputText value="Correo Electrónico :" />
+										<h:outputText value="#{_repre.personaRep.EMail}"
+											style="font-size:11px;" />
+									</h:panelGrid></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid columns="8"
+										width="100%"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Nacionalidad :" />
+										<h:outputText
+											value="#{_repre.personaRep.datosEspecificos.descripcion}"
+											style="font-size:11px;" />
+
+
+									</h:panelGrid></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid width="100%"
+										columns="5"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Pais Expedición de Doc. Identidad:" />
+										<h:outputText
+											value="#{_repre.personaRep.paisByIdPaisExpedicionDoc.descripcion}"
+											style="font-size:11px;" />
+										<rich:spacer width="5px" />
+										<h:outputText value="Nacionalidad:" />
+										<h:outputText
+											value="#{_repre.personaRep.datosEspecificos.descripcion}"
+											style="font-size:11px;" />
+
+									</h:panelGrid></td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="2"><h:panelGrid width="100%"
+										columns="1"
+										style="border-style:solid;border-color:black;border-width:thin;">
+										<h:outputText value="Observaciones:" />
+										<h:outputText value="#{_repre.observacion}"
+											style="font-size:11px;" />
+
+									</h:panelGrid></td>
+								</tr>
+
+							</table>
+						</rich:panel>
+					</rich:column>
+				</rich:dataTable>
+			</rich:panel></td>
+		</tr>
+	</table>
+	
+	<table id="datosFamiliares">
+		<tr>
+			<td><h:outputText value="DATOS FAMILIARES"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaFamiliares}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaFamiliares}"
+				value="#{vistaPreviaLegajoFC.listaFamiliares}" var="fam"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_doc}" />
+					</f:facet>
+					<h:outputText value="#{fam.personaFamiliar != null ? fam.personaFamiliar.documentoIdentidad : 'Sin Documento'}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_nombres_ap}" />
+					</f:facet>
+					<h:outputText
+						value="#{fam.personaFamiliar != null ? fam.personaFamiliar.nombres : fam.nombresFamiliar} #{fam.personaFamiliar != null ? fam.personaFamiliar.apellidos : fam.apellidosFamiliar}" />
+				</rich:column>
+				<!-- 
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_fecha_nac}" />
+					</f:facet>
+					<h:outputText value="#{fam.personaFamiliar.fechaNacimiento}" />
+				</rich:column>
+				 
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_sexo}" />
+					</f:facet>
+					<h:outputText
+						value="#{fam.personaFamiliar.sexo=='F'?'FEMENINO':'MASCULINO'}" />
+				</rich:column>
+				-->
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_parentesco}" />
+					</f:facet>
+					<h:outputText value="#{vistaPreviaLegajoFC.parentezco(fam)}" />
+				</rich:column>
+				<!-- 
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_estado_civil}" />
+					</f:facet>
+					<h:outputText
+						value="#{vistaPreviaLegajoFC.estadoCivil(fam.personaFamiliar.estadoCivil)}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Func. Público" />
+					</f:facet>
+					<h:outputText
+						value="#{vistaPreviaLegajoFC.esFuncionarioPublico(fam)}" />
+				</rich:column>
+				 -->
+				 <rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Nro. Contacto" />
+					</f:facet>
+					<h:outputText
+						value="#{fam.personaFamiliar != null ? fam.personaFamiliar.telefonos : fam.telefonos}" />
+				</rich:column>
+
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	
+	<table id="formacion">
+		<tr>
+			<td><h:outputText value="FORMACIÓN ACADÉMICA"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="#{messages.CU659_estudios}"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaEstudiosRealizados}" />
+			<rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaEstudiosRealizados}"
+				value="#{vistaPreviaLegajoFC.listaEstudiosRealizados}" var="est"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_titulo}" />
+					</f:facet>
+					<h:outputText value="#{est.tituloAcademico.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Especialidad" />
+					</f:facet>
+					<h:outputText value="#{est.especialidades.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_institucion}" />
+					</f:facet>
+					<h:outputText value="#{vistaPreviaLegajoFC.descInstitucionEducativa(est)}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_anho_egreso}" />
+					</f:facet>
+					<h:outputText value="#{est.fechaFin}"
+						rendered="#{est.fechaFin!=null}">
+						<s:convertDateTime type="both" pattern="yyyy" />
+					</h:outputText>
+					<h:outputText value="PENDIENTE" rendered="#{est.fechaFin==null}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Duración" />
+					</f:facet>
+					<h:outputText value="#{est.duracionHoras} Año/s"
+						rendered="#{est.tipoDuracion=='A'}" />
+					<h:outputText value="#{est.duracionHoras} Horas"
+						rendered="#{est.tipoDuracion=='H'}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Otros Estudios "
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaOtrosEstudiosRealizados}" />
+			<rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaOtrosEstudiosRealizados}"
+				value="#{vistaPreviaLegajoFC.listaOtrosEstudiosRealizados}" var="est"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_titulo}" />
+					</f:facet>
+					<h:outputText value="#{est.tituloAcademico.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Descripción" />
+					</f:facet>
+					<h:outputText value="#{est.otroNivel}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_institucion}" />
+					</f:facet>
+					<h:outputText value="#{est.institucionEducativa.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_anho_egreso}" />
+					</f:facet>
+					<h:outputText value="#{est.fechaFin}"
+						rendered="#{est.fechaFin!=null}">
+						<s:convertDateTime type="both" pattern="yyyy" />
+					</h:outputText>
+					<h:outputText value="PENDIENTE" rendered="#{est.fechaFin==null}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Duración" />
+					</f:facet>
+					<h:outputText value="#{est.duracionHoras} Año/s"
+						rendered="#{est.tipoDuracion=='A'}" />
+					<h:outputText value="#{est.duracionHoras} Horas"
+						rendered="#{est.tipoDuracion=='H'}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="#{messages.CU659_idiomas}"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaIdiomas}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaIdiomas}"
+				value="#{vistaPreviaLegajoFC.listaIdiomas}" var="idiom"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Idioma" />
+					</f:facet>
+					<h:outputText value="#{idiom.datosEspecificos.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Habla" />
+					</f:facet>
+					<h:outputText value="BASICO" rendered="#{idiom.habla=='B'}" />
+					<h:outputText value="MEDIO" rendered="#{idiom.habla=='M'}" />
+					<h:outputText value="AVANZADO" rendered="#{idiom.habla=='A'}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Escribe" />
+					</f:facet>
+
+					<h:outputText value="BASICO" rendered="#{idiom.escribe=='B'}" />
+					<h:outputText value="MEDIO" rendered="#{idiom.escribe=='M'}" />
+					<h:outputText value="AVANZADO" rendered="#{idiom.escribe=='A'}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Lee" />
+					</f:facet>
+					<h:outputText value="BASICO" rendered="#{idiom.lee=='B'}" />
+					<h:outputText value="MEDIO" rendered="#{idiom.lee=='M'}" />
+					<h:outputText value="AVANZADO" rendered="#{idiom.lee=='A'}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="#{messages.CU659_capacitaciones}"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaCapacitacionesDTO}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaCapacitacionesDTO}"
+				value="#{vistaPreviaLegajoFC.listaCapacitacionesDTO}" var="cap"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_tipo}" />
+					</f:facet>
+					<h:outputText value="#{cap.tipo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_curso}" />
+					</f:facet>
+					<h:outputText value="#{cap.cursoBeca}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_oee}" />
+					</f:facet>
+					<h:outputText value="#{cap.oee}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_fec_desde_hasta}" />
+					</f:facet>
+					<h:outputText value="#{cap.fechaDesdeHasta}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_carga_hora}" />
+					</f:facet>
+					<h:outputText value="#{cap.cargaHoraria}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_certificado}" />
+					</f:facet>
+					<h:outputText value="#{cap.certificado}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	
+	<table id="declaracion">
+		<tr>
+			<td><h:outputText value="DECLARACIÓN JURADA"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaDeclaracionJurada}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaDeclaracionJurada}"
+				value="#{vistaPreviaLegajoFC.listaDeclaracionJurada}" var="dec"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_fecha_presentacion}" />
+					</f:facet>
+					<h:outputText value="#{dec.fechaPresentacion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_comentario}" />
+					</f:facet>
+					<h:outputText value="#{dec.comentario}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="experiencia">
+	
+		<tr>
+			<td><h:outputText value="#{messages.CU659_experiencia}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaExpLaboral}" /> <rich:dataTable
+				id="itemsExpList" var="_e"
+				value="#{vistaPreviaLegajoFC.listaExpLaboral}" rowKeyVar="rowNr">
+				
+				<rich:column style="border-style:none;">
+				
+					<rich:panel style="border-style:none; width : 740px;">
+					
+						<table style="width: 740px;">
+							<tr>
+								<td bgcolor="#F1EFE4"
+									style="border-style: solid; border-color: black; border-width: thin;">
+								<table bgcolor="#F1EFE4">
+									<td><h:panelGrid columns="2">
+										<h:outputText value="#{messages.CU659_desde} :" />
+										<h:outputText value="#{_e.fechaDesde}" style="font-size:11px;" />
+										<h:outputText value="#{messages.CU659_hasta} :" />
+										<h:outputText value="#{_e.fechaHasta}" style="font-size:11px;" />
+									</h:panelGrid></td>
+									<td bgcolor="#F1EFE4" style="width: 6px;" />
+								</table>
+								</td>
+								<td bgcolor="#F1EFE4"
+									style="border-style: solid; border-color: black; border-width: thin;">
+								<table bgcolor="#F1EFE4">
+									<td><h:panelGrid columns="2">
+										<h:outputText value="#{messages.CU659_empresa} :" />
+										<h:outputText value="#{_e.empresa}" style="font-size:11px;" />
+										<h:outputText value="#{messages.CU659_referencia} :" />
+										<h:outputText value="#{_e.referenciasLaborales}"
+											style="font-size:11px;" />
+										<h:outputText value="Tipo de Vinculacion :" />
+										<h:outputText value="#{vistaPreviaLegajoFC.getTipoVinculacion(_e)}"
+											style="font-size:11px;" />
+										<h:outputText value="Sector :" />
+										<h:outputText value="#{vistaPreviaLegajoFC.getSector(_e)}"
+											style="font-size:11px;" />
+										<h:outputText value="Cargo :" />
+										<h:outputText value="#{_e.puestoCargo}"
+											style="font-size:11px;" />
+									</h:panelGrid></td>
+								</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3"><h:panelGrid width="100%"
+									style="border-style:solid;border-color:black;border-width:thin;">
+									<h:outputText value="#{messages.CU659_breve} :" />
+									<h:outputText value="#{_e.funcionesRealizadas}"
+										style="font-size:11px;" />
+								</h:panelGrid></td>
+							</tr>
+						</table>
+					</rich:panel>
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	
+	<table id="recorridoLaboral">
+		<tr>
+			<td><h:outputText value="#{messages.CU659_recorrido}"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<h:outputText value="#{messages.CU659_antiguedad} :" />
+				<h:outputText value="#{vistaPreviaLegajoFC.antiguedad}" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaRecorridoLaboral}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaRecorridoLaboral}"
+				value="#{vistaPreviaLegajoFC.listaRecorridoLaboral}" var="rec"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{rec.oee}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_uo}" />
+					</f:facet>
+					<h:outputText value="#{rec.uo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Estado" />
+					</f:facet>
+					<h:outputText value="#{rec.estado}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_puesto}" />
+					</f:facet>
+					<h:outputText value="#{rec.puesto}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Inicio" />
+					</f:facet>
+					<h:outputText value="#{rec.fechaInicio}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Fin" />
+					</f:facet>
+					<h:outputText value="#{rec.fechaFin}" />
+				</rich:column>
+
+			</rich:dataTable></td>
+		</tr>
+
+	</table>
+
+	<!--  
+	<table id="evaluacion">
+		<tr>
+			<td><h:outputText value="EVALUACIÓN DE DESEMPEÑO"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaEvalFuncionarios}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaEvalFuncionarios}"
+				value="#{vistaPreviaLegajoFC.listaEvalFuncionarios}" var="func"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{func.oee}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_uo}" />
+					</f:facet>
+					<h:outputText value="#{func.denominacionUnidad}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU659_puesto}" />
+					</f:facet>
+					<h:outputText value="#{func.puesto}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Plantilla" />
+					</f:facet>
+					<h:outputText value="#{func.plantilla}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="#{messages.CU649_fecha}" />
+					</f:facet>
+					<h:outputText value="#{func.fechaEvalDesde}/#{func.fechaEvalHasta}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Planes de Mejora" />
+					</f:facet>
+					<h:outputText value="#{func.planMejora}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		
+	</table>
+	-->
+	
+	<rich:simpleTogglePanel label="#{messages.CU571_panel1_title}"
+				id="discap">
+		<f:facet name="header">#{messages.CU649_titulo}(#{evaluacionesLegajoFC.listaEvalFuncionarios.size()})</f:facet>
+		<div class="results" id="tbldetList" >
+			<h:outputText
+				value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty evaluacionesLegajoFC.listaEvalFuncionarios}" />
+			<rich:dataTable id="itemsList" 
+			rowKeyVar="rowNr" var="_items" value="#{evaluacionesLegajoFC.listaEvalFuncionarios}" 
+			rendered="#{not empty evaluacionesLegajoFC.listaEvalFuncionarios}">
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_oee}</f:facet>
+				<h:outputText value="#{_items.oee}" />
+			</rich:column>
+			
+			<ui:remove>
+				<rich:column>
+								<f:facet name="header">#{messages.CU649_uo}</f:facet>
+								<h:outputText value="#{_items.denominacionUnidad}" />
+							</rich:column>
+			</ui:remove>
+			
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_puesto}</f:facet>
+				<h:outputText value="#{_items.puesto}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_evaluacion}</f:facet>
+				<h:outputText value="#{_items.titulo}" />
+			</rich:column>
+
+			<ui:remove>
+				<rich:column>
+								<f:facet name="header">#{messages.CU649_plantilla}</f:facet>
+								<h:outputText value="#{_items.plantilla}" />
+							</rich:column>
+			</ui:remove>
+			
+			<rich:column>
+				<f:facet name="header">Fecha desde - hasta</f:facet>
+				<h:outputText
+					value="#{evaluacionesLegajoFC.formateandoFecha(_items.fechaEvalDesde)} - #{evaluacionesLegajoFC.formateandoFecha(_items.fechaEvalHasta)}" />
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">#{messages.CU649_promedio}</f:facet>
+				<h:outputText value="#{_items.puntaje}"/>
+			</rich:column>
+
+		</rich:dataTable>
+		</div>
+	</rich:simpleTogglePanel>
+	
+	<table id="juridicos">
+		<tr>
+			<td><h:outputText value="PROCESOS JURÍDICOS"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Acciones de Inconstitucionalidad"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaInconstitucionalidadDTO}" />
+			<rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaInconstitucionalidadDTO}"
+				value="#{vistaPreviaLegajoFC.listaInconstitucionalidadDTO}"
+				var="inc" style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Estado" />
+					</f:facet>
+					<h:outputText value="#{inc.estado}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Ley/Artículos" />
+					</f:facet>
+					<h:outputText value="#{inc.ley}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{inc.fecha}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{inc.observacion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="Acuerdo y Sentencia" />
+					</f:facet>
+					<h:outputText value="#{inc.acuerdo}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Sumarios"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaSumariosDTO}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaSumariosDTO}"
+				value="#{vistaPreviaLegajoFC.listaSumariosDTO}" var="sum"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{sum.oee}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{sum.fecha}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Nro. Expediente" />
+					</f:facet>
+					<h:outputText value="#{sum.nroInterno}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Faltas Cometidas" />
+					</f:facet>
+					<h:outputText value="#{sum.faltas}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Recomendación Juez" />
+					</f:facet>
+					<h:outputText value="#{sum.recomendacionJuez}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Decisión MAI" />
+					</f:facet>
+					<h:outputText value="#{sum.decisionMai}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación MAI" />
+					</f:facet>
+					<h:outputText value="#{sum.obsMai}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Excepcionados"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaExcepcionados}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaExcepcionados}"
+				value="#{vistaPreviaLegajoFC.listaExcepcionados}" var="exc"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{exc.configuracionUoCab.denominacionUnidad}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Desde" />
+					</f:facet>
+					<h:outputText value="#{exc.fecha}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Hasta" />
+					</f:facet>
+					<h:outputText value="#{exc.fechaHasta}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Nro. Dictamen/Año" />
+					</f:facet>
+					<h:outputText value="#{exc.nroDictamen}/#{exc.anio}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Motivo" />
+					</f:facet>
+					<h:outputText value="#{exc.motivo}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	<table id="desvinculacion">
+		<tr>
+			<td><h:outputText value="DESVINCULACIÓN"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaDesvinculaciones}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaDesvinculaciones}"
+				value="#{vistaPreviaLegajoFC.listaDesvinculaciones}" var="desv"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText
+						value="#{desv.empleadoPuesto.plantaCargoDet.configuracionUoDet.configuracionUoCab.denominacionUnidad}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Desde" />
+					</f:facet>
+					<h:outputText value="#{desv.fechaDesvinculacion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Motivo" />
+					</f:facet>
+					<h:outputText value="#{desv.datosEspecifMotivo.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Monto" />
+					</f:facet>
+					<h:outputText value="#{desv.montoLiquidacion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Concepto" />
+					</f:facet>
+					<h:outputText value="#{desv.concepto}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{desv.observacion}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Inhabilitación"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaInhabilitados}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaInhabilitados}"
+				value="#{vistaPreviaLegajoFC.listaInhabilitados}" var="inh"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{inh.configuracionUoCab.denominacionUnidad}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Desde" />
+					</f:facet>
+					<h:outputText value="#{inh.fechaDesde}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Hasta" />
+					</f:facet>
+					<h:outputText value="#{inh.fechaHasta}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="¿Inhabilitado?" />
+					</f:facet>
+					<h:outputText value="SI" rendered="#{inh.inhabilitado}" />
+					<h:outputText value="NO" rendered="#{!inh.inhabilitado}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader"
+							value="Motivo Habilitación" />
+					</f:facet>
+					<h:outputText value="#{inh.motivoHabilit}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Habilitación" />
+					</f:facet>
+					<h:outputText value="#{inh.fechaHabilit}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+
+		<tr>
+			<td><h:panelGrid columns="2">
+				<rich:spacer width="6px" />
+				<h:outputText value="Jubilación"
+					style="color:#6E7953;font-size:14px;font-weight:bold;text-decoration:underline;" />
+			</h:panelGrid></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaJubilados}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaJubilados}"
+				value="#{vistaPreviaLegajoFC.listaJubilados}" var="jub"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="OEE" />
+					</f:facet>
+					<h:outputText value="#{jub.configuracionUoCab.denominacionUnidad}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Jubilación" />
+					</f:facet>
+					<h:outputText value="#{jub.fecha}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Tipo Jubilación" />
+					</f:facet>
+					<h:outputText value="#{jub.datosEspecifTipo.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="¿Inhabilitación?" />
+					</f:facet>
+					<h:outputText value="SI" rendered="#{jub.inhabilitado}" />
+					<h:outputText value="NO" rendered="#{!jub.inhabilitado}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="vacaciones">
+		<tr>
+			<td><h:outputText value="VACACIONES"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaVacaciones}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaVacaciones}"
+				value="#{vistaPreviaLegajoFC.listaVacaciones}" var="vac"
+				style="width : 740px; ">
+			
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Inicio" />
+					</f:facet>
+					<h:outputText value="#{vac.fechaInicio}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Fin" />
+					</f:facet>
+					<h:outputText value="#{vac.fechaFin}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{vac.obsVacaciones}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	<table id="permisos">
+		<tr>
+			<td><h:outputText value="PERMISOS"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaPermisos}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaPermisos}"
+				value="#{vistaPreviaLegajoFC.listaPermisos}" var="p"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Inicio" />
+					</f:facet>
+					<h:outputText value="#{p.fechaInicio}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha Fin" />
+					</f:facet>
+					<h:outputText value="#{p.fechaFin}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{p.obsPermiso}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Motivo del Permiso" />
+					</f:facet>
+					<h:outputText value="#{p.datosEspMotivoPermiso.descripcion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Estado del Permiso" />
+					</f:facet>
+					<h:outputText value="#{p.datosEspEstadoPermiso.descripcion}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+	<table id="premios">
+		<tr>
+			<td><h:outputText value="PREMIOS/RECONOCIMIENTOS"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaPremios}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaPremios}"
+				value="#{vistaPreviaLegajoFC.listaPremios}" var="premio"
+				style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{premio.obsPremio}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{premio.fechaActo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Nro. Acto" />
+					</f:facet>
+					<h:outputText value="#{premio.nroActo}" />
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="amonestaciones">
+		<tr>
+			<td><h:outputText value="SANCIONES ADMINISTRATIVAS"
+				style="color:#6E7953;font-size:20px;font-weight:bold;" /></td>
+		</tr>
+		<tr>
+			<td><h:outputText value="#{messages.msg_list_search_no_results}"
+				rendered="#{empty vistaPreviaLegajoFC.listaAmonestaciones}" /> <rich:dataTable
+				rendered="#{not empty vistaPreviaLegajoFC.listaAmonestaciones}"
+				value="#{vistaPreviaLegajoFC.listaAmonestaciones}"
+				var="amonestacion" style="width : 740px; ">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Observación" />
+					</f:facet>
+					<h:outputText value="#{amonestacion.obsAmonestacion}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{amonestacion.fechaActo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Nro. Acto" />
+					</f:facet>
+					<h:outputText value="#{amonestacion.nroActo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText styleClass="columnHeader" value="Motivo" />
+					</f:facet>
+					<h:outputText
+						value="#{amonestacion.motivo}" />
+				</rich:column>
+				<rich:column width="10%">
+					<f:facet name="header">#{messages.tipo_sancion}</f:facet>
+					<h:outputText value="#{amonestacion.datosEspTipoSancion.descripcion}">
+					</h:outputText>
+				</rich:column>
+			</rich:dataTable></td>
+		</tr>
+	</table>
+
+	<table id="ObservacionesPendientes">
+		<tr>
+			<td><h:outputText value="OBSEVACIONES PENDIENTES POR VALIDAR"
+				style="color:#6E7953;font-size:20px;font-weight:bold;"
+				rendered="#{vistaPreviaLegajoFC.mostrarObservacion}" /></td>
+		</tr>
+		<tr>
+			<td><h:inputTextarea
+				value="#{vistaPreviaLegajoFC.observacionesPendientes}" cols="120"
+				rendered="#{vistaPreviaLegajoFC.mostrarObservacion}" /></td>
+		</tr>
+	</table>
+</ui:composition>

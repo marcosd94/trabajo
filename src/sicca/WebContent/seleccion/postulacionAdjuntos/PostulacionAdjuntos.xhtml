@@ -1,0 +1,147 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Postulacion adjuntos Details</f:facet>
+
+        <s:decorate id="idPostulacionAdjuntos" template="layout/display.xhtml">
+            <ui:define name="label">Id postulacion adjuntos</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.idPostulacionAdjuntos}"/>
+        </s:decorate>
+
+        <s:decorate id="idDocumento" template="layout/display.xhtml">
+            <ui:define name="label">Id documento</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.idDocumento}"/>
+        </s:decorate>
+
+        <s:decorate id="activo" template="layout/display.xhtml">
+            <ui:define name="label">Activo</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.activo}"/>
+        </s:decorate>
+
+        <s:decorate id="usuAlta" template="layout/display.xhtml">
+            <ui:define name="label">Usu alta</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.usuAlta}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaAlta" template="layout/display.xhtml">
+            <ui:define name="label">Fecha alta</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.fechaAlta}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="usuMod" template="layout/display.xhtml">
+            <ui:define name="label">Usu mod</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.usuMod}"/>
+        </s:decorate>
+
+        <s:decorate id="fechaMod" template="layout/display.xhtml">
+            <ui:define name="label">Fecha mod</ui:define>
+            <h:outputText value="#{postulacionAdjuntosHome.instance.fechaMod}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/PostulacionAdjuntosEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty postulacionAdjuntosFrom ? 'PostulacionAdjuntosList' : postulacionAdjuntosFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Postulacion</h:panelGroup>
+        </f:facet>
+    <div class="association" id="postulacionParent">
+
+        <h:outputText value="There is no postulacion associated with this postulacionAdjuntos."
+                   rendered="#{postulacionAdjuntosHome.instance.postulacion == null}"/>
+
+        <rich:dataTable var="_postulacion"
+                   value="#{postulacionAdjuntosHome.instance.postulacion}"
+                rendered="#{postulacionAdjuntosHome.instance.postulacion != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="postulacionTable">
+            <h:column>
+                <f:facet name="header">Id postulacion</f:facet>
+                <h:outputText value="#{_postulacion.idPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Concurso puesto agr id concurso puesto agr</f:facet>
+                <h:outputText value="#{_postulacion.concursoPuestoAgr.idConcursoPuestoAgr}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Persona postulante id persona postulante</f:facet>
+                <h:outputText value="#{_postulacion.personaPostulante.idPersonaPostulante}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Activo</f:facet>
+                <h:outputText value="#{_postulacion.activo}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu postulacion</f:facet>
+                <h:outputText value="#{_postulacion.usuPostulacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha postulacion</f:facet>
+                <h:outputText value="#{_postulacion.fechaPostulacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Obs cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.obsCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Usu cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.usuCancelacion}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha cancelacion</f:facet>
+                <h:outputText value="#{_postulacion.fechaCancelacion}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Interes cargo</f:facet>
+                <h:outputText value="#{_postulacion.interesCargo}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewpostulacion"
+                     value="View"
+                      view="/Postulacion.xhtml">
+                    <f:param name="postulacionIdPostulacion"
+                           value="#{_postulacion.idPostulacion}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

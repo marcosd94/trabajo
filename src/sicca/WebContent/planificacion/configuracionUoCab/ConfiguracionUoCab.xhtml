@@ -1,0 +1,215 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.gral_oee}</h1>
+
+		<h:form id="configuracionUoCab" styleClass="edit">
+
+			<rich:panel>
+				<f:facet name="header">Ver #{messages.gral_oee}</f:facet>
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}<span class="required">*</span>
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+								value="#{nivelEntidadOeeUtil.codNivelEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									reRender="nivelDescripcion" focus="entidadCodigo"
+									action="#{nivelEntidadOeeUtil.findNivelEntidad()}" />
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreNivelEntidad}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  				
+						</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}<span class="required">*</span>
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);"  disabled="true"
+								value="#{nivelEntidadOeeUtil.codSinEntidad}" size="5">
+								<a:support event="onblur" eventsQueue="default"
+									action="#{administrarUoCabEditFormController.cargarEntidad()}" focus="unidadOrgCodigo"
+									reRender="entidadDescripcion,entCodigoField,ordenField" />
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{nivelEntidadOeeUtil.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                				
+						</s:decorate>
+					</a:region>
+				
+	                  <s:decorate id="vigenciaDesdeField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaDesde}</ui:define>
+	                <rich:calendar id="vigenciaDesde"
+                          datePattern="dd/MM/yyyy" required="true" disabled="true"
+                			   locale="#{localeSelector.localeString}"
+                                value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaDesde}" />
+	            </s:decorate>
+	            <s:decorate id="vigenciaHastaField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaHasta}</ui:define>
+	                <rich:calendar id="vigenciaHasta"
+                          datePattern="dd/MM/yyyy" disabled="true"
+                			   locale="#{localeSelector.localeString}"
+                                value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaHasta}" />
+	            </s:decorate>
+	              <s:decorate id="misionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_mis_fin}</ui:define>
+	                <h:inputText id="mision"
+	                   disabled="true"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.mision}">
+	                </h:inputText>
+	            </s:decorate>
+				
+	            <s:decorate id="denominacionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_denominacion} Unidad</ui:define>
+	                <h:inputText id="denominacion"
+	                	 disabled="true" required="true"
+	                	 size="70"
+	                		maxlength="100"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.denominacionUnidad}">
+	                </h:inputText>
+	            </s:decorate>
+			
+	             <s:decorate id="nenCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_descr_corta}</ui:define>
+	                <h:inputText id="nenCodigo"
+	                		 disabled="true"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.descripcionCorta}">
+	                </h:inputText>
+	            </s:decorate>
+	              <a:region >
+					<s:decorate id="ordenField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CondicionSegur_orden}</ui:define>
+						<h:inputText id="orden" disabled="true"
+							value="#{administrarUoCabEditFormController.configuracionUoCab.orden}">
+							<a:support event="onchange" eventsQueue="default"
+								action="#{administrarUoCabEditFormController.obtenerCod()}"
+								reRender="entCodigoField" focus="direccionField" />
+						</h:inputText>
+					</s:decorate>
+					<s:decorate id="vigenciaDesdeAyBField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.ConfiguracionUoCab_vigenciaDesdeAyB}</ui:define>
+						<rich:calendar id="vigenciaAyB" enableManualInput="true"
+							datePattern="dd/MM/yyyy" disabled="true"
+							locale="#{localeSelector.localeString}"
+							value="#{administrarUoCabEditFormController.configuracionUoCab.vigenciaDesdeAyB}" />
+					</s:decorate>
+				</a:region>
+	               <s:decorate id="entCodigoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_cod}</ui:define>
+	                <h:inputText id="entCodigo"
+	                	  disabled="true"
+	                          value="#{administrarUoCabEditFormController.codigo}">
+	                </h:inputText>
+	            </s:decorate>
+	              <s:decorate id="direccionField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_dir}</ui:define>
+	                <h:inputText id="direccion"
+	                	   disabled="true"
+	                	   size="100"
+	                		maxlength="150"
+	                        value="#{administrarUoCabEditFormController.configuracionUoCab.direccion}">
+	                </h:inputText>
+	            </s:decorate>
+	             <s:decorate id="telefonoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_tl}</ui:define>
+	                <h:inputText id="telefono"
+	                	 disabled="true"
+	                
+	                		maxlength="50"
+	                     value="#{administrarUoCabEditFormController.configuracionUoCab.telefono}">
+	                </h:inputText>
+	            </s:decorate>
+				<s:decorate id="urlField" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages.ConfiguracionUoDet_pagina_web}</ui:define>
+					<h:inputText id="url" size="70" disabled="true"
+						value="#{administrarUoCabEditFormController.configuracionUoCab.url}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="entCodigoSinarhField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoDet_cod}</ui:define>
+	                <h:inputText id="entCodigoSinarh"
+	                	  disabled="true"
+	                         		maxlength="50"
+	                          value="#{administrarUoCabEditFormController.configuracionUoCab.codigoSinarh}">
+	                </h:inputText>
+	            </s:decorate>
+	            <s:decorate id="activoField" template="/layout/edit.xhtml">
+	                <ui:define name="label">#{messages.ConfiguracionUoCab_activo}</ui:define>
+	                <h:selectBooleanCheckbox id="activo"
+	                	   disabled="true"
+	                       value="#{administrarUoCabEditFormController.configuracionUoCab.activo}" />
+	            </s:decorate>
+
+
+				<div style="clear: both"><span class="required">*</span>
+				#{messages.msg_required_fields}</div>
+
+			</rich:panel>
+
+			<div class="actionButtons"> <s:button
+				id="cancelAdd" value="Volver" propagation="nest"
+				view="/#{empty configuracionUoCabFrom ? 'planificacion/configuracionUoCab/ConfiguracionUoCabList' : configuracionUoCabFrom}.xhtml"
+				/></div>
+				   <div >
+			
+			<h:panelGrid columns="2">
+					<s:decorate id="usuarioAlta"    rendered="#{configuracionUoCabHome.managed}" template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.msg_usu_alta}</ui:define>
+						<h:outputText 
+							value="#{configuracionUoCabHome.instance.usuAlta}" />
+					</s:decorate>
+					<s:decorate id="fechaAlta" template="/layout/display.xhtml"  rendered="#{configuracionUoCabHome.managed}" >
+						<ui:define name="label">#{messages.msg_fecha_alta_}</ui:define>
+						<h:outputText
+							value="#{configuracionUoCabHome.instance.fechaAlta}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+					<s:decorate id="usuarioModi" template="/layout/display.xhtml"  rendered="#{configuracionUoCabHome.managed}" >
+						<ui:define name="label">#{messages.msg_usu_mod}</ui:define>
+						<h:outputText
+							value="#{configuracionUoCabHome.instance.usuMod}" />
+					</s:decorate>
+					<s:decorate id="fechaModi" template="/layout/display.xhtml"  rendered="#{configuracionUoCabHome.managed}">
+						<ui:define name="label">#{messages.msg_fecha_mod}</ui:define>
+
+						<h:outputText
+							value="#{configuracionUoCabHome.instance.fechaMod}">
+							<s:convertDateTime type="date" dateStyle="short"
+								pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</s:decorate>
+				</h:panelGrid>
+				
+				</div>
+				
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

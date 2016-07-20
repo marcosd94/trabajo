@@ -1,0 +1,422 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="redCapacitacion" styleClass="edit"
+			enctype="multipart/form-data">
+			<h1>#{messages.CU706_titulo_ver}</h1>
+
+
+			<rich:panel id="panelAdjuntar">
+				<f:facet name="header">#{messages.CU586_panel_acto}</f:facet>
+				<div class="results" id="tblList"
+					style="overflow: scroll; width: 400; HEIGHT: 230px"><h:panelGrid>
+					<rich:dataTable id="itemsDoc" var="_docs"
+						value="#{transladoConSolic662EditFC.adjuntos}"
+						rowKeyVar="rowNrDoc">
+						<rich:column>
+							<f:facet name="header">
+														Nº
+													</f:facet>
+							<h:outputText value="#{rowNrDoc + 1}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nro. Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Fecha Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.fechaDoc}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														#{messages.SinNivelEntidad_aniAniopre}
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.anhoDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Nombre Doc.
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.nombreFisicoDoc}" />
+						</rich:column>
+						
+						
+						<rich:column>
+							<f:facet name="header">
+														Tipo de Documento
+													</f:facet>
+							<h:outputText value="#{_docs.documentos.datosEspecificos.descripcion}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+														Acciones
+													</f:facet>
+							<h:commandLink id="down" value="Descargar"
+								action="#{transladoConSolic662EditFC.descargarDocBD(_docs.documentos.idDocumento)}" />
+						</rich:column>
+
+					</rich:dataTable>
+					<h:panelGrid columns="1">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.gral_observacion}</ui:define>
+							<h:inputTextarea id="obs" disabled="true"
+								value="#{transladoConSolic662EditFC.observacion}" cols="80">
+								<f:validateLength maximum="500" />
+							</h:inputTextarea>
+						</s:decorate>
+					</h:panelGrid>
+				</h:panelGrid></div>
+			</rich:panel>
+			<rich:panel id="panelPuestoAnterior">
+				<f:facet name="header">Datos del Puesto Anterior</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigoField">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.nombreNivelEntidad}"
+								size="50" disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigoField">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.codSinEntidad}"
+								size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.nombreSinEntidad}"
+								size="50" disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigoField">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo" styleClass="numeric" size="5"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.ordenUnidOrg}"
+								disabled="true" onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="50"
+								disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="uoCodigoField">
+						<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+						<h:inputText id="uoCodigo" styleClass="numeric" size="5"
+							value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.codigoUnidOrgDep}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion" size="50" disabled="true"
+							value="#{transladoConSolic662EditFC.entidadOeeUtilAnterior.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="puestoField">
+						<ui:define name="label">Puesto Anterior
+						</ui:define>
+						<h:inputText id="puesto" styleClass="numeric" size="20"
+							value="#{seleccionUtilFormController.obtenerCodigoPuesto(transladoConSolic662EditFC.funcionario.plantaCargoDet)}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion" size="80"
+							disabled="true"
+							value="#{transladoConSolic662EditFC.funcionario.plantaCargoDet.descripcion}" />
+									#{' '}
+									
+									<a:commandButton id="searchper" eventsQueue="default"
+							value="#{messages.CU541_ver_datos_persona}"
+							action="#{transladoConSolic662EditFC.toFindPersonaView()}" />
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_ci_func}
+						</ui:define>
+						<h:inputText id="nroCedula" disabled="true"
+							value="#{transladoConSolic662EditFC.funcionario.persona.documentoIdentidad}"
+							size="20" maxlength="30">
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_nombres}</ui:define>
+						<h:inputText id="nombres" disabled="true"
+							value="#{transladoConSolic662EditFC.funcionario.persona.nombres}" size="60"
+							maxlength="100">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU589_paisExpeDoc}</ui:define>
+						<h:inputText id="paisExpDoc" disabled="true"
+							value="#{transladoConSolic662EditFC.funcionario.persona.paisByIdPaisExpedicionDoc.descripcion}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+					<s:decorate template="/layout/display.xhtml">
+						<ui:define name="label">#{messages.CU440_apellidos}</ui:define>
+						<h:inputText id="apellidos" disabled="true"
+							value="#{transladoConSolic662EditFC.funcionario.persona.apellidos}"
+							size="60" maxlength="80">
+						</h:inputText>
+					</s:decorate>
+
+				</h:panelGrid>
+				<rich:panel style="border:none;">
+
+					<h:panelGrid columns="1">
+						<h:outputText value="Categoria/Remuneración en Puesto Anterior"
+							style="font-size:12px;font-weight:bold;" />
+						<rich:dataTable id="itemsList2" var="_pago"
+							value="#{transladoConSolic662EditFC.conceptoPagosOrigen}"
+							rowKeyVar="rowNr">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pago.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pago.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pago.monto}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</h:panelGrid>
+
+				</rich:panel>
+			</rich:panel>
+
+
+			<rich:panel id="panelNuevoPuesto">
+				<f:facet name="header">Datos del Nuevo Puesto</f:facet>
+				<h:panelGrid columns="3">
+					<a:region>
+						<s:decorate template="/layout/display.xhtml" id="nivelCodigo2Field">
+							<ui:define name="label">#{messages.ClasificadorUo_nivel}
+									 
+									</ui:define>
+							<h:inputText id="nivelCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.codNivelEntidad}" size="5">
+							</h:inputText>	
+					                #{' '}
+					                <h:inputText id="nivelDescripcion2"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.denominacionUnidadOrgaDep}" size="50"
+								disabled="true" />
+								 	#{' '}
+	               
+					  	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="entidadCodigo2Field">
+							<ui:define name="label">#{messages.Usuario_entidad}
+										 
+									</ui:define>
+							<h:inputText id="entidadCodigo2" styleClass="numeric"
+								onkeypress="return soloNumeros(event);" disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.codSinEntidad}" size="5">
+							</h:inputText>
+					                #{' '}
+					                <h:inputText id="entidadDescripcion2"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.nombreSinEntidad}" size="50"
+								disabled="true" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+
+					<a:region>
+						<s:decorate template="/layout/display.xhtml"
+							id="unidadOrgCodigo2Field">
+							<ui:define name="label">#{messages.gral_oee}
+										 
+									</ui:define>
+							<h:inputText id="unidadOrgCodigo2" styleClass="numeric" size="5"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.ordenUnidOrg}" disabled="true"
+								onkeypress="return soloNumeros(event);">
+							</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="50"
+								disabled="true"
+								value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.denominacionUnidad}" />
+									#{' '}
+	                	</s:decorate>
+					</a:region>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<s:decorate template="/layout/display.xhtml" id="uoCodigo2Field">
+						<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+						<h:inputText id="uoCodigo2" styleClass="numeric" size="5"
+							value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.ordenUnidOrg}" disabled="true"
+							onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="uoDenominacion2" size="50" disabled="true"
+							value="#{transladoConSolic662EditFC.entidadOeeUtilUsuario.denominacionUnidadOrgaDep}" />
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" >
+						<ui:define name="label">Nuevo Puesto
+
+						</ui:define>
+						<h:inputText id="puesto2" styleClass="numeric" size="20"
+							value="#{seleccionUtilFormController.obtenerCodigoPuesto(transladoConSolic662EditFC.empleadoPuesto.plantaCargoDet)}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText id="unidadOrgDenominacion2" size="80"
+							disabled="true"
+							value="#{transladoConSolic662EditFC.empleadoPuesto.plantaCargoDet.descripcion}" />
+					</s:decorate>
+					
+					<s:decorate template="/layout/display.xhtml" id="fecha2Field">
+						<ui:define name="label">Fecha de Inicio
+						</ui:define>
+						<rich:calendar id="fechaIngreso" disabled="true"
+								value="#{transladoConSolic662EditFC.fechaInicio}"
+								inputSize="10" datePattern="dd/MM/yyyy"
+								enableManualInput="false" oninputkeyup="ponerBarra(event)">
+							</rich:calendar>		
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" id="tipo2Field">
+						<ui:define name="label">Tipo Movilidad</ui:define>
+						<h:inputText id="tipo2" size="80"
+							value="#{transladoConSolic662EditFC.empleadoPuesto.datosEspecificosByIdDatosEspTipoIngresoMovilidad.descripcion}"
+							disabled="true" >
+						</h:inputText>
+									
+					</s:decorate>
+				</h:panelGrid>
+
+
+				<rich:panel style="border:none;">
+
+					<h:panelGrid columns="1">
+						<h:outputText value="Categoria/Remuneración en Nuevo Puesto"
+							style="font-size:12px;font-weight:bold;" />
+						<rich:dataTable id="itemsList" var="_pagos"
+							value="#{transladoConSolic662EditFC.conceptoPagosActual}"
+							rowKeyVar="rowNr2">
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_objeto_gasto}
+													</f:facet>
+								<h:outputText value="#{_pagos.objCodigo}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_categoria}
+													</f:facet>
+								<h:outputText value="#{_pagos.categoria}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+														#{messages.CU541_monto}
+													</f:facet>
+								<h:outputText value="#{_pagos.monto}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</h:panelGrid>
+
+				</rich:panel>
+				
+				<fieldset>
+				<legend>#{messages.CU662_en_espera}</legend>
+				<h:panelGrid >
+					<s:decorate template="/layout/display.xhtml" >
+						<ui:define name="label">Unid. Org.
+										 
+									</ui:define>
+						<h:inputText styleClass="numeric" size="5"
+							value="#{transladoConSolic662EditFC.empleadoMovilidadCabNuevasFunciones.empleadoPuestoAnterior.plantaCargoDet.configuracionUoDet.orden}" disabled="true"
+							onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText  size="50" disabled="true"
+							value="#{transladoConSolic662EditFC.empleadoMovilidadCabNuevasFunciones.empleadoPuestoAnterior.plantaCargoDet.configuracionUoDet.denominacionUnidad}" />
+
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml" >
+						<ui:define name="label">Nuevo Puesto
+
+						</ui:define>
+						<h:inputText  styleClass="numeric" size="20"
+							value="#{seleccionUtilFormController.obtenerCodigoPuesto(transladoConSolic662EditFC.empleadoMovilidadCabNuevasFunciones.empleadoPuestoVirtual.plantaCargoDet)}"
+							disabled="true" onkeypress="return soloNumeros(event);">
+						</h:inputText>
+										#{' '}
+										<h:inputText  size="80"
+							disabled="true"
+							value="#{transladoConSolic662EditFC.empleadoMovilidadCabNuevasFunciones.empleadoPuestoVirtual.plantaCargoDet.descripcion}" />
+					</s:decorate>
+				</h:panelGrid>
+				</fieldset>
+			</rich:panel>
+			<div class="actionButtons"><s:button id="cancelEdit"
+				value="Volver"
+				view="/#{transladoConSolic662EditFC.from}.xhtml" />
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

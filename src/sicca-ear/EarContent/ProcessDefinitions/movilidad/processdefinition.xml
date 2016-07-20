@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="movilidad">
+
+
+	<start-state name="start-state1">
+		<transition to="REGISTRAR_TRASLADO_POR_CONCURSO" name="start_TO_regTraCon"></transition>
+		<transition to="RESPONDER_TRASLADO" name="start_TO_resSol"></transition>
+	</start-state>
+
+
+	<task-node name="REGISTRAR_TRASLADO_POR_CONCURSO">
+		<task name="REGISTRAR_TRASLADO_POR_CONCURSO">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="end" name="regTraCon_TO_end"></transition>
+	</task-node>
+
+	<task-node name="RESPONDER_TRASLADO">
+		<task name="RESPONDER_TRASLADO">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="REVISAR_SOLICITUD_SFP" name="resSol_TO_revSolSfp"></transition>
+		<transition to="REGISTRAR_TRASLADO_TEMPORAL" name="respSol_TO_regTraTem"></transition>
+		<transition to="end2" name="resSol_TO_end"></transition>
+		<transition to="REGISTRAR_TRASLADO_SIN_LINEA" name="resSol_TO_regTraDefSinLin"></transition>
+	</task-node>
+
+	<task-node name="REVISAR_SOLICITUD_SFP">
+		<task name="REVISAR_SOLICITUD_SFP">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="end" name="revSolSfp_TO_end"></transition>
+		<transition to="REGISTRAR_TRASLADO_CON_LINEA" name="revSolSfp_TO_regTraDefConLin"></transition>
+	</task-node>
+
+	<task-node name="REGISTRAR_TRASLADO_TEMPORAL">
+		<task name="REGISTRAR_TRASLADO_TEMPORAL">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="end2" name="regTraTem_TO_end"></transition>
+	</task-node>
+
+	<task-node name="REGISTRAR_TRASLADO_SIN_LINEA">
+		<task name="REGISTRAR_TRASLADO_SIN_LINEA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="end2" name="regTraDefSinLin_TO_end"></transition>
+	</task-node>
+
+	<task-node name="REGISTRAR_TRASLADO_CON_LINEA">
+		<task name="REGISTRAR_TRASLADO_CON_LINEA">
+			<assignment pooled-actors="#{roles}"></assignment>
+		</task>
+		<transition to="end2" name="regTraDefConLin_TO_end"></transition>
+	</task-node>
+
+
+	<end-state name="end"></end-state>
+
+	<end-state name="end2"></end-state>
+
+
+</process-definition>

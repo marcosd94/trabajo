@@ -1,0 +1,248 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<h1>#{messages.trm_titulo_agregartrm} - #{tachasReclamosModifFormController.evalDocumentalCab.postulacion.usuPostulacion}</h1>
+		<h:form id="concurso" styleClass="edit" prependId="false"  enctype="multipart/form-data">
+
+			<rich:panel id="panel">
+				<f:facet name="header"> #{messages.trm_titulo_agregartrm}</f:facet>
+				
+
+														
+					<h:panelGrid columns="2">
+					<s:decorate id="fechatrm" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.trm_fecha_trm}<span>*</span>
+							</ui:define>
+							<rich:calendar id="fecha" 
+								value="#{tachasReclamosModifFormController.fechaTrm}"
+								enableManualInput="true" oninputkeyup="ponerBarra(event)" 
+								datePattern="dd/MM/yyyy" />
+					</s:decorate>
+					<s:decorate id="hor" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.trm_hora}<span>*</span>
+									</ui:define>
+									<h:inputText id="horaDesde" size="5" 
+										onkeyup="ponerDosPuntos(event);"
+										value="#{tachasReclamosModifFormController.horatrm}"/>
+					</s:decorate>
+					</h:panelGrid>
+					
+					<h:panelGrid
+								columns="2">
+					
+					<s:decorate id="archivoField" template="/layout/edit.xhtml">
+					<ui:define name="label">Documento Postulante</ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{tachasReclamosModifFormController.contentType}"
+						data="#{tachasReclamosModifFormController.uploadedFile}"
+						fileName="#{tachasReclamosModifFormController.fileName}"
+						fileSize="#{tachasReclamosModifFormController.tamArchivo}"
+						style=" width : 382px;" />
+				</s:decorate>
+				
+				
+				
+				</h:panelGrid>
+				
+				
+				<h:panelGrid
+								columns="2">
+					
+				<s:decorate id="archivoField1" template="/layout/edit.xhtml">
+					<ui:define name="label">Documento Comision</ui:define>
+					<s:fileUpload size="60" 
+						contentType="#{tachasReclamosModifFormController.contentTypeComision}"
+						data="#{tachasReclamosModifFormController.uploadedFileComision}"
+						fileName="#{tachasReclamosModifFormController.fileNameComision}"
+						fileSize="#{tachasReclamosModifFormController.tamArchivoComision}"
+						style=" width : 382px;"
+						 />
+				</s:decorate>
+				
+				
+				
+				</h:panelGrid>
+				
+					
+				<h:panelGrid columns="2">
+					<s:decorate id="modificaEvalDocumental" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.trm_modifica_eval_documental}
+							</ui:define>
+							<h:selectOneRadio id="sel_adj"
+								value="#{tachasReclamosModifFormController.trmNuevo.modificaEvalDocumental}">
+								<f:selectItems
+									value="#{tachasReclamosModifFormController.seleccionModificaEvalDocumentalValueItems()}" />
+							</h:selectOneRadio>
+					</s:decorate>
+					</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<s:decorate id="modificaEvaluaciones" template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages.trm_modifica_evaluaciones}
+							</ui:define>
+							<h:selectOneRadio id="sel_adj"
+								value="#{tachasReclamosModifFormController.trmNuevo.modificaEvaluaciones}">
+								<f:selectItems
+									value="#{tachasReclamosModifFormController.seleccionModificaEvalDocumentalValueItems()}" />
+							</h:selectOneRadio>
+					</s:decorate>
+					</h:panelGrid>
+				
+				
+				<h:panelGrid columns="2">							
+					<s:decorate id="observacionField" template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages.CU156_obs}</ui:define>
+						<h:inputTextarea id="observacion" cols="80" rows="3"
+							onkeypress="return imposeMaxLength(event, this, 1000);"
+							value="#{tachasReclamosModifFormController.trmNuevo.observacion}">
+							<f:validateLength maximum="1000" />
+						</h:inputTextarea>
+					</s:decorate>
+				</h:panelGrid>
+
+
+				
+					
+					
+			
+
+				<div style="clear: both"><span>*</span>
+				#{messages.msg_required_fields}</div>
+				<br />
+				
+							
+
+			<h:commandButton id="search"
+				
+				value="#{messages.RICH_FILE_UPLOAD_ADD_LABEL}"
+
+				action="#{tachasReclamosModifFormController.btnAgregarTRM()}">
+				<f:param name="firstResult" value="0" />
+			</h:commandButton>
+			
+			
+			<br />
+			<br />
+			
+			
+			<div class="results" id="datosEspecificosList">
+				 <h:outputText 	value="#{messages.msg_list_search_no_results}"
+               rendered="#{empty tachasReclamosModifFormController.tachasReclamosModificacionesList}"/>
+				
+				<rich:dataTable
+					id="tachasReclamosModificacionesList" var="registro" rowKeyVar="_index"
+					value="#{tachasReclamosModifFormController.tachasReclamosModificacionesList}" >
+					
+									
+								
+					<h:column>
+						<f:facet name="header">#{messages.trm_fecha_trm}	</f:facet>
+						<h:outputText value="#{tachasReclamosModifFormController.formatFecha(registro.fechaTrm) }"   />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{messages.trm_modifica_eval_documental}	</f:facet>
+						<h:outputText value="#{registro.modificaEvalDocumental ? 'SI': 'NO' }"   />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{messages.trm_modifica_evaluaciones}	</f:facet>
+						<h:outputText value="#{registro.modificaEvaluaciones ? 'SI': 'NO' }"   />
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{messages.CU156_obs}	</f:facet>
+						<h:outputText value="#{registro.observacion }"   />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Usuario_}	</f:facet>
+						<h:outputText value="#{registro.usuAlta }"   />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{messages.Usuario_fechaAlta}	</f:facet>
+						<h:outputText value="#{tachasReclamosModifFormController.formatFecha(registro.fechaAlta) }"   />
+					</h:column>
+					
+					<rich:column styleClass="action">
+										<f:facet name="header">#{messages.msg_list_action_column}</f:facet>
+							<!--		<h:commandLink value="Descargar" target="_blank"
+										action="#{admDocAdjuntoFormController.abrirDocumento(_index)}" />
+										reRender="documentoList,panelResultado"
+							-->		
+					
+
+		         	<h:commandLink id="imprimirDocumentoPostulante" value="Documento Postulante"
+						rendered="#{registro.documentoPostulante.idDocumento == null? 'false': 'true'}"
+						action="#{tachasReclamosModifFormController.imprimirDocumento(registro.documentoPostulante.idDocumento)}" />
+					
+											
+					
+					
+					<h:commandLink id="imprimirDocumentoComision" value="Documento Comision"
+						rendered="#{registro.documentoComision.idDocumento == null? 'false': 'true'}"
+						action="#{tachasReclamosModifFormController.imprimirDocumento(registro.documentoComision.idDocumento)}" />
+					
+											
+					</rich:column>	
+					
+					 
+					
+					
+				</rich:dataTable>
+				
+			</div>
+			
+			
+			<div class="tableControl"><s:link
+				view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left}#{messages.left} #{messages['msg_list_first_page']}"
+				id="firstPage">
+				<f:param name="firstResult" value="0" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.previousExists}"
+				value="#{messages.left} #{messages.msg_list_previous_page}"
+				id="previousPage">
+				<f:param name="firstResult"
+					value="#{documentosList.previousFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_next_page} #{messages.right}"
+				id="nextPage">
+				<f:param name="firstResult"
+					value="#{documentosList.nextFirstResult}" />
+			</s:link> <s:link view="/seleccion/adminDocAdjunto/AdmDocAdjunto.xhtml"
+				rendered="#{documentosList.nextExists}"
+				value="#{messages.msg_list_last_page} #{messages.right}#{messages.right}"
+				id="lastPage">
+				<f:param name="firstResult"
+					value="#{documentosList.lastFirstResult}" />
+			</s:link></div>
+						
+			
+			<div class="actionButtons">
+				
+			 <s:button
+				id="cancelEdit" value="Volver" propagation="none"
+				view="#{tachasReclamosModifFormController.volverTRMCIO()}"
+				 
+				
+				/>
+			</div>
+			
+			</rich:panel>
+		</h:form>
+		
+
+	</ui:define>
+
+</ui:composition>
